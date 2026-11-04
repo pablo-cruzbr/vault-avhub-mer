@@ -17,8 +17,8 @@ Quando nascer um contrato novo, ele entra **completo** em `06-Contratos/` (nunca
 
 | Pasta | Contratos (.md) | Anexos (.sql, .patch) | Total de arquivos |
 |---|---|---|---|
-| `Ativos` (a fazer ou parcial) | 13 | 3 | 16 |
-| `Entregues` (feito no código ou aplicado) | 68 | 15 | 83 |
+| `Ativos` (a fazer ou parcial) | 12 | 3 | 15 |
+| `Entregues` (feito no código ou aplicado) | 69 | 15 | 84 |
 | `Arquivados` (superado, fora de escopo ou histórico) | 11 | 0 | 11 |
 | **Total** | **92** | **18** | **110** |
 
@@ -26,9 +26,9 @@ Quando nascer um contrato novo, ele entra **completo** em `06-Contratos/` (nunca
 |---|---|
 | `proposta` | 1 |
 | `para-implementar` | 0 |
-| `parcial` | 12 |
+| `parcial` | 11 |
 | `implementado-no-codigo` | 50 |
-| `aplicado-em-producao` | 18 |
+| `aplicado-em-producao` | 19 |
 | `arquivado` | 11 |
 
 Vocabulário de status: `proposta` (ainda sem decisão), `para-implementar` (decidido, falta código), `parcial` (parte no código, parte não), `implementado-no-codigo` (conferido no código de 14/10), `aplicado-em-producao` (aplicado no banco, confirmado por dump; produção não reconferida em 14/10 ❓), `arquivado` (superado, rejeitado, fora de escopo ou histórico, com o motivo na nota).
@@ -63,7 +63,7 @@ Contrato que pede uma resposta de negócio a quem conhece o assunto, com context
 | SQL-013 | Contrato SQL 013 | [[SQL-013-Produtos-Provaveis-Duplicatas-Funcoes-e-Uso\|Produtos: prováveis duplicatas (normalização, pares por semelhança e uso)]] | `aplicado-em-producao` | av-hub: banco | Entregues | — | — | Gustavo: informar os ajustes feitos no script | — | — |
 | SQL-014 | Contrato SQL 014 | [[SQL-014-Pedido-Encerrado-por-Saldo-Zerado\|Pedido encerrado por saldo zerado ("Faturado, encerrado") e encerrado em atraso]] | `aplicado-em-producao` | av-hub: banco | Entregues | — | — | — | — | — |
 | SQL-015 | Contrato SQL 015 | [[SQL-015-Carteira-do-PCP-Totais-por-Vendedor-e-Desvio\|Carteira do PCP: totais, por vendedor e desvio de previsão]] | `aplicado-em-producao` | av-hub: banco, API, front | Entregues | — | — | ✅ banco e API terminados (Gustavo, 29/10) | Nathan: testar `PUT .../marcacao` (marcar e desmarcar) | — |
-| SQL-020 | Contrato SQL 020 | [[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado\|Orçamento por PDF: relatório compartilhado no banco (schema `orcamento_pdf`)]] | `parcial` | av-hub: banco, API, front | Ativos | — | — | Gustavo: aplicar o SQL, publicar a API e conceder a tela `orcamento-pdf` | Nathan: testar importar, trocar de período, remover e a TV | — |
+| SQL-020 | Contrato SQL 020 | [[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado\|Orçamento por PDF: relatório compartilhado no banco (schema `orcamento_pdf`)]] | `aplicado-em-producao` | av-hub: banco, API, front | Entregues | — | — | — | — | — |
 | SQL-021 | Contrato SQL 021 | [[SQL-021-Produto-Vendas-Codigo-Item-Integracao\|Item do pedido de venda: `produto_vendas.codigo_item_integracao`]] | `parcial` | av-hub: banco · pipeline Omie | Ativos | — | Robert: mandar `ide.codigo_item_integracao` em cada item do `IncluirPedido` | Gustavo: criar a coluna `produto_vendas.codigo_item_integracao` (`varchar(20)`, nulável) | — | — |
 | API-001 | — | [[API-001-Produtos-Parceiros-Filtro-Incremental\|Filtro incremental `alterado_desde` em produtos e parceiros]] | `implementado-no-codigo` | av-hub: API · pipeline Omie | Entregues | — | — | — (`alterado_desde` corrigido, informado 26/10) | — | — |
 | API-002 | — | [[API-002-Material-Alias-Omie-MES\|Alias de material Omie no MES (rejeitado)]] | `arquivado` | MES: API | Arquivados | — | — | — | — | — |
@@ -185,7 +185,6 @@ Só contratos fora de `Arquivados/`. O detalhe e os selos estão na nota de cada
 ### Gustavo (DBA: banco e API do av-hub)
 
 - [[SQL-021-Produto-Vendas-Codigo-Item-Integracao|SQL-021]]: Gustavo: criar `produto_vendas.codigo_item_integracao` (`varchar(20)`, nulável, sem default); a pipeline já tolera a falta da coluna e passa a gravar em até 1 hora depois
-- [[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado|SQL-020]]: Gustavo: aplicar `2026-11-03_orcamento_pdf_relatorio.sql`, publicar a API (`/orcamento_pdf/relatorios`) e conceder a tela `orcamento-pdf` (visualizar, criar, deletar) aos perfis
 - [[API-012-Produtos-Provaveis-Duplicatas-Rota-e-Tela|API-012]]: Gustavo: rota publicada; falta melhorar a nota (medidas em ordem, unidade, coesão) e informar os ajustes do script do [[SQL-013-Produtos-Provaveis-Duplicatas-Funcoes-e-Uso|SQL-013]]
 - [[API-010-Requisicao-do-Compras-Finalidade-Pedido-e-Produto|API-010]]: Gustavo: responder Q1 e Q4 (junto do API-009, BL-064); a migration `api010` está em produção desde 20/10
 - [[API-009-Referencia-Requisicao-Hub-Integracao-MES|API-009]]: Gustavo: ✅ rota `GET /compras/requisicoes/referencia` na `main` (BL-064); responder Q1 a Q4; a migration `api009` está em produção desde 20/10
@@ -200,7 +199,6 @@ Só contratos fora de `Arquivados/`. O detalhe e os selos estão na nota de cada
 
 ### Nathan (front do av-hub)
 
-- [[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado|SQL-020]]: Nathan: depois do banco e da API, testar importar o PDF, outro computador abrir o mesmo painel e a TV em tela cheia
 - [[API-014-Setor-do-Cliente-e-do-Grupo-no-Acompanhamento-de-Clientes|API-014]]: Nathan: testar salvar 2 setores, o filtro e o Excel na tela (o front de vários setores está na `develop`); definir perfis `pode_editar`/`pode_criar` e o lote
 - [[SQL-015-Carteira-do-PCP-Totais-por-Vendedor-e-Desvio|SQL-015]]: Nathan: testar `PUT .../marcacao` (marcar e desmarcar, escopo, histórico) e conferir o cartão "Em avanço" do Dashboard
 - [[LOG-55-Compras-Excluir-Requisicao|LOG-55]]: Nathan: Q2, dar `pode_deletar` em `compras` ao perfil Comprador (ajuste de perfil no banco)
@@ -228,6 +226,10 @@ Só contratos fora de `Arquivados/`. O detalhe e os selos estão na nota de cada
 ### Pablo (Comercial & Suprimentos)
 
 - Desde 28/10/2026 **acompanha** o Robert (N16-117). As pendências que eram dele (ciclo da proposta, módulo na `api-acos-vital`, Ciclo 2 do LOG-47, substituir o orçamento do LOG-42) passaram ao Robert.
+
+## O que mudou de pasta em 04/11/2026
+
+[[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado\|SQL-020]]: Ativos → Entregues, `parcial` → `aplicado-em-producao`. O Nathan informou em 04/11 que o contrato está feito (SQL aplicado, API publicada, permissões dadas e fluxo testado). Não conferi o banco nem a tela.
 
 ## O que mudou de pasta em 29/10/2026
 

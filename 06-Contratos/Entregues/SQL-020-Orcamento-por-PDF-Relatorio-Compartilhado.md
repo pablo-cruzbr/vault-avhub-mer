@@ -3,8 +3,8 @@ id: SQL-020
 aliases: ["Contrato SQL 020", "020-Orcamento-por-PDF"]
 tags: [contrato, contrato-sql, dba, api, orcamento, dashboard, experimental, tv]
 criado: 2026-11-03
-atualizado: 2026-11-03
-status: parcial
+atualizado: 2026-11-04
+status: aplicado-em-producao
 sistemas: [hub-banco, hub-api, hub-front]
 dono: "Gustavo (DBA)"
 etapa_0b: []
@@ -19,18 +19,15 @@ criado_original: 2026-11-03
 > [!abstract] Resumo em linguagem natural
 > **O que é:** A tela experimental "Orçamento por PDF" lê o "Relatório Gerencial Comercial" do ERP (um PDF) no navegador e monta um dashboard igual ao de Vendas. Até 03/11 o resultado ficava só no `localStorage` do navegador de quem importou. Este contrato leva o resultado para o banco (schema `orcamento_pdf`, uma tabela só) para o gerente e a TV verem o mesmo painel.
 > **Quem é afetado:** quem importa o PDF (Nathan e quem receber a permissão), o gerente e a TV da diretoria.
-> **Situação:** Parcial. O SQL, a API e o front estão escritos e testados sem banco; falta o Gustavo aplicar o SQL, publicar a API e dar as permissões, e o Nathan testar de ponta a ponta.
+> **Situação:** Entregue. O SQL foi aplicado, a API publicada, as permissões dadas e a tela testada (informado pelo Nathan em 04/11/2026).
 > **Exemplo:** o Nathan importa o PDF de outubro (31 vendedores, R$ 187.641.569,57 em 696 cotações); o gerente abre a tela no computador dele e vê o mesmo ranking.
 
-> [!info] Situação em 03/11/2026
-> **Status:** `parcial` · **Pasta:** `Ativos` · **Nós do 0b:** — (tela experimental, fora do fluxo) · **Dono:** Gustavo (DBA)
+> [!info] Situação em 04/11/2026
+> **Status:** `aplicado-em-producao` · **Pasta:** `Entregues` · **Nós do 0b:** — (tela experimental, fora do fluxo) · **Dono:** Gustavo (DBA)
 >
 > - ✅ **Escrito em 03/11/2026 (Nathan, com apoio do Claude):** SQL em `api-acos-vital/2026-11-03_orcamento_pdf_relatorio.sql`; API em `api-acos-vital/src/schemas/orcamento_pdf/` (4 rotas); BFF em `av-hub/app/api/orcamento-pdf/`; front em `av-hub/components/OrcamentoPdf/`.
 > - ✅ **Testado sem banco:** 7 testes unitários novos da validação (81 no total passam); `eslint` e `tsc` limpos. Os dados lidos do PDF de outubro (31 vendedores, soma R$ 187.641.569,57 e 696 cotações) passam no esquema da API e voltam idênticos pelo front.
-> - 🔴 **Não aplicado:** o SQL não foi rodado em nenhum banco (sem Postgres na máquina de desenvolvimento). Nenhuma rota foi chamada de verdade.
-> - 🔴 **Gustavo:** aplicar o SQL, publicar a API, conceder a tela `orcamento-pdf` aos perfis (seção "Permissões") e conferir o GRANT do usuário da API.
-> - 🔴 **Nathan:** depois disso, testar importar, trocar de período, remover e a TV em tela cheia.
-> - ❓ A tela ainda não está no menu: o menu vem de `auth.telas`; entra quando o SQL rodar. A rota funciona pela URL `/experimental/orcamento-pdf` (até lá responde "sem acesso", porque a tela não existe no banco).
+> - ✅ **Feito (informado pelo Nathan em 04/11/2026):** SQL aplicado, API publicada, tela `orcamento-pdf` concedida aos perfis e fluxo testado (importar, trocar de período, remover e a TV em tela cheia). Não conferi o banco nem a tela: o estado vem da informação do Nathan.
 >
 > Selos em [[Regras-do-Vault]].
 
