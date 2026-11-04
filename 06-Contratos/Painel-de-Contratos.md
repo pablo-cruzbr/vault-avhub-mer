@@ -1,7 +1,7 @@
 ---
 tags: [contratos, painel, indice]
 criado: 2026-10-14
-atualizado: 2026-10-29
+atualizado: 2026-11-04
 status: vigente
 dono: Nathan
 fontes: [LOG-51 e LOG-52 (auditoria de 15/10/2026), 06-Contratos/Ativos, 06-Contratos/Entregues, 06-Contratos/Arquivados, plano de 14/10/2026, código de 14/10 (api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0)]
@@ -17,16 +17,16 @@ Quando nascer um contrato novo, ele entra **completo** em `06-Contratos/` (nunca
 
 | Pasta | Contratos (.md) | Anexos (.sql, .patch) | Total de arquivos |
 |---|---|---|---|
-| `Ativos` (a fazer ou parcial) | 11 | 3 | 14 |
+| `Ativos` (a fazer ou parcial) | 13 | 3 | 16 |
 | `Entregues` (feito no código ou aplicado) | 68 | 15 | 83 |
 | `Arquivados` (superado, fora de escopo ou histórico) | 11 | 0 | 11 |
-| **Total** | **90** | **18** | **108** |
+| **Total** | **92** | **18** | **110** |
 
 | Status | Contratos |
 |---|---|
 | `proposta` | 1 |
 | `para-implementar` | 0 |
-| `parcial` | 10 |
+| `parcial` | 12 |
 | `implementado-no-codigo` | 50 |
 | `aplicado-em-producao` | 18 |
 | `arquivado` | 11 |
@@ -63,6 +63,8 @@ Contrato que pede uma resposta de negócio a quem conhece o assunto, com context
 | SQL-013 | Contrato SQL 013 | [[SQL-013-Produtos-Provaveis-Duplicatas-Funcoes-e-Uso\|Produtos: prováveis duplicatas (normalização, pares por semelhança e uso)]] | `aplicado-em-producao` | av-hub: banco | Entregues | — | — | Gustavo: informar os ajustes feitos no script | — | — |
 | SQL-014 | Contrato SQL 014 | [[SQL-014-Pedido-Encerrado-por-Saldo-Zerado\|Pedido encerrado por saldo zerado ("Faturado, encerrado") e encerrado em atraso]] | `aplicado-em-producao` | av-hub: banco | Entregues | — | — | — | — | — |
 | SQL-015 | Contrato SQL 015 | [[SQL-015-Carteira-do-PCP-Totais-por-Vendedor-e-Desvio\|Carteira do PCP: totais, por vendedor e desvio de previsão]] | `aplicado-em-producao` | av-hub: banco, API, front | Entregues | — | — | ✅ banco e API terminados (Gustavo, 29/10) | Nathan: testar `PUT .../marcacao` (marcar e desmarcar) | — |
+| SQL-020 | Contrato SQL 020 | [[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado\|Orçamento por PDF: relatório compartilhado no banco (schema `orcamento_pdf`)]] | `parcial` | av-hub: banco, API, front | Ativos | — | — | Gustavo: aplicar o SQL, publicar a API e conceder a tela `orcamento-pdf` | Nathan: testar importar, trocar de período, remover e a TV | — |
+| SQL-021 | Contrato SQL 021 | [[SQL-021-Produto-Vendas-Codigo-Item-Integracao\|Item do pedido de venda: `produto_vendas.codigo_item_integracao`]] | `parcial` | av-hub: banco · pipeline Omie | Ativos | — | Robert: mandar `ide.codigo_item_integracao` em cada item do `IncluirPedido` | Gustavo: criar a coluna `produto_vendas.codigo_item_integracao` (`varchar(20)`, nulável) | — | — |
 | API-001 | — | [[API-001-Produtos-Parceiros-Filtro-Incremental\|Filtro incremental `alterado_desde` em produtos e parceiros]] | `implementado-no-codigo` | av-hub: API · pipeline Omie | Entregues | — | — | — (`alterado_desde` corrigido, informado 26/10) | — | — |
 | API-002 | — | [[API-002-Material-Alias-Omie-MES\|Alias de material Omie no MES (rejeitado)]] | `arquivado` | MES: API | Arquivados | — | — | — | — | — |
 | API-003 | — | [[API-003-Requisicao-Compra-Integracao-MES\|Requisição de compra MES → av-hub (versão polling)]] | `arquivado` | av-hub: API · MES: API | Arquivados | P3 | — | — | — | — |
@@ -182,6 +184,8 @@ Só contratos fora de `Arquivados/`. O detalhe e os selos estão na nota de cada
 
 ### Gustavo (DBA: banco e API do av-hub)
 
+- [[SQL-021-Produto-Vendas-Codigo-Item-Integracao|SQL-021]]: Gustavo: criar `produto_vendas.codigo_item_integracao` (`varchar(20)`, nulável, sem default); a pipeline já tolera a falta da coluna e passa a gravar em até 1 hora depois
+- [[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado|SQL-020]]: Gustavo: aplicar `2026-11-03_orcamento_pdf_relatorio.sql`, publicar a API (`/orcamento_pdf/relatorios`) e conceder a tela `orcamento-pdf` (visualizar, criar, deletar) aos perfis
 - [[API-012-Produtos-Provaveis-Duplicatas-Rota-e-Tela|API-012]]: Gustavo: rota publicada; falta melhorar a nota (medidas em ordem, unidade, coesão) e informar os ajustes do script do [[SQL-013-Produtos-Provaveis-Duplicatas-Funcoes-e-Uso|SQL-013]]
 - [[API-010-Requisicao-do-Compras-Finalidade-Pedido-e-Produto|API-010]]: Gustavo: responder Q1 e Q4 (junto do API-009, BL-064); a migration `api010` está em produção desde 20/10
 - [[API-009-Referencia-Requisicao-Hub-Integracao-MES|API-009]]: Gustavo: ✅ rota `GET /compras/requisicoes/referencia` na `main` (BL-064); responder Q1 a Q4; a migration `api009` está em produção desde 20/10
@@ -196,6 +200,7 @@ Só contratos fora de `Arquivados/`. O detalhe e os selos estão na nota de cada
 
 ### Nathan (front do av-hub)
 
+- [[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado|SQL-020]]: Nathan: depois do banco e da API, testar importar o PDF, outro computador abrir o mesmo painel e a TV em tela cheia
 - [[API-014-Setor-do-Cliente-e-do-Grupo-no-Acompanhamento-de-Clientes|API-014]]: Nathan: testar salvar 2 setores, o filtro e o Excel na tela (o front de vários setores está na `develop`); definir perfis `pode_editar`/`pode_criar` e o lote
 - [[SQL-015-Carteira-do-PCP-Totais-por-Vendedor-e-Desvio|SQL-015]]: Nathan: testar `PUT .../marcacao` (marcar e desmarcar, escopo, histórico) e conferir o cartão "Em avanço" do Dashboard
 - [[LOG-55-Compras-Excluir-Requisicao|LOG-55]]: Nathan: Q2, dar `pode_deletar` em `compras` ao perfil Comprador (ajuste de perfil no banco)
@@ -218,6 +223,7 @@ Só contratos fora de `Arquivados/`. O detalhe e os selos estão na nota de cada
 ### Robert (módulo comercial na `api-acos-vital`, desde 28/10/2026)
 
 - [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub|LOG-52]]: Robert: trocar o backend das telas do Pablo, sem refazê-las (N16-119), portando só o que a N16-109 manda; a `api-comercial` fica só para leitura (N16-117)
+- [[SQL-021-Produto-Vendas-Codigo-Item-Integracao|SQL-021]]: Robert: mandar `ide.codigo_item_integracao` em cada item do `IncluirPedido` (o exemplo do pedido de 03/11 usa a sequência do item) e conferir no pedido de teste
 
 ### Pablo (Comercial & Suprimentos)
 
