@@ -30,6 +30,7 @@ Quando o Nathan disser "atualizar o vault" (ou "atualiza o vault", "sincroniza o
 - IDs: veja `01-Projeto/Tipos-de-ID.md`. Busque o ID exato (`N16-60`, `BL-035`, `LOG-34`, `V0.3`) em vez de abrir notas inteiras.
 - Notas grandes foram divididas: o detalhe fica em `<pasta>/Partes/` (frontmatter `parte-de`). Nenhuma nota passa de ~25 KB.
 - Contratos da v2: `06-Contratos/Contratos-da-v2.md` (texto no GitHub, tag `v2-antes-da-v3`).
+- `07-Desenvolvimento/v3/` é só o histórico da reestruturação (nomes da v2); não é fonte de estado. As fotos de fatos de antes da reescrita saíram da `main` e estão no commit `249baa8`.
 
 ## Scripts (Node, em `scripts/`)
 

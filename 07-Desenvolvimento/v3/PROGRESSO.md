@@ -190,5 +190,9 @@ São os mesmos commits de `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md` e 
 - Nathan precisa avisar Robert e Gustavo que a `main` do vault fica congelada (D4).
 - `omie-elt-pipeline` sem `develop`: confirmar que `origin/master` é a base correta.
 
+## Depois do encerramento
+- 2026-11-05: a pasta `fatos/` (1,6 MB de fotos das notas antes da reescrita) saiu da `main`, porque a busca do Obsidian e o `grep` misturavam essas cópias velhas com as notas novas. O conteúdo continua no git, no commit `249baa8` (`git show 249baa8:07-Desenvolvimento/v3/fatos/<arquivo>`).
+- 2026-11-05: `scripts/validar.mjs` corrigido; no Windows a checagem de selos não examinava nenhuma nota (filtro `[/]`). Com a correção apareceram 3 ✅ sem citação, criados pelo commit `b256b99`, e as 3 foram citadas.
+
 ## Histórico de retomadas
 (nenhuma)
