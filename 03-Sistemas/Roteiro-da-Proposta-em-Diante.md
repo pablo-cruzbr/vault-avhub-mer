@@ -2,7 +2,7 @@
 id: roteiro-proposta-em-diante
 tags: [roteiro, proposta, pedido-de-venda, compras, custo-real, comissao, api-acos-vital]
 criado: 2026-10-27
-atualizado: 2026-10-29
+atualizado: 2026-11-05
 status: proposta
 dono: Nathan
 fontes: ["LOG-52 (status em 27/10/2026)", "Registro-de-Decisoes N16-110 a N16-112", "Perguntas-Proposta-Pedido-Comissao (OQ-16, OQ-21, OQ-48)", "Dump do Avhub para referência (completo), 26/10/2026", "av-hub branch refactor/menu-enxuto-vendas-orcamento-compras (11844de)", "api-acos-vital 0384e89 src/schemas/core_comercial (28 e 29/10)", "av-hub 758d5f0 app/api/comercial (29/10)", "[[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]]"]
@@ -48,7 +48,7 @@ Banco, API e tela aparecem nessa ordem.
 | `B3`/`B4` Pedido de custo | 🔴 🔴 🔴 | Fila do Orçamento, sem prazo e cronometrada | Robert, Gustavo, Nathan |
 | `B2` Página do produto | 🟡 🟡 🟡 | Estatística de 90 dias, score, volatilidade e matriz de preços | Robert, Nathan |
 | Ofertas e cotação | 🟡 🔴 🟡 | Tabela de oferta, importar mapa e enviar cotação por e-mail | Robert, Gustavo, Nathan |
-| `V0.6`–`V0.7` Transformar em pedido | 🟡 🟡 🔴 | `POST …/transformar` existe (29/10): cria o pedido no Hub com a simulação v1, sem escrever no Omie; faltam as 3 respostas obrigatórias, a fila para o Omie e a tela | Robert, Gustavo, Nathan (pipeline) |
+| `V0.6`–`V0.7` Transformar em pedido | 🟡 🟡 🔴 | `POST …/transformar` existe (29/10): cria o pedido no Hub com a simulação v1. Desde 05/11 (`1654f65`) recebe a previsão, o nº do pedido do cliente, a categoria e `SPOT` ou `CONTRATO` no corpo e envia o pedido ao Omie na mesma requisição, direto pela API, sem fila (`api-acos-vital` `propostas.route.js:579-618`, `pedidoOmie.js`). Faltam a resposta da Qualidade, o faturamento em partes com a data por item (N16-150), o banco dessa função ❓ (migration fora do repositório) e a tela | Robert, Gustavo, Nathan (tela) |
 | `V1`–`V3` Liberação | 🟡 🟡 ✅ | Gravar a liberação na resposta do `IncluirPedido` | Gustavo, Nathan |
 | Pedido digitado no Omie | 🔴 🔴 🟡 | Trazer o pedido e o vendedor preencher a parte de compras (N16-106) | Robert, Gustavo, Nathan |
 | `C6`/`C7` Compras usa a proposta | 🔴 🔴 🔴 | A OC puxar impostos, frete e fornecedor. Nenhuma OC emitida em produção | Robert, Nathan |
@@ -103,7 +103,7 @@ Tudo abaixo é o conteúdo completo da nota original, sem cortes.
 | **B3/B4 · Pedido de custo** | 🔴 | 🔴 | 🔴 | Fila do Orçamento, cronometrada e sem prazo (N16-58). A tela atual é a do Pablo, com SLA | | **Robert** (API), Gustavo (banco), Nathan (tela) |
 | **B2 · Página do produto e matriz de preços** | 🟡 | 🟡 | 🟡 | Os dados existem (compras do Omie e cotações do Orçamento antigo). Faltam estatística de 90 dias, score e volatilidade do fornecedor e a matriz | | **Robert** (API), Nathan (tela) |
 | **Ofertas e cotação a fornecedor** | 🟡 | 🔴 | 🟡 | Uma tabela de oferta (`parceiros_produtos` está vazia), importar mapa, envio do pedido de cotação por e-mail | | **Robert** (API), Gustavo (banco), Nathan (tela) |
-| **V0.6–V0.7 · Transformar em pedido** | 🔴 | 🔴 | 🔴 | **Pedido:** `pedidos`, `pedidos_itens` e as 3 respostas obrigatórias (Qualidade, faturar em partes ou inteiro, data de previsão). **Omie:** fila e pipeline com `IncluirPedido`, erro com "Tentar novamente" | | **Robert** (API), Gustavo (banco), Nathan (pipeline e tela) |
+| **V0.6–V0.7 · Transformar em pedido** | 🔴 | 🔴 | 🔴 | **Pedido:** `pedidos`, `pedidos_itens` e as 3 respostas obrigatórias (Qualidade, faturar em partes ou inteiro, data de previsão). **Omie:** `IncluirPedido` direto pela API, sem fila nem pipeline (N16-149), erro com "Tentar novamente"; o código existe desde 05/11 (`1654f65`), falta o banco e a tela | | **Robert** (API), Gustavo (banco), Nathan (tela) |
 | **V1–V3 · Liberação** | 🟡 | 🟡 | ✅ | A liberação do pedido do Omie existe (LOG-26). Falta gravar a liberação na resposta do `IncluirPedido` | | Gustavo (banco e API), Nathan |
 | **Pedido digitado no Omie no mesmo fluxo** | 🔴 | 🔴 | 🟡 | Trazer o pedido para `pedidos` e o vendedor preencher a parte de compras em Meus Pedidos | N16-106 | **Robert** (API), Gustavo (banco), Nathan (tela) |
 | **C6/C7 · Compras usa os dados da proposta** | 🔴 | 🔴 | 🔴 | A OC puxar impostos, frete e fornecedor da proposta, com os campos de imposto na OC. O circuito de OC do Hub ainda não emitiu nenhuma em produção (`ordens_compra` = 0) | | **Robert** (rota da parte de compras), Nathan (pipeline e tela) |
