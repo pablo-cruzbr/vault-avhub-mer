@@ -20,20 +20,9 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-
 
 **Onde estamos no fluxo:** ← [[05-Estoque-Atendimento]] | [[07-Recebimento]] → · nós desta nota: `P3`, `C0`, `C1`, `C2`, `C3`, `C4`, `C5`, `C6`, `C7`, `C8`, `FN1`
 
-O MES (sistema de chão de fábrica) pede e depois só lê. O av-hub cota, aprova, emite e acompanha. Preço, fornecedor e condição ficam no av-hub. O MES recebe só os marcos do andamento.
+Quem pede o material é o MES (sistema de chão de fábrica); depois ele só lê. O av-hub cota, aprova, emite e acompanha. Preço, fornecedor e condição ficam no av-hub. O MES recebe só os marcos do andamento. CCP é o acompanhamento de compras: quem segue o fornecedor até a entrega.
 
-Nós do [[00-Fluxo-Mestre-0b]]: `P3`, `C0` a `C5`, `FN1`. Fecha em `FN1 → R0` ([[07-Recebimento]]). Selos em [[Regras-do-Vault]].
-
-> [!info] Decisões de 16 a 29/10/2026 (fluxo aprovado em 26/10; N16-120 a N16-143)
-> - Antes de cotar, Compras confere o que o vendedor preencheu na proposta: fornecedor, impostos e frete, que o sistema puxa para a OC (`C6`).
-> - Compras pode seguir o fornecedor do vendedor ou usar o valor correto, sem mudar a proposta (`C7`).
-> - Se comprar acima do custo do vendedor, por produto e sem tolerância, ele aprova ou reprova em Meus Pedidos; o reprovado vai à Gerência fisicamente e à lista de Reprovados de Compras (`C8`). Vale para o pedido da proposta e para o digitado no Omie 📝 (N16-08, N16-60 a N16-67, N16-76, N16-106) 🔴.
-> - Compras e o CCP registram as datas de entrega do fornecedor, que movem a previsão de faturamento (N16-88).
-> - Não há trava entre quem emite e quem aprova a OC; o Gerente de Compras pode aprovar a que ele mesmo emitiu. O limite de R$ 30 mil continua provisório (N16-123).
-> - O Compras será avisado no av-hub da recompra por RNC (N16-127; hoje só o MES sabe e a OC segue "atendida") e da reabertura do recebimento pelo PCP (N16-137), pelo mesmo caminho.
-> - O imposto por item da OC vem da parte de compras do pedido quando a finalidade da linha é `pedidos_venda` ou `recompra`; para `estoque` ou `uso_interno` o Comprador digita. Uma linha por pedido, sem média; o frete é rateado pelas linhas na proporção do valor; o Comprador pode editar antes de aprovar (N16-144). O contrato só será escrito quando o desenvolvimento começar.
-> - O recebimento e a leitura da OC pelo MES já existem na `develop` do MES (15 a 26/10; ver o fim desta nota). A `main` do MES parou em 08/10.
-> - Tudo isso exige contrato novo entre MES e hub. Detalhe de `C6` a `C8` em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
+Nós do [[00-Fluxo-Mestre-0b]] de que esta nota é dona: `P3`, `C0` a `C8` e `FN1`. Fecha em `FN1 → R0` ([[07-Recebimento]]). Selos em [[Regras-do-Vault]].
 
 ## Como funciona, passo a passo
 
@@ -69,26 +58,46 @@ O comprador manda o PDF ao fornecedor por fora. O CCP anota a confirmação e a 
 
 ## Regras que valem
 
+O fluxo foi aprovado em 26/10. As decisões N16-120 a N16-143 são de 29/10/2026.
+
+**Requisição e aprovação**
+
 - Existem duas origens de requisição, mas uma caixa só: PCP e Compras são tratados igual.
 - Até R$ 30 mil, o comprador emite livre. Acima, o Gerente de Compras aprova.
 - A Diretoria não aprova.
 - O limite de R$ 30 mil é por unidade e provisório. Endurece depois da conversa com Compras.
 - O Gerente de Compras pode aprovar a OC que ele mesmo emitiu (N16-123).
+- Não há trava entre quem emite e quem aprova a OC. O limite de R$ 30 mil continua provisório (N16-123).
 - Cancelar requisição exige motivo de 3 a 500 caracteres.
 - Requisição que já tem OC não se cancela pelo MES.
 - Compras · CCP no MES é só leitura.
 - A OC aprovada vai ao Omie por fila. OC com erro sai da fila e só volta se alguém reenviar.
 - OC cancelada devolve todas as requisições dela a "aberta". Nenhum estado é beco sem saída.
 
+**Parte de compras do pedido da proposta (`C6` a `C8`)**
+
+- Antes de cotar, Compras confere o que o vendedor preencheu na proposta: fornecedor, impostos e frete. O sistema puxa esses dados para a OC (`C6`).
+- Compras pode seguir o fornecedor do vendedor ou usar o valor correto, sem mudar a proposta (`C7`).
+- Se Compras comprar acima do custo do vendedor, o vendedor aprova ou reprova em Meus Pedidos. A conta é por produto, sem tolerância. O reprovado vai à Gerência fisicamente e à lista de Reprovados de Compras (`C8`). Vale para o pedido da proposta e para o digitado no Omie 📝 (N16-08, N16-60 a N16-67, N16-76, N16-106) 🔴.
+- O imposto por item da OC vem da parte de compras do pedido quando a finalidade da linha é `pedidos_venda` ou `recompra`. Para `estoque` ou `uso_interno`, o Comprador digita. É uma linha por pedido, sem média. O frete é rateado pelas linhas na proporção do valor. O Comprador pode editar antes de aprovar 📝 (N16-144). O contrato só será escrito quando o desenvolvimento começar.
+
+**Acompanhamento e avisos**
+
+- Compras e o CCP registram as datas de entrega do fornecedor. Essas datas movem a previsão de faturamento (N16-88).
+- O Compras será avisado no av-hub da recompra por RNC (registro de não conformidade da Qualidade; N16-127). Hoje só o MES sabe, e a OC segue "atendida".
+- Pelo mesmo caminho, o Compras será avisado quando o PCP reabrir o recebimento (N16-137).
+
 ## O que já existe e o que falta
 
 - ✅ (`av-hub`, `app-pcp`) Telas das duas origens, emissão da OC, lista de OCs, aprovações e follow-up do CCP.
 - ✅ Envio da OC ao Omie testado em 14/10. Produção ainda ❓.
 - 🟡 Regra de aprovação provisória: vai endurecer depois da conversa com Compras.
-- 📝 `C6` a `C8` decididos em 26/10; sem código na `api-acos-vital` nem no front 🔴 (conferido em 29/10: nenhuma rota `divergencias_compra`).
+- 📝 `C6` a `C8` decididos em 26/10; sem código na `api-acos-vital` nem no front 🔴 (conferido em 29/10: nenhuma rota `divergencias_compra`). Detalhe em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
 - ✅ O MES lê a OC do hub desde 15/10 (K4, `develop` do `api-pcp`) e as requisições do Compras com pedido de venda aparecem ao PCP na Triagem desde 23/10 (API-009). 🔴 Falta o PCP ver a OC do pedido na Triagem e na Destinação (BL-049) e o saldo futuro no Estoque (BL-050).
+- ✅ O recebimento e a leitura da OC pelo MES estão na `develop` do MES (15 a 26/10). A `main` do MES parou em 08/10.
 - 🔴 Perfil exclusivo do CCP (hoje vale a permissão da tela).
 - 🔴 Contrato de recompra por RNC e aviso de atraso ao PCP e ao vendedor.
+- 🔴 Contrato novo entre MES e hub para `C6` a `C8` e para os avisos da recompra por RNC (N16-127) e da reabertura do recebimento (N16-137).
 - ❓ Teste ponta a ponta com as chaves reais; versionar `fn_requisicao_mes_aplicar`.
 
 ## Detalhe técnico
