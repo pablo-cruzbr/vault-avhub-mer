@@ -20,24 +20,22 @@ fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2
 
 **Onde estamos no fluxo:** ← [[04-PCP-Triagem-e-Destinacao]] | [[06-Circuito-de-Compra]] → · nós desta nota: `E1`, `E2`, `E3`, `E4`
 
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - O despacho (documento de retirada, N16-120 a N16-122 e N16-140) está em [[12-Estoque-Despacho]]; a entrada do fabricado (LOG-53) em [[09-Estoque-Entrada-do-Lote]].
-> - Matéria-prima: a baixa decidida é na retirada (N16-140), mas a `develop` já baixa na hora em que o almoxarife usa "Atender pelo estoque" num item de fabricação (`ConsumoMateriaPrima`, 19/10, `8d07917`). A baixa na retirada ainda falta 🔴.
-> - Código: tudo o que é MES nesta nota está na `develop` do `api-pcp` e do `app-pcp`; a `main` parou em 08/10 e só recebe com o merge BL-035.
-
 ## Como funciona, passo a passo
 
-1. A parcial chega ao Estoque, vinda do PCP, com a quantidade toda.
+1. A parcial chega ao Estoque, vinda do PCP (planejamento e controle da produção), com a quantidade toda.
 2. O almoxarife vê o saldo livre na filial do pedido: lotes liberados menos reservas. `E1`
 3. Ele informa quanto atende, de zero até a quantidade da parcial, e de quais lotes. Atender zero é um clique. `E2`
 4. O sistema reserva o lote e separa a parte atendida, que segue para a Expedição. `E3`
 5. Para o restante, o almoxarife escolhe: solicitar compra ou enviar à produção. `E4`
 
-Depois: a entrada do lote comprado ou fabricado (passo 6, `E5`) está em [[09-Estoque-Entrada-do-Lote]], e o despacho pela retirada (passo 7, `E6`) em [[12-Estoque-Despacho]].
+Depois:
+
+- A entrada do lote comprado ou fabricado (passo 6, `E5`) está em [[09-Estoque-Entrada-do-Lote]]. A entrada do fabricado segue a [[Contratos-da-v2|LOG-53]].
+- O despacho pela retirada (passo 7, `E6`) está em [[12-Estoque-Despacho]]. Ele usa o documento de retirada (N16-120 a N16-122 e N16-140).
 
 ## Exemplo
 
-O pedido tem 100 flanges. O almoxarife encontra 40 em lotes liberados e informa 40. Elas viram uma parcial própria, com reserva, a caminho da Expedição. As 60 restantes seguem na parcial original. Se o destino for a Revenda, as 60 vão para a compra. Se for fabricação, ele escolhe entre comprar matéria-prima e seguir o roteiro. Quando a Expedição pede a retirada, o almoxarife confirma e o saldo baixa com o custo daquele lote.
+O pedido tem 100 flanges. O almoxarife encontra 40 em lotes liberados e informa 40. Elas viram uma parcial própria, com reserva, a caminho da Expedição. As 60 restantes seguem na parcial original. Se o destino for a Revenda, as 60 vão para a compra. Se for fabricação, ele escolhe entre comprar matéria-prima e seguir o roteiro. Quando a Expedição pede a retirada, o almoxarife confirma e o saldo baixa com o custo daquele lote. É o desenho decidido (N16-120 a N16-122); hoje a baixa é na Embalagem.
 
 ## Quem atua
 
@@ -50,6 +48,8 @@ O pedido tem 100 flanges. O almoxarife encontra 40 em lotes liberados e informa 
 
 ## Regras que valem
 
+As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do [[Registro-de-Decisoes]].
+
 - O saldo livre é por filial: lotes liberados menos reservas ativas, na filial do pedido.
 - Saldo zero exige clique. A parcial nunca passa sozinha.
 - O saldo é lido e a reserva criada no mesmo passo, para evitar corrida entre pedidos.
@@ -58,13 +58,17 @@ O pedido tem 100 flanges. O almoxarife encontra 40 em lotes liberados e informa 
 - Na fabricação, o restante pode comprar matéria-prima ou seguir o roteiro.
 - Ajuste de saldo não usa o que está reservado e exige motivo.
 - O custo do lote é opcional e nunca bloqueia nada.
+- A matéria-prima baixa do saldo na retirada, não no atendimento (N16-140).
 
 ## O que já existe e o que falta
+
+Tudo o que é MES nesta nota está na `develop` do `api-pcp` e do `app-pcp`. A `main` parou em 08/10 e só recebe com o merge BL-035.
 
 - ✅ (`app-pcp`) Telas Atendimento, Saldo, Reservas, Movimentação e Lote com etiqueta.
 - ✅ (`api-pcp`) Reserva, divisão da parcial, solicitar compra, entrada do item comprado e baixa na Embalagem.
 - 🟡 Painel do Estoque e Mapa do Depósito ainda são protótipos.
 - ✅ (`api-pcp`) Na `develop` do MES: fabricado aprovado vira lote `PRODUCAO` e saldo (27/10); rota `GET /itens/custo` com o custo do item (27/10, `6c11147`); custo da OC no lote do Recebimento (19/10); baixa de matéria-prima no "Atender pelo estoque" (19/10).
+- 🔴 Baixa da matéria-prima na retirada (N16-140). Hoje a `develop` baixa no "Atender pelo estoque" de item de fabricação (`ConsumoMateriaPrima`, 19/10, `8d07917`).
 - 🔴 Saldo futuro, com as OCs (ordens de compra) em andamento (BL-050).
 - 🔴 Custo obrigatório em todo lote (BL-066) e custo do fabricado (BL-067).
 - 🔴 Contagem cíclica, transferência entre filiais e separação física.
@@ -232,7 +236,7 @@ As pendências do despacho estão em [[12-Estoque-Despacho]] e as do fabricado e
 ```mermaid
 flowchart TD
     P2["P2 · Destinação do Pedido<br/>Estoque como etapa 1"] --> E1["E1 · Saldo disponível<br/>lotes LIBERADO menos reservas ATIVA, na filial do pedido<br/>saldo futuro das OCs em andamento, a construir"]
-    C0["C0 · OC do hub<br/>referência da OC, destino estoque ou pedido"] -.->|"saldo futuro"| E1
+    C0["C0 · Requisição de compra<br/>origem Compras, no av-hub<br/>a OC chega ao MES pela referência, destino estoque ou pedido"] -.->|"saldo futuro"| E1
     E1 --> E2{"E2 · Saldo cobre o item?<br/>almoxarife informa quanto atende"}
     E2 -->|"sim, tudo ou parte"| E3["E3 · Atende pelo saldo<br/>split e reserva ATIVA<br/>custo do item = média dos lotes, GET itens custo"]
     E2 -->|"não, ou o restante"| E4{"E4 · O que fazer com o restante?"}
