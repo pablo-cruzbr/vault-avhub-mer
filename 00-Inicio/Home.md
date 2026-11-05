@@ -17,12 +17,13 @@ O pedido começa na proposta (ou no pedido digitado no Omie) e termina na nota f
 
 - Chegou agora? Comece por [[Comece-Aqui]].
 - Quer saber o que falta fazer? Veja [[Onde-Estamos]].
+- É uma IA, ou vai analisar o código com o vault? Leia [[Guia-de-Leitura-do-Vault-e-dos-Sistemas]].
 
 ## Mapa das pastas
 
 | Pasta | O que tem |
 |---|---|
-| `00-Inicio` | Porta de entrada: [[Comece-Aqui]] · [[Onde-Estamos]] · [[Regras-do-Vault]] · [[Mapa-v1-para-v2]] |
+| `00-Inicio` | Porta de entrada: [[Comece-Aqui]] · [[Onde-Estamos]] · [[Regras-do-Vault]] · [[Guia-de-Leitura-do-Vault-e-dos-Sistemas]] · [[Mapa-v1-para-v2]] |
 | `01-Projeto` | O projeto em si: [[Visao-do-Projeto]] · [[Sistemas-e-Responsabilidades]] · [[Equipe-e-Divisao]] · [[Cronograma]] · [[Infraestrutura]] · [[Glossario]] |
 | `02-Fluxo-de-Atividades` | **O coração do manual.** [[00-Fluxo-Mestre-0b]] e uma nota por setor (lista abaixo), mais [[14-Telas-e-Experiencia-do-Usuario]], [[Estados-e-Status]] e [[Telas-por-Raia]] |
 | `03-Sistemas` | Como cada sistema é feito: [[AV-Hub-Front]] · [[AV-Hub-API]] · [[API-Comercial]] · [[Mapa-do-Modulo-do-Pablo]] · [[MES-Backend]] · [[MES-Front]] · [[Pipeline-Omie]] · [[RBAC-e-Permissoes]] · [[Bugs-Conhecidos]] · [[Proposta-Score-e-Volatilidade-OQ-46]] |
@@ -30,7 +31,7 @@ O pedido começa na proposta (ou no pedido digitado no Omie) e termina na nota f
 | `04-Dados` | Os bancos de dados: [[Banco-AvHub]] · [[Banco-MES]] · [[Modelo-Estoque-e-Custo-do-Lote]] · [[Schemas-Postgres]] · [[Diferencas-Codigo-x-Banco]] |
 | `05-Integracoes` | Como os sistemas conversam: [[Integracao-AvHub-MES]] · [[Chaves-e-Autenticacao]] · [[Omie-Integracao-Estado]] · [[Estudo-Omie-API]] · [[Mapa-IncluirPedido-Omie]] · [[Colunas-Protegidas]] · [[Rastreabilidade-e-Torre-de-Fluxo]] · dicionários do Omie em `05-Integracoes/Omie-Dicionarios` |
 | `06-Contratos` | [[Painel-de-Contratos]] (todos os contratos, texto integral) · Consultas: [[Modelo-de-Consulta]] |
-| `07-Desenvolvimento` | O que falta fazer: [[Backlog-por-Frente]] · [[Pontas-Soltas]] · [[Perguntas-Proposta-Pedido-Comissao]] · [[Contradicoes-Resolvidas]] · [[Riscos]] |
+| `07-Desenvolvimento` | O que falta fazer: [[Backlog-por-Frente]] · [[Pontas-Soltas]] · [[Perguntas-Proposta-Pedido-Comissao]] · [[Contradicoes-Resolvidas]] · [[Riscos]] · [[Analise-de-Organizacao-do-Vault]] |
 | `08-Decisoes` | [[Registro-de-Decisoes]] |
 | `09-Diagramas` | [[Indice-de-Diagramas]] (inclui os artifacts do 0b e da proposta ao pedido) · [[Classes]] · [[Estados]] · [[Casos-de-Uso]] · [[Sequencia]] · [[Componentes-e-Implantacao]] · [[Modelo-de-Dados]] |
 | `10-Anexo-Fora-do-Fluxo` | Assuntos fora do fluxo principal: [[Comissoes]] · [[RH-Vagas-Funcionarios]] · [[Dashboards]] · [[Pedido-Manual]] · [[Acompanhamento-Clientes]] · [[Comercial-Suprimentos]] · [[Mapa-Rotas-BFF-Bearer]] · [[Transferencia-entre-Filiais]] |
