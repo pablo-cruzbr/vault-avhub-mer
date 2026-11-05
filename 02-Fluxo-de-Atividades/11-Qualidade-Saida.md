@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, qualidade, qualidade-saida, q7, q8, mes]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: vigente
+ordem: 11
 nos: [Q7, Q8]
+anterior: "[[10-Producao-e-Roteiro]]"
+proxima: "[[12-Estoque-Despacho]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Qualidade (regra) · Nathan (decisões)
 fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts), app-pcp 1fca8d3 (qualidade/inspecao-saida, movimentacoes), v1 Fluxo-Qualidade-Completo, v1 Encaixe-Estoque-Revenda-no-PCP (EC-06), 06-Qualidade-Entrada, 00-Fluxo-Mestre-0b, api-pcp develop de 27/10/2026 (aprovar-saida, receber-fabricado), LOG-53, N16-128, N16-129]
@@ -12,6 +15,10 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts), app-pc
 # Qualidade de saída (Q7, Q8)
 
 **Em uma frase:** é a inspeção do que a produção fabricou, para que nada siga adiante sem conferência. Nós `Q7` (inspeção) e `Q8` (aprova?) do [[00-Fluxo-Mestre-0b]].
+
+**Quando consultar:** dúvidas sobre a inspeção do que a produção fabricou: aprovação e reprovação antes de seguir adiante.
+
+**Onde estamos no fluxo:** ← [[10-Producao-e-Roteiro]] | [[12-Estoque-Despacho]] → · nós desta nota: `Q7`, `Q8`
 
 Recebe a parcial concluída pela produção ([[10-Producao-e-Roteiro]]). A inspeção de entrada, por lote, é outra raia ([[08-Qualidade-Entrada]]).
 
