@@ -37,6 +37,14 @@ const arqIndice = join(vault, INDICE_CONTRATOS + ".md");
 if (existsSync(arqIndice)) {
   for (const m of readFileSync(arqIndice, "utf8").matchAll(/^\| ((?:LOG|API|SQL|CON)-\d+[a-z]?) \|/gm)) contratos.set(m[1], INDICE_CONTRATOS);
 }
+// Bloco 5 da v3: a lista completa saiu do índice para 06-Contratos/Partes/Contratos-da-v2-*; o ID aponta para a parte
+const dirPartesContratos = join(vault, "06-Contratos", "Partes");
+if (existsSync(dirPartesContratos)) {
+  for (const n of readdirSync(dirPartesContratos).filter((x) => x.startsWith("Contratos-da-v2-") && x.endsWith(".md"))) {
+    const p = "06-Contratos/Partes/" + n.replace(/\.md$/, "");
+    for (const m of readFileSync(join(dirPartesContratos, n), "utf8").matchAll(/^\| ((?:LOG|API|SQL|CON)-\d+[a-z]?) \|/gm)) if (!contratos.has(m[1])) contratos.set(m[1], p);
+  }
+}
 for (const pasta of ["Ativos", "Entregues", "Arquivados", "Consultas"]) {
   const dir = join(vault, "06-Contratos", pasta);
   if (!existsSync(dir)) continue;
