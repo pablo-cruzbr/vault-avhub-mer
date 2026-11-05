@@ -38,3 +38,4 @@ requisicoes_compra.numero_pedido_venda	**develop 05/11:**	Bloco 6 (depois da fot
 requisicoes_compra.route.js:148	**develop 05/11:**	Bloco 6 (depois da foto do Bloco 5): evidência de 14/10 do Backlog trocada pela citação da develop de 05/11; ver _v3/fatos/bloco6/substituicoes.tsv e _v3/selos/Backlog-*-develop.md.
 roteiroItem	**develop 05/11:**	Bloco 6 (depois da foto do Bloco 5): evidência de 14/10 do Backlog trocada pela citação da develop de 05/11; ver _v3/fatos/bloco6/substituicoes.tsv e _v3/selos/Backlog-*-develop.md.
 usuarios.route.js:71-95	**develop 05/11:**	Bloco 6 (depois da foto do Bloco 5): evidência de 14/10 do Backlog trocada pela citação da develop de 05/11; ver _v3/fatos/bloco6/substituicoes.tsv e _v3/selos/Backlog-*-develop.md.
+node _v3/scripts/contratos-indice.mjs	_v3/scripts/contratos-indice.mjs	Bloco 7: a instrução de rodar o script foi trocada pelo aviso de não rodar (desfaria a divisão do Bloco 5); o script continua citado no Contratos-da-v2.

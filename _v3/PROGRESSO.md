@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 7 concluído (validação e aceite), aguardando a aprovação do Nathan; depois, Bloco 8 (D6 = sim)
-Próxima ação: com a aprovação do Bloco 7, rodar a seção 1 e começar o Bloco 8 (listar as notas a reescrever, na ordem do fluxo), começando pelos 4 pontos de "Ficam para o Nathan ou para o Bloco 8" de `_v3/aceite-bloco7.md`
+Estado atual: Bloco 8 concluído, aguardando "ok" do Nathan para o Bloco 9 (encerramento)
+Próxima ação: com o "ok", Bloco 9: mover `_v3/` para `07-Desenvolvimento/v3/` (ajustar os caminhos que citam `_v3/`); o PR da `v3` para a `main` só se o Nathan pedir
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -103,8 +103,13 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Responder às 10 perguntas de aceite e comparar (`_v3/aceite-bloco7.md`): um agente novo respondeu lendo só o vault a partir do Home. Resultado: 8 bateram de primeira; 2 (5 e 9) batiam em parte e foram corrigidos (`_v3/scripts/aceite-ajustes.mjs`: laudo opcional no recebimento e na entrada, com arquivo:linha; aviso F3 no `Mapa-do-Modulo-do-Pablo`; títulos da 06 e da 10; nota de uso do `Contratos-da-v2`). Todas em até 2 cliques
 - [x] Relatório final (abaixo, "Relatório final da v3")
 
-### Blocos 8 e 9
-- [ ] Pendentes (ver `_v3/INSTRUCAO.md`, seção 8; D6 = sim)
+### Bloco 8: Reescrita para leitura (D6 = sim)
+- [x] Listar as notas a reescrever, na ordem do fluxo (d54102e: `_v3/bloco8-lista.md`, as 15 raias, só a nota principal; fotos de fatos em `_v3/fatos/bloco8/`)
+- [x] Reescrever uma nota por tarefa e por commit (2026-11-05, 644284d … 15 commits, um por raia; 3 agentes em paralelo, 5 raias cada, sem commit; revisão e commit aqui). Os quadros datados ("Decisões de 29/10", "Situação em 29/10") foram desmontados nas seções, no presente e com os IDs. Contradições resolvidas pela decisão mais nova: 14 (envio ao Omie direto pela `api-acos-vital`, N16-149; faturar inteiro ou em partes é do vendedor, N16-130), 11 (sem laudo na saída, N16-129; saídas do reprovado descritas de um jeito só, com o `P6`), 13 (escolha inteiro/partes é do vendedor, N16-130). Mermaid: `C0` na 05 e na 04 = requisição de Compras; `E5` na 10 = lote e saldo na develop (LOG-53); consumo de MP na 10 = baixa no atendimento. Depois, 180c89a alinhou a 01 à N16-149. Nenhum selo mudou, exceto os itens superados por decisão na 11 (laudo 🟡 → 📝 ✅ N16-129)
+- [x] Linguagem simples no topo e detalhe no fim; nenhuma regra, número, ID ou selo sumiu (fatos: 0 sumidos nas 15 fotos do bloco 8 e nas fotos dos blocos 3, 5 e 6; "conferir à mão" revistas pelos agentes e listadas no relatório de cada um). Tamanhos: todas abaixo de 25 KB (a maior, 10, com 24,8 KB)
+
+### Bloco 9: Encerramento
+- [ ] Pendente (ver `_v3/INSTRUCAO.md`, seção 8)
 
 ## Validações
 Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 0 CRLF; 0 caracteres corrompidos reais (o único achado é o texto da própria instrução); 37 notas acima de 25 KB; 354 links de contrato (regex `LOG|SQL|API|CON|ATV-n`) em 52 notas fora de `06-Contratos` (a instrução cita 1.278; a diferença será reconciliada no Bloco 1). Ajuste na checagem: `Ã` sozinho é letra válida em português, então só `Ã` + byte de continuação, `â€` e `�` contam.
@@ -126,6 +131,12 @@ Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 
 
 ### Bloco 6 (2026-11-05, `_v3/validacao-bloco6.md`, agora com `node scripts/validar.mjs`)
 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 notas acima de 25 KB; 92 contratos; 0 nomes antigos; 60 nós com dono único; 0 ✅ sem citação; mapa ok (0 contratos sem nota). Fatos do bloco 6 (`--dir=_v3/fatos/bloco6`): 0 sumiram, com 39 trocas de evidência registradas.
+
+### Bloco 7 (2026-11-05, `_v3/validacao-bloco7.md`)
+Verde; aceite em `_v3/aceite-bloco7.md` (10/10 respondidas pelo vault, até 2 cliques).
+
+### Bloco 8 (2026-11-05, `_v3/validacao-bloco8.md`)
+0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 notas acima de 25 KB; 92 contratos; 0 nomes antigos; 60 nós com dono único; 0 ✅ sem citação; mapa ok. Fatos: 0 sumidos em `_v3/fatos`, `bloco5`, `bloco6` e `bloco8` (a `bloco5` ganhou 1 substituição: o comando do `contratos-indice.mjs` tirado no Bloco 7).
 
 ## Relatório final da v3 (Bloco 7, 2026-11-05)
 
@@ -163,6 +174,7 @@ São os mesmos commits de `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md` e 
 - o `omie-elt-pipeline` sem `develop`.
 
 ## Problemas e pendências
+- Do Bloco 8, para o Nathan: na 08, a trava da decisão ao setor da Qualidade (N16-124) aparece 🟡 em "O que já existe" e 📝 🔴 na tabela "O que falta" (vale "decidido, sem código"); na 07, hoje a conferência é contra a NF e o cruzamento com a OC (N16-135, N16-136) segue 🔴 (sem contradição, só registrado); na 11, se quiserem anexo de evidência na reprovação de saída, é decisão nova (a N16-129 diz "um clique e um motivo").
 - Achados da conferência do Backlog para o Nathan decidir: (1) a `develop` da `api-acos-vital` versiona um dump de esquema de 29/10 (`Dump do Avhub para referência (29.10).sql`, f2fa237), usado como evidência de banco; (2) as rotas da proposta chamam `core_comercial.fn_proposta_aprovar/_cancelar/_transformar`, que não estão no repositório nem no dump; (3) o schema da proposta é `core_comercial` no código e `core_vendas_faturamento` na N16-116; (4) o CCP no MES já registra chegada e libera recebimento (`api-pcp` `compras.controller.ts:113,125`), ainda com a permissão `movimentacoes` (BL-017); (5) a numeração da proposta no dump é `CO-<código><ano>-<seq>-R00`, não só dígitos (N16-148, PS-038).
 - `_v3/scripts/contratos-indice.mjs` (Bloco 1) regenera o `Contratos-da-v2` inteiro numa nota só; se for rodado de novo, a lista completa volta para o índice. Não rodar sem ajustar para a parte `Contratos-da-v2-Lista-Completa`.
 - A tabela do Mestre foi cortada por tamanho (V0.1 a E1, E2 a Q2, Q3 a K6), não por raia. Dá para reagrupar por raia no Bloco 8, se o Nathan preferir.
