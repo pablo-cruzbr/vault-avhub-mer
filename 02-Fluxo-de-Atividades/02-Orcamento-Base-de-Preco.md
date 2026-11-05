@@ -22,9 +22,6 @@ fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N
 
 Esta nota substitui o anexo [[Orcamento]], arquivado em 26/10/2026. Os nós são `B1` a `B4` do [[00-Fluxo-Mestre-0b]].
 
-> [!info] Situação em 29/10/2026
-> O Orçamento é do Pablo, com o Robert (N16-117, N16-119). A `api-comercial` de teste não roda mais: fica no repositório só para leitura (N16-117) e o front de Fornecedores, Produtos, Cotação e a análise da proposta lê a API do Hub desde 27/10 (`av-hub` `d6dc1a6`). Na `api-acos-vital` (`develop`) o router `/suprimentos` existe mas ainda não tem rota: nasce fechado (`core_comercial/index.js`, "fase 4") 🔴.
-
 ## Como funciona, passo a passo
 
 1. O vendedor monta a proposta e tenta preencher o custo com o que conseguiu. Ele não é dono do dado, mas decide o valor que põe. `V0.2`
@@ -51,6 +48,8 @@ Depois, Compras emite a OC dos 100 flanges. O preço pago passa a ser a última 
 | Vendedor | Consulta a página do produto, pede cotação e decide o valor que põe na proposta |
 | Compras | Dona do dado de compra. As OC efetivadas alimentam a base |
 
+Quem desenvolve: o Orçamento é do Pablo, com o Robert (N16-117, N16-119).
+
 ## Regras que valem
 
 - A base é o preço de compra do produto e guarda sempre o histórico.
@@ -66,6 +65,9 @@ Depois, Compras emite a OC dos 100 flanges. O preço pago passa a ser a última 
 
 ## O que já existe e o que falta
 
+- O front de Fornecedores, Produtos, Cotação e a análise da proposta lê a API do Hub desde 27/10 (`av-hub` `d6dc1a6`).
+- Desde 29/10/2026, a `api-comercial` de teste não roda mais. Fica no repositório só para leitura (N16-117).
+- 🔴 Na `api-acos-vital` (`develop`), o router `/suprimentos` existe, mas ainda não tem rota: nasce fechado (`core_comercial/index.js`, "fase 4").
 - ✅ Telas no `av-hub` (`develop`, menu enxuto de 27/10, N16-107 e N16-108): Pedidos de custo (Painel do Comprador e Pedido de cotação, em abas), Produtos (Catálogo, Pesquisa de materiais e Ofertas, em abas), Fornecedores, Parâmetros (custo e Telha, em abas) e Custo por item.
 - 🔴 Sem API e sem banco: oferta imutável com histórico, média por período e pedido de custo existem só no `api-comercial` de teste (legado de consulta, N16-117), que será removido; falta portar para a `api-acos-vital`. Na API do Hub já há a leitura de fornecedores, vínculos, categorias e cotações (✅ `api-acos-vital` `orcamento.route.js:140-312`).
 - 📝 As regras acima estão decididas.
