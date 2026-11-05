@@ -21,3 +21,7 @@ antigo,novo,tipo,motivo
 02-Fluxo-de-Atividades/05-Estoque-Atendimento-e-Despacho.md,02-Fluxo-de-Atividades/05-Estoque-Atendimento.md,dividido,"D1: E1–E4 (git mv da provisória)"
 02-Fluxo-de-Atividades/05-Estoque-Atendimento-e-Despacho.md,02-Fluxo-de-Atividades/09-Estoque-Entrada-do-Lote.md,dividido,"D1: E5"
 02-Fluxo-de-Atividades/05-Estoque-Atendimento-e-Despacho.md,02-Fluxo-de-Atividades/12-Estoque-Despacho.md,dividido,"D1: E6"
+02-Fluxo-de-Atividades/01-Proposta-e-Pedido-de-Venda.md,02-Fluxo-de-Atividades/01-Proposta-de-Venda.md,dividido,"V0.1–V0.7 e V0C (git mv da provisória)"
+02-Fluxo-de-Atividades/01-Proposta-e-Pedido-de-Venda.md,02-Fluxo-de-Atividades/06-Circuito-de-Compra.md,dividido,"C6–C8: seção nova na nota dona"
+02-Fluxo-de-Atividades/01-Proposta-e-Pedido-de-Venda.md,02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md,dividido,"V1–V3, liberação e cancelamento do pedido"
+02-Fluxo-de-Atividades/01-Proposta-e-Pedido-de-Venda.md,02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md,dividido,"B2–B4: pedido de custo e página do produto"

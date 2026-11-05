@@ -196,7 +196,7 @@ Menus de Vendas e Orçamento revistos em 27/10/2026 (N16-107, N16-108) e já apl
 
 ## Ver também
 
-[[01-Proposta-e-Pedido-de-Venda]] · [[02-Orcamento-Base-de-Preco]] · [[15-Custo-Real-e-Comissao]] · [[Mapa-IncluirPedido-Omie]]
+[[01-Proposta-de-Venda]] · [[02-Orcamento-Base-de-Preco]] · [[15-Custo-Real-e-Comissao]] · [[Mapa-IncluirPedido-Omie]]
 
 ## Detalhe técnico
 

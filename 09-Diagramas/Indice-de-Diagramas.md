@@ -18,7 +18,7 @@ fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML, v1 01-Fluxo-Operacional (F
 | Quer saber… | Veja… |
 |---|---|
 | O processo inteiro, do pedido à nota fiscal | [[00-Fluxo-Mestre-0b]] |
-| Da proposta ao pedido de venda | `artifact-proposta-pedido.html` (página "Fluxo da Proposta ao Pedido"), [[01-Proposta-e-Pedido-de-Venda]] |
+| Da proposta ao pedido de venda | `artifact-proposta-pedido.html` (página "Fluxo da Proposta ao Pedido"), [[01-Proposta-de-Venda]] |
 | A jornada do usuário num caso real (Mogi: flanges, tubos, flanges cegas) | `Historia-da-Proposta-ao-Pedido.pdf` |
 | Como o Orçamento mantém o preço de compra | [[02-Orcamento-Base-de-Preco]] |
 | Como o custo real e a comissão entram no fluxo | [[15-Custo-Real-e-Comissao]] |
@@ -39,7 +39,7 @@ fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML, v1 01-Fluxo-Operacional (F
 | [[00-Fluxo-Mestre-0b]] | Fluxo de ponta a ponta, com passos `V0.1` a `O2` e `K1` a `K6` | 1 |
 | `artifact-proposta-pedido.html` | Da proposta ao pedido, aprovado em 26/10/2026: proposta, compra, datas, faturamento em partes, custo real, comissão e cancelamento (página publicada "Fluxo da Proposta ao Pedido") | 1 página |
 | `Historia-da-Proposta-ao-Pedido.pdf` | A jornada do usuário de ponta a ponta, num caso só (Mogi: flanges, tubos, flanges cegas e flange sobre desenho) | 3 páginas |
-| [[01-Proposta-e-Pedido-de-Venda]], [[02-Orcamento-Base-de-Preco]], [[15-Custo-Real-e-Comissao]] | Subfluxos da proposta ao pedido, do Orçamento e do custo real e da comissão | 3 |
+| [[01-Proposta-de-Venda]], [[02-Orcamento-Base-de-Preco]], [[15-Custo-Real-e-Comissao]] | Subfluxos da proposta ao pedido, do Orçamento e do custo real e da comissão | 3 |
 | [[Sequencia]] | Pedido ao PCP, atendimento do Estoque, requisição ida e volta, chegada com NF e Recebimento, inspeção de entrada, produção e Expedição, despacho | 8 |
 | [[Estados]] | Parcial, lote, reserva, recebimento, divergência, requisição (MES e hub), etapa de compra, OC, envio, liberação, etapa do item; proposta, pedido do Hub, pedido de custo e comissão nova (13 a 16, 🟡) | 17 |
 | [[Classes]] | Estoque e compras, produção, compras e integração, api-comercial | 4 |

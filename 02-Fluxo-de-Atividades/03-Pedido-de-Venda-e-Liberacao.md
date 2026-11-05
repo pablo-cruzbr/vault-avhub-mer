@@ -13,7 +13,7 @@ fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005,
 **Em uma frase:** o pedido de venda só segue para a produção depois que o vendedor o libera. É o portão do fluxo e a única entrada de pedido de venda no MES: sem liberação, o PCP (planejamento e controle da produção) não enxerga o pedido.
 
 > [!info] Proposta ao pedido (decisões de 16 a 26/10/2026, fluxo aprovado em 26/10)
-> Esta nota descreve a liberação que **existe hoje** ✅. O desenho aprovado põe a proposta antes do `V1`, com duas origens no mesmo fluxo. O pedido que nasce da proposta já vem liberado (a Qualidade é respondida no "Transformar em pedido"). O pedido digitado no Omie continua chegando travado, mas o vendedor responde a Qualidade e o faturamento em partes na tela do pedido e preenche ali a parte de compras, sem travar o fluxo. A liberação gravada é a mesma desta nota, que o MES lê. Esse desenho ainda não está todo pronto 📝 (N16-05, N16-91, N16-106): a `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub, mas **não envia o pedido ao Omie** e a resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe 🔴. Detalhe em [[01-Proposta-e-Pedido-de-Venda]].
+> Esta nota descreve a liberação que **existe hoje** ✅. O desenho aprovado põe a proposta antes do `V1`, com duas origens no mesmo fluxo. O pedido que nasce da proposta já vem liberado (a Qualidade é respondida no "Transformar em pedido"). O pedido digitado no Omie continua chegando travado, mas o vendedor responde a Qualidade e o faturamento em partes na tela do pedido e preenche ali a parte de compras, sem travar o fluxo. A liberação gravada é a mesma desta nota, que o MES lê. Esse desenho ainda não está todo pronto 📝 (N16-05, N16-91, N16-106): a `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub, mas **não envia o pedido ao Omie** e a resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe 🔴. Detalhe em [[01-Proposta-de-Venda]].
 
 ## Como funciona, passo a passo
 
@@ -212,7 +212,7 @@ Escopo (contrato 40, ✅ fixo na API): vale quando o usuário entrou por tela co
 
 ### Pedido que nasce da proposta: liberação e cancelamento
 
-Trechos que estavam na nota de proposta da v2 (`11-Proposta-e-Pedido-de-Venda`), movidos em 05/11/2026 para cá, a nota dona do pedido de venda (`V1` a `V3`), junto com o cancelamento do pedido. A numeração das regras e dos itens é a da nota de origem. A proposta em si está em [[01-Proposta-e-Pedido-de-Venda]].
+Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-antes-da-v3`), movidos em 05/11/2026 para cá, a nota dona do pedido de venda (`V1` a `V3`), junto com o cancelamento do pedido. A numeração das regras e dos itens é a da nota de origem. A proposta em si está em [[01-Proposta-de-Venda]].
 
 #### Passo a passo
 

@@ -116,7 +116,7 @@ Detalhes em [[06-Circuito-de-Compra]].
 | `propostas.status` | `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`; a API e o front aceitam também `EXPIRADA` (validade vencida) ❓ o `CHECK` do dump de 29/10 tem só os quatro primeiros | `api-acos-vital` `propostas.route.js`; Dump Avhub 29/10 (`ck_propostas_status`) ✅ |
 | `pedido.status_sincronizacao_omie` | `pendente`, `sincronizado`, `erro` | N16-36; `transformar` grava `pendente` ✅ |
 
-Detalhe e transições em [[01-Proposta-e-Pedido-de-Venda]].
+Detalhe e transições em [[01-Proposta-de-Venda]].
 
 ### Etapa do item vista pelo vendedor
 

@@ -284,4 +284,4 @@ Em Uberaba todo pedido com `1.01.99` é refaturamento por definição; `sem_refa
 
 ### Ver também
 
-[[Estudo-Omie-API]] · [[01-Proposta-e-Pedido-de-Venda]] · [[Telas-e-Experiencia-do-Usuario]]
+[[Estudo-Omie-API]] · [[01-Proposta-de-Venda]] · [[Telas-e-Experiencia-do-Usuario]]

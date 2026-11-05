@@ -19,7 +19,7 @@ A v2 está guardada na tag `v2-antes-da-v3`. Na v3, as notas de raia seguem a or
 
 | Nota da v2 | Nota na v3 | Motivo |
 |---|---|---|
-| `11-Proposta-e-Pedido-de-Venda` | [[01-Proposta-e-Pedido-de-Venda]] (provisório) | A proposta abre o fluxo (V0.1–V0.7). No Bloco 3 vira `01-Proposta-de-Venda`, e os trechos de orçamento, pedido e compra vão para as notas donas |
+| `11-Proposta-e-Pedido-de-Venda` | [[01-Proposta-de-Venda]] (V0.1–V0.7, V0C) | A proposta abre o fluxo (F1). Os trechos de `C6` a `C8` foram para [[06-Circuito-de-Compra]], os de `V1` a `V3` (liberação e cancelamento do pedido) para [[03-Pedido-de-Venda-e-Liberacao]] e os de `B2` a `B4` para [[02-Orcamento-Base-de-Preco]], com a numeração original das regras |
 | `12-Orcamento-Base-de-Preco` | [[02-Orcamento-Base-de-Preco]] | B1–B4 vêm logo depois da proposta |
 | `01-Vendas-Liberacao` | [[03-Pedido-de-Venda-e-Liberacao]] | V1–V3 |
 | `02-PCP-Triagem-e-Destinacao` | [[04-PCP-Triagem-e-Destinacao]] | P1, P2, P6 |

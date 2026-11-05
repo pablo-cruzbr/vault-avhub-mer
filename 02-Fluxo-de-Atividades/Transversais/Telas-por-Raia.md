@@ -50,7 +50,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Meus Pedidos, detalhe (V1 a O2) | Cartão Etapa dos itens. 🟡 Falta linha do tempo, SLA e filtro | Vendedor | ✅ |
 | Pedidos da Equipe, detalhe | Mesmo cartão de etapa, para a equipe | Gerente | ✅ |
 | Pedidos do PCP | Acompanhamento comercial por diligenciador. **Não é o `app-pcp`** | Diligenciador | ✅ |
-| Propostas, lista, nova e detalhe (V0.1 a V0.7) | Ver [[01-Proposta-e-Pedido-de-Venda]] | Vendedor | 🟡 |
+| Propostas, lista, nova e detalhe (V0.1 a V0.7) | Ver [[01-Proposta-de-Venda]] | Vendedor | 🟡 |
 | Acompanhamento de Clientes | Clientes e grupos de empresa (a antiga tela Clientes, N16-112) | Vendedor | ✅ |
 | Relatório Gerencial | Resumo por responsável, empresa e unidade | Gerência | ✅ |
 | Pedidos de Venda e Notas Fiscais de Saída | Páginas existem, inativas no menu (N16-33) | — | ✅ |
@@ -151,7 +151,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Notas Fiscais de Saída (O2) | Lista das notas emitidas | Vendedor | ✅ |
 | Minhas Notas, Notas da Equipe, Notas do PCP (O2) | Mostram as notas depois do fato | Vendedor, gerente, PCP | ✅ |
 
-## Proposta, Orçamento e comissão nova (`V0`, `B1` a `B4`, `C6` a `C8`, `K1` a `K6`) · [[01-Proposta-e-Pedido-de-Venda]]
+## Proposta, Orçamento e comissão nova (`V0`, `B1` a `B4`, `C6` a `C8`, `K1` a `K6`) · [[01-Proposta-de-Venda]] · [[02-Orcamento-Base-de-Preco]] · [[06-Circuito-de-Compra]] · [[15-Custo-Real-e-Comissao]]
 
 Desenho aprovado em 26/10/2026. Em 29/10/2026 a proposta já tem API na `api-acos-vital` e telas em andamento no `av-hub`; o resto segue sem código 🔴. As telas de proposta são do Robert e o Orçamento é do Pablo, com o Robert. Auditoria, conexões e menu: [[Telas-e-Experiencia-do-Usuario]].
 

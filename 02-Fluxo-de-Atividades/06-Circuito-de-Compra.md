@@ -25,7 +25,7 @@ Nós do [[00-Fluxo-Mestre-0b]]: `P3`, `C0` a `C5`, `FN1`. Fecha em `FN1 → R0` 
 > - O Compras será avisado no av-hub da recompra por RNC (N16-127; hoje só o MES sabe e a OC segue "atendida") e da reabertura do recebimento pelo PCP (N16-137), pelo mesmo caminho.
 > - O imposto por item da OC vem da parte de compras do pedido quando a finalidade da linha é `pedidos_venda` ou `recompra`; para `estoque` ou `uso_interno` o Comprador digita. Uma linha por pedido, sem média; o frete é rateado pelas linhas na proporção do valor; o Comprador pode editar antes de aprovar (N16-144). O contrato só será escrito quando o desenvolvimento começar.
 > - O recebimento e a leitura da OC pelo MES já existem na `develop` do MES (15 a 26/10; ver o fim desta nota). A `main` do MES parou em 08/10.
-> - Tudo isso exige contrato novo entre MES e hub. Detalhe em [[01-Proposta-e-Pedido-de-Venda]].
+> - Tudo isso exige contrato novo entre MES e hub. Detalhe de `C6` a `C8` em [[06-Circuito-de-Compra#C6, C7 e C8: a parte de compras do pedido da proposta]].
 
 ## Como funciona, passo a passo
 
@@ -256,7 +256,7 @@ Montagem em `core_vendas_faturamento/index.js:190-193`. Contratos de banco: [[Co
 
 ### C6, C7 e C8: a parte de compras do pedido da proposta
 
-Trechos que estavam na nota de proposta da v2 (`11-Proposta-e-Pedido-de-Venda`), movidos em 05/11/2026 para cá, a nota dona de `C6`, `C7` e `C8`. A numeração das regras e dos itens é a da nota de origem. A proposta em si está em [[01-Proposta-e-Pedido-de-Venda]].
+Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-antes-da-v3`), movidos em 05/11/2026 para cá, a nota dona de `C6`, `C7` e `C8`. A numeração das regras e dos itens é a da nota de origem. A proposta em si está em [[01-Proposta-de-Venda]].
 
 #### Passo a passo (pedido que vem da proposta)
 

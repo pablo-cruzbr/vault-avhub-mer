@@ -264,7 +264,7 @@ flowchart TD
 
 ## 13. Proposta (🟡)
 
-A proposta nasce aberta, o vendedor a revisa, aprova (só se estiver completa) e a transforma em pedido. Cancelada não reabre: o vendedor duplica. Regras: [[01-Proposta-e-Pedido-de-Venda]].
+A proposta nasce aberta, o vendedor a revisa, aprova (só se estiver completa) e a transforma em pedido. Cancelada não reabre: o vendedor duplica. Regras: [[01-Proposta-de-Venda]].
 
 ```mermaid
 stateDiagram-v2
@@ -414,7 +414,7 @@ Não é um diagrama de transição: o MES calcula a etapa por regra (`etapaDoIte
 
 O enum de hoje, no módulo do Pablo, é `ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA` (`api-comercial/prisma/models/enums.prisma:69-76` ✅). O desenho é o da migração (`ck_propostas_status`), pelas N16-02 e N16-03: sem fechamento parcial, ajuste só até aprovar, proposta incompleta não aprova, cancelada não reabre.
 
-Selo ✅ no código de 29/10: a `ck_propostas_status` do dump de 29/10 tem `ABERTA`, `APROVADA`, `TRANSFORMADA` e `CANCELADA`, e a `api-acos-vital` já tem `PUT /comercial/propostas/:id`, `aprovar`, `cancelar`, `copiar` e `transformar` (Robert, 28 e 29/10); produção ❓. Nós do Mestre: `V0.1` a `V0.7`, `V0C`. No legado (✅ no teste) `atualizar` só roda em `ABERTA` (`propostas.service.ts:478-481`), `perder` leva a `PERDIDA` (`:555-575`), `reabrir` e `fechar` parcial existem (`:578-649`) e saem. Regras: [[01-Proposta-e-Pedido-de-Venda]].
+Selo ✅ no código de 29/10: a `ck_propostas_status` do dump de 29/10 tem `ABERTA`, `APROVADA`, `TRANSFORMADA` e `CANCELADA`, e a `api-acos-vital` já tem `PUT /comercial/propostas/:id`, `aprovar`, `cancelar`, `copiar` e `transformar` (Robert, 28 e 29/10); produção ❓. Nós do Mestre: `V0.1` a `V0.7`, `V0C`. No legado (✅ no teste) `atualizar` só roda em `ABERTA` (`propostas.service.ts:478-481`), `perder` leva a `PERDIDA` (`:555-575`), `reabrir` e `fechar` parcial existem (`:578-649`) e saem. Regras: [[01-Proposta-de-Venda]].
 
 ### 14. Pedido de venda do Hub (`status_sincronizacao_omie`, 🟡)
 

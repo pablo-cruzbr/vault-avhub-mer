@@ -98,7 +98,7 @@ Os termos estão em ordem alfabética. Os nomes de tela seguem a regra de [[Regr
 
 ## Proposta, Orçamento, custo real e comissão nova (desenho aprovado em 26/10/2026)
 
-- **Proposta** — o documento do vendedor no Hub, antes do pedido (nós `V0.1` a `V0.7`). Só a aprovada vira pedido, e uma proposta vira um pedido só (N16-02). Estados: `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` ✅ (a `ck_propostas_status` do dump de 29/10 tem esses quatro). Ver [[01-Proposta-e-Pedido-de-Venda]].
+- **Proposta** — o documento do vendedor no Hub, antes do pedido (nós `V0.1` a `V0.7`). Só a aprovada vira pedido, e uma proposta vira um pedido só (N16-02). Estados: `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` ✅ (a `ck_propostas_status` do dump de 29/10 tem esses quatro). Ver [[01-Proposta-de-Venda]].
 - **Proposta incompleta** — a que tem item sem custo e sem fornecedor. Não é um estado, é um campo calculado. Ela impede a aprovação (N16-03, N16-31).
 - **Transformar em pedido** — o botão da proposta aprovada (`V0.6`). Pede a previsão de faturamento, se a Qualidade acompanha e se o pedido pode faturar em partes. Depois o Hub cria o pedido no Omie, por fila e pipeline (`V0.7`).
 - **Pedido do Hub** — o pedido de venda do Hub, com origem `PROPOSTA` ou `OMIE`. O schema (`core_vendas_faturamento` pela N16-116; o código de 29/10 ainda usa `core_comercial`) é ponto em aberto. Os dois seguem o mesmo fluxo e a mesma tela. O do Omie chega com a parte de vendas pronta, que só se altera no Omie (N16-106).

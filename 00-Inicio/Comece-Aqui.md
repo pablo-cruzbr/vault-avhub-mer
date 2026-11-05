@@ -18,7 +18,7 @@ fontes: [plano de 14/10/2026]
 1. [[Visao-do-Projeto]]: o que é o ERP da Aços Vital e quais princípios o guiam.
 2. [[00-Fluxo-Mestre-0b]]: o diagrama do pedido de 0 a 100%. Cada nó (`V1`, `P2`, `E6`…) mostra setor, tela, endpoint, contrato e se já existe no código (✅ 🟡 🔴).
 3. [[Onde-Estamos]]: uma tela com o que está pronto e o que falta, setor por setor.
-4. [[01-Proposta-e-Pedido-de-Venda]]: a proposta, o Orçamento, o custo real e a comissão nova (aprovados em 26/10/2026). Antes, leia a história de ponta a ponta em `09-Diagramas/Historia-da-Proposta-ao-Pedido.pdf`.
+4. [[01-Proposta-de-Venda]]: a proposta, com ligação para o Orçamento, o custo real e a comissão nova (aprovados em 26/10/2026). Antes, leia a história de ponta a ponta em `09-Diagramas/Historia-da-Proposta-ao-Pedido.pdf`.
 5. [[Regras-do-Vault]]: como escrever uma nota. Leia antes de editar qualquer coisa.
 
 ## Por perfil
@@ -30,7 +30,7 @@ fontes: [plano de 14/10/2026]
 | Nathan (front do av-hub) | [[AV-Hub-Front]], [[Telas-por-Raia]], [[Mapa-Rotas-BFF-Bearer]] |
 | Pablo (acompanha o módulo comercial e cuida do Orçamento) | [[Mapa-do-Modulo-do-Pablo]], [[02-Orcamento-Base-de-Preco]], [[API-Comercial]] (legado de leitura), [[Comercial-Suprimentos]] |
 | Controladoria (Michele) | [[15-Custo-Real-e-Comissao]], [[04-Regras-e-Estados-da-Comissao-Nova]] |
-| Compras e Orçamento | [[06-Circuito-de-Compra]], [[02-Orcamento-Base-de-Preco]], [[01-Proposta-e-Pedido-de-Venda]] (nós `C6` a `C8`) |
+| Compras e Orçamento | [[06-Circuito-de-Compra]] (com os nós `C6` a `C8`), [[02-Orcamento-Base-de-Preco]] |
 
 ## Como achar as coisas
 

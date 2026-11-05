@@ -300,7 +300,7 @@
   "duvidas": [
     "A regra de aprovação de R$ 30 mil é provisória e deve endurecer depois da conversa com Compras; não há desenho nem data.",
     "O envio da OC ao Omie foi testado em 14/10, mas a nota deixa a produção como não confirmada.",
-    "C6 a C8 estão decididos em 26/10 sem código. A nota de Compras só resume, e o detalhe está na nota 01 (Proposta e Pedido de Venda), por isso a ordem C6, C1, C7, C8 segue o fluxo mestre.",
+    "C6 a C8 estão decididos em 26/10 sem código. O detalhe está na própria nota de Compras (06-Circuito-de-Compra), e a proposta na nota 01 (Proposta de Venda), por isso a ordem C6, C1, C7, C8 segue o fluxo mestre.",
     "O MES ainda não lê a OC de uma requisição criada só no av-hub; a nota dá o caminho como proposta, e a tela de Reprovados está com rota ainda a definir."
   ]
 }

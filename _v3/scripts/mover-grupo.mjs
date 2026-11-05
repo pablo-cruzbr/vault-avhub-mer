@@ -107,9 +107,13 @@ function aplicar(g) {
   let ls = ler(G.origem).split('\n');
   const blocos = [G.titulo, '', G.intro, ''];
   for (const p of G.partes) {
-    const idx = p.linhas.map((l) => ls.indexOf(l));
-    idx.forEach((i, k) => { if (i < 0) throw new Error(`não achei em ${G.origem}: ${p.linhas[k].slice(0, 90)}`); });
     const ehTabela = p.linhas[0].startsWith('|');
+    // linhas de tabela: cada uma pela própria posição; texto: bloco contíguo a partir da primeira linha
+    // (procurar linha vazia isolada acharia a primeira linha vazia da nota)
+    const i0 = ls.indexOf(p.linhas[0]);
+    const idx = ehTabela ? p.linhas.map((l) => ls.indexOf(l))
+      : p.linhas.map((l, k) => (k === 0 ? i0 : ls[i0 + k] === l ? i0 + k : ls.indexOf(l)));
+    idx.forEach((i, k) => { if (i < 0 || (!ehTabela && k > 0 && p.linhas[k] === '' && i !== i0 + k)) throw new Error(`não achei em ${G.origem}: ${p.linhas[k].slice(0, 90) || '(linha vazia)'}`); });
     let pos;
     if (ehTabela) { pos = idx[0]; while (pos + 1 < ls.length && ls[pos + 1].startsWith('|')) pos++; } // fim da tabela
     const primeiro = Math.min(...idx);

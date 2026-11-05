@@ -23,7 +23,7 @@ Lista única de decisões do projeto: **N16-01 a N16-148** (16/10 a 30/10), **N1
 - **Achar por ID.** Aperte Ctrl+F nesta nota e digite o ID inteiro, por exemplo `N16-60` ou `#42`. Para ver onde o ID é citado em outras notas, use a busca do vault (Ctrl+Shift+F).
 - **Achar por assunto.** Veja as "Decisões mais importantes em linguagem simples" e o "Índice por assunto" logo abaixo: cada linha do índice lista os IDs do assunto. Depois use Ctrl+F com uma palavra do assunto.
 - **"Supera" e "completa".** A coluna *Superada* traz a decisão ligada e uma palavra entre parênteses. **Supera** (ou "substitui", "corrige", "ajusta") quer dizer que a linha troca o que a outra dizia, no todo ou "em parte"; a decisão antiga fica na tabela só como histórico e vale a mais recente. **Completa** (ou "esclarece", "refina") quer dizer que a linha acrescenta detalhe sem revogar a outra: valem as duas juntas. Em algumas linhas antigas a coluna aponta o inverso, a decisão nova que a substituiu (por exemplo, a N16-08 aponta a N16-60). Em conflito entre duas linhas, vale a de data mais recente.
-- **Tarefas e contradições.** O que fazer com cada decisão está em [[Backlog-por-Frente]]; as contradições do v1 já resolvidas, em [[Contradicoes-Resolvidas]]. O fluxo completo está em [[00-Fluxo-Mestre-0b]], e a proposta e o pedido em [[01-Proposta-e-Pedido-de-Venda|11-Proposta-e-Pedido-de-Venda]].
+- **Tarefas e contradições.** O que fazer com cada decisão está em [[Backlog-por-Frente]]; as contradições do v1 já resolvidas, em [[Contradicoes-Resolvidas]]. O fluxo completo está em [[00-Fluxo-Mestre-0b]], e a proposta e o pedido em [[01-Proposta-de-Venda|11-Proposta-e-Pedido-de-Venda]].
 
 ## Decisões mais importantes em linguagem simples
 
@@ -112,7 +112,7 @@ Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (C
 
 ## Decisões de 16 a 26/10/2026 (proposta, orçamento, pedido de venda, custo real e comissão)
 
-Tomadas pelo Nathan entre 16 e 26/10/2026, com respostas da Controladoria (Michele), de Compras e da Gerência. Desenham a proposta (`V0`), o Orçamento (`B1` a `B4`), o pedido de venda do Hub, as datas, o faturamento em partes, o custo real por evento e a comissão nova (`K1` a `K6`). O fluxo foi aprovado em 26/10/2026 ([[01-Proposta-e-Pedido-de-Venda|11-Proposta-e-Pedido-de-Venda]] e `09-Diagramas/artifact-proposta-pedido.html`). Os contratos dessa parte foram removidos em 29/10/2026 ([[Contratos-da-v2]]); o Robert cria os novos.
+Tomadas pelo Nathan entre 16 e 26/10/2026, com respostas da Controladoria (Michele), de Compras e da Gerência. Desenham a proposta (`V0`), o Orçamento (`B1` a `B4`), o pedido de venda do Hub, as datas, o faturamento em partes, o custo real por evento e a comissão nova (`K1` a `K6`). O fluxo foi aprovado em 26/10/2026 ([[01-Proposta-de-Venda|11-Proposta-e-Pedido-de-Venda]] e `09-Diagramas/artifact-proposta-pedido.html`). Os contratos dessa parte foram removidos em 29/10/2026 ([[Contratos-da-v2]]); o Robert cria os novos.
 
 | ID | Decisão | Data | Dono | Selo | Superada |
 |---|---|---|---|---|---|
