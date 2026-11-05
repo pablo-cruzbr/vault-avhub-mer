@@ -147,7 +147,7 @@ O `CLAUDE.md` na raiz do vault é a porta da IA (cerca de 40 linhas). Atualize-o
 node scripts/validar.mjs
 ```
 
-Tem de dar 0 em: links quebrados, notas órfãs, CRLF, caractere corrompido, notas acima de 25 KB, nomes antigos, nós sem dono único, caminhos do `build.mjs` que não existem e ✅ sem citação nas raias. O índice de contratos tem de somar 92. Se mexeu em mapa ou fichas, rode também `cd 09-Diagramas/mapa && node build.mjs` ("0 contratos sem nota achada").
+Tem de dar 0 em: links quebrados, notas órfãs, CRLF, caractere corrompido, notas acima de 25 KB, nomes antigos, nós sem dono único, caminhos do `build.mjs` que não existem e ✅ sem citação nas raias. O índice de contratos tem de somar 92. A última linha diz "RESULTADO: tudo verde"; com qualquer problema, o validador sai com código 1 (o que permite usá-lo num CI no futuro). Se mexeu em mapa ou fichas, rode também `cd 09-Diagramas/mapa && node build.mjs` ("0 contratos sem nota achada").
 
 Se mudou o próprio validador, ou se ele der tudo 0 e você desconfiar, rode o autoteste:
 
