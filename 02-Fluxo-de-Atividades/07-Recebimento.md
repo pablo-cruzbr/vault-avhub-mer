@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, recebimento, doca, nf, conferencia, divergencia, lote, mes, r0, r1, r2, r3, r4, r6]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: vigente
+ordem: 7
 nos: [R0, R1, R2, R3, R4, R6]
+anterior: "[[06-Circuito-de-Compra]]"
+proxima: "[[08-Qualidade-Entrada]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-03), API-007, API-008, v1 02-PRD-Estoque/Fluxo-Recebimento-Completo, v1 App-PCP-Recebimento-Conferencia, decisões do Nathan de 14/10 (conferência contra a NF), api-pcp 579a625 (recebimento.service.ts, compras.service.ts, compras.prisma, compras-ccp.dto.ts), app-pcp 1fca8d3 (FilaSetor, ConferirRecebimentoModal, decisoes-pcp), api-pcp develop de 27/10/2026 (recebimento por OC e por NF, custo da OC), API-011, N16-134 a N16-137]
@@ -12,6 +15,10 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-03), API-007, API-008, v1
 # Raia Recebimento (R0 a R6)
 
 **Em uma frase:** a doca recebe o material comprado, confere contra a nota fiscal (NF) e transforma o que chegou em lote em quarentena, para a Qualidade inspecionar. Enquanto houver divergência aberta, nada entra no estoque.
+
+**Quando consultar:** dúvidas sobre a doca: conferência contra a nota fiscal, divergência e a criação do lote em quarentena.
+
+**Onde estamos no fluxo:** ← [[06-Circuito-de-Compra]] | [[08-Qualidade-Entrada]] → · nós desta nota: `R0`, `R1`, `R2`, `R3`, `R4`, `R6`
 
 Nós do [[00-Fluxo-Mestre-0b]]: `R0`, `R1`, `R2`, `R3`, `R4`, `R6`. Entrada: `FN1` ([[06-Circuito-de-Compra]]). Saída: `Q1` ([[08-Qualidade-Entrada]]) ou `P6` ([[04-PCP-Triagem-e-Destinacao]]). Selos em [[Regras-do-Vault]].
 
