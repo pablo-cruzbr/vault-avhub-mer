@@ -1,0 +1,532 @@
+# Fatos de 07-Recebimento
+
+Foto tirada em 2026-11-05 de `02-Fluxo-de-Atividades/07-Recebimento.md`, antes de mexer na nota.
+Gerada por `node _v3/scripts/fatos.mjs extrair`. Conferência: `node _v3/scripts/fatos.mjs conferir 07-Recebimento`.
+
+## decisões e IDs (18)
+
+- `BL-001`
+- `BL-035`
+- `BL-050`
+- `BL-051`
+- `BL-066`
+- `D1 do 008`
+- `N14-04`
+- `N14-20`
+- `N14-28`
+- `N14-30`
+- `N16-09`
+- `N16-120`
+- `N16-134`
+- `N16-135`
+- `N16-136`
+- `N16-137`
+- `N16-143`
+- `PS-034`
+
+## contratos (5)
+
+- `API-004`
+- `API-007`
+- `API-008`
+- `API-011`
+- `LOG-35`
+
+## commits (3)
+
+- `5f50fff`
+- `97b9adc`
+- `9ced089`
+
+## arquivo:linha (53)
+
+- `/logistica/logistica-entrada/page.ts`
+- `ConferirRecebimentoModal.ts`
+- `FilaRecebimento.ts`
+- `ReceberComNfModal.ts`
+- `RecontarRecebimentoModal.ts`
+- `circuito-compra.ts:30-35`
+- `compra-oc.ts`
+- `compras-ccp.dto.ts:17-20`
+- `compras.controller.ts:105-115`
+- `compras.controller.ts:45-51`
+- `compras.controller.ts:93-103`
+- `compras.prisma:31-37`
+- `compras.prisma:39-47`
+- `compras.prisma:42-47`
+- `compras.prisma:84-104`
+- `compras.service.ts`
+- `compras.service.ts:111-114`
+- `compras.service.ts:305-351`
+- `compras.service.ts:318-326`
+- `compras.service.ts:356-370`
+- `compras.service.ts:404-446`
+- `compras.service.ts:464`
+- `compras.service.ts:472-616`
+- `compras.service.ts:506-531`
+- `compras.service.ts:537-568`
+- `compras.service.ts:545-547`
+- `compras.service.ts:819-862`
+- `compras.service.ts:878-898`
+- `compras.service.ts:897-898`
+- `conferir-recebimento.dto.ts:140-143`
+- `decisoes-pcp/page.ts`
+- `estoque.prisma:167`
+- `estoque/etiquetas/etiqueta.controller.ts`
+- `fila/CartaoItemParcial.ts`
+- `recebimento.controller.ts`
+- `recebimento.controller.ts:26-43`
+- `recebimento.service.ts`
+- `recebimento.service.ts:100-102`
+- `recebimento.service.ts:147-162`
+- `recebimento.service.ts:200-231`
+- `recebimento.service.ts:233-244`
+- `recebimento.service.ts:260`
+- `recebimento.service.ts:315-326`
+- `recebimento.service.ts:316-332`
+- `recebimento.service.ts:331-368`
+- `recebimento.service.ts:340-351`
+- `recebimento.service.ts:373-400`
+- `recebimento.service.ts:411-413`
+- `recebimento.service.ts:534-546`
+- `recebimento.service.ts:830`
+- `requisicao-avhub.eventos.ts:275-280`
+- `requisicao-avhub.eventos.ts:300-307`
+- `vw_ordens_compra_referencia_mes.swagger.js`
+
+## rotas (13)
+
+- `GET /:id`
+- `GET /compras/recebimentos`
+- `GET /compras/recebimentos/decisoes`
+- `GET /compras/recebimentos/oc-esperadas`
+- `GET /compras/requisicoes/esperados`
+- `GET /estoque/lotes/:id/etiqueta`
+- `POST /compras/recebimentos`
+- `POST /compras/recebimentos/:id/decidir`
+- `POST /compras/recebimentos/:id/recontar`
+- `POST /compras/recebimentos/nf`
+- `POST /compras/requisicoes/:id/chegada`
+- `POST /compras/requisicoes/:id/liberar-recebimento`
+- `POST /compras/requisicoes/:id/recebimentos`
+
+## datas (8)
+
+- `08/10`
+- `14/10`
+- `15/10`
+- `15/10/2026`
+- `19/10`
+- `20/10`
+- `20/10/2026`
+- `29/10/2026`
+
+## código entre crases (278)
+
+- `/compras/pedidos-compra`
+- `/decisoes-pcp`
+- `/logistica/logistica-entrada`
+- `/logistica/logistica-entrada/page.tsx`
+- `20261006140000_recebimento_conferencia`
+- `20261014120000_compras_ccp`
+- `5f50fff`
+- `97b9adc`
+- `9ced089`
+- `:119-164`
+- `:164-171`
+- `:168-210`
+- `:176-177`
+- `:212-240`
+- `:242-257`
+- `:254-258`
+- `:263-265`
+- `:275-277`
+- `:32-37`
+- `:346-350`
+- `:354-360`
+- `:362-382`
+- `:373-381`
+- `:386-398`
+- `:448-456`
+- `:45-49`
+- `:452-504`
+- `:508-526`
+- `:51-59`
+- `:541-554`
+- `:548-552`
+- `:557-568`
+- `:569-579`
+- `:590-601`
+- `:590-611`
+- `:604-611`
+- `:61-69`
+- `ABERTA`
+- `ACEITAR`
+- `ACEITO`
+- `AGUARDANDO_DECISAO`
+- `AGUARDANDO_RECONTAGEM`
+- `AVARIA`
+- `CANCELADA`
+- `CONCLUIDO`
+- `CRIADO`
+- `CompraCcpCard`
+- `ComprasService.registrarRecebimento`
+- `ConferirNfDto`
+- `ConferirRecebimentoModal.tsx:199`
+- `ConferirRecebimentoModal.tsx:60`
+- `DESCRICAO`
+- `EM_ANDAMENTO`
+- `EM_COMPRA`
+- `EM_TRANSITO`
+- `ENTRADA`
+- `EntradaUsoInterno`
+- `FN1`
+- `FilaRecebimento.tsx:147`
+- `FilaSetor`
+- `GET /:id`
+- `GET /compras/recebimentos`
+- `GET /compras/recebimentos/decisoes`
+- `GET /compras/recebimentos/oc-esperadas`
+- `GET /compras/requisicoes/esperados`
+- `GET /estoque/lotes/:id/etiqueta`
+- `LOGISTICA_ENTRADA`
+- `LT-AAAAMMDD-NNNN`
+- `Material.pesoTeoricoUnitario × contado`
+- `ModuloSetores`
+- `MovimentoEstoque`
+- `P6`
+- `PENDENTE`
+- `PESO`
+- `POST /compras/recebimentos`
+- `POST /compras/recebimentos/:id/decidir`
+- `POST /compras/recebimentos/:id/recontar`
+- `POST /compras/recebimentos/nf`
+- `POST /compras/requisicoes/:id/chegada`
+- `POST /compras/requisicoes/:id/liberar-recebimento`
+- `POST /compras/requisicoes/:id/recebimentos`
+- `PerfilSetor`
+- `Q1`
+- `QUALIDADE`
+- `QUANTIDADE`
+- `R0`
+- `R1`
+- `R2`
+- `R3`
+- `R4`
+- `R5`
+- `R6`
+- `RB-AAAAMMDD-NNNN`
+- `REABERTO`
+- `REABRIR`
+- `RECEBIDA`
+- `RECEBIDA_PARCIAL`
+- `RECEBIDO`
+- `ReceberComNfModal.tsx:56`
+- `Recebimento`
+- `RecebimentoDivergencia`
+- `RecebimentoItem`
+- `RecebimentoService.conferir`
+- `RecontarRecebimentoModal.tsx:91`
+- `STATUS_AGUARDANDO`
+- `SaldoEstoque`
+- `StatusRecebimento`
+- `StatusRequisicaoCompra`
+- `TipoDivergenciaRecebimento`
+- `_contada`
+- `_nf`
+- `_real`
+- `_recontada`
+- `_recontado`
+- `api-pcp`
+- `api007b`
+- `aplicarDeltaSaldo`
+- `app-pcp`
+- `atendida`
+- `chaveAcessoNf`
+- `chaveNfChegada`
+- `chave_acesso_nf`
+- `chave_nf_chegada`
+- `checarPermissaoSetor: false`
+- `chegadaEm`
+- `chegada_em`
+- `circuito-compra.ts:30-35`
+- `codigo`
+- `compra-oc.ts`
+- `comprado_em`
+- `compras-ccp.dto.ts:17-20`
+- `compras-liberar`
+- `compras.controller.ts:105-115`
+- `compras.controller.ts:45-51`
+- `compras.controller.ts:93-103`
+- `compras.prisma:31-37`
+- `compras.prisma:39-47`
+- `compras.prisma:42-47`
+- `compras.prisma:84-104`
+- `compras.service.ts`
+- `compras.service.ts:111-114`
+- `compras.service.ts:305-351`
+- `compras.service.ts:318-326`
+- `compras.service.ts:356-370`
+- `compras.service.ts:404-446`
+- `compras.service.ts:464`
+- `compras.service.ts:472-616`
+- `compras.service.ts:506-531`
+- `compras.service.ts:537-568`
+- `compras.service.ts:545-547`
+- `compras.service.ts:819-862`
+- `compras.service.ts:878-898`
+- `compras.service.ts:897-898`
+- `conferencia`
+- `conferencias[]`
+- `conferido_por_id`
+- `conferir-recebimento.dto.ts:140-143`
+- `decidido_por_id`
+- `decisoes-pcp`
+- `decisoes-pcp/page.tsx`
+- `decisoes-pcp:editar`
+- `decisoes-pcp:visualizar`
+- `descricao`
+- `despachada_em`
+- `destino`
+- `develop`
+- `estoque.prisma:167`
+- `estoque/etiquetas/etiqueta.controller.ts`
+- `etapa`
+- `etapaCompra ≠ CANCELADA`
+- `etapa_compra`
+- `evidencia_url`
+- `fila/CartaoItemParcial.tsx:761`
+- `fila/CartaoItemParcial.tsx:895`
+- `fila/CartaoItemParcial.tsx:907`
+- `finalidade`
+- `fornecedor`
+- `idItemParcial`
+- `idLocalizacao`
+- `idLoteCompra`
+- `idOcItem`
+- `idOrdemCompra`
+- `idRequisicao`
+- `idRequisicaoItem`
+- `id_item_oc`
+- `id_localizacao`
+- `id_lote`
+- `id_origem`
+- `id_requisicao`
+- `id_requisicao_item`
+- `itensOc`
+- `itensRequisicao`
+- `laudoUrl`
+- `laudo_url`
+- `liberadaRecebimentoEm`
+- `liberada_recebimento_*`
+- `logistica-entrada`
+- `loteCusto.create`
+- `lote_custo`
+- `lotes`
+- `main`
+- `min(parcial, produtoFinal)`
+- `motivo_decisao`
+- `motivo_liberacao`
+- `moverParcial`
+- `movimentacoes`
+- `movimentacoes:editar`
+- `movimentacoes:visualizar`
+- `nfChegada`
+- `nf_chegada`
+- `nf_fornecedor`
+- `numeroNf`
+- `numero_nf`
+- `numero_oc`
+- `oc.nomeFornecedor`
+- `ocAprovadaEm`
+- `oc_aprovada`
+- `oc_aprovada_em`
+- `oc_cancelada`
+- `ocorrencia_aberta`
+- `origem = OC`
+- `origem OC`
+- `origem RECEBIMENTO`
+- `pedido_compra`
+- `pedidos-compra`
+- `pendente = max(quantidade − quantidadeRecebida, 0)`
+- `pesoReal`
+- `peso_teorico`
+- `podeReceber`
+- `pode_atuar`
+- `previsaoEntrega`
+- `previsao_chegada`
+- `previsao_entrega`
+- `public`
+- `quantidade`
+- `quantidadeContada`
+- `quantidadeNf`
+- `quantidadeRecebida`
+- `quantidade_pendente`
+- `quantidade_recebida`
+- `quarentenaDesde`
+- `recebimento.controller.ts`
+- `recebimento.controller.ts:26-43`
+- `recebimento.service.ts`
+- `recebimento.service.ts:100-102`
+- `recebimento.service.ts:147-162`
+- `recebimento.service.ts:200-231`
+- `recebimento.service.ts:233-244`
+- `recebimento.service.ts:260`
+- `recebimento.service.ts:315-326`
+- `recebimento.service.ts:316-332`
+- `recebimento.service.ts:331-368`
+- `recebimento.service.ts:340-351`
+- `recebimento.service.ts:373-400`
+- `recebimento.service.ts:411-413`
+- `recebimento.service.ts:534-546`
+- `recebimento.service.ts:830`
+- `recebimentos`
+- `recebimentos_divergencias`
+- `recebimentos_itens`
+- `recontado_por_id`
+- `recontagem`
+- `registrarRecebimento`
+- `requisicao-avhub.eventos.ts:275-280`
+- `requisicao-avhub.eventos.ts:300-307`
+- `requisicoes_compra`
+- `requisicoes_compra_itens`
+- `splitParaDestino`
+- `status`
+- `tipo`
+- `tipos=['LOGISTICA_ENTRADA']`
+- `toleranciaPeso`
+- `tolerancia_peso`
+- `transportadora`
+- `vw_ordens_compra_referencia_mes.swagger.json:44-88`
+- `{decisao: ACEITAR\|REABRIR, motivo}`
+- `{idItemParcial, numeroNf?, chaveAcessoNf?}`
+- `{motivo}`
+
+## regras e linhas de conteúdo (106)
+
+- **A OC é aprovada.** A parcial (a parte do pedido que espera o material) entra na lista de esperados da doca. Compras também pode liberar à mão (`R0`).
+- **A carga chega com a nota.** A doca informa o número ou a chave de 44 dígitos da NF. Sem NF, a parcial não sai de Compras · CCP (`R0`).
+- **A doca confere contra a NF.** Conta o que chegou e compara com a nota, não com a OC. Receber mais do que o pedido é permitido, e a sobra fica livre no estoque (`R1`).
+- **A doca pesa.** Se o material tem peso teórico, o peso real é obrigatório. Desvio acima de 5% vira divergência de peso (`R2`).
+- **O sistema confere.** Se não há divergência, o lote nasce na hora. Se há, nada entra e outra pessoa precisa recontar (`R3`).
+- **Cria o lote em quarentena.** O lote nasce pendente, com entrada no saldo. Segue para a Qualidade (`R4`).
+- **Chegou só uma parte?** Essa parte vai à Qualidade. O restante volta a Compras · CCP, esperando a próxima NF (`R4`).
+- **Divergência: outra pessoa reconta.** Quem conferiu não reconta. A recontagem pede todos os itens (`R6`).
+- **Se a recontagem ainda diverge, o PCP decide.** Aceita (entra o que foi recontado) ou reabre (nada entra e a parcial volta a Compras). O motivo é obrigatório (`R6`).
+- | Doca (conferente) | Registra a chegada com a NF, conta, pesa e informa avaria e descrição |
+- | Segunda pessoa | Reconta quando há divergência |
+- | PCP | Aceita ou reabre quando a recontagem continua divergindo |
+- | Compras | Libera para o Recebimento sem OC aprovada; em geral só o Administrador |
+- | Qualidade | Recebe o lote e inspeciona |
+- A conferência é contra a nota, não contra o pendente nem contra a OC.
+- Sem NF, a parcial não sai de Compras · CCP. Assim o tempo do fornecedor não cai no Recebimento.
+- Divergência aberta trava a entrada no estoque.
+- Quem conferiu não pode recontar.
+- Peso real é obrigatório quando há peso teórico. Tolerância padrão de 5%, por material.
+- O lote sempre nasce em quarentena, mesmo item acabado.
+- O Recebimento nunca decide compra. A divergência vai ao PCP, e a reabertura devolve a Compras.
+- Só pode haver um recebimento aberto por parcial.
+- O custo do lote vem da OC, hoje é opcional e não bloqueia o recebimento. A N16-09 manda que todo lote tenha custo (obrigatório, BL-066), o que ainda não vale no código.
+- Divergência contra a OC também bloqueia, quando o cruzamento existir (N16-135).
+- ✅ (`app-pcp`) Telas de recebimento, recontagem e decisão do PCP; lote em quarentena com etiqueta em PDF.
+- ✅ (`api-pcp`) Recebimento parcial com divisão da parcial.
+- ✅ (`api-pcp`) Na `develop` do MES: o custo da OC é gravado no lote (19/10, `97b9adc`; unidade diferente da OC ou OC fora da projeção gera lote sem custo e sinalizado).
+- ✅ Na `develop` do MES: entrada de mercadoria de OC sem requisição do MES (OC criada só no av-hub), por OC e por NF, e uso interno sem lote (16 a 20/10).
+- 🔴 A conferência ainda não cruza com a OC (preço, quantidade comprada, fornecedor); só compara contado com a NF. O rateio da chegada entre destinos da OC também falta (API-011).
+- 🔴 Aviso ao av-hub quando o PCP reabre o recebimento; leitor de código de barras da NF; reabertura de divergência de produção.
+- 🟡 Aviso à doca quando uma OC esperada é cancelada.
+- 🔴 Alerta de OC que passou da previsão sem chegar.
+- ❓ Teste ponta a ponta com OC real.
+- | Doca (conferente) | Registra a chegada com NF, conta, pesa, informa avaria e descrição | MES, `/logistica/logistica-entrada` |
+- | Segunda pessoa | Reconta quando há divergência (quem conferiu **não** pode recontar) | idem |
+- | PCP | Decide `ACEITAR` ou `REABRIR` quando a recontagem continua divergindo | MES, `/decisoes-pcp` |
+- | Compras (`compras-liberar`, em geral só o Administrador) | Libera a requisição para o Recebimento sem OC aprovada | `FilaSetor` / `CompraCcpCard` |
+- | Qualidade | Recebe o lote | [[08-Qualidade-Entrada]] |
+- | 1 | **Esperados:** só aparece na lista da doca a parcial em Compras · CCP cuja requisição tem **OC aprovada** no av-hub (e não cancelada) ou **liberação manual** | 📝 ✅ `compras.service.ts:305-351`, `:448-456` |
+- | 2 | **Sem NF a parcial não sai de Compras · CCP**, para o tempo do fornecedor não cair no Recebimento. A doca informa número ou **chave de 44 dígitos** | 📝 ✅ `compras.service.ts:356-370`, `compras-ccp.dto.ts:17-20` |
+- | 3 | **A conferência é contra a NF**, não contra o pendente nem a OC. Receber mais do que a requisição pede é permitido; a sobra fica livre no estoque | 📝 ✅ `recebimento.service.ts:100-102`, `:176-177`; `compras.service.ts:464` |
+- | 4 | **Peso:** se o material tem peso teórico, o **peso real é obrigatório**; desvio acima da tolerância (padrão 5%, por material) vira divergência `PESO` | 📝 ✅ `recebimento.service.ts:373-400`, `estoque.prisma:167` |
+- | 5 | Tudo bate: o lote nasce **na hora**, `PENDENTE`, com `ENTRADA` no saldo na localização da conferência; recebimento `CONCLUIDO` | 📝 ✅ `recebimento.service.ts:200-231`, `compras.service.ts:537-568` |
+- | 6 | Diverge: **nada entra**; `AGUARDANDO_RECONTAGEM`; outra pessoa reconta | 📝 ✅ `recebimento.service.ts:233-244`, `:254-258` |
+- | 7 | Recontagem bate: `CONCLUIDO`. Continua divergindo: `AGUARDANDO_DECISAO` do PCP | 📝 ✅ `recebimento.service.ts:315-326` |
+- | 8 | PCP `ACEITAR` (entra a quantidade recontada) ou `REABRIR` (nada entra; a parcial volta a Compras · CCP); **motivo obrigatório** | 📝 ✅ `recebimento.service.ts:331-368`, `conferir-recebimento.dto.ts:140-143` |
+- | 9 | **Recebimento parcial faz split:** o que chegou segue para a Qualidade, o **restante volta a Compras · CCP** aguardando a próxima NF | 📝 ✅ `compras.service.ts:506-531`, `:590-611` |
+- | 10 | Avaria exige foto (URL de evidência); descrição e avaria são informadas pelo conferente; quantidade e peso o sistema calcula | ✅ `recebimento.service.ts:411-413`; `compras.prisma:39-47` |
+- | 11 | Só um recebimento aberto por parcial (409 se há conferência aguardando recontagem ou decisão) | ✅ `recebimento.service.ts:534-546` |
+- | 12 | Lote **sempre** nasce `PENDENTE` (quarentena), mesmo item "acabado" | 📝 ✅ `compras.service.ts:545-547` |
+- | 13 | **Custo do lote vem da OC.** Hoje é opcional e não bloqueia o recebimento; a N16-09 torna o custo obrigatório em todo lote | 📝 ✅ (`api-pcp`) gravado na `develop` (19/10, `97b9adc`; ver R4); 🔴 obrigatório (BL-066) |
+- | 14 | Recebimento nunca decide compra: a divergência vai ao PCP; o `REABERTO` devolve a Compras | 📝 ✅ `recebimento.service.ts:340-351` |
+- | Valor | Significado | Próximo |
+- | `CONCLUIDO` | Bateu (na conferência ou na recontagem); lotes criados | Qualidade |
+- | `AGUARDANDO_RECONTAGEM` | Divergiu; nada entrou | recontagem por outra pessoa |
+- | `AGUARDANDO_DECISAO` | A recontagem continua divergindo | PCP |
+- | `ACEITO` | PCP aceitou; entrou a quantidade recontada | Qualidade |
+- | `REABERTO` | PCP reabriu; nada entrou | Compras · CCP |
+- | Nome atual | Nome antigo | Rota | Slug | Ações |
+- | Recebimento | Logística de entrada | `/logistica/logistica-entrada` | `logistica-entrada` | lista de esperados, **Receber com NF** (`FilaRecebimento.tsx:147`, `ReceberComNfModal.tsx:56`), **Conferir recebimento** (`fila/CartaoItemParcial.tsx:907`, `ConferirRecebimentoModal.tsx:199`), **Recontar** (`fila/CartaoItemParcial.tsx:895`, `RecontarRecebimentoModal.tsx:91`), **Liberar para o Recebimento sem OC** (`fila/CartaoItemParcial.tsx:761`) |
+- | Divergências de Recebimento | Decisões do PCP | `/decisoes-pcp` | `decisoes-pcp` | Aceitar ou Reabrir com motivo (`decisoes-pcp/page.tsx`) |
+- | Compras · CCP | Pedidos de Compra | `/compras/pedidos-compra` | `pedidos-compra` | onde a parcial espera até a NF chegar ([[06-Circuito-de-Compra]]) |
+- | Método e rota | Permissão | Efeito | Código |
+- | `GET /compras/requisicoes/esperados` | `movimentacoes:visualizar` | R0: lista de esperados | `compras.controller.ts:45-51` ✅ |
+- | `POST /compras/requisicoes/:id/chegada` `{idItemParcial, numeroNf?, chaveAcessoNf?}` | `movimentacoes:editar` | R0: grava `nfChegada`, `chaveNfChegada`, `chegadaEm`; parcial vai ao Recebimento | `compras.controller.ts:93-103`, `compras.service.ts:819-862` ✅ |
+- | `POST /compras/requisicoes/:id/liberar-recebimento` `{motivo}` | `movimentacoes:editar` + `compras-liberar` | Rede de segurança (motivo até 500) | `compras.controller.ts:105-115`, `compras.service.ts:404-446` ✅ |
+- | `GET /compras/recebimentos`, `GET /:id` | `movimentacoes:visualizar` | Lista (até 200) e detalhe | `recebimento.controller.ts:26-43` ✅ |
+- | `GET /compras/recebimentos/decisoes` | `decisoes-pcp:visualizar` | Fila `AGUARDANDO_DECISAO` | `:32-37` ✅ |
+- | `POST /compras/recebimentos` | `movimentacoes:editar` | R1 a R4: conferir (`idRequisicao`, `idItemParcial`, itens com `quantidadeNf`, `quantidadeContada`, `pesoReal`, `idLocalizacao`; cabeçalho `numeroNf`, `chaveAcessoNf`, `fornecedor`, `laudoUrl`; divergências informadas) | `:45-49` ✅ |
+- | `POST /compras/recebimentos/nf` | `movimentacoes:editar` | Conferência de uma NF com várias conferências, cada uma de uma requisição do MES (`itensRequisicao`) ou de uma OC do hub sem requisição (`idOrdemCompra` e `itensOc`); item de uso interno não vira lote | `recebimento.controller.ts`, `recebimento.service.ts` (`ConferirNfDto`) ✅ `develop` |
+- | `GET /compras/recebimentos/oc-esperadas` | `movimentacoes:visualizar` | Esperados por item de OC aprovada, com ou sem requisição do MES | `recebimento.controller.ts` ✅ `develop` |
+- | `POST /compras/recebimentos/:id/recontar` | `movimentacoes:editar` | Recontagem por outra pessoa | `:51-59` ✅ |
+- | `POST /compras/recebimentos/:id/decidir` `{decisao: ACEITAR\|REABRIR, motivo}` | `decisoes-pcp:editar` | Decisão do PCP | `:61-69` ✅ |
+- | `POST /compras/requisicoes/:id/recebimentos` | — | **Removida**; o registro direto não existe mais | ✅ (`api-pcp`) |
+- | `GET /estoque/lotes/:id/etiqueta` | Estoque | PDF Code128 do lote | `estoque/etiquetas/etiqueta.controller.ts` ✅ |
+- Lote `PENDENTE`, `origem RECEBIMENTO`, `quarentenaDesde`, com `idRequisicaoItem`, NF, fornecedor (`:541-554`).
+- `SaldoEstoque` (`aplicarDeltaSaldo`) e `MovimentoEstoque` `ENTRADA` na localização (`:557-568`).
+- `quantidadeRecebida` do item incrementa; a requisição vira `RECEBIDA` (todos os itens cobertos) ou `RECEBIDA_PARCIAL` (`:569-579`).
+- A parcela que o recebimento cobre avança: na revenda, o que chegou do **produto final**, `min(parcial, produtoFinal)`; só com matéria-prima, a parcial inteira quando tudo chegou (`:508-526`). Se é a parcial toda, `moverParcial`; se é parte, `splitParaDestino` (nasce parcial nova) para o setor `QUALIDADE` com `idLoteCompra` apontando o lote (`:590-601`).
+- O restante volta a **Compras · CCP** `EM_TRANSITO`, com "falta N" (`:604-611`).
+- | Tabela (`public`, MES) | Campos que importam |
+- | `requisicoes_compra` | `pedido_compra`, `fornecedor`, `previsao_entrega`, `comprado_em`, `liberada_recebimento_*`, `motivo_liberacao`, `nf_chegada`, `chave_nf_chegada`, `chegada_em` (`compras.prisma:84-104`) |
+- | `requisicoes_compra_itens` | `quantidade`, `quantidade_recebida`, `etapa_compra`, `numero_oc`, `oc_aprovada_em`, `previsao_chegada`, `despachada_em`, `nf_fornecedor`, `transportadora`, `ocorrencia_aberta` (`:119-164`) |
+- | `recebimentos` | `codigo`, `status`, `numero_nf`, `chave_acesso_nf`, `fornecedor`, `laudo_url`, `conferido_por_id`, `recontado_por_id`, `decidido_por_id`, `motivo_decisao` (`:168-210`) |
+- | `recebimentos_itens` | `quantidade_pendente`, `_nf`, `_contada`, `_recontada`, `peso_teorico`, `_real`, `_recontado`, `tolerancia_peso`, `id_localizacao`, `id_lote` (`:212-240`) |
+- | `recebimentos_divergencias` | `tipo`, `descricao`, `evidencia_url`, `etapa` (`:242-257`) |
+- | `lotes` | `PENDENTE`, `id_requisicao_item`, `numero_nf`, `fornecedor` ([[05-Estoque-Atendimento]]) |
+- O job do contrato 004/007 (BL-001) grava a projeção da OC aprovada; o item traz `id_requisicao` nulo ou sem `id_origem` e o `destino` (pedido de venda ou estoque) ✅ `vw_ordens_compra_referencia_mes.swagger.json:44-88`.
+- A OC aprovada sem requisição do MES entra nos **esperados** do Recebimento como "esperado por OC", sem parcial, com fornecedor, quantidade, previsão e destino vindos da referência.
+- A doca registra a chegada com a NF e confere contra a NF (regra de hoje, N14-04); o lote nasce `PENDENTE`, em quarentena, e segue para a Qualidade como qualquer outro.
+- O que o `destino` marca como **pedido de venda** reserva o lote para aquele pedido e avisa o PCP; o que é **estoque** vira saldo livre; o que era "saldo futuro" deixa de ser futuro e passa a saldo atual ([[05-Estoque-Atendimento]]).
+- Receber parte da OC mantém o restante como esperado (como o split de hoje).
+- | # | O quê | Dono | Nó | Selo |
+- | 1 | Gravar o custo da OC no lote (`lote_custo`, `origem OC`, `id_item_oc`): feito na `develop` (19/10). Falta o custo obrigatório em todo lote (BL-066) | Robert | R4 | ✅ (`api-pcp`) gravação; 🔴 obrigatório |
+- | 2 | **Cruzar a conferência com a OC** (quantidade comprada, preço, fornecedor, N16-135): a referência da OC já chega ao MES (K4), mas a divergência contra a OC não existe; hoje só NF | Robert | R1, R3 | 🔴 |
+- | 3 | Caminho de entrada da mercadoria de OC sem requisição do MES (BL-051): feito na `develop` (16 a 20/10). Falta o rateio da chegada entre destinos da OC e o teste em homologação (API-011); ver "Mercadoria de OC sem requisição do MES" abaixo | Robert | R0 | ✅ (`api-pcp`) entrada; 🔴 rateio |
+- | 4 | Reabertura de divergência de produção e o `P6` novo norte | Robert | R6, P6 | 🔴 |
+- | 5 | Leitor de código de barras da chave da NF e posto de recebimento (impressora, leitor) | Robert | R1 | 🔴 |
+- | 6 | Avisar o av-hub quando o PCP **reabre** o recebimento (devolução ao fornecedor, nova compra) | Nathan, Gustavo, Robert | R6 | 🔴 |
+- | 7 | Aviso à doca quando uma OC esperada é cancelada no av-hub | Robert | R0 | 🟡 |
+- | 8 | Teste ponta a ponta de "Receber com NF" e da lista de esperados com OC real | Robert | R0 | ❓ |
+- | 9 | Alerta de OC esperada que passou da previsão sem chegar | Compras, Robert | R0 | 🔴 |
+- Nathan: tolerância de peso de 5% vale para toda categoria (decisão provisória do v1), ou por material? O código guarda por material (`toleranciaPeso`, padrão 0,05). **Decidido em 29/10/2026 (N16-134): 5% por padrão, ajustável por material.**
+- Nathan: quando existir o cruzamento com a OC, a divergência de quantidade contra a OC bloqueia (como a da NF) ou só avisa? **Decidido em 29/10/2026 (N16-135): bloqueia.**
+- Robert: conferência de NF com **várias OCs** ou várias requisições na mesma nota. **Decidido em 29/10/2026 (N16-136): uma nota pode trazer várias OCs, conferidas por item da OC.** Na `develop` do MES já existe (`POST /compras/recebimentos/nf`, `conferencias[]`).
+- Robert: na conferência por OC, o fornecedor digitado vale e, sem ele, fica o da OC (`oc.nomeFornecedor`, `api007b`); confirmar que os dois não conflitam.
+
+## subfluxo mermaid
+
+```text
+flowchart TD
+    FN1["FN1 · Fornecedor entrega<br/>CIF direto ou coleta FOB"] --> R0["R0 · Esperados: OC aprovada<br/>doca registra a chegada com NF<br/>POST compras requisicoes chegada"]
+    C5["C5 · Marco oc_aprovada do av-hub"] -.->|"entra nos esperados"| R0
+    C0["C0 · OC de requisição só do av-hub<br/>ou de estoque, lida pela referência"] -.->|"esperado por OC, na develop do MES"| R0
+    R0 --> R1["R1 · Confere contra a NF<br/>chave de 44 dígitos, contado x NF"]
+    R1 --> R2["R2 · Pesagem<br/>peso real obrigatório se há peso teórico<br/>tolerância 5%"]
+    R2 --> R3{"R3 · Bate com o esperado?"}
+    R3 -->|sim| R4["R4 · Cria o lote PENDENTE em quarentena<br/>ENTRADA no saldo, split se chegou parte<br/>custo da OC gravado na develop"]
+    R3 -->|"não: recontagem por outra pessoa"| R6["R6 · Divergência<br/>QUANTIDADE, DESCRICAO, PESO, AVARIA"]
+    R6 -->|"recontagem bate"| R4
+    R6 -->|"PCP aceita"| R4
+    R6 -->|"PCP reabre: nada entra"| P6["P6 · Novo norte<br/>a parcial volta a Compras · CCP"]
+    P6 -->|"reabre compra"| P3["P3 · Requisição de compra"]
+    R4 -->|"restante da NF volta a Compras · CCP"| R0
+    R4 --> Q1["Q1 · Inspeção de entrada por lote"]
+```

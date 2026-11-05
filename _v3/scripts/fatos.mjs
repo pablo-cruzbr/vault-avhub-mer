@@ -5,7 +5,7 @@
 //       rotas, identificadores de código entre crases, datas, números com unidade, nós e as linhas
 //       de regra (linhas de tabela e de lista). Não sobrescreve um arquivo de fatos que já existe
 //       (a lista é a foto de ANTES); use --refazer para forçar.
-//   node _v3/scripts/fatos.mjs conferir [nota]
+//   node _v3/scripts/fatos.mjs conferir [nota] [--pasta=<sub>]
 //       para cada lista em _v3/fatos/, confere se cada fato aparece em alguma nota do vault (fora de _v3).
 //       Fatos "token" precisam aparecer literalmente. Linhas de regra são conferidas pelo texto sem
 //       selos e sem formatação; as que não batem vão para "conferir à mão" (o selo pode mudar pelo F5,
@@ -15,7 +15,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const dirFatos = path.join(raiz, '_v3', 'fatos');
+// --pasta=<sub> grava e confere em _v3/fatos/<sub>/ (Bloco 5: _v3/fatos/bloco5, porque já há fotos do Bloco 3 com o mesmo nome)
+const pastaArg = (process.argv.find((a) => a.startsWith('--pasta=')) || '').slice(8);
+const dirFatos = path.join(raiz, '_v3', 'fatos', pastaArg);
 const [, , modo, alvo] = process.argv;
 const simular = process.argv.includes('--simular');
 const refazer = process.argv.includes('--refazer');

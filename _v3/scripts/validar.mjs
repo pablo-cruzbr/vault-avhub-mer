@@ -62,7 +62,8 @@ for (const f of notas) {
   if (txt.includes('\r')) crlf.push(rel(f));
   // "Ã" sozinho é letra válida (AÇÃO); só conta quando seguido de byte de continuação (Ã§, Ã£...)
   if ((/Ã[\u0080-¿]|â€|�/.test(txt)) && !rel(f).startsWith('_v3/')) corrompidos.push(rel(f));
-  if (buf.length > 25 * 1024) grandes.push(`${rel(f)} (${(buf.length / 1024).toFixed(1)} KB)`);
+  // _v3/ é material de trabalho (fotos de fatos); fica fora do limite de tamanho
+  if (buf.length > 25 * 1024 && !rel(f).startsWith('_v3/')) grandes.push(`${rel(f)} (${(buf.length / 1024).toFixed(1)} KB)`);
 }
 
 const contratosLinks = [];
@@ -158,7 +159,8 @@ if (fs.existsSync(build)) {
   const ARQ = new RegExp(String.raw`${SEG}(?:/${SEG})*\.(?:tsx|ts|json|mjs|js|prisma|sql)(?![\w])`);
   const CIT = /\b(api-acos-vital|av-hub|api-pcp|app-pcp|omie-elt-pipeline|api-comercial|Dump|dump|Omie|Estudo-Omie-API)\b|(service|controller|helpers|route|dto)?:\d+(-\d+)?\b/;
   const prob = [];
-  for (const f of notas.filter((x) => /02-Fluxo-de-Atividades[\/](0[1-9]|1[0-5])-/.test(x))) {
+  // Bloco 5: as partes das raias (Partes/NN-...) também
+  for (const f of notas.filter((x) => /02-Fluxo-de-Atividades[\/](Partes[\/])?(0[1-9]|1[0-5])-/.test(x))) {
     const t = fs.readFileSync(f, 'utf8');
     if (!/^develop-conferida:/m.test((t.match(/^---\n([\s\S]*?)\n---/) || [, ''])[1])) prob.push(`${rel(f)}: sem develop-conferida`);
     let cod = false;
