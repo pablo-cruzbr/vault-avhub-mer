@@ -27,7 +27,7 @@ Selos (pela `develop`, F5): ✅ está na `develop` · 📝 decidido · 🟡 parc
 | E6 | "Despacho do Estoque: baixa do saldo" | **Documento de retirada; a baixa é na retirada, no Estoque** 📝 (código ainda baixa na Embalagem 🔴) |
 | Q8 / F1 | Fabricado aprovado vai direto à Expedição | **Tudo que é fabricado ou comprado vira lote e saldo no Estoque** 📝 (fabricado vira lote na `develop` do MES desde 27/10 ✅; na `main` do MES, parada em 08/10, ainda não) |
 | C5 | CCP follow-up | **Compras · CCP no MES é só leitura**, espelha os marcos do contrato 35; a OC aprovada entra nos **esperados do Recebimento** ✅. O CCP registra a nova data do fornecedor e vincula a NF de entrada à OC 📝 (N16-86, N16-88) |
-| V0 | — (o pedido nascia no Omie) | **Proposta no Hub** (`V0.1` a `V0.7`, `V0C`): o vendedor monta, busca o custo, a comissão estimada nasce, a Gerência aprova fisicamente, o vendedor marca aprovada e transforma em pedido, que vai ao Omie por API 📝 (N16-01 a N16-05, N16-89, N16-90); a `api-acos-vital` (`develop`, 29/10) já tem criar, revisar, aprovar, cancelar e transformar em pedido do Hub ✅; falta o envio ao Omie e a tela de aprovar e transformar 🔴 |
+| V0 | — (o pedido nascia no Omie) | **Proposta no Hub** (`V0.1` a `V0.7`, `V0C`): o vendedor monta, busca o custo, a comissão estimada nasce, a Gerência aprova fisicamente, o vendedor marca aprovada e transforma em pedido, que vai ao Omie por API 📝 (N16-01 a N16-05, N16-89, N16-90); a `api-acos-vital` (`develop`, 29/10) já tem criar, revisar, aprovar, cancelar e transformar em pedido do Hub ✅; o envio ao Omie existe na API desde 05/11 (`1654f65`) 🟡; faltam o banco dessa função ❓ e a tela de aprovar e transformar 🔴 |
 | V1 a V3 | Pedido do Omie, travado até liberar | **Duas origens, mesmo fluxo e mesma tela:** o da proposta nasce liberado; o digitado no Omie chega travado, com a parte de vendas pronta (só se altera no Omie), e o vendedor responde Qualidade e faturamento em partes (`V2`/`V3`) e preenche a parte de compras no pedido, sem travar o fluxo 📝 (N16-05, N16-91, N16-106) |
 | B1 a B4 | — | **Orçamento:** base de preço com histórico, página do produto, pedido de custo e cotação do setor de Orçamento 📝 (N16-06, N16-07, N16-52 a N16-59, N16-104) |
 | C6 a C8 | — | **Compras confere a parte de compras** do vendedor, usa o valor correto e, se comprar acima do custo do vendedor, ele aprova ou reprova em Meus Pedidos; reprovado, Compras leva à Gerência fisicamente 📝 (N16-08, N16-60 a N16-67, N16-76) |
@@ -46,7 +46,7 @@ flowchart TD
         V05{"V0.5 · Proposta aprovada?<br/>vendedor marca, revisão travada"}
         V0C["V0C · Proposta cancelada<br/>não reabre, comissão estimada vira histórico"]
         V06["V0.6 · Transformar em pedido<br/>previsão, Qualidade e faturamento em partes"]
-        V07["V0.7 · Cria o pedido no Omie por API<br/>fila e pipeline, nosso número"]
+        V07["V0.7 · Cria o pedido no Omie por API<br/>direto pela API, síncrono, nosso número"]
         V01 --> V02 --> V03 --> V04 --> V05
         V05 -->|não| V0C
         V05 -->|sim| V06 --> V07
@@ -207,11 +207,11 @@ flowchart TD
     classDef parcial fill:#fff4d6,stroke:#a8860f,color:#3b2f00
     classDef falta fill:#fde8e8,stroke:#b3261e,color:#410002
     class V2,V3,P1,P2,P3,E1,E2,E3,E5,C1,C2,C3,C4,C5,FN1,R0,R1,R2,R3,R4,R6,Q1,Q2,Q3,Q4,F1,Q7,X1,O2 ok
-    class V1,E4,X2,X3,X4,P6,Q8,C0,O1,V01,V05,V0C,V06 parcial
-    class E6,V02,V03,V04,V07,B1,B2,B3,B4,C6,C7,C8,K1,K2,K3,K4,K5,K6 falta
+    class V1,E4,X2,X3,X4,P6,Q8,C0,O1,V01,V05,V0C,V06,V07 parcial
+    class E6,V02,V03,V04,B1,B2,B3,B4,C6,C7,C8,K1,K2,K3,K4,K5,K6 falta
 ```
 
-> O verde é o que está no código, o amarelo é parcial e o vermelho é sem código. Os nós do Orçamento, de `C6` a `C8` e da comissão nova são proposta aprovada em 26/10 e ainda não têm código na `api-acos-vital`. Os da proposta (`V0.1`, `V0.5`, `V0C`, `V0.6`) têm API na `develop` da `api-acos-vital` desde 29/10, sem tela de aprovar e transformar e sem envio ao Omie (`V0.7`). Os nós do MES que só existem na `develop` do MES (fabricado como lote, custo, recebimento por OC) estão contados como no código; a `main` do MES parou em 08/10 (merge BL-035). Nos diagramas, os IDs com ponto aparecem sem o ponto (`V01` = `V0.1`). A coluna "Código" da tabela a seguir é a fonte; a cor é um resumo. Q4 e Q3 estão no código, mas a substituição aprovada depende do circuito de compra completo (🟡).
+> O verde é o que está no código, o amarelo é parcial e o vermelho é sem código. Os nós do Orçamento, de `C6` a `C8` e da comissão nova são proposta aprovada em 26/10 e ainda não têm código na `api-acos-vital`. Os da proposta (`V0.1`, `V0.5`, `V0C`, `V0.6`) têm API na `develop` da `api-acos-vital` desde 29/10, sem tela de aprovar e transformar; o envio ao Omie (`V0.7`) existe na API desde 05/11 (`1654f65`), mas o banco dessa função está fora do repositório. Os nós do MES que só existem na `develop` do MES (fabricado como lote, custo, recebimento por OC) estão contados como no código; a `main` do MES parou em 08/10 (merge BL-035). Nos diagramas, os IDs com ponto aparecem sem o ponto (`V01` = `V0.1`). A coluna "Código" da tabela a seguir é a fonte; a cor é um resumo. Q4 e Q3 estão no código, mas a substituição aprovada depende do circuito de compra completo (🟡).
 
 ## Tabela nó → raia, tela, endpoint, contrato, código
 
