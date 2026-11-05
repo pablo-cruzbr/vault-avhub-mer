@@ -18,3 +18,6 @@ antigo,novo,tipo,motivo
 06-Contratos/(Ativos|Entregues|Arquivados|Consultas)/*,06-Contratos/Contratos-da-v2.md,contrato-v2,"F2: contratos ficaram na tag v2-antes-da-v3 (Bloco 1)"
 06-Contratos/Painel-de-Contratos.md,06-Contratos/Contratos-da-v2.md,contrato-v2,"F2: o painel foi substituído pelo índice (Bloco 1)"
 06-Contratos/Consultas/Modelo-de-Consulta.md,06-Contratos/Modelos/Modelo-de-Consulta.md,final,"Modelo não é contrato (Bloco 1)"
+02-Fluxo-de-Atividades/05-Estoque-Atendimento-e-Despacho.md,02-Fluxo-de-Atividades/05-Estoque-Atendimento.md,dividido,"D1: E1–E4 (git mv da provisória)"
+02-Fluxo-de-Atividades/05-Estoque-Atendimento-e-Despacho.md,02-Fluxo-de-Atividades/09-Estoque-Entrada-do-Lote.md,dividido,"D1: E5"
+02-Fluxo-de-Atividades/05-Estoque-Atendimento-e-Despacho.md,02-Fluxo-de-Atividades/12-Estoque-Despacho.md,dividido,"D1: E6"

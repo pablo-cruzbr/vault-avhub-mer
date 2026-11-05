@@ -77,7 +77,7 @@ Decididas pelo Nathan em 14/10; o que sobra é trabalho e está em [[Backlog-por
 
 | ID | Decisão | Nota afetada | Trabalho que sobra |
 |---|---|---|---|
-| PS-003 | O MES lê as OCs do hub: se a OC é vinculada a pedido de venda, o PCP vê a OC do pedido; se é de estoque, o Estoque mostra o saldo futuro. Substitui as opções (a) e (b). N14-20 | [[06-Circuito-de-Compra]], [[07-Recebimento]], [[05-Estoque-Atendimento-e-Despacho]], [[04-PCP-Triagem-e-Destinacao]], [[Integracao-AvHub-MES]] | BL-006, BL-028, BL-041, BL-049, BL-050, BL-051 |
+| PS-003 | O MES lê as OCs do hub: se a OC é vinculada a pedido de venda, o PCP vê a OC do pedido; se é de estoque, o Estoque mostra o saldo futuro. Substitui as opções (a) e (b). N14-20 | [[06-Circuito-de-Compra]], [[07-Recebimento]], [[05-Estoque-Atendimento]], [[04-PCP-Triagem-e-Destinacao]], [[Integracao-AvHub-MES]] | BL-006, BL-028, BL-041, BL-049, BL-050, BL-051 |
 | PS-004 | A Ordem de Produção é entidade do sistema e também documento para impressão, só do que será fabricado. N14-22 | [[04-PCP-Triagem-e-Destinacao]], [[Glossario]] | BL-036, BL-052 |
 | PS-007 | Perfil CCP: será criado em breve; tarefa cadastral simples (Nathan e Gustavo), sem bloqueio de desenho. N14-24 | [[Equipe-e-Divisao]], [[RBAC-e-Permissoes]] | BL-017 (cadastral) |
 | PS-008 | ✅ **Feito em 30/10/2026 (Nathan).** Vínculo de usuários à Gerência de Compras: tarefa cadastral. N14-24 | [[Equipe-e-Divisao]], [[06-Circuito-de-Compra]] | cadastro (RS-015) |

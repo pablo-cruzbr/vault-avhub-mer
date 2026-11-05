@@ -23,7 +23,7 @@ fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Enc
 1. O [[07-Recebimento]] entrega o lote em quarentena (status `PENDENTE`). Ele aparece na fila da Qualidade, do mais antigo ao mais novo, e ainda não conta no saldo. `Q1`
 2. O inspetor da Qualidade abre o lote na tela de inspeção e decide: aprova ou reprova. `Q2`
 3. Para aprovar, ele anexa o laudo. Para reprovar, anexa laudo, motivo e evidência e informa a quantidade reprovada. `Q2`
-4. Aprovado: o lote fica `LIBERADO`. A parcial que esperava junta-se às outras do mesmo item e volta ao Estoque ([[05-Estoque-Atendimento-e-Despacho]]). `E5`
+4. Aprovado: o lote fica `LIBERADO`. A parcial que esperava junta-se às outras do mesmo item e volta ao Estoque ([[09-Estoque-Entrada-do-Lote]]). `E5`
 5. Reprovado em parte: a quantidade reprovada vira um lote filho separado e o sistema abre a RNC (registro de não conformidade). `Q3`
 6. A parte reprovada volta para Compras ([[06-Circuito-de-Compra]]), que combina com o fornecedor a devolução e a substituição. `Q3`
 7. Se ainda há parcial esperando, a parte aprovada fica em quarentena até a substituição chegar. `Q4`

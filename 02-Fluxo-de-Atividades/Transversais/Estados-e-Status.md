@@ -96,7 +96,7 @@ No av-hub, a requisição passa por `aberta`, `em_cotacao`, `atendida` ou `cance
 | `REPROVADO` | A Qualidade reprovou. |
 | `QUARENTENA` | É a parte aprovada de uma reprovação parcial. Fica parada até a substituição (EC-07). |
 
-A reserva não expira. Ela nasce `ATIVA`, vira `CONSUMIDA` na saída física e `LIBERADA` ao ser cancelada ([[08-Qualidade-Entrada]], [[05-Estoque-Atendimento-e-Despacho]]).
+A reserva não expira. Ela nasce `ATIVA`, vira `CONSUMIDA` na saída física e `LIBERADA` ao ser cancelada ([[08-Qualidade-Entrada]], [[05-Estoque-Atendimento]]).
 
 ### Ordem de compra (OC)
 
@@ -255,7 +255,7 @@ Regras: bateu vai a `CONCLUIDO`; divergiu vai a `AGUARDANDO_RECONTAGEM`; continu
 | `StatusReserva` | `ATIVA`, `CONSUMIDA`, `LIBERADA` | `estoque.prisma:48-52` (308) ✅ |
 | `OrigemCusto` | `CARGA_INICIAL`, `OC`, `MANUAL` | `estoque.prisma:378-382` (141) ✅ |
 
-Saldo disponível conta só lote `LIBERADO` menos reservas `ATIVA` (`estoque-operacao.helpers.ts:165`). `QUARENTENA` é a parte aprovada de uma reprovação parcial até a substituição (EC-07). Reserva sem expiração: nasce `ATIVA`, vira `CONSUMIDA` na saída física e `LIBERADA` ao cancelar ([[08-Qualidade-Entrada]], [[05-Estoque-Atendimento-e-Despacho]]).
+Saldo disponível conta só lote `LIBERADO` menos reservas `ATIVA` (`estoque-operacao.helpers.ts:165`). `QUARENTENA` é a parte aprovada de uma reprovação parcial até a substituição (EC-07). Reserva sem expiração: nasce `ATIVA`, vira `CONSUMIDA` na saída física e `LIBERADA` ao cancelar ([[08-Qualidade-Entrada]], [[05-Estoque-Atendimento]]).
 
 #### Anexos
 

@@ -69,11 +69,11 @@ O pedido de 100 flanges de aço carbono do Cliente Exemplo S.A. aparece na Triag
 - 🟡 Matéria-prima: a `develop` baixa no "Atender pelo estoque" (19/10); a decisão é baixar na retirada (N16-140) 🔴.
 - 📝 Pedido anterior à data de corte: decidido, falta a mensagem no lugar do 404.
 
-Entrada: [[03-Pedido-de-Venda-e-Liberacao]]. Próxima raia: [[05-Estoque-Atendimento-e-Despacho]].
+Entrada: [[03-Pedido-de-Venda-e-Liberacao]]. Próxima raia: [[05-Estoque-Atendimento]].
 
 ## Detalhe técnico
 
-Nós do [[00-Fluxo-Mestre-0b]]: `P1` Triagem do Pedido, `P2` Destinação do Pedido, `P6` Novo norte. O nó `P3` (requisição de compra de origem PCP) fica em [[06-Circuito-de-Compra]]. Entrada: [[03-Pedido-de-Venda-e-Liberacao]]. Saída: [[05-Estoque-Atendimento-e-Despacho]]. Selos em [[Regras-do-Vault]].
+Nós do [[00-Fluxo-Mestre-0b]]: `P1` Triagem do Pedido, `P2` Destinação do Pedido, `P6` Novo norte. O nó `P3` (requisição de compra de origem PCP) fica em [[06-Circuito-de-Compra]]. Entrada: [[03-Pedido-de-Venda-e-Liberacao]]. Saída: [[05-Estoque-Atendimento]]. Selos em [[Regras-do-Vault]].
 
 ### Quem atua (onde)
 
@@ -106,7 +106,7 @@ Nós do [[00-Fluxo-Mestre-0b]]: `P1` Triagem do Pedido, `P2` Destinação do Ped
 
 #### Matriz de destinação (eixo 1 × eixo 2)
 
-O diagrama antigo tratava Estoque, Revenda e Fabricação como três ramos. O modelo vigente tem **três eixos independentes**: (1) natureza, escolhida pela fábrica da rodada; (2) disponibilidade física, resolvida **no setor Estoque**; (3) destinação da reserva (a tabela `Reserva`, ver [[05-Estoque-Atendimento-e-Despacho]]). A matriz abaixo diz o que acontece com cada célula.
+O diagrama antigo tratava Estoque, Revenda e Fabricação como três ramos. O modelo vigente tem **três eixos independentes**: (1) natureza, escolhida pela fábrica da rodada; (2) disponibilidade física, resolvida **no setor Estoque**; (3) destinação da reserva (a tabela `Reserva`, ver [[05-Estoque-Atendimento]]). A matriz abaixo diz o que acontece com cada célula.
 
 | | **Pronto em estoque** (lote `LIBERADO` livre na filial do pedido) | **Matéria-prima em estoque** | **Sem estoque** |
 |---|---|---|---|

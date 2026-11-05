@@ -23,7 +23,7 @@ A v2 está guardada na tag `v2-antes-da-v3`. Na v3, as notas de raia seguem a or
 | `12-Orcamento-Base-de-Preco` | [[02-Orcamento-Base-de-Preco]] | B1–B4 vêm logo depois da proposta |
 | `01-Vendas-Liberacao` | [[03-Pedido-de-Venda-e-Liberacao]] | V1–V3 |
 | `02-PCP-Triagem-e-Destinacao` | [[04-PCP-Triagem-e-Destinacao]] | P1, P2, P6 |
-| `03-Estoque-Atendimento-e-Despacho` | [[05-Estoque-Atendimento-e-Despacho]] (provisório) | No Bloco 3 vira três notas (D1): `05-Estoque-Atendimento` (E1–E4), `09-Estoque-Entrada-do-Lote` (E5) e `12-Estoque-Despacho` (E6) |
+| `03-Estoque-Atendimento-e-Despacho` | [[05-Estoque-Atendimento]] (E1–E4) · [[09-Estoque-Entrada-do-Lote]] (E5) · [[12-Estoque-Despacho]] (E6) | D1: o Estoque aparece em três momentos do fluxo. As regras 9 e 11 foram para a 09 e a regra 10 para a 12, com a numeração da v2 |
 | `04-Circuito-de-Compra` | [[06-Circuito-de-Compra]] | P3, C0–C8, FN1 |
 | `05-Recebimento` | [[07-Recebimento]] | R0–R6 |
 | `06-Qualidade-Entrada` | [[08-Qualidade-Entrada]] | Q1–Q4 |

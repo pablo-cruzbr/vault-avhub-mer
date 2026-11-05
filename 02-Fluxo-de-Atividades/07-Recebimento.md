@@ -205,7 +205,7 @@ Contratos de apoio: [[Contratos-da-v2|LOG-35]] (marco `oc_aprovada` põe a parci
 | `recebimentos` | `codigo`, `status`, `numero_nf`, `chave_acesso_nf`, `fornecedor`, `laudo_url`, `conferido_por_id`, `recontado_por_id`, `decidido_por_id`, `motivo_decisao` (`:168-210`) |
 | `recebimentos_itens` | `quantidade_pendente`, `_nf`, `_contada`, `_recontada`, `peso_teorico`, `_real`, `_recontado`, `tolerancia_peso`, `id_localizacao`, `id_lote` (`:212-240`) |
 | `recebimentos_divergencias` | `tipo`, `descricao`, `evidencia_url`, `etapa` (`:242-257`) |
-| `lotes` | `PENDENTE`, `id_requisicao_item`, `numero_nf`, `fornecedor` ([[05-Estoque-Atendimento-e-Despacho]]) |
+| `lotes` | `PENDENTE`, `id_requisicao_item`, `numero_nf`, `fornecedor` ([[05-Estoque-Atendimento]]) |
 
 Migrations: `20261006140000_recebimento_conferencia`, `20261014120000_compras_ccp`. Modelo geral em [[Banco-MES]].
 
@@ -219,7 +219,7 @@ Caminho necessário 🟡 (proposta; o desenho é do Robert):
 1. O job do contrato 004/007 (BL-001) grava a projeção da OC aprovada; o item traz `id_requisicao` nulo ou sem `id_origem` e o `destino` (pedido de venda ou estoque) ✅ `vw_ordens_compra_referencia_mes.swagger.json:44-88`.
 2. A OC aprovada sem requisição do MES entra nos **esperados** do Recebimento como "esperado por OC", sem parcial, com fornecedor, quantidade, previsão e destino vindos da referência.
 3. A doca registra a chegada com a NF e confere contra a NF (regra de hoje, N14-04); o lote nasce `PENDENTE`, em quarentena, e segue para a Qualidade como qualquer outro.
-4. O que o `destino` marca como **pedido de venda** reserva o lote para aquele pedido e avisa o PCP; o que é **estoque** vira saldo livre; o que era "saldo futuro" deixa de ser futuro e passa a saldo atual ([[05-Estoque-Atendimento-e-Despacho]]).
+4. O que o `destino` marca como **pedido de venda** reserva o lote para aquele pedido e avisa o PCP; o que é **estoque** vira saldo livre; o que era "saldo futuro" deixa de ser futuro e passa a saldo atual ([[05-Estoque-Atendimento]]).
 5. Receber parte da OC mantém o restante como esperado (como o split de hoje).
 
 📝 **N14-28 (15/10/2026):** o Recebimento recebe produtos para **pedido de venda, estoque e uso interno**, e tudo aparece no Estoque. **Proposta do Robert:** os esperados passam a ser **por item da OC**, com ou sem requisição do MES; o lote nasce ligado à OC (`id_item_oc`) já com o custo (K5), o que também resolve o D1 do 008; se a OC tinha destino em pedido de venda, a parcial daquele item segue o caminho normal. **Torre:** lote de estoque, uso interno ou compra por fora não gera evento de fluxo (só o item de pedido de venda). Perguntas em aberto em [[Pontas-Soltas]] PS-034 (uso interno, chave do cruzamento, rateio entre destinos, reserva).

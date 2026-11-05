@@ -44,7 +44,7 @@ O plano pede mais trabalho do Robert do que ele consegue entregar no prazo. O Ci
 | Ator | Onde atua | Nota |
 |---|---|---|
 | Vendedor, Gerente (equipe) | HUB: Liberar Pedidos, Pedidos da equipe | [[03-Pedido-de-Venda-e-Liberacao]] |
-| PCP e Almoxarife (setor Estoque) | `app-pcp`: Triagem, Destinação, Atendimento | [[04-PCP-Triagem-e-Destinacao]], [[05-Estoque-Atendimento-e-Despacho]] |
+| PCP e Almoxarife (setor Estoque) | `app-pcp`: Triagem, Destinação, Atendimento | [[04-PCP-Triagem-e-Destinacao]], [[05-Estoque-Atendimento]] |
 | Comprador (livre até R$ 30 mil), Gerente de Compras (aprova acima de R$ 30 mil) | HUB: Compras | [[06-Circuito-de-Compra]] |
 | CCP (acompanhamento de compras) | HUB Follow-up; MES Compras · CCP (leitura) | O pessoal do CCP faz parte do PCP e acompanha as compras. Compras acessa só para ler. Havendo ocorrência, o CCP interage aprovando ou não 📝 (Nathan, 14/10). O perfil será criado em breve: tarefa cadastral simples, sem bloqueio de desenho (Nathan, Gustavo; N14-24) |
 | Recebimento (doca), Qualidade | `app-pcp` | [[07-Recebimento]], [[08-Qualidade-Entrada]], [[11-Qualidade-Saida]] |

@@ -116,7 +116,7 @@ Não existe tela de laudo, checklist nem formulário de resultado de inspeção 
 |---|---|---|
 | `PATCH /itens-parciais/:id/receber`, `/iniciar` | inspetor assume a parcial | `service:224`, `:299` ✅ |
 | `PATCH /itens-parciais/:id/aprovar-saida` `{ observacao?, quantidade? }` | **"aprova"**: a parcela (ou só a `quantidade`) volta ao Estoque `EM_TRANSITO`, marcada como fabricado aprovado | `develop` (27/10, `itens-parciais.controller.ts`) ✅ |
-| `PATCH /itens-parciais/:id/receber-fabricado` `{ idLocalizacao }` | o Estoque recebe o fabricado e cria o lote `PRODUCAO` | `develop` (27/10) ✅ ([[05-Estoque-Atendimento-e-Despacho]]) |
+| `PATCH /itens-parciais/:id/receber-fabricado` `{ idLocalizacao }` | o Estoque recebe o fabricado e cria o lote `PRODUCAO` | `develop` (27/10) ✅ ([[09-Estoque-Entrada-do-Lote]]) |
 | `PATCH /itens-parciais/:id/mover` | na `main` do MES era o "aprova": segue ao próximo setor do roteiro | `service:366` ✅ |
 | `PATCH /itens-parciais/:id/reprovar` `{ motivo }` | reprova e abre divergência | `controller:205-213`, `service:1011` ✅ |
 | `PATCH /itens-parciais/:id/resolver` | falso alarme | `service:1067` ✅ |
@@ -166,4 +166,4 @@ flowchart TD
     E6 --> X1
 ```
 
-Raias vizinhas: [[10-Producao-e-Roteiro]], [[05-Estoque-Atendimento-e-Despacho]], [[13-Expedicao]].
+Raias vizinhas: [[10-Producao-e-Roteiro]], [[09-Estoque-Entrada-do-Lote]] (o fabricado aprovado vira lote), [[12-Estoque-Despacho]], [[13-Expedicao]].

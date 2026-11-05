@@ -293,12 +293,14 @@ flowchart TD
 | Vendas: pedido | V1–V3 | [[03-Pedido-de-Venda-e-Liberacao]] e [[01-Proposta-e-Pedido-de-Venda]] |
 | Orçamento | B1–B4 | [[02-Orcamento-Base-de-Preco]] |
 | PCP | P1, P2, P6 | [[04-PCP-Triagem-e-Destinacao]] |
-| Estoque | E1–E6 | [[05-Estoque-Atendimento-e-Despacho]] |
+| Estoque: atendimento | E1–E4 | [[05-Estoque-Atendimento]] |
 | Compras e fornecedor | P3, C0–C8, FN1 | [[06-Circuito-de-Compra]] e [[01-Proposta-e-Pedido-de-Venda]] |
 | Recebimento | R0–R6 | [[07-Recebimento]] |
 | Qualidade de entrada | Q1–Q4 | [[08-Qualidade-Entrada]] |
+| Estoque: entrada do lote | E5 | [[09-Estoque-Entrada-do-Lote]] |
 | Produção | F1 | [[10-Producao-e-Roteiro]] |
 | Qualidade de saída | Q7, Q8 | [[11-Qualidade-Saida]] |
+| Estoque: despacho | E6 | [[12-Estoque-Despacho]] |
 | Expedição | X1–X4 | [[13-Expedicao]] |
 | Fiscal | O1, O2 | [[14-Fiscal-Omie]] |
 | Comissão | K1–K6 | [[15-Custo-Real-e-Comissao]] |

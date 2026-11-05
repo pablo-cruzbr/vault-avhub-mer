@@ -69,7 +69,7 @@ stateDiagram-v2
 | Código | `itens-parciais.service.ts:318` e `entregas.service.ts:72` (no-op se já consumida) | não existe 🔴 |
 | Efeito no saldo | `SAIDA` com `id_reserva` | `SAIDA` com o documento de retirada, a pedido da raia que precisa da mercadoria |
 
-Lacuna para o Robert: criar o documento de retirada (E6) e mover para ele a chamada de `consumirReservasDaParcial` 🔴. Ver [[05-Estoque-Atendimento-e-Despacho]].
+Lacuna para o Robert: criar o documento de retirada (E6) e mover para ele a chamada de `consumirReservasDaParcial` 🔴. Ver [[12-Estoque-Despacho]].
 
 ## Tudo que é fabricado ou comprado vai para o Estoque
 

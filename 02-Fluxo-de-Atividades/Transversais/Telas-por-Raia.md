@@ -70,7 +70,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | OC do pedido (P1, P2) | Mostrar na Triagem e na Destinação que já há OC (N14-20, BL-049). Hoje a Triagem mostra só as requisições do Compras com pedido de venda (develop, 23/10) | PCP | 🟡 🔴 |
 | Ordem de Produção (P2) | Documento imprimível do que será fabricado (N14-22, BL-052): botão "Imprimir OP" e 2ª via no detalhe da ordem. Só na develop (27/10) | PCP | ✅ |
 
-## Estoque (E1 a E6) · [[05-Estoque-Atendimento-e-Despacho]]
+## Estoque (E1 a E6) · [[05-Estoque-Atendimento]] (E1–E4) · [[09-Estoque-Entrada-do-Lote]] (E5) · [[12-Estoque-Despacho]] (E6)
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|

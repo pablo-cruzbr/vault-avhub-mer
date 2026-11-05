@@ -10,7 +10,7 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, diverge
 
 # Produção e roteiro (F1, P6)
 
-**Em uma frase:** a Produção leva cada parte do item (a "parcial") pelos setores do roteiro do pedido, na ordem, até o último setor, e registra tudo no histórico. Nós `F1` (setores produtivos) e `P6` (novo norte: retrabalho ou reabre compra) do [[00-Fluxo-Mestre-0b]]. A entrada vem do despacho do Estoque (`E6`, [[05-Estoque-Atendimento-e-Despacho]]). A saída vai para a inspeção de saída `Q7` ([[11-Qualidade-Saida]]). Selos em [[Regras-do-Vault]].
+**Em uma frase:** a Produção leva cada parte do item (a "parcial") pelos setores do roteiro do pedido, na ordem, até o último setor, e registra tudo no histórico. Nós `F1` (setores produtivos) e `P6` (novo norte: retrabalho ou reabre compra) do [[00-Fluxo-Mestre-0b]]. A entrada vem do despacho do Estoque (`E6`, [[12-Estoque-Despacho]]). A saída vai para a inspeção de saída `Q7` ([[11-Qualidade-Saida]]). Selos em [[Regras-do-Vault]].
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-140: a matéria-prima sai do Estoque na retirada, pela quantidade pedida, no mesmo documento de retirada da Expedição. O operador não lança consumo ao concluir a etapa.

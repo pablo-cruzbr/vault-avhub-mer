@@ -71,7 +71,7 @@ As 100 flanges do Cliente Exemplo S.A. chegam à Embalagem, que registra os pall
 
 ### Objetivo (original)
 
-A Expedição tem **duas portas de entrada** na `main` do MES (parada em 08/10): a parcial atendida pelo Estoque (`atendidoPeloEstoque`) e a parcial que a Qualidade moveu (fabricado, [[11-Qualidade-Saida]]). Na `develop` (27/10, `ab3318d`) o fabricado aprovado já volta ao Estoque antes de seguir ([[05-Estoque-Atendimento-e-Despacho]]); ❓ conferir se ainda sobra alguma porta direta. Pela decisão de 14/10 haverá uma só: o **documento de retirada do Estoque**, porque tudo que é fabricado ou comprado passa pelo Estoque ([[05-Estoque-Atendimento-e-Despacho]]).
+A Expedição tem **duas portas de entrada** na `main` do MES (parada em 08/10): a parcial atendida pelo Estoque (`atendidoPeloEstoque`) e a parcial que a Qualidade moveu (fabricado, [[11-Qualidade-Saida]]). Na `develop` (27/10, `ab3318d`) o fabricado aprovado já volta ao Estoque antes de seguir ([[09-Estoque-Entrada-do-Lote]]); ❓ conferir se ainda sobra alguma porta direta. Pela decisão de 14/10 haverá uma só: o **documento de retirada do Estoque**, porque tudo que é fabricado ou comprado passa pelo Estoque ([[12-Estoque-Despacho]]).
 
 O sistema **nunca emite nota fiscal**. Ele sinaliza a necessidade e o Omie emite. No v1 as telas são 10.1 a 10.4.
 
@@ -200,4 +200,4 @@ flowchart TD
     X4 -.->|"POST entregas, quantidade pendente baixa"| PED["Pedido ENTREGUE quando zera o pendente"]
 ```
 
-Raias vizinhas: [[05-Estoque-Atendimento-e-Despacho]], [[11-Qualidade-Saida]], [[14-Fiscal-Omie]].
+Raias vizinhas: [[12-Estoque-Despacho]], [[11-Qualidade-Saida]], [[14-Fiscal-Omie]].

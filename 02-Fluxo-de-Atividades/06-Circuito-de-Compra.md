@@ -87,7 +87,7 @@ O comprador manda o PDF ao fornecedor por fora. O CCP anota a confirmação e a 
 
 ### Nós e entradas
 
-Nós do [[00-Fluxo-Mestre-0b]]: `P3` requisição de compra (origem PCP, MES), `C0` requisição de compra (origem Compras, av-hub), `C1` cotação, `C2` acima de R$ 30 mil?, `C3` aprovação, `C4` emissão da OC, `C5` follow-up do CCP, `FN1` fornecedor. Fecha em `FN1 → R0` ([[07-Recebimento]]). Entrada: `E4` "solicitar compra" ([[05-Estoque-Atendimento-e-Despacho]]) e `Q3` recompra ([[08-Qualidade-Entrada]]). Sequências técnicas completas em [[Integracao-AvHub-MES]]. Selos em [[Regras-do-Vault]].
+Nós do [[00-Fluxo-Mestre-0b]]: `P3` requisição de compra (origem PCP, MES), `C0` requisição de compra (origem Compras, av-hub), `C1` cotação, `C2` acima de R$ 30 mil?, `C3` aprovação, `C4` emissão da OC, `C5` follow-up do CCP, `FN1` fornecedor. Fecha em `FN1 → R0` ([[07-Recebimento]]). Entrada: `E4` "solicitar compra" ([[05-Estoque-Atendimento]]) e `Q3` recompra ([[08-Qualidade-Entrada]]). Sequências técnicas completas em [[Integracao-AvHub-MES]]. Selos em [[Regras-do-Vault]].
 
 ### Quem atua (onde)
 

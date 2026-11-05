@@ -100,7 +100,7 @@ As duas tabelas abaixo, em "Detalhe técnico", dão o motivo de cada um. Um limi
 | `Fluxogramas-Completos` 1 | Fluxograma mestre (desenho de 24/09) | Descartado | Substituído pelo [[00-Fluxo-Mestre-0b]] |
 | `Fluxogramas-Completos` 2 a 4 | Compras, Recebimento, Qualidade (atividades) | Descartados | Cobertos pelas notas de raia [[06-Circuito-de-Compra]], [[07-Recebimento]], [[08-Qualidade-Entrada]] e pelos diagramas [[Sequencia]] 3 a 5; o desenho anterior tinha "confere contra a OC" |
 | `Fluxogramas-Completos` 5 | Produção como máquina de estados (`ItemParcial`) | Redesenhado | [[Estados]] 1 |
-| `Fluxogramas-Completos` 6 | Estoque (etapa 1, entrada do comprado, operação contínua) | Redesenhado | [[Sequencia]] 2 e 7; a operação contínua do depósito (movimentação e ajuste) é tela de [[05-Estoque-Atendimento-e-Despacho]] |
+| `Fluxogramas-Completos` 6 | Estoque (etapa 1, entrada do comprado, operação contínua) | Redesenhado | [[Sequencia]] 2 e 7; a operação contínua do depósito (movimentação e ajuste) é tela de [[05-Estoque-Atendimento]] |
 | `Fluxograma-Telas-por-Bloco` (mestre com contagem de telas) | Mestre com contagem por raia | Descartado | A contagem de telas é de 08/10 e as telas mudaram; a fonte agora é [[Telas-por-Raia]] |
 | `Fluxo-Sistema-no-Meio` (3 diagramas) | "O sistema no centro" e mestre com o sistema interposto | Descartados | Desenho conceitual de 29/09 com 19 atos; o que vale está nas notas de raia |
 | `Fluxo-Operacional-Visao-Geral` | ASCII macro das quatro fases | Descartado | Superado pelo encaixe de 24/09 e pelo Mestre |

@@ -249,7 +249,7 @@ sequenceDiagram
     REQ->>MES: receber a parcial na Embalagem ou Expedicao
     MES->>DB: consumirReservasDaParcial, Reserva CONSUMIDA e SAIDA
 ```
-📝 Decisão do Nathan de 14/10. 🔴 O documento de retirada e a tela ainda não existem. Dono: Robert ([[05-Estoque-Atendimento-e-Despacho]]).
+📝 Decisão do Nathan de 14/10. 🔴 O documento de retirada e a tela ainda não existem. Dono: Robert ([[12-Estoque-Despacho]]).
 
 ## Detalhe técnico
 
@@ -283,4 +283,4 @@ Selo ✅: `itens-parciais.controller.ts` (reprovar, resolver, retrabalho), `iten
 
 ### 7. Despacho do Estoque
 
-📝 Decisão do Nathan de 14/10. 🔴 Não existe documento de retirada nem tela; hoje a baixa é na Embalagem/Expedição (`itens-parciais.service.ts`). Dono: Robert ([[05-Estoque-Atendimento-e-Despacho]]).
+📝 Decisão do Nathan de 14/10. 🔴 Não existe documento de retirada nem tela; hoje a baixa é na Embalagem/Expedição (`itens-parciais.service.ts`). Dono: Robert ([[12-Estoque-Despacho]]).
