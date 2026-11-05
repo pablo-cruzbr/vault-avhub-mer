@@ -1,10 +1,10 @@
 # Progresso da v3
-Estado atual: Bloco 3 concluído, aguardando "ok" do Nathan para o Bloco 4
-Próxima ação: com o "ok", rodar a seção 1 e começar o Bloco 4 (cabeçalho padrão das raias)
+Estado atual: Bloco 4 concluído, aguardando "ok" do Nathan para o Bloco 5
+Próxima ação: com o "ok" e o Obsidian fechado, rodar a seção 1 e começar o Bloco 5 (medir as notas acima de 25 KB)
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
-Data: 2026-11-05  Vault: branch `v3` criada a partir de `main` 5203232 (tag `v2-antes-da-v3`); `origin/v3` ainda não existe  origin/main: 5203232 (sem commits novos)
+Data: 2026-11-05 (reconferido no início do Bloco 4)  Vault: `v3` 05891e7 = `origin/v3`, pull ok; tag `v2-antes-da-v3`  origin/main: 5203232 (sem commits novos)
 origin/develop: api-acos-vital b97981c · av-hub 2e5456d · api-pcp befd973 · app-pcp 93f96de · omie-elt-pipeline **sem develop** (só `origin/master` 5e7e94d)
 autocrlf: false (ajustado só no vault; estava `true`)   Obsidian fechado: sim no Bloco 1 e no Bloco 2 (processo não está rodando, conferido em 2026-11-05)
 Observações:
@@ -67,7 +67,17 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Aplicar o F3 nas notas de proposta, orçamento e compras (2026-11-05, 10e5e3b: Nathan confirmou que o `api-comercial` será removido integralmente; 35 selos das notas 01 e 02 passam a 🔴 "sem API e sem banco"; na 06 nada dependia dele. Na API do Hub ficam ✅ as rotas da proposta e a leitura de fornecedores, vínculos, categorias, cotações e parâmetros de custo; `produtos/:id/precos` e `matriz_precos` são apontadas pelo BFF mas não existem na `api-acos-vital`)
 - [x] Conferir as listas de `_v3/fatos/` (2026-11-05: 0 fatos sumiram em 7 listas; trocas de linha e de caminho registradas em `_v3/fatos/substituicoes.tsv`)
 
-### Blocos 4 a 9
+### Bloco 4: Navegação, padrão e regras
+- [x] Rodar a seção 1 (2026-11-05: `develop` dos sistemas sem mudança desde o Bloco 0; `origin/main` do vault sem commit novo; `v3` em dia com `origin/v3`; autocrlf false; Obsidian sem processo rodando)
+- [x] Cabeçalho padrão: "Em uma frase" (já existia nas 15), "Quando consultar" e "Onde estamos no fluxo" (← anterior | próxima →, nós da nota) (2026-11-05, 49b988a, script `_v3/scripts/cabecalho-raias.mjs`)
+- [x] Frontmatter: `ordem`, `nos`, `anterior`, `proxima`, `estado-em` (no lugar de `atualizado`, com a data da reconferência do Bloco 3, 2026-11-05) e `develop-conferida` (já do Bloco 3). O Mestre ganhou `ordem: 0` e `proxima` (49b988a)
+- [x] Aplicar nas notas de raia, uma por tarefa (2026-11-05, ebd8b8b … 7c65b17: 15 commits). "Detalhe técnico" já era a última seção nas 15
+- [x] Atualizar o `Regras-do-Vault` (2026-11-05, cf9a469: tabela de selos do F5, `develop-conferida`, F3, numeração e cabeçalho das raias, frontmatter novo, contratos da v2 pelo índice e próximos IDs, fontes da verdade com a `develop` primeiro). Mudança de vocabulário de status de contrato novo: `implementado-no-codigo` → `implementado-na-develop`; `aplicado-em-producao` saiu (publicado na `main` é informação)
+- [x] Atualizar o `Guia-de-Leitura-do-Vault-e-dos-Sistemas` (2026-11-05, 140619c: seção "Antes de tudo: preparar o ambiente" (seção 1) e F1–F5; ordem das raias da v3; `Contratos-da-v2` no lugar do `Painel-de-Contratos` (linhas 112 e 133 da v2); `api-comercial` pelo F3; `omie-elt-pipeline` = `origin/master`; selos 🟡/🔴 pela `develop`; caminho da RAIZ mantido (D7); "Comando: atualizar o vault" mantido)
+- [x] Atualizar o aviso de "produção" em `Onde-Estamos` pelo F5 (2026-11-05, 6b8a135; o fato "em uso real só dashboards, vagas e gerência" foi mantido)
+- [x] Extra: legendas de selo com "❓ não conferido em produção" no Glossário, Mestre, Backlog e Comissão/01 passam ao F5 (7d138c9). Os "produção ❓" sobre o envio real da OC ao Omie (PS-009) ficaram: falam do ambiente real do Omie, não da `main`
+
+### Blocos 5 a 9
 - [ ] Pendentes (ver `_v3/INSTRUCAO.md`, seção 8)
 
 ## Validações
@@ -82,8 +92,11 @@ Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 
 ### Bloco 3 (2026-11-05, `_v3/validacao-bloco3.md`)
 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 60 nós com dono único; todo ✅ das raias cita repositório ou arquivo e cada raia tem `develop-conferida`; 0 fatos sumiram; mapa ok. 24 notas acima de 25 KB (Bloco 5); 2 nomes antigos no Guia (Bloco 4).
 
+### Bloco 4 (2026-11-05, `_v3/validacao-bloco4.md`)
+0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 nomes antigos (as 2 crases do Guia foram resolvidas); 60 nós com dono único; 0 ✅ sem citação; mapa regenerado (12 fichas, 0 contratos sem nota). A cadeia `proxima` vai do Mestre à 15 passando pelas 15 raias na ordem do F1. 24 notas acima de 25 KB (Bloco 5).
+
 ## Problemas e pendências
-- Referências entre crases a `Painel-de-Contratos` ficam no `Guia-de-Leitura` (linhas 112 e 133; atualizar no Bloco 4), no frontmatter `fontes` de `Onde-Estamos` (histórico) e em `Analise-de-Organizacao-do-Vault` (exceção).
+- Referências entre crases a `Painel-de-Contratos`: as do Guia saíram no Bloco 4; ficam no frontmatter `fontes` de `Onde-Estamos` (histórico) e em `Analise-de-Organizacao-do-Vault` (exceção).
 - Nathan precisa avisar Robert e Gustavo que a `main` do vault fica congelada (D4).
 - `omie-elt-pipeline` sem `develop`: confirmar que `origin/master` é a base correta.
 
