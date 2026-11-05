@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, vendas, proposta, pedido-de-venda, compras, v0, v1, v2, v3, c6, c7, c8, cancelamento, simulador, tela]
 criado: 2026-10-16
-atualizado: 2026-10-29
+atualizado: 2026-11-05
 status: proposta
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
 fontes: [Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10]
@@ -88,7 +88,7 @@ Depois, Compras acha o flange mais caro que o previsto. O aviso mostra a margem 
 - 🔴 Aviso e aprovação da compra mais cara em Meus Pedidos (`C8`).
 - 🔴 Cancelamento do pedido, com tarja na requisição e na OC.
 - 🟡 Nomes de rota das partes que faltam: o Gustavo e o Robert fecham.
-- ❓ Testes no Omie: número próprio do pedido, pedido bloqueado e `ExcluirPedido`.
+- ❓ Testes no Omie: número próprio do pedido, pedido bloqueado e `ExcluirPedido`. O primeiro teste (item 4 do pedido do Robert de 03/11) sai com etapa `"10"`, `bloqueado = "S"`, sem CFOP e sem impostos no payload, e categoria de uma lista da unidade; ver [[Mapa-IncluirPedido-Omie]].
 
 ## Detalhe técnico
 
@@ -270,6 +270,7 @@ No av-hub (API do hub), o que serve de padrão: contador por `(unidade, tipo)` (
 
 - ✅ O `IncluirPedido` aceita o **nosso código de integração** do pedido e do item: o hub grava a liberação na **resposta** da inclusão e liga o item da proposta ao `codigo_item_omie`. Etapa inicial `"10"`. A pipeline precisa **gravar** `codigo_pedido_integracao`.
 - 🟡 Pode ser possível **mandar o nosso `numero_pedido`**, e o pedido criado por API pode nascer **bloqueado** na tela do Omie: ❓ só teste.
+- ✅ **A categoria do pedido decide se ele gera comissão.** A regra do grupo G6 compara o código `'1.01.96'` (refaturamento em Mogi) e a `vw_comissao_master` só lê `grupo IS NULL`; a categoria que o Hub manda em `informacoes_adicionais.codigo_categoria` entra direto nessa regra. 🔴 Em Uberaba o refaturamento é o `1.01.99` e **não** cai em G6 ([[Riscos]], RS-022). 🟡 A tela deve mostrar essa consequência na hora de escolher a categoria; ver [[Mapa-IncluirPedido-Omie]], seção 5.3.1.
 - ✅ **Existe cancelar pedido por API** (`CancelarPedidoVenda`, serviço `/produtos/pedidovendafat/`), e também `ExcluirPedido` e `AlterarPedidoVenda`. **Quem cancela, edita e exclui é o vendedor** (N16-84), não o Fiscal. O `ListarEtapasPedido` (`/produtos/pedidoetapas/`) devolve, por pedido, cancelamento, devolução e faturamento. **O hub guarda o cancelamento por conta própria** (quem, quando, motivo) porque o `exclusionSync` apagaria do hub um pedido excluído no Omie.
 - ✅ Devolução de **venda**: a total vem do Omie; a **parcial** só chega marcada, sem valor, item nem quantidade. Fiscal ou Controladoria informam o que voltou (N16-74).
 
@@ -337,7 +338,7 @@ As colunas e as condições **vêm das mesmas entradas do motor atual** (`simula
 |---|---|---|
 | 1 | ✅ Alçada de desconto e margem: tudo fisicamente (N16-75; OQ-04 fechada) | Nathan (feito) |
 | 2 | Perfis do Orçamento e de quem vê a equipe (OQ-21); o Moisés é uma das pessoas do setor (N16-104) | Nathan, Gustavo |
-| 3 | Testes no Omie: campos obrigatórios, `numero_pedido` próprio, pedido bloqueado, `ExcluirPedido` (OQ-16, OQ-48) | Nathan |
+| 3 | Testes no Omie: campos obrigatórios, `numero_pedido` próprio, pedido bloqueado, `ExcluirPedido` (OQ-16, OQ-48). Roteiro: pedido mínimo, `ConsultarPedido`, comparar com um digitado à mão, `ExcluirPedido`, com cadastros TESTE. Espera a unidade, a categoria e a decisão da conta corrente | Nathan |
 | 4 | ✅ Quem cancela: o vendedor, por API (N16-84). Falta testar a diferença entre `CancelarPedidoVenda` e `ExcluirPedido` e quando cada um vale (OQ-17, OQ-48) | Nathan |
 | 5 | Quem cadastra produto novo, e em quanto tempo (OQ-36) | Fiscal |
 | 6 | O e-mail de Compras ao vendedor deixa de ser necessário? (N16-64) | Nathan, Compras |
