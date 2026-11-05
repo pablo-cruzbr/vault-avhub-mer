@@ -22,12 +22,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-03), API-007, API-008, v1
 
 Nós do [[00-Fluxo-Mestre-0b]]: `R0`, `R1`, `R2`, `R3`, `R4`, `R6`. Entrada: `FN1` ([[06-Circuito-de-Compra]]). Saída: `Q1` ([[08-Qualidade-Entrada]]) ou `P6` ([[04-PCP-Triagem-e-Destinacao]]). Selos em [[Regras-do-Vault]].
 
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - N16-134: tolerância de peso de 5% por padrão, ajustável por material.
-> - N16-135: quando houver cruzamento com a OC, divergência contra a OC bloqueia, como a da nota.
-> - N16-136: uma nota pode trazer itens de mais de uma OC. A conferência é por item da OC (proposta do Robert). Na `develop` do MES isso já existe: `POST /compras/recebimentos/nf` recebe várias conferências na mesma nota, cada uma de uma requisição do MES ou de uma OC do hub, e a tela "Receber com NF" aceita vários itens (`api-pcp` 19 a 20/10, `app-pcp` `5f50fff`, `9ced089`) ✅.
-> - N16-137: a reabertura pelo PCP avisa o av-hub. Exige contrato novo entre MES e hub.
-> - Código: o que aparece como ✅ de MES, a partir da conferência por OC e do custo da OC, está na `develop` do `api-pcp` e do `app-pcp`. A `main` do MES parou em 08/10 e só recebe com o merge BL-035.
+Siglas desta nota: OC é a ordem de compra; NF é a nota fiscal; PCP é o planejamento e controle da produção; MES é o sistema de chão de fábrica, onde a doca trabalha.
 
 ## Como funciona, passo a passo
 
@@ -65,13 +60,17 @@ Se faltassem flanges mesmo depois da recontagem, o PCP decidiria entre aceitar o
 - Sem NF, a parcial não sai de Compras · CCP. Assim o tempo do fornecedor não cai no Recebimento.
 - Divergência aberta trava a entrada no estoque.
 - Quem conferiu não pode recontar.
-- Peso real é obrigatório quando há peso teórico. Tolerância padrão de 5%, por material.
+- Peso real é obrigatório quando há peso teórico. Tolerância padrão de 5%, ajustável por material (N16-134).
 - Avaria exige foto.
 - O lote sempre nasce em quarentena, mesmo item acabado.
 - O Recebimento nunca decide compra. A divergência vai ao PCP, e a reabertura devolve a Compras.
 - Só pode haver um recebimento aberto por parcial.
 - O custo do lote vem da OC, hoje é opcional e não bloqueia o recebimento. A N16-09 manda que todo lote tenha custo (obrigatório, BL-066), o que ainda não vale no código.
 - Divergência contra a OC também bloqueia, quando o cruzamento existir (N16-135).
+- Uma nota pode trazer itens de mais de uma OC. A conferência é por item da OC (N16-136, proposta do Robert).
+- Quando o PCP reabre o recebimento, o av-hub tem de ser avisado (N16-137). Isso exige contrato novo entre MES e hub.
+
+As decisões N16-134 a N16-137 são de 29/10/2026 (lote N16-120 a N16-143).
 
 ## O que já existe e o que falta
 
@@ -79,8 +78,10 @@ Se faltassem flanges mesmo depois da recontagem, o PCP decidiria entre aceitar o
 - ✅ (`api-pcp`) Recebimento parcial com divisão da parcial.
 - ✅ (`api-pcp`) Na `develop` do MES: o custo da OC é gravado no lote (19/10, `97b9adc`; unidade diferente da OC ou OC fora da projeção gera lote sem custo e sinalizado).
 - ✅ Na `develop` do MES: entrada de mercadoria de OC sem requisição do MES (OC criada só no av-hub), por OC e por NF, e uso interno sem lote (16 a 20/10).
+- ✅ Na `develop` do MES: uma nota com itens de várias OCs (N16-136). `POST /compras/recebimentos/nf` recebe várias conferências na mesma nota, cada uma de uma requisição do MES ou de uma OC do hub, e a tela "Receber com NF" aceita vários itens (`api-pcp` 19 a 20/10, `app-pcp` `5f50fff`, `9ced089`).
+- O que aparece como ✅ de MES nesta nota, a partir da conferência por OC e do custo da OC, está na `develop` do `api-pcp` e do `app-pcp`. A `main` do MES parou em 08/10 e só recebe com o merge BL-035.
 - 🔴 A conferência ainda não cruza com a OC (preço, quantidade comprada, fornecedor); só compara contado com a NF. O rateio da chegada entre destinos da OC também falta (API-011).
-- 🔴 Aviso ao av-hub quando o PCP reabre o recebimento; leitor de código de barras da NF; reabertura de divergência de produção.
+- 🔴 Aviso ao av-hub quando o PCP reabre o recebimento (N16-137, sem contrato); leitor de código de barras da NF; reabertura de divergência de produção.
 - 🟡 Aviso à doca quando uma OC esperada é cancelada.
 - 🔴 Alerta de OC que passou da previsão sem chegar.
 - ❓ Teste ponta a ponta com OC real.
