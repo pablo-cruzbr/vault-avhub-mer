@@ -3,6 +3,7 @@ tags: [fluxo, raia, producao, roteiro, f1, p6, mes]
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+nos: [F1]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, divergencias, roteiro-item, prisma/models/producao.prisma e fabricas.prisma), app-pcp 1fca8d3 (movimentacoes), v1 02-PRD-Estoque/Fluxo-Producao-OS-OP-Completo, v1 01-Fluxo-Operacional/Fluxograma-Telas-por-Bloco bloco 7, Dump MES 14/10, api-pcp e app-pcp develop de 27/10/2026 (finalizar, Montagem do Roteiro, aprovar-saida, ConsumoMateriaPrima), N16-140, N16-141]
 ---

@@ -3,6 +3,7 @@ tags: [fluxo, raia, expedicao, logistica-saida, paletes, entrega, x1, x2, x3, x4
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+nos: [X1, X2, X3, X4]
 dono: Robert (MES) · Expedição/Logística (regra) · Nathan (decisões)
 fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens, pedido-embalagem-pallets, estoque-operacao.helpers.ts), app-pcp 1fca8d3 (logistica/expedicao, movimentacoes, ordens-producao), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 10, T-06, api-pcp develop de 27/10/2026, N16-130 a N16-133]
 ---

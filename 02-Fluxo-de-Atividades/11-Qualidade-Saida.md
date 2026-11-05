@@ -3,6 +3,7 @@ tags: [fluxo, raia, qualidade, qualidade-saida, q7, q8, mes]
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+nos: [Q7, Q8]
 dono: Robert (MES) · Qualidade (regra) · Nathan (decisões)
 fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts), app-pcp 1fca8d3 (qualidade/inspecao-saida, movimentacoes), v1 Fluxo-Qualidade-Completo, v1 Encaixe-Estoque-Revenda-no-PCP (EC-06), 06-Qualidade-Entrada, 00-Fluxo-Mestre-0b, api-pcp develop de 27/10/2026 (aprovar-saida, receber-fabricado), LOG-53, N16-128, N16-129]
 ---

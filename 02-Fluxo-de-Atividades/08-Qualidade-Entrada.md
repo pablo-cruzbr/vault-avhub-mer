@@ -3,6 +3,7 @@ tags: [fluxo, raia, qualidade, qualidade-entrada, lote, rnc, quarentena, mes]
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+nos: [Q1, Q2, Q3, Q4]
 dono: Robert (MES) · Qualidade (regra de negócio) · Nathan (decisões)
 fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Encaixe-Estoque-Revenda-no-PCP (EC-01, EC-07), api-pcp 579a625 (qualidade.service.ts, circuito-compra.ts, estoque.prisma), app-pcp 1fca8d3 (qualidade/inspecao-entrada), Registro-de-Decisoes #25 #26]
 ---

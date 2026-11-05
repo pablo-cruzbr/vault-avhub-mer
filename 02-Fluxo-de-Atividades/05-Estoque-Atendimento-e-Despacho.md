@@ -3,6 +3,7 @@ tags: [fluxo, raia, estoque, atendimento, despacho, reserva, lote, custo, mes, e
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+nos: [E1, E2, E3, E4, E5, E6]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, v1 02-PRD-Estoque/Fluxo-Estoque-Completo, v1 Estoque-Custo-do-Lote, v1 Rota-Estoque, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, decisões do Nathan de 14/10, API-008, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.*, estoque.prisma, circuito-compra.ts), app-pcp 1fca8d3 (AtenderEstoqueModal), api-pcp develop befd973 de 27/10/2026 (aprovar-saida, receber-fabricado, itens-custo.ts, ConsumoMateriaPrima), LOG-53, N16-09, N16-140]
 ---

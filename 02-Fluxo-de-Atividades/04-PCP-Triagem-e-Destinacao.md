@@ -3,6 +3,7 @@ tags: [fluxo, raia, pcp, triagem, destinacao, mes, p1, p2, p6]
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+nos: [P1, P2, P6]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, v1 Fluxo-Estoque-Completo, api-pcp 579a625 (pedidos.service.ts, pedidos-carteira.service.ts, pedidos.controller.ts, fabricas.prisma), app-pcp 1fca8d3 (carteira, ordens-producao/novo), Registro-de-Decisoes #31b #50b, api-pcp e app-pcp develop de 27/10/2026 (OP, Montagem do Roteiro), N16-138 a N16-142]
 ---

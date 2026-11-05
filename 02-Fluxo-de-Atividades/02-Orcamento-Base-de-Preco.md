@@ -3,6 +3,7 @@ tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo,
 criado: 2026-10-16
 atualizado: 2026-10-29
 status: proposta
+nos: [B1, B2, B3, B4]
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---

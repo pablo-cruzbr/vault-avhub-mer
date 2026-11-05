@@ -3,6 +3,7 @@ tags: [fluxo, raia, fiscal, omie, nota-fiscal, o1, o2, pipeline]
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+nos: [O1, O2]
 dono: Gustavo (DBA, pipeline e banco) · Robert (sinalização no MES) · Nathan (decisões)
 fontes: [omie-elt-pipeline 0f739f0 (notasFiscais.ts, pedidosVendas.ts, scheduler/config), Dump Avhub 14/10 (fn_sync_situacao_pv, pedidos_vendas, notas_fiscais, produto_vendas), api-pcp 579a625 (entregas), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 11, v1 08-Integracao-Omie/01-Dados-Extraidos, api-acos-vital develop 0384e89 (POST /comercial/clientes)]
 ---

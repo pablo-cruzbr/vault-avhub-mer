@@ -3,6 +3,7 @@ tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3]
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+nos: [V1, V2, V3]
 dono: Nathan
 fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10]
 ---

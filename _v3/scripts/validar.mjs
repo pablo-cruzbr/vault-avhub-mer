@@ -112,3 +112,31 @@ if (fs.existsSync(csv)) {
   }
   secao('Nomes antigos em links ou crases (fora das exceções)', achados);
 }
+
+// Dono dos nós (a partir do Bloco 3): cada nó do mermaid aparece no `nos:` de exatamente uma nota.
+const mestre = path.join(raiz, '02-Fluxo-de-Atividades', '00-Fluxo-Mestre-0b.md');
+if (fs.existsSync(mestre)) {
+  const t = fs.readFileSync(mestre, 'utf8');
+  const merm = (t.match(/```mermaid\n([\s\S]*?)```/) || [, ''])[1];
+  const nosMerm = new Set([...merm.matchAll(/^\s*([A-Z][A-Z0-9_]*)\s*[\[\(\{]/gm)].map((m) => m[1].replace(/^V0(\d)$/, 'V0.$1')));
+  const donos = new Map();
+  for (const f of notas) {
+    const fm = (fs.readFileSync(f, 'utf8').match(/^---\n([\s\S]*?)\n---/) || [, ''])[1];
+    const l = fm.match(/^nos:\s*\[(.*)\]\s*$/m);
+    if (!l) continue;
+    for (const n of l[1].split(',').map((s) => s.trim()).filter(Boolean)) {
+      if (!donos.has(n)) donos.set(n, []);
+      donos.get(n).push(path.basename(f, '.md'));
+    }
+  }
+  if (donos.size) {
+    const prob = [];
+    for (const n of nosMerm) {
+      const d = donos.get(n) || [];
+      if (d.length !== 1) prob.push(`${n}: ${d.length ? d.join(', ') : 'sem dono'}`);
+    }
+    for (const n of donos.keys()) if (!nosMerm.has(n)) prob.push(`${n}: no nos: mas não no mermaid (${donos.get(n).join(', ')})`);
+    console.log(`\nNós do mermaid: ${nosMerm.size}`);
+    secao('Nós sem dono único', prob);
+  }
+}
