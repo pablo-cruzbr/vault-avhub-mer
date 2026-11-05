@@ -79,7 +79,7 @@ Onde os dados ficam (decisões de 29/10/2026, bloco N16-120 a N16-143):
 - ✅ (`av-hub`) Simulador de Comissão, usado como referência da tela nova.
 - 🟡 Tela "Custo real por item" existe, sem imposto e com dados de teste.
 - 🟡 Módulo novo em `core_comissao`: modelado e testado no banco, sem API nem tela.
-- ⚠️ ❓ Schema: o código e o dump de 29/10 da `api-acos-vital` já usam `core_comercial.propostas` e `core_comercial.fn_proposta_*`, contra a N16-116 (`core_vendas_faturamento`). A divergência está aberta com o Nathan e o Gustavo.
+- ⚠️ ❓ Schema: o código e o dump de 29/10 da `api-acos-vital` já usam `core_comercial.propostas` e `core_comercial.fn_proposta_*` (e o dump do banco de teste de 04/11/2026 também tem o pedido do Hub em `core_comercial.pedidos_venda`), contra a N16-116 (`core_vendas_faturamento`). A divergência está aberta com o Nathan e o Gustavo.
 - 🔴 Comissão estimada na proposta (`K1`).
 - 🔴 Custo real por evento, com a nota de entrada como verdade (`K2`).
 - 🔴 Tela da Controladoria, relatórios e visão geral (`K4`).

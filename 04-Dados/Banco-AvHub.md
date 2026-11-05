@@ -9,6 +9,13 @@ fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/
 
 # Banco do av-hub
 
+> [!info] Dump mais novo: banco de teste, 04/11/2026
+> O Nathan enviou o esqueleto do banco de **teste** (`tst`) de 04/11/2026 23:58 (PostgreSQL 18.6), sem dados: [[Dump-AvHub-Teste-2026-11-04]]. Frente ao de 29/10 abaixo: **15 schemas, 146 tabelas, 51 views, 238 funções e 191 triggers**. Mudou só o `core_comercial` e entrou o schema `orcamento_pdf` (tabela `relatorio`):
+> - `core_comercial` passa a ter **12 tabelas** (`propostas`, `propostas_itens`, `propostas_eventos`, `propostas_versoes`, `pedidos_venda`, `pedidos_venda_itens`, `parametros_custo`, `unidades_emissoras`, `perfis_comerciais`, `sequencias_documento`, `sequencias_proposta`, `chaves_idempotencia`), 2 views e 28 funções (entre elas `fn_proposta_aprovar`, `_cancelar`, `_revisar`, `_copiar`, `_transformar` e `fn_propostas_expirar`).
+> - Saíram as 13 tabelas do módulo de teste do Pablo: `ofertas`, `solicitacoes_custo`, `clientes`, `clientes_contatos`, `fornecedores_perfil`, `fornecedores_categorias`, `categorias_suprimento`, `apelidos_fornecedor`, `certificados`, `notificacoes`, `produtos_pendentes`, `produtos_perfil` e `tabelas_custo_telha` (com a view `vw_fornecedores_por_cnpj`).
+> - Sem mudança: `divergencias_compra` e o schema `core_comissao` continuam ausentes; o contador de documentos aceita só `ordem_compra` e `requisicao_compra`; a numeração da proposta continua `CO-<código><ano>-<seq>-R00`.
+> O resto desta nota descreve o dump de 29/10, que continua valendo para os outros schemas. Comparação completa: [[Dump-AvHub-Teste-2026-11-04]].
+
 PostgreSQL do av-hub, de responsabilidade do DBA (Gustavo). Usado pela `api-acos-vital` ([[AV-Hub-API]]) e pela pipeline Omie ([[Pipeline-Omie]], que escreve direto nas tabelas `core*` e `omie_*`). O dump de 29/10 é só esqueleto: **156 tabelas, 52 views, 222 funções, 199 triggers, 14 schemas**, sem nenhuma linha de dado ✅ `grep` do dump. O de 14/10 tinha 126 tabelas, 44 views, 178 funções, 125 triggers e 13 schemas; a diferença é o schema `core_comercial` (23 tabelas, 3 views, 12 funções, herdado da `api-comercial`, [[API-Comercial]]), `auth.chaves_servico_rotas` e `_uso`, e cinco tabelas novas em `core_vendas_faturamento`. Os números de linha (`:NNNN`) das tabelas abaixo são do dump de 14/10; no de 29/10 mudaram. Por que o av-hub tem vários schemas e o MES um só: [[Schemas-Postgres]]. Banco do MES: [[Banco-MES]]. Selos: [[Regras-do-Vault]].
 
 ## Schemas

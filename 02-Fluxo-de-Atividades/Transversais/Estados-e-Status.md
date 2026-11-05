@@ -113,7 +113,7 @@ Detalhes em [[06-Circuito-de-Compra]].
 
 | Campo | Valores | Fonte |
 |---|---|---|
-| `propostas.status` | `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`; a API e o front aceitam também `EXPIRADA` (validade vencida) ❓ o `CHECK` do dump de 29/10 tem só os quatro primeiros | `api-acos-vital` `propostas.route.js`; Dump Avhub 29/10 (`ck_propostas_status`) ✅ |
+| `propostas.status` | `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`; a API e o front aceitam também `EXPIRADA` (validade vencida) ❓ o `CHECK` do dump de 29/10 tem só os quatro primeiros; no dump do banco de teste de 04/11/2026 o `ck_propostas_status` já aceita `EXPIRADA` ✅ | `api-acos-vital` `propostas.route.js`; Dump Avhub 29/10 (`ck_propostas_status`) ✅ |
 | `pedido.status_sincronizacao_omie` | `pendente`, `sincronizado`, `erro` | N16-36; `transformar` grava `pendente` ✅ |
 
 Detalhe e transições em [[01-Proposta-de-Venda]].

@@ -418,7 +418,7 @@ Selo ✅ no código de 29/10: a `ck_propostas_status` do dump de 29/10 tem `ABER
 
 ### 14. Pedido de venda do Hub (`status_sincronizacao_omie`, 🟡)
 
-Selo 🟡. A rota `POST /comercial/propostas/:id/transformar` cita a tabela `core_comercial.pedidos_venda`, que **não existe** no dump de 29/10; o schema final (`core_comercial` ou `core_vendas_faturamento`, N16-116) está em decisão. Mesmo vocabulário da OC (`ck_ordens_compra_status`, Dump Avhub 17315-17320 ✅). O pedido tem `origem` `PROPOSTA` ou `OMIE` (N16-106); o da proposta nasce com `status_liberacao = liberado` (diagrama 11), e o do Omie segue o diagrama 11 desde `pendente`. Na recusa, o vendedor vê o motivo e o botão "Tentar novamente" (N16-36).
+Selo 🟡. A rota `POST /comercial/propostas/:id/transformar` cita a tabela `core_comercial.pedidos_venda`, que **não existe** no dump de 29/10 e existe no dump do banco de teste de 04/11/2026 (status `ABERTO` ou `CANCELADO`, `ck_pedidos_venda_status`); o schema final (`core_comercial` ou `core_vendas_faturamento`, N16-116) está em decisão. Mesmo vocabulário da OC (`ck_ordens_compra_status`, Dump Avhub 17315-17320 ✅). O pedido tem `origem` `PROPOSTA` ou `OMIE` (N16-106); o da proposta nasce com `status_liberacao = liberado` (diagrama 11), e o do Omie segue o diagrama 11 desde `pendente`. Na recusa, o vendedor vê o motivo e o botão "Tentar novamente" (N16-36).
 
 ### 15. Pedido de custo ao Orçamento (`StatusSolicitacao`)
 

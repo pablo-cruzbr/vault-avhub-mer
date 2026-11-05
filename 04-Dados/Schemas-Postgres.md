@@ -73,6 +73,6 @@ A chave de negócio comum é **`codigo_empresa`** (uuid de `core.unidades`) ✅ 
 3. **Convenção de chave:** av-hub usa `uuidv7()` no banco; MES gera `uuid` na aplicação (Prisma) e não tem `DEFAULT` ✅ dumps.
 4. **Convenção de auditoria:** av-hub tem `created_by`, `updated_by`, `deleted_by` e `deleted_at` em quase toda tabela; MES guarda autor só onde importa (`created_by_id`, `delivered_by_id`) e usa `deleted_at` em cadastros.
 5. **Quantidade:** MES `numeric(14,4)`; requisição e OC no av-hub `numeric(15,4)`. O PUT de requisição aceita até 11 dígitos inteiros e arredonda a 5ª casa ✅ `requisicoes_compra.route.js:48-50`.
-6. **`core_comercial` está no dump de 29/10** ✅ (23 tabelas); no de 14/10 não estava. É o schema do módulo comercial; ver a decisão N16-116 acima.
+6. **`core_comercial` está no dump de 29/10** ✅ (23 tabelas); no de 14/10 não estava. No dump do banco de teste de 04/11/2026 tem 12 tabelas (saíram as do módulo de teste do Pablo; entraram `pedidos_venda` e `pedidos_venda_itens`), e há um 15º schema, `orcamento_pdf` ✅ [[Dump-AvHub-Teste-2026-11-04]]. É o schema do módulo comercial; ver a decisão N16-116 acima.
 
 Detalhe das tabelas: [[Banco-MES]] e [[Banco-AvHub]]. O que existe em um lado e não no outro: [[Diferencas-Codigo-x-Banco]].

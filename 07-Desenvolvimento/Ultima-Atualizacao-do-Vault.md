@@ -27,6 +27,8 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-05 (origin/master 
 
 São os mesmos commits do `develop-conferida` das notas de raia.
 
+**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 04/11/2026 23:58, enviado pelo Nathan: [[Dump-AvHub-Teste-2026-11-04]]. O de 29/10 continua em `api-acos-vital` (`Dump do Avhub para referência (29.10).sql`, na `develop`). Do MES, o mais novo é o de 14/10.
+
 ## Como usar na próxima atualização
 
 1. Em cada sistema, depois do `git fetch --all --prune`: `git log --oneline <commit acima>..origin/develop` e `git diff --stat <commit acima> origin/develop`.

@@ -75,7 +75,7 @@ Resolvidos desde 14/10 (só na `develop`): `GET /itens/custo` com `alterado_desd
 | objetos do contrato 46 (046) | ✅ existem (`core_fluxo.*`, funções da Torre); **a 046b** (zeros no mapa, concessão só ao Admin) não se prova por esqueleto | ❓ | `item_estado_projetado.route.js:16-30` |
 | API-004/007 (`moeda`, `cotacao_*`, `valor_frete`, `valor_seguro` na referência) e api007b (fornecedor) | ✅ colunas na view (fornecedor no dump de 29/10) | ✅ | dump `vw_ordens_compra_referencia_mes` |
 | API-009 (`requisicoes_compra_referencia_mes` e a view) | ✅ existem no dump de 29/10 | ✅ | `vw_requisicoes_compra_referencia_mes.route.js:59` |
-| rotas `/comercial/*` (funções `core_comercial.fn_proposta_*`, `fn_cliente_omie_registrar`, `fn_parametros_custo_salvar`, `vw_propostas_lista`) | ✅ existem no dump de 29/10 | ✅ | `core_comercial/aggregates/*` |
+| rotas `/comercial/*` (funções `core_comercial.fn_proposta_*`, `fn_cliente_omie_registrar`, `fn_parametros_custo_salvar`, `vw_propostas_lista`) | ✅ existem no dump de 29/10 só a criação e o cálculo do item (`fn_proposta_criar`, `fn_proposta_item_calcular`); as de revisar, aprovar, cancelar, copiar, transformar e expirar, e as tabelas `core_comercial.pedidos_venda` e `pedidos_venda_itens`, aparecem no dump do banco de teste de 04/11/2026 | ✅ | `core_comercial/aggregates/*` |
 | views `vw_ritmo_*_hora`, `vw_volume_pedidos_diario*` | não existem; **só aparecem em comentários** (as rotas foram reconstruídas) | ✅ sem problema | `ritmo_faturamento_hora.route.js:8` |
 | `auth.rotas_telas` com `/fluxo/*`, `/itens_pedido_custo`, `/compras/requisicoes/eventos`, `/comercial/*` | tabela existe; linhas ❓ | ❓ | [[RBAC-e-Permissoes]] |
 

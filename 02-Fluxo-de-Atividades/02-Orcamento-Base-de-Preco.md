@@ -69,7 +69,7 @@ Quem desenvolve: o Orçamento é do Pablo, com o Robert (N16-117, N16-119).
 - Desde 29/10/2026, a `api-comercial` de teste não roda mais. Fica no repositório só para leitura (N16-117).
 - 🔴 Na `api-acos-vital` (`develop`), o router `/suprimentos` existe, mas ainda não tem rota: nasce fechado (`core_comercial/index.js`, "fase 4").
 - ✅ Telas no `av-hub` (`develop`, menu enxuto de 27/10, N16-107 e N16-108): Pedidos de custo (Painel do Comprador e Pedido de cotação, em abas), Produtos (Catálogo, Pesquisa de materiais e Ofertas, em abas), Fornecedores, Parâmetros (custo e Telha, em abas) e Custo por item.
-- 🔴 Sem API e sem banco: oferta imutável com histórico, média por período e pedido de custo existem só no `api-comercial` de teste (legado de consulta, N16-117), que será removido; falta portar para a `api-acos-vital`. Na API do Hub já há a leitura de fornecedores, vínculos, categorias e cotações (✅ `api-acos-vital` `orcamento.route.js:140-312`).
+- 🔴 Sem API e sem banco: oferta imutável com histórico, média por período e pedido de custo existem só no `api-comercial` de teste (legado de consulta, N16-117), que será removido; falta portar para a `api-acos-vital`. No banco de teste de 04/11/2026 as tabelas `core_comercial.ofertas` e `solicitacoes_custo` também saíram ([[Dump-AvHub-Teste-2026-11-04]]). Na API do Hub já há a leitura de fornecedores, vínculos, categorias e cotações (✅ `api-acos-vital` `orcamento.route.js:140-312`).
 - 📝 As regras acima estão decididas.
 - 🟡 Valor correto da OC (`C7`) entrando no histórico de compras.
 - 🟡 Cadastro das telas em produção.
