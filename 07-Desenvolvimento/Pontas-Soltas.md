@@ -1,7 +1,7 @@
 ---
 tags: [desenvolvimento, pontas-soltas, pendencias]
 criado: 2026-10-14
-atualizado: 2026-10-29
+atualizado: 2026-11-05
 status: vigente
 dono: Nathan
 fontes: [Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55, Registro-de-Decisoes]
@@ -68,6 +68,8 @@ Dúvidas, lacunas de decisão e pontos sem dono que **não são tarefa de códig
 | PS-037 | **Como criar o sequencial e cancelar ou excluir pelo Omie.** Não há botão claro para criar sequencial; `CancelarPedidoVenda` e `ExcluirPedido` ainda não foram testados num pedido não faturado | Nathan | O1, V0.7 | Testar no Omie depois das telas (N16-82, N16-104) | [[Mapa-IncluirPedido-Omie]], [[Estudo-Omie-API]] |
 | PS-038 | ✅ **Decidido em 30/10/2026 (N16-147 e N16-148): só dígitos, o ano mais a sequência; o prefixo só aparece na tela e no PDF. O mesmo vale para a ordem de compra.** Formato do número da proposta | Nathan | V0.1 | Decidido (N16-04, N16-147) | |
 | PS-039 | **Perguntas abertas da proposta, do Orçamento e da comissão** (OQ-xx, C-xx) | vários | V0, B, K | Ver a lista | [[Perguntas-Proposta-Pedido-Comissao]] |
+| PS-040 | **Refaturamento de Uberaba na comissão.** Quantos pedidos de Uberaba com categoria `1.01.99` (o refaturamento de lá) entraram na base de comissão, e quantos tinham `refat` na observação. O Robert pediu a medida em 05/11 | Nathan (medir), Gustavo (regra) | V0.7 | Rodar a consulta e decidir se a regra do G6 passa a ler a categoria de refaturamento por unidade ou se o texto livre já cobre 🟡 | [[Mapa-IncluirPedido-Omie]] (seção 5.3.1), [[Riscos]] (RS-022) |
+| PS-041 | **Conta corrente do pedido de venda.** Omitir o campo (o vendedor não preenche conta no Omie, e ela define onde nasce o título; proposta do Robert, 05/11) ou oferecer lista por unidade (ideia de 04/11)? | Nathan | V0.7 | Decidir; o teste do item 4 mostra o que o Omie grava sem a conta 🟡 | [[Mapa-IncluirPedido-Omie]], BL-081 |
 
 ## Resolvidas em 14/10/2026
 

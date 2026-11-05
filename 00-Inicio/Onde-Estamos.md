@@ -1,7 +1,7 @@
 ---
 tags: [inicio, status]
 criado: 2026-10-14
-atualizado: 2026-10-30
+atualizado: 2026-11-05
 status: vigente
 dono: Nathan
 fontes: [00-Fluxo-Mestre-0b, notas de raia 02-Fluxo-de-Atividades, Registro-de-Decisoes (N16-01 a N16-148), Painel-de-Contratos de 29/10, develop do api-pcp e do app-pcp (27/10), develop da api-acos-vital (29/10), develop do av-hub (29/10), omie-elt-pipeline 0f739f0]
@@ -24,7 +24,7 @@ O estado do código é o de 29/10/2026 (`develop` do MES, da `api-acos-vital` e 
 
 | Setor | Como está | Quem toca | O que falta |
 |---|---|---|---|
-| [[11-Proposta-e-Pedido-de-Venda]] | 🟡 API e telas da proposta existem na `develop`; falta o pedido no Omie | Robert (rotas e telas), Gustavo, Pablo acompanha | Confirmar no banco o "Transformar em pedido"; enviar o pedido ao Omie por fila; motor da comissão na API; decidir o schema (`core_comercial` ou `core_vendas_faturamento`, N16-116) |
+| [[11-Proposta-e-Pedido-de-Venda]] | 🟡 API e telas da proposta existem na `develop`; falta o pedido no Omie | Robert (rotas e telas), Gustavo, Pablo acompanha | Confirmar no banco o "Transformar em pedido"; enviar o pedido ao Omie direto pela API (a fila caiu em 03/11) e fazer o teste do pedido mínimo (BL-081); motor da comissão na API; decidir o schema (`core_comercial` ou `core_vendas_faturamento`, N16-116) |
 | [[12-Orcamento-Base-de-Preco]] | 🟡 Menu e abas no front; o resto sem código | Pablo, Robert, Gustavo | Base de preço gerada das compras; página do produto com score e volatilidade; pedido de custo ao Orçamento |
 | [[01-Vendas-Liberacao]] | ✅ Liberação funciona · 🔴 pedido no Hub | Nathan, Gustavo | Pedido do Omie no mesmo fluxo do pedido da proposta; compras e faturamento em partes na tela do pedido |
 | [[02-PCP-Triagem-e-Destinacao]] | ✅ Triagem e Destinação · 🔴 volta de reprovado | Robert | Caminho para o item reprovado (retrabalho ou nova compra); mostrar a OC do pedido ao PCP. A Ordem de Produção já é emitida e impressa e a Triagem mostra as requisições do hub (`develop`, 23 e 27/10) |
@@ -60,7 +60,7 @@ Versão completa da tabela por setor, com os nós do [[00-Fluxo-Mestre-0b]] e o 
 
 | Raia | Nós | Estado | O que falta | Dono |
 |---|---|---|---|---|
-| [[11-Proposta-e-Pedido-de-Venda]] | V0.1–V0.7, V0C | 🟡 API e telas da proposta na `develop` | A rota de proposta (criar, revisar, aprovar, cancelar, copiar, transformar) existe na `api-acos-vital` e as telas, no av-hub, com o Robert; falta confirmar o banco do "Transformar em pedido", o pedido por API no Omie, por fila e pipeline, e decidir o schema (N16-116 diz `core_vendas_faturamento`, o código usa `core_comercial`); estados `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` (validade sem decisão N16) | Robert, Gustavo, Pablo acompanha |
+| [[11-Proposta-e-Pedido-de-Venda]] | V0.1–V0.7, V0C | 🟡 API e telas da proposta na `develop` | A rota de proposta (criar, revisar, aprovar, cancelar, copiar, transformar) existe na `api-acos-vital` e as telas, no av-hub, com o Robert; falta confirmar o banco do "Transformar em pedido", o pedido por API no Omie, direto da API (a fila caiu em 03/11), e decidir o schema (N16-116 diz `core_vendas_faturamento`, o código usa `core_comercial`); estados `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` (validade sem decisão N16) | Robert, Gustavo, Pablo acompanha |
 | [[12-Orcamento-Base-de-Preco]] | B1–B4 | 🟡 menu e abas no front | Base de preço gerada das OCs; página do produto com score e volatilidade; pedido de custo sem prazo, com o tempo cronometrado | Pablo, Robert, Gustavo |
 | [[01-Vendas-Liberacao]] | V1–V3 | ✅ liberação · 🔴 pedido no Hub | Pedido do Omie no mesmo fluxo do pedido da proposta (N16-106); parte de compras e faturamento em partes na tela do pedido | Nathan, Gustavo |
 | [[02-PCP-Triagem-e-Destinacao]] | P1, P2, P6 | ✅ P1/P2 · 🔴 P6 | Novo norte (retrabalho ou reabre compra): o motor passou a ler o `RoteiroItem`, mas a volta de reprovado segue sem tela; renomear rotas antigas; **OC do pedido** visível ao PCP. ✅ **Ordem de Produção** emitida na criação e imprimível (27/10, `develop`); ✅ requisições do hub na Triagem (23/10) | Robert |

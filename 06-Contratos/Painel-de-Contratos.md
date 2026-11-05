@@ -64,7 +64,7 @@ Contrato que pede uma resposta de negócio a quem conhece o assunto, com context
 | SQL-014 | Contrato SQL 014 | [[SQL-014-Pedido-Encerrado-por-Saldo-Zerado\|Pedido encerrado por saldo zerado ("Faturado, encerrado") e encerrado em atraso]] | `aplicado-em-producao` | av-hub: banco | Entregues | — | — | — | — | — |
 | SQL-015 | Contrato SQL 015 | [[SQL-015-Carteira-do-PCP-Totais-por-Vendedor-e-Desvio\|Carteira do PCP: totais, por vendedor e desvio de previsão]] | `aplicado-em-producao` | av-hub: banco, API, front | Entregues | — | — | ✅ banco e API terminados (Gustavo, 29/10) | Nathan: testar `PUT .../marcacao` (marcar e desmarcar) | — |
 | SQL-020 | Contrato SQL 020 | [[SQL-020-Orcamento-por-PDF-Relatorio-Compartilhado\|Orçamento por PDF: relatório compartilhado no banco (schema `orcamento_pdf`)]] | `aplicado-em-producao` | av-hub: banco, API, front | Entregues | — | — | — | — | — |
-| SQL-021 | Contrato SQL 021 | [[SQL-021-Produto-Vendas-Codigo-Item-Integracao\|Item do pedido de venda: `produto_vendas.codigo_item_integracao`]] | `parcial` | av-hub: banco · pipeline Omie | Ativos | — | Robert: mandar `ide.codigo_item_integracao` em cada item do `IncluirPedido` | Gustavo: criar a coluna `produto_vendas.codigo_item_integracao` (`varchar(20)`, nulável) | — | — |
+| SQL-021 | Contrato SQL 021 | [[SQL-021-Produto-Vendas-Codigo-Item-Integracao\|Item do pedido de venda: `produto_vendas.codigo_item_integracao`]] | `parcial` | av-hub: banco · pipeline Omie | Ativos | — | Robert: mandar `ide.codigo_item_integracao` em cada item do `IncluirPedido` | Gustavo: criar a coluna `produto_vendas.codigo_item_integracao` (`varchar(30)`, nulável) | — | — |
 | API-001 | — | [[API-001-Produtos-Parceiros-Filtro-Incremental\|Filtro incremental `alterado_desde` em produtos e parceiros]] | `implementado-no-codigo` | av-hub: API · pipeline Omie | Entregues | — | — | — (`alterado_desde` corrigido, informado 26/10) | — | — |
 | API-002 | — | [[API-002-Material-Alias-Omie-MES\|Alias de material Omie no MES (rejeitado)]] | `arquivado` | MES: API | Arquivados | — | — | — | — | — |
 | API-003 | — | [[API-003-Requisicao-Compra-Integracao-MES\|Requisição de compra MES → av-hub (versão polling)]] | `arquivado` | av-hub: API · MES: API | Arquivados | P3 | — | — | — | — |
@@ -184,7 +184,7 @@ Só contratos fora de `Arquivados/`. O detalhe e os selos estão na nota de cada
 
 ### Gustavo (DBA: banco e API do av-hub)
 
-- [[SQL-021-Produto-Vendas-Codigo-Item-Integracao|SQL-021]]: Gustavo: criar `produto_vendas.codigo_item_integracao` (`varchar(20)`, nulável, sem default); a pipeline já tolera a falta da coluna e passa a gravar em até 1 hora depois
+- [[SQL-021-Produto-Vendas-Codigo-Item-Integracao|SQL-021]]: Gustavo: criar `produto_vendas.codigo_item_integracao` (`varchar(30)`, nulável, sem default); a pipeline já tolera a falta da coluna e passa a gravar em até 1 hora depois
 - [[API-012-Produtos-Provaveis-Duplicatas-Rota-e-Tela|API-012]]: Gustavo: rota publicada; falta melhorar a nota (medidas em ordem, unidade, coesão) e informar os ajustes do script do [[SQL-013-Produtos-Provaveis-Duplicatas-Funcoes-e-Uso|SQL-013]]
 - [[API-010-Requisicao-do-Compras-Finalidade-Pedido-e-Produto|API-010]]: Gustavo: responder Q1 e Q4 (junto do API-009, BL-064); a migration `api010` está em produção desde 20/10
 - [[API-009-Referencia-Requisicao-Hub-Integracao-MES|API-009]]: Gustavo: ✅ rota `GET /compras/requisicoes/referencia` na `main` (BL-064); responder Q1 a Q4; a migration `api009` está em produção desde 20/10

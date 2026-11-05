@@ -50,10 +50,10 @@ Idempotente. A única mudança é acrescentar uma coluna nulável, sem default. 
 BEGIN;
 
 ALTER TABLE core_vendas_faturamento.produto_vendas
-  ADD COLUMN IF NOT EXISTS codigo_item_integracao character varying(20);
+  ADD COLUMN IF NOT EXISTS codigo_item_integracao character varying(30);
 
 COMMENT ON COLUMN core_vendas_faturamento.produto_vendas.codigo_item_integracao IS
-  'ide.codigo_item_integracao do Omie (string20): identificador do item que o Hub
+  'ide.codigo_item_integracao do Omie (ate 30 caracteres): identificador do item que o Hub
    envia no IncluirPedido. Liga o item faturado ao item da proposta. NULL no
    historico e em pedido digitado direto no Omie. Nao e chave: pode repetir entre
    pedidos, entao use sempre junto de codigo_pedido_omie.';
@@ -77,7 +77,7 @@ ALTER TABLE core_vendas_faturamento.produto_vendas
 
 ## Critérios de aceite
 
-1. Depois do SQL, a coluna existe como `varchar(20)`, nulável e sem default, e todas as linhas atuais ficam `NULL`.
+1. Depois do SQL, a coluna existe como `varchar(30)`, nulável e sem default, e todas as linhas atuais ficam `NULL`.
 2. Em até 1 hora, o sync de um pedido **criado pela API** grava em `produto_vendas.codigo_item_integracao` o valor enviado; o de um pedido **digitado no Omie** deixa `NULL`.
 3. Antes do SQL, o sync de pedidos de venda continua sem erro e o log avisa uma vez "Coluna ainda não existe no banco" para esta coluna.
 4. Ressincronizar o mesmo pedido não cria linhas novas: a chave continua `codigo_empresa` + `codigo_item_omie`.
@@ -96,5 +96,5 @@ ALTER TABLE core_vendas_faturamento.produto_vendas
 ## Riscos
 
 - O valor **repete entre pedidos**. Não é chave: nunca consultar só por ele, sempre com `codigo_pedido_omie`.
-- O Omie limita o campo a 20 caracteres. Se a API mandar mais, ele corta e o valor guardado fica diferente do enviado.
+- O campo tem **30 caracteres** na documentação do `IncluirPedido` (lida em 23/10; [[Mapa-IncluirPedido-Omie]]). O `cCodIntItem` da OC tem 20, e por isso `pedidos_compras_itens` é `varchar(20)`: **não copiar esse tamanho**. Se a coluna for menor que o valor enviado, o insert do item falha e a pipeline pula aquele item, com aviso no log.
 - A pipeline só lê o que o Omie devolve. Se o Hub mandar o identificador errado, a coluna guarda o errado.

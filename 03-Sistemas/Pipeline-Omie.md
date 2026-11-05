@@ -1,7 +1,7 @@
 ---
 tags: [sistemas, pipeline, omie, elt, bullmq, redis]
 criado: 2026-10-14
-atualizado: 2026-10-29
+atualizado: 2026-11-05
 status: vigente
 dono: Gustavo (DBA)
 fontes: [omie-elt-pipeline 0f739f0 (master), README.md, ARCHITECTURE.md, src/config/index.ts, src/jobs/*, src/omie/resources/*, src/workers/*, ecosystem.config.cjs, v1 Omie-ELT-Pipeline]
@@ -95,11 +95,13 @@ Fonte: ✅ `src/config/index.ts:89-159`, `src/jobs/scheduler.ts:25-130`. Por que
 | `etapasFaturamento` | `ListarEtapasFaturamento` | `core.etapas_faturamento` | ✅ |
 | `compradores` | `ListarCompradores` | `core_vendas_faturamento.compradores` | ✅ |
 | `pedidosCompras` | `PesquisarPedCompra` (paginação `nPagina`) | `core_vendas_faturamento.pedidos_compras` (+ itens e parcelas em tabelas próprias) | ✅ |
-| `condicoesPagamentoCompras` | `ListarFormasPagCompras` | `core_vendas_faturamento.condicoes_pagamento_compras` | ✅ |
+| `condicoesPagamentoCompras` | `ListarFormasPagCompras` | `core_vendas_faturamento.condicoes_pagamento_compras` | ✅ também é a fonte da condição do pedido de venda (Nathan, 04/11) |
 | `projetos`, `contasCorrentes`, `categorias` | `ListarProjetos`, `ListarContasCorrentes`, `ListarCategorias` | `core.projetos`, `core.contas_correntes`, `core.categorias` | ✅ |
 | `estoque` | `ListarPosEstoque` | nenhuma (`table: null`; a tabela `core.estoque_saldo` existe no banco, sem sync) | **desligado** (`enabled: false`) ✅ `resources/estoque.ts:16,32` |
 
-Os catálogos de Compras (condições, projetos, contas, categorias, compradores) rodam só na camada "últimos meses" e no full sync (`somenteCamadaLenta`) ✅ README `:118-120`. `core.estoque_saldo` fica vazia: **o saldo do Estoque da fábrica vive no MES**, não no Omie ([[Modelo-Estoque-e-Custo-do-Lote]]).
+Os catálogos de Compras (condições, projetos, contas, categorias, compradores) rodam só na camada "últimos meses" e no full sync (`somenteCamadaLenta`) ✅
+
+🟡 **Na branch `feat/produto-vendas-codigo-item-integracao` (sem PR, 05/11/2026):** o pedido de venda passa a mapear `det[].ide.codigo_item_integracao` para `produto_vendas.codigo_item_integracao` ([[SQL-021-Produto-Vendas-Codigo-Item-Integracao]]) e filtra as colunas pelo que a tabela tem de fato (`src/db/colunasExistentes.ts`, o mesmo filtro que o `pedidosCompras.ts` já usava), para a coluna ausente não derrubar o pedido inteiro; a coluna `encargos` de `condicoes_pagamento_compras` entra em `PROTECTED_COLUMNS`. Typecheck passa; não foi testado contra banco nem Omie. README `:118-120`. `core.estoque_saldo` fica vazia: **o saldo do Estoque da fábrica vive no MES**, não no Omie ([[Modelo-Estoque-e-Custo-do-Lote]]).
 
 O pedido de venda entra no av-hub **travado** (sem marcação de liberação); a liberação é do vendedor ([[01-Vendas-Liberacao]]). O pipeline nunca escreve em `pedidos_vendas.manual` nem nas outras colunas protegidas ✅ `src/db/protectedColumns.ts:50-58`.
 
