@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, estoque, atendimento, reserva, lote, custo, mes, e1, e2, e3, e4]
 criado: 2026-10-14
-atualizado: 2026-11-05
+estado-em: 2026-11-05
 status: vigente
+ordem: 5
 nos: [E1, E2, E3, E4]
+anterior: "[[04-PCP-Triagem-e-Destinacao]]"
+proxima: "[[06-Circuito-de-Compra]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026 (E5 foi para 09-Estoque-Entrada-do-Lote e E6 para 12-Estoque-Despacho), v1 02-PRD-Estoque/Fluxo-Estoque-Completo, v1 Estoque-Custo-do-Lote, v1 Rota-Estoque, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, decisões do Nathan de 14/10, API-008, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.*, estoque.prisma, circuito-compra.ts), app-pcp 1fca8d3 (AtenderEstoqueModal), api-pcp develop befd973 de 27/10/2026 (aprovar-saida, receber-fabricado, itens-custo.ts, ConsumoMateriaPrima), LOG-53, N16-09, N16-140]
@@ -12,6 +15,10 @@ fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2
 # Raia Estoque: atendimento (E1 a E4)
 
 **Em uma frase:** toda parcial de item passa primeiro pelo Estoque. O almoxarife atende o que o saldo cobre e decide o que fazer com o resto: comprar ou mandar para a produção.
+
+**Quando consultar:** dúvidas sobre o que o almoxarife faz com a parcial: saldo, reserva, atender pelo estoque, comprar ou produzir.
+
+**Onde estamos no fluxo:** ← [[04-PCP-Triagem-e-Destinacao]] | [[06-Circuito-de-Compra]] → · nós desta nota: `E1`, `E2`, `E3`, `E4`
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - O despacho (documento de retirada, N16-120 a N16-122 e N16-140) está em [[12-Estoque-Despacho]]; a entrada do fabricado (LOG-53) em [[09-Estoque-Entrada-do-Lote]].
