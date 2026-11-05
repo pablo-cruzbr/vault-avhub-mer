@@ -31,7 +31,7 @@ fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005,
 7. Quando o PCP grava as ordens, o MES avisa o av-hub. O pedido vira "No PCP" e a resposta trava, com um cadeado. `P2`
 8. Depois disso, o vendedor só acompanha. O cartão "Etapa dos itens" mostra em que etapa está cada item.
 
-Os passos acima descrevem a liberação que **existe hoje** ✅.
+Os passos acima descrevem a liberação que **existe hoje** ✅ (`av-hub` `app/(protected)/vendas/liberar-pedidos/page.tsx` e `app/(protected)/liberacao-equipe/page.tsx`; `api-acos-vital` `src/schemas/core_vendas_faturamento/aggregates/pedidos_liberacao/pedidos_liberacao.route.js:89` e `:165`; `api-pcp` `src/pedidos/omie-integracao.ts:339-349`, a confirmação de importação).
 
 ### O pedido pode vir de dois lugares (desenho decidido)
 

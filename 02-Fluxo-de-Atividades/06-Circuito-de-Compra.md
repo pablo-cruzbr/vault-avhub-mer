@@ -94,7 +94,7 @@ O fluxo foi aprovado em 26/10. As decisões N16-120 a N16-143 são de 29/10/2026
 - 🟡 Regra de aprovação provisória: vai endurecer depois da conversa com Compras.
 - 📝 `C6` a `C8` decididos em 26/10; sem código na `api-acos-vital` nem no front 🔴 (conferido em 29/10: nenhuma rota `divergencias_compra`). Detalhe em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
 - ✅ O MES lê a OC do hub desde 15/10 (K4, `develop` do `api-pcp`) e as requisições do Compras com pedido de venda aparecem ao PCP na Triagem desde 23/10 (API-009). 🔴 Falta o PCP ver a OC do pedido na Triagem e na Destinação (BL-049) e o saldo futuro no Estoque (BL-050).
-- ✅ O recebimento e a leitura da OC pelo MES estão na `develop` do MES (15 a 26/10). A `main` do MES parou em 08/10.
+- ✅ (`api-pcp` `src/compras/recebimento.service.ts:169` e `src/compras/recebimento.controller.ts:20`; leitura da OC em `src/integracao-avhub/oc-referencia-avhub.service.ts:97`) O recebimento e a leitura da OC pelo MES estão na `develop` do MES (15 a 26/10). A `main` do MES parou em 08/10.
 - 🔴 Perfil exclusivo do CCP (hoje vale a permissão da tela).
 - 🔴 Contrato de recompra por RNC e aviso de atraso ao PCP e ao vendedor.
 - 🔴 Contrato novo entre MES e hub para `C6` a `C8` e para os avisos da recompra por RNC (N16-127) e da reabertura do recebimento (N16-137).

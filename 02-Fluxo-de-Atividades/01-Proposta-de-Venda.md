@@ -100,7 +100,7 @@ Quem desenvolve (N16-117 a N16-119):
 
 - ✅ No banco, o dump de 29/10 traz `core_comercial.propostas`, os itens, as versões, os eventos e a função `fn_proposta_criar`.
 - ✅ No banco de teste (dump de 04/11/2026, [[Dump-AvHub-Teste-2026-11-04]]), as funções de revisar, aprovar, cancelar, copiar, transformar e expirar existem: `fn_proposta_revisar`, `fn_proposta_aprovar`, `fn_proposta_cancelar`, `fn_proposta_copiar`, `fn_proposta_transformar` e `fn_propostas_expirar`. No dump de 29/10 elas não estavam.
-- ✅ O `transformar` grava o pedido do Hub em `core_comercial.pedidos_venda` e `pedidos_venda_itens` (status `ABERTO` ou `CANCELADO`, `status_sincronizacao_omie` `pendente`) e a simulação de comissão (`core_comissionamento.simulacoes`). 🔴 Ele não grava liberação (N16-05; BL-069).
+- ✅ (`api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:548-568`, que chama `core_comercial.fn_proposta_transformar`; a função e as tabelas estão no Dump de 04/11, [[Dump-AvHub-Teste-2026-11-04]]) O `transformar` grava o pedido do Hub em `core_comercial.pedidos_venda` e `pedidos_venda_itens` (status `ABERTO` ou `CANCELADO`, `status_sincronizacao_omie` `pendente`) e a simulação de comissão (`core_comissionamento.simulacoes`). 🔴 Ele não grava liberação (N16-05; BL-069).
 - ❓ A migration dessas funções continua fora do repositório (Gustavo).
 
 **Regras, contratos e testes**
