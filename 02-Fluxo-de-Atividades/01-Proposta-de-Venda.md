@@ -29,7 +29,7 @@ Nesta etapa o vendedor também acompanha o pedido, aprova compras mais caras e p
 3. O sistema calcula margem e comissão estimada. Só o vendedor vê. Item sem custo e sem fornecedor deixa a proposta incompleta, e ela não pode ser aprovada. `V0.3`
 4. A Gerência aprova desconto e margem pessoalmente, fora do sistema, neste ciclo. `V0.4`
 5. O vendedor marca "aprovada" no sistema. O sistema grava quem, quando e qual revisão, e a proposta trava. Se a proposta não segue, ela é cancelada e não reabre. `V0.5`, `V0C`
-6. O vendedor clica em "Transformar em pedido de venda". Ele precisa dizer se a Qualidade acompanha o pedido. `V0.6`
+6. O vendedor clica em "Transformar em pedido de venda" e responde seis campos (N16-150): se a Qualidade acompanha o pedido por todos os processos (`Sim` ou `Não`); a previsão de faturamento, que é a data de entrega ao cliente; se a venda é `SPOT` (cliente sem contrato) ou `CONTRATO`; se o pedido fatura em partes ou só quando tudo estiver pronto; o número do pedido do cliente (opcional); e a categoria, escolhida numa lista com código e descrição. Se fatura em partes, a data do pedido é a data final e cada item leva a sua data, igual ou anterior a ela. `V0.6`
 7. O sistema coloca o pedido numa fila e a integração o cria no Omie. Se o Omie recusar, aparece o motivo e o botão "Tentar novamente". `V0.7`
 8. O pedido nasce liberado e o PCP o vê na triagem (`V1` a `V3`): ver [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 9. Compras confere a parte de compras e, se comprar acima do valor da proposta, o vendedor aprova ou reprova por produto: `C6`, `C7` e `C8` estão em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
@@ -70,6 +70,9 @@ Quem desenvolve (N16-117 a N16-119):
 - Proposta incompleta (item sem custo e sem fornecedor) não pode ser aprovada.
 - O botão "Transformar em pedido" só aparece na proposta aprovada.
 - Sem a resposta "a Qualidade acompanha?", o pedido não é criado. O vendedor pode corrigir até o MES (sistema de chão de fábrica) importar o pedido.
+- Sem os campos obrigatórios do modal (Qualidade, previsão de faturamento, `SPOT` ou `CONTRATO`, faturamento em partes ou não e categoria), o pedido não é criado. O tipo da venda (`SPOT` ou `CONTRATO`) é só informativo. Em faturamento em partes, a data por item é obrigatória (N16-150) 📝.
+- Qualidade "Sim": o PCP é obrigado a pôr a Qualidade em todo o roteiro e em todas as etapas da fábrica. É mudança do lado do MES, em contrato à parte (N16-151) 📝.
+- Refaturamento: se a categoria escolhida é de refaturamento, a comissão do vendedor nesse pedido é desconsiderada. Quais categorias são refaturamento ainda será definido (N16-152, PS-040) 📝.
 - O pedido nasce liberado; o cancelamento do pedido (antes e depois de faturar) está em [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 - O vendedor não é dono do dado de custo. Ele decide o valor que põe e responde por ele.
 - Regras de Compras sobre a proposta (não altera a proposta, compra acima do valor, reprovação, aviso favorável): [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
@@ -95,6 +98,8 @@ Quem desenvolve (N16-117 a N16-119):
 - ✅ Também existem `POST /comercial/clientes` (cadastra o cliente no Omie da unidade), `GET /comercial/parceiros`, `/me`, `/empresas_emissoras`, `/responsaveis` e `/parametros_custo`.
 - 🔴 Criar o pedido no Omie (`V0.7`). Desde 03/11/2026 o envio é síncrono, direto da `api-acos-vital` ao `IncluirPedido`, sem fila nem pipeline (N16-149; [[Mapa-IncluirPedido-Omie]]); o desenho anterior era por fila e pipeline, com a pipeline como 2ª etapa. Hoje o pedido do Hub nasce com `status_sincronizacao_omie = pendente`. Ele fica `pendente`, e nada o envia: a API **não escreve no Omie** nesse passo.
 - 🟡 Nomes de rota das partes que faltam: o Gustavo e o Robert fecham.
+- 🟡 O corpo do `transformar` já recebe previsão de faturamento (obrigatória), número do pedido do cliente, categoria (opcional), `numero_contrato` (`SPOT` ou `CONTRATO`, opcional), `bloqueado` e `frete_modalidade` (✅ `api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:579-617`, `develop` 1654f65). Esse mesmo commit passou a enviar o pedido ao Omie na mesma requisição (`pedidoOmie.js`). O vault ainda descreve o `V0.7` como 🔴 acima e não foi reconferido nesta atualização: conferir o caminho inteiro (tela, API, banco) antes de trocar o selo.
+- 🔴 Faltam no `transformar`: a resposta da Qualidade, o faturamento em partes com a data por item, e tornar obrigatórios o tipo da venda e a categoria (N16-150). O refaturamento sem comissão e a Qualidade no roteiro do PCP também não existem no código (N16-151, N16-152).
 
 **O banco**
 
