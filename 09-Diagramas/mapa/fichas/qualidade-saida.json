@@ -186,7 +186,7 @@
     "situacao": "Proposta aceita em 15/10, sem código",
     "st": "gap",
     "muda": "MES: tabela da ordem de produção, lote com origem Produção e impressão da ordem. Nada disso existe no código hoje; o SQL está escrito e validado em banco de teste.",
-    "arquivo": "06-Contratos/Ativos, nota LOG-53"
+    "arquivo": "06-Contratos/Contratos-da-v2, LOG-53"
   },
   "palavrasFonte": 1179,
   "duvidas": [

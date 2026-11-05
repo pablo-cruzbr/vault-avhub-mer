@@ -26,15 +26,22 @@ const NOTAS = {
   fiscal: [["Fiscal e Omie", R + "10-Fiscal-Omie"]],
   controladoria: [["Custo real e comissão no fluxo", R + "13-Custo-Real-e-Comissao-no-Fluxo"], ["Regras e estados da comissão nova", "03-Sistemas/Comissao/04-Regras-e-Estados-da-Comissao-Nova"]]
 };
-const GERAIS = [["Registro de decisões", "08-Decisoes/Registro-de-Decisoes"], ["Painel de contratos", "06-Contratos/Painel-de-Contratos"], ["Fluxo mestre (o diagrama completo)", R + "00-Fluxo-Mestre-0b"]];
+const INDICE_CONTRATOS = "06-Contratos/Contratos-da-v2";
+const GERAIS = [["Registro de decisões", "08-Decisoes/Registro-de-Decisoes"], ["Contratos da v2 (índice)", INDICE_CONTRATOS], ["Fluxo mestre (o diagrama completo)", R + "00-Fluxo-Mestre-0b"]];
 
-// id do contrato -> caminho no site de consulta
+// id do contrato -> caminho no site de consulta.
+// Na v3 os contratos da v2 ficaram na tag v2-antes-da-v3; todo ID listado no índice aponta para ele.
+// Contratos novos da v3 (pastas Ativos/Entregues/Arquivados/Consultas) apontam para a própria nota.
 const contratos = new Map();
-for (const pasta of ["Ativos", "Entregues", "Arquivados"]) {
+const arqIndice = join(vault, INDICE_CONTRATOS + ".md");
+if (existsSync(arqIndice)) {
+  for (const m of readFileSync(arqIndice, "utf8").matchAll(/^\| ((?:LOG|API|SQL|CON)-\d+[a-z]?) \|/gm)) contratos.set(m[1], INDICE_CONTRATOS);
+}
+for (const pasta of ["Ativos", "Entregues", "Arquivados", "Consultas"]) {
   const dir = join(vault, "06-Contratos", pasta);
   if (!existsSync(dir)) continue;
   for (const n of readdirSync(dir)) {
-    const m = n.match(/^((?:LOG|API|SQL)-\d+[a-z]?)-.*\.md$/);
+    const m = n.match(/^((?:LOG|API|SQL|CON)-\d+[a-z]?)-.*\.md$/);
     if (m) contratos.set(m[1], `06-Contratos/${pasta}/${n.replace(/\.md$/, "")}`);
   }
 }

@@ -184,7 +184,7 @@
     "situacao": "Parcial",
     "st": "part",
     "muda": "Para quem desenvolve: faltam o custo da compra no Recebimento, o custo gravado na saída do estoque e a consulta de custo por item. Quem usa a Qualidade não percebe mudança.",
-    "arquivo": "06-Contratos/Ativos, nota API-008"
+    "arquivo": "06-Contratos/Contratos-da-v2, API-008"
   },
   "palavrasFonte": 2230,
   "duvidas": [

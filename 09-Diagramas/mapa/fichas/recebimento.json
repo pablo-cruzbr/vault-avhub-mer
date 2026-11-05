@@ -224,7 +224,7 @@
     "situacao": "Parcial",
     "st": "part",
     "muda": "MES: gravar o custo da OC no lote ao receber, com o job do contrato 004 e 007. Quem desenvolve: lote sem custo fica sinalizado quando a unidade difere.",
-    "arquivo": "06-Contratos/Ativos, API-008-Custo-do-Lote-no-MES"
+    "arquivo": "06-Contratos/Contratos-da-v2, API-008"
   },
   "palavrasFonte": 2855,
   "duvidas": [
