@@ -19,13 +19,7 @@ fontes: [Registro-de-Decisoes (N16-09 a N16-11, N16-17 a N16-23, N16-34 a N16-51
 
 **Onde estamos no fluxo:** ← [[14-Fiscal-Omie]] | fim do fluxo → · nós desta nota: `K1`, `K2`, `K3`, `K4`, `K5`, `K6`
 
-Tudo aqui ainda é proposta: não há API nem tela. Esta nota mostra só o fluxo. Os modelos de dados estão em [[03-Modelo-Novo-core_comissao]]. Decisões: [[Registro-de-Decisoes]]. Selos: [[Regras-do-Vault]].
-
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - N16-143: a comissão nova fica em `core_comissao`, schema próprio, já modelado e testado.
-> - Proposta, pedido e custo realizado vão para `core_vendas_faturamento`: a N16-116 decide que não existirá `core_comercial`. ⚠️ O código e o dump de 29/10 da `api-acos-vital` já usam `core_comercial.propostas` e `core_comercial.fn_proposta_*`; a divergência está aberta com o Nathan e o Gustavo ❓.
-> - N16-144: o imposto por item da OC vem da parte de compras do pedido (finalidade `pedidos_venda` ou `recompra`) ou é digitado (`estoque`, `uso_interno`); uma linha por pedido, sem média; frete rateado pelo valor; a fórmula do custo com imposto segue o motor do comissionamento. O contrato só será escrito quando o desenvolvimento começar.
-> - A pendência de devolução parcial já está no banco.
+O fluxo novo ainda é proposta: não há API nem tela dele. O que já existe é o motor atual e telas de referência (veja "O que já existe e o que falta"). Esta nota mostra só o fluxo. Os modelos de dados estão em [[03-Modelo-Novo-core_comissao]]. Decisões: [[Registro-de-Decisoes]]. Selos: [[Regras-do-Vault]].
 
 ## Como funciona, passo a passo
 
@@ -72,6 +66,12 @@ Um pedido com 50 flanges (item A). Na proposta, o vendedor cotou R$ 100 por flan
 - O encargo da condição de pagamento entra no preço sugerido, não no custo.
 - Cancelamento, devolução ou recusa abatem a comissão. Se já foi paga, o desconto entra na próxima apuração.
 - Devolução total vem do Omie. Na parcial, o Fiscal ou a Controladoria informam o que voltou.
+- O imposto por item da OC vem da parte de compras do pedido (finalidade `pedidos_venda` ou `recompra`) ou é digitado (`estoque`, `uso_interno`). Uma linha por pedido, sem média. O frete é rateado pelo valor. A fórmula do custo com imposto segue o motor do comissionamento (N16-144). O contrato só será escrito quando o desenvolvimento começar.
+
+Onde os dados ficam (decisões de 29/10/2026, bloco N16-120 a N16-143):
+
+- A comissão nova fica em `core_comissao`, schema próprio, já modelado e testado (N16-143).
+- Proposta, pedido e custo realizado vão para `core_vendas_faturamento`: a N16-116 decide que não existirá `core_comercial`. O código ainda diverge (veja abaixo).
 
 ## O que já existe e o que falta
 
@@ -79,11 +79,12 @@ Um pedido com 50 flanges (item A). Na proposta, o vendedor cotou R$ 100 por flan
 - ✅ (`av-hub`) Simulador de Comissão, usado como referência da tela nova.
 - 🟡 Tela "Custo real por item" existe, sem imposto e com dados de teste.
 - 🟡 Módulo novo em `core_comissao`: modelado e testado no banco, sem API nem tela.
+- ⚠️ ❓ Schema: o código e o dump de 29/10 da `api-acos-vital` já usam `core_comercial.propostas` e `core_comercial.fn_proposta_*`, contra a N16-116 (`core_vendas_faturamento`). A divergência está aberta com o Nathan e o Gustavo.
 - 🔴 Comissão estimada na proposta (`K1`).
 - 🔴 Custo real por evento, com a nota de entrada como verdade (`K2`).
 - 🔴 Tela da Controladoria, relatórios e visão geral (`K4`).
 - 🔴 Aprovação do vendedor na compra acima do valor.
-- 🔴 Pendência de devolução parcial e apuração do vendedor.
+- 🔴 Pendência de devolução parcial e apuração do vendedor. A pendência de devolução parcial já está no banco (no modelo de `core_comissao`); falta API e tela.
 - ❓ Sobra aproveitável de chapa (OQ-32) e devolução de compra ao fornecedor (OQ-42).
 
 ## Detalhe técnico
