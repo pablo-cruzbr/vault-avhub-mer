@@ -99,7 +99,7 @@ Efeito de cada marco no MES: tabela em [[Integracao-AvHub-MES]] (INT-03) e `requ
 | Follow-up do CCP | `/compras/followup` | HUB | CCP | ✅ `components/Compras/Followup/FollowupLista.tsx`, `FollowupPainel.tsx` |
 | Dashboard de Compras, Compradores | `/compras/dashboard-compras`, `/compras/compradores` | HUB | Compras | ✅ (`av-hub`) fora da espinha |
 
-Nome histórico no MES: o setor `COMPRAS` aparece como "Pedidos de Compra" em rótulos de 09/10 e hoje como **Compras · CCP**; a rota continua `/compras/pedidos-compra`. HUB confirmado em disco (`C:\Users\nathan.silva\Desktop\TI\NATHAN\00 - HUB`, b55ac55).
+Nome histórico no MES: o setor `COMPRAS` aparece como "Pedidos de Compra" em rótulos de 09/10 e hoje como **Compras · CCP**; a rota continua `/compras/pedidos-compra`. HUB confirmado no clone local do `av-hub` em 14/10 (b55ac55).
 
 ## Endpoints e contratos
 

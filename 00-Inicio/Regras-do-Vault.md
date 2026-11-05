@@ -13,7 +13,7 @@ fontes: [plano de 14/10/2026, instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO
 
 **Quando consultar esta nota:** antes de criar ou editar qualquer nota.
 
-Este vault é o **manual para desenvolver o fluxo de Atividades** do ERP Aços Vital (diagrama 0b). O vault anterior (`vault-avhub-mer`) está congelado e serve só para consulta. Aqui vale uma regra central: **cada nota diz o estado atual**, sem camadas de histórico. O estado é medido na `develop` dos sistemas (F5): o que está na `develop` está pronto.
+Este vault é o **manual para desenvolver o fluxo de Atividades** do ERP Aços Vital (diagrama 0b). As versões anteriores do vault (v1, tag `arquivo/v1`; v2, tag `v2-final`) estão congeladas e servem só para consulta. Aqui vale uma regra central: **cada nota diz o estado atual**, sem camadas de histórico. O estado é medido na `develop` dos sistemas (F5): o que está na `develop` está pronto.
 
 ## Como escrever
 

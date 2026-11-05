@@ -92,4 +92,4 @@ Pares de risco (a tela natural da API difere da do BFF), todos **ainda presentes
 
 ### Como refazer
 
-`node mapa-rotas.js <pasta do HUB> <saida.md>`. O script está no anexo do v1 (`vault-avhub-mer/04-Arquitetura-Transversal/Mapa-Rotas-BFF-API-anexos/mapa-rotas.js`); a saída lista as seções A (a mapear), B (sem Bearer), C (com Bearer) e D (sem chamada). Dono: Nathan.
+`node mapa-rotas.js <pasta do HUB> <saida.md>`. O script está no anexo do v1 (tag `arquivo/v1`, `04-Arquitetura-Transversal/Mapa-Rotas-BFF-API-anexos/mapa-rotas.js`); a saída lista as seções A (a mapear), B (sem Bearer), C (com Bearer) e D (sem chamada). Dono: Nathan.

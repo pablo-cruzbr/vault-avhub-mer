@@ -21,7 +21,7 @@ fontes: [instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, seções 1, 3, 6
 
 ## 1. Preparar o ambiente (sempre, antes de começar)
 
-1. Em cada pasta de `C:\Users\nathan.silva\Desktop\Gerenciamento-de-Integracoes` (`vault-avhub-mer-v2`, `api-acos-vital`, `av-hub`, `api-pcp`, `app-pcp`, `omie-elt-pipeline`): `git fetch --all --prune`. Anote o commit de `origin/develop`.
+1. Em cada um dos seis repositórios da pasta-mãe do vault (`vault-avhub-mer`, `api-acos-vital`, `av-hub`, `api-pcp`, `app-pcp`, `omie-elt-pipeline`, lado a lado): `git fetch --all --prune`. Anote o commit de `origin/develop`.
 2. No vault: `git status` (se houver alteração não commitada, pergunte ao dono antes de qualquer coisa) e `git pull --ff-only`. Se não for fast-forward, pare e avise; não faça merge nem rebase por conta própria.
 3. Nos sistemas, **só leitura**: nunca troque de branch, faça commit ou stash. Leia com `git show origin/develop:<arquivo>`, `git grep -n <termo> origin/develop`, `git log origin/develop`. Se a branch local for `develop` e o working tree estiver limpo, `git pull --ff-only` é permitido; fora isso, não toque.
 4. No vault, `git config core.autocrlf` deve ser `false` (o `.gitattributes` exige LF).
@@ -29,7 +29,7 @@ fontes: [instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, seções 1, 3, 6
 
 ## 2. Comando "atualizar o vault"
 
-Gatilho: o Nathan diz "atualizar o vault" (ou "atualiza", "sincroniza"). O roteiro completo é a seção "Comando: atualizar o vault" do [[Guia-de-Leitura-do-Vault-e-dos-Sistemas]]. Em resumo:
+Gatilho: quem está usando diz "atualizar o vault" (ou "atualiza", "sincroniza"). O roteiro completo é a seção "Comando: atualizar o vault" do [[Guia-de-Leitura-do-Vault-e-dos-Sistemas]]. Em resumo:
 
 1. **Remoto → local sem perder nada local:** faça a seção 1. Commits locais sem push são listados e só vão com o "ok".
 2. **Ler a `develop` desde a última atualização:** os commits de partida estão em [[Ultima-Atualizacao-do-Vault]]. Em cada sistema: `git log --oneline <commit>..origin/develop` e `git diff --stat <commit> origin/develop`.
@@ -147,7 +147,7 @@ O `CLAUDE.md` na raiz do vault é a porta da IA (cerca de 40 linhas). Atualize-o
 node scripts/validar.mjs
 ```
 
-Tem de dar 0 em: links quebrados, notas órfãs, CRLF, caractere corrompido, notas acima de 25 KB, nomes antigos, nós sem dono único, caminhos do `build.mjs` que não existem e ✅ sem citação nas raias. O índice de contratos tem de somar 92. Se mexeu em mapa ou fichas, rode também `cd 09-Diagramas/mapa && node build.mjs` ("0 contratos sem nota achada").
+Tem de dar 0 em: links quebrados, notas órfãs, CRLF, caractere corrompido, notas acima de 25 KB, nomes antigos, nós sem dono único, caminhos do `build.mjs` que não existem e ✅ sem citação nas raias. O índice de contratos tem de somar 92. A última linha diz "RESULTADO: tudo verde"; com qualquer problema, o validador sai com código 1 (o que permite usá-lo num CI no futuro). Se mexeu em mapa ou fichas, rode também `cd 09-Diagramas/mapa && node build.mjs` ("0 contratos sem nota achada").
 
 Se mudou o próprio validador, ou se ele der tudo 0 e você desconfiar, rode o autoteste:
 

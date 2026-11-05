@@ -17,8 +17,15 @@ const IGNORAR = new Set(['.git', 'node_modules']);
 const RAIA = path.join('02-Fluxo-de-Atividades', '01-Proposta-de-Venda.md');
 const OUTRA = path.join('00-Inicio', 'Home.md');
 
+// Devolve a saída e o código de saída (o validador sai com 1 quando acha problema).
 function validar(dir) {
-  return execFileSync(process.execPath, [path.join(dir, 'scripts', 'validar.mjs')], { cwd: dir, encoding: 'utf8', maxBuffer: 64 << 20 });
+  try {
+    const saida = execFileSync(process.execPath, [path.join(dir, 'scripts', 'validar.mjs')], { cwd: dir, encoding: 'utf8', maxBuffer: 64 << 20 });
+    return Object.assign(new String(saida), { codigo: 0 });
+  } catch (e) {
+    if (typeof e.status !== 'number') throw e;
+    return Object.assign(new String(e.stdout || ''), { codigo: e.status });
+  }
 }
 function contar(saida, rotulo) {
   const l = saida.split('\n').find((x) => x.startsWith(`## ${rotulo}`));
@@ -48,10 +55,14 @@ try {
   const nRaias = notasDeRaia(antes);
   console.log(`Cópia limpa: ${CHECAGENS.map(([r]) => `${r} = ${base[r]}`).join(' · ')} · notas de raia nos selos = ${nRaias}`);
   if (nRaias === 0) { console.log('FALHA: a checagem de selos não examinou nenhuma nota'); falhas++; }
+  if (antes.codigo !== 0) { console.log(`FALHA: na cópia limpa o validador saiu com código ${antes.codigo} (esperado 0)`); falhas++; }
 
   // 2) estraga a cópia e confere que cada checagem sobe
   for (const [, , estragar] of CHECAGENS) estragar(tmp);
   const depois = validar(tmp);
+  const codigoOk = depois.codigo === 1;
+  if (!codigoOk) falhas++;
+  console.log(`${codigoOk ? 'ok   ' : 'FALHA'} código de saída com problemas: ${depois.codigo} (esperado 1, para um CI poder barrar o PR)`);
   for (const [rotulo, oque] of CHECAGENS) {
     const n = contar(depois, rotulo);
     const ok = n > base[rotulo];

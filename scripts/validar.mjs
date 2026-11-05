@@ -77,7 +77,11 @@ for (const f of notas) {
   if (n) contratosLinks.push([rel(f), n]);
 }
 
+// Toda seção conta como problema; no fim o validador sai com código 1 se houver algum,
+// para um CI (uma GitHub Action, ainda não criada) poder barrar o PR.
+let problemas = 0;
 const secao = (t, l) => {
+  problemas += l.length;
   console.log(`\n## ${t}: ${l.length}`);
   for (const x of l.slice(0, 40)) console.log(`- ${x}`);
   if (l.length > 40) console.log(`- ... (+${l.length - 40})`);
@@ -91,10 +95,11 @@ secao('Arquivos com CRLF', crlf);
 secao('Arquivos com caractere corrompido (Ã, â€, �)', corrompidos);
 secao('Notas acima de 25 KB', grandes);
 console.log(`\n## Links para contratos fora de 06-Contratos: ${contratosLinks.reduce((s, x) => s + x[1], 0)} em ${contratosLinks.length} notas`);
+problemas += contratosLinks.length;
 const idx = path.join(raiz, '06-Contratos', 'Contratos-da-v2.md');
 // Bloco 5: a lista completa fica em Partes/Contratos-da-v2-*; conta o índice e as partes
 const textoIdx = () => [idx, ...(fs.existsSync(path.join(raiz, '06-Contratos', 'Partes')) ? fs.readdirSync(path.join(raiz, '06-Contratos', 'Partes')).filter((x) => x.startsWith('Contratos-da-v2-')).map((x) => path.join(raiz, '06-Contratos', 'Partes', x)) : [])].map((x) => fs.readFileSync(x, 'utf8')).join('\n');
-if (fs.existsSync(idx)) { const ids = new Set([...textoIdx().matchAll(/^\| ((?:LOG|SQL|API|CON)-\d+[a-z]?) \|/gm)].map((m) => m[1])); console.log(`Índice Contratos-da-v2: ${ids.size} contratos distintos (esperado 92)`); }
+if (fs.existsSync(idx)) { const ids = new Set([...textoIdx().matchAll(/^\| ((?:LOG|SQL|API|CON)-\d+[a-z]?) \|/gm)].map((m) => m[1])); if (ids.size !== 92) problemas++; console.log(`Índice Contratos-da-v2: ${ids.size} contratos distintos (esperado 92)`); }
 
 // Nomes antigos do mapa (a partir do Bloco 2): em [[links]] e em texto entre crases.
 const csv = [path.join(raiz, '_v3', 'mapa-renomeacao.csv'), path.join(raiz, '07-Desenvolvimento', 'v3', 'mapa-renomeacao.csv')].find((x) => fs.existsSync(x)) || '';
@@ -185,3 +190,6 @@ if (fs.existsSync(build)) {
   }
   secao('Selos ✅ sem citação ou sem develop-conferida', prob);
 }
+
+console.log(problemas ? `\nRESULTADO: ${problemas} problema(s). O validador sai com código 1.` : '\nRESULTADO: tudo verde.');
+process.exitCode = problemas ? 1 : 0;

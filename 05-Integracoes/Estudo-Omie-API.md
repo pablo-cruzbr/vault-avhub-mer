@@ -4,7 +4,7 @@ criado: 2026-10-21
 atualizado: 2026-10-29
 status: proposta
 dono: Nathan
-fontes: [documentação pública do Omie lida em 21/10/2026: app.omie.com.br/api/v1/produtos/pedido/ (PedidoVendaProduto), /produtos/pedidocompra/ (PedidoCompra), /produtos/recebimentonfe/ (RecebimentoNFe), /produtos/nfconsultar/ (NFConsultar); vault-avhub-mer-v2 Omie-Integracao-Estado e Omie-Dicionarios/Pedidos-de-Venda; Perguntas-Proposta-Pedido-Comissao OQ-15, OQ-16, OQ-17, OQ-37, OQ-39, OQ-48; Registro-de-Decisoes]
+fontes: [documentação pública do Omie lida em 21/10/2026: app.omie.com.br/api/v1/produtos/pedido/ (PedidoVendaProduto), /produtos/pedidocompra/ (PedidoCompra), /produtos/recebimentonfe/ (RecebimentoNFe), /produtos/nfconsultar/ (NFConsultar); notas do vault Omie-Integracao-Estado e Omie-Dicionarios/Pedidos-de-Venda; Perguntas-Proposta-Pedido-Comissao OQ-15, OQ-16, OQ-17, OQ-37, OQ-39, OQ-48; Registro-de-Decisoes]
 ---
 
 # Estudo do Omie para o projeto (21/10/2026)
