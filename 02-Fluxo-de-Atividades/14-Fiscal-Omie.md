@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, fiscal, omie, nota-fiscal, o1, o2, pipeline]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: vigente
+ordem: 14
 nos: [O1, O2]
+anterior: "[[13-Expedicao]]"
+proxima: "[[15-Custo-Real-e-Comissao]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Gustavo (DBA, pipeline e banco) · Robert (sinalização no MES) · Nathan (decisões)
 fontes: [omie-elt-pipeline 0f739f0 (notasFiscais.ts, pedidosVendas.ts, scheduler/config), Dump Avhub 14/10 (fn_sync_situacao_pv, pedidos_vendas, notas_fiscais, produto_vendas), api-pcp 579a625 (entregas), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 11, v1 08-Integracao-Omie/01-Dados-Extraidos, api-acos-vital develop 0384e89 (POST /comercial/clientes)]
@@ -12,6 +15,10 @@ fontes: [omie-elt-pipeline 0f739f0 (notasFiscais.ts, pedidosVendas.ts, scheduler
 # Fiscal no Omie (O1, O2)
 
 **Em uma frase:** é a etapa em que o Omie emite a nota fiscal e dá baixa nos itens do pedido. O sistema nunca emite nem edita nota; só recebe o que o Omie emitiu.
+
+**Quando consultar:** dúvidas sobre a nota fiscal: o que o Omie emite, a baixa dos itens do pedido e o que o sistema só recebe.
+
+**Onde estamos no fluxo:** ← [[13-Expedicao]] | [[15-Custo-Real-e-Comissao]] → · nós desta nota: `O1`, `O2`
 
 Nós `O1` (emite a nota) e `O2` (baixa o item) do [[00-Fluxo-Mestre-0b]], depois de `X4` ([[13-Expedicao]]). Contexto: [[Pipeline-Omie]] e [[Omie-Integracao-Estado]].
 
