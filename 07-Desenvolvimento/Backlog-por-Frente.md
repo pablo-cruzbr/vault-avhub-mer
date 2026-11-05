@@ -1,9 +1,10 @@
 ---
 tags: [desenvolvimento, backlog, pendencias]
 criado: 2026-10-14
-atualizado: 2026-11-05
+estado-em: 2026-11-05
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55, Dump Avhub e Dump MES de 14/10, Registro-de-Decisoes (N16 de 16 a 26/10)]
 ---
 
@@ -30,13 +31,14 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca
 
 ## Lista completa
 
-O que **falta desenvolver** no fluxo de Atividades ([[00-Fluxo-Mestre-0b]]), conferido no código em 14/10/2026. Cada item tem ID `BL-nnn` (estável, citado por outras notas), nó do 0b, contrato, selo e evidência. Dentro de cada frente a ordem é a dos nós do 0b (V, P, E, C, FN, R, Q, F, X, O) e depois o transversal. Divisão: Robert = MES (`api-pcp`, `app-pcp`); Gustavo = banco e API do av-hub; Nathan = front do HUB e coordenação; Robert também conduz o módulo Comercial & Suprimentos na `api-acos-vital` (N16-117, 28/10), com Pablo acompanhando ([[Equipe-e-Divisao]]). Selos: [[Regras-do-Vault]]. Lacunas de decisão e dúvidas: [[Pontas-Soltas]]; riscos: [[Riscos]].
+O que **falta desenvolver** no fluxo de Atividades ([[00-Fluxo-Mestre-0b]]), conferido no código em 14/10/2026 e com os selos reconferidos item a item na `develop` em 05/11/2026 (coluna Evidência: "develop 05/11" é a prova atual; "14/10" fica só quando ainda vale; o texto "Conferido na develop em 05/11/2026" no fim de "O que falta" diz o que mudou). Cada item tem ID `BL-nnn` (estável, citado por outras notas), nó do 0b, contrato, selo e evidência. Dentro de cada frente a ordem é a dos nós do 0b (V, P, E, C, FN, R, Q, F, X, O) e depois o transversal. Divisão: Robert = MES (`api-pcp`, `app-pcp`); Gustavo = banco e API do av-hub; Nathan = front do HUB e coordenação; Robert também conduz o módulo Comercial & Suprimentos na `api-acos-vital` (N16-117, 28/10), com Pablo acompanhando ([[Equipe-e-Divisao]]). Selos: [[Regras-do-Vault]]. Lacunas de decisão e dúvidas: [[Pontas-Soltas]]; riscos: [[Riscos]].
 
 A lista completa desta nota fica em 4 notas à parte, uma por frente, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
 
 - [[Backlog-Frente-Robert]]: Frente Robert (MES: `api-pcp` e `app-pcp`)
 - [[Backlog-Frente-Gustavo]]: Frente Gustavo (banco e API do av-hub)
 - [[Backlog-Frente-Nathan]]: Frente Nathan (front do av-hub, BFF e coordenação)
+- [[Backlog-Frente-Nathan-Proposta-Omie-e-Comissao]]: Frente Nathan, itens BL-075 a BL-081 (proposta, pedido no Omie e comissão)
 - [[Backlog-Frente-Comercial-e-Suprimentos]]: Frente Comercial & Suprimentos (Robert conduz; Pablo acompanha)
 
 ## Fechados em 14/10/2026
