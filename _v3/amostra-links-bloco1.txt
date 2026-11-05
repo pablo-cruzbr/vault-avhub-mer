@@ -1,0 +1,80 @@
+SIMULAÇÃO — links reescritos: 372 em 57 notas
+- 00-Inicio/Comece-Aqui.md: 2
+- 00-Inicio/Home.md: 1
+- 00-Inicio/Mapa-v1-para-v2.md: 73
+- 00-Inicio/Regras-do-Vault.md: 1
+- 01-Projeto/Cronograma.md: 2
+- 01-Projeto/Glossario.md: 1
+- 01-Projeto/Sistemas-e-Responsabilidades.md: 1
+- 01-Projeto/Visao-do-Projeto.md: 2
+- 02-Fluxo-de-Atividades/00-Fluxo-Mestre-0b.md: 3
+- 02-Fluxo-de-Atividades/01-Vendas-Liberacao.md: 11
+- 02-Fluxo-de-Atividades/02-PCP-Triagem-e-Destinacao.md: 2
+- 02-Fluxo-de-Atividades/03-Estoque-Atendimento-e-Despacho.md: 11
+- 02-Fluxo-de-Atividades/04-Circuito-de-Compra.md: 17
+- 02-Fluxo-de-Atividades/05-Recebimento.md: 5
+- 02-Fluxo-de-Atividades/06-Qualidade-Entrada.md: 3
+- 02-Fluxo-de-Atividades/07-Producao-e-Roteiro.md: 3
+- 02-Fluxo-de-Atividades/08-Qualidade-Saida.md: 6
+- 02-Fluxo-de-Atividades/09-Expedicao.md: 2
+- 02-Fluxo-de-Atividades/12-Orcamento-Base-de-Preco.md: 4
+- 02-Fluxo-de-Atividades/13-Custo-Real-e-Comissao-no-Fluxo.md: 6
+- 02-Fluxo-de-Atividades/Estados-e-Status.md: 4
+- 02-Fluxo-de-Atividades/Telas-por-Raia.md: 1
+- 03-Sistemas/API-Comercial.md: 2
+- 03-Sistemas/Comissao/01-Motor-Atual-Como-Calcula.md: 1
+- 03-Sistemas/Comissao/03-Modelo-Novo-core_comissao.md: 1
+- 03-Sistemas/Mapa-do-Modulo-do-Pablo.md: 4
+- 03-Sistemas/Pipeline-Omie.md: 1
+- 03-Sistemas/Roteiro-da-Proposta-em-Diante.md: 2
+- 04-Dados/Diferencas-Codigo-x-Banco.md: 1
+- 04-Dados/Modelo-Estoque-e-Custo-do-Lote.md: 5
+- 05-Integracoes/Chaves-e-Autenticacao.md: 2
+- 05-Integracoes/Colunas-Protegidas.md: 4
+- 05-Integracoes/Integracao-AvHub-MES.md: 19
+- 05-Integracoes/Mapa-IncluirPedido-Omie.md: 1
+- 05-Integracoes/Omie-Dicionarios/Etapas-Faturamento.md: 1
+- 05-Integracoes/Omie-Dicionarios/Notas-Fiscais-e-Itens.md: 1
+- 05-Integracoes/Omie-Dicionarios/Parceiros-Clientes-Fornecedores.md: 1
+- 05-Integracoes/Omie-Dicionarios/Pedidos-de-Venda.md: 2
+- 05-Integracoes/Omie-Dicionarios/Vendedores.md: 2
+- 05-Integracoes/Rastreabilidade-e-Torre-de-Fluxo.md: 3
+- 06-Contratos/Consultas/Modelo-de-Consulta.md: 4
+- 06-Contratos/Contratos-da-v2.md: 2
+- 07-Desenvolvimento/Backlog-por-Frente.md: 63
+- 07-Desenvolvimento/Contradicoes-Resolvidas.md: 8
+- 07-Desenvolvimento/Perguntas-Proposta-Pedido-Comissao.md: 2
+- 07-Desenvolvimento/Pontas-Soltas.md: 11
+- 07-Desenvolvimento/Riscos.md: 3
+- 08-Decisoes/Registro-de-Decisoes.md: 42
+- 09-Diagramas/Estados.md: 2
+- 09-Diagramas/Modelo-de-Dados.md: 1
+- 10-Anexo-Fora-do-Fluxo/Acompanhamento-Clientes.md: 2
+- 10-Anexo-Fora-do-Fluxo/Comercial-Suprimentos.md: 1
+- 10-Anexo-Fora-do-Fluxo/Comissoes.md: 4
+- 10-Anexo-Fora-do-Fluxo/Dashboards.md: 4
+- 10-Anexo-Fora-do-Fluxo/Orcamento.md: 2
+- 10-Anexo-Fora-do-Fluxo/Pedido-Manual.md: 4
+- 10-Anexo-Fora-do-Fluxo/RH-Vagas-Funcionarios.md: 3
+
+## Amostra (20 notas diferentes)
+00-Inicio/Comece-Aqui.md:37  [[Painel-de-Contratos]]  →  [[Contratos-da-v2]]
+00-Inicio/Mapa-v1-para-v2.md:154  [[LOG-04b-Pedidos-Notas-Dashboards-Agregacao-no-Banco]]  →  [[Contratos-da-v2\|LOG-04b]]
+01-Projeto/Cronograma.md:142  [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]]  →  [[Contratos-da-v2\|LOG-52]]
+01-Projeto/Sistemas-e-Responsabilidades.md:57  [[Painel-de-Contratos]]  →  [[Contratos-da-v2]]
+02-Fluxo-de-Atividades/00-Fluxo-Mestre-0b.md:280  [[API-005-Status-Item-Integracao-MES]]  →  [[Contratos-da-v2|API-005]]
+02-Fluxo-de-Atividades/02-PCP-Triagem-e-Destinacao.md:155  [[LOG-26-Vendas-Liberacao-Pedido]]  →  [[Contratos-da-v2\|LOG-26]]
+02-Fluxo-de-Atividades/04-Circuito-de-Compra.md:202  [[SQL-008-Requisicoes-Compra]]  →  [[Contratos-da-v2|SQL-008]]
+02-Fluxo-de-Atividades/06-Qualidade-Entrada.md:145  [[LOG-34-Requisicoes-MES-Empurra-para-o-Hub]]  →  [[Contratos-da-v2|LOG-34]]
+02-Fluxo-de-Atividades/08-Qualidade-Saida.md:92  [[LOG-54-Documento-de-Retirada-e-Baixa-na-Retirada]]  →  [[Contratos-da-v2\|LOG-54]]
+02-Fluxo-de-Atividades/12-Orcamento-Base-de-Preco.md:196  [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]]  →  [[Contratos-da-v2|LOG-52]]
+02-Fluxo-de-Atividades/Estados-e-Status.md:266  [[API-005-Status-Item-Integracao-MES]]  →  [[Contratos-da-v2|API-005]]
+03-Sistemas/API-Comercial.md:53  [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]]  →  [[Contratos-da-v2|LOG-52]]
+03-Sistemas/Comissao/03-Modelo-Novo-core_comissao.md:976  [[LOG-47-Custo-Real-por-Item-no-Hub]]  →  [[Contratos-da-v2|LOG-47]]
+03-Sistemas/Pipeline-Omie.md:104  [[SQL-021-Produto-Vendas-Codigo-Item-Integracao]]  →  [[Contratos-da-v2|SQL-021]]
+04-Dados/Diferencas-Codigo-x-Banco.md:40  [[API-008-Custo-do-Lote-no-MES]]  →  [[Contratos-da-v2\|API-008]]
+05-Integracoes/Chaves-e-Autenticacao.md:127  [[LOG-51-Seguranca-e-Padrao-da-API-do-Hub]]  →  [[Contratos-da-v2|LOG-51]]
+05-Integracoes/Integracao-AvHub-MES.md:68  [[SQL-010-Itens-Pedido-Status]]  →  [[Contratos-da-v2\|SQL-010]]
+05-Integracoes/Omie-Dicionarios/Etapas-Faturamento.md:24  [[LOG-43-Ordem-das-Etapas-de-Faturamento-no-Cadastro]]  →  [[Contratos-da-v2\|LOG-43]]
+05-Integracoes/Omie-Dicionarios/Parceiros-Clientes-Fornecedores.md:49  [[LOG-30-Compras-Pedido-Omie-PDF-Completo]]  →  [[Contratos-da-v2|LOG-30]]
+05-Integracoes/Omie-Dicionarios/Vendedores.md:29  [[LOG-40-Escopo-de-Vendedores-e-Permissoes-pelo-Token-no-Backend]]  →  [[Contratos-da-v2|LOG-40]]

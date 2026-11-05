@@ -1,12 +1,12 @@
 # Progresso da v3
-Estado atual: Bloco 0 concluído, aguardando "ok" do Nathan (aprovar `perguntas-de-aceite.md` e a base de validação)
-Próxima ação: com o "ok" do Nathan e o Obsidian fechado, iniciar o Bloco 1 (índice `Contratos-da-v2`)
+Estado atual: Bloco 1, tarefa 3 (amostra de 20 links aguardando aprovação do Nathan)
+Próxima ação: com o "ok" da amostra, rodar `node _v3/scripts/contratos-links.mjs` (grava 372 links em 57 notas) e commitar
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
 Data: 2026-11-05  Vault: branch `v3` criada a partir de `main` 5203232 (tag `v2-antes-da-v3`); `origin/v3` ainda não existe  origin/main: 5203232 (sem commits novos)
 origin/develop: api-acos-vital b97981c · av-hub 2e5456d · api-pcp befd973 · app-pcp 93f96de · omie-elt-pipeline **sem develop** (só `origin/master` 5e7e94d)
-autocrlf: false (ajustado só no vault; estava `true`)   Obsidian fechado: a confirmar antes dos blocos 1, 2, 3 e 5
+autocrlf: false (ajustado só no vault; estava `true`)   Obsidian fechado: sim no Bloco 1 (processo não está rodando, conferido em 2026-11-05)
 Observações:
 - `omie-elt-pipeline` não tem `develop` nem `main`: a base é `origin/master`. Avisado ao Nathan.
 - Primeiro fetch de api-pcp, app-pcp e omie falhou por rede; repetido com sucesso.
@@ -34,13 +34,13 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Resolver a D2; criar a tag `v2-antes-da-v3` na `main` do vault; criar a branch `v3` (2026-11-05; tag e branch locais, ainda não enviadas)
 - [x] Copiar a instrução, inteira e sem mudanças, para `_v3/INSTRUCAO.md` (cópia byte a byte conferida)
 - [x] Criar `_v3/PROGRESSO.md`; commitar; testar o push (push de `v3` e da tag `v2-antes-da-v3` ok, 2026-11-05)
-- [~] Escrever `_v3/perguntas-de-aceite.md` com 10 perguntas-padrão; pedir aprovação (escrito; 3 respostas com "a conferir" no Bloco 3; aguarda aprovação)
+- [x] Escrever `_v3/perguntas-de-aceite.md` com 10 perguntas-padrão; pedir aprovação (aprovado pelo Nathan em 2026-11-05; 3 respostas "a conferir" no Bloco 3)
 - [x] Rodar a validação (seção 9) na v2 e gravar o resultado como base (`_v3/validacao-base-v2.md`, script `_v3/scripts/validar.mjs`)
 
 ### Bloco 1: Retirar os contratos da v2
-- [ ] Gerar o índice `Contratos-da-v2` e conferir as 97 linhas e os links do GitHub
-- [ ] Reescrever os links de contrato e do Painel por script
-- [ ] Mostrar ao Nathan uma amostra de 20 links reescritos
+- [x] Gerar o índice `Contratos-da-v2` e conferir as 97 linhas e os links do GitHub (2026-11-05, e5d763d). Os 97 `.md` de `06-Contratos` = 92 contratos + 3 HIST + Painel + Modelo-de-Consulta. O índice tem 92 linhas de contrato e uma tabela à parte com os 3 HIST e o Painel; o Modelo vai para `Modelos/`. Todos os links do GitHub conferidos contra a tag. Próximos IDs: API-019, CON-04, LOG-56, SQL-022.
+- [~] Reescrever os links de contrato e do Painel por script (`_v3/scripts/contratos-links.mjs`: 372 links em 57 notas na simulação; idempotente; nada sobra fora de código. A contagem da instrução, 1.278, incluía links internos de `06-Contratos`, que saem com as pastas)
+- [~] Mostrar ao Nathan uma amostra de 20 links reescritos (`_v3/amostra-links-bloco1.txt`; aguardando ok)
 - [ ] Ajustar `build.mjs` e as fichas; rodar `node build.mjs`
 - [ ] Mover o `Modelo-de-Consulta` para `Modelos/`; `git rm -r` nos contratos e no Painel
 
