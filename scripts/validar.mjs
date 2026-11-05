@@ -167,7 +167,12 @@ if (fs.existsSync(build)) {
   const CIT = /\b(api-acos-vital|av-hub|api-pcp|app-pcp|omie-elt-pipeline|api-comercial|Dump|dump|Omie|Estudo-Omie-API)\b|(service|controller|helpers|route|dto)?:\d+(-\d+)?\b/;
   const prob = [];
   // Bloco 5: as partes das raias (Partes/NN-...) também
-  for (const f of notas.filter((x) => /02-Fluxo-de-Atividades[\/](Partes[\/])?(0[1-9]|1[0-5])-/.test(x))) {
+  // [\\/]: aceita a barra do Windows (\) e a do Linux (/). Com [\/] só a "/" casava e, no Windows,
+  // esta checagem não examinava nenhuma nota e dava 0 sempre (achado em 05/11/2026).
+  const raias = notas.filter((x) => /02-Fluxo-de-Atividades[\\/](Partes[\\/])?(0[1-9]|1[0-5])-/.test(x));
+  if (raias.length === 0) prob.push('ERRO DO VALIDADOR: nenhuma nota de raia encontrada; a checagem de selos não rodou');
+  console.log(`\nNotas de raia conferidas nos selos: ${raias.length}`);
+  for (const f of raias) {
     const t = fs.readFileSync(f, 'utf8');
     if (!/^develop-conferida:/m.test((t.match(/^---\n([\s\S]*?)\n---/) || [, ''])[1])) prob.push(`${rel(f)}: sem develop-conferida`);
     let cod = false;
