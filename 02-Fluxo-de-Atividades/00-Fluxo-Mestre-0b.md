@@ -3,6 +3,8 @@ tags: [fluxo, mestre, 0b, atividades]
 criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
+ordem: 0
+proxima: "[[01-Proposta-de-Venda]]"
 dono: Nathan
 fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML.md (0b, rev. 09/10), Registro-de-Decisoes #21 #24 #25 #26 #31b #33 #50b #74 #78, decisões do Nathan de 14/10 e de 16 a 29/10 (N16-01 a N16-144), fluxo da proposta ao pedido aprovado em 26/10 (09-Diagramas/artifact-proposta-pedido.html), código de 14/10 (api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, HUB b55ac55) e de 29/10 (api-acos-vital develop 0384e89, api-pcp e app-pcp develop de 27/10, av-hub develop 758d5f0)]
 ---
