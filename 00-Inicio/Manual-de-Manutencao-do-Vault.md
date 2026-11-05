@@ -149,6 +149,14 @@ node scripts/validar.mjs
 
 Tem de dar 0 em: links quebrados, notas órfãs, CRLF, caractere corrompido, notas acima de 25 KB, nomes antigos, nós sem dono único, caminhos do `build.mjs` que não existem e ✅ sem citação nas raias. O índice de contratos tem de somar 92. Se mexeu em mapa ou fichas, rode também `cd 09-Diagramas/mapa && node build.mjs` ("0 contratos sem nota achada").
 
+Se mudou o próprio validador, ou se ele der tudo 0 e você desconfiar, rode o autoteste:
+
+```bash
+node scripts/autoteste-validador.mjs
+```
+
+Ele copia o vault para uma pasta temporária, planta um link quebrado, um ✅ sem citação, uma nota acima de 25 KB e uma linha com CRLF, e confere se o validador acusa os quatro. Também falha se a checagem de selos não examinar nenhuma nota. O vault de verdade não é tocado. Foi o que faltou até 05/11/2026: no Windows, a checagem de selos não olhava nenhuma nota e dava 0 sempre.
+
 ## 14. Abrir uma versão nova do vault
 
 Para uma reestruturação grande (como a v3), em vez de mudar a `main` aos poucos:
