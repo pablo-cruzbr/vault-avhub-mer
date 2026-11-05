@@ -1,8 +1,8 @@
 # Progresso da v3
 
 > Esta pasta era `_v3/` na raiz do vault até o Bloco 9 (05/11/2026); foi movida para `07-Desenvolvimento/v3/` com `git mv`. Os caminhos `_v3/...` citados abaixo são os da época e hoje ficam em `07-Desenvolvimento/v3/...`.
-Estado atual: Bloco 9 — PR #74 aberto (v3 → main), aguardando revisão e merge do Nathan
-Próxima ação: depois do merge do PR #74, criar e enviar a tag `v2-final` em `5203232` (último commit da v2) e marcar o Bloco 9 como concluído
+Estado atual: v3 concluída (Blocos 0 a 9). PR #74 mergeado na `main` (`2c8ec7d`); tag `v2-final` criada
+Próxima ação: nenhuma da v3. Para mudanças novas, usar o Manual-de-Manutencao-do-Vault (a `main` volta a receber mudanças; avisar Robert e Gustavo, D4)
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -113,7 +113,7 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 ### Bloco 9: Encerramento
 - [x] Mover `_v3/` para `07-Desenvolvimento/v3/` (2026-11-05: `git mv` de 119 arquivos; os 22 scripts de bloco passam a achar a raiz três pastas acima e a usar `07-Desenvolvimento/v3` (`scripts/encerramento-caminhos.mjs`, idempotente); 8 notas e `scripts/fatos.mjs` e `dividir.mjs` citam o caminho novo; os históricos desta pasta ficaram como estavam. Scripts de bloco rodados em `--simular`: 0 mudanças. Validação verde; fatos 0 sumidos nas 5 pastas, com 2 substituições de caminho registradas em `fatos/bloco5/substituicoes.tsv`)
 - [x] Abrir o PR da `v3` para a `main` do vault (2026-11-05, a pedido do Nathan: https://github.com/Acosvital/vault-avhub-mer/pull/74; 117 commits, sem conflito com a `main`, que segue em `5203232`; o repositório não tem CI)
-- [ ] Depois do merge, criar a tag `v2-final` no último commit da v2
+- [x] Depois do merge, criar a tag `v2-final` no último commit da v2 (2026-11-05: PR #74 mergeado pelo Claude a pedido do Nathan, merge commit `2c8ec7d` na `main`, com os 117 commits preservados; tag anotada `v2-final` em `5203232`, o mesmo commit da `v2-antes-da-v3`, porque a `main` não recebeu nada durante a v3; enviada ao `origin`)
 
 ## Validações
 Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 0 CRLF; 0 caracteres corrompidos reais (o único achado é o texto da própria instrução); 37 notas acima de 25 KB; 354 links de contrato (regex `LOG|SQL|API|CON|ATV-n`) em 52 notas fora de `06-Contratos` (a instrução cita 1.278; a diferença será reconciliada no Bloco 1). Ajuste na checagem: `Ã` sozinho é letra válida em português, então só `Ã` + byte de continuação, `â€` e `�` contam.
