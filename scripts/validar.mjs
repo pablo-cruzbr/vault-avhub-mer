@@ -78,7 +78,7 @@ for (const f of notas) {
 }
 
 // Toda seção conta como problema; no fim o validador sai com código 1 se houver algum,
-// para um CI (uma GitHub Action, ainda não criada) poder barrar o PR.
+// para a GitHub Action (.github/workflows/validar.yml) barrar o PR.
 let problemas = 0;
 const secao = (t, l) => {
   problemas += l.length;

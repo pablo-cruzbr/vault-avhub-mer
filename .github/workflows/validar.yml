@@ -1,0 +1,32 @@
+# Roda o validador do vault em todo PR para a main (e em todo push nela).
+# O validador sai com código 1 quando acha problema: link quebrado, nota órfã, CRLF, caractere
+# corrompido, nota acima de 25 KB, nome antigo, nó sem dono, caminho do mapa, selo ✅ sem citação.
+# Com a proteção da main exigindo este check, nada entra sem passar por ele.
+name: Validar o vault
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    name: validar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validador (node scripts/validar.mjs)
+        run: node scripts/validar.mjs
+
+      - name: Autoteste do validador (node scripts/autoteste-validador.mjs)
+        run: node scripts/autoteste-validador.mjs

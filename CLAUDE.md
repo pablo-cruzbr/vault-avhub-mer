@@ -42,6 +42,7 @@ Quando quem estiver usando disser "atualizar o vault" (ou "atualiza o vault", "s
 ## Scripts (Node, em `scripts/`)
 
 - `node scripts/validar.mjs`: links, órfãs, CRLF, codificação, tamanho, dono dos nós e selos. Rode depois de toda mudança.
+- No GitHub, a Action `validar` roda os dois em todo PR. A `main` só recebe mudança por PR com esse check verde: trabalhe numa branch e abra o PR.
 - `node scripts/autoteste-validador.mjs`: prova, numa cópia temporária, que o validador acusa o que deve. Rode depois de mexer no validador.
 - `node scripts/fatos.mjs extrair <nota.md>` antes de reescrever ou dividir uma nota, e `node scripts/fatos.mjs conferir` depois.
 - `node scripts/dividir.mjs <chave> --simular`: divide uma nota acima de 25 KB (acrescente a entrada no `PLANO`).
