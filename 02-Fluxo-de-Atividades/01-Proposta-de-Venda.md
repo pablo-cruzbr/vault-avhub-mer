@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, vendas, proposta, v0, simulador, tela]
 criado: 2026-10-16
-atualizado: 2026-11-05
+estado-em: 2026-11-05
 status: proposta
+ordem: 1
 nos: [V0.1, V0.2, V0.3, V0.4, V0.5, V0.6, V0.7, V0C]
+anterior: "[[00-Fluxo-Mestre-0b]]"
+proxima: "[[02-Orcamento-Base-de-Preco]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
 fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10]
@@ -12,6 +15,10 @@ fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6�
 # Proposta de venda
 
 **Em uma frase:** o vendedor monta a proposta, a Gerência aprova, e a proposta aprovada vira pedido de venda (PV) no Omie, já liberado para o PCP (planejamento e controle da produção) começar.
+
+**Quando consultar:** dúvidas sobre a proposta: como o vendedor monta, quem aprova, o que a proposta guarda e como ela vira pedido no Omie.
+
+**Onde estamos no fluxo:** ← [[00-Fluxo-Mestre-0b]] | [[02-Orcamento-Base-de-Preco]] → · nós desta nota: `V0.1`, `V0.2`, `V0.3`, `V0.4`, `V0.5`, `V0.6`, `V0.7`, `V0C`
 
 Nesta etapa o vendedor também acompanha o pedido, aprova compras mais caras e pode cancelar. A nota é uma proposta: o fluxo foi aprovado em 26/10/2026.
 
