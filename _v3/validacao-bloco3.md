@@ -1,5 +1,5 @@
 # Validação do vault (2026-11-05)
-Notas: 99  Arquivos: 140
+Notas: 105  Arquivos: 150
 
 ## Links quebrados: 0
 
@@ -9,10 +9,12 @@ Notas: 99  Arquivos: 140
 
 ## Arquivos com caractere corrompido (Ã, â€, �): 0
 
-## Notas acima de 25 KB: 19
-- 02-Fluxo-de-Atividades/00-Fluxo-Mestre-0b.md (69.4 KB)
-- 02-Fluxo-de-Atividades/01-Proposta-e-Pedido-de-Venda.md (46.1 KB)
-- 02-Fluxo-de-Atividades/06-Circuito-de-Compra.md (34.0 KB)
+## Notas acima de 25 KB: 24
+- 02-Fluxo-de-Atividades/00-Fluxo-Mestre-0b.md (69.3 KB)
+- 02-Fluxo-de-Atividades/01-Proposta-de-Venda.md (40.4 KB)
+- 02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md (25.5 KB)
+- 02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md (29.1 KB)
+- 02-Fluxo-de-Atividades/06-Circuito-de-Compra.md (39.3 KB)
 - 02-Fluxo-de-Atividades/07-Recebimento.md (26.6 KB)
 - 02-Fluxo-de-Atividades/15-Custo-Real-e-Comissao.md (32.4 KB)
 - 02-Fluxo-de-Atividades/Transversais/Telas-e-Experiencia-do-Usuario.md (40.2 KB)
@@ -23,12 +25,15 @@ Notas: 99  Arquivos: 140
 - 03-Sistemas/Mapa-do-Modulo-do-Pablo.md (36.0 KB)
 - 03-Sistemas/MES-Backend.md (29.6 KB)
 - 05-Integracoes/Integracao-AvHub-MES.md (34.5 KB)
-- 05-Integracoes/Mapa-IncluirPedido-Omie.md (35.8 KB)
+- 05-Integracoes/Mapa-IncluirPedido-Omie.md (35.7 KB)
 - 06-Contratos/Contratos-da-v2.md (30.1 KB)
-- 07-Desenvolvimento/Backlog-por-Frente.md (70.5 KB)
+- 07-Desenvolvimento/Backlog-por-Frente.md (70.4 KB)
 - 07-Desenvolvimento/Perguntas-Proposta-Pedido-Comissao.md (38.7 KB)
 - 08-Decisoes/Registro-de-Decisoes.md (191.3 KB)
+- _v3/fatos/01-Proposta-e-Pedido-de-Venda.md (42.6 KB)
+- _v3/fatos/03-Pedido-de-Venda-e-Liberacao.md (25.7 KB)
 - _v3/fatos/05-Estoque-Atendimento-e-Despacho.md (25.2 KB)
+- _v3/fatos/06-Circuito-de-Compra.md (35.7 KB)
 
 ## Links para contratos fora de 06-Contratos: 0 em 0 notas
 Índice Contratos-da-v2: 92 contratos distintos (esperado 92)

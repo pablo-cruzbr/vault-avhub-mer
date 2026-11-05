@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 3, divisão de 01-Proposta-e-Pedido-de-Venda (próxima tarefa)
-Próxima ação: salvar `_v3/fatos/01-Proposta-e-Pedido-de-Venda.md`, ler a nota por seções (47 KB) e dividir
+Estado atual: Bloco 3, faltam a reconferência dos selos pela `develop` (uma raia por tarefa), o F3 e a conferência final dos fatos
+Próxima ação: com o ok do Nathan sobre o resumo parcial, reconferir os selos da raia 01-Proposta-de-Venda contra a `develop`
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -55,12 +55,12 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 
 ### Bloco 3: Dono único e estado pela `develop` (julgamento)
 - [x] Adicionar `nos: [...]` ao frontmatter de cada nota de raia (2026-11-05, 2610177: 13 notas; 60 nós do mermaid, cada um com um dono; R5 não existe no mermaid; provisórias: 01 fica com V0.1–V0.7 e V0C, 05 com E1–E6 até a divisão)
-- [~] Antes de mexer numa nota, salvar a lista de fatos dela em `_v3/fatos/<nota>.md` (script `_v3/scripts/fatos.mjs`; feito: 05-Estoque-Atendimento-e-Despacho, 5136542)
-- [ ] Dividir as notas provisórias (uma divisão por tarefa)
+- [x] Antes de mexer numa nota, salvar a lista de fatos dela em `_v3/fatos/<nota>.md` (feito para 05-Estoque, 01-Proposta, 02, 03, 06, 13 e 14; as de 13 e 14 foram tiradas do commit b27a30d, antes da troca, porque a foto não foi feita antes da edição)
+- [x] Dividir as notas provisórias (uma divisão por tarefa)
   - [x] 05-Estoque-Atendimento-e-Despacho → 05-Estoque-Atendimento (E1–E4), 09-Estoque-Entrada-do-Lote (E5), 12-Estoque-Despacho (E6) (2026-11-05, 4c146bb e decdb4d: 36 links decididos um por um em `_v3/scripts/links-divisao-estoque.mjs`; regras 9 e 11 → 09, regra 10 → 12; fatos 307/307 e 116/116)
-  - [ ] 01-Proposta-e-Pedido-de-Venda → 01-Proposta-de-Venda (V0.1–V0.7, V0C); trechos de V1–V3 para 03, B1–B4 para 02, C6–C8 para 06
-- [ ] Mover os trechos de nós com mais de uma casa (C6–C8, B1–B4, V1–V3, P3) para a nota dona
-- [ ] Trocar `10.1–10.4` e `11.1` pelos IDs de nó (X1, X3, X4 e a ligação do O1)
+  - [x] 01-Proposta-e-Pedido-de-Venda → 01-Proposta-de-Venda (V0.1–V0.7, V0C) (2026-11-05, b27a30d; links decididos em `_v3/scripts/renomear-proposta.mjs`; "Datas do pedido" do Mestre passou a apontar para 06, porque a nota de proposta não tinha esse conteúdo)
+- [x] Mover os trechos de nós com mais de uma casa (C6–C8 → 06 em c122c9b; V1–V3, liberação e cancelamento do pedido → 03 em b34dee0; B2–B4 → 02 em 315a621; P3: nada a mover, as outras notas só citam com link)
+- [x] Trocar `10.1–10.4` e `11.1` pelos IDs de nó (2026-11-05, c13593a: 40 trocas em 12 notas; conferido em app-pcp 93f96de e api-pcp befd973; Mapa-v1-para-v2 e Registro-de-Decisoes ficaram como estão)
 - [ ] Reconferir os selos de cada raia contra a `origin/develop` (F5), uma raia por tarefa
 - [ ] Aplicar o F3 nas notas de proposta, orçamento e compras
 - [ ] Conferir as listas de `_v3/fatos/`
