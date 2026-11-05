@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 6 concluído, aguardando "ok" do Nathan para o Bloco 7
-Próxima ação: com o "ok", rodar a seção 1 e começar o Bloco 7 (validação completa e as 10 perguntas de aceite)
+Estado atual: Bloco 7 concluído (validação e aceite), aguardando a aprovação do Nathan; depois, Bloco 8 (D6 = sim)
+Próxima ação: com a aprovação do Bloco 7, rodar a seção 1 e começar o Bloco 8 (listar as notas a reescrever, na ordem do fluxo), começando pelos 4 pontos de "Ficam para o Nathan ou para o Bloco 8" de `_v3/aceite-bloco7.md`
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -98,8 +98,13 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Criar `00-Inicio/Manual-de-Manutencao-do-Vault` (dcf1852; 14 seções, todos os itens da instrução)
 - [x] Mover os scripts de validação para `scripts/` (f2c482f: `validar.mjs`, `fatos.mjs` (agora com `--dir=`, padrão `scripts/fatos/`) e `dividir.mjs`); citados no Manual e no `CLAUDE.md`. Os scripts de bloco ficam em `_v3/scripts/`
 
-### Blocos 7 a 9
-- [ ] Pendentes (ver `_v3/INSTRUCAO.md`, seção 8)
+### Bloco 7: Validação e aceite
+- [x] Rodar a seção 1 de novo e a validação completa (2026-11-05: fetch dos seis; `develop`, `main` e `v3` sem mudança; autocrlf false; Obsidian fechado. Validação verde: `_v3/validacao-bloco7.md`. Fatos: 0 sumidos nas três pastas (`_v3/fatos`, `bloco5`, `bloco6`); a pasta `bloco5` ganhou `substituicoes.tsv` com as 39 trocas de evidência do Backlog feitas no Bloco 6. Mapa: 12 fichas, 0 contratos sem nota)
+- [x] Responder às 10 perguntas de aceite e comparar (`_v3/aceite-bloco7.md`): um agente novo respondeu lendo só o vault a partir do Home. Resultado: 8 bateram de primeira; 2 (5 e 9) batiam em parte e foram corrigidos (`_v3/scripts/aceite-ajustes.mjs`: laudo opcional no recebimento e na entrada, com arquivo:linha; aviso F3 no `Mapa-do-Modulo-do-Pablo`; títulos da 06 e da 10; nota de uso do `Contratos-da-v2`). Todas em até 2 cliques
+- [x] Relatório final (abaixo, "Relatório final da v3")
+
+### Blocos 8 e 9
+- [ ] Pendentes (ver `_v3/INSTRUCAO.md`, seção 8; D6 = sim)
 
 ## Validações
 Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 0 CRLF; 0 caracteres corrompidos reais (o único achado é o texto da própria instrução); 37 notas acima de 25 KB; 354 links de contrato (regex `LOG|SQL|API|CON|ATV-n`) em 52 notas fora de `06-Contratos` (a instrução cita 1.278; a diferença será reconciliada no Bloco 1). Ajuste na checagem: `Ã` sozinho é letra válida em português, então só `Ã` + byte de continuação, `â€` e `�` contam.
@@ -121,6 +126,41 @@ Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 
 
 ### Bloco 6 (2026-11-05, `_v3/validacao-bloco6.md`, agora com `node scripts/validar.mjs`)
 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 notas acima de 25 KB; 92 contratos; 0 nomes antigos; 60 nós com dono único; 0 ✅ sem citação; mapa ok (0 contratos sem nota). Fatos do bloco 6 (`--dir=_v3/fatos/bloco6`): 0 sumiram, com 39 trocas de evidência registradas.
+
+## Relatório final da v3 (Bloco 7, 2026-11-05)
+
+**Base usada (`origin/develop`, lida sem checkout):**
+
+| Sistema | Commit | Data |
+|---|---|---|
+| `api-acos-vital` | b97981c | 03/11/2026 |
+| `av-hub` | 2e5456d | 05/11/2026 |
+| `api-pcp` | befd973 | 27/10/2026 |
+| `app-pcp` | 93f96de | 27/10/2026 |
+| `omie-elt-pipeline` | `origin/master` 5e7e94d (sem `develop`) | 05/11/2026 |
+
+São os mesmos commits de `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md` e do `develop-conferida` das notas.
+
+**O que a v3 entregou:**
+
+- **Ordem do fluxo:** 15 raias na ordem do mermaid, com `anterior`/`proxima` e cabeçalho padrão; o fluxo se percorre só pelos links.
+- **Dono único:** 60 nós do mermaid, cada um no `nos:` de uma nota só.
+- **Contratos:** os 92 da v2 ficaram na tag `v2-antes-da-v3` e são achados pelo índice.
+- **Tamanho:** nenhuma nota passa de 25 KB; as grandes têm o detalhe em `Partes/`.
+- **Selos pela `develop` (F5):**
+  - todo ✅ das raias cita o repositório e o arquivo:linha;
+  - o `Onde-Estamos` e o Backlog (78 itens) foram conferidos na `develop`;
+  - o que só existe no `api-comercial` é 🔴 (F3).
+- **Entrada e manutenção:** `CLAUDE.md`, Manual de manutenção, `Tipos-de-ID`, `Ultima-Atualizacao-do-Vault`, e os scripts `scripts/validar.mjs`, `fatos.mjs` e `dividir.mjs`.
+- **Aceite:** 10 de 10 perguntas respondidas pelo vault, em até 2 cliques (2 depois de correção).
+- **Validação:** 0 links quebrados, 0 órfãs, 0 CRLF, 0 corrompidos, 0 nomes antigos e 0 fatos sumidos.
+
+**Pendências para o Nathan:**
+
+- os 4 pontos de leitura de `_v3/aceite-bloco7.md`;
+- os 5 achados da conferência do Backlog (abaixo);
+- a D4 (avisar Robert e Gustavo do congelamento da `main`);
+- o `omie-elt-pipeline` sem `develop`.
 
 ## Problemas e pendências
 - Achados da conferência do Backlog para o Nathan decidir: (1) a `develop` da `api-acos-vital` versiona um dump de esquema de 29/10 (`Dump do Avhub para referência (29.10).sql`, f2fa237), usado como evidência de banco; (2) as rotas da proposta chamam `core_comercial.fn_proposta_aprovar/_cancelar/_transformar`, que não estão no repositório nem no dump; (3) o schema da proposta é `core_comercial` no código e `core_vendas_faturamento` na N16-116; (4) o CCP no MES já registra chegada e libera recebimento (`api-pcp` `compras.controller.ts:113,125`), ainda com a permissão `movimentacoes` (BL-017); (5) a numeração da proposta no dump é `CO-<código><ano>-<seq>-R00`, não só dígitos (N16-148, PS-038).
