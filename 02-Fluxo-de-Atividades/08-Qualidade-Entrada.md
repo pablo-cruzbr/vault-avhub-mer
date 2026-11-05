@@ -14,17 +14,13 @@ fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Enc
 
 # Qualidade de entrada (Q1 a Q4)
 
-**Em uma frase:** a Qualidade inspeciona o lote que chegou do fornecedor e decide se ele entra no Estoque ou volta para Compras, para que nada comprado vire saldo sem laudo. Nós `Q1` a `Q4` do [[00-Fluxo-Mestre-0b]]. A inspeção de saída da produção é outra raia: [[11-Qualidade-Saida]].
+**Em uma frase:** a Qualidade inspeciona o lote que chegou do fornecedor e decide se ele entra no Estoque ou volta para Compras, para que nada comprado vire saldo sem laudo.
 
 **Quando consultar:** dúvidas sobre a inspeção do material comprado: laudo, liberação do lote ou devolução para Compras.
 
 **Onde estamos no fluxo:** ← [[07-Recebimento]] | [[09-Estoque-Entrada-do-Lote]] → · nós desta nota: `Q1`, `Q2`, `Q3`, `Q4`
 
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - N16-124: só o setor da Qualidade decide o lote. Hoje qualquer usuário com permissão de editar a inspeção decide.
-> - N16-125: não existe concessão. O lote é liberado ou reprovado.
-> - N16-126: lote 100% reprovado volta ao fornecedor e abre a recompra (RNC).
-> - N16-127: o Compras é avisado no av-hub da recompra. Isso exige contrato novo entre MES e hub.
+Nós `Q1` a `Q4` do [[00-Fluxo-Mestre-0b]]. A inspeção de saída da produção é outra raia: [[11-Qualidade-Saida]]. Tudo acontece no MES (sistema de chão de fábrica).
 
 ## Como funciona, passo a passo
 
@@ -48,7 +44,7 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 | Inspetor da Qualidade | Anexa o laudo, aprova ou reprova o lote |
 | Almoxarife / Recebimento | Entrega o lote em quarentena e recebe a parcial de volta no Estoque |
 | Compras | Recebe a parte reprovada e alinha devolução e substituição |
-| PCP | Só acompanha a parcial; não decide nada aqui |
+| PCP (planejamento e controle da produção) | Só acompanha a parcial; não decide nada aqui |
 
 ## Regras que valem
 
@@ -60,6 +56,12 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 - Lote da carga inicial já nasce liberado, porque a dupla conferência faz o papel do laudo.
 - Reprovação total também tem saída: a parte volta a Compras. Nenhum estado fica sem dono.
 - Devolução a fornecedor (RNC) e devolução de cliente são coisas diferentes. Só a primeira existe aqui.
+- Só o setor da Qualidade decide o lote (N16-124). Hoje qualquer usuário com permissão de editar a inspeção decide.
+- Não existe concessão: o lote é liberado ou reprovado (N16-125).
+- Lote 100% reprovado volta ao fornecedor e abre a recompra (RNC, N16-126).
+- O Compras será avisado no av-hub da recompra (N16-127). Exige contrato novo entre MES e hub.
+
+As quatro decisões acima são de 29/10/2026 (bloco N16-120 a N16-143).
 
 ## O que já existe e o que falta
 
@@ -68,7 +70,7 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 - 🟡 Painel do Estoque com alerta de RNC pendentes: é protótipo, mas o alerta usa API real.
 - 🟡 Travar a decisão ao setor da Qualidade (decidido em N16-124, falta código).
 - 🔴 Fechar a RNC: registrar a nota de devolução e dar baixa do lote reprovado. Hoje é manual, fora do MES.
-- 🔴 Avisar o Compras no av-hub da recompra por RNC. Sem contrato.
+- 🔴 Avisar o Compras no av-hub da recompra por RNC (N16-127). Sem contrato.
 - 🔴 Inspeção de processo (Ciclo 2).
 - ❓ Nome do perfil da Qualidade no ambiente real.
 
@@ -197,7 +199,7 @@ A parcial chega ao setor Estoque `EM_TRANSITO`. O almoxarife usa "Atender pelo e
 | Inspeção de saída | Setor(es) tipo `QUALIDADE` do roteiro, fila `/qualidade/inspecao-saida`; agir exige `podeAtuar` no setor (`ensurePodeAtuar`) | `perfis.service.ts:278-289`, `itens-parciais.service.ts:909-918` ✅ |
 | Login | Escritório entra por Azure AD; chão de fábrica por usuário e senha | `POST /auth/azure`, `POST /auth/login` ✅ (`api-pcp`) |
 
-Consequência de projeto: qualquer usuário com `inspecao-entrada:editar` decide qualquer lote, mesmo sem vínculo de setor. 🟡 se for desejado travar por setor (Robert). **Decidido em 29/10/2026 (N16-124): a decisão fica travada ao setor da Qualidade.**
+Consequência de projeto: qualquer usuário com `inspecao-entrada:editar` decide qualquer lote, mesmo sem vínculo de setor. 🟡 se for desejado travar por setor (Robert). Decidido: travar (N16-124, ver "Regras que valem").
 
 ### Dados (dump MES, tudo em `public`)
 
@@ -225,8 +227,8 @@ Consequência de projeto: qualquer usuário com `inspecao-entrada:editar` decide
 ### Pendências
 
 - Nathan: a trava do laudo vale igual na inspeção de processo (documental)? (T-04 do v1, só afeta o Ciclo 2).
-- Nathan: concessão de lote fora de especificação existe? Quem autoriza? Qual o destino de um lote 100% reprovado? **Decidido em 29/10/2026 (N16-125 e N16-126): não existe concessão; lote 100% reprovado volta ao fornecedor e abre a recompra.**
-- Qualidade e Robert: nome do perfil da Qualidade no ambiente e quem pode decidir lote (ver item 3). **Decidido em 29/10/2026 (N16-124): a decisão do lote fica travada ao setor da Qualidade. O nome do perfil no ambiente segue ❓.**
+- Nathan: concessão de lote fora de especificação existe? Quem autoriza? Qual o destino de um lote 100% reprovado? **Decidido (N16-125 e N16-126, ver "Regras que valem").**
+- Qualidade e Robert: nome do perfil da Qualidade no ambiente e quem pode decidir lote (ver item 3). **Decidido: a decisão do lote fica travada ao setor da Qualidade (N16-124). O nome do perfil no ambiente segue ❓.**
 - Robert: comportamento esperado quando o fornecedor entrega a substituição **antes** de o lote reprovado ser baixado fisicamente (sem movimento de devolução, o saldo do filho `REPROVADO` convive com o novo lote).
 
 ### Diagrama do subfluxo
