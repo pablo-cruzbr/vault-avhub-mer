@@ -20,21 +20,35 @@ fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2
 
 **Onde estamos no fluxo:** ← [[08-Qualidade-Entrada]] | [[10-Producao-e-Roteiro]] → · nós desta nota: `E5`
 
-> [!info] Decisão e código
-> - Fabricado: [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`): um lote de origem `PRODUCAO` por ordem de produção e produto, criado quando o Estoque recebe o fabricado aprovado e informa a localização.
+Entrada: [[08-Qualidade-Entrada]] (comprado) e [[11-Qualidade-Saida]] (fabricado). Próxima raia: [[10-Producao-e-Roteiro]]. O MES é o sistema de chão de fábrica; OP é a ordem de produção.
 
 ## Como funciona, passo a passo
 
 6. O item comprado volta ao mesmo Estoque depois que a Qualidade libera o lote. O almoxarife faz a reserva. `E5`
 
+- O item fabricado chega pelo "sim" da inspeção de saída ([[11-Qualidade-Saida]]). O almoxarife informa a localização. Só então nasce o lote do fabricado, com saldo e reserva para a própria parcela. `E5`
+
 Os passos 1 a 5 (saldo, atendimento e o restante) estão em [[05-Estoque-Atendimento]]; o passo 7 (despacho) em [[12-Estoque-Despacho]].
+
+## Quem atua
+
+| Quem | O que faz |
+|---|---|
+| Qualidade | Libera o lote comprado ou aprova o fabricado na inspeção de saída |
+| Almoxarife | Faz a reserva e, no fabricado, informa a localização |
 
 ## Regras que valem
 
 - O item comprado só volta ao Estoque depois que a Qualidade libera o lote.
 - Tudo que é fabricado ou comprado passa pelo Estoque (decisão de 14/10). O fabricado aprovado já volta ao Estoque como lote na `develop` (27/10).
+- O fabricado gera um lote de origem `PRODUCAO` por ordem de produção e produto ([[Contratos-da-v2|LOG-53]]).
 
-Entrada: [[08-Qualidade-Entrada]] (comprado) e [[11-Qualidade-Saida]] (fabricado). Próxima raia: [[10-Producao-e-Roteiro]].
+## O que já existe e o que falta
+
+- ✅ Comprado: a parcial volta ao Estoque quando a Qualidade aprova o lote, e o almoxarife reserva (`circuito-compra.ts:166-250`, `itens-parciais.service.ts:592-593`).
+- Fabricado: [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`): um lote de origem `PRODUCAO` por ordem de produção e produto, criado quando o Estoque recebe o fabricado aprovado e informa a localização.
+- 🔴 O lote do fabricado nasce sem custo (BL-067).
+- 🔴 A Expedição ainda não sai do Estoque pela retirada.
 
 ## Detalhe técnico
 
