@@ -13,7 +13,7 @@ fontes: ["tag v2-antes-da-v3 do vault (06-Contratos)", "gerado por _v3/scripts/c
 
 **Quando consultar:** quando uma nota cita um ID de contrato antigo (`LOG-34`, `SQL-014`, `API-011`, `CON-02`) ou quando for registrar um contrato novo (veja a numeração no fim).
 
-Esta nota é gerada por script a partir do frontmatter dos contratos. Não edite as linhas à mão: rode `node _v3/scripts/contratos-indice.mjs`.
+Esta nota foi gerada por script (`_v3/scripts/contratos-indice.mjs`, Bloco 1 da v3) a partir do frontmatter dos contratos da v2, e a lista completa foi para [[Contratos-da-v2-Lista-Completa]] no Bloco 5. Os contratos da v2 não mudam mais: não rode o script de novo (ele juntaria a lista outra vez nesta nota). Contrato novo entra à mão na seção "Contratos novos (v3)" (veja o [[Manual-de-Manutencao-do-Vault]]). A coluna de status traz o vocabulário da v2 (`implementado-no-codigo`, `aplicado-em-producao`); na v3, contrato novo usa `implementado-na-develop`.
 
 Total: **92 contratos** (Ativos 12 · Consultas 3 · Entregues 69 · Arquivados 8), mais 3 documentos históricos e 18 anexos (`.sql`, `.patch`), todos acessíveis pela tag.
 

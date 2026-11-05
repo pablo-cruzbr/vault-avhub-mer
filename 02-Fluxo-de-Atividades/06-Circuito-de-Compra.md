@@ -12,7 +12,7 @@ dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144]
 ---
 
-# Circuito de compra (P3, C0 a C5, FN1)
+# Circuito de compra (P3, C0 a C8, FN1)
 
 **Em uma frase:** transforma a necessidade de um material em uma ordem de compra (OC) aprovada, enviada ao Omie e acompanhada até o fornecedor entregar.
 

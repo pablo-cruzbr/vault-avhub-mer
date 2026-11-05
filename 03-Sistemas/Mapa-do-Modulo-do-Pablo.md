@@ -13,6 +13,9 @@ fontes: [av-hub 5aa5311 (branch feat/menu-orcamento-vendas-compras) api-comercia
 
 **Quando consultar esta nota:** antes de migrar, reaproveitar ou descartar qualquer parte do código do Pablo (`av-hub\api-comercial`).
 
+> [!warning] Leia os selos desta nota pelo F3 (05/11/2026)
+> Esta nota descreve o `api-comercial` de teste, que será removido inteiro. Aqui, ✅ quer dizer "visto no código de teste", e **não** pronto: pelo F3, o que só existe no `api-comercial` é 🔴 "sem API e sem banco". O estado do módulo na `develop` está no [[Onde-Estamos]] (linhas da proposta e do Orçamento), nas raias [[01-Proposta-de-Venda]], [[02-Orcamento-Base-de-Preco]] e [[06-Circuito-de-Compra]] e no [[Backlog-Frente-Comercial-e-Suprimentos]]. O envio do pedido ao Omie não é mais por fila: desde 03/11 a `api-acos-vital` chama o Omie direto ([[Mapa-IncluirPedido-Omie]]).
+
 Selos: ✅ visto no código · 📝 decidido (`N16-xx`) · 🟡 proposta nova · ❓ 🔴 não conferido ou falta. Decisões em [[Registro-de-Decisoes]].
 
 ## O que existe hoje

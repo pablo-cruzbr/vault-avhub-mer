@@ -53,7 +53,7 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 ## Regras que valem
 
 - A inspeção vale para o lote, nunca para a parcial (decisão EC-01).
-- Aprovar exige laudo. Reprovar exige laudo, motivo e evidência.
+- Aprovar exige laudo. Reprovar exige laudo, motivo e evidência. No recebimento e na entrada de lote no estoque o laudo é opcional ✅ (`api-pcp` `src/qualidade/dto/aprovar-lote.dto.ts:8` e `reprovar-lote.dto.ts:9` obrigatórios; `src/compras/dto/registrar-recebimento.dto.ts:53`, `conferir-recebimento.dto.ts:106,268` e `src/estoque/operacao/dto/entrada-lote.dto.ts:25` opcionais).
 - Na reprovação parcial, a parte aprovada fica em quarentena até a substituição ser aprovada (EC-07).
 - Material aprovado vai ao Estoque. Nunca segue direto à Expedição.
 - O sistema nunca emite a nota de devolução. Ele só sinaliza e o Omie emite.
