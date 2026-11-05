@@ -22,21 +22,15 @@ fontes: [omie-elt-pipeline 0f739f0 (notasFiscais.ts, pedidosVendas.ts, scheduler
 
 Nós `O1` (emite a nota) e `O2` (baixa o item) do [[00-Fluxo-Mestre-0b]], depois de `X4` ([[13-Expedicao]]). Contexto: [[Pipeline-Omie]] e [[Omie-Integracao-Estado]].
 
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - N16-130: o vendedor decide nota inteira ou em partes, pela marca "pode faturar em partes".
-> - N16-132: a Logística avisa que a carga está pronta, ao fechá-la. Sem código ainda.
-> - N16-133: pedido faturado antes da entrega no MES só gera aviso.
-> - N16-92 a N16-94: o sequencial é um agrupamento, não outro pedido: um pedido, várias notas.
-
 ## Como funciona, passo a passo
 
 1. A carga fica pronta e a Logística avisa o faturista, fora do sistema. `X4`
-2. O faturista emite a nota no Omie, inteira ou em partes. `O1`
+2. O faturista emite a nota fiscal (NF) no Omie, inteira ou em partes, conforme a marca do vendedor. `O1`
 3. A cada 3 minutos, o pipeline lê os pedidos e o banco marca o pedido como Faturado. `O2`
 4. O pipeline lê as notas e grava o número da nota em cada item. Assim o item dá baixa. `O2`
 5. O vendedor vê o pedido e a nota nas telas de notas. `O2`
 
-O MES ainda não sabe que o pedido foi faturado.
+O MES (o sistema da produção) ainda não sabe que o pedido foi faturado.
 
 ## Exemplo
 
@@ -58,12 +52,18 @@ A Expedição avisa que as 100 flanges do Cliente Exemplo S.A. estão prontas. O
 - A baixa do item volta pelo pipeline, sem tela e sem escrita do MES.
 - O banco calcula a situação do pedido a partir das marcas do Omie.
 - As telas de notas só mostram o que o Omie já emitiu.
-- A única escrita do pipeline no Omie é o envio da ordem de compra. A API do Hub, por conta própria, também cadastra cliente no Omie (`POST /comercial/clientes`, 28/10/2026).
+- O vendedor decide se a nota sai inteira ou em partes, pela marca "pode faturar em partes" (N16-130, 29/10/2026). Não é a Expedição quem decide.
+- A Logística avisa que a carga está pronta, ao fechá-la (N16-132). Sem código ainda.
+- Pedido faturado antes da entrega no MES só gera aviso (N16-133).
+- O sequencial é um agrupamento, não outro pedido: um pedido, várias notas (N16-92 a N16-94).
+- A única escrita do pipeline no Omie é o envio da ordem de compra (OC). A API do Hub, por conta própria, também cadastra cliente no Omie (`POST /comercial/clientes`, 28/10/2026).
+- O pedido de venda vai ao Omie direto pela API do Hub (`api-acos-vital`), sem fila e sem a pipeline. É uma chamada síncrona ao `IncluirPedido` (decidido em 03/11/2026 pelo Robert, registrado na N16-149; [[Mapa-IncluirPedido-Omie]]). Hoje esse envio não existe: o pedido do Hub fica `pendente` e nada o envia (🔴).
 - Remessa de produtos fica para o Ciclo 2 (22/01/2027).
 
 ## O que já existe e o que falta
 
 - ✅ Omie emite a nota; o pipeline traz pedido e nota; as telas de notas do hub.
+- 🔴 Envio do pedido de venda ao Omie pela `api-acos-vital` (`IncluirPedido`, N16-149): o pedido fica `pendente`.
 - 🔴 Fila de sinalização de carga pronta (ligação do `O1`) e a volta da nota ao MES.
 - 🔴 Remessa de produtos (Ciclo 2).
 - 🟡 Pedido faturado antes da entrega: só avisa. Dicionário de etapas do Omie.
@@ -81,10 +81,10 @@ O Omie é o sistema fiscal e financeiro (decisão #30 do registro de 07/10). O M
 |---|---|---|
 | 1 | Emissão fiscal 100% no Omie; nenhum módulo do ERP emite ou edita NF | 📝 (#30) |
 | 2 | A baixa de item no pedido volta pelo **pipeline** (polling), sem tela e sem escrita do MES | 📝 ✅ (`omie-elt-pipeline`) |
-| 3 | Parcial x integral na faturação é decisão da Expedição ([[13-Expedicao]], X2, T-06); pela N16-130, de 29/10, quem decide é o vendedor, pela marca "pode faturar em partes" | 📝 |
+| 3 | Parcial x integral na faturação é decisão do vendedor, pela marca "pode faturar em partes" (N16-130, de 29/10, que resolve a T-06). A Expedição (X2, [[13-Expedicao]]) segue a marca e não decide por conta própria | 📝 |
 | 4 | A sinalização ao Omie é uma fila de cargas prontas (ligação do `O1`), com acompanhamento do número e da chave da NF pelo pipeline | 🟡 desenho, sem código |
 | 5 | Remessa de produtos (registro de remessa) fica para o Ciclo 2 (22/01/2027) | 📝 |
-| 6 | Só uma escrita do pipeline no Omie: envio da OC (`UpsertPedCompra`, `ExcluirPedCompra`; `omie-elt-pipeline` `master` sem mudança desde 08/10). A `api-acos-vital` (`develop`) já escreve cliente no Omie por `UpsertClienteCpfCnpj` (`260e835`, 28/10, `src/utils/omie.js`); o pedido da proposta (`IncluirPedido`) ainda não é enviado: `POST /comercial/propostas/:id/transformar` grava o pedido do Hub com `status_sincronizacao_omie = pendente` e deixa o envio para a pipeline | ✅ [[06-Circuito-de-Compra]]; 🔴 envio do pedido |
+| 6 | Só uma escrita do pipeline no Omie: envio da OC (`UpsertPedCompra`, `ExcluirPedCompra`; `omie-elt-pipeline` `master` sem mudança desde 08/10). A `api-acos-vital` (`develop`) já escreve cliente no Omie por `UpsertClienteCpfCnpj` (`260e835`, 28/10, `src/utils/omie.js`). O pedido da proposta (`IncluirPedido`) vai pela `api-acos-vital`, direto e síncrono, sem fila e sem a pipeline (decidido em 03/11, N16-149; [[Mapa-IncluirPedido-Omie]]). Ainda não é enviado: `POST /comercial/propostas/:id/transformar` grava o pedido do Hub com `status_sincronizacao_omie = pendente` e nada o envia (o desenho anterior deixava o envio para a pipeline) | ✅ [[06-Circuito-de-Compra]]; 🔴 envio do pedido |
 
 ### Estados
 
@@ -162,11 +162,10 @@ O desenho do v1 (tela 11.1, hoje a ligação do `O1`): lista de cargas prontas, 
 
 ### Pendências
 
-- Nathan e Faturamento: quem sinaliza (Expedição ou Logística) e qual o gatilho (carga fechada ou item `CONCLUIDO`)? **Decidido em 29/10/2026 (N16-132), ver quadro no topo.**
-- Nathan: sinalização por carga ou por pedido? Faturamento parcial gera um pedido filho (`sequencial`) no Omie? **Respondido (N16-132, N16-92 a N16-94, N16-133), ver quadro no topo: por carga fechada.**
 - Gustavo: o pipeline tem latência de minutos; o MES precisa do retorno em quanto tempo?
 - Nathan: devolução de cliente (`Devolvido`, `Dev. Parcial`) afeta saldo do Estoque? Fluxo decidido para o Estoque na Fase D, sem código.
 
+Respondidas em 29/10/2026: quem sinaliza e o gatilho (a Logística, ao fechar a carga; não o item `CONCLUIDO`, N16-132); sinalização por carga ou por pedido (por carga fechada, N16-132); faturamento parcial não gera pedido filho no Omie: o `sequencial` é um agrupamento (N16-92 a N16-94); faturado antes da entrega só avisa (N16-133).
 ### Subfluxo
 
 ```mermaid
