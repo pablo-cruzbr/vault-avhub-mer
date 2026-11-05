@@ -14,6 +14,8 @@ fontes: ["LOG-52 (status em 27/10/2026)", "Registro-de-Decisoes N16-110 a N16-11
 
 **Quando consultar esta nota:** para saber o que vem a seguir e quem responde por cada parte.
 
+> [!note] Esta nota é o plano de construção (a ordem e quem faz), escrito em 27/10/2026. O estado de cada parte fica no [[Onde-Estamos]] e nas raias; as tarefas, com ID `BL-nnn`, ficam no [[Backlog-por-Frente]]. Em caso de diferença, valem essas notas (conferidas na `develop`).
+
 Legenda: ✅ existe · 🟡 existe em parte · 🔴 não existe. Os contratos desta parte foram removidos em 29/10/2026; o Robert cria os novos.
 
 ## Quem faz o quê
