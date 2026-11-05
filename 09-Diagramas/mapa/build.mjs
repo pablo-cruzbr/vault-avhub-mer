@@ -16,7 +16,7 @@ const NOTAS = {
   vendas: [["Pedido de venda e liberação", R + "03-Pedido-de-Venda-e-Liberacao"], ["Proposta e pedido de venda", R + "01-Proposta-e-Pedido-de-Venda"]],
   orcamento: [["Orçamento e base de preço", R + "02-Orcamento-Base-de-Preco"]],
   pcp: [["PCP: triagem e destinação", R + "04-PCP-Triagem-e-Destinacao"]],
-  estoque: [["Estoque: atendimento e despacho", R + "05-Estoque-Atendimento-e-Despacho"]],
+  estoque: [["Estoque: atendimento", R + "05-Estoque-Atendimento"], ["Estoque: entrada do lote", R + "09-Estoque-Entrada-do-Lote"], ["Estoque: despacho", R + "12-Estoque-Despacho"]],
   compras: [["Circuito de compra", R + "06-Circuito-de-Compra"]],
   recebimento: [["Recebimento", R + "07-Recebimento"]],
   "qualidade-entrada": [["Qualidade de entrada", R + "08-Qualidade-Entrada"]],
