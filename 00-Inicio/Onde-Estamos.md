@@ -71,8 +71,8 @@ Versão completa da tabela por setor, com os nós do [[00-Fluxo-Mestre-0b]] e o 
 | [[08-Qualidade-Entrada]] | Q1–Q4 | ✅ | Recompra por RNC sem contrato | Robert, Gustavo |
 | [[10-Producao-e-Roteiro]] | F1 | ✅ filas · 🔴 consumo | Consumo de matéria-prima; `EM_PRODUCAO` e `BLOQUEADO` nunca são gravados; divergência de produção sem tela | Robert |
 | [[11-Qualidade-Saida]] | Q7, Q8 | 🟡 | ✅ `aprovar-saida` e `receber-fabricado`: o aprovado volta ao Estoque como lote `PRODUCAO` (`develop`, 27/10); confirmar se ainda sobra porta direta na Expedição | Robert |
-| [[13-Expedicao]] | X1–X4 | 🟡 | Consolidar carga (10.2), transporte (10.3); integral travado por item que não chega (T-06); confirmar as portas de entrada depois do fabricado voltar ao Estoque | Robert |
-| [[14-Fiscal-Omie]] | O1, O2 | ✅ lado Omie · 🔴 sinalização | Contrato que ligue a Expedição à NF do Omie (11.1); faturamento em partes (sequenciais ligados ao item do pedido) e teste de como o Omie cria o sequencial (PS-037) | Robert, Gustavo, Nathan |
+| [[13-Expedicao]] | X1–X4 | 🟡 | Consolidar carga (X3), transporte (X4); integral travado por item que não chega (T-06); confirmar as portas de entrada depois do fabricado voltar ao Estoque | Robert |
+| [[14-Fiscal-Omie]] | O1, O2 | ✅ lado Omie · 🔴 sinalização | Contrato que ligue a Expedição à NF do Omie (ligação do O1); faturamento em partes (sequenciais ligados ao item do pedido) e teste de como o Omie cria o sequencial (PS-037) | Robert, Gustavo, Nathan |
 | [[15-Custo-Real-e-Comissao]] | K1–K6 | 🔴 (desenho aprovado em 26/10) | Schema `core_comissao`; motor na API; custo real por evento; fila e decisão da Controladoria; custo obrigatório em todo lote no MES | Gustavo, Nathan, Robert |
 
 Transversais, na versão técnica:

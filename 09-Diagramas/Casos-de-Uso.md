@@ -242,7 +242,7 @@ As duas opções do nó `E4` (compra ou produção) são alternativas para o res
 | Caso | Estado | Selo |
 |---|---|---|
 | F1 | Filas de Produção `/movimentacoes` | ✅ consumo de matéria-prima 🔴 |
-| X1 | Paletes (10.1) | ✅ |
-| X3 | Consolidar a carga (10.2) | 🔴 |
+| X1 | Paletes | ✅ |
+| X3 | Consolidar a carga | 🔴 |
 | X4 | `POST /entregas` com comprovante | 🟡 transporte 🔴 |
-| O1 O2 | Lado Omie; sinalização do MES ao Omie (11.1) | ✅ 🔴 |
+| O1 O2 | Lado Omie; sinalização do MES ao Omie (ligação do O1) | ✅ 🔴 |

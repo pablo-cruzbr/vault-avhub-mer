@@ -117,4 +117,4 @@ Plano completo em [[Cronograma]].
 | Qualidade (`Q1`-`Q4`, `Q7`, `Q8`) | Inspeção de entrada por lote, RNC, cisão e quarentena; inspeção de saída ✅ | `Q8` "sim" volta ao Estoque (Robert); inspeção de saída nunca conferida em campo ❓ |
 | Produção (`F1`) | Roteiro, filas, ItemParcial ✅ | Consumo de matéria-prima J2/J3 (Robert) 🔴 |
 | Expedição (`X1`-`X4`) | Embalagem, paletes, comprovante de entrega ✅ | Consolidação de carga, transporte (Robert); integral travado por item que não chega (T-06) 🔴 |
-| Fiscal (`O1`, `O2`) | Omie emite e baixa; pipeline lê `ListarNF` ✅ | Sinalização do MES ao Omie (`11.1`, Nathan, Robert) 🔴 |
+| Fiscal (`O1`, `O2`) | Omie emite e baixa; pipeline lê `ListarNF` ✅ | Sinalização do MES ao Omie (ligação do `O1`, Nathan, Robert) 🔴 |

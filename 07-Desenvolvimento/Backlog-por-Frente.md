@@ -55,8 +55,8 @@ O que **falta desenvolver** no fluxo de Atividades ([[00-Fluxo-Mestre-0b]]), con
 | BL-037 | R1 | D11: leitor 2D e posto de recebimento (hardware aprovado, DEC-8). Etiquetas existem no MES | [[07-Recebimento]] | ❓ (etiqueta ✅) | `api-pcp/src/estoque/etiquetas/etiqueta.service.ts`; leitor 2D não conferido |
 | BL-012 | R6 | Reabertura de divergência de **produção**: `ABERTA`, `EM_ANALISE`, `RESOLVIDA`, `CANCELADA` sem caminho de volta (a de recebimento tem `REABERTO`) | [[00-Fluxo-Mestre-0b]] | 🔴 | `api-pcp/prisma/models/producao.prisma:77-82` |
 | BL-013 | Q3 | **Recompra por RNC**: a parte reprovada volta a Compras; falta contrato e evento do MES para reabrir a compra (`requisicao_reaberta` já é tratado no MES, mas a RNC não o dispara) | sem contrato 🔴 | 🔴 | `qualidade.service.ts:97`; `requisicao-avhub.eventos.ts` trata `requisicao_reaberta` |
-| BL-014 | X3 | Consolidar a carga (10.2) | [[13-Expedicao]] | 🔴 | nenhuma tela ou rota de carga em `api-pcp/src/entregas` |
-| BL-015 | X4 | Logística de saída: transporte (10.3). O comprovante (10.4) existe | [[13-Expedicao]] | 🔴 | `api-pcp/src/entregas` sem `transportadora` |
+| BL-014 | X3 | Consolidar a carga | [[13-Expedicao]] | 🔴 | nenhuma tela ou rota de carga em `api-pcp/src/entregas` |
+| BL-015 | X4 | Logística de saída: transporte. O comprovante existe | [[13-Expedicao]] | 🔴 | `api-pcp/src/entregas` sem `transportadora` |
 | BL-003 | todos | **Módulo `fluxo`**: `fluxo.evento` imutável, `GET /fluxo/eventos`, trilha, tempo, SLA, regra de autorização, instrumentação das transições (I1, I2, I3, I7) | [[Contratos-da-v2\|LOG-46]] | 🔴 | nenhuma pasta `fluxo` em `api-pcp/src`; a `api-test` responde 404 ao job (13/10) |
 | BL-032 | transversal | Remover `GET /requisicoes-compra` (003, legado sem consumidor) ou assumir | [[Contratos-da-v2\|API-003]] | 🔴 | `integracao-avhub.controller.ts:20-24` |
 | BL-034 | P2 | Depois de 7 dias o `importado` não é mais reenviado, sem alerta; pedido continua com a marcação editável | [[Contratos-da-v2\|LOG-26]] | 🔴 | `api-pcp/src/pedidos/pedidos.service.ts:64-67` |

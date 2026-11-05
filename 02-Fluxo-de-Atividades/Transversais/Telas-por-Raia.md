@@ -280,16 +280,16 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 
 | Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
 |---|---|---|---|---|---|---|
-| X1, X4 | Expedição | Embalagem e Logística de saída (10.1, 10.4) | app-pcp | `/logistica/expedicao` | `expedicao` | `expedicao/page.tsx:1-16`; pallets (`PalletsModal`), `ConfirmarEntregaModal` |
-| X1 | Seção Embalagens do pedido | (10.1) | app-pcp | `/ordens-producao/[id]` | `ordens-producao` | `EmbalagensSection.tsx` |
-| X3 | Consolidação de carga | (10.2) | app-pcp | — | — | 🔴 |
-| X4 | Transporte e roteiro | (10.3) | app-pcp | — | — | 🔴 |
+| X1, X4 | Expedição | Embalagem e Logística de saída | app-pcp | `/logistica/expedicao` | `expedicao` | `expedicao/page.tsx:1-16`; pallets (`PalletsModal`), `ConfirmarEntregaModal` |
+| X1 | Seção Embalagens do pedido | — | app-pcp | `/ordens-producao/[id]` | `ordens-producao` | `EmbalagensSection.tsx` |
+| X3 | Consolidação de carga | — | app-pcp | — | — | 🔴 |
+| X4 | Transporte e roteiro | — | app-pcp | — | — | 🔴 |
 
 ### Fiscal
 
 | Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
 |---|---|---|---|---|---|---|
-| O1 | Fila de sinalização de faturamento | (11.1) | app-pcp | — | — | 🔴 |
+| O1 | Fila de sinalização de faturamento | — | app-pcp | — | — | 🔴 |
 | O2 | Notas Fiscais de Saída | — | HUB | `/vendas/notas-fiscais-saida` | ❓ | Título `page.tsx:98` |
 | O2 | Minhas Notas, Notas da Equipe, Notas do PCP | — | HUB | `/vendas/minhas-notas`, `/notas-equipe`, `/pcp-notas` | ❓ | Pós-fato |
 

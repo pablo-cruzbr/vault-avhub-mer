@@ -229,7 +229,7 @@ sequenceDiagram
     MES-->>EXP: entrega registrada
     Note over MES,OM: O1 O2 o Omie emite a nota. A sinalizacao do MES ao Omie nao existe
 ```
-✅ Conferido. O Mestre manda o aprovado ao Estoque (`Q8` para `E5`), mas o código manda à Expedição; o desenho mostra as duas coisas (dono: Robert). 🟡 `Q8` (aprovado volta ao Estoque) e `X3` (consolidar carga) sem código. 🔴 Aviso do MES ao Omie para faturar (11.1).
+✅ Conferido. O Mestre manda o aprovado ao Estoque (`Q8` para `E5`), mas o código manda à Expedição; o desenho mostra as duas coisas (dono: Robert). 🟡 `Q8` (aprovado volta ao Estoque) e `X3` (consolidar carga) sem código. 🔴 Aviso do MES ao Omie para faturar (ligação do `O1`).
 
 ## 7. Despacho do Estoque: hoje e decidido (E6)
 
@@ -279,7 +279,7 @@ Selo ✅: `qualidade.service.ts:83-100` (aprovar), `:102-262` (reprovar, quarent
 
 ### 6. Produção, inspeção de saída e Expedição
 
-Selo ✅: `itens-parciais.controller.ts` (reprovar, resolver, retrabalho), `itens-parciais.service.ts` e `entregas.service.ts` (baixa). 🟡 Q8 (aprovado volta ao Estoque) e X3 (consolidar carga) sem código. 🔴 Sinalização de faturamento (11.1). O nó `Q8` do Mestre manda o aprovado ao Estoque (E5); o código manda à Expedição.
+Selo ✅: `itens-parciais.controller.ts` (reprovar, resolver, retrabalho), `itens-parciais.service.ts` e `entregas.service.ts` (baixa). 🟡 Q8 (aprovado volta ao Estoque) e X3 (consolidar carga) sem código. 🔴 Sinalização de faturamento (ligação do `O1`). O nó `Q8` do Mestre manda o aprovado ao Estoque (E5); o código manda à Expedição.
 
 ### 7. Despacho do Estoque
 

@@ -64,7 +64,7 @@ As 100 flanges do Cliente Exemplo S.A. chegam à Embalagem, que registra os pall
 - 🟡 NF da entrega é texto livre, sem ligação com o número do Omie.
 - 🔴 Documento de retirada e baixa na retirada (sem código).
 - 🔴 Consolidação de carga (`X3`) e transporte (`X4`).
-- 🔴 Aviso ao Faturamento dentro do sistema (fila 11.1).
+- 🔴 Aviso ao Faturamento dentro do sistema (fila de sinalização, ligação do `O1`).
 - 🔴 Registro de remessa de produtos, no Ciclo 2.
 
 ## Detalhe técnico
@@ -73,7 +73,7 @@ As 100 flanges do Cliente Exemplo S.A. chegam à Embalagem, que registra os pall
 
 A Expedição tem **duas portas de entrada** na `main` do MES (parada em 08/10): a parcial atendida pelo Estoque (`atendidoPeloEstoque`) e a parcial que a Qualidade moveu (fabricado, [[11-Qualidade-Saida]]). Na `develop` (27/10, `ab3318d`) o fabricado aprovado já volta ao Estoque antes de seguir ([[09-Estoque-Entrada-do-Lote]]); ❓ conferir se ainda sobra alguma porta direta. Pela decisão de 14/10 haverá uma só: o **documento de retirada do Estoque**, porque tudo que é fabricado ou comprado passa pelo Estoque ([[12-Estoque-Despacho]]).
 
-O sistema **nunca emite nota fiscal**. Ele sinaliza a necessidade e o Omie emite. No v1 as telas são 10.1 a 10.4.
+O sistema **nunca emite nota fiscal**. Ele sinaliza a necessidade e o Omie emite. No v1 eram as telas 10.1 a 10.4; na v3 elas se chamam pelos nós `X1` a `X4`.
 
 ### Quem atua (com telas)
 
@@ -117,9 +117,9 @@ Pedido: `StatusPedido` `AGUARDANDO`, `EM_PRODUCAO`, `BLOQUEADO`, `ENTREGUE`. Tod
 | Editar pallets / Ver pallets | — | modal na fila | app-pcp | `movimentacoes` | ✅ `PalletsModal.tsx` (248 linhas) |
 | Confirmar entrega | — | modal na fila | app-pcp | `movimentacoes` | ✅ `ConfirmarEntregaModal.tsx` (195 linhas): quantidade, NF opcional, observação, anexo `COMPROVANTE_ENTREGA`, `CANHOTO` ou `NOTA` |
 | Acompanhamento dos Pedidos, seção Embalagens | Ordens de Produção | `/ordens-producao/[id]` | app-pcp | `ordens-producao` | ✅ `EmbalagensSection.tsx` |
-| Consolidação de carga (10.2) | — | — | — | — | 🔴 não existe |
-| Transporte e roteiro (10.3) | — | — | — | — | 🔴 não existe |
-| Fila de sinalização de faturamento (11.1) | — | — | — | — | 🔴 [[14-Fiscal-Omie]] |
+| Consolidação de carga (`X3`) | — | — | — | — | 🔴 não existe |
+| Transporte e roteiro (`X4`) | — | — | — | — | 🔴 não existe |
+| Fila de sinalização de faturamento (ligação do `O1`) | — | — | — | — | 🔴 [[14-Fiscal-Omie]] |
 
 ### Endpoints e contratos
 
@@ -137,7 +137,7 @@ Não há contrato com o av-hub para a Expedição além da etapa do item ([[Cont
 
 ### Como está no código
 
-#### X1 · 10.1 paletes ✅
+#### X1 · paletes ✅
 
 Dois modelos coexistem:
 
@@ -160,7 +160,7 @@ Não há campo nem tela para a escolha. A entrega parcial é permitida por padr�
 
 #### X3 · consolidação de carga 🔴 e X4 · transporte 🔴
 
-Nenhuma entidade (carga, romaneio, veículo, transportadora de saída) existe em `api-pcp/prisma/models`. O levantamento do PCP legado (romaneios de carga: criar, conferir, fechar, imprimir) está em [[Backlog-por-Frente]]. O comprovante de entrega (10.4) está feito ✅.
+Nenhuma entidade (carga, romaneio, veículo, transportadora de saída) existe em `api-pcp/prisma/models`. O levantamento do PCP legado (romaneios de carga: criar, conferir, fechar, imprimir) está em [[Backlog-por-Frente]]. O comprovante de entrega (`X4`) está feito ✅.
 
 #### Fechamento do pedido
 
@@ -173,9 +173,9 @@ Nenhuma entidade (carga, romaneio, veículo, transportadora de saída) existe em
 | 1 | **Documento de retirada** do Estoque (solicitante: Expedição ou Produção; itens, lotes, quantidades) e baixa do saldo na retirada; remover a baixa em `receber()` | Robert, Nathan decide fluxo | `E6`, X1 | 🔴 |
 | 2 | Entrada única na Expedição: tudo vem do Estoque pelo documento de retirada (na `main` há duas portas; na `develop` o fabricado já passa pelo Estoque, falta a retirada) | Robert | X1 | 🟡 🔴 retirada |
 | 3 | Decisão e campo parcial x integral por pedido, com gatilho de saída para item travado (T-06) | Nathan, Comercial, Expedição | X2 | 🔴 (decidido em 29/10, N16-130 e N16-131; falta o campo) |
-| 4 | Consolidação de carga (10.2): visão por pedido, espera dos itens, romaneio | Robert | X3 | 🔴 |
-| 5 | Transporte e roteiro (10.3): frota própria ou terceirizada | Robert | X4 | 🔴 |
-| 6 | Sinalização do MES ao Omie (11.1) com acompanhamento do retorno da NF | Robert, Gustavo | O1 | 🔴 |
+| 4 | Consolidação de carga: visão por pedido, espera dos itens, romaneio | Robert | X3 | 🔴 |
+| 5 | Transporte e roteiro: frota própria ou terceirizada | Robert | X4 | 🔴 |
+| 6 | Sinalização do MES ao Omie (ligação do `O1`) com acompanhamento do retorno da NF | Robert, Gustavo | O1 | 🔴 |
 | 7 | NF da entrega só é texto livre (`numeroNf VarChar(30)`); ligar ao número que o Omie devolve | Robert | X4, O1 | 🟡 |
 | 8 | Registro de remessa de produtos | Robert | X4 | 🔴 Ciclo 2 |
 

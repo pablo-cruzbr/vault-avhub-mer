@@ -56,7 +56,7 @@ A Expedição avisa que as 100 flanges do Cliente Exemplo S.A. estão prontas. O
 ## O que já existe e o que falta
 
 - ✅ Omie emite a nota; o pipeline traz pedido e nota; as telas de notas do hub.
-- 🔴 Fila de sinalização de carga pronta (tela 11.1) e a volta da nota ao MES.
+- 🔴 Fila de sinalização de carga pronta (ligação do `O1`) e a volta da nota ao MES.
 - 🔴 Remessa de produtos (Ciclo 2).
 - 🟡 Pedido faturado antes da entrega: só avisa. Dicionário de etapas do Omie.
 - ❓ Itens legados com `codigo_item_omie` nulo.
@@ -65,7 +65,7 @@ A Expedição avisa que as 100 flanges do Cliente Exemplo S.A. estão prontas. O
 
 ### Objetivo
 
-O Omie é o sistema fiscal e financeiro (decisão #30 do registro de 07/10). O MES só deveria **sinalizar** que a carga está pronta (11.1); o retorno da nota chega pelo pipeline ELT, que já funciona.
+O Omie é o sistema fiscal e financeiro (decisão #30 do registro de 07/10). O MES só deveria **sinalizar** que a carga está pronta (ligação do `O1`); o retorno da nota chega pelo pipeline ELT, que já funciona.
 
 ### Regras decididas
 
@@ -74,7 +74,7 @@ O Omie é o sistema fiscal e financeiro (decisão #30 do registro de 07/10). O M
 | 1 | Emissão fiscal 100% no Omie; nenhum módulo do ERP emite ou edita NF | 📝 (#30) |
 | 2 | A baixa de item no pedido volta pelo **pipeline** (polling), sem tela e sem escrita do MES | 📝 ✅ |
 | 3 | Parcial x integral na faturação é decisão da Expedição ([[13-Expedicao]], X2, T-06); pela N16-130, de 29/10, quem decide é o vendedor, pela marca "pode faturar em partes" | 📝 |
-| 4 | A sinalização ao Omie é uma fila de cargas prontas (tela 11.1), com acompanhamento do número e da chave da NF pelo pipeline | 🟡 desenho, sem código |
+| 4 | A sinalização ao Omie é uma fila de cargas prontas (ligação do `O1`), com acompanhamento do número e da chave da NF pelo pipeline | 🟡 desenho, sem código |
 | 5 | Remessa de produtos (registro de remessa) fica para o Ciclo 2 (22/01/2027) | 📝 |
 | 6 | Só uma escrita do pipeline no Omie: envio da OC (`UpsertPedCompra`, `ExcluirPedCompra`; `omie-elt-pipeline` `master` sem mudança desde 08/10). A `api-acos-vital` (`develop`) já escreve cliente no Omie por `UpsertClienteCpfCnpj` (`260e835`, 28/10, `src/utils/omie.js`); o pedido da proposta (`IncluirPedido`) ainda não é enviado: `POST /comercial/propostas/:id/transformar` grava o pedido do Hub com `status_sincronizacao_omie = pendente` e deixa o envio para a pipeline | ✅ [[06-Circuito-de-Compra]]; 🔴 envio do pedido |
 
@@ -101,7 +101,7 @@ O MES não tem estado fiscal: guarda só `Entrega.numeroNf` (texto de até 30 ca
 
 | Nome atual | Nome antigo | Rota | App | Estado |
 |---|---|---|---|---|
-| Fila de sinalização de faturamento (11.1) | — | — | MES | 🔴 não existe |
+| Fila de sinalização de faturamento (ligação do `O1`) | — | — | MES | 🔴 não existe |
 | Minhas Notas | — | `/minhas-notas` | HUB | ✅ `app/(protected)/minhas-notas/page.tsx` (pós-fato, por vendedor) |
 | Notas da Equipe | — | `/notas-equipe` | HUB | ✅ `app/(protected)/notas-equipe/page.tsx` |
 | Notas do PCP | — | `/pcp-notas` | HUB | ✅ `app/(protected)/pcp-notas/page.tsx` |
@@ -119,7 +119,7 @@ As telas de notas do HUB são **pós-fato**: mostram a NF que o Omie já emitiu.
 | `core_vendas_faturamento.notas_fiscais` (chave `codigo_empresa`, `codigo_nf_omie`) | destino da NF | `notasFiscais.ts:57-58` ✅ |
 | `afterUpsert` da NF | grava `codigo_nf_omie` e `numero_nf` nos itens de `produto_vendas` do mesmo pedido que ainda não têm NF | `notasFiscais.ts:125-165` ✅ |
 | Cron do pipeline | hoje a cada 3 min (`SYNC_HOJE_CRON`); mês a cada 20 min; últimos meses a cada 3 h; full 3h17 | `config` `:89-104` ✅ |
-| Sinalização do MES ao Omie (11.1) | MES para Omie, via av-hub | 🔴 sem contrato |
+| Sinalização do MES ao Omie (ligação do `O1`) | MES para Omie, via av-hub | 🔴 sem contrato |
 
 Os endpoints do av-hub que expõem pedidos e notas pertencem ao módulo de vendas ([[AV-Hub-API]]).
 
@@ -134,18 +134,18 @@ Mecanismo dos passos 2 a 5 do resumo do topo:
 
 Limitação conhecida: o Omie filtra por data de inclusão, então o pipeline revarre janelas fixas em vez de usar watermark (`pedidosVendas.ts`, comentário de abertura). Itens legados com `codigo_item_omie` nulo podem ser pulados no vínculo ([[Riscos]]).
 
-#### Sinalização do MES ao Omie (11.1) 🔴
+#### Sinalização do MES ao Omie (ligação do O1) 🔴
 
 Não existe no `api-pcp` nem na API do av-hub: nenhuma rota, tabela ou fila que sinalize "carga pronta, emitir NF".
 
-O desenho do v1 (11.1): lista de cargas prontas, botão que sinaliza, acompanhamento do retorno (número e chave) pela sincronização. Como o MES nunca fala com o Omie direto, a sinalização passaria pelo av-hub, que já tem o caminho de escrita ao Omie (envio de OC pelo pipeline).
+O desenho do v1 (tela 11.1, hoje a ligação do `O1`): lista de cargas prontas, botão que sinaliza, acompanhamento do retorno (número e chave) pela sincronização. Como o MES nunca fala com o Omie direto, a sinalização passaria pelo av-hub, que já tem o caminho de escrita ao Omie (envio de OC pelo pipeline).
 
 ### O que falta desenvolver
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
 | 1 | Contrato e fila de sinalização MES para o av-hub (carga pronta por pedido e itens) e destino no Omie | Nathan desenha, Gustavo (API e pipeline), Robert (MES) | X4, O1 | 🔴 |
-| 2 | Tela 11.1 no MES: cargas prontas, sinalizar, ver número e chave da NF | Robert | O1 | 🔴 |
+| 2 | Tela de sinalização (ligação do `O1`) no MES: cargas prontas, sinalizar, ver número e chave da NF | Robert | O1 | 🔴 |
 | 3 | Volta da NF ao MES: ligar `Entrega.numeroNf` ao número do Omie (hoje digitado) e mostrar "faturado" na Expedição | Robert, Gustavo | O2 | 🔴 |
 | 4 | Pedido em `Faturado` antes de entregue: definir se o MES bloqueia ou só avisa | Nathan | O2 | 🟡 |
 | 5 | Remessa de produtos (Ciclo 2) | Robert | O1 | 🔴 |
@@ -163,7 +163,7 @@ O desenho do v1 (11.1): lista de cargas prontas, botão que sinaliza, acompanham
 
 ```mermaid
 flowchart TD
-    X4["X4 · Logistica de saida"] -.->|"sinalizacao 11.1 (sem codigo)"| FILA["Fila de sinalizacao de faturamento"]
+    X4["X4 · Logistica de saida"] -.->|"sinalizacao O1 (sem codigo)"| FILA["Fila de sinalizacao de faturamento"]
     FILA -.-> O1
     X4 -->|"aviso fora do sistema"| O1["O1 · Omie emite a nota fiscal"]
     O1 --> O2["O2 · Baixa o item no pedido<br/>faturado = S, numero_nf nos itens"]

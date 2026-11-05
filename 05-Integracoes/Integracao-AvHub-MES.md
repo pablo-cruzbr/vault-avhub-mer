@@ -317,7 +317,7 @@ Compras cria requisição de necessidade própria no HUB (nó C0, `POST /compras
 
 ### Outras pontes com o MES
 
-- **MES→Omie:** o MES nunca fala com o Omie. A sinalização de faturamento (nó O1, tela 11.1) não existe 🔴 ([[14-Fiscal-Omie]]). Decidido em 29/10: quem avisa o Fiscal é a Logística, ao fechar a carga (N16-132, depende da consolidação de carga `X3`, que não existe), e o MES só mostra um aviso de "faturado antes da entrega", sem bloquear (N16-133); hoje o MES nem sabe se o pedido foi faturado.
+- **MES→Omie:** o MES nunca fala com o Omie. A sinalização de faturamento (ligação do nó O1) não existe 🔴 ([[14-Fiscal-Omie]]). Decidido em 29/10: quem avisa o Fiscal é a Logística, ao fechar a carga (N16-132, depende da consolidação de carga `X3`, que não existe), e o MES só mostra um aviso de "faturado antes da entrega", sem bloquear (N16-133); hoje o MES nem sabe se o pedido foi faturado.
 - **Avisos do MES ao hub (novos, sem contrato):** recompra por RNC de lote 100% reprovado (N16-127) e reabertura do recebimento pelo PCP (N16-137). Hoje só o MES sabe e a OC do hub segue "atendida" 🔴.
 - **Pipeline→av-hub→Omie:** a única escrita no Omie é o envio da OC pela pipeline (`GET /compras/ordens/fila-omie`, `PATCH /compras/ordens/:id/sincronizacao`); não passa pelo MES. Ver [[Omie-Integracao-Estado]] e [[Pipeline-Omie]].
 - **Pedido manual** ([[Contratos-da-v2|LOG-45]]) não percorre o fluxo do MES.
