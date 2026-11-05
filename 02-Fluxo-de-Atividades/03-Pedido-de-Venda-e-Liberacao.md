@@ -210,6 +210,72 @@ Modelo do banco do av-hub em [[Banco-AvHub]]; do MES em [[Banco-MES]].
 
 Escopo (contrato 40, ✅ fixo na API): vale quando o usuário entrou por tela com escopo de vendedor e o perfil não tem escopo `todos`. No dump de 07/10 só o perfil "Gerencia PCP" tinha `todos`; os outros 20 perfis estavam `vinculados` (❓ conferir em produção). Detalhes de perfis e telas em [[RBAC-e-Permissoes]].
 
+### Pedido que nasce da proposta: liberação e cancelamento
+
+Trechos que estavam na nota de proposta da v2 (`11-Proposta-e-Pedido-de-Venda`), movidos em 05/11/2026 para cá, a nota dona do pedido de venda (`V1` a `V3`), junto com o cancelamento do pedido. A numeração das regras e dos itens é a da nota de origem. A proposta em si está em [[01-Proposta-e-Pedido-de-Venda]].
+
+#### Passo a passo
+
+8. O pedido nasce liberado e o PCP o vê na triagem. O pedido digitado direto no Omie segue o mesmo caminho: chega travado, com vendas pronta, e o vendedor responde e libera. `V1`, `V2`, `V3`
+
+#### Regras que valem
+
+- O pedido criado pela proposta nasce liberado, porque a Qualidade já foi respondida na proposta.
+- Pedido cancelado: a requisição e a OC ainda não emitida cancelam sozinhas. O que já foi comprado vai ao Estoque, livre.
+- Pedido já faturado: o cancelamento não desfaz compra nem produção.
+
+#### O que já existe e o que falta
+
+- ✅ Telas Liberar Pedidos e Liberação da Equipe.
+- 🔴 Cancelamento do pedido, com tarja na requisição e na OC.
+
+#### Regras decididas
+
+| # | Regra | Selo |
+|---|---|---|
+| 10 | O pedido criado pela proposta **nasce liberado**, sem `V3`. O `V1` tem duas origens, que seguem o mesmo fluxo e a mesma tela; o pedido digitado no Omie chega com a parte de vendas pronta (só se altera no Omie), e o vendedor responde `V2`/`V3` e preenche a parte de compras no Hub, sem travar o fluxo | 📝 N16-05, N16-106 |
+| 22 | **Pedido cancelado:** a requisição do PCP e a OC ainda não emitida são **canceladas sozinhas, com tarja**; a OC e o PCP são avisados; o que já foi comprado vai ao **Estoque, livre**, como lote com o custo da OC | 📝 N16-68, N16-69, N16-70 |
+| 23 | **Pedido já faturado:** o cancelamento não desfaz compra nem produção; fica só o abatimento da comissão e o saldo ainda não faturado, **parte por parte** | 📝 N16-71 |
+| 26 | Se alguém mexer no pedido no Omie depois, o sistema só avisa e traz a mudança | 📝 N16-30 |
+| 32 | **Pedidos de Venda e Notas Fiscais de Saída** ficam inativas também em produção | 📝 N16-33 |
+
+#### Liberação
+
+O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Pedido-de-Venda-e-Liberacao]]); o histórico `liberado` é gravado **na resposta do `IncluirPedido`**, usando o `codigo_pedido_integracao` como chave ([[Estudo-Omie-API]]).
+
+#### Telas
+
+| Nome atual | Rota | App | Quem | Nó | Estado |
+|---|---|---|---|---|---|
+| Pedidos de Venda (lista do Omie) | `/vendas/pedidos-de-venda` | HUB | Vendedor | `V1` | ✅ página no código; **inativada também em produção** (N16-33) |
+| Notas Fiscais de Saída | `/vendas/notas-fiscais-saida` | HUB | — | — | ✅ página no código; **inativada também em produção** (N16-33) |
+| **Tarja de pedido cancelado** na requisição e na OC | nas telas da requisição e da OC | HUB, MES | Compras, PCP | cancelamento | 🔴 |
+| Liberar Pedidos, Liberação da Equipe | `/liberar-pedidos`, `/liberacao-equipe` | HUB | Vendedor, gerente | `V2`, `V3` | ✅ hoje; a resposta passa para a tela do pedido (N16-106) 🟡 |
+
+#### Endpoints
+
+| Método e rota | Uso | Nó | Estado |
+|---|---|---|---|
+| `POST /pedidos_venda_hub/:id/cancelar` | registrar o cancelamento do pedido no hub; avisa OC e PCP, cancela requisição e OC não emitida, manda o comprado ao Estoque | cancelamento | 🔴 🟡 nome |
+
+#### O Omie e o cancelamento
+
+- ✅ **Existe cancelar pedido por API** (`CancelarPedidoVenda`, serviço `/produtos/pedidovendafat/`), e também `ExcluirPedido` e `AlterarPedidoVenda`. **Quem cancela, edita e exclui é o vendedor** (N16-84), não o Fiscal. O `ListarEtapasPedido` (`/produtos/pedidoetapas/`) devolve, por pedido, cancelamento, devolução e faturamento. **O hub guarda o cancelamento por conta própria** (quem, quando, motivo) porque o `exclusionSync` apagaria do hub um pedido excluído no Omie.
+
+#### O que falta (numeração da nota de proposta)
+
+| # | O quê | Dono | Nó | Selo |
+|---|---|---|---|---|
+| 6 | Liberação gravada na resposta do `IncluirPedido`, com histórico | Gustavo | `V1` | 🔴 |
+| 13 | **Cancelamento:** registro no hub, requisição e OC não emitida canceladas com tarja, aviso à OC e ao PCP, comprado ao Estoque, ajuste do `exclusionSync` | Nathan, Gustavo, Robert (Estoque) | cancelamento | 🔴 |
+
+#### Pendências (numeração da nota de proposta)
+
+| # | Pergunta | Dono |
+|---|---|---|
+| 4 | ✅ Quem cancela: o vendedor, por API (N16-84). Falta testar a diferença entre `CancelarPedidoVenda` e `ExcluirPedido` e quando cada um vale (OQ-17, OQ-48) | Nathan |
+| 8 | Estado do item que vai ao Estoque quando o pedido cancela e a reserva do MES | Robert |
+
 ### O que falta desenvolver
 
 | # | O quê | Dono | Nó | Selo |

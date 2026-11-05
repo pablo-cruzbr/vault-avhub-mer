@@ -7,7 +7,7 @@ nos: [V0.1, V0.2, V0.3, V0.4, V0.5, V0.6, V0.7, V0C]
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
 fontes: [Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10]
 ---
-
+A liberação do pedido da proposta está em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 # Proposta e pedido de venda
 
 **Em uma frase:** o vendedor monta a proposta, a Gerência aprova, e a proposta aprovada vira pedido de venda (PV) no Omie, já liberado para o PCP (planejamento e controle da produção) começar.
@@ -30,7 +30,7 @@ Nesta etapa o vendedor também acompanha o pedido, aprova compras mais caras e p
 5. O vendedor marca "aprovada" no sistema. O sistema grava quem, quando e qual revisão, e a proposta trava. Se a proposta não segue, ela é cancelada e não reabre. `V0.5`, `V0C`
 6. O vendedor clica em "Transformar em pedido de venda". Ele precisa dizer se a Qualidade acompanha o pedido. `V0.6`
 7. O sistema coloca o pedido numa fila e a integração o cria no Omie. Se o Omie recusar, aparece o motivo e o botão "Tentar novamente". `V0.7`
-8. O pedido nasce liberado e o PCP o vê na triagem. O pedido digitado direto no Omie segue o mesmo caminho: chega travado, com vendas pronta, e o vendedor responde e libera. `V1`, `V2`, `V3`
+8. O pedido nasce liberado e o PCP o vê na triagem (`V1` a `V3`): ver [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 9. Compras confere a parte de compras e, se comprar acima do valor da proposta, o vendedor aprova ou reprova por produto: `C6`, `C7` e `C8` estão em [[06-Circuito-de-Compra#C6, C7 e C8: a parte de compras do pedido da proposta]].
 
 ## Exemplo
@@ -62,19 +62,17 @@ Depois, Compras acha o flange mais caro que o previsto. O aviso mostra a margem 
 - Proposta incompleta (item sem custo e sem fornecedor) não pode ser aprovada.
 - O botão "Transformar em pedido" só aparece na proposta aprovada.
 - Sem a resposta "a Qualidade acompanha?", o pedido não é criado. O vendedor pode corrigir até o MES (sistema de chão de fábrica) importar o pedido.
-- O pedido criado pela proposta nasce liberado, porque a Qualidade já foi respondida na proposta.
+- O pedido nasce liberado; o cancelamento do pedido (antes e depois de faturar) está em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 - O vendedor não é dono do dado de custo. Ele decide o valor que põe e responde por ele.
 - Regras de Compras sobre a proposta (não altera a proposta, compra acima do valor, reprovação, aviso favorável): [[06-Circuito-de-Compra#C6, C7 e C8: a parte de compras do pedido da proposta]].
 - Proposta cancelada não reabre. O vendedor duplica.
-- Pedido cancelado: a requisição e a OC ainda não emitida cancelam sozinhas. O que já foi comprado vai ao Estoque, livre.
-- Pedido já faturado: o cancelamento não desfaz compra nem produção.
 - Produto pendente (`PEND-xxxx`) não vira pedido até o cadastro no Omie.
 - O câmbio vem da PTAX do Hub, do dia da aprovação.
 
 ## O que já existe e o que falta
 
 - ✅ Lista de propostas, nova proposta e detalhe da proposta no front, lendo a API do Hub; clientes pelo Acompanhamento de Clientes (N16-112).
-- ✅ Telas Liberar Pedidos e Liberação da Equipe.
+- Liberação e cancelamento do pedido: ver [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 - ✅ Meus Pedidos, com a etapa dos itens.
 - ✅ API da proposta na `api-acos-vital` (`develop`, 29/10): criar, listar, revisar, aprovar, cancelar, copiar e transformar em pedido do Hub.
 - 📝 Todas as regras acima estão decididas.
@@ -83,7 +81,6 @@ Depois, Compras acha o flange mais caro que o previsto. O aviso mostra a margem 
 - 🔴 Tela da proposta no formato do Simulador de Comissão, com comissão estimada.
 - 🔴 `C6` e `C7` na tela da OC.
 - 🔴 Aviso e aprovação da compra mais cara em Meus Pedidos (`C8`).
-- 🔴 Cancelamento do pedido, com tarja na requisição e na OC.
 - 🟡 Nomes de rota das partes que faltam: o Gustavo e o Robert fecham.
 - ❓ Testes no Omie: número próprio do pedido, pedido bloqueado e `ExcluirPedido`. O primeiro teste (item 4 do pedido do Robert de 03/11) sai com etapa `"10"`, `bloqueado = "S"`, sem CFOP e sem impostos no payload, e categoria de uma lista da unidade; ver [[Mapa-IncluirPedido-Omie]].
 
@@ -134,21 +131,18 @@ Origem: [[Registro-de-Decisoes]]. As regras 14 a 20 e 30 (`C6`, `C7`, `C8`) est�
 | 7 | Proposta **incompleta** é a que tem **qualquer item sem custo e sem fornecedor**; **não pode ser aprovada** | 📝 N16-03, N16-31 |
 | 8 | Número automático e próprio, só dígitos, **por unidade e tipo**; proposta e pedido têm sequências próprias; prefixo só na tela e no PDF; o número do Omie segue a chave no MES | 📝 N16-04, N16-26 |
 | 9 | "A Qualidade acompanha?" é obrigatório em `V0.6`; sem a marcação, o pedido não é criado. O vendedor pode corrigir a marcação até o MES importar, com histórico | 📝 N16-05, N16-29 |
-| 10 | O pedido criado pela proposta **nasce liberado**, sem `V3`. O `V1` tem duas origens, que seguem o mesmo fluxo e a mesma tela; o pedido digitado no Omie chega com a parte de vendas pronta (só se altera no Omie), e o vendedor responde `V2`/`V3` e preenche a parte de compras no Hub, sem travar o fluxo | 📝 N16-05, N16-106 |
 | 11 | O vendedor preenche o custo com o que conseguiu, mas **não é o dono do dado** (Compras e Orçamento são). Sem o dado, pede cotação ao orçamentista ou vê o histórico das OC. Ele decide o valor que põe | 📝 N16-06, N16-54 |
 | 12 | A aprovação de desconto e margem é **física** neste ciclo (`V0.4`); no sistema, só no próximo. **O vendedor marca "aprovada"** no sistema, que grava quem, quando e qual revisão | 📝 N16-12, N16-25 |
 | 13 | A comissão estimada nasce em `V0.3` (`K1`) e só o vendedor a vê, como ele a colocou | 📝 N16-10 |
 | 21 | O pedido de custo ao Orçamento **não tem prazo fixo**; o tempo é **cronometrado**. O setor é novo (o Moisés é uma das pessoas) e o sistema funciona sem orçamentista | 📝 N16-58, N16-59, N16-104 |
-| 22 | **Pedido cancelado:** a requisição do PCP e a OC ainda não emitida são **canceladas sozinhas, com tarja**; a OC e o PCP são avisados; o que já foi comprado vai ao **Estoque, livre**, como lote com o custo da OC | 📝 N16-68, N16-69, N16-70 |
-| 23 | **Pedido já faturado:** o cancelamento não desfaz compra nem produção; fica só o abatimento da comissão e o saldo ainda não faturado, **parte por parte** | 📝 N16-71 |
 | 24 | O câmbio vem da PTAX do Hub, **do dia da aprovação**; não há migração do ERP antigo de propostas | 📝 N16-13, N16-27 |
 | 25 | Produto pendente (`PEND-xxxx`) **não vira pedido** até o cadastro no Omie | 📝 N16-28 |
-| 26 | Se alguém mexer no pedido no Omie depois, o sistema só avisa e traz a mudança | 📝 N16-30 |
 | 27 | Erro do Omie ao criar o pedido: **erro de sincronia**, com o motivo e o botão **"Tentar novamente"**; a proposta segue aprovada | 📝 N16-36 |
 | 28 | **A tela da proposta é semelhante à do Simulador de Comissão atual**: pedido, condições comerciais (um conjunto por proposta), itens com Compra, Venda e Resultado, e rodapé de totais com margem e letra. Mesmo motor e mesmas regras, em tabelas novas. Seção "A tela da proposta" abaixo | 📝 N16-19, N16-21, 🔴 sem código |
 | 29 | O vendedor preenche o custo de compra dos itens na própria tela e vê custo líquido, sugerido, margem, letra e a comissão estimada que ele colocou. **Não vê** a comissão real antes da decisão da Controladoria. Na aprovação de **C8** ele vê o valor da compra daquele produto | 📝 N16-10, N16-19, N16-60 |
 | 31 | A Michele tem a tela igual, com o custo real e afins, lado a lado com o estimado, e as condições de **cada evento de custo** | 📝 N16-19, N16-20 |
-| 32 | **Pedidos de Venda e Notas Fiscais de Saída** ficam inativas também em produção | 📝 N16-33 |
+
+As regras 10, 22, 23, 26 e 32 (pedido, liberação, cancelamento e telas de pedido) estão em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]], com a mesma numeração.
 
 ### Estados
 
@@ -172,9 +166,7 @@ Mesmo vocabulário da OC (`pendente`, `sincronizado`, `erro`; Dump Avhub 17315-1
 
 O pedido de aprovação do vendedor (`C8`) está em [[06-Circuito-de-Compra#C6, C7 e C8: a parte de compras do pedido da proposta]].
 
-#### Liberação
 
-O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Pedido-de-Venda-e-Liberacao]]); o histórico `liberado` é gravado **na resposta do `IncluirPedido`**, usando o `codigo_pedido_integracao` como chave ([[Estudo-Omie-API]]).
 
 ### Telas
 
@@ -186,14 +178,12 @@ O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Ped
 | **Página do produto** (histórico, top fornecedores com score, flutuação, volatilidade, média) | a definir 🟡 | HUB | Vendedor | `V0.2`, `B2` | 🔴 ([[02-Orcamento-Base-de-Preco]]) |
 | Acompanhamento de Clientes (a tela Clientes passou a ser esta, N16-112) | `/vendas/acompanhamento-clientes` | HUB | Vendedor | `V0.1` | ✅ (`av-hub` `1a48140`, 27/10); o cliente da proposta sai do cadastro do Hub e `POST /comercial/clientes` cadastra no Omie |
 | Relatório Gerencial | `/vendas/relatorio-gerencial` | HUB | Gerência | — | ✅; o Relatório de Cotações não existe mais como página na `develop` (conferido em 29/10) |
-| Pedidos de Venda (lista do Omie) | `/vendas/pedidos-de-venda` | HUB | Vendedor | `V1` | ✅ página no código; **inativada também em produção** (N16-33) |
-| Notas Fiscais de Saída | `/vendas/notas-fiscais-saida` | HUB | — | — | ✅ página no código; **inativada também em produção** (N16-33) |
 | Tela da proposta no formato do Simulador (pedido, condições, itens, totais) | dentro de `/vendas/propostas/[id]` e `/vendas/propostas/nova` | HUB | Vendedor | `V0.2`, `V0.3` | 🟡 itens em grade e condições no layout do Simulador desde 27/10 (`37c9cf2`); a análise de margem é gravada com a proposta (29/10); 🔴 sem a comissão estimada |
 | Visão da Controladoria da mesma tela, com custo real | Operações 🟡 | HUB | Controladoria | `K4` | 🔴 ([[15-Custo-Real-e-Comissao]]) |
 | Botão "Transformar em pedido de venda" e marcação da Qualidade | dentro de `/vendas/propostas/[id]` | HUB | Vendedor | `V0.6` | 🔴 tela (a API `transformar` existe) |
 | Marcar "aprovada" (registro da aprovação física) | idem | HUB | Vendedor | `V0.4`, `V0.5` | 🔴 tela (a API `aprovar` existe) |
-| **Tarja de pedido cancelado** na requisição e na OC | nas telas da requisição e da OC | HUB, MES | Compras, PCP | cancelamento | 🔴 |
-| Liberar Pedidos, Liberação da Equipe | `/liberar-pedidos`, `/liberacao-equipe` | HUB | Vendedor, gerente | `V2`, `V3` | ✅ hoje; a resposta passa para a tela do pedido (N16-106) 🟡 |
+
+As telas do pedido (Pedidos de Venda, Notas Fiscais de Saída, tarja de cancelado, Liberar Pedidos) estão em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 
 As telas de `C6`, `C7` e `C8` (Meus Pedidos com a aprovação, lista de reprovados, visão e conferência de Compras) estão em [[06-Circuito-de-Compra#C6, C7 e C8: a parte de compras do pedido da proposta]].
 
@@ -224,8 +214,9 @@ Rotas do `api-comercial` de teste (legado) ainda sem equivalente na `api-acos-vi
 | `GET /produtos/:id/precos` | histórico, média e fornecedores | `B2` | ✅ `suprimentos.routes.ts:823` |
 | `POST /solicitacoes_custo` e `responder`, `assumir`, `liberar`, `cancelar` | pedido de custo (o prazo obrigatório de 2 dias úteis **sai**: N16-58) | `B3`, `B4` | ✅ `custos.routes.ts:304-510`; 🔴 ajuste |
 | `GET /pedidos_venda_hub/fila-omie`, `PATCH /pedidos_venda_hub/:id/sincronizacao`, `POST /:id/reenviar` | fila e retorno da pipeline, espelho de `/compras/ordens/fila-omie` | `V0.7` | 🔴 (nome em aberto; o pedido já nasce `pendente` em `transformar`) |
-| `POST /pedidos_venda_hub/:id/cancelar` | registrar o cancelamento do pedido no hub; avisa OC e PCP, cancela requisição e OC não emitida, manda o comprado ao Estoque | cancelamento | 🔴 🟡 nome |
 | `GET /propostas/:id/pedido_omie`, `PUT` (digitar o número à mão) | **substituídas**: o pedido deixa de ser digitado | `V0.7` | ✅ `propostas.routes.ts:146-164`, saem |
+
+A rota de cancelamento do pedido está em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 
 Auditoria das telas e a nova página de proposta: [[Telas-e-Experiencia-do-Usuario]]; mapa do pedido no Omie: [[Mapa-IncluirPedido-Omie]].
 
@@ -255,7 +246,7 @@ No av-hub (API do hub), o que serve de padrão: contador por `(unidade, tipo)` (
 - ✅ O `IncluirPedido` aceita o **nosso código de integração** do pedido e do item: o hub grava a liberação na **resposta** da inclusão e liga o item da proposta ao `codigo_item_omie`. Etapa inicial `"10"`. A pipeline precisa **gravar** `codigo_pedido_integracao`.
 - 🟡 Pode ser possível **mandar o nosso `numero_pedido`**, e o pedido criado por API pode nascer **bloqueado** na tela do Omie: ❓ só teste.
 - ✅ **A categoria do pedido decide se ele gera comissão.** A regra do grupo G6 compara o código `'1.01.96'` (refaturamento em Mogi) e a `vw_comissao_master` só lê `grupo IS NULL`; a categoria que o Hub manda em `informacoes_adicionais.codigo_categoria` entra direto nessa regra. 🔴 Em Uberaba o refaturamento é o `1.01.99` e **não** cai em G6 ([[Riscos]], RS-022). 🟡 A tela deve mostrar essa consequência na hora de escolher a categoria; ver [[Mapa-IncluirPedido-Omie]], seção 5.3.1.
-- ✅ **Existe cancelar pedido por API** (`CancelarPedidoVenda`, serviço `/produtos/pedidovendafat/`), e também `ExcluirPedido` e `AlterarPedidoVenda`. **Quem cancela, edita e exclui é o vendedor** (N16-84), não o Fiscal. O `ListarEtapasPedido` (`/produtos/pedidoetapas/`) devolve, por pedido, cancelamento, devolução e faturamento. **O hub guarda o cancelamento por conta própria** (quem, quando, motivo) porque o `exclusionSync` apagaria do hub um pedido excluído no Omie.
+- O cancelamento do pedido no Omie (`CancelarPedidoVenda`, quem cancela) está em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 - ✅ Devolução de **venda**: a total vem do Omie; a **parcial** só chega marcada, sem valor, item nem quantidade. Fiscal ou Controladoria informam o que voltou (N16-74).
 
 ### Dados 🟡
@@ -306,14 +297,14 @@ Os itens 7 e 12 (`C6`, `C7`, `C8`) estão em [[06-Circuito-de-Compra#C6, C7 e C8
 | 3 | Cancelar com motivo: rota feita (29/10). Falta o histórico da comissão estimada | Robert | `V0C` | ✅ API; 🔴 histórico |
 | 4 | Botão "Transformar em pedido" e marcação da Qualidade obrigatória: rota `transformar` feita (grava o pedido do Hub `pendente`). Faltam a tela, a fila do pedido e o retorno da pipeline | Robert (API), Nathan (tela e pipeline), Gustavo (banco) | `V0.6`, `V0.7` | ✅ API; 🔴 tela e envio |
 | 5 | Pipeline: `IncluirPedido` por fila, espelho do `envioOrdensCompra.ts`, com `codigo_pedido_integracao` e `codigo_item_integracao`; gravar esses códigos no hub | Nathan | `V0.7` | 🔴 |
-| 6 | Liberação gravada na resposta do `IncluirPedido`, com histórico | Gustavo | `V1` | 🔴 |
 | 8 | Trocar a AwesomeAPI pela PTAX do hub: o front já lê o câmbio do Hub (`GET /cambio` para `/cotacoes_moeda/atual`, 27/10) | Robert | `V0.1` | ✅ front; ❓ API |
 | 9 | Aprovar com perfil da Gerência no sistema | — | `V0.4` | próximo ciclo (N16-12) |
 | 10 | Tela da proposta no formato do Simulador, com o motor na API (porta de `lib/simulador/motor.ts`) e a comissão estimada | Robert (tela de proposta e API), Nathan (`K1`), Gustavo | `V0.2`, `V0.3`, `K1` | 🟡 |
 | 11 | Visão de Compras (leitura) e visão da Controladoria (custo real, drill-down por evento) da mesma tela | Nathan | `C6`, `C7`, `K4` | 🔴 |
-| 13 | **Cancelamento:** registro no hub, requisição e OC não emitida canceladas com tarja, aviso à OC e ao PCP, comprado ao Estoque, ajuste do `exclusionSync` | Nathan, Gustavo, Robert (Estoque) | cancelamento | 🔴 |
 | 14 | **Pipeline do Omie:** gravar os códigos de integração, ampliar o espelho e o envio da OC com os impostos, recurso novo de recebimento de NF-e, cancelamento e devolução da NF | Nathan, Gustavo | vários | 🔴 ([[Estudo-Omie-API]]) |
 | 15 | Página do produto e regras do score | Nathan, Robert, Pablo | `V0.2`, `B2` | 🔴 ([[02-Orcamento-Base-de-Preco]]) |
+
+Os itens 6 (liberação) e 13 (cancelamento) estão em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 
 ### Pendências
 
@@ -322,9 +313,9 @@ Os itens 7 e 12 (`C6`, `C7`, `C8`) estão em [[06-Circuito-de-Compra#C6, C7 e C8
 | 1 | ✅ Alçada de desconto e margem: tudo fisicamente (N16-75; OQ-04 fechada) | Nathan (feito) |
 | 2 | Perfis do Orçamento e de quem vê a equipe (OQ-21); o Moisés é uma das pessoas do setor (N16-104) | Nathan, Gustavo |
 | 3 | Testes no Omie: campos obrigatórios, `numero_pedido` próprio, pedido bloqueado, `ExcluirPedido` (OQ-16, OQ-48). Roteiro: pedido mínimo, `ConsultarPedido`, comparar com um digitado à mão, `ExcluirPedido`, com cadastros TESTE. Espera a unidade, a categoria e a decisão da conta corrente | Nathan |
-| 4 | ✅ Quem cancela: o vendedor, por API (N16-84). Falta testar a diferença entre `CancelarPedidoVenda` e `ExcluirPedido` e quando cada um vale (OQ-17, OQ-48) | Nathan |
 | 5 | Quem cadastra produto novo, e em quanto tempo (OQ-36) | Fiscal |
-| 8 | Estado do item que vai ao Estoque quando o pedido cancela e a reserva do MES | Robert |
+
+As pendências 4 e 8 (cancelamento) estão em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 
 As pendências 6 e 7 (aviso e e-mail de Compras) estão em [[06-Circuito-de-Compra#C6, C7 e C8: a parte de compras do pedido da proposta]].
 
