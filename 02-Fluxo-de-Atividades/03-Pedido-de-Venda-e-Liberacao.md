@@ -172,7 +172,7 @@ Banco e telas (DDL e `auth.telas`): apêndices A e B do contrato 26. Diagnóstic
 
 - ✅ BFF `app/api/liberar-pedidos/route.ts` (GET): para a fonte `vendedor` exige token de usuário (sem ele, 401 "Sessão sem identidade no backend") e **não manda `vendedor`**; 403 `SEM_VENDEDOR_VINCULADO` vira "sem vínculo". `[codigoEmpresa]/[numeroPedido]/route.ts` (PUT): exige token, põe o autor pela sessão, e o dono do pedido é conferido pela API.
 - ✅ `components/LiberarPedidos/` (lista, tabela, hook e `fontes.ts`) e páginas `app/(protected)/liberar-pedidos/page.tsx` e `liberacao-equipe/page.tsx`.
-- ✅ Cartão `components/Pedidos/EtapaDosItens.tsx`, embutido em `PedidoDetalhe.tsx:812` (ao lado de `ComprasDoPedido`, `:814`), alimentado por `app/api/pedidos-venda/[fonte]/[codigoEmpresa]/[pedidoVenda]/etapas/route.ts`. Tradução das etapas em `lib/domain/etapas-item.ts:30-41`; aviso de dado velho acima de 10 minutos (`ETAPA_ATRASO_MINUTOS`).
+- ✅ Cartão `components/Pedidos/EtapaDosItens.tsx`, embutido em `PedidoDetalhe.tsx:1051` (ao lado de `ComprasDoPedido`, `:814`), alimentado por `app/api/pedidos-venda/[fonte]/[codigoEmpresa]/[pedidoVenda]/etapas/route.ts`. Tradução das etapas em `lib/domain/etapas-item.ts:30-41`; aviso de dado velho acima de 10 minutos (`ETAPA_ATRASO_MINUTOS`).
 
 #### MES (`api-pcp` 579a625, `app-pcp` 1fca8d3)
 

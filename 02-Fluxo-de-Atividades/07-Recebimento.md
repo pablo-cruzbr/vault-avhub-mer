@@ -93,7 +93,7 @@ Nós do [[00-Fluxo-Mestre-0b]]: `R0` esperados e chegada com NF, `R1` conferênc
 | Compras (`compras-liberar`, em geral só o Administrador) | Libera a requisição para o Recebimento sem OC aprovada | `FilaSetor` / `CompraCcpCard` |
 | Qualidade | Recebe o lote | [[08-Qualidade-Entrada]] |
 
-Permissões: `movimentacoes` (visualizar ou editar) para conferir e recontar; `decisoes-pcp` para listar e decidir; `pode_atuar` no setor Recebimento (`PerfilSetor`) para a chegada e a recontagem (`compras.service.ts:381-382`, `recebimento.service.ts:260`); a decisão do PCP **não** exige setor (`recebimento.service.ts:336`, `registrarRecebimento` com `checarPermissaoSetor: false`).
+Permissões: `movimentacoes` (visualizar ou editar) para conferir e recontar; `decisoes-pcp` para listar e decidir; `pode_atuar` no setor Recebimento (`PerfilSetor`) para a chegada e a recontagem (`compras.service.ts:897-898`, `recebimento.service.ts:260`); a decisão do PCP **não** exige setor (`recebimento.service.ts:830`, `registrarRecebimento` com `checarPermissaoSetor: false`).
 
 ### Regras decididas
 
@@ -132,7 +132,7 @@ Permissões: `movimentacoes` (visualizar ou editar) para conferir e recontar; `d
 
 #### Parcial e requisição
 
-Parcial no setor `LOGISTICA_ENTRADA` (nome "Recebimento", código `logistica-entrada`) em estado "aguardando": `CRIADO`, `EM_TRANSITO`, `RECEBIDO` ou `EM_ANDAMENTO` (`STATUS_AGUARDANDO`, `circuito-compra.ts:30-35`). `StatusRequisicaoCompra`: `ABERTA`/`EM_COMPRA` → `RECEBIDA_PARCIAL` → `RECEBIDA` (`compras.service.ts:576-579`); `CANCELADA`. Lote: `PENDENTE` ([[08-Qualidade-Entrada]], [[Estados-e-Status]]).
+Parcial no setor `LOGISTICA_ENTRADA` (nome "Recebimento", código `logistica-entrada`) em estado "aguardando": `CRIADO`, `EM_TRANSITO`, `RECEBIDO` ou `EM_ANDAMENTO` (`STATUS_AGUARDANDO`, `circuito-compra.ts:30-35`). `StatusRequisicaoCompra`: `ABERTA`/`EM_COMPRA` → `RECEBIDA_PARCIAL` → `RECEBIDA` (`compras.service.ts:111-114`); `CANCELADA`. Lote: `PENDENTE` ([[08-Qualidade-Entrada]], [[Estados-e-Status]]).
 
 ### Telas
 
@@ -149,7 +149,7 @@ Parcial no setor `LOGISTICA_ENTRADA` (nome "Recebimento", código `logistica-ent
 | Método e rota | Permissão | Efeito | Código |
 |---|---|---|---|
 | `GET /compras/requisicoes/esperados` | `movimentacoes:visualizar` | R0: lista de esperados | `compras.controller.ts:45-51` ✅ |
-| `POST /compras/requisicoes/:id/chegada` `{idItemParcial, numeroNf?, chaveAcessoNf?}` | `movimentacoes:editar` | R0: grava `nfChegada`, `chaveNfChegada`, `chegadaEm`; parcial vai ao Recebimento | `compras.controller.ts:93-103`, `compras.service.ts:356-399` ✅ |
+| `POST /compras/requisicoes/:id/chegada` `{idItemParcial, numeroNf?, chaveAcessoNf?}` | `movimentacoes:editar` | R0: grava `nfChegada`, `chaveNfChegada`, `chegadaEm`; parcial vai ao Recebimento | `compras.controller.ts:93-103`, `compras.service.ts:819-862` ✅ |
 | `POST /compras/requisicoes/:id/liberar-recebimento` `{motivo}` | `movimentacoes:editar` + `compras-liberar` | Rede de segurança (motivo até 500) | `compras.controller.ts:105-115`, `compras.service.ts:404-446` ✅ |
 | `GET /compras/recebimentos`, `GET /:id` | `movimentacoes:visualizar` | Lista (até 200) e detalhe | `recebimento.controller.ts:26-43` ✅ |
 | `GET /compras/recebimentos/decisoes` | `decisoes-pcp:visualizar` | Fila `AGUARDANDO_DECISAO` | `:32-37` ✅ |
@@ -167,7 +167,7 @@ Contratos de apoio: [[Contratos-da-v2|LOG-35]] (marco `oc_aprovada` põe a parci
 
 #### R0: esperados e chegada com NF
 
-✅ O marco `oc_aprovada` grava `ocAprovadaEm` no item da requisição (`requisicao-avhub.eventos.ts:275-280`). `podeReceber` = `liberadaRecebimentoEm` preenchido **ou** algum item com `ocAprovadaEm` e `etapaCompra ≠ CANCELADA` (`compras.service.ts:448-456`). Os esperados saem ordenados por `previsaoEntrega` (`:346-350`). Na chegada, o service exige: requisição não cancelada, `podeReceber`, parcial do mesmo item do pedido, parcial **em Compras · CCP** e aguardando, e `pode_atuar` no setor Recebimento (`:362-382`). A parcial vai `EM_TRANSITO` ao Recebimento com a observação "Chegou a NF … aguardando a conferência" (`:386-398`). `oc_cancelada` tira dos esperados e devolve ao comprador (`requisicao-avhub.eventos.ts:300-307`).
+✅ O marco `oc_aprovada` grava `ocAprovadaEm` no item da requisição (`requisicao-avhub.eventos.ts:275-280`). `podeReceber` = `liberadaRecebimentoEm` preenchido **ou** algum item com `ocAprovadaEm` e `etapaCompra ≠ CANCELADA` (`compras.service.ts:318-326`). Os esperados saem ordenados por `previsaoEntrega` (`:346-350`). Na chegada, o service exige: requisição não cancelada, `podeReceber`, parcial do mesmo item do pedido, parcial **em Compras · CCP** e aguardando, e `pode_atuar` no setor Recebimento (`:362-382`). A parcial vai `EM_TRANSITO` ao Recebimento com a observação "Chegou a NF … aguardando a conferência" (`:386-398`). `oc_cancelada` tira dos esperados e devolve ao comprador (`requisicao-avhub.eventos.ts:300-307`).
 
 #### R1: conferência contra a NF
 
@@ -175,7 +175,7 @@ Contratos de apoio: [[Contratos-da-v2|LOG-35]] (marco `oc_aprovada` põe a parci
 
 #### R2: pesagem
 
-✅ Peso teórico = `Material.pesoTeoricoUnitario × contado`; sem peso teórico o item não é pesado; com ele, o peso real digitado é obrigatório (400 se falta) e o desvio acima de `toleranciaPeso` vira `PESO` (`recebimento.service.ts:382-398`). Balança sem saída digital: o peso é digitado.
+✅ Peso teórico = `Material.pesoTeoricoUnitario × contado`; sem peso teórico o item não é pesado; com ele, o peso real digitado é obrigatório (400 se falta) e o desvio acima de `toleranciaPeso` vira `PESO` (`recebimento.service.ts:316-332`). Balança sem saída digital: o peso é digitado.
 
 #### R3: bate com o esperado?
 
@@ -213,7 +213,7 @@ Migrations: `20261006140000_recebimento_conferencia`, `20261014120000_compras_cc
 
 ✅ **Feito na `develop` do MES (16 a 20/10/2026, BL-051):** a mercadoria de OC sem requisição do MES entra pelos esperados por item de OC (`GET /compras/recebimentos/oc-esperadas`) e pela conferência por OC (`POST /compras/recebimentos/nf`, `itensOc`), com o lote ligado ao item da OC e ao custo; o uso interno vira `EntradaUsoInterno`, sem lote nem saldo (N14-30). Ver [[Contratos-da-v2|API-011]]. O texto abaixo é o registro do desenho e do estado de 14/10.
 
-📝 N14-20: o MES passa a ler as OCs do hub. A mercadoria de uma OC criada a partir de requisição só do av-hub (ou de uma OC de estoque, sem requisição) precisa ter entrada no Estoque, mas o Recebimento do MES, em 14/10, **exigia requisição do MES**: a chegada pede requisição não cancelada, `podeReceber`, parcial do mesmo item do pedido **em Compras · CCP** e `pode_atuar` no Recebimento (`compras.service.ts:362-382`), e a conferência valida que cada item pertence à requisição (`recebimento.service.ts:147-162`). Uma OC sem `id_origem` não tem parcial nem requisição no MES, então não cai nos esperados.
+📝 N14-20: o MES passa a ler as OCs do hub. A mercadoria de uma OC criada a partir de requisição só do av-hub (ou de uma OC de estoque, sem requisição) precisa ter entrada no Estoque, mas o Recebimento do MES, em 14/10, **exigia requisição do MES**: a chegada pede requisição não cancelada, `podeReceber`, parcial do mesmo item do pedido **em Compras · CCP** e `pode_atuar` no Recebimento (`compras.service.ts:878-898`), e a conferência valida que cada item pertence à requisição (`recebimento.service.ts:147-162`). Uma OC sem `id_origem` não tem parcial nem requisição no MES, então não cai nos esperados.
 
 Caminho necessário 🟡 (proposta; o desenho é do Robert):
 1. O job do contrato 004/007 (BL-001) grava a projeção da OC aprovada; o item traz `id_requisicao` nulo ou sem `id_origem` e o `destino` (pedido de venda ou estoque) ✅ `vw_ordens_compra_referencia_mes.swagger.json:44-88`.

@@ -75,7 +75,7 @@ A numeração é a da nota de Estoque da v2; as outras regras estão em [[05-Est
 
 #### E6: despacho
 
-✅ O que existe: quando a **Embalagem recebe** a parcial atendida (`PATCH /itens-parciais/:id/receber`), o código chama `consumirReservasDaParcial` (`itens-parciais.service.ts:275-285`). Ele tira o saldo das localizações do lote (maior saldo primeiro), grava um `MovimentoEstoque` `SAIDA` por pedaço com `idReserva`, e marca a reserva `CONSUMIDA` (`estoque-operacao.helpers.ts:208-284`). Se o saldo físico não cobre, 409 "registre um ajuste antes de entregar" (`:253-258`). Se a Embalagem desfaz o recebimento ou devolve ao Estoque, o saldo volta (`estornarConsumosDaParcial`).
+✅ O que existe: quando a **Embalagem recebe** a parcial atendida (`PATCH /itens-parciais/:id/receber`), o código chama `consumirReservasDaParcial` (`itens-parciais.service.ts:318-328`). Ele tira o saldo das localizações do lote (maior saldo primeiro), grava um `MovimentoEstoque` `SAIDA` por pedaço com `idReserva`, e marca a reserva `CONSUMIDA` (`estoque-operacao.helpers.ts:317-393`). Se o saldo físico não cobre, 409 "registre um ajuste antes de entregar" (`:253-258`). Se a Embalagem desfaz o recebimento ou devolve ao Estoque, o saldo volta (`estornarConsumosDaParcial`).
 
 🔴 O que o desenho decidido exige e não existe:
 1. **Documento de retirada** gerado por quem precisa da mercadoria (Expedição ou Produção), com itens, lotes, quantidades e solicitante.

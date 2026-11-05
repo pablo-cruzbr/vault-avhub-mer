@@ -76,7 +76,7 @@ Nós do [[00-Fluxo-Mestre-0b]]: `E1` saldo disponível, `E2` saldo cobre?, `E3` 
 | Compras · CCP | Recebe o "Solicitar compra" via setor Requisições | [[06-Circuito-de-Compra]] |
 | Robert | Dono do código | `api-pcp`, `app-pcp` |
 
-Permissão: agir no setor exige `PerfilSetor.podeAtuar` (`ensurePodeAtuar`, `itens-parciais.service.ts:617`); movimentação e carga inicial exigem `PerfilDeposito.podeAtuar` no depósito (`estoque.prisma:86-106`, `estoque-operacao.service.ts:399-401`).
+Permissão: agir no setor exige `PerfilSetor.podeAtuar` (`ensurePodeAtuar`, `itens-parciais.service.ts:617`); movimentação e carga inicial exigem `PerfilDeposito.podeAtuar` no depósito (`estoque.prisma:86-106`, `estoque-operacao.service.ts:614-616`).
 
 ### Regras decididas
 
@@ -121,7 +121,7 @@ As regras 9 e 11 (entrada do lote) estão em [[09-Estoque-Entrada-do-Lote]]; a r
 | `CONSUMIDA` | A parcial é recebida na Embalagem (`consumirReservasDaParcial`, saída do lote) |
 | `LIBERADA` | Ordem excluída, parcial cancelada ou liberação manual com motivo |
 
-`quantidadeConsumida` acompanha parcial; estorno (`estornarConsumosDaParcial`) devolve o saldo à mesma localização quando a Embalagem desfaz o recebimento ou devolve ao Estoque (`itens-parciais.service.ts:1450`, `:1587`; `estoque-operacao.helpers.ts:287`).
+`quantidadeConsumida` acompanha parcial; estorno (`estornarConsumosDaParcial`) devolve o saldo à mesma localização quando a Embalagem desfaz o recebimento ou devolve ao Estoque (`itens-parciais.service.ts:2100`, `:1587`; `estoque-operacao.helpers.ts:287`).
 
 #### Parcial no Estoque
 
@@ -145,7 +145,7 @@ Aceita agir em `CRIADO`, `EM_TRANSITO`, `RECEBIDO`, `EM_ANDAMENTO` (`itens-parci
 | Método e rota | Permissão | Efeito | Código |
 |---|---|---|---|
 | `GET /estoque/saldo/disponivel-parcial/:idItemParcial` | `movimentacoes:visualizar` | Lotes `LIBERADO` com disponível, mais `outrasFiliais` | `estoque-operacao.controller.ts:45-49`, `estoque-operacao.service.ts:112-147` ✅ |
-| `PATCH /itens-parciais/:id/atender-estoque` | `movimentacoes:editar` | `quantidadeEstoque`, `alocacoes[]` (lote e quantidade), `destinoRestante` `ROTEIRO` ou `COMPRA`, observação | `itens-parciais.controller.ts:163-180`, `itens-parciais.service.ts:607` ✅ |
+| `PATCH /itens-parciais/:id/atender-estoque` | `movimentacoes:editar` | `quantidadeEstoque`, `alocacoes[]` (lote e quantidade), `destinoRestante` `ROTEIRO` ou `COMPRA`, observação | `itens-parciais.controller.ts:163-180`, `itens-parciais.service.ts:796` ✅ |
 | `GET /estoque/saldo` | `saldo:visualizar` | Saldo por lote e localização; custo só para quem tem `estoque-custo` | `estoque-operacao.controller.ts:39-43` ✅ |
 | `POST /estoque/lotes/carga-inicial` | `movimentacao:criar` | Lote `LIBERADO`, custo opcional (`estoque-custo:editar`) | `estoque-operacao.controller.ts:66-70`, `estoque-operacao.service.ts:398-445` ✅ |
 | `GET /estoque/movimentos`, `POST /estoque/movimentos` | `movimentacao` | Transferência e ajuste | `estoque-operacao.controller.ts:78-88` ✅ |
@@ -174,7 +174,7 @@ A reserva valida lote `LIBERADO`, mesmo produto (`codigoProdutoOmie`) e mesma fi
 
 #### E4: o restante
 
-✅ `destinoRestante = COMPRA` (ou Revenda, sempre) move a parcial para o setor `REQUISICAO` (`setorDoCircuito`, `itens-parciais.service.ts:727-730`); o PCP abre a requisição lá ([[06-Circuito-de-Compra]], nó `P3`). A observação de histórico diz "Sem saldo no estoque: N vão para compra (Requisições)" (`:808-811`).
+✅ `destinoRestante = COMPRA` (ou Revenda, sempre) move a parcial para o setor `REQUISICAO` (`setorDoCircuito`, `itens-parciais.service.ts:1056-1059`); o PCP abre a requisição lá ([[06-Circuito-de-Compra]], nó `P3`). A observação de histórico diz "Sem saldo no estoque: N vão para compra (Requisições)" (`:808-811`).
 
 ✅ **Enviar à produção** (`ROTEIRO`) move a parcial para a próxima etapa do roteiro. Na `develop`, o item de fabricação pode ser atendido com matéria-prima do estoque: lote(s) de qualquer produto, com a quantidade baixada e as unidades do item cobertas (`ConsumoMateriaPrima`, 19/10, `8d07917`; a baixa é imediata e devolver a parcial ao Estoque estorna). 🔴 Diverge da N16-140: a decisão é baixar na retirada, pelo documento, e não na hora do atendimento. A genealogia (J4) segue sem código.
 

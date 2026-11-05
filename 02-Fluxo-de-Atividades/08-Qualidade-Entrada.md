@@ -178,7 +178,7 @@ A RNC só nasce e é listada (`alertas.service.ts:63`). **Não existe endpoint n
 
 #### Retorno ao Estoque
 
-A parcial chega ao setor Estoque `EM_TRANSITO`. O almoxarife usa "Atender pelo estoque" (`PATCH /itens-parciais/:id/atender-estoque`, `itens-parciais.service.ts:607`): reserva sobre lote `LIBERADO` e despacha para a Expedição. O bloqueio inverso existe: enviar para um setor tipo `ESTOQUE` com lote `PENDENTE` do item é recusado (`ensureLotesCompradosLiberados`, `itens-parciais.service.ts:862-879`).
+A parcial chega ao setor Estoque `EM_TRANSITO`. O almoxarife usa "Atender pelo estoque" (`PATCH /itens-parciais/:id/atender-estoque`, `itens-parciais.service.ts:607`): reserva sobre lote `LIBERADO` e despacha para a Expedição. O bloqueio inverso existe: enviar para um setor tipo `ESTOQUE` com lote `PENDENTE` do item é recusado (`ensureLotesCompradosLiberados`, `itens-parciais.service.ts:1220-1237`).
 
 ### Perfil e permissões do setor QUALIDADE
 
@@ -186,7 +186,7 @@ A parcial chega ao setor Estoque `EM_TRANSITO`. O almoxarife usa "Atender pelo e
 |---|---|---|
 | Fila e decisão de lote | `RequirePermission('inspecao-entrada', 'visualizar'|'editar')`. Não há checagem de `PerfilSetor` no serviço | `qualidade.controller.ts:19-35` ✅ |
 | Fila do setor Qualidade · Entrada | Só aparece para quem tem `podeVisualizar` no setor `qualidade-entrada` (tabela `perfil_setores`) | `perfis.service.ts` / `useSetoresPermitidos` ✅ |
-| Inspeção de saída | Setor(es) tipo `QUALIDADE` do roteiro, fila `/qualidade/inspecao-saida`; agir exige `podeAtuar` no setor (`ensurePodeAtuar`) | `perfis.service.ts:278-289`, `itens-parciais.service.ts:1011-1020` ✅ |
+| Inspeção de saída | Setor(es) tipo `QUALIDADE` do roteiro, fila `/qualidade/inspecao-saida`; agir exige `podeAtuar` no setor (`ensurePodeAtuar`) | `perfis.service.ts:278-289`, `itens-parciais.service.ts:909-918` ✅ |
 | Login | Escritório entra por Azure AD; chão de fábrica por usuário e senha | `POST /auth/azure`, `POST /auth/login` ✅ |
 
 Consequência de projeto: qualquer usuário com `inspecao-entrada:editar` decide qualquer lote, mesmo sem vínculo de setor. 🟡 se for desejado travar por setor (Robert). **Decidido em 29/10/2026 (N16-124): a decisão fica travada ao setor da Qualidade.**

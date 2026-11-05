@@ -101,7 +101,7 @@ O acesso a cada fila depende de `PerfilSetor` (`podeVisualizar`, `podeAtuar`), d
 | 1 | O setor Estoque (`codigo = 'estoque'`) é a **etapa 1 de todo roteiro** e é inserido pelo backend. O payload não pode trazê-lo (`pedidos.service.ts:459-463`). Decisão EN-03. Na `develop` a Destinação cria a OP só com o Estoque e a Montagem do Roteiro (`PUT /pedidos/:id/roteiro`, permissão `montagem-roteiro`) monta e libera o roteiro; `POST /pedidos/:id/devolver-destinacao` devolve a OP à Destinação | ✅ 📝 |
 | 2 | Setores de tipo `ESTOQUE`, `REQUISICAO`, `COMPRAS` e `LOGISTICA_ENTRADA` **não entram no roteiro** do PCP: o circuito de compra é fixo (`pedidos.service.ts:500-506`) | ✅ |
 | 3 | Roteiro de **fabricação** exige um setor `QUALIDADE` (inspeção de saída) e ele vem antes da primeira `EXPEDICAO` (`pedidos.service.ts:512-525`). Decisão EC-06 | ✅ 📝 |
-| 4 | O roteiro só pode usar setores vinculados à fábrica do pedido (`FabricaSetor`), sem repetir setor nem ordem (`pedidos.service.ts:450-474`) | ✅ |
+| 4 | O roteiro só pode usar setores vinculados à fábrica do pedido (`FabricaSetor`), sem repetir setor nem ordem (`pedidos.service.ts:545-569`) | ✅ |
 | 5 | `receber` e `iniciar` são obrigatórios em todo setor antes de `mover` ou `concluir`. `iniciar` preenche `startedAt` (cronômetro) e, em setor com `exigeMaquinaOperador`, exige `idMaquina` e `idOperador` (`:299-321`) | ✅ |
 | 6 | `concluir` só no **último** setor do roteiro; `mover` só quando existe próximo (`:540-547`, `:426-434`). `mover` aceita `idSetorDestino` livre dentro da fábrica e quantidade parcial (split na passagem) | ✅ |
 | 7 | `reprovar` é exclusivo de setor tipo `QUALIDADE` (403 fora dele) e exige `EM_ANDAMENTO` (`:966-989`, `:1011-1021`) | ✅ |
@@ -218,7 +218,7 @@ Na `develop` (19/10, `8d07917`) existe a baixa de matéria-prima no "Atender pel
 
 - `destinoRestante: 'ROTEIRO'` em `atenderEstoque` só move a parcial para a próxima etapa, sem reservar nem consumir material (`service:722-742`).
 - `TipoItemRequisicao.MATERIA_PRIMA` existe só para a compra, com o comentário "ação no Estoque·Entrada na próxima rodada" (`compras.prisma:17-22`).
-- Consumo de reserva (`consumirReservasDaParcial`, `estoque-operacao.helpers.ts:208`) só trata a parte "atendida pelo estoque", que é a que vai à Expedição.
+- Consumo de reserva (`consumirReservasDaParcial`, `estoque-operacao.helpers.ts:317`) só trata a parte "atendida pelo estoque", que é a que vai à Expedição.
 
 O que falta: definir quem informa o material consumido (setor ao concluir etapa, ou Estoque ao despachar para a produção pelo documento de retirada), o vínculo produto acabado x matéria-prima, e a geração de `MovimentoEstoque` `SAIDA` com referência à parcial. Dono: Robert, decisão Nathan. **Decidido em 29/10 (N16-140): na retirada do Estoque.**
 

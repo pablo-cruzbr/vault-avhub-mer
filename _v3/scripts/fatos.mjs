@@ -104,11 +104,21 @@ function corpus() {
 function conferir(so) {
   if (!fs.existsSync(dirFatos)) { console.log('sem listas de fatos'); return; }
   const { bruto, normal: norm } = corpus();
+  // substituições registradas (o fato foi atualizado, não sumiu): antigo → novo, com o motivo
+  const subst = new Map();
+  const ps = path.join(dirFatos, 'substituicoes.tsv');
+  if (fs.existsSync(ps)) for (const l of fs.readFileSync(ps, 'utf8').split('\n').slice(1).filter(Boolean)) {
+    const [a, n] = l.split('\t');
+    if (!subst.has(a)) subst.set(a, []);
+    subst.get(a).push(n);
+  }
+  const presente = (t) => bruto.includes(t) || (subst.get(t) || []).some((n) => bruto.includes(n))
+    || [...subst].some(([a, ns]) => t.includes(a) && ns.some((n) => bruto.includes(t.replace(a, n))));
   let falhas = 0;
   for (const f of fs.readdirSync(dirFatos).filter((x) => x.endsWith('.md'))) {
     if (so && path.basename(f, '.md') !== so) continue;
     const { tokens, regras } = lerLista(path.join(dirFatos, f));
-    const faltam = tokens.filter(([, t]) => !bruto.includes(t));
+    const faltam = tokens.filter(([, t]) => !presente(t));
     const regrasFaltam = regras.filter((r) => !norm.includes(normal(r)));
     falhas += faltam.length;
     console.log(`\n## ${f}: ${tokens.length - faltam.length}/${tokens.length} fatos; ${regras.length - regrasFaltam.length}/${regras.length} linhas iguais`);

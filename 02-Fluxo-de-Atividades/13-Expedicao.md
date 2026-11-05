@@ -141,14 +141,14 @@ Não há contrato com o av-hub para a Expedição além da etapa do item ([[Cont
 
 Dois modelos coexistem:
 
-- **Por parcial** (usado na fila): `ItemParcial.pesosPallets`, `nomesPallets` e `unidadesPallets`, arrays alinhados por índice (`producao.prisma:454-468`). Atualizado por `atualizarPallets`, que exige setor tipo `EXPEDICAO` e o mesmo tamanho dos três arrays (`itens-parciais.service.ts:927-961`).
+- **Por parcial** (usado na fila): `ItemParcial.pesosPallets`, `nomesPallets` e `unidadesPallets`, arrays alinhados por índice (`producao.prisma:420-434`). Atualizado por `atualizarPallets`, que exige setor tipo `EXPEDICAO` e o mesmo tamanho dos três arrays (`itens-parciais.service.ts:1640-1674`).
 - **Por pedido** (usado na seção Embalagens do detalhe): `PedidoEmbalagem` (identificação e `totalUnidades`) com `PedidoEmbalagemPallet` (identificação, `peso Decimal(10,3)`, `unidades`). `totalUnidades` é derivado e atualizado por delta a cada pallet (`producao.prisma:294-338`).
 
 #### Baixa do saldo hoje 🔴
 
 A baixa do Estoque acontece **quando a Embalagem recebe** a parcial:
 
-- `receber()` chama `consumirReservasDaParcial` se `atendidoPeloEstoque` (`itens-parciais.service.ts:278-285`). A reserva vira `CONSUMIDA` e nasce um `MovimentoEstoque` `SAIDA` (`estoque-operacao.helpers.ts:208-280`).
+- `receber()` chama `consumirReservasDaParcial` se `atendidoPeloEstoque` (`itens-parciais.service.ts:317-324`). A reserva vira `CONSUMIDA` e nasce um `MovimentoEstoque` `SAIDA` (`estoque-operacao.helpers.ts:317-389`).
 - `desfazerRecebimento` e `devolver` ao Estoque estornam a baixa (`estornarConsumosDaParcial`, helpers `:287`; service `:1450`, `:1587`).
 - `EntregasService.create` consome de novo o que ainda estiver reservado, como garantia (`entregas.service.ts:87-94`).
 

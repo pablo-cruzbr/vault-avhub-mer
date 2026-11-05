@@ -152,7 +152,7 @@ A Triagem lista por mês, ano e **filial** (`codigoEmpresa`), mostra a coluna Qu
 | `GET /pedidos/unidades` | `ordens-producao:criar` | Filiais (do av-hub) | `pedidos.controller.ts:83-86` ✅ |
 | `GET /pedidos/setor-estoque-fixo` | `ordens-producao:criar` | Mostra a etapa 1 travada | `pedidos.controller.ts:91-95` ✅ |
 | `POST /pedidos/completo/lote` | `ordens-producao:criar` | Cria todas as ordens da rodada de uma vez | `pedidos.controller.ts:57-64` ✅ |
-| `GET /pedidos`, `GET /pedidos/:id`, `PATCH /pedidos/:id`, `DELETE /pedidos/:id` | `ordens-producao` | Acompanhamento; excluir exige motivo e grava `PedidoExcluido` | `pedidos.controller.ts:120-169` ✅ |
+| `GET /pedidos`, `GET /pedidos/:id`, `PATCH /pedidos/:id`, `DELETE /pedidos/:id` | `ordens-producao` | Acompanhamento; excluir exige motivo e grava `PedidoExcluido` | `pedidos.controller.ts:211-260` ✅ |
 | `GET /pedidos_liberados`, `GET /pedidos_liberados/:numero/itens`, `POST /pedidos_liberados/:numero/importado` | chave `API_KEY` do MES | Lado av-hub do contrato | [[Contratos-da-v2\|LOG-26]] ✅ ver [[Integracao-AvHub-MES]] INT-01 |
 
 O `POST /pedidos/completo` singular foi apagado (PR #50); só o `/lote` existe.
@@ -161,7 +161,7 @@ O `POST /pedidos/completo` singular foi apagado (PR #50); só o `/lote` existe.
 
 - ✅ **Triagem.** `PedidosCarteiraService.listar` lê a página do av-hub (`listarCarteiraIntegracao`), busca os itens de cada pedido com concorrência 8 (`pedidos-carteira.service.ts:48`, `:94-116`) e cruza com as ordens do MES **na mesma filial** (`:132-148`). Falha de um pedido vira `INDISPONIVEL`, não derruba a página.
 - ✅ **Criação.** Valida todos os destinos (fábrica, roteiro, liberação no av-hub, `pedidos.service.ts:207-260`) e depois grava numa transação com timeout de 30 s (`:396`): `Pedidos` com `acompanhamentoQualidade` e `codigoPedidoOmie` copiados do av-hub (`:250-253`, `:282-285`), `ItensPedido`, `Roteiros` (Estoque ordem 0) e uma `ItemParcial` por item.
-- ✅ **Excluir ordem** devolve reservas ATIVAS (`liberarReservas`), enfileira o cancelamento das requisições no av-hub (`enfileirarCancelamentosDoPedido`, 409 se já tem OC) e apaga com snapshot (`pedidos.service.ts:622-712`).
+- ✅ **Excluir ordem** devolve reservas ATIVAS (`liberarReservas`), enfileira o cancelamento das requisições no av-hub (`enfileirarCancelamentosDoPedido`, 409 se já tem OC) e apaga com snapshot (`pedidos.service.ts:773-863`).
 - ✅ **Reenvio do `importado`** com `AVHUB_REENVIO_IMPORTADO_MIN` (padrão 10; 0 desliga) (`pedidos.service.ts:80-85`).
 - 🟡 **Nomes técnicos antigos:** a rota é `/carteira`, o campo é `ordemProducao`, os códigos são `OP-`. Os rótulos novos já estão na tela (09/10, `9bb47e4`).
 - ✅ **Ordem de Produção como entidade e documento (N14-22), só na `develop`.** Desde 27/10 (`ab3318d`) toda ordem de destino de fabricação é emitida na criação e tem PDF (`src/pedidos/ordem-producao-pdf.ts`, `GET /pedidos/:id/op`, `opImpressoes` conta as 2ªs vias). Registro de 14/10 (superado na `develop`): `ordemProducao` era só o texto do pedido (`producao.prisma:97`).
