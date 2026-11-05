@@ -1,5 +1,5 @@
 # Progresso da v3
-Estado atual: Bloco 8 concluído, aguardando "ok" do Nathan para o Bloco 9 (encerramento)
+Estado atual: Bloco 8 concluído e dump de teste de 04/11 incorporado; aguardando "ok" do Nathan para o Bloco 9
 Próxima ação: com o "ok", Bloco 9: mover `_v3/` para `07-Desenvolvimento/v3/` (ajustar os caminhos que citam `_v3/`); o PR da `v3` para a `main` só se o Nathan pedir
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
@@ -174,6 +174,7 @@ São os mesmos commits de `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md` e 
 - o `omie-elt-pipeline` sem `develop`.
 
 ## Problemas e pendências
+- Dump novo (05/11, antes do Bloco 9): o Nathan enviou o esqueleto do banco de **teste** do av-hub de 04/11/2026. Ficha e comparação em `04-Dados/Dump-AvHub-Teste-2026-11-04`; o `.sql` fica só no computador do Nathan (`04-Dados/Dumps/` no `.gitignore`, decisão do Nathan). Responde o achado (2) da conferência do Backlog: as `fn_proposta_aprovar/_cancelar/_transformar` existem no banco de teste (a migration segue fora do repositório) e o `transformar` grava `core_comercial.pedidos_venda` sem liberação. O achado (5) continua: numeração `CO-…-R00`. Saíram do `core_comercial` as 13 tabelas do módulo de teste do Pablo. Notas atualizadas sem apagar o fato de 29/10 (`_v3/scripts/dump-0411.mjs`; fatos 0 sumidos em `_v3/fatos/dump0411`).
 - Do Bloco 8, para o Nathan: na 08, a trava da decisão ao setor da Qualidade (N16-124) aparece 🟡 em "O que já existe" e 📝 🔴 na tabela "O que falta" (vale "decidido, sem código"); na 07, hoje a conferência é contra a NF e o cruzamento com a OC (N16-135, N16-136) segue 🔴 (sem contradição, só registrado); na 11, se quiserem anexo de evidência na reprovação de saída, é decisão nova (a N16-129 diz "um clique e um motivo").
 - Achados da conferência do Backlog para o Nathan decidir: (1) a `develop` da `api-acos-vital` versiona um dump de esquema de 29/10 (`Dump do Avhub para referência (29.10).sql`, f2fa237), usado como evidência de banco; (2) as rotas da proposta chamam `core_comercial.fn_proposta_aprovar/_cancelar/_transformar`, que não estão no repositório nem no dump; (3) o schema da proposta é `core_comercial` no código e `core_vendas_faturamento` na N16-116; (4) o CCP no MES já registra chegada e libera recebimento (`api-pcp` `compras.controller.ts:113,125`), ainda com a permissão `movimentacoes` (BL-017); (5) a numeração da proposta no dump é `CO-<código><ano>-<seq>-R00`, não só dígitos (N16-148, PS-038).
 - `_v3/scripts/contratos-indice.mjs` (Bloco 1) regenera o `Contratos-da-v2` inteiro numa nota só; se for rodado de novo, a lista completa volta para o índice. Não rodar sem ajustar para a parte `Contratos-da-v2-Lista-Completa`.
