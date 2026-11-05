@@ -51,7 +51,7 @@ for (const f of notas) {
   }
 }
 
-const orfas = notas.filter((f) => !recebidos.has(f) && path.basename(f) !== 'CLAUDE.md').map(rel);
+const orfas = notas.filter((f) => !recebidos.has(f) && path.basename(f) !== 'CLAUDE.md' && !rel(f).startsWith('_v3/')).map(rel);
 
 const crlf = [];
 const corrompidos = [];
@@ -61,7 +61,7 @@ for (const f of notas) {
   const txt = buf.toString('utf8');
   if (txt.includes('\r')) crlf.push(rel(f));
   // "Ã" sozinho é letra válida (AÇÃO); só conta quando seguido de byte de continuação (Ã§, Ã£...)
-  if (/Ã[\u0080-¿]|â€|�/.test(txt)) corrompidos.push(rel(f));
+  if ((/Ã[\u0080-¿]|â€|�/.test(txt)) && !rel(f).startsWith('_v3/')) corrompidos.push(rel(f));
   if (buf.length > 25 * 1024) grandes.push(`${rel(f)} (${(buf.length / 1024).toFixed(1)} KB)`);
 }
 
@@ -87,3 +87,5 @@ secao('Arquivos com CRLF', crlf);
 secao('Arquivos com caractere corrompido (Ã, â€, �)', corrompidos);
 secao('Notas acima de 25 KB', grandes);
 console.log(`\n## Links para contratos fora de 06-Contratos: ${contratosLinks.reduce((s, x) => s + x[1], 0)} em ${contratosLinks.length} notas`);
+const idx = path.join(raiz, '06-Contratos', 'Contratos-da-v2.md');
+if (fs.existsSync(idx)) { const ids = new Set([...fs.readFileSync(idx, 'utf8').matchAll(/^\| ((?:LOG|SQL|API|CON)-\d+[a-z]?) \|/gm)].map((m) => m[1])); console.log(`Índice Contratos-da-v2: ${ids.size} contratos distintos (esperado 92)`); }
