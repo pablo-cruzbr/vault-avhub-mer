@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 6 em andamento (falta aplicar a conferência do Backlog na develop)
-Próxima ação: aplicar nas 4 notas Backlog-Frente-* os selos conferidos na develop; depois validar, push e resumo do Bloco 6
+Estado atual: Bloco 6 concluído, aguardando "ok" do Nathan para o Bloco 7
+Próxima ação: com o "ok", rodar a seção 1 e começar o Bloco 7 (validação completa e as 10 perguntas de aceite)
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -90,9 +90,9 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Criar o `CLAUDE.md` na raiz do vault (2026-11-05, b1f9dd3; 41 linhas)
 - [x] Criar `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md` (2026-11-05, b426358; commits b97981c, 2e5456d, befd973, 93f96de e master 5e7e94d; reconferir no Bloco 7)
 - [x] Criar a nota `Tipos-de-ID` (2026-11-05, e0335c2; em `01-Projeto/`; próximos livres: N16-150, BL-082, PS-042, OQ-49, RS-023, CR-20, INT-10, LOG-56, SQL-022, API-019, CON-04)
-- [~] Dar dono único ao status: `Onde-Estamos` e `Backlog`, ambos conferidos na `develop`
+- [x] Dar dono único ao status: `Onde-Estamos` e `Backlog`, ambos conferidos na `develop`
   - [x] `Onde-Estamos` alinhado às raias conferidas no Bloco 3 e com `develop-conferida` (ce95553): 08 deixa de ser "✅ Pronto" (fechar RNC 🔴), 10 passa de "🔴 consumo" a "🟡 matéria-prima", 11 fica "✅ aprovar · 🔴 reprovar parte", 02 ganha "🔴 sem API e sem banco (F3)", 15 ganha "🟡 core_comissao testado no banco"; nova seção "Publicado na main (informação)" com a contagem de 05/11 (api-acos-vital 0, av-hub 12, api-pcp 53, app-pcp 51), vinda de `Sistemas-e-Responsabilidades`; o `Roteiro-da-Proposta-em-Diante` ganhou aviso de que o status é do Onde-Estamos e do Backlog. Fatos: 0 sumiram (`_v3/fatos/bloco6`)
-  - [~] Backlog: 78 itens BL conferidos na `develop` por 3 agentes de leitura (Robert; Gustavo; Nathan + Comercial); falta aplicar
+  - [x] Backlog (80440c2): 78 itens BL conferidos item a item na `develop` por 3 agentes de leitura (tabelas em `_v3/selos/Backlog-*-develop.md`) e aplicados por `_v3/scripts/backlog-develop.mjs`. Viram ✅: BL-001, 002, 004, 006, 008, 019, 028, 041, 042, 052, 058, 064, 065. Viram 🟡: BL-011, 024, 027, 056, 057, 059, 060, 061, 062, 063, 071, 072, 075. Viram ❓ (dependem de cadastro ou teste fora do código): BL-017, 020, 081. A evidência passou a "develop 05/11: repositório arquivo:linha"; a de 14/10 ficou só onde ainda vale (39 trocas em `_v3/fatos/bloco6/substituicoes.tsv`; fatos 0 sumidos). BL-075 a BL-081 foram para `Backlog-Frente-Nathan-Proposta-Omie-e-Comissao`, porque a parte do Nathan passou de 25 KB
 - [x] Reordenar `Home` e `Comece-Aqui`; trilhas para Vendas, Orçamento e Compras, Estoque, Qualidade, Produção, Expedição, Fiscal e Comissão (56ab10e)
 - [x] Corrigir as referências à numeração antiga (56ab10e: só a frase "notas 11 a 14" do Home; em Telas não havia mais; "a nota 11 da tag v2" nas partes é histórica e ficou)
 - [x] Criar `00-Inicio/Manual-de-Manutencao-do-Vault` (dcf1852; 14 seções, todos os itens da instrução)
@@ -119,7 +119,11 @@ Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 
 ### Bloco 5 (2026-11-05, `_v3/validacao-bloco5.md`)
 192 notas; 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; **0 notas acima de 25 KB** (fora de `_v3/`); índice de contratos com 92 (índice + parte); 0 nomes antigos; 60 nós com dono único; 0 ✅ sem citação (agora também nas partes das raias); mapa regenerado (12 fichas, 0 contratos sem nota); fatos: 0 sumiram.
 
+### Bloco 6 (2026-11-05, `_v3/validacao-bloco6.md`, agora com `node scripts/validar.mjs`)
+0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 notas acima de 25 KB; 92 contratos; 0 nomes antigos; 60 nós com dono único; 0 ✅ sem citação; mapa ok (0 contratos sem nota). Fatos do bloco 6 (`--dir=_v3/fatos/bloco6`): 0 sumiram, com 39 trocas de evidência registradas.
+
 ## Problemas e pendências
+- Achados da conferência do Backlog para o Nathan decidir: (1) a `develop` da `api-acos-vital` versiona um dump de esquema de 29/10 (`Dump do Avhub para referência (29.10).sql`, f2fa237), usado como evidência de banco; (2) as rotas da proposta chamam `core_comercial.fn_proposta_aprovar/_cancelar/_transformar`, que não estão no repositório nem no dump; (3) o schema da proposta é `core_comercial` no código e `core_vendas_faturamento` na N16-116; (4) o CCP no MES já registra chegada e libera recebimento (`api-pcp` `compras.controller.ts:113,125`), ainda com a permissão `movimentacoes` (BL-017); (5) a numeração da proposta no dump é `CO-<código><ano>-<seq>-R00`, não só dígitos (N16-148, PS-038).
 - `_v3/scripts/contratos-indice.mjs` (Bloco 1) regenera o `Contratos-da-v2` inteiro numa nota só; se for rodado de novo, a lista completa volta para o índice. Não rodar sem ajustar para a parte `Contratos-da-v2-Lista-Completa`.
 - A tabela do Mestre foi cortada por tamanho (V0.1 a E1, E2 a Q2, Q3 a K6), não por raia. Dá para reagrupar por raia no Bloco 8, se o Nathan preferir.
 - Referências entre crases a `Painel-de-Contratos`: as do Guia saíram no Bloco 4; ficam no frontmatter `fontes` de `Onde-Estamos` (histórico) e em `Analise-de-Organizacao-do-Vault` (exceção).

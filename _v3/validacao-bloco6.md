@@ -1,5 +1,5 @@
 # Validação do vault (2026-11-05)
-Notas: 206  Arquivos: 261
+Notas: 214  Arquivos: 272
 
 ## Links quebrados: 0
 
