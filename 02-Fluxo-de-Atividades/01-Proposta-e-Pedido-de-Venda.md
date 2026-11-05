@@ -134,13 +134,14 @@ Origem: [[Registro-de-Decisoes]]. As regras 14 a 20 e 30 (`C6`, `C7`, `C8`) est�
 | 11 | O vendedor preenche o custo com o que conseguiu, mas **não é o dono do dado** (Compras e Orçamento são). Sem o dado, pede cotação ao orçamentista ou vê o histórico das OC. Ele decide o valor que põe | 📝 N16-06, N16-54 |
 | 12 | A aprovação de desconto e margem é **física** neste ciclo (`V0.4`); no sistema, só no próximo. **O vendedor marca "aprovada"** no sistema, que grava quem, quando e qual revisão | 📝 N16-12, N16-25 |
 | 13 | A comissão estimada nasce em `V0.3` (`K1`) e só o vendedor a vê, como ele a colocou | 📝 N16-10 |
-| 21 | O pedido de custo ao Orçamento **não tem prazo fixo**; o tempo é **cronometrado**. O setor é novo (o Moisés é uma das pessoas) e o sistema funciona sem orçamentista | 📝 N16-58, N16-59, N16-104 |
 | 24 | O câmbio vem da PTAX do Hub, **do dia da aprovação**; não há migração do ERP antigo de propostas | 📝 N16-13, N16-27 |
 | 25 | Produto pendente (`PEND-xxxx`) **não vira pedido** até o cadastro no Omie | 📝 N16-28 |
 | 27 | Erro do Omie ao criar o pedido: **erro de sincronia**, com o motivo e o botão **"Tentar novamente"**; a proposta segue aprovada | 📝 N16-36 |
 | 28 | **A tela da proposta é semelhante à do Simulador de Comissão atual**: pedido, condições comerciais (um conjunto por proposta), itens com Compra, Venda e Resultado, e rodapé de totais com margem e letra. Mesmo motor e mesmas regras, em tabelas novas. Seção "A tela da proposta" abaixo | 📝 N16-19, N16-21, 🔴 sem código |
 | 29 | O vendedor preenche o custo de compra dos itens na própria tela e vê custo líquido, sugerido, margem, letra e a comissão estimada que ele colocou. **Não vê** a comissão real antes da decisão da Controladoria. Na aprovação de **C8** ele vê o valor da compra daquele produto | 📝 N16-10, N16-19, N16-60 |
 | 31 | A Michele tem a tela igual, com o custo real e afins, lado a lado com o estimado, e as condições de **cada evento de custo** | 📝 N16-19, N16-20 |
+
+A regra 21 (pedido de custo ao Orçamento, `B3`) está em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
 
 As regras 10, 22, 23, 26 e 32 (pedido, liberação, cancelamento e telas de pedido) estão em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]], com a mesma numeração.
 
@@ -175,13 +176,14 @@ O pedido de aprovação do vendedor (`C8`) está em [[06-Circuito-de-Compra#C6, 
 | Propostas (lista) | `/vendas/propostas` | HUB | Vendedor, equipe | `V0.1` | ✅ `app/(protected)/vendas/propostas/page.tsx` (movida em 16/10, `200e860`); lê `GET /comercial/propostas` da API do Hub |
 | Nova proposta | `/vendas/propostas/nova` | HUB | Vendedor | `V0.1`, `V0.2` | ✅ `vendas/propostas/nova/page.tsx`, formulário `components/Propostas/PropostaForm/PropostaForm.tsx` |
 | Proposta (detalhe, revisões, linha do tempo) | `/vendas/propostas/[id]` | HUB | Vendedor, equipe | `V0.1` a `V0.7` | ✅ `vendas/propostas/[id]/page.tsx` (abas e análise de margem, 29/10, `88fbafe`); 🟡 aprovar e transformar: API pronta, BFF e botão não |
-| **Página do produto** (histórico, top fornecedores com score, flutuação, volatilidade, média) | a definir 🟡 | HUB | Vendedor | `V0.2`, `B2` | 🔴 ([[02-Orcamento-Base-de-Preco]]) |
 | Acompanhamento de Clientes (a tela Clientes passou a ser esta, N16-112) | `/vendas/acompanhamento-clientes` | HUB | Vendedor | `V0.1` | ✅ (`av-hub` `1a48140`, 27/10); o cliente da proposta sai do cadastro do Hub e `POST /comercial/clientes` cadastra no Omie |
 | Relatório Gerencial | `/vendas/relatorio-gerencial` | HUB | Gerência | — | ✅; o Relatório de Cotações não existe mais como página na `develop` (conferido em 29/10) |
 | Tela da proposta no formato do Simulador (pedido, condições, itens, totais) | dentro de `/vendas/propostas/[id]` e `/vendas/propostas/nova` | HUB | Vendedor | `V0.2`, `V0.3` | 🟡 itens em grade e condições no layout do Simulador desde 27/10 (`37c9cf2`); a análise de margem é gravada com a proposta (29/10); 🔴 sem a comissão estimada |
 | Visão da Controladoria da mesma tela, com custo real | Operações 🟡 | HUB | Controladoria | `K4` | 🔴 ([[15-Custo-Real-e-Comissao]]) |
 | Botão "Transformar em pedido de venda" e marcação da Qualidade | dentro de `/vendas/propostas/[id]` | HUB | Vendedor | `V0.6` | 🔴 tela (a API `transformar` existe) |
 | Marcar "aprovada" (registro da aprovação física) | idem | HUB | Vendedor | `V0.4`, `V0.5` | 🔴 tela (a API `aprovar` existe) |
+
+A página do produto (`B2`) está em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
 
 As telas do pedido (Pedidos de Venda, Notas Fiscais de Saída, tarja de cancelado, Liberar Pedidos) estão em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 
@@ -211,10 +213,10 @@ Rotas do `api-comercial` de teste (legado) ainda sem equivalente na `api-acos-vi
 | `GET /propostas/:id/versoes`, `/:id/versoes/:revisao` | listar versões | `V0.1` | ✅ `propostas.routes.ts` (módulo de teste); 🔴 na `api-acos-vital` |
 | `POST /propostas/calcular`, `/itens/importar`, `GET /itens/modelo` | pré-visualizar, planilha de itens | `V0.1` | ✅ `:27`, `:55`, `:68` (módulo de teste); 🔴 na `api-acos-vital` |
 | `POST /custos/sugerir` | sugestão de custo para o item | `V0.2` | ✅ `custos.routes.ts:30` |
-| `GET /produtos/:id/precos` | histórico, média e fornecedores | `B2` | ✅ `suprimentos.routes.ts:823` |
-| `POST /solicitacoes_custo` e `responder`, `assumir`, `liberar`, `cancelar` | pedido de custo (o prazo obrigatório de 2 dias úteis **sai**: N16-58) | `B3`, `B4` | ✅ `custos.routes.ts:304-510`; 🔴 ajuste |
 | `GET /pedidos_venda_hub/fila-omie`, `PATCH /pedidos_venda_hub/:id/sincronizacao`, `POST /:id/reenviar` | fila e retorno da pipeline, espelho de `/compras/ordens/fila-omie` | `V0.7` | 🔴 (nome em aberto; o pedido já nasce `pendente` em `transformar`) |
 | `GET /propostas/:id/pedido_omie`, `PUT` (digitar o número à mão) | **substituídas**: o pedido deixa de ser digitado | `V0.7` | ✅ `propostas.routes.ts:146-164`, saem |
+
+As rotas de preço do produto e de pedido de custo (`B2` a `B4`) estão em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
 
 A rota de cancelamento do pedido está em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 
@@ -234,7 +236,7 @@ Tudo abaixo é do `api-comercial` (pasta `av-hub/api-comercial`), serviço **só
 - ✅ **Duplicar e copiar para outra empresa** (`propostas.service.ts:853-903`).
 - ✅ **PDF e e-mail da proposta** (HUB gera o PDF; `emailProposta.ts`; evento `PDF_GERADO`).
 - ✅ **Capacidades** derivadas das telas do hub: `propostas`, `propostas-valores`, `custo-item`, `painel-comprador`, `propostas-delegacao` (`domain/permissoes/capacidades.ts:47-56`).
-- ✅ **Pedido de custo** com prazo padrão de 2 dias úteis (`custos.routes.ts:378`) e rótulos `ATRASADA`, `VENCE_HOJE`, `NO_PRAZO` (`:338`): **saem** com N16-58 (cronômetro, sem prazo). `GET /produtos/:id/precos` (`suprimentos.routes.ts:823-880`).
+- O pedido de custo no módulo de teste está em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
 - ✅ **Simulador do Hub** lê a proposta ligada ao pedido para pré-preencher o lado da compra (`simulador.routes.ts`, PR #207). Não é a comissão estimada da proposta.
 
 No HUB (branch `feat/menu-orcamento-vendas-compras`, `5aa5311`): as páginas de Vendas já estão em `app/(protected)/vendas/*` ✅.
@@ -302,7 +304,8 @@ Os itens 7 e 12 (`C6`, `C7`, `C8`) estão em [[06-Circuito-de-Compra#C6, C7 e C8
 | 10 | Tela da proposta no formato do Simulador, com o motor na API (porta de `lib/simulador/motor.ts`) e a comissão estimada | Robert (tela de proposta e API), Nathan (`K1`), Gustavo | `V0.2`, `V0.3`, `K1` | 🟡 |
 | 11 | Visão de Compras (leitura) e visão da Controladoria (custo real, drill-down por evento) da mesma tela | Nathan | `C6`, `C7`, `K4` | 🔴 |
 | 14 | **Pipeline do Omie:** gravar os códigos de integração, ampliar o espelho e o envio da OC com os impostos, recurso novo de recebimento de NF-e, cancelamento e devolução da NF | Nathan, Gustavo | vários | 🔴 ([[Estudo-Omie-API]]) |
-| 15 | Página do produto e regras do score | Nathan, Robert, Pablo | `V0.2`, `B2` | 🔴 ([[02-Orcamento-Base-de-Preco]]) |
+
+O item 15 (página do produto) está em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
 
 Os itens 6 (liberação) e 13 (cancelamento) estão em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
 

@@ -210,6 +210,39 @@ Campos novos pelas decisões 🟡: `oferta.prazo_entrega_dias` (número); `solic
 
 Hoje a regra do código é mais restrita: `veCusto` vem de `custo-item` ou de ser comprador (`capacidades.ts:77`). Dar a página do produto ao vendedor exige tela ou permissão nova (OQ-21).
 
+### Orçamento visto da proposta (B2 a B4)
+
+Trechos que estavam na nota de proposta da v2 (`11-Proposta-e-Pedido-de-Venda`), movidos em 05/11/2026 para cá, a nota dona de `B1` a `B4`. A numeração das regras e dos itens é a da nota de origem. A proposta em si está em [[01-Proposta-e-Pedido-de-Venda]].
+
+#### Regras decididas
+
+| # | Regra | Selo |
+|---|---|---|
+| 21 | O pedido de custo ao Orçamento **não tem prazo fixo**; o tempo é **cronometrado**. O setor é novo (o Moisés é uma das pessoas) e o sistema funciona sem orçamentista | 📝 N16-58, N16-59, N16-104 |
+
+#### Telas
+
+| Nome atual | Rota | App | Quem | Nó | Estado |
+|---|---|---|---|---|---|
+| **Página do produto** (histórico, top fornecedores com score, flutuação, volatilidade, média) | a definir 🟡 | HUB | Vendedor | `V0.2`, `B2` | 🔴 ([[02-Orcamento-Base-de-Preco]]) |
+
+#### Endpoints do módulo de teste
+
+| Método e rota | Uso | Nó | Estado |
+|---|---|---|---|
+| `GET /produtos/:id/precos` | histórico, média e fornecedores | `B2` | ✅ `suprimentos.routes.ts:823` |
+| `POST /solicitacoes_custo` e `responder`, `assumir`, `liberar`, `cancelar` | pedido de custo (o prazo obrigatório de 2 dias úteis **sai**: N16-58) | `B3`, `B4` | ✅ `custos.routes.ts:304-510`; 🔴 ajuste |
+
+#### Como está no código (módulo de teste)
+
+- ✅ **Pedido de custo** com prazo padrão de 2 dias úteis (`custos.routes.ts:378`) e rótulos `ATRASADA`, `VENCE_HOJE`, `NO_PRAZO` (`:338`): **saem** com N16-58 (cronômetro, sem prazo). `GET /produtos/:id/precos` (`suprimentos.routes.ts:823-880`).
+
+#### O que falta (numeração da nota de proposta)
+
+| # | O quê | Dono | Nó | Selo |
+|---|---|---|---|---|
+| 15 | Página do produto e regras do score | Nathan, Robert, Pablo | `V0.2`, `B2` | 🔴 ([[02-Orcamento-Base-de-Preco]]) |
+
 ### O que falta desenvolver
 
 | # | O quê | Dono | Nó | Selo |
