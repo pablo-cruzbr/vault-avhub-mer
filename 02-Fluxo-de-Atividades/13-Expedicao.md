@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, expedicao, logistica-saida, paletes, entrega, x1, x2, x3, x4, mes]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: vigente
+ordem: 13
 nos: [X1, X2, X3, X4]
+anterior: "[[12-Estoque-Despacho]]"
+proxima: "[[14-Fiscal-Omie]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Expedição/Logística (regra) · Nathan (decisões)
 fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens, pedido-embalagem-pallets, estoque-operacao.helpers.ts), app-pcp 1fca8d3 (logistica/expedicao, movimentacoes, ordens-producao), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 10, T-06, api-pcp develop de 27/10/2026, N16-130 a N16-133]
@@ -12,6 +15,10 @@ fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens
 # Expedição e logística de saída (X1 a X4)
 
 **Em uma frase:** a Expedição recebe o que está pronto, embala em pallets, decide se o pedido sai inteiro ou por partes, monta a carga e registra a entrega ao cliente. Nós `X1` a `X4` do [[00-Fluxo-Mestre-0b]]: embalagem e paletização, parcial ou integral, consolida a carga e transporte. Termina na emissão da nota no Omie ([[14-Fiscal-Omie]]). O sistema nunca emite nota fiscal.
+
+**Quando consultar:** dúvidas sobre a saída ao cliente: embalagem, pallets, entrega parcial ou integral, carga e transporte.
+
+**Onde estamos no fluxo:** ← [[12-Estoque-Despacho]] | [[14-Fiscal-Omie]] → · nós desta nota: `X1`, `X2`, `X3`, `X4`
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-120, N16-121 e N16-122: a Expedição pede a retirada ao Estoque e só o Estoque confirma. A reserva é consumida junto com a baixa. A Embalagem só recebe depois da retirada confirmada. O que o documento imprime segue aberto. Contrato: [[Contratos-da-v2|LOG-54]].
