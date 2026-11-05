@@ -153,7 +153,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 
 ## Proposta, Orçamento e comissão nova (`V0`, `B1` a `B4`, `C6` a `C8`, `K1` a `K6`) · [[01-Proposta-e-Pedido-de-Venda]]
 
-Desenho aprovado em 26/10/2026. Em 29/10/2026 a proposta já tem API na `api-acos-vital` e telas em andamento no `av-hub`; o resto segue sem código 🔴. As telas de proposta são do Robert e o Orçamento é do Pablo, com o Robert. Auditoria, conexões e menu: [[14-Telas-e-Experiencia-do-Usuario]].
+Desenho aprovado em 26/10/2026. Em 29/10/2026 a proposta já tem API na `api-acos-vital` e telas em andamento no `av-hub`; o resto segue sem código 🔴. As telas de proposta são do Robert e o Orçamento é do Pablo, com o Robert. Auditoria, conexões e menu: [[Telas-e-Experiencia-do-Usuario]].
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|

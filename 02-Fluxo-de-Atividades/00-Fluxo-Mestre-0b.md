@@ -302,4 +302,4 @@ flowchart TD
 | Expedição | X1–X4 | [[13-Expedicao]] |
 | Fiscal | O1, O2 | [[14-Fiscal-Omie]] |
 | Comissão | K1–K6 | [[15-Custo-Real-e-Comissao]] |
-| Telas de Vendas, Orçamento e Compras | todos | [[14-Telas-e-Experiencia-do-Usuario]] |
+| Telas de Vendas, Orçamento e Compras | todos | [[Telas-e-Experiencia-do-Usuario]] |

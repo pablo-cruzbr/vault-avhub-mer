@@ -243,7 +243,7 @@ Rotas do `api-comercial` de teste (legado) ainda sem equivalente na `api-acos-vi
 | `GET /divergencias_compra`, `POST /:id/aprovar`, `/:id/reprovar`, `/:id/resolver` | aviso ao vendedor, decisão dele e solução de Compras | `C8` | 🔴 🟡 nomes |
 | `GET /propostas/:id/pedido_omie`, `PUT` (digitar o número à mão) | **substituídas**: o pedido deixa de ser digitado | `V0.7` | ✅ `propostas.routes.ts:146-164`, saem |
 
-Auditoria das telas e a nova página de proposta: [[14-Telas-e-Experiencia-do-Usuario]]; mapa do pedido no Omie: [[Mapa-IncluirPedido-Omie]].
+Auditoria das telas e a nova página de proposta: [[Telas-e-Experiencia-do-Usuario]]; mapa do pedido no Omie: [[Mapa-IncluirPedido-Omie]].
 
 Contratos: os desta parte foram removidos em 29/10/2026 e o Robert cria os novos. Nomes de rota 🟡: o Gustavo e o Robert fecham.
 

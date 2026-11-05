@@ -163,7 +163,7 @@ A IA pode abrir o preview das telas (o navegador embutido do app, com o front ro
 
 **Abra o preview sempre que a decisão depender de:**
 
-- o que aparece na tela, em que ordem e com que nome (compare com `Telas-por-Raia` e `14-Telas-e-Experiencia-do-Usuario`);
+- o que aparece na tela, em que ordem e com que nome (compare com `Telas-por-Raia` e `Telas-e-Experiencia-do-Usuario`);
 - campos, botões, estados vazios, mensagens de erro e validações;
 - o que cada perfil vê ou não vê (`RBAC-e-Permissoes`);
 - o caminho completo de um nó do fluxo, da tela até a resposta da API.

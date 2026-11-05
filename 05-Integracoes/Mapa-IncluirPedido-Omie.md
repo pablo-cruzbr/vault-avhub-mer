@@ -280,8 +280,8 @@ Em Uberaba todo pedido com `1.01.99` é refaturamento por definição; `sem_refa
 - **Condições de pagamento de venda por conta:** 📝 decidido (Nathan, 04/11): fica só `condicoes_pagamento_compras`, sem recurso novo (ver o início da seção 5.1). Falta o de-para com a chave da tabela de encargos do motor, e a coluna `encargos` (Gustavo). 🟡
 - **Categoria, conta corrente, projeto e etapa já são sincronizados** pela pipeline (`categorias`, `contasCorrentes`, `projetos`, `etapasFaturamento`, `vendedores`). ✅ Não é preciso digitar códigos: a configuração por conta **escolhe** da lista sincronizada. 🟡 O que falta é guardar **qual** categoria, conta corrente e cenário o pedido de venda usa em cada conta.
 - **Configuração por conta Omie** (nova tabela ou parâmetros): `codigo_categoria`, `codigo_conta_corrente`, `codigo_cenario_impostos`, etapa inicial e local de estoque, **por conta** (Mogi e Uberaba). 🔴 hoje não existe lugar.
-- **Proposta:** ver [[14-Telas-e-Experiencia-do-Usuario]] para o que isso muda na tela (condição de pagamento escolhida de uma lista, imposto vindo do Omie, destino derivado do cliente).
+- **Proposta:** ver [[Telas-e-Experiencia-do-Usuario]] para o que isso muda na tela (condição de pagamento escolhida de uma lista, imposto vindo do Omie, destino derivado do cliente).
 
 ### Ver também
 
-[[Estudo-Omie-API]] · [[01-Proposta-e-Pedido-de-Venda]] · [[14-Telas-e-Experiencia-do-Usuario]]
+[[Estudo-Omie-API]] · [[01-Proposta-e-Pedido-de-Venda]] · [[Telas-e-Experiencia-do-Usuario]]

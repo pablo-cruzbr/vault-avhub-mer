@@ -31,7 +31,7 @@ O v1 (`vault-avhub-mer`) tem **171 notas** e est√° congelado. Os contratos mant√
 | `01-Fluxo-Operacional/Fluxo-Detalhado-Pedido-Item.md` | [[00-Fluxo-Mestre-0b]] |
 | `01-Fluxo-Operacional/Fluxo-Operacional-Visao-Geral.md` | [[00-Fluxo-Mestre-0b]] |
 | `01-Fluxo-Operacional/Fluxo-Sistema-no-Meio.md` | [[00-Fluxo-Mestre-0b]] |
-| `01-Fluxo-Operacional/Fluxograma-Telas-por-Bloco.md` | [[Telas-por-Raia]] |
+| `01-Fluxo-Operacional/Fluxograma-Telas-por-Bloco.md` | [[Telas-por-Raia\|Telas-por-Raia]] |
 | `01-Fluxo-Operacional/Fluxogramas-Completos.md` | [[Indice-de-Diagramas]] |
 | `01-Fluxo-Operacional/Modelo-Destinacao-Item.md` | [[04-PCP-Triagem-e-Destinacao\|02-PCP-Triagem-e-Destinacao]] |
 | `01-Fluxo-Operacional/PCP-Carteira.md` | [[04-PCP-Triagem-e-Destinacao\|02-PCP-Triagem-e-Destinacao]] |
@@ -92,7 +92,7 @@ O v1 (`vault-avhub-mer`) tem **171 notas** e est√° congelado. Os contratos mant√
 | `04-Arquitetura-Transversal/Perguntas-Pendentes-MES-Estoque.md` | [[Pontas-Soltas]] |
 | `04-Arquitetura-Transversal/Perguntas-em-Aberto-Consolidadas.md` | [[Pontas-Soltas]] |
 | `04-Arquitetura-Transversal/Rastreabilidade-e-SLA-de-Eventos.md` | [[Rastreabilidade-e-Torre-de-Fluxo]] |
-| `04-Arquitetura-Transversal/Revisao-dos-Estados-e-Status.md` | [[Estados-e-Status]] |
+| `04-Arquitetura-Transversal/Revisao-dos-Estados-e-Status.md` | [[Estados-e-Status\|Estados-e-Status]] |
 | `04-Arquitetura-Transversal/Schema-Postgres-Multi-Dominio.md` | [[Schemas-Postgres]] |
 | `05-Pessoas-e-Equipe/Equipe-Projeto.md` | [[Equipe-e-Divisao]] |
 | `06-Glossario/Glossario.md` | [[Glossario]] |
