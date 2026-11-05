@@ -133,7 +133,7 @@ develop-conferida: [api-acos-vital <commit>, av-hub <commit>, api-pcp <commit>, 
 - Pastas: `Ativos/` (a fazer ou parcial), `Entregues/` (feito na `develop`), `Arquivados/` (superado, fora de escopo ou histórico) e `Consultas/`. Modelos em `Modelos/`.
 - Vocabulário de status: `proposta`, `para-implementar`, `parcial`, `implementado-na-develop`, `arquivado`. Publicado na `main` é informação, não status.
 - Todo contrato novo ganha uma linha na seção "Contratos novos (v3)" do [[Contratos-da-v2]] (o primeiro contrato novo cria a tabela ali), e a linha "Próximos IDs livres" é atualizada. A lista completa dos contratos da v2 fica em [[Contratos-da-v2-Lista-Completa]].
-- Nota que passar de ~25 KB é dividida: o resumo fica na nota, e o detalhe vai para notas-parte em `<pasta>/Partes/`, com `parte-de` no frontmatter (script `_v3/scripts/dividir.mjs`, Bloco 5 da v3).
+- Nota que passar de ~25 KB é dividida: o resumo fica na nota, e o detalhe vai para notas-parte em `<pasta>/Partes/`, com `parte-de` no frontmatter (script `scripts/dividir.mjs`; veja o [[Manual-de-Manutencao-do-Vault]]).
 
 ### Esquemas de banco
 
