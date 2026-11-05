@@ -23,7 +23,7 @@ O pedido começa na proposta (ou no pedido digitado no Omie) e termina na nota f
 
 | Pasta | O que tem |
 |---|---|
-| `00-Inicio` | Porta de entrada: [[Comece-Aqui]] · [[Onde-Estamos]] · [[Regras-do-Vault]] · [[Guia-de-Leitura-do-Vault-e-dos-Sistemas]] · [[Mapa-v1-para-v2]] |
+| `00-Inicio` | Porta de entrada: [[Comece-Aqui]] · [[Onde-Estamos]] · [[Regras-do-Vault]] · [[Guia-de-Leitura-do-Vault-e-dos-Sistemas]] · [[Mapa-v1-para-v2]] · [[Mapa-v2-para-v3]] |
 | `01-Projeto` | O projeto em si: [[Visao-do-Projeto]] · [[Sistemas-e-Responsabilidades]] · [[Equipe-e-Divisao]] · [[Cronograma]] · [[Infraestrutura]] · [[Glossario]] |
 | `02-Fluxo-de-Atividades` | **O coração do manual.** [[00-Fluxo-Mestre-0b]] e uma nota por setor (lista abaixo), mais [[Telas-e-Experiencia-do-Usuario]], [[Estados-e-Status]] e [[Telas-por-Raia]] |
 | `03-Sistemas` | Como cada sistema é feito: [[AV-Hub-Front]] · [[AV-Hub-API]] · [[API-Comercial]] · [[Mapa-do-Modulo-do-Pablo]] · [[MES-Backend]] · [[MES-Front]] · [[Pipeline-Omie]] · [[RBAC-e-Permissoes]] · [[Bugs-Conhecidos]] · [[Proposta-Score-e-Volatilidade-OQ-46]] |

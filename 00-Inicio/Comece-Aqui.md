@@ -37,7 +37,7 @@ fontes: [plano de 14/10/2026]
 - **Um contrato:** [[Contratos-da-v2]] (ID, apelido, status e nó do 0b).
 - **Uma decisão:** [[Registro-de-Decisoes]].
 - **Um termo:** [[Glossario]].
-- **Uma nota do vault antigo:** [[Mapa-v1-para-v2]].
+- **Uma nota do vault antigo:** [[Mapa-v1-para-v2]] (v1 → v2) e [[Mapa-v2-para-v3]] (v2 → v3).
 - **Como ler o vault junto com o código, as telas e o banco (para a IA e para quem analisa):** [[Guia-de-Leitura-do-Vault-e-dos-Sistemas]].
 - **O que ainda está solto:** [[Pontas-Soltas]], [[Perguntas-Proposta-Pedido-Comissao]] e [[Contradicoes-Resolvidas]].
 
