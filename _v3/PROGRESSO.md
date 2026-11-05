@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 2, amostra de 20 links (simulada) aguardando aprovação do Nathan
-Próxima ação: com o "ok", rodar `node _v3/scripts/renomear.mjs --grupo=raias`, commitar; depois `--crases`, mapa/build, `--grupo=transversais` e `Mapa-v2-para-v3`
+Estado atual: Bloco 2 concluído, aguardando "ok" do Nathan para o Bloco 3 (julgamento)
+Próxima ação: com o "ok" e o Obsidian fechado, rodar a seção 1, copiar a lista do Bloco 3 para cá e começar por `nos: [...]` no frontmatter das raias
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -46,12 +46,12 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 
 ### Bloco 2: Renomear um para um
 - [x] Gerar o `mapa-renomeacao.csv` (2026-11-05: 13 raias, 3 transversais, 3 linhas de contrato/modelo do Bloco 1)
-- [~] Rodar o script de renomeação (`_v3/scripts/renomear.mjs`; simulação: 13 `git mv`, 330 links em 46 notas; transversais: 3 `git mv`, 10 links em 8 notas)
-- [ ] Atualizar as referências entre crases aos nomes de notas
-- [~] Mostrar ao Nathan uma amostra de 20 links reescritos (`_v3/amostra-links-bloco2.txt`, aguardando ok)
-- [ ] Atualizar `build.mjs`, fichas e `exemplo-mapa-vendas.html`; rodar `node build.mjs`
-- [ ] Mover as transversais para `Transversais/`
-- [ ] Criar `Mapa-v2-para-v3`
+- [x] Rodar o script de renomeação (2026-11-05, 3f84353: 13 `git mv`, 330 links em 46 notas; nas notas históricas o link ganhou o nome antigo como alias)
+- [x] Atualizar as referências entre crases aos nomes de notas (2026-11-05, 9fde32d: só 1, `14-Telas-e-Experiencia-do-Usuario` no Guia, linha 166; restam `Painel-de-Contratos` no Guia, linhas 112 e 133, para o Bloco 4)
+- [x] Mostrar ao Nathan uma amostra de 20 links reescritos (aprovada em 2026-11-05; `_v3/amostra-links-bloco2.txt`)
+- [x] Atualizar `build.mjs`, fichas e `exemplo-mapa-vendas.html`; rodar `node build.mjs` (2026-11-05, 89f409d: 13 caminhos no `build.mjs`, 1 menção "nota 11" na ficha de Compras, 1 menção a contrato no exemplo; as 9 fichas com contrato já foram no Bloco 1)
+- [x] Mover as transversais para `Transversais/` (2026-11-05, 9fde32d: 3 `git mv`, 10 links em 8 notas)
+- [x] Criar `Mapa-v2-para-v3` (2026-11-05, 8bf55ff; ligado no Home e no Comece-Aqui)
 
 ### Bloco 3: Dono único e estado pela `develop` (julgamento)
 - [ ] (copiar a lista da seção 8 da instrução quando o bloco começar)
@@ -64,6 +64,9 @@ Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 
 
 ### Bloco 1 (2026-11-05, `_v3/validacao-bloco1.md`)
 92 notas; 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 links para contrato da v2 fora do índice; índice com 92 contratos distintos; 19 notas acima de 25 KB (Bloco 5); mapa regenerado (12 fichas). Validador ajustado: `_v3/` fica fora de órfãs e de codificação (cita os padrões de propósito).
+
+### Bloco 2 (2026-11-05, `_v3/validacao-bloco2.md`)
+95 notas; 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 links para contratos da v2; índice com 92; nomes antigos: só 2 (`Painel-de-Contratos` entre crases no Guia, para o Bloco 4); mapa regenerado. O validador ganhou a checagem de nomes antigos (links e crases) a partir do CSV.
 
 ## Problemas e pendências
 - Referências entre crases a `Painel-de-Contratos` ficam no `Guia-de-Leitura` (linhas 112 e 133; atualizar no Bloco 4), no frontmatter `fontes` de `Onde-Estamos` (histórico) e em `Analise-de-Organizacao-do-Vault` (exceção).

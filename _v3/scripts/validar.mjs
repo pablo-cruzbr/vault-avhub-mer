@@ -89,3 +89,26 @@ secao('Notas acima de 25 KB', grandes);
 console.log(`\n## Links para contratos fora de 06-Contratos: ${contratosLinks.reduce((s, x) => s + x[1], 0)} em ${contratosLinks.length} notas`);
 const idx = path.join(raiz, '06-Contratos', 'Contratos-da-v2.md');
 if (fs.existsSync(idx)) { const ids = new Set([...fs.readFileSync(idx, 'utf8').matchAll(/^\| ((?:LOG|SQL|API|CON)-\d+[a-z]?) \|/gm)].map((m) => m[1])); console.log(`Índice Contratos-da-v2: ${ids.size} contratos distintos (esperado 92)`); }
+
+// Nomes antigos do mapa (a partir do Bloco 2): em [[links]] e em texto entre crases.
+const csv = path.join(raiz, '_v3', 'mapa-renomeacao.csv');
+if (fs.existsSync(csv)) {
+  const EXC = ['Mapa-v2-para-v3', 'Mapa-v1-para-v2', 'Contratos-da-v2', 'Analise-de-Organizacao-do-Vault', 'Registro-de-Decisoes'];
+  const antigos = fs.readFileSync(csv, 'utf8').split('\n').slice(1)
+    .map((l) => l.split(',')[0]).filter((a) => a && a.endsWith('.md') && !a.includes('*'))
+    .map((a) => path.basename(a, '.md'))
+    .filter((n) => !notas.some((f) => path.basename(f, '.md') === n)); // nome antigo que ainda existe como nota não conta
+  const re = new RegExp(`(?<![A-Za-z0-9-])(${antigos.join('|')})(?![A-Za-z0-9-])`);
+  const achados = [];
+  for (const f of notas) {
+    const r = rel(f);
+    if (r.startsWith('_v3/') || EXC.includes(path.basename(f, '.md'))) continue;
+    const txt = fs.readFileSync(f, 'utf8');
+    for (const [i, l] of txt.split('\n').entries()) {
+      const trechos = [...l.matchAll(/\[\[[^\]\n]+?\]\]/g), ...l.replace(/\[\[[^\]\n]+?\]\]/g, (m) => 'x'.repeat(m.length)).matchAll(/`[^`]*`/g)]
+        .map((m) => l.slice(m.index, m.index + m[0].length));
+      for (const t of trechos) if (re.test(t)) achados.push(`${r}:${i + 1} ${t.slice(0, 90)}`);
+    }
+  }
+  secao('Nomes antigos em links ou crases (fora das exceções)', achados);
+}
