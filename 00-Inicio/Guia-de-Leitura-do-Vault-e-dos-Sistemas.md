@@ -1,10 +1,10 @@
 ---
 tags: [inicio, guia, ia]
 criado: 2026-11-05
-atualizado: 2026-11-05
+estado-em: 2026-11-05
 status: vigente
 dono: Nathan
-fontes: [análise do vault de 05/11/2026, Regras-do-Vault, Comece-Aqui]
+fontes: [análise do vault de 05/11/2026, Regras-do-Vault, Comece-Aqui, instrução da v3 (_v3/INSTRUCAO.md, seção 1 e fatos F1 a F5)]
 ---
 
 # Guia de leitura do vault e dos sistemas (para a IA)
@@ -12,6 +12,24 @@ fontes: [análise do vault de 05/11/2026, Regras-do-Vault, Comece-Aqui]
 **Em uma frase:** ensina a IA (e qualquer colaborador) a ler o vault e o código dos sistemas na ordem certa, para decidir com o máximo de certeza: o vault explica o que o sistema deve fazer, e o código e o banco provam o que ele faz.
 
 **Quando consultar esta nota:** antes de qualquer análise que cruze o vault com o código, o banco ou as telas. Para o roteiro de 5 minutos de quem chegou agora, veja [[Comece-Aqui]]; para as regras de escrita, [[Regras-do-Vault]].
+
+## Antes de tudo: preparar o ambiente
+
+Faça isto no início de toda sessão, antes de ler ou escrever (é a seção 1 da instrução da v3).
+
+1. **Atualize os seis repositórios.** Em cada pasta, rode `git fetch --all --prune` e anote o commit de `origin/develop` (no vault, o de `origin/main`).
+2. **Vault:** traga o remoto com `git pull --ff-only`. Se não for fast-forward, pare e avise; não faça merge nem rebase por conta própria.
+3. **Sistemas:** só leitura, sempre pela `origin/develop` (F5). Nunca troque de branch, faça commit ou stash neles. O `omie-elt-pipeline` não tem `develop`: a base é `origin/master`.
+4. **Quebra de linha:** no vault, `git config core.autocrlf` tem de ser `false`. O `.gitattributes` exige `eol=lf`.
+5. **Obsidian:** antes de mexer em muitas notas de uma vez (renomear, mover, dividir), confirme com o Nathan que o Obsidian está fechado.
+
+**Os cinco fatos que valem (05/11/2026):**
+
+- **F1.** A ordem do vault é a ordem do fluxo do mermaid: as raias vão de `01-Proposta-de-Venda` a `15-Custo-Real-e-Comissao`.
+- **F2.** Os contratos da v2 ficaram na v2 (tag `v2-antes-da-v3`); o vault os consulta pelo índice [[Contratos-da-v2]].
+- **F3.** O módulo do Pablo (proposta e suprimentos) não tem API nem banco. O que não estiver na `develop` é 🔴 "sem API e sem banco"; o `api-comercial` de teste será removido inteiro.
+- **F4.** O Nathan fecha o Obsidian enquanto a IA trabalha em lote.
+- **F5.** A base é a `develop` dos sistemas: se está na `develop`, está pronto (✅). A `main` não é critério de pronto; só aparece como informação ("publicado na `main`: sim/não").
 
 ## Comando: "atualizar o vault"
 
@@ -33,7 +51,7 @@ Faça isto em `api-acos-vital`, `av-hub`, `api-pcp`, `app-pcp` e `omie-elt-pipel
 1. `git fetch --all --prune`.
 2. Relate, sem mexer, se há alteração não commitada ou commit local sem push na branch atual. É trabalho de alguém.
 3. Se a branch atual for `develop`, o working tree estiver limpo e só faltar trazer o remoto, rode `git pull --ff-only`. Fora isso, não troque de branch, não faça commit e não faça stash.
-4. Leia sempre pela `origin/develop`, sem checkout. Por exemplo: `git show origin/develop:<arquivo>` e `git grep <termo> origin/develop`. Se o repositório não tiver `develop`, use `origin/main` e avise.
+4. Leia sempre pela `origin/develop`, sem checkout. Por exemplo: `git show origin/develop:<arquivo>` e `git grep <termo> origin/develop`. Se o repositório não tiver `develop`, use o ramo principal (`origin/master` no `omie-elt-pipeline`) e avise.
 
 **3. Descubra o que mudou desde a última atualização.**
 
@@ -70,7 +88,7 @@ Tudo fica dentro de `C:\Users\nathan.silva\Desktop\Gerenciamento-de-Integracoes`
 | --- | --- | --- | --- |
 | `vault-avhub-mer-v2` | Vault | O manual do fluxo de Atividades (pedido de 0 a 100%) | `Home`, `Comece-Aqui`, `Regras-do-Vault` |
 | `api-acos-vital` | ERP | API do av-hub (dono: Gustavo; rotas comerciais com o Robert desde 28/10) | `AV-Hub-API`, `Banco-AvHub` |
-| `av-hub` | ERP | Front do av-hub, o HUB em Next.js, com o BFF e a pasta `api-comercial/` (legado, só leitura) | `AV-Hub-Front`, `Mapa-Rotas-BFF-Bearer`, `Telas-por-Raia` |
+| `av-hub` | ERP | Front do av-hub, o HUB em Next.js, com o BFF e a pasta `api-comercial/` (módulo de teste do Pablo, será removido inteiro; não conta como pronto, F3) | `AV-Hub-Front`, `Mapa-Rotas-BFF-Bearer`, `Telas-por-Raia` |
 | `api-pcp` | MES | Backend do MES, o sistema de chão de fábrica (dono: Robert) | `MES-Backend`, `Banco-MES` |
 | `app-pcp` | MES | Front do MES (dono: Robert) | `MES-Front`, `Estados-e-Status` |
 | `omie-elt-pipeline` | Pipeline | Carrega dados do Omie para o Postgres do av-hub | `Pipeline-Omie`, `Omie-Integracao-Estado` |
@@ -87,11 +105,13 @@ Antes de ler qualquer código, confirme a estrutura real de cada pasta (`README`
 2. `Visao-do-Projeto` e `Sistemas-e-Responsabilidades`: o que é o ERP e quem cuida de quê.
 3. `00-Fluxo-Mestre-0b`: o diagrama do pedido. Cada nó (`V1`, `P2`, `E6`…) liga setor, tela, endpoint, contrato e código. É o índice central.
 4. `Onde-Estamos`: o que está pronto e o que falta, por setor.
-5. A nota de raia do setor em questão (`02-Fluxo-de-Atividades`), depois o contrato (`06-Contratos`) e a decisão (`08-Decisoes`).
+5. A nota de raia do setor em questão (`02-Fluxo-de-Atividades`), depois o contrato e a decisão (`08-Decisoes`). Contrato da v2 se acha pelo ID no `Contratos-da-v2`, que leva ao texto no GitHub (tag `v2-antes-da-v3`); contrato novo fica em `06-Contratos`.
+
+**As raias, na ordem do fluxo (F1).** `01-Proposta-de-Venda` → `02-Orcamento-Base-de-Preco` → `03-Pedido-de-Venda-e-Liberacao` → `04-PCP-Triagem-e-Destinacao` → `05-Estoque-Atendimento` → `06-Circuito-de-Compra` → `07-Recebimento` → `08-Qualidade-Entrada` → `09-Estoque-Entrada-do-Lote` → `10-Producao-e-Roteiro` → `11-Qualidade-Saida` → `12-Estoque-Despacho` → `13-Expedicao` → `14-Fiscal-Omie` → `15-Custo-Real-e-Comissao`. Cada raia abre com "Em uma frase", "Quando consultar" e "Onde estamos no fluxo" (anterior, próxima e os nós de que é dona, também no frontmatter `nos:`). Estados e telas ficam em `02-Fluxo-de-Atividades/Transversais/`. Os nomes da v2 estão no `Mapa-v2-para-v3`.
 
 **Precedência das fontes.** Em conflito, vale a ordem abaixo; entre dois itens do mesmo nível, vale a data mais recente.
 
-1. Código nos branches atuais.
+1. Código na `origin/develop` dos sistemas (F5); o `develop-conferida` de cada nota diz qual commit foi lido.
 2. Dumps de esquema (MES e av-hub, de 14/10/2026).
 3. `Registro-de-Decisoes`.
 4. `00-Fluxo-Mestre-0b`.
@@ -103,13 +123,13 @@ Antes de ler qualquer código, confirme a estrutura real de cada pasta (`README`
 | --- | --- | --- |
 | ✅ | Está na `develop` | Confira na `origin/develop` o `arquivo:linha` citado; o código pode ter mudado |
 | 📝 | Decidido | Procure o ID da decisão no registro e veja se algo a supera |
-| 🟡 | Proposta ou parcial | Não trate como regra |
-| 🔴 | Aberto ou sem código | Não assuma que existe |
+| 🟡 | Parcial na `develop` | Não trate como pronto; veja o que falta na nota |
+| 🔴 | Não está na `develop` | Não assuma que existe (no módulo do Pablo: "sem API e sem banco", F3) |
 | ❓ | Não conferido na `develop` | Confira na `origin/develop` antes de afirmar. A `main` é só informação (o que já foi publicado), não critério de pronto |
 
-**Achar pelo ID, não pela leitura.** Busque o ID exato (`N16-60`, `BL-035`, `PS-037`, `OQ-15`, `LOG-46`, `V0.3`) em vez de abrir a nota inteira. Prefixos: `N16`/`N14`/`DEC`/`EN`/`EC`/`#` são decisões, `BL` é tarefa do backlog, `PS` é ponta solta, `OQ` é pergunta em aberto, `RS` é risco, `LOG`/`SQL`/`API`/`CON` são contratos.
+**Achar pelo ID, não pela leitura.** Busque o ID exato (`N16-60`, `BL-035`, `PS-037`, `OQ-15`, `LOG-46`, `V0.3`) em vez de abrir a nota inteira. Prefixos: `N16`/`N14`/`DEC`/`EN`/`EC`/`#` são decisões, `BL` é tarefa do backlog, `PS` é ponta solta, `OQ` é pergunta em aberto, `RS` é risco, `LOG`/`SQL`/`API`/`CON` são contratos (os da v2 estão no `Contratos-da-v2`).
 
-**O que não ler inteiro.** `Registro-de-Decisoes` (190 KB), `Backlog-por-Frente`, `00-Fluxo-Mestre-0b`, `03-Modelo-Novo-core_comissao` e `Painel-de-Contratos` passam de 45 KB. Leia o índice ou a seção e busque o resto. Os `.csv`, `.sql`, `.html` e PDFs de `04-Dados/Sequenciais`, `09-Diagramas` e `10-Anexo-Fora-do-Fluxo` só se a tarefa pedir.
+**O que não ler inteiro.** `Registro-de-Decisoes` (190 KB), `Backlog-por-Frente`, `00-Fluxo-Mestre-0b` e `03-Modelo-Novo-core_comissao` passam de 45 KB; o `Contratos-da-v2` tem 30 KB (busque pelo ID). Leia o índice ou a seção e busque o resto. Os `.csv`, `.sql`, `.html` e PDFs de `04-Dados/Sequenciais`, `09-Diagramas` e `10-Anexo-Fora-do-Fluxo` só se a tarefa pedir.
 
 **Regra do perfil de teste.** `Admin (Dev)` é perfil de teste do time de TI, não é ator. Nunca o liste em "quem atua", diagramas ou papéis.
 
@@ -130,7 +150,7 @@ O vault diz o que procurar; o código diz o que existe. Para cada afirmação re
 | Quero entender | Veja primeiro no vault | Depois no código |
 | --- | --- | --- |
 | Uma tela do HUB | `Telas-por-Raia`, `AV-Hub-Front` | `av-hub` (página, componente e BFF) |
-| Uma rota ou regra da API do Hub | `AV-Hub-API`, o contrato do `Painel-de-Contratos` | `api-acos-vital` |
+| Uma rota ou regra da API do Hub | `AV-Hub-API`, o contrato pelo ID no `Contratos-da-v2` | `api-acos-vital` |
 | Chão de fábrica, OP, lote, recebimento | `MES-Backend`, `MES-Front`, `Estados-e-Status` | `api-pcp` e `app-pcp` |
 | Dados vindos do Omie | `Pipeline-Omie`, `Omie-Integracao-Estado` | `omie-elt-pipeline` e schemas `omie_*` |
 | Permissões e perfis | `RBAC-e-Permissoes`, `Chaves-e-Autenticacao` | `api-acos-vital` (e o BFF do `av-hub`) |
