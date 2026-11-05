@@ -140,3 +140,13 @@ if (fs.existsSync(mestre)) {
     secao('Nós sem dono único', prob);
   }
 }
+
+// Mapa HTML: todo caminho de nota citado no build.mjs existe.
+const build = path.join(raiz, '09-Diagramas', 'mapa', 'build.mjs');
+if (fs.existsSync(build)) {
+  const b = fs.readFileSync(build, 'utf8');
+  const R = '02-Fluxo-de-Atividades/';
+  const caminhos = [...b.matchAll(/R \+ "([^"]+)"/g)].map((m) => R + m[1])
+    .concat([...b.matchAll(/"(\d\d-[A-Za-z]+\/[^"]+)"/g)].map((m) => m[1]));
+  secao('Caminhos do build.mjs que não existem', caminhos.filter((c) => !fs.existsSync(path.join(raiz, c + '.md'))));
+}

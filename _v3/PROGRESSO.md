@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 3, tarefa 2 (fatos de 05-Estoque-Atendimento-e-Despacho antes da divisão)
-Próxima ação: salvar `_v3/fatos/05-Estoque-Atendimento-e-Despacho.md` e dividir a nota em 05, 09 e 12
+Estado atual: Bloco 3, divisão de 01-Proposta-e-Pedido-de-Venda (próxima tarefa)
+Próxima ação: salvar `_v3/fatos/01-Proposta-e-Pedido-de-Venda.md`, ler a nota por seções (47 KB) e dividir
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -55,9 +55,9 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 
 ### Bloco 3: Dono único e estado pela `develop` (julgamento)
 - [x] Adicionar `nos: [...]` ao frontmatter de cada nota de raia (2026-11-05, 2610177: 13 notas; 60 nós do mermaid, cada um com um dono; R5 não existe no mermaid; provisórias: 01 fica com V0.1–V0.7 e V0C, 05 com E1–E6 até a divisão)
-- [ ] Antes de mexer numa nota, salvar a lista de fatos dela em `_v3/fatos/<nota>.md`
+- [~] Antes de mexer numa nota, salvar a lista de fatos dela em `_v3/fatos/<nota>.md` (script `_v3/scripts/fatos.mjs`; feito: 05-Estoque-Atendimento-e-Despacho, 5136542)
 - [ ] Dividir as notas provisórias (uma divisão por tarefa)
-  - [ ] 05-Estoque-Atendimento-e-Despacho → 05-Estoque-Atendimento (E1–E4), 09-Estoque-Entrada-do-Lote (E5), 12-Estoque-Despacho (E6)
+  - [x] 05-Estoque-Atendimento-e-Despacho → 05-Estoque-Atendimento (E1–E4), 09-Estoque-Entrada-do-Lote (E5), 12-Estoque-Despacho (E6) (2026-11-05, 4c146bb e decdb4d: 36 links decididos um por um em `_v3/scripts/links-divisao-estoque.mjs`; regras 9 e 11 → 09, regra 10 → 12; fatos 307/307 e 116/116)
   - [ ] 01-Proposta-e-Pedido-de-Venda → 01-Proposta-de-Venda (V0.1–V0.7, V0C); trechos de V1–V3 para 03, B1–B4 para 02, C6–C8 para 06
 - [ ] Mover os trechos de nós com mais de uma casa (C6–C8, B1–B4, V1–V3, P3) para a nota dona
 - [ ] Trocar `10.1–10.4` e `11.1` pelos IDs de nó (X1, X3, X4 e a ligação do O1)
