@@ -5,7 +5,7 @@ estado-em: 2026-11-05
 status: vigente
 dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
 parte-de: "[[06-Circuito-de-Compra]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 1654f65, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144]
 ---
 
@@ -42,32 +42,32 @@ Nós do [[00-Fluxo-Mestre-0b]]: `P3` requisição de compra (origem PCP, MES), `
 | 2 | O circuito do MES é **fixo do sistema, fora do roteiro**: `Estoque → Requisições → Compras · CCP → Recebimento → Qualidade · Entrada → Estoque` | 📝 ✅ `circuito-compra.ts:9-25` |
 | 3 | **Ida (LOG-34):** o MES **empurra** cada item da requisição por `PUT /compras/requisicoes/origem/{id_origem}`; fila própria, sem perder se o av-hub cair | 📝 ✅ `envio-avhub.service.ts:21`, `:130` |
 | 4 | **Volta (LOG-35):** o MES **lê** os marcos por `GET /compras/requisicoes/eventos` com cursor; polling de 5 min mais leitura sob demanda | 📝 ✅ `eventos-avhub.service.ts:25-31` |
-| 5 | **Aprovação:** a OC que **excede R$ 30 mil** é aprovada pelo **Gerente de Compras**; a OC **até R$ 30 mil** é liberada sem aprovação (**compradores livres**). **A Diretoria não aprova.** Regra provisória: fica mais rígida depois da conversa com Compras (🟡, ver Pendências) | 📝 N14-21 ✅ `ordens_compra.route.js:1230-1240`, `FecharCompra.tsx:604-605`, trigger `fn_ordens_compra_recalcular` |
+| 5 | **Aprovação:** a OC que **excede R$ 30 mil** é aprovada pelo **Gerente de Compras**; a OC **até R$ 30 mil** é liberada sem aprovação (**compradores livres**). **A Diretoria não aprova.** Regra provisória: fica mais rígida depois da conversa com Compras (🟡, ver Pendências) | 📝 N14-21 ✅ `ordens_compra.route.js:1227-1237`, `FecharCompra.tsx:604-605`, trigger `fn_ordens_compra_recalcular` |
 | 6 | Limite de aprovação é **por unidade**, configurável (`parametros_compras.limite_aprovacao`, padrão 30.000,00), em BRL (OC em moeda estrangeira converte pela cotação) | 📝 ✅ `parametros_compras.model.js:16`; Dump Avhub `fn_ordens_compra_recalcular` (linha 6779) |
-| 7 | OC emitida marca a requisição `atendida` por trigger; **nunca** pelo PATCH; OC cancelada devolve **todas** as requisições dela a `aberta` ("nenhum estado é beco sem saída") | 📝 ✅ `requisicoes_compra.route.js:15-17`, `:424-430`; Dump `fn_ordens_compra_requisicao` |
-| 8 | Cancelar requisição exige motivo (3 a 500 caracteres) | ✅ `requisicoes_compra.route.js:442-448` |
-| 9 | Requisição com OC **não se cancela pelo MES**: 409 `REQUISICAO_COM_OC`; o envio fica `RECUSADO` e não repete | ✅ `requisicoes_compra.route.js:221-265`, `envio-avhub.service.ts:164-169` |
+| 7 | OC emitida marca a requisição `atendida` por trigger; **nunca** pelo PATCH; OC cancelada devolve **todas** as requisições dela a `aberta` ("nenhum estado é beco sem saída") | 📝 ✅ `requisicoes_compra.route.js:14-16`, `:423-429`; Dump `fn_ordens_compra_requisicao` |
+| 8 | Cancelar requisição exige motivo (3 a 500 caracteres) | ✅ `requisicoes_compra.route.js:441-447` |
+| 9 | Requisição com OC **não se cancela pelo MES**: 409 `REQUISICAO_COM_OC`; o envio fica `RECUSADO` e não repete | ✅ `requisicoes_compra.route.js:220-264`, `envio-avhub.service.ts:164-169` |
 | 10 | **Compras · CCP no MES é só leitura.** A parcial só sai dele quando a doca registra a chegada **com NF** | 📝 ✅ `compras.service.ts:353-399` |
 | 11 | OC aprovada entra na lista de **esperados** do Recebimento; OC cancelada tira de lá e devolve ao comprador | 📝 ✅ `compras.service.ts:305-351`, `requisicao-avhub.eventos.ts:275-280` |
 | 12 | Rede de segurança: sem OC aprovada vinda do av-hub, quem tem `compras-liberar` libera com motivo | 📝 ✅ `compras.service.ts:404-446` |
-| 13 | A OC vai ao **Omie pela pipeline**, por fila (decisão de 24/09): `enviar` = aprovada e pendente; `excluir` = cancelada que já estava no Omie | 📝 ✅ `ordens_compra.route.js:857-889`, `envioOrdensCompra.ts:18-40` |
+| 13 | A OC vai ao **Omie pela pipeline**, por fila (decisão de 24/09): `enviar` = aprovada e pendente; `excluir` = cancelada que já estava no Omie | 📝 ✅ `ordens_compra.route.js:856-888`, `envioOrdensCompra.ts:18-40` |
 | 14 | O sistema **não envia a OC ao fornecedor**: e-mail ou PDF fora do sistema; frete CIF (fornecedor entrega) ou FOB (coleta da empresa) | 📝 FN1 fora do sistema |
-| 15 | Quem aprova ou cancela OC precisa de `pode_aprovar` na tela `compras`; a identidade vem da sessão do BFF | ✅ `ordens_compra.route.js:1230-1240`; HUB `app/api/compras/ordens/[id]/route.ts:35`, `:53` |
+| 15 | Quem aprova ou cancela OC precisa de `pode_aprovar` na tela `compras`; a identidade vem da sessão do BFF | ✅ `ordens_compra.route.js:1227-1237`; HUB `app/api/compras/ordens/[id]/route.ts:35`, `:53` |
 | 16 | Comprador só emite OC na unidade a que pertence; unidade que compra por outra unidade recusa (23514) | ✅ Dump `fn_ordens_compra_nascer`, `fn_ordens_compra_comprador` |
 
 ## Estados
 
 ### Requisição no av-hub (`requisicoes_compra.status`)
 
-`aberta` → `em_cotacao` → `atendida` (só trigger) · `cancelada`. Transições do PATCH: `aberta→em_cotacao|cancelada`, `em_cotacao→aberta|cancelada`, `cancelada→aberta|em_cotacao`, `atendida→(nenhuma)` (`requisicoes_compra.route.js:13-23`).
+`aberta` → `em_cotacao` → `atendida` (só trigger) · `cancelada`. Transições do PATCH: `aberta→em_cotacao|cancelada`, `em_cotacao→aberta|cancelada`, `cancelada→aberta|em_cotacao`, `atendida→(nenhuma)` (`requisicoes_compra.route.js:12-22`).
 
 ### OC no av-hub (`ordens_compra.status`, `status_sincronizacao_omie`)
 
 | Campo | Valores | Fonte |
 |---|---|---|
-| `status` | `rascunho`, `aguardando_aprovacao`, `aprovado`, `cancelado` | `ordens_compra.route.js:91` |
-| `status_sincronizacao_omie` | `pendente`, `sincronizado`, `erro` | `ordens_compra.route.js:95` |
-| `finalidade` | `pedidos_venda`, `recompra`, `estoque`, `uso_interno` (só as duas primeiras ligam a PV) | `ordens_compra.route.js:92-94` |
+| `status` | `rascunho`, `aguardando_aprovacao`, `aprovado`, `cancelado` | `ordens_compra.route.js:90` |
+| `status_sincronizacao_omie` | `pendente`, `sincronizado`, `erro` | `ordens_compra.route.js:94` |
+| `finalidade` | `pedidos_venda`, `recompra`, `estoque`, `uso_interno` (só as duas primeiras ligam a PV) | `ordens_compra.route.js:91-93` |
 
 Trigger de recálculo: OC nasce `aguardando_aprovacao`; ao recalcular o total em BRL, **valor ≤ limite vira `aprovado` sozinho**, valor > limite fica `aguardando_aprovacao`; `rascunho` e `cancelado` não mudam; OC já aprovada que sobe acima do limite volta a `aguardando_aprovacao` (Dump `fn_ordens_compra_recalcular`, linhas 6750-6794).
 
@@ -121,11 +121,11 @@ Nome histórico no MES: o setor `COMPRAS` aparece como "Pedidos de Compra" em r�
 
 | Rota | Quem chama | Efeito | Código |
 |---|---|---|---|
-| `PUT /compras/requisicoes/origem/:id_origem` | MES (chave `MES_INTEGRACAO_KEYS`) | cria, atualiza, cancela ou ignora (`fn_requisicao_mes_aplicar`) | `requisicoes_compra.route.js:221` ✅ [[Contratos-da-v2\|LOG-34]] |
+| `PUT /compras/requisicoes/origem/:id_origem` | MES (chave `MES_INTEGRACAO_KEYS`) | cria, atualiza, cancela ou ignora (`fn_requisicao_mes_aplicar`) | `requisicoes_compra.route.js:220` ✅ [[Contratos-da-v2\|LOG-34]] |
 | `GET /compras/requisicoes/eventos` | MES (`API_KEY`) | marcos com cursor `(registrado_em, id)` | `:289` ✅ [[Contratos-da-v2\|LOG-35]] |
 | `GET`, `GET /resumo`, `GET /:id`, `POST`, `PATCH /:id` | HUB (BFF) | caixa do Compras e "Nova requisição"; PATCH só `em_cotacao`, `aberta`, `cancelada` | `:148`, `:199`, `:371`, `:384`, `:413` ✅ |
-| `GET /compras/ordens`, `POST /compras/ordens`, `PATCH /:id` (`aprovado` ou `cancelado`) | HUB | lista, emite, aprova ou cancela | `ordens_compra.route.js:607`, `:923`, `:1177` ✅ [[Contratos-da-v2\|LOG-23]], [[Contratos-da-v2\|LOG-36]] |
-| `GET /compras/ordens/fila-omie`, `PATCH /:id/sincronizacao`, `POST /:id/reenviar` | pipeline e HUB | fila e retorno do envio ao Omie | `ordens_compra.route.js:857`, `:1267`, `:1321` ✅ |
+| `GET /compras/ordens`, `POST /compras/ordens`, `PATCH /:id` (`aprovado` ou `cancelado`) | HUB | lista, emite, aprova ou cancela | `ordens_compra.route.js:606`, `:922`, `:1174` ✅ [[Contratos-da-v2\|LOG-23]], [[Contratos-da-v2\|LOG-36]] |
+| `GET /compras/ordens/fila-omie`, `PATCH /:id/sincronizacao`, `POST /:id/reenviar` | pipeline e HUB | fila e retorno do envio ao Omie | `ordens_compra.route.js:856`, `:1264`, `:1318` ✅ |
 | `GET /compras/acompanhamento`, `GET`/`PUT /compras/ordens/:id/acompanhamento`, `POST …/contatos`, `POST …/ocorrencias`, `PATCH /compras/ocorrencias/:id` | HUB (CCP) | follow-up | `ordens_compra_acompanhamento.route.js:298-586` ✅ [[Contratos-da-v2\|LOG-32]] |
 | `GET /ordens-compra/referencia` | MES (job) | referência e valores da OC | [[Contratos-da-v2\|API-004]], [[Contratos-da-v2\|API-007]]; lado hub ✅ (`api-acos-vital`); o MES consome na `develop` (K4, `6914fe9`, 15/10) ✅ |
 | `GET /compras/requisicoes/referencia` | MES (job) | requisições do Compras com pedido de venda, antes de virarem OC | [[Contratos-da-v2\|API-009]]; lado hub ✅ (`api-acos-vital`); o MES lê na `develop` (`9e75df5`, 23/10) ✅ |
