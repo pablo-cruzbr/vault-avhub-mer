@@ -41,7 +41,7 @@ if (existsSync(arqIndice)) {
 const dirPartesContratos = join(vault, "06-Contratos", "Partes");
 if (existsSync(dirPartesContratos)) {
   for (const n of readdirSync(dirPartesContratos).filter((x) => x.startsWith("Contratos-da-v2-") && x.endsWith(".md"))) {
-    const p = "06-Contratos/Partes/" + n.replace(/\.md$/, "");
+    const p = ["06-Contratos", "Partes", n.replace(/\.md$/, "")].join("/");
     for (const m of readFileSync(join(dirPartesContratos, n), "utf8").matchAll(/^\| ((?:LOG|API|SQL|CON)-\d+[a-z]?) \|/gm)) if (!contratos.has(m[1])) contratos.set(m[1], p);
   }
 }
