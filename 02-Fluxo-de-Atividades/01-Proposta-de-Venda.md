@@ -22,13 +22,6 @@ fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6�
 
 Nesta etapa o vendedor também acompanha o pedido, aprova compras mais caras e pode cancelar. A nota é uma proposta: o fluxo foi aprovado em 26/10/2026.
 
-> [!info] Situação em 29/10/2026
-> - As telas de proposta são do Robert; o Orçamento é do Pablo, com o Robert (N16-117 a N16-119). O Robert faz as rotas na `api-acos-vital` e o Nathan cuida da comissão estimada (`K1`, N16-115, N16-118).
-> - ✅ A `api-acos-vital` (`develop`, `cc30c85`, 28 e 29/10) já tem as rotas da proposta em `/comercial/propostas`: criar, listar, resumo, detalhe, linha do tempo, revisar (`PUT`, com `If-Match`), aprovar, cancelar com motivo, copiar e **transformar em pedido do Hub**. O pedido nasce com `status_sincronizacao_omie = pendente`; a API **não escreve no Omie** nesse passo (a pipeline é a 2ª etapa) 🔴. Também existem `POST /comercial/clientes` (cadastra o cliente no Omie da unidade), `GET /comercial/parceiros`, `/me`, `/empresas_emissoras`, `/responsaveis` e `/parametros_custo`.
-> - ✅ No banco, o dump de 29/10 traz `core_comercial.propostas`, os itens, as versões, os eventos e a função `fn_proposta_criar`. As funções de revisar, aprovar, cancelar, copiar, transformar e expirar são chamadas pela API, mas a migration delas não está no repositório nem no dump ❓ (Gustavo).
-> - 🟡 O front (`av-hub` `develop`, 758d5f0) lista, cria e abre a proposta pela API do Hub; o BFF ainda não tem `aprovar`, `cancelar` nem `transformar`, e o cartão de andamento diz que a etapa do pedido fica pendente enquanto a rota não existe.
-> - O contrato do menu e os 15 contratos de proposta, orçamento, custo real e comissão nova foram removidos em 29/10; o Robert cria os novos.
-
 ## Como funciona, passo a passo
 
 1. O vendedor cria a proposta. O sistema dá a ela um número automático, só com dígitos. `V0.1`
@@ -63,6 +56,13 @@ Depois, Compras acha o flange mais caro que o previsto. O aviso mostra a margem 
 | Controladoria (Michele) | Decide a comissão no fim, com o custo real |
 | Gerente de Vendas | Lê as propostas da equipe 🟡 |
 
+Quem desenvolve (N16-117 a N16-119):
+
+- O Robert faz as telas de proposta e as rotas na `api-acos-vital`.
+- O Orçamento é do Pablo, com o Robert.
+- O Nathan cuida da comissão estimada (`K1`, N16-115, N16-118).
+- O Gustavo (DBA, administrador do banco) cuida do banco.
+
 ## Regras que valem
 
 - Uma proposta vira um único pedido. Não existe fechamento parcial.
@@ -79,17 +79,33 @@ Depois, Compras acha o flange mais caro que o previsto. O aviso mostra a margem 
 
 ## O que já existe e o que falta
 
+**A tela (front, `av-hub`)**
+
 - ✅ (`av-hub`) Lista de propostas, nova proposta e detalhe da proposta no front, lendo a API do Hub; clientes pelo Acompanhamento de Clientes (N16-112).
-- Liberação e cancelamento do pedido: ver [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 - ✅ (`av-hub`) Meus Pedidos, com a etapa dos itens.
-- ✅ API da proposta na `api-acos-vital` (`develop`, 29/10): criar, listar, revisar, aprovar, cancelar, copiar e transformar em pedido do Hub.
-- 📝 Todas as regras acima estão decididas.
+- 🟡 O front lista, cria e abre a proposta pela API do Hub (`av-hub` `develop`, 758d5f0). O BFF (a camada que liga a tela à API) ainda não tem `aprovar`, `cancelar` nem `transformar`. O cartão de andamento diz que a etapa do pedido fica pendente enquanto a rota não existe.
 - 🟡 Aprovar e transformar em pedido: a API existe; falta ligar o BFF e a tela.
-- 🔴 Criar o pedido no Omie por fila e pipeline (`V0.7`): o pedido do Hub fica `pendente` e nada o envia.
 - 🔴 Tela da proposta no formato do Simulador de Comissão, com comissão estimada.
 - 🔴 `C6` e `C7` na tela da OC.
 - 🔴 Aviso e aprovação da compra mais cara em Meus Pedidos (`C8`).
+
+**A API (`api-acos-vital`)**
+
+- ✅ API da proposta na `api-acos-vital` (`develop`, `cc30c85`, de 28 e 29/10). As rotas ficam em `/comercial/propostas`: criar, listar, resumo, detalhe, linha do tempo, revisar (`PUT`, com `If-Match`), aprovar, cancelar com motivo, copiar e **transformar em pedido do Hub**.
+- ✅ Também existem `POST /comercial/clientes` (cadastra o cliente no Omie da unidade), `GET /comercial/parceiros`, `/me`, `/empresas_emissoras`, `/responsaveis` e `/parametros_custo`.
+- 🔴 Criar o pedido no Omie por fila e pipeline (`V0.7`). O pedido do Hub nasce com `status_sincronizacao_omie = pendente`. Ele fica `pendente`, e nada o envia. A API **não escreve no Omie** nesse passo; a pipeline é a 2ª etapa.
 - 🟡 Nomes de rota das partes que faltam: o Gustavo e o Robert fecham.
+
+**O banco**
+
+- ✅ No banco, o dump de 29/10 traz `core_comercial.propostas`, os itens, as versões, os eventos e a função `fn_proposta_criar`.
+- ❓ As funções de revisar, aprovar, cancelar, copiar, transformar e expirar são chamadas pela API, mas a migration delas não está no repositório nem no dump (Gustavo).
+
+**Regras, contratos e testes**
+
+- 📝 Todas as regras acima estão decididas.
+- O contrato do menu e os 15 contratos de proposta, orçamento, custo real e comissão nova foram removidos em 29/10/2026. O Robert cria os novos.
+- Liberação e cancelamento do pedido: ver [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 - ❓ Testes no Omie: número próprio do pedido, pedido bloqueado e `ExcluirPedido`. O primeiro teste (item 4 do pedido do Robert de 03/11) sai com etapa `"10"`, `bloqueado = "S"`, sem CFOP e sem impostos no payload, e categoria de uma lista da unidade; ver [[Mapa-IncluirPedido-Omie]].
 
 ## Detalhe técnico
