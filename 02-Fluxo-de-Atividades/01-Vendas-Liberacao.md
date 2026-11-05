@@ -70,7 +70,7 @@ Raia seguinte: [[02-PCP-Triagem-e-Destinacao]].
 
 Nós do [[00-Fluxo-Mestre-0b]]: `V1` pedido chega do Omie travado, `V2` vendedor marca se a Qualidade acompanha, `V3` vendedor libera. Selos e convenções em [[Regras-do-Vault]].
 
-Depois da liberação, esta raia continua como leitura: o vendedor acompanha o item pelo cartão **Etapa dos itens** (status por item que o MES informa, [[API-005-Status-Item-Integracao-MES]] e [[API-006-Status-por-Item-Leitura-no-Hub]]).
+Depois da liberação, esta raia continua como leitura: o vendedor acompanha o item pelo cartão **Etapa dos itens** (status por item que o MES informa, [[Contratos-da-v2|API-005]] e [[Contratos-da-v2|API-006]]).
 
 ### Quem atua (onde)
 
@@ -88,7 +88,7 @@ Pedidos manuais (anexo) e comissões ficam fora desta raia (decisão do Nathan: 
 
 ### Regras decididas
 
-Origem: [[LOG-26-Vendas-Liberacao-Pedido]] §2, decisões do Nathan de 28/09/2026, salvo onde indicado.
+Origem: [[Contratos-da-v2|LOG-26]] §2, decisões do Nathan de 28/09/2026, salvo onde indicado.
 
 | # | Regra | Selo |
 |---|---|---|
@@ -100,7 +100,7 @@ Origem: [[LOG-26-Vendas-Liberacao-Pedido]] §2, decisões do Nathan de 28/09/202
 | 6 | **Ninguém empurra ao MES: o MES faz GET (polling).** É o Fluxo 4 da integração (os Fluxos 1 a 3 são requisição, referência da OC e status por item). | 📝 |
 | 7 | Quem libera: o vendedor e o auxiliar dos titulares que ele auxilia. | 📝 |
 | 8 | O gerente tem tela própria, **só visualização**, com todos os vendedores. | 📝 |
-| 9 | O escopo do vendedor é aplicado **pela API a partir do token** (contrato [[LOG-40-Escopo-de-Vendedores-e-Permissoes-pelo-Token-no-Backend]]): sem a chave `vendedor`, a API preenche com os vendedores do usuário. O BFF não filtra mais. | 📝 |
+| 9 | O escopo do vendedor é aplicado **pela API a partir do token** (contrato [[Contratos-da-v2\|LOG-40]]): sem a chave `vendedor`, a API preenche com os vendedores do usuário. O BFF não filtra mais. | 📝 |
 | 10 | Pedido do Omie entra na liberação com os mesmos filtros que a Carteira antiga usava: `sequencial = 0`, sem track record, grupo líquido (sem dedução ou blacklist), `etapa <> 0`, incluído a partir da data de corte e `situacao = 'Pendente'` (ou já liberado). | 📝 |
 | 11 | A marcação "Qualidade acompanha" é **capturada agora e consumida depois** pela fila de inspeção de processo da Qualidade (não existe, ver "O que falta"). | 📝 |
 
@@ -145,13 +145,13 @@ Abas com contagem vinda do backend (`contagem.pendente`, `liberado`, `importado`
 
 | Método e rota | Direção | Uso | Contrato |
 |---|---|---|---|
-| `GET /pedidos_liberacao?vendedor=&codigo_empresa=&status=&busca=&sort=&order=&page=&limit=` | HUB lê da API | caixa do vendedor e tela do gerente (sem `vendedor` = todos) | [[LOG-26-Vendas-Liberacao-Pedido]] §4.1 |
+| `GET /pedidos_liberacao?vendedor=&codigo_empresa=&status=&busca=&sort=&order=&page=&limit=` | HUB lê da API | caixa do vendedor e tela do gerente (sem `vendedor` = todos) | [[Contratos-da-v2\|LOG-26]] §4.1 |
 | `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido` `{ acompanhamento_qualidade, updated_by }` | HUB escreve | libera (1ª vez) ou troca a marcação; 404 `PEDIDO_FORA_DA_LIBERACAO`, 409 `PEDIDO_IMPORTADO_MES`, 403 `PEDIDO_FORA_DO_ESCOPO` e `SEM_VENDEDOR_VINCULADO` | idem |
 | `GET /pedidos_liberados?codigo_empresa=&alterado_desde=&mes=&ano=&importado=&page=&limit=` | MES lê (polling) | só liberados; com `alterado_desde` ordena por `liberacao_alterada_em` crescente | idem §4.2 |
 | `GET /pedidos_liberados/:numero/itens?codigo_empresa=` | MES lê | itens do pedido mais o objeto `liberacao`; 409 `PEDIDO_NAO_LIBERADO` | idem |
 | `POST /pedidos_liberados/:numero/importado?codigo_empresa=` `{ referencia }` | MES escreve | confirma a importação (idempotente); trava a marcação | idem |
 | `GET /api/liberar-pedidos` e `PUT /api/liberar-pedidos/:empresa/:numero` | BFF do HUB | repassa à API; `?fonte=equipe` exige a tela `liberacao-equipe` | idem §5 |
-| `GET /itens/status` (MES) e `GET /itens_pedido_status?codigo_empresa=&pedido_venda=&historico=` (hub) | MES para hub (job de 90 s) e HUB lê | cartão Etapa dos itens | [[API-005-Status-Item-Integracao-MES]], [[API-006-Status-por-Item-Leitura-no-Hub]], [[SQL-010-Itens-Pedido-Status]] |
+| `GET /itens/status` (MES) e `GET /itens_pedido_status?codigo_empresa=&pedido_venda=&historico=` (hub) | MES para hub (job de 90 s) e HUB lê | cartão Etapa dos itens | [[Contratos-da-v2\|API-005]], [[Contratos-da-v2\|API-006]], [[Contratos-da-v2\|SQL-010]] |
 | `GET /api/pedidos-venda/:fonte/:empresa/:pedido/etapas` | BFF do HUB | repassa `/itens_pedido_status`; responde `disponivel: false` quando o hub ainda não tem a rota | API-006 |
 
 Banco e telas (DDL e `auth.telas`): apêndices A e B do contrato 26. Diagnóstico das chaves (a do MES só vale para o PUT do contrato 34; as leituras e o `POST importado` usam outra): [[Chaves-e-Autenticacao]].
@@ -188,7 +188,7 @@ Banco e telas (DDL e `auth.telas`): apêndices A e B do contrato 26. Diagnóstic
 | `pedidos_vendas_liberacao` | `core_vendas_faturamento` | PK (`codigo_empresa`, `numero_pedido`); `acompanhamento_qualidade boolean`; `liberado_por`, `liberado_em`; `updated_by`, `updated_at` (cursor do polling); `importado_mes_em`, `importado_mes_referencia`. Sem FK para `pedidos_vendas` (o pipeline recria linhas) |
 | `pedidos_vendas_liberacao_historico` | `core_vendas_faturamento` | `acao` (`liberado`, `alterado`, `importado_mes`), `valor_anterior`, `usuario`, `referencia` |
 | `vw_pedidos_liberacao` | `core_vendas_faturamento` | um pedido por linha; `status_liberacao`; sobre `vw_vendas_planilha` |
-| `itens_pedido_status` (+ cursor) | `core_vendas_faturamento` | uma linha por parcial e etapa; alimentada pelo job de 90 s ([[SQL-010-Itens-Pedido-Status]]) |
+| `itens_pedido_status` (+ cursor) | `core_vendas_faturamento` | uma linha por parcial e etapa; alimentada pelo job de 90 s ([[Contratos-da-v2\|SQL-010]]) |
 | `Pedidos.acompanhamento_qualidade`, `Pedidos.importado_avhub_em`, `Pedidos.codigo_pedido_omie` | `public` (MES) | cópia da marcação, selo de importação confirmada, id do pedido no Omie |
 
 Modelo do banco do av-hub em [[Banco-AvHub]]; do MES em [[Banco-MES]].
@@ -223,9 +223,9 @@ Escopo (contrato 40, ✅ fixo na API): vale quando o usuário entrou por tela co
 | 8 | **Estados macro do vendedor** (os 8 do desenho): decidir se entram ou se o vendedor fica com `status_liberacao` mais 11 etapas; se entrarem, depende do feed do MES (`estado_macro`) | Nathan decide, Robert (feed) | V1 a O2 | 🔴 |
 | 9 | **Cartão Etapa dos itens:** teste ponta a ponta com a migration `api005` aplicada; `quantidade_na_etapa` tipado como número e a API pode mandar `null`; sem linha do tempo, SLA nem filtro por etapa; `compras.fechamento` ainda aparece como "Em compra" (sem cotação, aprovação ou trânsito) | Nathan (front), Gustavo (migration), Robert (etapa de compra mais fina) | V1 | 🔴 |
 | 10 | **Migration `api005`** (função, tabela e mapa de rotas do status por item) não verificada no banco; DDL não versionado | Gustavo | V1 | ❓ |
-| 11 | ✅ Marcas `GAMBIARRA(` de escopo removidas do front (`lib/api/pedidosVenda.ts`, `lib/api/portalPcp.ts`; `484dea6`, 15/10): contrato [[LOG-50-Tirar-as-Marcas-de-Escopo-de-Vendedores-do-Front]] | Nathan | V2 | ✅ |
+| 11 | ✅ Marcas `GAMBIARRA(` de escopo removidas do front (`lib/api/pedidosVenda.ts`, `lib/api/portalPcp.ts`; `484dea6`, 15/10): contrato [[Contratos-da-v2\|LOG-50]] | Nathan | V2 | ✅ |
 | 12 | **Valor da data de corte em produção** e documentar | Nathan e Gustavo | V1 | ❓ |
-| 13 | Pedido manual ([[LOG-45-Pedido-de-Venda-Manual]]): o desenho só prevê pedido que chega do Omie; o risco do `exclusionSync` apagar pedido manual está em [[Riscos]] | Gustavo | V1 | 🔴 |
+| 13 | Pedido manual ([[Contratos-da-v2\|LOG-45]]): o desenho só prevê pedido que chega do Omie; o risco do `exclusionSync` apagar pedido manual está em [[Riscos]] | Gustavo | V1 | 🔴 |
 
 ### Pendências
 

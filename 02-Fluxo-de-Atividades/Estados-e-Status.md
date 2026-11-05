@@ -120,7 +120,7 @@ Detalhe e transições em [[11-Proposta-e-Pedido-de-Venda]].
 
 ### Etapa do item vista pelo vendedor
 
-O vendedor vê o item em uma de 11 etapas, do "Requisição de compra" até o "Pronto para expedição". A etapa vem do **tipo do setor atual** mais o status. O vocabulário é provisório ([[API-005-Status-Item-Integracao-MES]], [[API-006-Status-por-Item-Leitura-no-Hub]]). A tabela completa está no Detalhe técnico. Não há etapa "entregue" nem "faturado" 🔴.
+O vendedor vê o item em uma de 11 etapas, do "Requisição de compra" até o "Pronto para expedição". A etapa vem do **tipo do setor atual** mais o status. O vocabulário é provisório ([[Contratos-da-v2|API-005]], [[Contratos-da-v2|API-006]]). A tabela completa está no Detalhe técnico. Não há etapa "entregue" nem "faturado" 🔴.
 
 ### Proposta e pedido do Hub 🟡
 
@@ -263,7 +263,7 @@ Saldo disponível conta só lote `LIBERADO` menos reservas `ATIVA` (`estoque-ope
 
 ### 2. Status por item: as 11 etapas (contrato 005)
 
-Emitidas por `GET /itens/status` do MES (`etapaDoItem`, `integracao-avhub.service.ts:167-192`) ✅ e gravadas em `core_vendas_faturamento.itens_pedido_status.etapa` (`varchar(60)`, Dump Avhub linha 16990). A etapa deriva do **tipo do setor atual** mais o status; o vocabulário é provisório ([[API-005-Status-Item-Integracao-MES]], [[API-006-Status-por-Item-Leitura-no-Hub]]).
+Emitidas por `GET /itens/status` do MES (`etapaDoItem`, `integracao-avhub.service.ts:167-192`) ✅ e gravadas em `core_vendas_faturamento.itens_pedido_status.etapa` (`varchar(60)`, Dump Avhub linha 16990). A etapa deriva do **tipo do setor atual** mais o status; o vocabulário é provisório ([[Contratos-da-v2|API-005]], [[Contratos-da-v2|API-006]]).
 
 | # | `etapa` | Regra (código) | Rótulo no HUB (`lib/domain/etapas-item.ts:34-46`) |
 |---|---|---|---|

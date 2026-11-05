@@ -21,7 +21,7 @@ fontes: [api-acos-vital f322dcd src/schemas/core_compras/aggregates/orcamento, H
 
 ## Como estava em 14/10
 
-- Decisão do Nathan de 07/10 (item 39 do v1): o orçamento é feito por fora, no módulo Comercial & Suprimentos ([[Comercial-Suprimentos]]). A tela e o código antigos do HUB saem quando o módulo novo os substituir 🟡 ([[LOG-42-Coordenadores-e-Orcamento-sair-do-JSON-do-Repositorio]], proposta).
+- Decisão do Nathan de 07/10 (item 39 do v1): o orçamento é feito por fora, no módulo Comercial & Suprimentos ([[Comercial-Suprimentos]]). A tela e o código antigos do HUB saem quando o módulo novo os substituir 🟡 ([[Contratos-da-v2|LOG-42]], proposta).
 - A API existia, mas **nada a consumia**: o HUB lia arquivos JSON guardados no repositório.
 - Esses arquivos têm dados reais de fornecedores (CNPJ, e-mail, telefone; 4,4 MB) e seguem no git do HUB 🔴.
 - Decisão pendente: migrar a tela para a API ou removê-la. O v1 propôs remover 🟡. Dono da decisão e do front: Nathan; endpoints de apoio, se migrar: Gustavo.
@@ -30,7 +30,7 @@ Mesma pendência dos coordenadores em [[Comissoes]].
 
 ## Detalhe técnico
 
-Fora do fluxo 0b. Decisão do Nathan de 07/10 (item 39 do v1): o orçamento é desenvolvido por fora, no módulo Comercial & Suprimentos ([[Comercial-Suprimentos]]); a tela e o código legado do HUB saem quando o módulo novo a substituir 🟡 ([[LOG-42-Coordenadores-e-Orcamento-sair-do-JSON-do-Repositorio]], proposta).
+Fora do fluxo 0b. Decisão do Nathan de 07/10 (item 39 do v1): o orçamento é desenvolvido por fora, no módulo Comercial & Suprimentos ([[Comercial-Suprimentos]]); a tela e o código legado do HUB saem quando o módulo novo a substituir 🟡 ([[Contratos-da-v2|LOG-42]], proposta).
 
 ### Estado
 

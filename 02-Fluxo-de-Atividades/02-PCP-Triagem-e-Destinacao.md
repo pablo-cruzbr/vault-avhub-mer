@@ -16,7 +16,7 @@ fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Mo
 > - Saldo zero continua exigindo o clique do almoxarife, mesmo depois do marco zero de 13/11 (N16-139).
 > - No retrabalho, o PCP escolhe o setor de volta. Hoje o código volta sempre ao setor anterior (N16-141).
 > - Pedido anterior à data de corte fica fora do MES e termina no sistema antigo. Falta trocar o erro 404 por uma mensagem clara (N16-142).
-> - Ordem de Produção: [[LOG-53-Ordem-de-Producao-e-Lote-do-Fabricado]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`, `app-pcp` `b9e8cb1`): toda ordem de destino de fabricação é uma OP emitida na criação, numerada `pedido/N`, com PDF e botão "Imprimir OP" (2ª via); revenda não gera OP.
+> - Ordem de Produção: [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`, `app-pcp` `b9e8cb1`): toda ordem de destino de fabricação é uma OP emitida na criação, numerada `pedido/N`, com PDF e botão "Imprimir OP" (2ª via); revenda não gera OP.
 > - Roteiro: desde 22/10 (`develop`) a Destinação cria a OP só com o Estoque e o roteiro é montado depois, na tela Montagem do Roteiro (`/montagem-roteiro`), que libera a OP.
 > - Código: o que aparece como "develop" nesta nota não está na `main` do MES, parada em 08/10 (merge BL-035).
 
@@ -152,7 +152,7 @@ A Triagem lista por mês, ano e **filial** (`codigoEmpresa`), mostra a coluna Qu
 | `GET /pedidos/setor-estoque-fixo` | `ordens-producao:criar` | Mostra a etapa 1 travada | `pedidos.controller.ts:91-95` ✅ |
 | `POST /pedidos/completo/lote` | `ordens-producao:criar` | Cria todas as ordens da rodada de uma vez | `pedidos.controller.ts:57-64` ✅ |
 | `GET /pedidos`, `GET /pedidos/:id`, `PATCH /pedidos/:id`, `DELETE /pedidos/:id` | `ordens-producao` | Acompanhamento; excluir exige motivo e grava `PedidoExcluido` | `pedidos.controller.ts:120-169` ✅ |
-| `GET /pedidos_liberados`, `GET /pedidos_liberados/:numero/itens`, `POST /pedidos_liberados/:numero/importado` | chave `API_KEY` do MES | Lado av-hub do contrato | [[LOG-26-Vendas-Liberacao-Pedido]] ✅ ver [[Integracao-AvHub-MES]] INT-01 |
+| `GET /pedidos_liberados`, `GET /pedidos_liberados/:numero/itens`, `POST /pedidos_liberados/:numero/importado` | chave `API_KEY` do MES | Lado av-hub do contrato | [[Contratos-da-v2\|LOG-26]] ✅ ver [[Integracao-AvHub-MES]] INT-01 |
 
 O `POST /pedidos/completo` singular foi apagado (PR #50); só o `/lote` existe.
 

@@ -61,15 +61,15 @@ Nota canônica das integrações entre o av-hub (`api-acos-vital` + HUB) e o MES
 
 | ID | Fluxo | Contrato | Direção e rota | Nós 0b | Estado |
 |---|---|---|---|---|---|
-| INT-01 | Liberação do pedido | [[LOG-26-Vendas-Liberacao-Pedido]] | HUB→av-hub `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido`; MES←av-hub `GET /pedidos_liberados`, `GET /pedidos_liberados/:numero/itens`; MES→av-hub `POST /pedidos_liberados/:numero/importado` | V2 V3 P1 P2 | ✅ ponta a ponta no código; chave de escopo mínimo 🔴 |
-| INT-02 | Requisição de compra, ida | [[LOG-34-Requisicoes-MES-Empurra-para-o-Hub]] | MES→av-hub `PUT /compras/requisicoes/origem/:id_origem` | P3 | ✅ |
-| INT-03 | Marcos da requisição, volta | [[LOG-35-Compras-Marcos-Requisicao-para-MES]] | MES←av-hub `GET /compras/requisicoes/eventos` | C1 a C5 R0 | ✅ para requisição do MES; 🔴 para requisição só do av-hub |
-| INT-04 | Referência da OC | [[API-004-Referencia-OC-Integracao-MES]], [[API-007-Referencia-OC-Valores-no-MES]], [[SQL-011-Ordens-Compra-Referencia-MES]], [[SQL-012-Ordens-Compra-Referencia-Valores]] | MES←av-hub `GET /ordens-compra/referencia` | C4 R0 R1 R4 | ✅ lado do hub; ✅ job K4 do MES na `develop` (15/10); uso na tela 🔴 |
-| INT-05 | Status por item | [[API-005-Status-Item-Integracao-MES]], [[API-006-Status-por-Item-Leitura-no-Hub]], [[SQL-010-Itens-Pedido-Status]] | av-hub←MES `GET /itens/status` | todos | ✅ |
-| INT-06 | Custo real por item | [[API-008-Custo-do-Lote-no-MES]], [[LOG-47-Custo-Real-por-Item-no-Hub]] | av-hub←MES `GET /itens/custo` | E3 R4 | ✅ lado do hub; ✅ rota do MES na `develop` (27/10); fora da `main` |
-| INT-07 | Torre de Fluxo | [[LOG-46-Torre-de-Fluxo-Feed-Jobs-e-Telas]] | av-hub←MES `GET /fluxo/eventos` e proxy `/fluxo/*` | os 9 setores | ✅ lado do hub; 🔴 MES sem o módulo `fluxo` |
-| INT-08 | Requisições lidas do MES | [[API-003-Requisicao-Compra-Integracao-MES]] | MES `GET /requisicoes-compra` | — | legado sem consumidor |
-| INT-09 | Requisições do Compras com pedido de venda | [[API-009-Referencia-Requisicao-Hub-Integracao-MES]] | MES←av-hub `GET /compras/requisicoes/referencia` | C0 P1 P2 P3 E1 | ✅ lado do hub e job do MES na `develop` (23/10, `9e75df5`) |
+| INT-01 | Liberação do pedido | [[Contratos-da-v2\|LOG-26]] | HUB→av-hub `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido`; MES←av-hub `GET /pedidos_liberados`, `GET /pedidos_liberados/:numero/itens`; MES→av-hub `POST /pedidos_liberados/:numero/importado` | V2 V3 P1 P2 | ✅ ponta a ponta no código; chave de escopo mínimo 🔴 |
+| INT-02 | Requisição de compra, ida | [[Contratos-da-v2\|LOG-34]] | MES→av-hub `PUT /compras/requisicoes/origem/:id_origem` | P3 | ✅ |
+| INT-03 | Marcos da requisição, volta | [[Contratos-da-v2\|LOG-35]] | MES←av-hub `GET /compras/requisicoes/eventos` | C1 a C5 R0 | ✅ para requisição do MES; 🔴 para requisição só do av-hub |
+| INT-04 | Referência da OC | [[Contratos-da-v2\|API-004]], [[Contratos-da-v2\|API-007]], [[Contratos-da-v2\|SQL-011]], [[Contratos-da-v2\|SQL-012]] | MES←av-hub `GET /ordens-compra/referencia` | C4 R0 R1 R4 | ✅ lado do hub; ✅ job K4 do MES na `develop` (15/10); uso na tela 🔴 |
+| INT-05 | Status por item | [[Contratos-da-v2\|API-005]], [[Contratos-da-v2\|API-006]], [[Contratos-da-v2\|SQL-010]] | av-hub←MES `GET /itens/status` | todos | ✅ |
+| INT-06 | Custo real por item | [[Contratos-da-v2\|API-008]], [[Contratos-da-v2\|LOG-47]] | av-hub←MES `GET /itens/custo` | E3 R4 | ✅ lado do hub; ✅ rota do MES na `develop` (27/10); fora da `main` |
+| INT-07 | Torre de Fluxo | [[Contratos-da-v2\|LOG-46]] | av-hub←MES `GET /fluxo/eventos` e proxy `/fluxo/*` | os 9 setores | ✅ lado do hub; 🔴 MES sem o módulo `fluxo` |
+| INT-08 | Requisições lidas do MES | [[Contratos-da-v2\|API-003]] | MES `GET /requisicoes-compra` | — | legado sem consumidor |
+| INT-09 | Requisições do Compras com pedido de venda | [[Contratos-da-v2\|API-009]] | MES←av-hub `GET /compras/requisicoes/referencia` | C0 P1 P2 P3 E1 | ✅ lado do hub e job do MES na `develop` (23/10, `9e75df5`) |
 
 Detalhe da Torre: [[Rastreabilidade-e-Torre-de-Fluxo]].
 
@@ -199,7 +199,7 @@ sequenceDiagram
 **Para quê:** (1) o Recebimento conferir contra o que foi comprado e o lote nascer com custo (nós C4, R0, R1, R4); hoje o Recebimento confere contra a **NF** 📝, e o cruzamento com a OC espera o job abaixo; (2) o PCP ver a OC de cada pedido e o Estoque ver o **saldo futuro** das OCs de estoque, inclusive as de requisição criada só no hub (C0, N14-20; ver "Requisito: o MES lê as OCs do hub").
 
 - **Rota no hub:** `GET /ordens-compra/referencia?alterado_desde=&codigo_empresa=&apos_id=&page=&limit=` (`alterado_desde` obrigatório; limite padrão 100, máximo 500) ✅ `vw_ordens_compra_referencia_mes.route.js:44-89`, montada em `core_vendas_faturamento/index.js:199`. Entram OC `aprovada` e as canceladas depois de aprovadas. `alterado_em` é o maior `updated_at` da OC, dos itens e dos vínculos (trigger da migration `api004`). A regra mora no banco.
-- **Valores (contrato 007):** a resposta traz `moeda`, `cotacao_moeda`, `cotacao_data`, `cotacao_origem`, `valor_frete`, `valor_seguro` na OC e `valor_unitario`, `desconto_pct`, `valor_desconto`, `valor_total_item` em cada item ✅ `vw_ordens_compra_referencia_mes.route.js:51-53`. A rota tolera banco sem a migration `api007` (200 sem os campos) e responde 500 sem a `api004` ❓ se aplicadas em produção (Gustavo, SQL em [[SQL-012-Ordens-Compra-Referencia-Valores]]). Desde a `api007b` (26/10, `a7fda49`) a OC traz também `codigo_fornecedor`, `nome_fornecedor` e `cnpj_fornecedor` ✅ (pedido do Robert); segue sem condição de pagamento, categoria nem conta corrente.
+- **Valores (contrato 007):** a resposta traz `moeda`, `cotacao_moeda`, `cotacao_data`, `cotacao_origem`, `valor_frete`, `valor_seguro` na OC e `valor_unitario`, `desconto_pct`, `valor_desconto`, `valor_total_item` em cada item ✅ `vw_ordens_compra_referencia_mes.route.js:51-53`. A rota tolera banco sem a migration `api007` (200 sem os campos) e responde 500 sem a `api004` ❓ se aplicadas em produção (Gustavo, SQL em [[Contratos-da-v2|SQL-012]]). Desde a `api007b` (26/10, `a7fda49`) a OC traz também `codigo_fornecedor`, `nome_fornecedor` e `cnpj_fornecedor` ✅ (pedido do Robert); segue sem condição de pagamento, categoria nem conta corrente.
 - **Chave de leitura:** `API_KEY` do MES; a chave do 34 dá 403.
 - **Cursor e periodicidade:** `proximo` (`alterado_desde` + `apos_id`) com sobreposição de 5 minutos, a cada 5 min ✅ (`oc-referencia-avhub.service.ts`). Idempotência no MES por `(codigo_empresa, id_ordem_compra)` e itens por `(id_ordem_compra, id_item_oc)`; item que sumiu da OC é marcado `removido_em`; OC cancelada ou item removido desfaz os vínculos de origem do hub.
 - **O MES consome ✅ (na `develop`, não na `main`):** `oc-referencia-avhub.service.ts` (K4, `114ba89`, 15/10) lê a referência a cada 5 min (`AVHUB_OC_INTERVALO_MIN`, 0 desliga) e na subida, com cursor `ordens-compra-referencia`, 500 por página, até 40 páginas, e grava a projeção `oc_referencia` e `oc_referencia_itens`; o Recebimento já cria o lote com o custo da OC (BL-005, desde 19/10). O que falta é **usar** a projeção: OC do pedido para o PCP (BL-049) e saldo futuro do Estoque (BL-050). Dono: Robert, backlog [[Backlog-por-Frente]] (BL-001, BL-006).
@@ -251,9 +251,9 @@ sequenceDiagram
 
 ### INT-06 Custo real por item (contratos 008 e 47)
 
-**Para quê:** o custo do item do pedido = média dos lotes reservados (nó E3), usado pelo hub no Ciclo 2 para o simulador e a comissão ([[LOG-47-Custo-Real-por-Item-no-Hub]]).
+**Para quê:** o custo do item do pedido = média dos lotes reservados (nó E3), usado pelo hub no Ciclo 2 para o simulador e a comissão ([[Contratos-da-v2|LOG-47]]).
 
-- **Rota no MES** ✅ (`integracao-avhub.controller.ts`, `itens-custo.ts`, `6c11147`, 27/10, só na `develop`): `GET /itens/custo?alterado_desde=&codigo_empresa=&apos_id=&limit=`, array puro, uma linha por filial + pedido + **produto** (`codigo_produto_omie`; linhas repetidas do pedido são somadas), com `quantidade`, `quantidade_com_custo`, `custo_total`, `custo_medio`, `completo`, `cotacao_a_conferir`, `lotes[]`, `alterado_em` ([[API-008-Custo-do-Lote-no-MES]]). Entram só pedidos do Omie e itens que têm ou tiveram reserva no Estoque; fabricado fica de fora até o custo da matéria-prima; só entra o que mudou há mais de 180 s (janela de segurança). BL-004 feito pelo Robert.
+- **Rota no MES** ✅ (`integracao-avhub.controller.ts`, `itens-custo.ts`, `6c11147`, 27/10, só na `develop`): `GET /itens/custo?alterado_desde=&codigo_empresa=&apos_id=&limit=`, array puro, uma linha por filial + pedido + **produto** (`codigo_produto_omie`; linhas repetidas do pedido são somadas), com `quantidade`, `quantidade_com_custo`, `custo_total`, `custo_medio`, `completo`, `cotacao_a_conferir`, `lotes[]`, `alterado_em` ([[Contratos-da-v2|API-008]]). Entram só pedidos do Omie e itens que têm ou tiveram reserva no Estoque; fabricado fica de fora até o custo da matéria-prima; só entra o que mudou há mais de 180 s (janela de segurança). BL-004 feito pelo Robert.
 - **Job no hub** ✅ `itens_pedido_custo.job.js`: a cada 90 s por unidade, cursor `alterado_em` + `id`; **404 do MES avisa e tenta a cada 10 min** (produção ainda sem a rota: `main` do MES parou em 08/10); sem a migration 047b o job nem chama o MES.
 - **Rota de leitura no hub:** `GET /itens_pedido_custo?codigo_empresa=&numero_pedido=` exige sempre `custo-itens:pode_visualizar`; a tela nasce sem perfil, então responde 403 a todos 🔴 Gustavo (BL-020). Devolve `custo_sem_impostos: true` (custo do Ciclo 1 não tem ICMS, IPI nem ST).
 - **Chave:** `MES_API_KEY` (a mesma do INT-05).
@@ -320,7 +320,7 @@ Compras cria requisição de necessidade própria no HUB (nó C0, `POST /compras
 - **MES→Omie:** o MES nunca fala com o Omie. A sinalização de faturamento (nó O1, tela 11.1) não existe 🔴 ([[10-Fiscal-Omie]]). Decidido em 29/10: quem avisa o Fiscal é a Logística, ao fechar a carga (N16-132, depende da consolidação de carga `X3`, que não existe), e o MES só mostra um aviso de "faturado antes da entrega", sem bloquear (N16-133); hoje o MES nem sabe se o pedido foi faturado.
 - **Avisos do MES ao hub (novos, sem contrato):** recompra por RNC de lote 100% reprovado (N16-127) e reabertura do recebimento pelo PCP (N16-137). Hoje só o MES sabe e a OC do hub segue "atendida" 🔴.
 - **Pipeline→av-hub→Omie:** a única escrita no Omie é o envio da OC pela pipeline (`GET /compras/ordens/fila-omie`, `PATCH /compras/ordens/:id/sincronizacao`); não passa pelo MES. Ver [[Omie-Integracao-Estado]] e [[Pipeline-Omie]].
-- **Pedido manual** ([[LOG-45-Pedido-de-Venda-Manual]]) não percorre o fluxo do MES.
+- **Pedido manual** ([[Contratos-da-v2|LOG-45]]) não percorre o fluxo do MES.
 
 ### O que acontece quando o outro lado cai
 

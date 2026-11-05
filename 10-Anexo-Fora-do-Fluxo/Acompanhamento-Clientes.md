@@ -11,7 +11,7 @@ fontes: [api-acos-vital f322dcd src/schemas/core_vendas_faturamento, HUB b55ac55
 
 **Em uma frase:** a tela mostra, por cliente e por grupo de empresas, quanto comprou e faturou no mês, quais vendedores o atenderam e se ele está parado.
 
-**Quando consultar:** quando a dúvida é "este cliente está inativo?" ou "como vários CNPJs viram um grupo?". Esta nota fica fora do fluxo 0b. Contrato: [[LOG-48-Acompanhamento-de-Clientes-Grupos-de-Empresa]] (banco e API existem; pendências de banco abertas).
+**Quando consultar:** quando a dúvida é "este cliente está inativo?" ou "como vários CNPJs viram um grupo?". Esta nota fica fora do fluxo 0b. Contrato: [[Contratos-da-v2|LOG-48]] (banco e API existem; pendências de banco abertas).
 
 ## Como funciona
 
@@ -23,7 +23,7 @@ fontes: [api-acos-vital f322dcd src/schemas/core_vendas_faturamento, HUB b55ac55
 ## Onde está hoje
 
 - ✅ Banco, rotas, telas e diálogo de grupos existem. A tela agora fica em `vendas/acompanhamento-clientes`.
-- ✅ **Setor do cliente e do grupo** ([[API-014-Setor-do-Cliente-e-do-Grupo-no-Acompanhamento-de-Clientes]]): tabelas `clientes_setor` e `setores_clientes` na API (varios setores por alvo, `43dbec3` de 23/10) e BFF `clientes-setor` e `setores-clientes` no HUB; banco e API terminados em 29/10. Falta o Nathan testar salvar 2 setores, o filtro e o Excel.
+- ✅ **Setor do cliente e do grupo** ([[Contratos-da-v2|API-014]]): tabelas `clientes_setor` e `setores_clientes` na API (varios setores por alvo, `43dbec3` de 23/10) e BFF `clientes-setor` e `setores-clientes` no HUB; banco e API terminados em 29/10. Falta o Nathan testar salvar 2 setores, o filtro e o Excel.
 - 🔴 Ainda há pendências marcadas `GAMBIARRA` no HUB (lista abaixo; reconferidas em 29/10).
 - ❓ Produção não foi conferida.
 

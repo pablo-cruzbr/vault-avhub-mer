@@ -166,7 +166,7 @@ Menu **Orçamento** desde 16/10/2026; enxugado em 27/10/2026 (N16-107 e N16-108,
 
 ### Endpoints e contratos
 
-Rotas do `api-comercial` (legado só para leitura, N16-117) que o Robert recria na `api-acos-vital` ([[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]]; nenhuma delas existe ainda na `api-acos-vital`, conferido em 29/10/2026):
+Rotas do `api-comercial` (legado só para leitura, N16-117) que o Robert recria na `api-acos-vital` ([[Contratos-da-v2|LOG-52]]; nenhuma delas existe ainda na `api-acos-vital`, conferido em 29/10/2026):
 
 | Método e rota | Uso | Nó | Código |
 |---|---|---|---|
@@ -179,7 +179,7 @@ Rotas do `api-comercial` (legado só para leitura, N16-117) que o Robert recria 
 | `POST /custos/sugerir` | sugestão de custo | `B2` | ✅ `custos.routes.ts:30` |
 | Matriz de preços | 🟡 | `B1`, `B2` | 🔴 |
 
-Contratos: os do Orçamento foram removidos em 29/10/2026 e o Robert cria os novos. Dependências: [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] (fases 4 e 5).
+Contratos: os do Orçamento foram removidos em 29/10/2026 e o Robert cria os novos. Dependências: [[Contratos-da-v2|LOG-52]] (fases 4 e 5).
 
 ### Como está no código (✅)
 
@@ -193,7 +193,7 @@ Contratos: os do Orçamento foram removidos em 29/10/2026 e o Robert cria os nov
 
 ### Dados 🟡
 
-Tudo no `core_comercial`. O banco real já tem as ofertas (imutáveis, com histórico), as solicitações de custo, os fornecedores, os produtos e os parâmetros de custo; a migração acrescenta só o que falta: ofertas geradas das OCs, base e estatística de preço e o pedido de custo sem prazo. O schema separado `core_orcamento`, do desenho de 16 a 21/10, foi abandonado em 26/10 (o mesmo que o [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] já fazia).
+Tudo no `core_comercial`. O banco real já tem as ofertas (imutáveis, com histórico), as solicitações de custo, os fornecedores, os produtos e os parâmetros de custo; a migração acrescenta só o que falta: ofertas geradas das OCs, base e estatística de preço e o pedido de custo sem prazo. O schema separado `core_orcamento`, do desenho de 16 a 21/10, foi abandonado em 26/10 (o mesmo que o [[Contratos-da-v2|LOG-52]] já fazia).
 
 Campos novos pelas decisões 🟡: `oferta.prazo_entrega_dias` (número); `solicitacao_custo.aberta_em` e `respondida_em` (cronômetro); parâmetros do score (pesos, limite de volatilidade, dias de "dado recente", mínimo de pontos) em tabela de parâmetros **com vigência**, por categoria.
 
@@ -266,4 +266,4 @@ O anexo `10-Anexo-Fora-do-Fluxo/Orcamento.md` (14/10) dizia que o orçamento era
 | Marcas `GAMBIARRA` O1 e O2 (`lib/orcamento/dados.ts`) | **Saíram:** o arquivo não tem mais a marca; as funções O1 e O2 foram removidas junto das telas |
 | Tabelas `orc_*` e views `orc_vw_*` no schema `core_compras` (13.896 linhas carregadas em 02/10, dump de 07/10) | **Seguem no banco** e as rotas `/orcamento/*` da `api-acos-vital` seguem montadas (`orcamento.route.js`), **sem consumidor**. Aposentadoria: fase 7 do LOG-52 ("só depois do Nathan confirmar o corte do orçamento", agora confirmado por N16-14 e N16-16), a cargo do Gustavo 🔴 |
 | Decisão "migrar a tela para a API ou removê-la" | Resolvida: removida (N16-14); o módulo novo é o do Pablo (N16-07, N16-15) |
-| Contratos [[LOG-42-Coordenadores-e-Orcamento-sair-do-JSON-do-Repositorio]] e `LOG-07a` | LOG-42 encerrado (N16-14); a metade de coordenadores segue pendente e ganha item no backlog ([[Backlog-por-Frente]]) |
+| Contratos [[Contratos-da-v2\|LOG-42]] e `LOG-07a` | LOG-42 encerrado (N16-14); a metade de coordenadores segue pendente e ganha item no backlog ([[Backlog-por-Frente]]) |

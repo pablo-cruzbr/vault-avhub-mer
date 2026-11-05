@@ -64,7 +64,7 @@ Selos: ✅ visto no código · 📝 decidido (`N16-xx`) · 🟡 proposta nova ·
 
 ## Defeitos que a migração não pode herdar
 
-A auditoria de 15/10 achou 24 itens. Exemplos: escopo por vendedor que não restringe e CNPJ alfanumérico rejeitado. A lista está em [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] §10.
+A auditoria de 15/10 achou 24 itens. Exemplos: escopo por vendedor que não restringe e CNPJ alfanumérico rejeitado. A lista está em [[Contratos-da-v2|LOG-52]] §10.
 
 ## Perguntas abertas
 
@@ -287,7 +287,7 @@ Tipos de tela ainda dizem "api-comercial" e `PARCIAL`/`FECHADA` (`lib/domain/com
 | Custo líquido, médias, seleção de custo, análise de compras | Servem à base de preço do Orçamento | ✅ `custo.ts`, `medias.ts`, `analiseCompras.ts` |
 | Configurador de telha e a ideia da tabela com vigência | N16-15 mantém o módulo; só a tabela vira estruturada | ✅ `configurador.ts` |
 | Clientes, contatos, carteira e ficha | Continuam em Vendas | ✅ `clientes.routes.ts` |
-| Idempotência, `If-Match`/`ETag`, envelope de erro | Padrão de [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] T3 e T4 | ✅ `README.md:37-44` |
+| Idempotência, `If-Match`/`ETag`, envelope de erro | Padrão de [[Contratos-da-v2\|LOG-52]] T3 e T4 | ✅ `README.md:37-44` |
 | Empresas emissoras (AV, AU, HRM) com cabeçalho do PDF | Continuam; ganham a unidade do Omie onde o pedido é criado | ✅ `empresas.prisma:2-29` |
 | Solicitação de custo (assumir, liberar, responder, cancelar) | Vira o pedido de custo ao Orçamento (N16-06) | ✅ `custos.routes.ts:304-542` |
 | Ofertas imutáveis, invalidar com motivo, trava de escala | Base com histórico sempre (N16-07) | ✅ `suprimentos.routes.ts:687-806` |
@@ -322,7 +322,7 @@ Tipos de tela ainda dizem "api-comercial" e `PARCIAL`/`FECHADA` (`lib/domain/com
 | Sincronização Omie (`src/modules/omie/*`, rotas `/omie/*`, tabelas `sincronizacoes_omie`, `omie_registros_brutos`, `travas_tarefa`, `produtos_contas_omie`, `fornecedores_contas_omie`, `ordens_compra`, `itens_ordem_compra` do comercial, slug `sincronizacao-omie`) | A Sincronização Omie sai do menu e a pipeline é a fonte | 📝 N16-14, N14-15 |
 | Câmbio próprio (`cambio.ts`) e rota `GET /cambio` | PTAX do hub | 📝 N16-13 |
 | Planilha e resumo "pedido a digitar no Omie" (`pedidoOmie.ts`, `GET/PUT /propostas/:id/pedido_omie`, `…/xlsx`, `PedidoOmieModal.tsx`) | O pedido é criado por API | 📝 N16-02 |
-| `Auditoria` própria | Já existe `auth.auditoria` | 🟡 [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] §3.1 |
+| `Auditoria` própria | Já existe `auth.auditoria` | 🟡 [[Contratos-da-v2\|LOG-52]] §3.1 |
 | `perfisDev.ts` e `AUTH_DEV_BYPASS` | Perfis fictícios, nunca em produção | 🟡 LOG-52 §6 |
 | As 5 telas antigas de `/orcamento/*` e as rotas `app/api/historicoProdutos` | Removidas do av-hub em 16/10 | 📝 N16-14 |
 | `Unidade` (`MOGI`, `UBERABA`, `ARUJA`) e `ContaOmie` como enums | Viram `core.unidades` (uuid) | 🟡 |
@@ -330,7 +330,7 @@ Tipos de tela ainda dizem "api-comercial" e `PARCIAL`/`FECHADA` (`lib/domain/com
 
 ### 9. Defeitos do código de teste que a migração não pode herdar
 
-A auditoria de 15/10 (24 itens) está em [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] §10. Os que tocam as tabelas e regras da proposta, do Orçamento e da comissão: filtro por responsável que anula o escopo `proprios` (item 1), `vinculados` que não restringe (item 2), CNPJ alfanumérico rejeitado (item 4), cliente criado na proposta que sobrescreve o cadastro de outro vendedor (item 6), custo e margem apagados por `PUT` sem `veCusto` (item 8), `normalizarIpi` na oferta digitada (item 16), sem FK nem `CHECK` (item 17). Os DDL de já trazem FK, `CHECK` e CNPJ de 14 posições alfanuméricas.
+A auditoria de 15/10 (24 itens) está em [[Contratos-da-v2|LOG-52]] §10. Os que tocam as tabelas e regras da proposta, do Orçamento e da comissão: filtro por responsável que anula o escopo `proprios` (item 1), `vinculados` que não restringe (item 2), CNPJ alfanumérico rejeitado (item 4), cliente criado na proposta que sobrescreve o cadastro de outro vendedor (item 6), custo e margem apagados por `PUT` sem `veCusto` (item 8), `normalizarIpi` na oferta digitada (item 16), sem FK nem `CHECK` (item 17). Os DDL de já trazem FK, `CHECK` e CNPJ de 14 posições alfanuméricas.
 
 ### 10. Perguntas que nascem deste mapa
 

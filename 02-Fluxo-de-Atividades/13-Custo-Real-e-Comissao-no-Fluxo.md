@@ -105,16 +105,16 @@ Regra (N16-09, N16-40): o custo real de um item do pedido é a **soma das linhas
 
 | Nó | O que entra no custo real | Origem da linha | Selo |
 |---|---|---|---|
-| `C4` | O valor da OC, por item, vinculado ao pedido de venda (`ordens_compra_itens_vinculos`); inclui a **OC de mão de obra** (categoria "Despesas com Industrialização", ou "Serviços Tomados" com o Nº do Pedido do Fornecedor apontando um PV) | `OC` | 🔴 linha por evento; vínculo ✅ ([[LOG-14b-Compras-Vinculo-Pedido-Venda]]) |
+| `C4` | O valor da OC, por item, vinculado ao pedido de venda (`ordens_compra_itens_vinculos`); inclui a **OC de mão de obra** (categoria "Despesas com Industrialização", ou "Serviços Tomados" com o Nº do Pedido do Fornecedor apontando um PV) | `OC` | 🔴 linha por evento; vínculo ✅ ([[Contratos-da-v2\|LOG-14b]]) |
 | `C7` | Compras usa o valor correto; a proposta **não muda**; se for maior que o da proposta, o vendedor aprova ou reprova (`C8`) | `OC` | 📝 N16-08, N16-17, N16-60 |
 | NF de entrada | No recebimento, o valor da NF substitui o da OC. **O CCP vincula a NF de entrada à OC**, na tela de Follow-up, e o item do pedido vem do vínculo da OC (a ligação automática do Omie não existe na prática; N16-57, N16-86), inclusive com várias NFs por OC e KG contra PC. A NF traz **imposto real** e a **data real de recebimento** | `NF_ENTRADA` | 🔴 recurso novo na pipeline ([[Estudo-Omie-API]]) |
 | `R4` | O lote nasce com custo, **obrigatório**: valor total e valor por item; no fim, o valor unitário | `OC` (ou `CARGA_INICIAL`, `MANUAL`) | ✅ o lote do Recebimento nasce com o custo da OC na `develop` do MES (19/10, `97b9adc`); 🔴 custo obrigatório (N16-09, BL-066). ❓ o dado de estoque hoje não é confiável (aviso de Compras) |
 | `E3` | Item atendido pelo Estoque usa o **custo real do lote** (o da OC que o originou) | lote | ✅ `GET /itens/custo` existe na `develop` do MES (27/10, `6c11147`); 🔴 teste junto com o job do hub e merge do MES para a `main` (BL-035) |
-| `E5` | O fabricado aprovado vira lote; o custo do lote fabricado é **só a matéria-prima** | `PRODUCAO` | ✅ o lote `PRODUCAO` existe na `develop` (27/10); 🔴 o custo do fabricado (BL-067) ([[LOG-53-Ordem-de-Producao-e-Lote-do-Fabricado]]) |
+| `E5` | O fabricado aprovado vira lote; o custo do lote fabricado é **só a matéria-prima** | `PRODUCAO` | ✅ o lote `PRODUCAO` existe na `develop` (27/10); 🔴 o custo do fabricado (BL-067) ([[Contratos-da-v2\|LOG-53]]) |
 | `F1` | A matéria-prima enviada à produção para o item fabricado (J2, J3) | lote da matéria-prima | 🟡 a `develop` baixa a matéria-prima no "Atender pelo estoque" (19/10); a baixa na retirada (N16-140) e o custo da matéria-prima no fabricado são 🔴 (BL-010) |
 | `O1` | Fecha a comissão sobre a NF | NF | ✅ lado Omie; `K3` 🔴 |
 
-Hoje o código tem a base: `lote_custo` (`api-pcp/prisma/models/estoque.prisma`, opcional hoje), `OrigemCusto` `CARGA_INICIAL`, `OC`, `MANUAL` (as três já gravadas na `develop` do MES), `GET /itens/custo` publicado pelo MES na `develop` (27/10) e a tabela `itens_pedido_custo` no hub com o job que o lê (`itens_pedido_custo.job.js:78`) ([[API-008-Custo-do-Lote-no-MES]], [[LOG-47-Custo-Real-por-Item-no-Hub]]). O que as decisões acrescentam: custo **obrigatório**, linhas **por evento**, a **NF de entrada como verdade** do valor, e a soma por item do pedido.
+Hoje o código tem a base: `lote_custo` (`api-pcp/prisma/models/estoque.prisma`, opcional hoje), `OrigemCusto` `CARGA_INICIAL`, `OC`, `MANUAL` (as três já gravadas na `develop` do MES), `GET /itens/custo` publicado pelo MES na `develop` (27/10) e a tabela `itens_pedido_custo` no hub com o job que o lê (`itens_pedido_custo.job.js:78`) ([[Contratos-da-v2|API-008]], [[Contratos-da-v2|LOG-47]]). O que as decisões acrescentam: custo **obrigatório**, linhas **por evento**, a **NF de entrada como verdade** do valor, e a soma por item do pedido.
 
 #### Sobras de chapa ❓
 
@@ -211,7 +211,7 @@ No fluxo novo (N16-51, OQ-28 em parte): o **percentual de Compras** deixa de ser
 | Item do menu na imagem | O que é hoje | Alinhamento 🟡 |
 |---|---|---|
 | Comissões › Simulador, Análise de Simuladores, Minhas Comissões, Visão Geral, Parâmetros, Bloqueio de Comissões | Módulo atual (`app/(protected)/comissoes/*`), **não muda** (N16-11) | O módulo novo fica em Operações |
-| Operações › "Custo real por item" | `app/(protected)/orcamento/custo-itens/page.tsx` (`CustoItens`; a rota antiga `custo-itens` foi para o menu Orçamento em 27/10): custo real por pedido, KPIs, lotes e simulador de margem **sem imposto**, sobre dados de teste (BL-023, `544ee0b`; [[LOG-47-Custo-Real-por-Item-no-Hub]]) | Pode ser a entrada do drill-down por evento da Controladoria; precisa ligar ao custo por evento e ao imposto |
+| Operações › "Custo real por item" | `app/(protected)/orcamento/custo-itens/page.tsx` (`CustoItens`; a rota antiga `custo-itens` foi para o menu Orçamento em 27/10): custo real por pedido, KPIs, lotes e simulador de margem **sem imposto**, sobre dados de teste (BL-023, `544ee0b`; [[Contratos-da-v2\|LOG-47]]) | Pode ser a entrada do drill-down por evento da Controladoria; precisa ligar ao custo por evento e ao imposto |
 | Dashboards › "Matriz de preços" | O BFF cita o slug `matriz-precos`; a tela ainda não existe | É a matriz de preços do Orçamento ([[12-Orcamento-Base-de-Preco]]) |
 
 Os contratos com o detalhe das telas e das regras foram removidos em 29/10/2026; o Robert cria os novos.
@@ -233,7 +233,7 @@ A lista por mês, vendedor, unidade e status (com exportação para Excel), mais
 | Pedido **faturado** e depois cancelado | O cancelamento não desfaz compra nem produção; fica o abatimento da comissão (`K6`) e o saldo não faturado, parte por parte (N16-71) |
 | Devolução de **venda** | Total vem do Omie; parcial só chega marcada e o Fiscal ou a Controladoria informam item, quantidade e valor (N16-74) |
 | Devolução de **compra** (NF de entrada devolvida ao fornecedor) | ❓ Como aparece no Omie e o efeito na linha de custo: adiado (OQ-42) |
-| Pedido manual (`MAN-`) | Nunca entra no custo (D6 do 008, [[LOG-45-Pedido-de-Venda-Manual]]) |
+| Pedido manual (`MAN-`) | Nunca entra no custo (D6 do 008, [[Contratos-da-v2\|LOG-45]]) |
 
 ### Estados da comissão
 

@@ -160,7 +160,7 @@ Parcial no setor `LOGISTICA_ENTRADA` (nome "Recebimento", código `logistica-ent
 | `POST /compras/requisicoes/:id/recebimentos` | — | **Removida**; o registro direto não existe mais | ✅ |
 | `GET /estoque/lotes/:id/etiqueta` | Estoque | PDF Code128 do lote | `estoque/etiquetas/etiqueta.controller.ts` ✅ |
 
-Contratos de apoio: [[LOG-35-Compras-Marcos-Requisicao-para-MES]] (marco `oc_aprovada` põe a parcial nos esperados), [[API-004-Referencia-OC-Integracao-MES]] e [[API-007-Referencia-OC-Valores-no-MES]] (referência e valores da OC; o MES consome na `develop`, K4 de 15/10), [[API-008-Custo-do-Lote-no-MES]] (custo no lote).
+Contratos de apoio: [[Contratos-da-v2|LOG-35]] (marco `oc_aprovada` põe a parcial nos esperados), [[Contratos-da-v2|API-004]] e [[Contratos-da-v2|API-007]] (referência e valores da OC; o MES consome na `develop`, K4 de 15/10), [[Contratos-da-v2|API-008]] (custo no lote).
 
 ### Como está no código
 
@@ -210,7 +210,7 @@ Migrations: `20261006140000_recebimento_conferencia`, `20261014120000_compras_cc
 
 ### Mercadoria de OC sem requisição do MES (C0)
 
-✅ **Feito na `develop` do MES (16 a 20/10/2026, BL-051):** a mercadoria de OC sem requisição do MES entra pelos esperados por item de OC (`GET /compras/recebimentos/oc-esperadas`) e pela conferência por OC (`POST /compras/recebimentos/nf`, `itensOc`), com o lote ligado ao item da OC e ao custo; o uso interno vira `EntradaUsoInterno`, sem lote nem saldo (N14-30). Ver [[API-011-Compra-em-Andamento-Recebimento-por-Item-da-OC-e-Uso-Interno]]. O texto abaixo é o registro do desenho e do estado de 14/10.
+✅ **Feito na `develop` do MES (16 a 20/10/2026, BL-051):** a mercadoria de OC sem requisição do MES entra pelos esperados por item de OC (`GET /compras/recebimentos/oc-esperadas`) e pela conferência por OC (`POST /compras/recebimentos/nf`, `itensOc`), com o lote ligado ao item da OC e ao custo; o uso interno vira `EntradaUsoInterno`, sem lote nem saldo (N14-30). Ver [[Contratos-da-v2|API-011]]. O texto abaixo é o registro do desenho e do estado de 14/10.
 
 📝 N14-20: o MES passa a ler as OCs do hub. A mercadoria de uma OC criada a partir de requisição só do av-hub (ou de uma OC de estoque, sem requisição) precisa ter entrada no Estoque, mas o Recebimento do MES, em 14/10, **exigia requisição do MES**: a chegada pede requisição não cancelada, `podeReceber`, parcial do mesmo item do pedido **em Compras · CCP** e `pode_atuar` no Recebimento (`compras.service.ts:362-382`), e a conferência valida que cada item pertence à requisição (`recebimento.service.ts:147-162`). Uma OC sem `id_origem` não tem parcial nem requisição no MES, então não cai nos esperados.
 

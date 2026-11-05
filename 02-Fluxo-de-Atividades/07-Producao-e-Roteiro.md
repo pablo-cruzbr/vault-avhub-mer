@@ -14,7 +14,7 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, diverge
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-140: a matéria-prima sai do Estoque na retirada, pela quantidade pedida, no mesmo documento de retirada da Expedição. O operador não lança consumo ao concluir a etapa.
 > - N16-141: no retrabalho, o PCP escolhe o setor de volta. A regra 8 (volta ao setor anterior) vale só até isso ter código.
-> - Fabricado: [[LOG-53-Ordem-de-Producao-e-Lote-do-Fabricado]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`): o "sim" da inspeção de saída (`aprovar-saida`) leva a parcela ao Estoque, e o lote de origem `PRODUCAO` nasce em `receber-fabricado`.
+> - Fabricado: [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`): o "sim" da inspeção de saída (`aprovar-saida`) leva a parcela ao Estoque, e o lote de origem `PRODUCAO` nasce em `receber-fabricado`.
 > - Roteiro: desde 22/10 (`develop`) a Destinação cria a OP só com o Estoque e o roteiro é montado depois, na tela Montagem do Roteiro; enquanto não for liberado, a parcial só sai do Estoque para compra.
 > - Código: o que aparece como ✅ de MES nesta nota além da `main` está na `develop` do `api-pcp` e do `app-pcp`; a `main` parou em 08/10 (merge BL-035).
 
@@ -192,7 +192,7 @@ Todos sob `@UseGuards(JwtAuthGuard, PermissionsGuard)`; setor checado por `perfi
 | `/roteiros` CRUD, `/roteiro-item` CRUD | roteiro do pedido e roteiro individual do item | idem | `roteiros.controller.ts:24`, `roteiro-item.controller.ts:25` ✅ CRUD; na `develop`, `RoteiroItem` é lido pelo motor (`roteiro-efetivo.ts`) |
 | `GET /pedidos/roteiros`, `GET`/`PUT /pedidos/:id/roteiro`, `POST /pedidos/:id/devolver-destinacao` | Montagem do Roteiro | `montagem-roteiro` | `pedidos.controller.ts` ✅ `develop` (22/10) |
 | `/divergencias` (`POST`, `GET`, `PATCH :id`, `PATCH :id/resolver`) | divergência de produção | `movimentacoes` | `divergencias.controller.ts:26-63` ✅ |
-| `GET /itens/status` | foto de cada parcial para o av-hub, com `etapa` | chave `MES_API_KEY` | `integracao-avhub.service.ts:114`, `etapaDoItem :167` ✅ ([[API-005-Status-Item-Integracao-MES]]) |
+| `GET /itens/status` | foto de cada parcial para o av-hub, com `etapa` | chave `MES_API_KEY` | `integracao-avhub.service.ts:114`, `etapaDoItem :167` ✅ ([[Contratos-da-v2\|API-005]]) |
 
 ### Como está no código
 
@@ -223,7 +223,7 @@ O que falta: definir quem informa o material consumido (setor ao concluir etapa,
 
 #### Fabricado vira lote ✅ (só na `develop`)
 
-Desde 27/10/2026 (`ab3318d`) a `develop` do MES tem `OrigemLote.PRODUCAO`: o "sim" da inspeção de saída (`aprovar-saida`) devolve a parcela ao Estoque e `receber-fabricado` cria o lote (um por OP e produto, sem custo), com entrada no saldo e reserva para a própria parcela ([[LOG-53-Ordem-de-Producao-e-Lote-do-Fabricado]]). Registro de 14/10 (superado): `OrigemLote` só tinha `RECEBIMENTO` e `CARGA_INICIAL` e nada criava lote do fabricado.
+Desde 27/10/2026 (`ab3318d`) a `develop` do MES tem `OrigemLote.PRODUCAO`: o "sim" da inspeção de saída (`aprovar-saida`) devolve a parcela ao Estoque e `receber-fabricado` cria o lote (um por OP e produto, sem custo), com entrada no saldo e reserva para a própria parcela ([[Contratos-da-v2|LOG-53]]). Registro de 14/10 (superado): `OrigemLote` só tinha `RECEBIMENTO` e `CARGA_INICIAL` e nada criava lote do fabricado.
 
 ### O que falta desenvolver
 

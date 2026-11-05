@@ -973,4 +973,4 @@ Perguntas para a Michele estão em M01 a M16 na nota [[01-Motor-Atual-Como-Calcu
 | C14 | Abatimento por devolução parcial: tabela de pendência (`comissao_devolucao_pendente`) com NF, quem informou, item, quantidade e valor | Gustavo | Pendência até o Fiscal ou a Controladoria informar |
 | C08 | Cargas de `vigencia_inicio` das regras e exclusões migradas: `2000-01-01` (como os coordenadores) ou a data de criação? | Michele | `2000-01-01` |
 
-Relacionados: [[01-Motor-Atual-Como-Calcula]], [[02-Tabelas-Atuais-core_comissionamento]], [[04-Regras-e-Estados-da-Comissao-Nova]], [[LOG-47-Custo-Real-por-Item-no-Hub]], [[Modelo-Estoque-e-Custo-do-Lote]], [[Comissoes]].
+Relacionados: [[01-Motor-Atual-Como-Calcula]], [[02-Tabelas-Atuais-core_comissionamento]], [[04-Regras-e-Estados-da-Comissao-Nova]], [[Contratos-da-v2|LOG-47]], [[Modelo-Estoque-e-Custo-do-Lote]], [[Comissoes]].

@@ -28,7 +28,7 @@ Cada chave serve a uma ligação específica. Todas viajam no cabeçalho `x-api-
 ## O que ainda não está bom
 
 - **Já existe no código** (desde 15/10, `api-acos-vital` `b02d6c5`, migration 051) a chave do banco presa a rotas: cada chave tem `modo_rotas` (`livre`, `registrar` ou `exigir`) e uma lista de rotas ✅. Falta, para MES e pipeline, **cadastrar a lista e passar a chave para o modo `exigir`**. Em que modo cada chave está em produção ❓ (Gustavo, BL-018 e BL-057). Quando isso for feito, o Robert troca a variável da chave no MES e confere que as rotas que o MES chama estão na lista, senão leva 403.
-- A chave do `.env` (`API_KEYS`) sem login de usuário continua dispensando permissão, escopo e identidade enquanto `IDENTIDADE_EXIGIR_TOKEN` for `false` (padrão). Falta ligar e fixar essa variável (LOG-51 S1, parte 2). A API já isenta a chamada do menu do login (`rotaDispensaToken`), então o HUB não precisa mudar nada. Desenho: [[LOG-51-Seguranca-e-Padrao-da-API-do-Hub]].
+- A chave do `.env` (`API_KEYS`) sem login de usuário continua dispensando permissão, escopo e identidade enquanto `IDENTIDADE_EXIGIR_TOKEN` for `false` (padrão). Falta ligar e fixar essa variável (LOG-51 S1, parte 2). A API já isenta a chamada do menu do login (`rotaDispensaToken`), então o HUB não precisa mudar nada. Desenho: [[Contratos-da-v2|LOG-51]].
 - O BFF do HUB já manda o token do usuário em todos os ajudantes de chamada; só as chamadas do login em `app/api/auth/[...nextauth]/route.ts` vão só com a chave, e é o esperado (conferido em 29/10, veja [[Mapa-Rotas-BFF-Bearer]]). A PS-018 está atendida no código; o Nathan decide encerrá-la.
 - Falta conferir valores e presença das variáveis nos ambientes reais (PS-019) e a exposição pública do `api-pcp` (RS-009).
 
@@ -124,7 +124,7 @@ Ver também: [[Registro-de-Decisoes]], [[Infraestrutura]].
 
 ### Endurecimento (auditoria de 15/10/2026)
 
-A auditoria da `api-acos-vital` (`276dab8`) achou que a chave de `API_KEYS` sem token **dispensa permissão, escopo e identidade** (`exigirToken` com padrão `false`, `acessoConfig.js`) e que `POST /autenticacao/azure` emitia JWT só com o e-mail. Desenho da correção, ordem e testes: [[LOG-51-Seguranca-e-Padrao-da-API-do-Hub]] (S1 e S2), com o lado do HUB no BL-058. Situação conferida em 29/10/2026:
+A auditoria da `api-acos-vital` (`276dab8`) achou que a chave de `API_KEYS` sem token **dispensa permissão, escopo e identidade** (`exigirToken` com padrão `false`, `acessoConfig.js`) e que `POST /autenticacao/azure` emitia JWT só com o e-mail. Desenho da correção, ordem e testes: [[Contratos-da-v2|LOG-51]] (S1 e S2), com o lado do HUB no BL-058. Situação conferida em 29/10/2026:
 
 - **Login Azure:** a validação do `id_token` é fixa desde 16/10 (S2) ✅ e o HUB manda o `id_token` (PR #206). Testado em homologação em 28/10 (Nathan: login Azure, login por senha e sessão ociosa funcionaram, BL-058).
 - **`fetchMenu`:** a API já isenta `GET /permissoes_usuario/menu/:id_usuario` quando a chave exige token (`rotaDispensaToken`, S1 parte 2), com o id preso ao do token ✅. Nada a fazer no HUB.

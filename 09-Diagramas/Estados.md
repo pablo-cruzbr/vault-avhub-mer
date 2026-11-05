@@ -191,7 +191,7 @@ stateDiagram-v2
     cancelada --> excluida : DELETE, so criada no Hub (LOG-55)
     excluida --> [*]
 ```
-🔴 O estado `excluida` é proposta 📝 ([[LOG-55-Compras-Excluir-Requisicao]]): só vale para requisição criada no Hub, sem OC. A requisição do MES continua só cancelável. Banco e API ainda não existem.
+🔴 O estado `excluida` é proposta 📝 ([[Contratos-da-v2|LOG-55]]): só vale para requisição criada no Hub, sem OC. A requisição do MES continua só cancelável. Banco e API ainda não existem.
 
 ## 9. Ordem de compra no av-hub
 
@@ -390,7 +390,7 @@ Espelho dos marcos do contrato 35 ([[Integracao-AvHub-MES]], INT-03). Selo ✅ `
 
 ### 8. Requisição no av-hub (`requisicoes_compra.status`)
 
-🔴 `excluida` é 📝 proposta ([[LOG-55-Compras-Excluir-Requisicao]]): exclusão lógica (`deleted_at`), sem OC e sem `id_origem`; a requisição do MES continua só cancelável. Banco e API ainda não existem.
+🔴 `excluida` é 📝 proposta ([[Contratos-da-v2|LOG-55]]): exclusão lógica (`deleted_at`), sem OC e sem `id_origem`; a requisição do MES continua só cancelável. Banco e API ainda não existem.
 
 Selo ✅ `requisicoes_compra.route.js:13-22` (`atendida` só pela trigger da OC, nunca pelo PATCH); 409 `REQUISICAO_COM_OC` ao cancelar com OC (`:221-265`).
 

@@ -129,7 +129,7 @@ Com 100% de foco as ondas terminam em 02/02 (W0), 06/04, 13/05, 26/07 e 25/08/20
 | Robert | 75% | 31,5 pd | S1–FC + S5: capacidade 48,75 pd contra 78,35 planejados (64,85 + 16,5 do N14-29 − 3,0 do K4), **déficit de 29,6 pd** 🔴 (era 16,1 pd; 32,6 antes do crédito do K4; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida) |
 | Pablo | 75% | fora da conta | Comercial & Suprimentos |
 
-Custo do lote (09/10) somou ao Robert K3 1,0 + K4 3,0 + K5 1,5 + K6 0,5 pd; ao Gustavo K1, K2 e K7 (1,5 pd); K8 (`GET /itens/custo`) e K9 a K11 iam ao Ciclo 2; com a N16-09 (custo obrigatório e custo real por evento) a proposta de 16/10 os traz de volta como R3 e R5 (seção "Novas frentes de 16/10") 🟡. Detalhe em [[Modelo-Estoque-e-Custo-do-Lote]] e [[API-008-Custo-do-Lote-no-MES]].
+Custo do lote (09/10) somou ao Robert K3 1,0 + K4 3,0 + K5 1,5 + K6 0,5 pd; ao Gustavo K1, K2 e K7 (1,5 pd); K8 (`GET /itens/custo`) e K9 a K11 iam ao Ciclo 2; com a N16-09 (custo obrigatório e custo real por evento) a proposta de 16/10 os traz de volta como R3 e R5 (seção "Novas frentes de 16/10") 🟡. Detalhe em [[Modelo-Estoque-e-Custo-do-Lote]] e [[Contratos-da-v2|API-008]].
 
 ### Comercial & Suprimentos (Pablo criou; Robert conduz desde 28/10; fora do plano original)
 
@@ -139,7 +139,7 @@ Custo do lote (09/10) somou ao Robert K3 1,0 + K4 3,0 + K5 1,5 + K6 0,5 pd; ao G
 | CS2 | Suprimentos: catálogo, fornecedores, ofertas, mapa de cotação, solicitações de custo | ✅ feito no legado; telas de catálogo, fornecedores, painel do comprador e parâmetros de custo seguem em `orcamento/` |
 | CS3 | Painel do Comprador, histórico de compras, produtos pendentes | ✅ feito no legado; a tela Histórico de compras saiu (N16-108) |
 | CS4 | E2E Playwright e CI | ✅ feito no legado; o Playwright saiu do HUB em 29/10 |
-| CS5 | **Migrar o módulo para a `api-acos-vital`** (no lugar de publicar o `api-comercial`; LOG-52 fases 1 a 5; o `api-comercial` virou legado de leitura, N16-117), cadastrar telas em `auth.telas`, claim `perfis` no token | 🟡 **Robert conduz desde 28/10** (Pablo acompanha). Na `api-acos-vital`, `develop` de 29/10: cadastros, `POST /clientes`, `/parceiros` e `/propostas` (criar, listar, resumo, eventos, `PUT`, aprovar, cancelar, copiar, transformar); `/suprimentos` sem rota. Pd e datas dos blocos P1 a P7 estão superados ❓. Ver [[Comercial-Suprimentos]] e [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] |
+| CS5 | **Migrar o módulo para a `api-acos-vital`** (no lugar de publicar o `api-comercial`; LOG-52 fases 1 a 5; o `api-comercial` virou legado de leitura, N16-117), cadastrar telas em `auth.telas`, claim `perfis` no token | 🟡 **Robert conduz desde 28/10** (Pablo acompanha). Na `api-acos-vital`, `develop` de 29/10: cadastros, `POST /clientes`, `/parceiros` e `/propostas` (criar, listar, resumo, eventos, `PUT`, aprovar, cancelar, copiar, transformar); `/suprimentos` sem rota. Pd e datas dos blocos P1 a P7 estão superados ❓. Ver [[Comercial-Suprimentos]] e [[Contratos-da-v2\|LOG-52]] |
 
 ### Novas frentes de 16/10: proposta, Orçamento, custo real e comissão nova (🟡 a validar; histórico)
 

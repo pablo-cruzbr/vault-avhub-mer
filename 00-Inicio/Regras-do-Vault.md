@@ -64,7 +64,7 @@ Use o nome novo. O código ainda usa o antigo em alguns pontos, então registre 
 
 Contrato é o combinado por escrito entre dois sistemas ou entre duas pessoas sobre uma entrega.
 
-- Todo contrato novo ou seção nova entra **completo** em `06-Contratos/` e no [[Painel-de-Contratos]].
+- Todo contrato novo ou seção nova entra **completo** em `06-Contratos/` e no [[Contratos-da-v2]].
 - O texto do contrato é copiado inteiro. Só o frontmatter, um bloco "Resumo em linguagem natural" (o que é, quem é afetado, situação) e um bloco "Situação em DD/MM" no topo são acrescentados.
 - Os IDs são únicos: `SQL-007`, `API-004`, `LOG-34`. O número original é preservado. Os duplicados ganham letra (`LOG-04a`, `LOG-04b`).
 - Os contratos de **Consulta** (`CON-NN`) pedem uma **resposta**, não uma mudança. Dão o contexto e um cenário, fazem perguntas numeradas e trazem uma mensagem pronta para o WhatsApp. As respostas voltam pelo WhatsApp do Nathan e são registradas na própria nota. Modelo e regras em [[Modelo-de-Consulta]].

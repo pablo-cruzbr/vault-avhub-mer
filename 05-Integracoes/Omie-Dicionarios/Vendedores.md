@@ -24,8 +24,8 @@ Fonte: `ListarVendedores` (`/geral/vendedores/`), resource `vendedores.ts`. Sem 
 | `comissao`, `ajuda_custo`, `filial`, `id_usuario`, `id_funcionario` | **não vêm do Omie**: colunas protegidas ([[Colunas-Protegidas]]) |
 | `id`, `id_origem`, `created_at/by`, `updated_at/by`, `deleted_at/by` | controle do banco (identificador, autoria e datas de criação, alteração e exclusão) |
 
-Um vendedor pode ter várias linhas (uma por filial ou conta Omie), ligadas pelo `id_funcionario`, que o pipeline não gere. O vínculo é feito na tela de Vendedores do HUB ([[LOG-39-Vendedores-Fila-de-Vinculo]]).
+Um vendedor pode ter várias linhas (uma por filial ou conta Omie), ligadas pelo `id_funcionario`, que o pipeline não gere. O vínculo é feito na tela de Vendedores do HUB ([[Contratos-da-v2|LOG-39]]).
 
-O escopo do vendedor (ver só os próprios pedidos) é aplicado pela API a partir do token, fixo no código desde o contrato 40 ✅ (`api-acos-vital/src/utils/acessoConfig.js:75`; [[LOG-40-Escopo-de-Vendedores-e-Permissoes-pelo-Token-no-Backend]]).
+O escopo do vendedor (ver só os próprios pedidos) é aplicado pela API a partir do token, fixo no código desde o contrato 40 ✅ (`api-acos-vital/src/utils/acessoConfig.js:75`; [[Contratos-da-v2|LOG-40]]).
 
 Ver também: [[Pedidos-de-Venda]].

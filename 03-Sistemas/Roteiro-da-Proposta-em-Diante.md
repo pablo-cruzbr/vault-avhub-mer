@@ -85,7 +85,7 @@ Tudo abaixo é o conteúdo completo da nota original, sem cortes.
 ### 1. Antes de construir: realinhar os contratos à N16-111, N16-112 e N16-116
 
 - **Os contratos SQL e de API desta parte foram removidos em 29/10/2026.** O Robert cria os novos já sobre `core_vendas_faturamento` e a API do Hub (N16-111, N16-112, N16-116), com o Gustavo revisando o banco.
-  - Mapa do que reusar: [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] §0 e a tabela de unificação em [[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]].
+  - Mapa do que reusar: [[Contratos-da-v2|LOG-52]] §0 e a tabela de unificação em [[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]].
 - **Não existirá `core_comercial` (N16-116, 27/10/2026): a proposta fica em `core_vendas_faturamento`.** Os contratos novos nomeiam esse schema, e as rotas `/comercial/*` da fase 1 mudam de prefixo.
 - **O `core_comercial` está em produção, vazio** (dump de 26/10: só `categorias_suprimento` 17, `parametros_custo` 1 e `unidades_emissoras` 3; o dump de 29/10 tem as mesmas 23 tabelas). Quem faz: Gustavo e **Robert**. Pela N16-116 ele **sai**: o que for útil (parâmetros de custo, emissoras) migra para o lugar certo. ⚠️ O código de 28 e 29/10 (propostas, transformar em pedido) ainda grava em `core_comercial.*`; isso contradiz a N16-116 e está como dúvida no relatório de 29/10.
 
@@ -158,4 +158,4 @@ Entrega depois da proposta, na `api-acos-vital`, sobre o que o Hub já tem (N16-
 
 ### Ver também
 
-[[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]] · [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] · · · · [[Registro-de-Decisoes]] · [[Perguntas-Proposta-Pedido-Comissao]]
+[[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]] · [[Contratos-da-v2|LOG-52]] · · · · [[Registro-de-Decisoes]] · [[Perguntas-Proposta-Pedido-Comissao]]

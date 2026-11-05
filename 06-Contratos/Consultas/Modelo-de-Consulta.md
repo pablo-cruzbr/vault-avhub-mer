@@ -60,10 +60,10 @@ bloqueia: [BL-NNN, PS-NNN]
 2. **Respondida:** cole as respostas em "Respostas recebidas", com data e nome. Atualize "Depois da resposta".
 3. **Aplicada:** a regra foi para a nota de raia, o Registro de Decisões (nova decisão `N<dia>-NN`) e, se houver desenvolvimento, para o Backlog. Mude o status para `arquivada` e mova a nota para `Arquivados/`.
 
-O [[Painel-de-Contratos]] lista as Consultas abertas. O ID usa o prefixo `CON-` e a numeração é própria, sem relação com os outros tipos.
+O [[Contratos-da-v2]] lista as Consultas abertas. O ID usa o prefixo `CON-` e a numeração é própria, sem relação com os outros tipos.
 
 ## Consultas abertas
 
-- [[CON-01-Relatorios-Valores-e-Faturamento-Itens-28-e-29]]
-- [[CON-02-Rastreabilidade-e-Book-Itens-18-e-20]]
-- [[CON-03-Devolucao-de-Compra-e-Classificacao-do-Pedido]]
+- [[Contratos-da-v2|CON-01]]
+- [[Contratos-da-v2|CON-02]]
+- [[Contratos-da-v2|CON-03]]

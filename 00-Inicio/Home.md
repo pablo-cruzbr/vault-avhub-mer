@@ -30,7 +30,7 @@ O pedido começa na proposta (ou no pedido digitado no Omie) e termina na nota f
 | `03-Sistemas/Comissao` | A comissão atual e a nova: [[01-Motor-Atual-Como-Calcula]] · [[02-Tabelas-Atuais-core_comissionamento]] · [[03-Modelo-Novo-core_comissao]] · [[04-Regras-e-Estados-da-Comissao-Nova]] |
 | `04-Dados` | Os bancos de dados: [[Banco-AvHub]] · [[Banco-MES]] · [[Modelo-Estoque-e-Custo-do-Lote]] · [[Schemas-Postgres]] · [[Diferencas-Codigo-x-Banco]] |
 | `05-Integracoes` | Como os sistemas conversam: [[Integracao-AvHub-MES]] · [[Chaves-e-Autenticacao]] · [[Omie-Integracao-Estado]] · [[Estudo-Omie-API]] · [[Mapa-IncluirPedido-Omie]] · [[Colunas-Protegidas]] · [[Rastreabilidade-e-Torre-de-Fluxo]] · dicionários do Omie em `05-Integracoes/Omie-Dicionarios` |
-| `06-Contratos` | [[Painel-de-Contratos]] (todos os contratos, texto integral) · Consultas: [[Modelo-de-Consulta]] |
+| `06-Contratos` | [[Contratos-da-v2]] (todos os contratos, texto integral) · Consultas: [[Modelo-de-Consulta]] |
 | `07-Desenvolvimento` | O que falta fazer: [[Backlog-por-Frente]] · [[Pontas-Soltas]] · [[Perguntas-Proposta-Pedido-Comissao]] · [[Contradicoes-Resolvidas]] · [[Riscos]] · [[Analise-de-Organizacao-do-Vault]] |
 | `08-Decisoes` | [[Registro-de-Decisoes]] |
 | `09-Diagramas` | [[Indice-de-Diagramas]] (inclui os artifacts do 0b e da proposta ao pedido) · [[Classes]] · [[Estados]] · [[Casos-de-Uso]] · [[Sequencia]] · [[Componentes-e-Implantacao]] · [[Modelo-de-Dados]] |

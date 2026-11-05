@@ -17,7 +17,7 @@ Recebe a parcial concluída pela produção ([[07-Producao-e-Roteiro]]). A inspe
 > - N16-128: pode reprovar só parte (5 de 100 peças). Hoje reprova tudo.
 > - N16-129: sem laudo nem checklist. Um clique e um motivo.
 > - N16-141: no retrabalho, o PCP escolhe o setor de volta. Hoje volta ao anterior.
-> - Aprovado vai ao Estoque como lote ([[LOG-53-Ordem-de-Producao-e-Lote-do-Fabricado]]); baixa na retirada ([[LOG-54-Documento-de-Retirada-e-Baixa-na-Retirada]]).
+> - Aprovado vai ao Estoque como lote ([[Contratos-da-v2|LOG-53]]); baixa na retirada ([[Contratos-da-v2|LOG-54]]).
 > - Código: o "sim" (`aprovar-saida`) e o lote do fabricado estão só na `develop` do `api-pcp` e do `app-pcp` (27/10/2026, `ab3318d`). A `main` do MES parou em 08/10 e só recebe com o merge BL-035.
 
 ## Como funciona, passo a passo
@@ -89,7 +89,7 @@ Perfis são dados do banco; o inspetor precisa de `PerfilSetor.podeAtuar` no set
 | 2 | `reprovar` só em setor tipo `QUALIDADE` e a partir de `EM_ANDAMENTO` | ✅ `itens-parciais.service.ts:966-989`, `:1017-1021` |
 | 3 | Reprovar grava histórico e abre `Divergencia` tipo `QUALIDADE`, `ABERTA`, com motivo | ✅ `:1036-1058` |
 | 4 | Reprovado só tem duas saídas: `resolver` (falso alarme, volta a `EM_ANDAMENTO`) ou `retrabalho` (volta ao setor anterior; pela N16-141, de 29/10, o PCP passará a escolher o setor). Mover, concluir, pausar e devolver somem | ✅ `acoes.ts:67` |
-| 5 | Aprovado volta ao Estoque: **lote e saldo do fabricado**, retirada depois ([[LOG-53-Ordem-de-Producao-e-Lote-do-Fabricado]], [[LOG-54-Documento-de-Retirada-e-Baixa-na-Retirada]]) | 📝 ✅ lote e saldo na `develop` (27/10); 🔴 retirada |
+| 5 | Aprovado volta ao Estoque: **lote e saldo do fabricado**, retirada depois ([[Contratos-da-v2\|LOG-53]], [[Contratos-da-v2\|LOG-54]]) | 📝 ✅ lote e saldo na `develop` (27/10); 🔴 retirada |
 | 6 | Reprovação de inspeção de saída **não** gera RNC nem nota de devolução: RNC é conceito do lote comprado | ✅ `rncs` só em `qualidade.service.ts:212` |
 | 7 | Inspeção de saída tem trava de laudo? Pergunta T-04 para a inspeção documental (ciclo 2). Hoje não há laudo na saída. **Decidido em 29/10 (N16-129): sem laudo nem checklist.** | 📝 ✅ |
 
@@ -122,7 +122,7 @@ Não existe tela de laudo, checklist nem formulário de resultado de inspeção 
 | `PATCH /itens-parciais/:id/retrabalho` `{ motivo }` | volta ao setor anterior, `retrabalho = true` | `service:1124` ✅ |
 | `GET /divergencias` | consulta divergências | `divergencias.controller.ts:38-43` ✅ |
 
-Contrato com o av-hub: só a etapa do item ([[API-005-Status-Item-Integracao-MES]], [[API-006-Status-por-Item-Leitura-no-Hub]]).
+Contrato com o av-hub: só a etapa do item ([[Contratos-da-v2|API-005]], [[Contratos-da-v2|API-006]]).
 
 ### Como está no código
 

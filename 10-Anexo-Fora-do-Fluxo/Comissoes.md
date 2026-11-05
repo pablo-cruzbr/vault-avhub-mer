@@ -28,9 +28,9 @@ Fora do fluxo 0b. Banco e API são do Gustavo; as telas são do Nathan. A comiss
 
 ## O que falta
 
-- Trocar o JSON de coordenadores pela API (Nathan). O contrato [[LOG-42-Coordenadores-e-Orcamento-sair-do-JSON-do-Repositorio]] continua `proposta`. Os valores nominais estão no git do HUB 🔴 (dado pessoal no repositório). A parte do Orçamento desse contrato já acabou: o módulo antigo de Orçamento (JSON em `lib/orcamento`) foi removido do HUB em 16/10 (`c851cda`). A parte do Orçamento desse contrato já acabou: o módulo antigo de Orçamento (JSON em `lib/orcamento`) foi removido do HUB em 16/10 (`c851cda`).
+- Trocar o JSON de coordenadores pela API (Nathan). O contrato [[Contratos-da-v2|LOG-42]] continua `proposta`. Os valores nominais estão no git do HUB 🔴 (dado pessoal no repositório). A parte do Orçamento desse contrato já acabou: o módulo antigo de Orçamento (JSON em `lib/orcamento`) foi removido do HUB em 16/10 (`c851cda`). A parte do Orçamento desse contrato já acabou: o módulo antigo de Orçamento (JSON em `lib/orcamento`) foi removido do HUB em 16/10 (`c851cda`).
 - ❓ Confirmar em produção que as migrations 007 e 007b do DBA foram aplicadas.
-- 🔴 Comissão por faturamento com custo real: Ciclo 2, [[LOG-47-Custo-Real-por-Item-no-Hub]].
+- 🔴 Comissão por faturamento com custo real: Ciclo 2, [[Contratos-da-v2|LOG-47]].
 
 Ver também: [[12-Orcamento-Base-de-Preco]] (a marca `GAMBIARRA` do LOG-42 saiu do Orçamento em 16/10), [[Dashboards]].
 
@@ -59,6 +59,6 @@ Ver também: [[12-Orcamento-Base-de-Preco]] (a marca `GAMBIARRA` do LOG-42 saiu 
 
 ### O que falta (detalhe)
 
-- Trocar o JSON de coordenadores pelo `GET /dashboard/comissoes` no HUB (Nathan), sem apagar o arquivo enquanto a troca não existir. O contrato [[LOG-42-Coordenadores-e-Orcamento-sair-do-JSON-do-Repositorio]] continua `proposta`; os valores nominais estão no git do HUB 🔴 (dado pessoal no repositório).
+- Trocar o JSON de coordenadores pelo `GET /dashboard/comissoes` no HUB (Nathan), sem apagar o arquivo enquanto a troca não existir. O contrato [[Contratos-da-v2|LOG-42]] continua `proposta`; os valores nominais estão no git do HUB 🔴 (dado pessoal no repositório).
 - Confirmar em produção que as migrations 007 e 007b do DBA foram aplicadas ❓ (o código as cita; o Dump Avhub de 14/10 tem `comissao_coordenadores` e `comissao_coordenadores_historico`).
-- Comissão por faturamento com custo real: Ciclo 2, [[LOG-47-Custo-Real-por-Item-no-Hub]] 🔴.
+- Comissão por faturamento com custo real: Ciclo 2, [[Contratos-da-v2|LOG-47]] 🔴.

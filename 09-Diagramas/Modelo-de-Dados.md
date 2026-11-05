@@ -457,7 +457,7 @@ Selo ✅ Dump Avhub de 14/10 (`core_vendas_faturamento.*`). Observações:
 - `pedidos_vendas_liberacao` não tem coluna de status: `pendente`, `liberado` e `importado` são calculados pela view `vw_pedidos_liberacao` a partir de `importado_mes_em`.
 - `requisicoes_compra.id_origem` é o id do `requisicoes_compra_itens` do MES; vale só para a origem MES. `requisicoes_compra_eventos.id_origem` é `NOT NULL`, por isso a requisição criada só no av-hub não gera evento 🔴 ([[Integracao-AvHub-MES]]).
 - `itens_pedido_custo`: a API exige a 047b (grava por produto, BL-019 feito em 15/10); o dump de 14/10 ainda mostrava `item integer`; produção ❓.
-- `itens_pedido_status` e `itens_pedido_custo` são projeções lidas do MES pelos jobs de 90 s; `ordens_compra_itens_vinculos` liga o item da OC ao pedido de venda (contrato [[LOG-14b-Compras-Vinculo-Pedido-Venda]]).
+- `itens_pedido_status` e `itens_pedido_custo` são projeções lidas do MES pelos jobs de 90 s; `ordens_compra_itens_vinculos` liga o item da OC ao pedido de venda (contrato [[Contratos-da-v2|LOG-14b]]).
 
 ### 5. Mapa dos dois bancos
 

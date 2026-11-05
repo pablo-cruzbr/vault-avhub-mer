@@ -142,7 +142,7 @@ A tela de inspeção lista os lotes `PENDENTE` com material, quantidade, fornece
 | `POST /qualidade/lotes/:id/reprovar` | idem | `inspecao-entrada:editar` | RNC, cisão, devolução a Compras | `qualidade.controller.ts:31-35`, `qualidade.service.ts:102-265` ✅ |
 | `GET /estoque/alertas/rnc-pendentes` | app-pcp → api-pcp | permissão do Estoque | Lista RNC com `notaDevolucaoPendente = true` | `estoque/alertas/alertas.service.ts:63-64` ✅ |
 
-Não há contrato com o av-hub para a RNC. O Compras só vê o efeito indireto (ver "O que falta desenvolver"). Contratos relacionados: [[LOG-35-Compras-Marcos-Requisicao-para-MES]] (marcos), [[LOG-34-Requisicoes-MES-Empurra-para-o-Hub]] (ida da requisição), [[API-008-Custo-do-Lote-no-MES]] (a cisão herda o custo do pai).
+Não há contrato com o av-hub para a RNC. O Compras só vê o efeito indireto (ver "O que falta desenvolver"). Contratos relacionados: [[Contratos-da-v2|LOG-35]] (marcos), [[Contratos-da-v2|LOG-34]] (ida da requisição), [[Contratos-da-v2|API-008]] (a cisão herda o custo do pai).
 
 ### Como está no código
 

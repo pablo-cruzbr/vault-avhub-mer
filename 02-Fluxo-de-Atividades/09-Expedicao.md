@@ -12,7 +12,7 @@ fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens
 **Em uma frase:** a Expedição recebe o que está pronto, embala em pallets, decide se o pedido sai inteiro ou por partes, monta a carga e registra a entrega ao cliente. Nós `X1` a `X4` do [[00-Fluxo-Mestre-0b]]: embalagem e paletização, parcial ou integral, consolida a carga e transporte. Termina na emissão da nota no Omie ([[10-Fiscal-Omie]]). O sistema nunca emite nota fiscal.
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - N16-120, N16-121 e N16-122: a Expedição pede a retirada ao Estoque e só o Estoque confirma. A reserva é consumida junto com a baixa. A Embalagem só recebe depois da retirada confirmada. O que o documento imprime segue aberto. Contrato: [[LOG-54-Documento-de-Retirada-e-Baixa-na-Retirada]].
+> - N16-120, N16-121 e N16-122: a Expedição pede a retirada ao Estoque e só o Estoque confirma. A reserva é consumida junto com a baixa. A Embalagem só recebe depois da retirada confirmada. O que o documento imprime segue aberto. Contrato: [[Contratos-da-v2|LOG-54]].
 > - N16-130: o vendedor decide se o pedido sai inteiro ou por partes, pela marca "pode faturar em partes".
 > - N16-131: item que nunca chega num pedido integral é decisão manual, sem prazo automático.
 > - N16-132: a Logística avisa o Fiscal ao fechar a carga. Depende da consolidação de carga (`X3`), que não existe.
@@ -132,7 +132,7 @@ Pedido: `StatusPedido` `AGUARDANDO`, `EM_PRODUCAO`, `BLOQUEADO`, `ENTREGUE`. Tod
 | `POST /pedido-anexos` | comprovante, canhoto, NF da entrega (via `criarPedidoAnexo`) | ❓ | `ConfirmarEntregaModal.tsx:94` ✅ |
 | `/pedido-embalagens` e `/pedido-embalagem-pallets` (CRUD) | embalagens e pallets por pedido, total em sincronia | `ordens-producao` | `pedido-embalagens.controller.ts:32`, `pedido-embalagem-pallets.controller.ts:28` ✅ |
 
-Não há contrato com o av-hub para a Expedição além da etapa do item ([[API-005-Status-Item-Integracao-MES]]). A baixa do item ("faturado") volta pelo pipeline do Omie, sem contrato.
+Não há contrato com o av-hub para a Expedição além da etapa do item ([[Contratos-da-v2|API-005]]). A baixa do item ("faturado") volta pelo pipeline do Omie, sem contrato.
 
 ### Como está no código
 

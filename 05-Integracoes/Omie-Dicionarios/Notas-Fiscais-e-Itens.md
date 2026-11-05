@@ -30,7 +30,7 @@ Fonte: Omie `ListarNF` (`/produtos/nfconsultar/`), resource `notasFiscais.ts`. D
 | `codigo_pedido_omie` | `compl.nIdPedido` |
 | `oppedido` | `nf.pedido.opPedido`: tipo de operação (liga a nota ao nome da etapa); cruza com `core.etapas_faturamento.codigo_operacao` ([[Etapas-Faturamento]]) |
 | `valor_mercadorias`, `valor_nf`, `valor_ipi` | `total.ICMSTot.vProd`, `.vNF`, `.vIPI` |
-| `descontos`, `manual`, `averbado` | **não vêm do Omie**: colunas protegidas ([[Colunas-Protegidas]]); `manual` e `descontos` vêm da NF manual do av-hub ([[LOG-29-Notas-Fiscais-Manuais-So-Admin]], só administrador) |
+| `descontos`, `manual`, `averbado` | **não vêm do Omie**: colunas protegidas ([[Colunas-Protegidas]]); `manual` e `descontos` vêm da NF manual do av-hub ([[Contratos-da-v2\|LOG-29]], só administrador) |
 | `id`, `created_at/by`, `updated_at/by`, `deleted_at/by` | controle do banco (identificador, autoria e datas de criação, alteração e exclusão) |
 
 ## Vínculo NF → item do pedido

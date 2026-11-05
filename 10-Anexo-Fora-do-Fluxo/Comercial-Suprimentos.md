@@ -16,7 +16,7 @@ fontes: [HUB b55ac55 api-comercial/ (prisma, src/modules, Dockerfile, env.ts), a
 Quem cuida hoje: o Robert conduz a migração das rotas para a `api-acos-vital`; o Pablo acompanha e cuida do Orçamento (com supervisão do Robert); o Gustavo revisa o banco; o Nathan faz as telas (N16-117).
 
 > [!info] Migração para a API do hub (15/10/2026)
-> O serviço `api-comercial` descrito abaixo é de teste e será absorvido pela `api-acos-vital` (N14-15). O que já existe na API do hub, o que criar e o que descartar está em [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]].
+> O serviço `api-comercial` descrito abaixo é de teste e será absorvido pela `api-acos-vital` (N14-15). O que já existe na API do hub, o que criar e o que descartar está em [[Contratos-da-v2|LOG-52]].
 
 > [!info] Legado só para leitura (28/10/2026, N16-117)
 > A pasta `api-comercial/` do HUB é **legado de consulta**, com `LEIA-ME-LEGADO.md`: não se roda, não se publica e não se altera, e fica fora da CI, do lint e do `tsc`. O front fala só com a API do Hub. O que vale portar está em [[Mapa-do-Modulo-do-Pablo]].

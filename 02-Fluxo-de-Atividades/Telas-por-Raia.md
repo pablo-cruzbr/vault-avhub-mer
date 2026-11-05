@@ -173,7 +173,7 @@ Desenho aprovado em 26/10/2026. Em 29/10/2026 a proposta já tem API na `api-aco
 |---|---|---|---|
 | Login (T.1) | Azure AD e usuário e senha | Todos | ✅ |
 | Cadastros › Acessos (T.2) | Usuários, Perfis, Permissões, Telas e vínculos ([[RBAC-e-Permissoes]]). 🔴 `PerfilSetor` sem filial | Administrador | ✅ |
-| Torre de Fluxo (T.3 a T.6) | Mapa, ranking, tempo e trilha por item. As telas existem no HUB sobre dados de exemplo (BL-022, 15/10, `3cd55de`); o MES ainda não publica o feed ([[Rastreabilidade-e-Torre-de-Fluxo]], [[LOG-46-Torre-de-Fluxo-Feed-Jobs-e-Telas]]) | Gestão | 🟡 |
+| Torre de Fluxo (T.3 a T.6) | Mapa, ranking, tempo e trilha por item. As telas existem no HUB sobre dados de exemplo (BL-022, 15/10, `3cd55de`); o MES ainda não publica o feed ([[Rastreabilidade-e-Torre-de-Fluxo]], [[Contratos-da-v2\|LOG-46]]) | Gestão | 🟡 |
 | Inicial, Blank | Páginas básicas | Todos | ✅ |
 
 ## Detalhe técnico

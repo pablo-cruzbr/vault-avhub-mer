@@ -25,7 +25,7 @@ fontes: [plano de 14/10/2026]
 
 | Quem | Vá para |
 |---|---|
-| Robert (MES, o sistema de chão de fábrica, e o módulo comercial na API do Hub desde 28/10) | [[Backlog-por-Frente]] (frente MES), [[MES-Backend]], [[MES-Front]], [[Estados-e-Status]], [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]], [[Mapa-do-Modulo-do-Pablo]] |
+| Robert (MES, o sistema de chão de fábrica, e o módulo comercial na API do Hub desde 28/10) | [[Backlog-por-Frente]] (frente MES), [[MES-Backend]], [[MES-Front]], [[Estados-e-Status]], [[Contratos-da-v2\|LOG-52]], [[Mapa-do-Modulo-do-Pablo]] |
 | Gustavo (DBA, cuida do banco e da API do av-hub) | [[Backlog-por-Frente]] (frente DBA), [[AV-Hub-API]], [[Banco-AvHub]], [[Diferencas-Codigo-x-Banco]] |
 | Nathan (front do av-hub) | [[AV-Hub-Front]], [[Telas-por-Raia]], [[Mapa-Rotas-BFF-Bearer]] |
 | Pablo (acompanha o módulo comercial e cuida do Orçamento) | [[Mapa-do-Modulo-do-Pablo]], [[12-Orcamento-Base-de-Preco]], [[API-Comercial]] (legado de leitura), [[Comercial-Suprimentos]] |
@@ -34,7 +34,7 @@ fontes: [plano de 14/10/2026]
 
 ## Como achar as coisas
 
-- **Um contrato:** [[Painel-de-Contratos]] (ID, apelido, status e nó do 0b).
+- **Um contrato:** [[Contratos-da-v2]] (ID, apelido, status e nó do 0b).
 - **Uma decisão:** [[Registro-de-Decisoes]].
 - **Um termo:** [[Glossario]].
 - **Uma nota do vault antigo:** [[Mapa-v1-para-v2]].

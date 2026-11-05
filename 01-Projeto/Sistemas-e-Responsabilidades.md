@@ -54,7 +54,7 @@ flowchart LR
     API -->|"GET itens status contrato 005"| MESB
 ```
 
-Versão completa por contrato em [[Componentes-e-Implantacao|Diagrama-Componentes-e-Implantacao]]. Chaves e autenticação entre os sistemas em [[Chaves-e-Autenticacao]]. Contratos em [[Integracao-AvHub-MES]] e [[Painel-de-Contratos]].
+Versão completa por contrato em [[Componentes-e-Implantacao|Diagrama-Componentes-e-Implantacao]]. Chaves e autenticação entre os sistemas em [[Chaves-e-Autenticacao]]. Contratos em [[Integracao-AvHub-MES]] e [[Contratos-da-v2]].
 
 ## Em que ambiente cada um está
 

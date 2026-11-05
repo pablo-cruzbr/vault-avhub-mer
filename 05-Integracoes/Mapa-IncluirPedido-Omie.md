@@ -88,7 +88,7 @@ Selos: ✅ está na documentação ou no código · 📝 decisão do Nathan · �
 
 | Campo | O que mandar | Origem | Situação |
 |---|---|---|---|
-| `codigo_item_integracao` | código nosso do item, até 30 caracteres | `pedidos_itens.id` ou ordem (o exemplo do Robert usa a sequência do item, `"1"`) | ✅ obrigatório no exemplo. A pipeline **grava de volta** o `codigo_item_omie` por item (hoje chega por `ListarPedidos`). 🟡 A pipeline mapeia também o `codigo_item_integracao` para `produto_vendas.codigo_item_integracao` ([[SQL-021-Produto-Vendas-Codigo-Item-Integracao]]); o valor repete entre pedidos e só serve junto do `codigo_pedido_omie` |
+| `codigo_item_integracao` | código nosso do item, até 30 caracteres | `pedidos_itens.id` ou ordem (o exemplo do Robert usa a sequência do item, `"1"`) | ✅ obrigatório no exemplo. A pipeline **grava de volta** o `codigo_item_omie` por item (hoje chega por `ListarPedidos`). 🟡 A pipeline mapeia também o `codigo_item_integracao` para `produto_vendas.codigo_item_integracao` ([[Contratos-da-v2\|SQL-021]]); o valor repete entre pedidos e só serve junto do `codigo_pedido_omie` |
 | `simples_nacional` | `"S"`/`"N"` | emissora | ❓ o Omie deduz da empresa? |
 | `acao_item` | só em alteração | — | ✅ |
 | `id_ordem_producao` | — | — | ❓ ver se o Omie liga o PV a uma OP dele; não é o nosso PCP |

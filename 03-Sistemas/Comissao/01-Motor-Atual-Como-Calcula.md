@@ -423,4 +423,4 @@ Cada pergunta traz o que o módulo novo vai fazer se ela não responder (🟡). 
 | M15 | O flag **`vendedores.comissao`** e a **ajuda de custo do vendedor** (`vendedores.ajuda_custo`) valem para quê? O motor atual não os lê | Fora do motor; ficam no cadastro |
 | M16 | O **valor retido** (comissões bloqueadas) deve aparecer no resumo mensal da Controladoria, o que hoje mostra zero por defeito? (OQ-05) | Sim |
 
-Relacionados: [[02-Tabelas-Atuais-core_comissionamento]], [[03-Modelo-Novo-core_comissao]], [[04-Regras-e-Estados-da-Comissao-Nova]], [[Comissoes]], [[LOG-47-Custo-Real-por-Item-no-Hub]], [[Regras-do-Vault]].
+Relacionados: [[02-Tabelas-Atuais-core_comissionamento]], [[03-Modelo-Novo-core_comissao]], [[04-Regras-e-Estados-da-Comissao-Nova]], [[Comissoes]], [[Contratos-da-v2|LOG-47]], [[Regras-do-Vault]].

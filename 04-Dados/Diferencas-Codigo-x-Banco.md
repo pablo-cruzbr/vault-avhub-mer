@@ -37,7 +37,7 @@ Conferido de novo em 29/10 no código da `develop`.
 | `requisicoes_compra.pedido_compra`, `fornecedor`, `previsao_entrega`, `comprado_em` | colunas do "Registrar compra" manual (removido); hoje só recebem o espelho do que o av-hub informa | 🟡 | dump `:1198-1201`; `requisicao-avhub.eventos.ts` |
 | `requisicoes_compra_itens.avhub_*` | preenchidas pelo envio (LOG-34); `avhub_status` guarda o status do av-hub | ✅ | `envio-avhub.service.ts` |
 | `materiais.estoque_maximo` | só cadastro, sem alerta que o use | 🟡 | grep (1 ocorrência) |
-| `lote_custo`: escritor de `OC` e `MANUAL`, snapshot na `SAIDA` (`movimentos_estoque.custo_unitario`) e `itens_pedido.custo_alterado_em` | contrato 008 §3 a §5 com código na `develop` (16 e 27/10) | ✅ | [[API-008-Custo-do-Lote-no-MES]]; `estoque-operacao.helpers.ts:51-62,442` |
+| `lote_custo`: escritor de `OC` e `MANUAL`, snapshot na `SAIDA` (`movimentos_estoque.custo_unitario`) e `itens_pedido.custo_alterado_em` | contrato 008 §3 a §5 com código na `develop` (16 e 27/10) | ✅ | [[Contratos-da-v2\|API-008]]; `estoque-operacao.helpers.ts:51-62,442` |
 
 ## MES: código sem banco (precisaria de tabela ou coluna)
 
