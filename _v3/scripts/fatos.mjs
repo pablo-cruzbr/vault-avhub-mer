@@ -18,7 +18,7 @@ const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 // --pasta=<sub> grava e confere em _v3/fatos/<sub>/ (Bloco 5: _v3/fatos/bloco5, porque já há fotos do Bloco 3 com o mesmo nome)
 const pastaArg = (process.argv.find((a) => a.startsWith('--pasta=')) || '').slice(8);
 const dirFatos = path.join(raiz, '_v3', 'fatos', pastaArg);
-const [, , modo, alvo] = process.argv;
+const [modo, alvo] = process.argv.slice(2).filter((a) => !a.startsWith('--')); // flags não são nome de nota
 const simular = process.argv.includes('--simular');
 const refazer = process.argv.includes('--refazer');
 

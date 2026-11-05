@@ -1,10 +1,10 @@
 # Progresso da v3
-Estado atual: Bloco 4 concluído, aguardando "ok" do Nathan para o Bloco 5
-Próxima ação: com o "ok" e o Obsidian fechado, rodar a seção 1 e começar o Bloco 5 (medir as notas acima de 25 KB)
+Estado atual: Bloco 5 concluído, aguardando "ok" do Nathan para o Bloco 6
+Próxima ação: com o "ok", rodar a seção 1 e começar o Bloco 6 (CLAUDE.md na raiz do vault)
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
-Data: 2026-11-05 (reconferido no início do Bloco 4)  Vault: `v3` 05891e7 = `origin/v3`, pull ok; tag `v2-antes-da-v3`  origin/main: 5203232 (sem commits novos)
+Data: 2026-11-05 (reconferido no início dos Blocos 4 e 5)  Vault: `v3` 05891e7 = `origin/v3`, pull ok; tag `v2-antes-da-v3`  origin/main: 5203232 (sem commits novos)
 origin/develop: api-acos-vital b97981c · av-hub 2e5456d · api-pcp befd973 · app-pcp 93f96de · omie-elt-pipeline **sem develop** (só `origin/master` 5e7e94d)
 autocrlf: false (ajustado só no vault; estava `true`)   Obsidian fechado: sim no Bloco 1 e no Bloco 2 (processo não está rodando, conferido em 2026-11-05)
 Observações:
@@ -77,7 +77,15 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Atualizar o aviso de "produção" em `Onde-Estamos` pelo F5 (2026-11-05, 6b8a135; o fato "em uso real só dashboards, vagas e gerência" foi mantido)
 - [x] Extra: legendas de selo com "❓ não conferido em produção" no Glossário, Mestre, Backlog e Comissão/01 passam ao F5 (7d138c9). Os "produção ❓" sobre o envio real da OC ao Omie (PS-009) ficaram: falam do ambiente real do Omie, não da `main`
 
-### Blocos 5 a 9
+### Bloco 5: Dividir os arquivos grandes (julgamento)
+- [x] Rodar a seção 1 (2026-11-05: nada novo na `develop` nem na `main`; `v3` = `origin/v3` 2b45a3e; Obsidian sem processo rodando)
+- [x] Medir todas as notas: 20 acima de 25 KB fora de `_v3/` (raias 00, 01, 02, 03, 06, 07, 15; Telas; AV-Hub-API; MES-Backend; Conexao e Mapa do Pablo; Comissão 01 e 03; Integracao-AvHub-MES; Mapa-IncluirPedido-Omie; Contratos-da-v2; Backlog; Perguntas; Registro). As fotos de `_v3/fatos/` ficam fora do limite (material de trabalho)
+- [x] Salvar a lista de fatos de cada nota antes de dividir (2026-11-05, 0a8e405: `_v3/fatos/bloco5/`, 20 listas; `fatos.mjs` ganhou `--pasta=`, porque já havia fotos do Bloco 3 com o mesmo nome)
+- [x] Dividir uma nota por tarefa (2026-11-05, 52cde97 … dad1efa: 19 commits, script `_v3/scripts/dividir.mjs` com o plano de cada nota). Regra: a original fica com o resumo e um índice no lugar da seção grande; o texto movido vai sem mudança para `<pasta>/Partes/<nota>-...`, com `parte-de` e o frontmatter da original (inclusive `develop-conferida`, sem `nos:`); os títulos sobem um nível (### → ##). 23 links `[[Nota#Seção]]` foram reescritos para a parte (em 01-Proposta e 06). Casos especiais: Mestre (a tabela nó → raia foi cortada por linhas em 3 partes; o diagrama ficou), Registro (N16 em 5 notas por faixa de ID; N14, DEC/EN/EC/#1–#38, #39–#80 e #81–#100 + estado no código em 4 notas; o texto das decisões não mudou), Backlog (uma nota por frente), Perguntas (Quadro geral e OQ-02 a OQ-30), Contratos-da-v2 (lista completa numa parte; o índice ficou com os pendentes e os contratos novos)
+- [x] Conferir a lista de fatos depois da divisão (2026-11-05: 0 fatos sumiram em 20 listas, 8.477 fatos; 11 linhas "conferir à mão", todas esperadas: 7 links cujo alvo virou a parte e 4 instruções de uso do Registro reescritas de propósito; `_v3/fatos/bloco5/conferencia.txt`). `fatos.mjs conferir` passou a ignorar flags como nome de nota
+- [x] Extras: `build.mjs` do mapa lê os IDs também em `Contratos-da-v2-Lista-Completa` (442770a; 0 contratos sem nota); Regras e Guia explicam as notas divididas (ea913a1); o validador confere os selos também nas partes das raias e conta os contratos nas partes (859f4ce)
+
+### Blocos 6 a 9
 - [ ] Pendentes (ver `_v3/INSTRUCAO.md`, seção 8)
 
 ## Validações
@@ -95,7 +103,12 @@ Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 
 ### Bloco 4 (2026-11-05, `_v3/validacao-bloco4.md`)
 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 nomes antigos (as 2 crases do Guia foram resolvidas); 60 nós com dono único; 0 ✅ sem citação; mapa regenerado (12 fichas, 0 contratos sem nota). A cadeia `proxima` vai do Mestre à 15 passando pelas 15 raias na ordem do F1. 24 notas acima de 25 KB (Bloco 5).
 
+### Bloco 5 (2026-11-05, `_v3/validacao-bloco5.md`)
+192 notas; 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; **0 notas acima de 25 KB** (fora de `_v3/`); índice de contratos com 92 (índice + parte); 0 nomes antigos; 60 nós com dono único; 0 ✅ sem citação (agora também nas partes das raias); mapa regenerado (12 fichas, 0 contratos sem nota); fatos: 0 sumiram.
+
 ## Problemas e pendências
+- `_v3/scripts/contratos-indice.mjs` (Bloco 1) regenera o `Contratos-da-v2` inteiro numa nota só; se for rodado de novo, a lista completa volta para o índice. Não rodar sem ajustar para a parte `Contratos-da-v2-Lista-Completa`.
+- A tabela do Mestre foi cortada por tamanho (V0.1 a E1, E2 a Q2, Q3 a K6), não por raia. Dá para reagrupar por raia no Bloco 8, se o Nathan preferir.
 - Referências entre crases a `Painel-de-Contratos`: as do Guia saíram no Bloco 4; ficam no frontmatter `fontes` de `Onde-Estamos` (histórico) e em `Analise-de-Organizacao-do-Vault` (exceção).
 - Nathan precisa avisar Robert e Gustavo que a `main` do vault fica congelada (D4).
 - `omie-elt-pipeline` sem `develop`: confirmar que `origin/master` é a base correta.

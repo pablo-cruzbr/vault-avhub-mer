@@ -1,0 +1,53 @@
+
+## 00-Fluxo-Mestre-0b.md: 212/212 fatos; 97/97 linhas iguais
+
+## 01-Motor-Atual-Como-Calcula.md: 300/300 fatos; 142/142 linhas iguais
+
+## 01-Proposta-de-Venda.md: 359/359 fatos; 140/147 linhas iguais
+- conferir à mão: O pedido nasce liberado e o PCP o vê na triagem (`V1` a `V3`): ver [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
+- conferir à mão: Compras confere a parte de compras e, se comprar acima do valor da proposta, o vendedor aprova ou reprova por produto: `C6`, `C7` e `C8` estão em [[06-Circuito-
+- conferir à mão: O pedido nasce liberado; o cancelamento do pedido (antes e depois de faturar) está em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e
+- conferir à mão: Regras de Compras sobre a proposta (não altera a proposta, compra acima do valor, reprovação, aviso favorável): [[06-Circuito-de-Compra#C6, C7 e C8: a parte de 
+- conferir à mão: Liberação e cancelamento do pedido: ver [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
+- conferir à mão: O pedido de custo no módulo de teste está em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
+- conferir à mão: O cancelamento do pedido no Omie (`CancelarPedidoVenda`, quem cancela) está em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancel
+
+## 02-Orcamento-Base-de-Preco.md: 267/267 fatos; 126/126 linhas iguais
+
+## 03-Modelo-Novo-core_comissao.md: 650/650 fatos; 636/636 linhas iguais
+
+## 03-Pedido-de-Venda-e-Liberacao.md: 294/294 fatos; 140/140 linhas iguais
+
+## 06-Circuito-de-Compra.md: 501/501 fatos; 158/158 linhas iguais
+
+## 07-Recebimento.md: 378/378 fatos; 106/106 linhas iguais
+
+## 15-Custo-Real-e-Comissao.md: 167/167 fatos; 132/132 linhas iguais
+
+## AV-Hub-API.md: 630/630 fatos; 123/123 linhas iguais
+
+## Backlog-por-Frente.md: 678/678 fatos; 99/99 linhas iguais
+
+## Conexao-das-Telas-do-Pablo-com-a-API-do-Hub.md: 144/144 fatos; 158/158 linhas iguais
+
+## Contratos-da-v2.md: 245/245 fatos; 114/114 linhas iguais
+
+## Integracao-AvHub-MES.md: 440/440 fatos; 123/123 linhas iguais
+
+## Mapa-do-Modulo-do-Pablo.md: 870/870 fatos; 192/192 linhas iguais
+
+## Mapa-IncluirPedido-Omie.md: 294/294 fatos; 135/135 linhas iguais
+
+## MES-Backend.md: 808/808 fatos; 179/179 linhas iguais
+
+## Perguntas-Proposta-Pedido-Comissao.md: 242/242 fatos; 88/88 linhas iguais
+
+## Registro-de-Decisoes.md: 1039/1039 fatos; 423/427 linhas iguais
+- conferir à mão: **Onde estão as decisões.** Cada época tem a sua tabela, mais abaixo: as decisões N16 (16 a 29/10/2026) sobre proposta, pedido, custo real, comissão e o que vei
+- conferir à mão: **Os selos.** 📝 decidido; 🟡 proposta adotada, ainda a confirmar; 🔴 aberto (e "🔴 sem código" é decidido, mas ainda não feito); ✅ conferido no código ou testa
+- conferir à mão: **Achar por ID.** Aperte Ctrl+F nesta nota e digite o ID inteiro, por exemplo `N16-60` ou `#42`. Para ver onde o ID é citado em outras notas, use a busca do vau
+- conferir à mão: **Achar por assunto.** Veja as "Decisões mais importantes em linguagem simples" e o "Índice por assunto" logo abaixo: cada linha do índice lista os IDs do assun
+
+## Telas-e-Experiencia-do-Usuario.md: 89/89 fatos; 222/222 linhas iguais
+
+Total de fatos que sumiram: 0
