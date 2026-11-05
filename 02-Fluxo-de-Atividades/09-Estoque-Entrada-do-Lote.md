@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, estoque, entrada, lote, fabricado, comprado, mes, e5]
 criado: 2026-11-05
-atualizado: 2026-11-05
+estado-em: 2026-11-05
 status: vigente
+ordem: 9
 nos: [E5]
+anterior: "[[08-Qualidade-Entrada]]"
+proxima: "[[10-Producao-e-Roteiro]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026, api-pcp develop befd973 de 27/10/2026 (aprovar-saida, receber-fabricado), circuito-compra.ts, LOG-53]
@@ -12,6 +15,10 @@ fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2
 # Raia Estoque: entrada do lote (E5)
 
 **Em uma frase:** o item comprado volta ao Estoque depois que a Qualidade libera o lote, e o fabricado aprovado vira lote e saldo; nos dois casos o almoxarife faz a reserva.
+
+**Quando consultar:** dúvidas sobre a entrada do lote no estoque depois da Qualidade: saldo, reserva e a entrada do fabricado.
+
+**Onde estamos no fluxo:** ← [[08-Qualidade-Entrada]] | [[10-Producao-e-Roteiro]] → · nós desta nota: `E5`
 
 > [!info] Decisão e código
 > - Fabricado: [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`): um lote de origem `PRODUCAO` por ordem de produção e produto, criado quando o Estoque recebe o fabricado aprovado e informa a localização.
