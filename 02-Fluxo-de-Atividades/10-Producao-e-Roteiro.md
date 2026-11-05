@@ -14,18 +14,13 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, diverge
 
 # Produção e roteiro (F1)
 
-**Em uma frase:** a Produção leva cada parte do item (a "parcial") pelos setores do roteiro do pedido, na ordem, até o último setor, e registra tudo no histórico. Nós `F1` (setores produtivos) e `P6` (novo norte: retrabalho ou reabre compra) do [[00-Fluxo-Mestre-0b]]. A entrada vem do despacho do Estoque (`E6`, [[12-Estoque-Despacho]]). A saída vai para a inspeção de saída `Q7` ([[11-Qualidade-Saida]]). Selos em [[Regras-do-Vault]].
+**Em uma frase:** a Produção leva cada parte do item (a "parcial") pelos setores do roteiro do pedido, na ordem, até o último setor, e registra tudo no histórico.
 
 **Quando consultar:** dúvidas sobre a fábrica: o roteiro por setores, a ordem de passagem, o histórico e o retorno de retrabalho.
 
 **Onde estamos no fluxo:** ← [[09-Estoque-Entrada-do-Lote]] | [[11-Qualidade-Saida]] → · nós desta nota: `F1`
 
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - N16-140: a matéria-prima sai do Estoque na retirada, pela quantidade pedida, no mesmo documento de retirada da Expedição. O operador não lança consumo ao concluir a etapa.
-> - N16-141: no retrabalho, o PCP escolhe o setor de volta. A regra 8 (volta ao setor anterior) vale só até isso ter código.
-> - Fabricado: [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`): o "sim" da inspeção de saída (`aprovar-saida`) leva a parcela ao Estoque, e o lote de origem `PRODUCAO` nasce em `receber-fabricado`.
-> - Roteiro: desde 22/10 (`develop`) a Destinação cria a OP só com o Estoque e o roteiro é montado depois, na tela Montagem do Roteiro; enquanto não for liberado, a parcial só sai do Estoque para compra.
-> - Código: o que aparece como ✅ de MES nesta nota além da `main` está na `develop` do `api-pcp` e do `app-pcp`; a `main` parou em 08/10 (merge BL-035).
+Nós `F1` (setores produtivos) e `P6` (novo norte: retrabalho ou reabre compra) do [[00-Fluxo-Mestre-0b]]. A entrada vem do despacho do Estoque (`E6`, [[12-Estoque-Despacho]]). A saída vai para a inspeção de saída `Q7` ([[11-Qualidade-Saida]]). Selos em [[Regras-do-Vault]]. Tudo acontece no MES (sistema de chão de fábrica). PCP é o planejamento e controle da produção; OP é a ordem de produção.
 
 ## Como funciona, passo a passo
 
@@ -67,20 +62,23 @@ O PCP monta a rota das 100 flanges de aço carbono. O Estoque vem primeiro e a i
 - Item de pedido inativo bloqueia tudo, menos cancelar.
 - Revenda não produz. A fábrica de revenda só envia o restante para compra.
 - Tudo que é fabricado volta ao Estoque como lote e saldo (decisão de 14/10; feito na `develop` em 27/10).
+- A matéria-prima sai do Estoque na retirada, pela quantidade pedida, no mesmo documento de retirada da Expedição. O operador não lança consumo ao concluir a etapa (N16-140, 29/10).
 - Retrabalho: o PCP escolhe o setor de volta (N16-141). O código ainda volta ao setor anterior.
+- A regra 8 do detalhe (volta ao setor anterior) vale só até a N16-141 ter código. As duas decisões são de 29/10/2026 (bloco N16-120 a N16-143).
 
 ## O que já existe e o que falta
 
 - ✅ (`api-pcp`, `app-pcp`) Roteiro, filas por setor, receber, iniciar, mover, pausar, retomar, concluir, reprovar, devolver, cancelar. É o único subfluxo com motor completo desde o início.
 - ✅ (`app-pcp`) Telas: Filas de Produção, Destinação do Pedido, Acompanhamento dos Pedidos, Cadastros operacionais; na `develop`, também Montagem do Roteiro e Produtos em Produção.
 - ✅ (`api-pcp`) Na `develop` (23/10): ação "finalizar" no setor (status `FINALIZADO`, para o cronômetro e a peça aguarda no setor; `reabrir` volta a `EM_ANDAMENTO`).
-- ✅ (`api-pcp`) Na `develop` (27/10): Ordem de Produção impressa (PDF, 2ª via) e fabricado aprovado vira lote e saldo no Estoque (LOG-53).
+- ✅ (`api-pcp`) Na `develop` (27/10): Ordem de Produção impressa (PDF, 2ª via) e fabricado aprovado vira lote e saldo no Estoque (LOG-53, `ab3318d`): o "sim" da inspeção de saída (`aprovar-saida`) leva a parcela ao Estoque, e o lote de origem `PRODUCAO` nasce em `receber-fabricado`.
 - ✅ Na `develop`: roteiro individual do item (`RoteiroItem`) lido por `mover`, `concluir`, `atender-estoque`, `reprovar` e `aprovar-saida` (`roteiro-efetivo.ts`).
 - 🟡 Matéria-prima: a `develop` já baixa na hora do "Atender pelo estoque" (19/10); a decisão (N16-140) é baixar na retirada, ainda sem código 🔴.
 - 🔴 Tela do novo norte, reabrir divergência e reabrir compra a partir da produção.
 - 🔴 Painel TV, `PerfilSetor` por filial e feed `/fluxo/eventos`.
 - 🟡 Botões de dividir e juntar parciais na fila (a API existe).
 - ❓ Nomes e filas reais dos setores produtivos no ambiente.
+- O que aparece como ✅ de MES nesta nota além da `main` está na `develop` do `api-pcp` e do `app-pcp`. A `main` parou em 08/10 (merge BL-035).
 
 ## Detalhe técnico
 
@@ -263,7 +261,7 @@ flowchart TD
     E6["E6 · Despacho do Estoque<br/>materia-prima ou beneficiamento"] --> F1["F1 · Setores produtivos do roteiro<br/>receber, iniciar, mover, concluir"]
     F1 --> Q7["Q7 · Inspecao de saida<br/>setor QUALIDADE no roteiro"]
     Q7 --> Q8{"Q8 · Aprova?"}
-    Q8 -->|sim| E5["E5 · Entrada no Estoque (decidido, sem codigo)"]
+    Q8 -->|sim| E5["E5 · Entrada no Estoque<br/>lote e saldo na develop (LOG-53)"]
     Q8 -->|nao| P6["P6 · Novo norte"]
     P6 -->|retrabalho| F1
     P6 -->|reabre compra| P3["P3 · Requisicao de compra"]
