@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 3, aguardando a resposta do Nathan sobre o F3 (api-comercial); depois, conferência final dos fatos e resumo
-Próxima ação: aplicar a resposta do F3 nas notas 01, 02 e 06 e fechar o Bloco 3
+Estado atual: Bloco 3 concluído, aguardando "ok" do Nathan para o Bloco 4
+Próxima ação: com o "ok", rodar a seção 1 e começar o Bloco 4 (cabeçalho padrão das raias)
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -15,6 +15,8 @@ Observações:
 
 ## Fatos do Nathan
 F1 ordem do mermaid · F2 contratos ficam na v2 · F3 módulo do Pablo sem API e sem banco · F4 Obsidian fechado · F5 base = develop
+Complemento do F3 (05/11/2026): o `api-comercial` (módulo de teste do Pablo em `av-hub/api-comercial`) será removido integralmente; o que só existe nele é 🔴.
+Decisão de formato (05/11/2026): o commit da develop lido fica uma vez por nota, em `develop-conferida`; cada ✅ cita repositório e arquivo:linha.
 Complemento (05/11/2026): a `develop` dos sistemas está congelada e é a versão mais atualizada; ainda não há produção (o software não foi lançado).
 
 ## Decisões
@@ -62,8 +64,8 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Mover os trechos de nós com mais de uma casa (C6–C8 → 06 em c122c9b; V1–V3, liberação e cancelamento do pedido → 03 em b34dee0; B2–B4 → 02 em 315a621; P3: nada a mover, as outras notas só citam com link)
 - [x] Trocar `10.1–10.4` e `11.1` pelos IDs de nó (2026-11-05, c13593a: 40 trocas em 12 notas; conferido em app-pcp 93f96de e api-pcp befd973; Mapa-v1-para-v2 e Registro-de-Decisoes ficaram como estão)
 - [x] Reconferir os selos de cada raia contra a `origin/develop` (F5) (2026-11-05, até 8351ea6. Decisão do Nathan: commit da develop uma vez por nota, em `develop-conferida`; cada ✅ cita repositório e arquivo:linha. Relatórios em `_v3/selos/`. 25 linhas corrigidas por script e 34 à mão (`_v3/fatos/substituicoes.tsv`); 100 ✅ ganharam o repositório; 3 ✅ viraram 📝; JSON do Orçamento 🔴 → ✅ removidos (av-hub c851cda). Limite: a checagem de conteúdo é por identificador perto da linha; ~50 citações sem identificador seguem só com arquivo e intervalo conferidos)
-- [!] Aplicar o F3 nas notas de proposta, orçamento e compras (bloqueado: o módulo de teste `av-hub/api-comercial` está na develop; pergunta feita ao Nathan se conta como ✅ ou como 🔴 "sem API e sem banco")
-- [ ] Conferir as listas de `_v3/fatos/`
+- [x] Aplicar o F3 nas notas de proposta, orçamento e compras (2026-11-05, 10e5e3b: Nathan confirmou que o `api-comercial` será removido integralmente; 35 selos das notas 01 e 02 passam a 🔴 "sem API e sem banco"; na 06 nada dependia dele. Na API do Hub ficam ✅ as rotas da proposta e a leitura de fornecedores, vínculos, categorias, cotações e parâmetros de custo; `produtos/:id/precos` e `matriz_precos` são apontadas pelo BFF mas não existem na `api-acos-vital`)
+- [x] Conferir as listas de `_v3/fatos/` (2026-11-05: 0 fatos sumiram em 7 listas; trocas de linha e de caminho registradas em `_v3/fatos/substituicoes.tsv`)
 
 ### Blocos 4 a 9
 - [ ] Pendentes (ver `_v3/INSTRUCAO.md`, seção 8)
@@ -76,6 +78,9 @@ Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 
 
 ### Bloco 2 (2026-11-05, `_v3/validacao-bloco2.md`)
 95 notas; 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 links para contratos da v2; índice com 92; nomes antigos: só 2 (`Painel-de-Contratos` entre crases no Guia, para o Bloco 4); mapa regenerado. O validador ganhou a checagem de nomes antigos (links e crases) a partir do CSV.
+
+### Bloco 3 (2026-11-05, `_v3/validacao-bloco3.md`)
+0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 60 nós com dono único; todo ✅ das raias cita repositório ou arquivo e cada raia tem `develop-conferida`; 0 fatos sumiram; mapa ok. 24 notas acima de 25 KB (Bloco 5); 2 nomes antigos no Guia (Bloco 4).
 
 ## Problemas e pendências
 - Referências entre crases a `Painel-de-Contratos` ficam no `Guia-de-Leitura` (linhas 112 e 133; atualizar no Bloco 4), no frontmatter `fontes` de `Onde-Estamos` (histórico) e em `Analise-de-Organizacao-do-Vault` (exceção).
