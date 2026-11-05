@@ -20,12 +20,6 @@ fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2
 
 **Onde estamos no fluxo:** ← [[11-Qualidade-Saida]] | [[13-Expedicao]] → · nós desta nota: `E6`
 
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - O documento de retirada é pedido ao Estoque por quem precisa da mercadoria, Expedição ou Produção. Só o Estoque confirma (N16-120). O que o documento imprime segue aberto. Contrato: [[Contratos-da-v2|LOG-54]].
-> - A reserva é consumida junto com a baixa. A saída grava lote, pedido e o custo do lote naquele momento (N16-121).
-> - A Embalagem só recebe a parcial depois da retirada confirmada (N16-122).
-> - A matéria-prima da produção sai por documento de retirada, pela quantidade pedida (N16-140).
-
 ## Como funciona, passo a passo
 
 7. Na saída física, quem precisa da mercadoria pede um documento de retirada, e a baixa acontece na retirada. Hoje a baixa acontece quando a Embalagem recebe a parcial. `E6`
@@ -40,6 +34,16 @@ Os passos 1 a 5 estão em [[05-Estoque-Atendimento]]; o passo 6 (entrada do lote
 | Produção | Receberia matéria-prima por documento de retirada, que ainda não existe |
 
 O almoxarife, o Gestor de Estoque e o Robert estão em [[05-Estoque-Atendimento]].
+
+## Regras que valem
+
+Decisões de 29/10/2026 (bloco N16-120 a N16-143). Contrato: [[Contratos-da-v2|LOG-54]].
+
+- Quem precisa da mercadoria pede o documento de retirada ao Estoque: a Expedição ou a Produção. Só o Estoque confirma (N16-120).
+- O que o documento imprime ainda está em aberto.
+- A reserva é consumida junto com a baixa. A saída grava o lote, o pedido e o custo do lote naquele momento (N16-121).
+- A Embalagem só recebe a parcial depois da retirada confirmada (N16-122).
+- A matéria-prima da produção também sai por documento de retirada, pela quantidade pedida (N16-140).
 
 ## O que já existe e o que falta
 
@@ -103,5 +107,6 @@ Os demais itens estão em [[05-Estoque-Atendimento]] e [[09-Estoque-Entrada-do-L
 
 ### Pendências
 
-- Nathan: o documento de retirada nasce de quem? Expedição pede ao Estoque, ou o Estoque gera quando a parcial chega à Expedição? O que o documento imprime e quem confirma? **Decidido em 29/10/2026 (N16-120): a Expedição ou a Produção pede ao Estoque, e só o Estoque confirma. O que o documento imprime segue aberto.**
-- Nathan: a Reserva continua existindo depois da retirada (para rastrear custo) ou é consumida junto? **Decidido em 29/10/2026 (N16-121): consumida junto com a baixa.**
+- Nathan: o que o documento de retirada imprime? Segue aberto.
+
+Respondidas em 29/10/2026: quem gera o documento (a Expedição ou a Produção pede ao Estoque, e só o Estoque confirma, N16-120) e se a Reserva continua depois da retirada para rastrear custo (não: é consumida junto com a baixa, N16-121).
