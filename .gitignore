@@ -1,4 +1,7 @@
 **/.obsidian/workspace.json
 **/.obsidian/workspace-mobile.json
-# dumps de banco ficam só no computador de quem os recebeu (decisão do Nathan, 05/11/2026)
-04-Dados/Dumps/
+# 04-Dados/Dumps/ passou a ir para o git em 05/11/2026, depois que o repositório ficou privado
+# (decisão do Nathan). Só dumps de esquema, sem dados nem senhas. Se o repositório voltar a ser
+# público, volte a ignorar a pasta antes.
+# permissões pessoais do Claude Code em cada computador (não sobem)
+.claude/settings.local.json

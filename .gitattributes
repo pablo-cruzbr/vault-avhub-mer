@@ -1,1 +1,3 @@
 * text=auto eol=lf
+# dumps de banco: cópia exata do arquivo recebido, sem normalizar a quebra de linha
+04-Dados/Dumps/** -text

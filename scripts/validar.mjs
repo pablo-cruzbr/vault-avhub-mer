@@ -22,7 +22,7 @@ const notas = arquivos.filter((f) => f.endsWith('.md'));
 const rel = (f) => path.relative(raiz, f).split(path.sep).join('/');
 // material de trabalho, fora das checagens de nota (órfã, codificação, tamanho, nomes antigos):
 // _v3/ durante a v3, 07-Desenvolvimento/v3/ depois do Bloco 9 e scripts/ (listas de fatos)
-const trabalho = (r) => r.startsWith('_v3/') || r.startsWith('07-Desenvolvimento/v3/') || r.startsWith('scripts/');
+const trabalho = (r) => r.startsWith('_v3/') || r.startsWith('07-Desenvolvimento/v3/') || r.startsWith('scripts/') || r.startsWith('.claude/');
 
 // nomes resolvíveis: base sem extensão (notas) e nome com extensão (anexos)
 const porNome = new Map();
@@ -54,7 +54,7 @@ for (const f of notas) {
   }
 }
 
-const orfas = notas.filter((f) => !recebidos.has(f) && path.basename(f) !== 'CLAUDE.md' && !trabalho(rel(f))).map(rel);
+const orfas = notas.filter((f) => !recebidos.has(f) && path.basename(f) !== 'CLAUDE.md' && path.basename(f) !== 'AGENTS.md' && !trabalho(rel(f))).map(rel);
 
 const crlf = [];
 const corrompidos = [];

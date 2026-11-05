@@ -24,6 +24,13 @@ Este repositório é um vault Obsidian em português: o manual do fluxo de um pe
 
 Quando quem estiver usando disser "atualizar o vault" (ou "atualiza o vault", "sincroniza o vault"), siga a seção **"Comando: atualizar o vault"** do Guia de Leitura. O ponto de partida é `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md`. Mostre o plano e espere o "ok" antes de escrever.
 
+## Quem edita e os procedimentos (skills)
+
+- **Só o Nathan altera o vault** (commit, PR, merge). Robert, Gustavo e Pablo só leem: fazem `git pull` e mandam pedidos e entregas em PDF no grupo do WhatsApp. Se quem está usando não se identificou como o Nathan (confira `git config user.name`), trabalhe em modo leitura e não grave nada no vault.
+- Os passo a passo ficam em `.claude/skills/<nome>/SKILL.md` (lista e quando usar em `AGENTS.md`): `ler-o-vault`, `pedir-contrato`, `abrir-consulta`, `relatorio-de-entrega`, `gerar-pdf`, e, só para o Nathan, `aplicar-documento-recebido` e `atualizar-o-vault`.
+- Modelos: `06-Contratos/Modelos/Modelo-de-Contrato.md` (LOG, SQL, API), `Modelo-de-Consulta.md` (CON) e `Modelo-de-Relatorio-de-Entrega.md`. O ID final de contrato e de consulta é sempre do Nathan.
+- Relatório de entrega só para o que já está na `develop`.
+
 ## Como achar as coisas
 
 - Ordem do fluxo: `02-Fluxo-de-Atividades/01-...` a `15-...`; cada raia tem "anterior" e "próxima" e o `nos:` dos nós de que é dona. O diagrama é o `00-Fluxo-Mestre-0b`.
@@ -39,5 +46,6 @@ Quando quem estiver usando disser "atualizar o vault" (ou "atualiza o vault", "s
 - `node scripts/fatos.mjs extrair <nota.md>` antes de reescrever ou dividir uma nota, e `node scripts/fatos.mjs conferir` depois.
 - `node scripts/dividir.mjs <chave> --simular`: divide uma nota acima de 25 KB (acrescente a entrada no `PLANO`).
 - `cd 09-Diagramas/mapa && node build.mjs`: regenera o mapa HTML.
+- `node scripts/gerar-pdf.mjs <arquivo.html>`: gera o PDF de um contrato, consulta ou relatório (usa o Edge ou o Chrome instalado).
 
 Mantenha este arquivo curto e atualizado quando mudar a estrutura, os scripts ou as regras (veja o Manual).

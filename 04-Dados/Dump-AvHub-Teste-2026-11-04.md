@@ -15,7 +15,7 @@ fontes: ["Dump do Avhub para referência tst (esqueleto).sql, enviado pelo Natha
 
 ## Ficha do arquivo
 
-- **Arquivo:** `04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql`, cópia sem mudança do arquivo enviado pelo Nathan em 05/11/2026 (`Dump do Avhub para referência tst (esqueleto).sql`). **Fica só no computador do Nathan:** a pasta `04-Dados/Dumps/` está no `.gitignore` e não vai para o GitHub (decisão do Nathan, 05/11/2026). Quem precisar do arquivo pede ao Nathan ou ao Gustavo.
+- **Arquivo:** `04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql`, cópia sem mudança do arquivo enviado pelo Nathan em 05/11/2026 (`Dump do Avhub para referência tst (esqueleto).sql`). **Está no git** desde 05/11/2026, quando o repositório `vault-avhub-mer` passou a ser privado (decisão do Nathan): quem tem acesso ao repositório recebe o arquivo pelo `git pull`. É só o esquema (tabelas, funções e papéis), sem nenhuma linha de dados e sem senhas. Antes, a pasta `04-Dados/Dumps/` ficava no `.gitignore` e só no computador do Nathan. **Se o repositório voltar a ser público, a pasta tem de sair do git antes.**
 - **Ambiente:** teste (`tst`). Gerado em 04/11/2026 às 23:58, PostgreSQL 18.6, `pg_dump` 18.3, dump do cluster (papéis e esquema).
 - **Só esquema:** nenhum `COPY` nem `INSERT`, e os papéis não trazem senha. Não há dado de cliente, de pedido nem de usuário.
 - **Lugar na precedência:** fonte 2 (dumps), depois do código na `develop` (F5). Ele mostra o que está **aplicado no banco de teste**; a migration que criou um objeto pode não estar no repositório.
