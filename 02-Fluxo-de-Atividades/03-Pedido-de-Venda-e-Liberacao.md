@@ -4,6 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 nos: [V1, V2, V3]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan
 fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10]
 ---
@@ -55,9 +56,9 @@ O Cliente Exemplo S.A. pede 100 flanges, e o pedido é digitado no Omie. Ele che
 
 ## O que já existe e o que falta
 
-- ✅ Telas Liberar Pedidos e Liberação da Equipe, e as rotas da API.
-- ✅ O MES lê os liberados, recusa pedido não liberado e confirma a importação, com reenvio automático.
-- ✅ Cartão "Etapa dos itens" no detalhe do pedido.
+- ✅ (`av-hub`, `api-acos-vital`) Telas Liberar Pedidos e Liberação da Equipe, e as rotas da API.
+- ✅ (`api-pcp`) O MES lê os liberados, recusa pedido não liberado e confirma a importação, com reenvio automático.
+- ✅ (`av-hub`) Cartão "Etapa dos itens" no detalhe do pedido.
 - 🟡 Os 9 estados macro do vendedor não existem no código. Hoje ele vê a situação da liberação e 11 etapas por item.
 - 🔴 Chave própria do MES, mapa de rotas por tela e teste do escopo do vendedor.
 - 🔴 Renovar o token expirado, reabrir marcação depois da importação e alertar pedido parado.
@@ -226,7 +227,7 @@ Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-ant
 
 #### O que já existe e o que falta
 
-- ✅ Telas Liberar Pedidos e Liberação da Equipe.
+- ✅ (`av-hub`) Telas Liberar Pedidos e Liberação da Equipe.
 - 🔴 Cancelamento do pedido, com tarja na requisição e na OC.
 
 #### Regras decididas
@@ -248,9 +249,9 @@ O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Ped
 | Nome atual | Rota | App | Quem | Nó | Estado |
 |---|---|---|---|---|---|
 | Pedidos de Venda (lista do Omie) | `/vendas/pedidos-de-venda` | HUB | Vendedor | `V1` | ✅ página no código; **inativada também em produção** (N16-33) |
-| Notas Fiscais de Saída | `/vendas/notas-fiscais-saida` | HUB | — | — | ✅ página no código; **inativada também em produção** (N16-33) |
+| Notas Fiscais de Saída | `/vendas/notas-fiscais-saida` | HUB | — | — | ✅ (`av-hub`) página no código; **inativada também em produção** (N16-33) |
 | **Tarja de pedido cancelado** na requisição e na OC | nas telas da requisição e da OC | HUB, MES | Compras, PCP | cancelamento | 🔴 |
-| Liberar Pedidos, Liberação da Equipe | `/vendas/liberar-pedidos`, `/liberacao-equipe` | HUB | Vendedor, gerente | `V2`, `V3` | ✅ hoje; a resposta passa para a tela do pedido (N16-106) 🟡 |
+| Liberar Pedidos, Liberação da Equipe | `/vendas/liberar-pedidos`, `/liberacao-equipe` | HUB | Vendedor, gerente | `V2`, `V3` | ✅ (`av-hub`) hoje; a resposta passa para a tela do pedido (N16-106) 🟡 |
 
 #### Endpoints
 
@@ -273,7 +274,7 @@ O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Ped
 
 | # | Pergunta | Dono |
 |---|---|---|
-| 4 | ✅ Quem cancela: o vendedor, por API (N16-84). Falta testar a diferença entre `CancelarPedidoVenda` e `ExcluirPedido` e quando cada um vale (OQ-17, OQ-48) | Nathan |
+| 4 | 📝 Quem cancela: o vendedor, por API (N16-84). Falta testar a diferença entre `CancelarPedidoVenda` e `ExcluirPedido` e quando cada um vale (OQ-17, OQ-48) | Nathan |
 | 8 | Estado do item que vai ao Estoque quando o pedido cancela e a reserva do MES | Robert |
 
 ### O que falta desenvolver
@@ -299,7 +300,7 @@ O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Ped
 | # | Pergunta | Dono |
 |---|---|---|
 | 1 | Auxiliar pode liberar pelo titular? Está implementado que sim; confirmar a regra de negócio | Nathan |
-| 2 | ✅ Pedidos anteriores à data de corte ficam fora do MES e terminam no sistema antigo (N16-142). Falta só trocar o erro 404 dos itens por uma mensagem clara 🔴 | Robert (mensagem) |
+| 2 | ✅ (`api-pcp`) Pedidos anteriores à data de corte ficam fora do MES e terminam no sistema antigo (N16-142). Falta só trocar o erro 404 dos itens por uma mensagem clara 🔴 | Robert (mensagem) |
 | 3 | O vendedor confirma pedido a pedido ou existe liberação automática depois de um prazo? (T-07) | Nathan e Comercial |
 | 4 | Quem avisa o vendedor quando o pedido já está importado e ele tenta trocar a marcação (hoje aparece o cadeado)? | Nathan |
 | 5 | Perfil com escopo `todos`: só a Gerência PCP? Os demais perfis passam a ver só os vendedores vinculados, o que muda o dia a dia de comprador e diligenciador | Nathan e Gustavo |

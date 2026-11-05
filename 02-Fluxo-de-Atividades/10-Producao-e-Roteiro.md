@@ -4,6 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 nos: [F1]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, divergencias, roteiro-item, prisma/models/producao.prisma e fabricas.prisma), app-pcp 1fca8d3 (movimentacoes), v1 02-PRD-Estoque/Fluxo-Producao-OS-OP-Completo, v1 01-Fluxo-Operacional/Fluxograma-Telas-por-Bloco bloco 7, Dump MES 14/10, api-pcp e app-pcp develop de 27/10/2026 (finalizar, Montagem do Roteiro, aprovar-saida, ConsumoMateriaPrima), N16-140, N16-141]
 ---
@@ -63,10 +64,10 @@ O PCP monta a rota das 100 flanges de aço carbono. O Estoque vem primeiro e a i
 
 ## O que já existe e o que falta
 
-- ✅ Roteiro, filas por setor, receber, iniciar, mover, pausar, retomar, concluir, reprovar, devolver, cancelar. É o único subfluxo com motor completo desde o início.
-- ✅ Telas: Filas de Produção, Destinação do Pedido, Acompanhamento dos Pedidos, Cadastros operacionais; na `develop`, também Montagem do Roteiro e Produtos em Produção.
-- ✅ Na `develop` (23/10): ação "finalizar" no setor (status `FINALIZADO`, para o cronômetro e a peça aguarda no setor; `reabrir` volta a `EM_ANDAMENTO`).
-- ✅ Na `develop` (27/10): Ordem de Produção impressa (PDF, 2ª via) e fabricado aprovado vira lote e saldo no Estoque (LOG-53).
+- ✅ (`api-pcp`, `app-pcp`) Roteiro, filas por setor, receber, iniciar, mover, pausar, retomar, concluir, reprovar, devolver, cancelar. É o único subfluxo com motor completo desde o início.
+- ✅ (`app-pcp`) Telas: Filas de Produção, Destinação do Pedido, Acompanhamento dos Pedidos, Cadastros operacionais; na `develop`, também Montagem do Roteiro e Produtos em Produção.
+- ✅ (`api-pcp`) Na `develop` (23/10): ação "finalizar" no setor (status `FINALIZADO`, para o cronômetro e a peça aguarda no setor; `reabrir` volta a `EM_ANDAMENTO`).
+- ✅ (`api-pcp`) Na `develop` (27/10): Ordem de Produção impressa (PDF, 2ª via) e fabricado aprovado vira lote e saldo no Estoque (LOG-53).
 - ✅ Na `develop`: roteiro individual do item (`RoteiroItem`) lido por `mover`, `concluir`, `atender-estoque`, `reprovar` e `aprovar-saida` (`roteiro-efetivo.ts`).
 - 🟡 Matéria-prima: a `develop` já baixa na hora do "Atender pelo estoque" (19/10); a decisão (N16-140) é baixar na retirada, ainda sem código 🔴.
 - 🔴 Tela do novo norte, reabrir divergência e reabrir compra a partir da produção.
@@ -108,9 +109,9 @@ O acesso a cada fila depende de `PerfilSetor` (`podeVisualizar`, `podeAtuar`), d
 | 8 | `retrabalho` só sai de `REPROVADO`: cancela a linha e cria outra `EM_TRANSITO` no setor anterior com `retrabalho = true` (`:1124-1192`). Não altera a quantidade do `ItensPedido` | ✅; **superada em parte pela N16-141 (29/10): o PCP passa a escolher o setor de volta, ainda sem código** |
 | 9 | `devolver` cria linha nova ligada por `idDevolvidoDe`; a antiga vira `CANCELADO` e nunca é editada (`:1387-1488`). Não vale para parcial com requisição de compra viva (`ensureDevolucaoForaDaCompra`, `:1391`) | ✅ |
 | 10 | Item de pedido inativo bloqueia toda ação, menos `cancelar` (`:202-208`) | ✅ |
-| 11 | **Tudo que é fabricado volta ao Estoque** como lote e saldo, e só sai pelo documento de retirada. Decisão do Nathan de 14/10 | 📝 ✅ lote e saldo na `develop` (27/10, `aprovar-saida` e `receber-fabricado`); 🔴 a saída pelo documento de retirada |
+| 11 | **Tudo que é fabricado volta ao Estoque** como lote e saldo, e só sai pelo documento de retirada. Decisão do Nathan de 14/10 | 📝 ✅ (`api-pcp`) lote e saldo na `develop` (27/10, `aprovar-saida` e `receber-fabricado`); 🔴 a saída pelo documento de retirada |
 | 12 | **Matéria-prima é consumida do Estoque** na produção (J2/J3 do v1). **Decidido em 29/10 (N16-140): a baixa é na retirada do Estoque, pela quantidade pedida** | 📝 🔴 na retirada; hoje a `develop` baixa na hora do "Atender pelo estoque" (`ConsumoMateriaPrima`, 19/10) |
-| 13 | Novo norte (P6): o PCP decide entre retrabalho e reabrir a compra. Roteiro individual do item (`RoteiroItem`, C8) é a ferramenta decidida | 📝 ✅ `RoteiroItem` lido pelo motor na `develop`; 🔴 a tela do novo norte |
+| 13 | Novo norte (P6): o PCP decide entre retrabalho e reabrir a compra. Roteiro individual do item (`RoteiroItem`, C8) é a ferramenta decidida | 📝 ✅ (`api-pcp`) `RoteiroItem` lido pelo motor na `develop`; 🔴 a tela do novo norte |
 
 ### Estados
 
@@ -180,8 +181,8 @@ Todos sob `@UseGuards(JwtAuthGuard, PermissionsGuard)`; setor checado por `perfi
 | `PATCH /:id/iniciar` | `RECEBIDO` para `EM_ANDAMENTO` (máquina e operador) | idem | `service:299` ✅ |
 | `PATCH /:id/mover` | `EM_ANDAMENTO` para `EM_TRANSITO` no próximo setor (ou `idSetorDestino`), com quantidade parcial | idem | `service:366` ✅ |
 | `PATCH /:id/concluir` | `CONCLUIDO` no último setor | idem | `service:520` ✅ |
-| `PATCH /:id/finalizar`, `PATCH /:id/reabrir` | finaliza o setor (com ou sem enviar) e reabre | idem | `develop` (23/10) ✅ |
-| `PATCH /:id/aprovar-saida`, `PATCH /:id/receber-fabricado` | o "sim" da inspeção de saída e a entrada do fabricado no Estoque | idem | `develop` (27/10) ✅ ([[11-Qualidade-Saida]]) |
+| `PATCH /:id/finalizar`, `PATCH /:id/reabrir` | finaliza o setor (com ou sem enviar) e reabre | idem | `develop` (23/10) ✅ (`api-pcp`) |
+| `PATCH /:id/aprovar-saida`, `PATCH /:id/receber-fabricado` | o "sim" da inspeção de saída e a entrada do fabricado no Estoque | idem | `develop` (27/10) ✅ (`api-pcp`) ([[11-Qualidade-Saida]]) |
 | `PATCH /:id/pausar`, `/:id/retomar` | pausa e retomada | idem | `service:881`, `:1199` ✅ |
 | `PATCH /:id/reprovar`, `/:id/resolver`, `/:id/retrabalho` | reprovação com `Divergencia`, falso alarme, retrabalho | idem | `service:1011`, `:1067`, `:1124` ✅ |
 | `POST /:id/split`, `PATCH /:id/consolidar` | divide e junta parciais `RECEBIDO` | idem | `service:1250`, `:1616` ✅ sem botão na tela |
@@ -222,7 +223,7 @@ Na `develop` (19/10, `8d07917`) existe a baixa de matéria-prima no "Atender pel
 
 O que falta: definir quem informa o material consumido (setor ao concluir etapa, ou Estoque ao despachar para a produção pelo documento de retirada), o vínculo produto acabado x matéria-prima, e a geração de `MovimentoEstoque` `SAIDA` com referência à parcial. Dono: Robert, decisão Nathan. **Decidido em 29/10 (N16-140): na retirada do Estoque.**
 
-#### Fabricado vira lote ✅ (só na `develop`)
+#### Fabricado vira lote ✅ (`api-pcp`) (só na `develop`)
 
 Desde 27/10/2026 (`ab3318d`) a `develop` do MES tem `OrigemLote.PRODUCAO`: o "sim" da inspeção de saída (`aprovar-saida`) devolve a parcela ao Estoque e `receber-fabricado` cria o lote (um por OP e produto, sem custo), com entrada no saldo e reserva para a própria parcela ([[Contratos-da-v2|LOG-53]]). Registro de 14/10 (superado): `OrigemLote` só tinha `RECEBIMENTO` e `CARGA_INICIAL` e nada criava lote do fabricado.
 
@@ -230,9 +231,9 @@ Desde 27/10/2026 (`ab3318d`) a `develop` do MES tem `OrigemLote.PRODUCAO`: o "si
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 1 | Baixa de matéria-prima na retirada do Estoque (N16-140) e genealogia; hoje há a baixa imediata no "Atender pelo estoque" (`develop`) | Robert | F1 | 🟡 baixa imediata ✅; 🔴 retirada |
-| 2 | Fabricado aprovado vira lote e saldo: feito na `develop` (27/10). Falta a saída pelo documento de retirada | Robert | F1, `E5` | ✅ lote; 🔴 retirada |
-| 3 | `RoteiroItem` lido por `mover`, `concluir` e Expedição: lido pelo motor na `develop`; conferir a Expedição | Robert | P6 | ✅ motor; ❓ Expedição |
+| 1 | Baixa de matéria-prima na retirada do Estoque (N16-140) e genealogia; hoje há a baixa imediata no "Atender pelo estoque" (`develop`) | Robert | F1 | 🟡 baixa imediata ✅ (`api-pcp`); 🔴 retirada |
+| 2 | Fabricado aprovado vira lote e saldo: feito na `develop` (27/10). Falta a saída pelo documento de retirada | Robert | F1, `E5` | ✅ (`api-pcp`) lote; 🔴 retirada |
+| 3 | `RoteiroItem` lido por `mover`, `concluir` e Expedição: lido pelo motor na `develop`; conferir a Expedição | Robert | P6 | ✅ (`api-pcp`) motor; ❓ Expedição |
 | 4 | Tela do novo norte para divergência de produção (reprovada na inspeção de saída), com retrabalho e reabrir compra; `/decisoes-pcp` só cobre recebimento | Robert, Nathan decide | P6 | 🔴 |
 | 5 | Reabertura de divergência (hoje `RESOLVIDA` e `CANCELADA` são terminais) | Robert | P6 | 🔴 |
 | 6 | Reabertura de compra a partir da produção (P6 para P3): sem rota; só a divergência de recebimento reabre (`REABERTO`) | Robert | P6 | 🔴 |

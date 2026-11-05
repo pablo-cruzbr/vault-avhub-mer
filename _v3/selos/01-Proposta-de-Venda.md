@@ -36,23 +36,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `vendas/propostas/[id]/page.tsx` | 179 | av-hub: `app/(protected)/vendas/propostas/[id]/page.tsx` | — | ok (54 linhas) |
 | `vendas/propostas/nova/page.tsx` | 178 | av-hub: `app/(protected)/vendas/propostas/nova/page.tsx` | — | ok (31 linhas) |
 
-## ✅ sem repositório nem arquivo citado (15)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 20: > - ✅ No banco, o dump de 29/10 traz `core_comercial.propostas`, os itens, as versões, os eventos e a função `fn_proposta_criar`. As funções de revisar, aprovar
-- linha 74: - ✅ Lista de propostas, nova proposta e detalhe da proposta no front, lendo a API do Hub; clientes pelo Acompanhamento de Clientes (N16-112).
-- linha 76: - ✅ Meus Pedidos, com a etapa dos itens.
-- linha 107: | Gerente de Vendas e perfis que veem a equipe | Leem propostas da equipe (escopo `vinculados`/`todos`) ✅ o gestor vê o time (N16-147, N16-148); falta a relação
-- linha 166: Mesmo vocabulário da OC (`pendente`, `sincronizado`, `erro`; Dump Avhub 17315-17320): `pendente` (na fila), `sincronizado` (Omie criou; guarda o número do Omie)
-- linha 228: ### Como está no código (✅ do módulo do Pablo)
-- linha 235: - ✅ **Comandos de status:** `perder` (`:555-575`), `reabrir` (`:578-606`), `fechar` com fechamento parcial por item (`:609-649`) e `calcularFechamento`. **Diver
-- linha 249: - ✅ O `IncluirPedido` aceita o **nosso código de integração** do pedido e do item: o hub grava a liberação na **resposta** da inclusão e liga o item da proposta
-- linha 251: - ✅ **A categoria do pedido decide se ele gera comissão.** A regra do grupo G6 compara o código `'1.01.96'` (refaturamento em Mogi) e a `vw_comissao_master` só 
-- linha 253: - ✅ Devolução de **venda**: a total vem do Omie; a **parcial** só chega marcada, sem valor, item nem quantidade. Fiscal ou Controladoria informam o que voltou (
-- linha 299: | 2 | Estado `APROVADA`, trava de ajuste e aprovar com a revisão: rotas feitas (29/10). Falta ligar o BFF e a tela, e conferir no banco a regra "incompleta" | R
-- linha 300: | 3 | Cancelar com motivo: rota feita (29/10). Falta o histórico da comissão estimada | Robert | `V0C` | ✅ API; 🔴 histórico |
-- linha 301: | 4 | Botão "Transformar em pedido" e marcação da Qualidade obrigatória: rota `transformar` feita (grava o pedido do Hub `pendente`). Faltam a tela, a fila do p
-- linha 303: | 8 | Trocar a AwesomeAPI pela PTAX do hub: o front já lê o câmbio do Hub (`GET /cambio` para `/cotacoes_moeda/atual`, 27/10) | Robert | `V0.1` | ✅ front; ❓ API
-- linha 317: | 1 | ✅ Alçada de desconto e margem: tudo fisicamente (N16-75; OQ-04 fechada) | Nathan (feito) |
 
 ## Citações deslocadas (o identificador está em outra linha) (1)
 

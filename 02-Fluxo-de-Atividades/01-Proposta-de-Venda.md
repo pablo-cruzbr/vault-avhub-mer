@@ -4,6 +4,7 @@ criado: 2026-10-16
 atualizado: 2026-11-05
 status: proposta
 nos: [V0.1, V0.2, V0.3, V0.4, V0.5, V0.6, V0.7, V0C]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
 fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10]
 ---
@@ -71,9 +72,9 @@ Depois, Compras acha o flange mais caro que o previsto. O aviso mostra a margem 
 
 ## O que já existe e o que falta
 
-- ✅ Lista de propostas, nova proposta e detalhe da proposta no front, lendo a API do Hub; clientes pelo Acompanhamento de Clientes (N16-112).
+- ✅ (`av-hub`) Lista de propostas, nova proposta e detalhe da proposta no front, lendo a API do Hub; clientes pelo Acompanhamento de Clientes (N16-112).
 - Liberação e cancelamento do pedido: ver [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
-- ✅ Meus Pedidos, com a etapa dos itens.
+- ✅ (`av-hub`) Meus Pedidos, com a etapa dos itens.
 - ✅ API da proposta na `api-acos-vital` (`develop`, 29/10): criar, listar, revisar, aprovar, cancelar, copiar e transformar em pedido do Hub.
 - 📝 Todas as regras acima estão decididas.
 - 🟡 Aprovar e transformar em pedido: a API existe; falta ligar o BFF e a tela.
@@ -104,7 +105,7 @@ Depois do pedido, o PCP abre as requisições (`P3`). Compras recebe e o sistema
 | Auxiliar do titular | Mesmo escopo do vendedor (vê e edita pelos titulares que auxilia, como em Meus Pedidos) 🟡 | idem |
 | Gerência (João Vitor, Sérgio Vital) | Aprova desconto e margem **fisicamente** (`V0.4`). Quando o vendedor reprova uma compra, **Compras leva o caso a ela, fisicamente**; a Gerência **não cancela no sistema** e **não tem tela** para isso (N16-66) | fora do sistema |
 | Orçamento (setor orçamentário) | **Setor novo; uma das pessoas é o Moisés** (N16-104). O sistema funciona sem orçamentista (N16-59). Atende o pedido de custo e mantém a base de preço ([[02-Orcamento-Base-de-Preco]]). O perfil "orçamentista" deve existir | Orçamento, `/orcamento/painel-comprador` |
-| Gerente de Vendas e perfis que veem a equipe | Leem propostas da equipe (escopo `vinculados`/`todos`) ✅ o gestor vê o time (N16-147, N16-148); falta a relação gestor-time no banco (Gustavo) | Vendas |
+| Gerente de Vendas e perfis que veem a equipe | Leem propostas da equipe (escopo `vinculados`/`todos`) ✅ (`api-acos-vital`) o gestor vê o time (N16-147, N16-148); falta a relação gestor-time no banco (Gustavo) | Vendas |
 | PCP | Consome o pedido liberado e abre a requisição (`P1` a `P3`); **é avisado do cancelamento** do pedido; **liga a NF de entrada ao item do pedido** (N16-57) | MES |
 | Compras (compradores, Gerente de Compras) | `C6`, `C7`, `C8`, OC (`C1` a `C4`); **lista dos casos reprovados pelo vendedor** e registro da solução (N16-73) | HUB, `/compras/*` |
 | Fiscal | Cria o produto novo no Omie; separa o pedido em sequenciais para faturar em partes (N16-92); informa a **devolução parcial** (N16-74). **Não cancela o pedido**: quem cancela é o vendedor (N16-84) | Omie |
@@ -178,7 +179,7 @@ A liberação do pedido da proposta está em [[03-Pedido-de-Venda-e-Liberacao#Pe
 | Nova proposta | `/vendas/propostas/nova` | HUB | Vendedor | `V0.1`, `V0.2` | ✅ `vendas/propostas/nova/page.tsx`, formulário `components/Propostas/PropostaForm/PropostaForm.tsx` |
 | Proposta (detalhe, revisões, linha do tempo) | `/vendas/propostas/[id]` | HUB | Vendedor, equipe | `V0.1` a `V0.7` | ✅ `vendas/propostas/[id]/page.tsx` (abas e análise de margem, 29/10, `88fbafe`); 🟡 aprovar e transformar: API pronta, BFF e botão não |
 | Acompanhamento de Clientes (a tela Clientes passou a ser esta, N16-112) | `/vendas/acompanhamento-clientes` | HUB | Vendedor | `V0.1` | ✅ (`av-hub` `1a48140`, 27/10); o cliente da proposta sai do cadastro do Hub e `POST /comercial/clientes` cadastra no Omie |
-| Relatório Gerencial | `/vendas/relatorio-gerencial` | HUB | Gerência | — | ✅; o Relatório de Cotações não existe mais como página na `develop` (conferido em 29/10) |
+| Relatório Gerencial | `/vendas/relatorio-gerencial` | HUB | Gerência | — | ✅ (`av-hub`); o Relatório de Cotações não existe mais como página na `develop` (conferido em 29/10) |
 | Tela da proposta no formato do Simulador (pedido, condições, itens, totais) | dentro de `/vendas/propostas/[id]` e `/vendas/propostas/nova` | HUB | Vendedor | `V0.2`, `V0.3` | 🟡 itens em grade e condições no layout do Simulador desde 27/10 (`37c9cf2`); a análise de margem é gravada com a proposta (29/10); 🔴 sem a comissão estimada |
 | Visão da Controladoria da mesma tela, com custo real | Operações 🟡 | HUB | Controladoria | `K4` | 🔴 ([[15-Custo-Real-e-Comissao]]) |
 | Botão "Transformar em pedido de venda" e marcação da Qualidade | dentro de `/vendas/propostas/[id]` | HUB | Vendedor | `V0.6` | 🔴 tela (a API `transformar` existe) |
@@ -225,7 +226,7 @@ Auditoria das telas e a nova página de proposta: [[Telas-e-Experiencia-do-Usuar
 
 Contratos: os desta parte foram removidos em 29/10/2026 e o Robert cria os novos. Nomes de rota 🟡: o Gustavo e o Robert fecham.
 
-### Como está no código (✅ do módulo do Pablo)
+### Como está no código (✅ (`av-hub/api-comercial`) do módulo do Pablo)
 
 Tudo abaixo é do `api-comercial` (pasta `av-hub/api-comercial`), serviço **só de teste** (N14-15), hoje **legado só para leitura** (N16-117). Parte disto já foi refeita na `api-acos-vital` (rotas da proposta, `develop`, 29/10; ver o quadro de endpoints); o que não foi segue 🔴 lá. As regras antigas de fechamento parcial, perda, reabrir e pedido digitado no Omie saíram do front em 28/10 (`av-hub` `2008344`).
 
@@ -240,13 +241,13 @@ Tudo abaixo é do `api-comercial` (pasta `av-hub/api-comercial`), serviço **só
 - O pedido de custo no módulo de teste está em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
 - ✅ **Simulador do Hub** lê a proposta ligada ao pedido para pré-preencher o lado da compra (`simulador.routes.ts`, PR #207). Não é a comissão estimada da proposta.
 
-No HUB (branch `feat/menu-orcamento-vendas-compras`, `5aa5311`): as páginas de Vendas já estão em `app/(protected)/vendas/*` ✅.
+No HUB (branch `feat/menu-orcamento-vendas-compras`, `5aa5311`): as páginas de Vendas já estão em `app/(protected)/vendas/*` ✅ (`av-hub`).
 
 No av-hub (API do hub), o que serve de padrão: contador por `(unidade, tipo)` (`contadores_documento`, `fn_proximo_numero_documento`, Dump Avhub 8110-8140, 16552-16564); fila da OC para o Omie (`GET /compras/ordens/fila-omie`, `PATCH …/sincronizacao`, `POST …/reenviar`, `ordens_compra.route.js:857`, `:1267`, `:1321`); liberação (`pedidos_vendas_liberacao`, Dump 18285).
 
 ### O Omie nesta raia ([[Estudo-Omie-API]])
 
-- ✅ O `IncluirPedido` aceita o **nosso código de integração** do pedido e do item: o hub grava a liberação na **resposta** da inclusão e liga o item da proposta ao `codigo_item_omie`. Etapa inicial `"10"`. A pipeline precisa **gravar** `codigo_pedido_integracao`.
+- ✅ (Omie, [[Estudo-Omie-API]]) O `IncluirPedido` aceita o **nosso código de integração** do pedido e do item: o hub grava a liberação na **resposta** da inclusão e liga o item da proposta ao `codigo_item_omie`. Etapa inicial `"10"`. A pipeline precisa **gravar** `codigo_pedido_integracao`.
 - 🟡 Pode ser possível **mandar o nosso `numero_pedido`**, e o pedido criado por API pode nascer **bloqueado** na tela do Omie: ❓ só teste.
 - ✅ **A categoria do pedido decide se ele gera comissão.** A regra do grupo G6 compara o código `'1.01.96'` (refaturamento em Mogi) e a `vw_comissao_master` só lê `grupo IS NULL`; a categoria que o Hub manda em `informacoes_adicionais.codigo_categoria` entra direto nessa regra. 🔴 Em Uberaba o refaturamento é o `1.01.99` e **não** cai em G6 ([[Riscos]], RS-022). 🟡 A tela deve mostrar essa consequência na hora de escolher a categoria; ver [[Mapa-IncluirPedido-Omie]], seção 5.3.1.
 - O cancelamento do pedido no Omie (`CancelarPedidoVenda`, quem cancela) está em [[03-Pedido-de-Venda-e-Liberacao#Pedido que nasce da proposta: liberação e cancelamento]].
@@ -296,11 +297,11 @@ Os itens 7 e 12 (`C6`, `C7`, `C8`) estão em [[06-Circuito-de-Compra#C6, C7 e C8
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
 | 1 | Migrar o módulo de propostas para a `api-acos-vital`: feito para criar, listar, revisar, aprovar, cancelar, copiar e transformar (29/10). Falta a numeração só de dígitos (hoje `CO-{AV\|AU\|HRM}{AAAA}-{NNNN}-R{RR}`, formato decidido: só dígitos, ano mais sequência, N16-148 e PS-038; diverge da N16-04 e da N16-26, e a mudança é do Gustavo), versões, importação de itens e o cálculo no servidor | Robert, Gustavo | `V0.1` | ✅ rotas; 🔴 numeração e o resto |
-| 2 | Estado `APROVADA`, trava de ajuste e aprovar com a revisão: rotas feitas (29/10). Falta ligar o BFF e a tela, e conferir no banco a regra "incompleta" | Robert, Nathan | `V0.4`, `V0.5` | ✅ API; 🔴 tela |
-| 3 | Cancelar com motivo: rota feita (29/10). Falta o histórico da comissão estimada | Robert | `V0C` | ✅ API; 🔴 histórico |
-| 4 | Botão "Transformar em pedido" e marcação da Qualidade obrigatória: rota `transformar` feita (grava o pedido do Hub `pendente`). Faltam a tela, a fila do pedido e o retorno da pipeline | Robert (API), Nathan (tela e pipeline), Gustavo (banco) | `V0.6`, `V0.7` | ✅ API; 🔴 tela e envio |
+| 2 | Estado `APROVADA`, trava de ajuste e aprovar com a revisão: rotas feitas (29/10). Falta ligar o BFF e a tela, e conferir no banco a regra "incompleta" | Robert, Nathan | `V0.4`, `V0.5` | ✅ (`api-acos-vital`) API; 🔴 tela |
+| 3 | Cancelar com motivo: rota feita (29/10). Falta o histórico da comissão estimada | Robert | `V0C` | ✅ (`api-acos-vital`) API; 🔴 histórico |
+| 4 | Botão "Transformar em pedido" e marcação da Qualidade obrigatória: rota `transformar` feita (grava o pedido do Hub `pendente`). Faltam a tela, a fila do pedido e o retorno da pipeline | Robert (API), Nathan (tela e pipeline), Gustavo (banco) | `V0.6`, `V0.7` | ✅ (`api-acos-vital`) API; 🔴 tela e envio |
 | 5 | Pipeline: `IncluirPedido` por fila, espelho do `envioOrdensCompra.ts`, com `codigo_pedido_integracao` e `codigo_item_integracao`; gravar esses códigos no hub | Nathan | `V0.7` | 🔴 |
-| 8 | Trocar a AwesomeAPI pela PTAX do hub: o front já lê o câmbio do Hub (`GET /cambio` para `/cotacoes_moeda/atual`, 27/10) | Robert | `V0.1` | ✅ front; ❓ API |
+| 8 | Trocar a AwesomeAPI pela PTAX do hub: o front já lê o câmbio do Hub (`GET /cambio` para `/cotacoes_moeda/atual`, 27/10) | Robert | `V0.1` | ✅ (`av-hub`) front; ❓ API |
 | 9 | Aprovar com perfil da Gerência no sistema | — | `V0.4` | próximo ciclo (N16-12) |
 | 10 | Tela da proposta no formato do Simulador, com o motor na API (porta de `lib/simulador/motor.ts`) e a comissão estimada | Robert (tela de proposta e API), Nathan (`K1`), Gustavo | `V0.2`, `V0.3`, `K1` | 🟡 |
 | 11 | Visão de Compras (leitura) e visão da Controladoria (custo real, drill-down por evento) da mesma tela | Nathan | `C6`, `C7`, `K4` | 🔴 |
@@ -314,7 +315,7 @@ Os itens 6 (liberação) e 13 (cancelamento) estão em [[03-Pedido-de-Venda-e-Li
 
 | # | Pergunta | Dono |
 |---|---|---|
-| 1 | ✅ Alçada de desconto e margem: tudo fisicamente (N16-75; OQ-04 fechada) | Nathan (feito) |
+| 1 | 📝 Alçada de desconto e margem: tudo fisicamente (N16-75; OQ-04 fechada) | Nathan (feito) |
 | 2 | Perfis do Orçamento e de quem vê a equipe (OQ-21); o Moisés é uma das pessoas do setor (N16-104) | Nathan, Gustavo |
 | 3 | Testes no Omie: campos obrigatórios, `numero_pedido` próprio, pedido bloqueado, `ExcluirPedido` (OQ-16, OQ-48). Roteiro: pedido mínimo, `ConsultarPedido`, comparar com um digitado à mão, `ExcluirPedido`, com cadastros TESTE. Espera a unidade, a categoria e a decisão da conta corrente | Nathan |
 | 5 | Quem cadastra produto novo, e em quanto tempo (OQ-36) | Fiscal |

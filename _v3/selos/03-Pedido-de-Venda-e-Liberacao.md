@@ -36,15 +36,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `src/utils/acessoConfig.js` | 167 | api-acos-vital: `src/utils/acessoConfig.js` | 73-74 | ok (104 linhas) |
 | `tables/itens_pedido_status/itens_pedido_status.job.js` | 169 | api-acos-vital: `src/schemas/core_vendas_faturamento/tables/itens_pedido_status/itens_pedido_status.job.js` | — | ok (233 linhas) |
 
-## ✅ sem repositório nem arquivo citado (7)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 58: - ✅ Telas Liberar Pedidos e Liberação da Equipe, e as rotas da API.
-- linha 60: - ✅ Cartão "Etapa dos itens" no detalhe do pedido.
-- linha 168: - ✅ Regras no banco (Dump Avhub 14/10): trigger `fn_pedidos_vendas_liberacao_regras` (linha 7783: `liberado_por` e `liberado_em` não mudam; depois de `importado
-- linha 211: Escopo (contrato 40, ✅ fixo na API): vale quando o usuário entrou por tela com escopo de vendedor e o perfil não tem escopo `todos`. No dump de 07/10 só o perfi
-- linha 229: - ✅ Telas Liberar Pedidos e Liberação da Equipe.
-- linha 263: - ✅ **Existe cancelar pedido por API** (`CancelarPedidoVenda`, serviço `/produtos/pedidovendafat/`), e também `ExcluirPedido` e `AlterarPedidoVenda`. **Quem can
-- linha 276: | 4 | ✅ Quem cancela: o vendedor, por API (N16-84). Falta testar a diferença entre `CancelarPedidoVenda` e `ExcluirPedido` e quando cada um vale (OQ-17, OQ-48) 
 
 ## Citações deslocadas (o identificador está em outra linha) (4)
 

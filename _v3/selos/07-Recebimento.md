@@ -29,18 +29,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `requisicao-avhub.eventos.ts` | 170 | api-pcp: `src/integracao-avhub/requisicao-avhub.eventos.ts` | 275-280, 300-307 | ok (389 linhas) |
 | `vw_ordens_compra_referencia_mes.swagger.json` | 219 | api-acos-vital: `src/schemas/core_vendas_faturamento/views/vw_ordens_compra_referencia_mes/vw_ordens_compra_referencia_mes.swagger.json` | 44-88 | ok (346 linhas) |
 
-## ✅ sem repositório nem arquivo citado (10)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 70: - ✅ Telas de recebimento, recontagem e decisão do PCP; lote em quarentena com etiqueta em PDF.
-- linha 71: - ✅ Recebimento parcial com divisão da parcial.
-- linha 114: | 13 | **Custo do lote vem da OC.** Hoje é opcional e não bloqueia o recebimento; a N16-09 torna o custo obrigatório em todo lote | 📝 ✅ gravado na `develop` (1
-- linha 155: | `GET /compras/recebimentos/decisoes` | `decisoes-pcp:visualizar` | Fila `AGUARDANDO_DECISAO` | `:32-37` ✅ |
-- linha 156: | `POST /compras/recebimentos` | `movimentacoes:editar` | R1 a R4: conferir (`idRequisicao`, `idItemParcial`, itens com `quantidadeNf`, `quantidadeContada`, `pe
-- linha 159: | `POST /compras/recebimentos/:id/recontar` | `movimentacoes:editar` | Recontagem por outra pessoa | `:51-59` ✅ |
-- linha 160: | `POST /compras/recebimentos/:id/decidir` `{decisao: ACEITAR\|REABRIR, motivo}` | `decisoes-pcp:editar` | Decisão do PCP | `:61-69` ✅ |
-- linha 161: | `POST /compras/requisicoes/:id/recebimentos` | — | **Removida**; o registro direto não existe mais | ✅ |
-- linha 182: ✅ "Bate" = nenhuma divergência calculada nem informada. Não bate: `AGUARDANDO_RECONTAGEM`. A recontagem exige **todos** os itens (`:263-265`), mantém `DESCRICAO
-- linha 235: | 1 | Gravar o custo da OC no lote (`lote_custo`, `origem OC`, `id_item_oc`): feito na `develop` (19/10). Falta o custo obrigatório em todo lote (BL-066) | Robe
 
 ## Citações deslocadas (o identificador está em outra linha) (9)
 

@@ -4,6 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 nos: [X1, X2, X3, X4]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Expedição/Logística (regra) · Nathan (decisões)
 fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens, pedido-embalagem-pallets, estoque-operacao.helpers.ts), app-pcp 1fca8d3 (logistica/expedicao, movimentacoes, ordens-producao), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 10, T-06, api-pcp develop de 27/10/2026, N16-130 a N16-133]
 ---
@@ -59,7 +60,7 @@ As 100 flanges do Cliente Exemplo S.A. chegam à Embalagem, que registra os pall
 
 ## O que já existe e o que falta
 
-- ✅ Fila, pallets, confirmar entrega com comprovante e fechamento do pedido.
+- ✅ (`app-pcp`, `api-pcp`) Fila, pallets, confirmar entrega com comprovante e fechamento do pedido.
 - 🟡 Escolha parcial ou integral: decidida, falta o campo na tela.
 - 🟡 NF da entrega é texto livre, sem ligação com o número do Omie.
 - 🔴 Documento de retirada e baixa na retirada (sem código).
@@ -137,7 +138,7 @@ Não há contrato com o av-hub para a Expedição além da etapa do item ([[Cont
 
 ### Como está no código
 
-#### X1 · paletes ✅
+#### X1 · paletes ✅ (`app-pcp`, `api-pcp`)
 
 Dois modelos coexistem:
 

@@ -4,6 +4,7 @@ criado: 2026-10-16
 atualizado: 2026-10-29
 status: proposta
 nos: [B1, B2, B3, B4]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---
@@ -154,13 +155,13 @@ Menu **Orçamento** desde 16/10/2026; enxugado em 27/10/2026 (N16-107 e N16-108,
 
 | Nome atual | Rota | Abas (conferidas no código) | Nó | Estado |
 |---|---|---|---|---|
-| Pedidos de custo (Painel do Comprador) | `/orcamento/painel-comprador` | fila do Painel do Comprador e Pedido de cotação (`PaginaComAbas`) | `B3`, `B4` | ✅ fila de solicitações de custo; responde com oferta (PR #201) |
+| Pedidos de custo (Painel do Comprador) | `/orcamento/painel-comprador` | fila do Painel do Comprador e Pedido de cotação (`PaginaComAbas`) | `B3`, `B4` | ✅ (`av-hub`) fila de solicitações de custo; responde com oferta (PR #201) |
 | Produtos (Catálogo) | `/orcamento/catalogo-produtos`, `/[id]` | Catálogo, Pesquisa de materiais e Ofertas | `B1`, `B2` | ✅ o detalhe do produto mostra os preços (`components/Suprimentos/ProdutoDetalhe.tsx`); é a base da página do produto |
-| Fornecedores (e ficha) | `/orcamento/fornecedores`, `/[id]` | lista e ficha | `B1` | ✅ |
-| Parâmetros de custo | `/orcamento/parametros-custo` | Custo (ICMS a recuperar, densidades, validade) e Telha (tabela da telha) | `B1` | ✅; 🟡 recebe também os pesos do score e os limites |
-| Custo por item | `/orcamento/custo-itens` | — | `B2` | ✅ itens, lotes e custo médio do pedido |
-| Custo do item (oculta) | — | — | `B2` | ✅ slug `custo-item`: libera ver custo, margem e sugestão |
-| Solicitações de custo (oculta, em Vendas) | — | — | `B3` | ✅ slug `solicitacoes-custo`: o vendedor pede custo pela proposta |
+| Fornecedores (e ficha) | `/orcamento/fornecedores`, `/[id]` | lista e ficha | `B1` | ✅ (`av-hub`) |
+| Parâmetros de custo | `/orcamento/parametros-custo` | Custo (ICMS a recuperar, densidades, validade) e Telha (tabela da telha) | `B1` | ✅ (`av-hub`); 🟡 recebe também os pesos do score e os limites |
+| Custo por item | `/orcamento/custo-itens` | — | `B2` | ✅ (`av-hub`) itens, lotes e custo médio do pedido |
+| Custo do item (oculta) | — | — | `B2` | ✅ (`api-acos-vital`) slug `custo-item`: libera ver custo, margem e sugestão |
+| Solicitações de custo (oculta, em Vendas) | — | — | `B3` | ✅ (`api-acos-vital`) slug `solicitacoes-custo`: o vendedor pede custo pela proposta |
 | Histórico de compras | — | — | `B1` | Sai (N16-108): `/compras/historico-compras` não existe mais na `develop`; o histórico está em Ordens de compra, com filtro por produto |
 | **Página do produto para o vendedor**: histórico, top fornecedores com score, flutuação anual, mensal e total, volatilidade, média | 🟡 | 🟡 | `B2` | 🔴 hoje só quem tem `custo-item` ou `painel-comprador` vê custo (`capacidades.ts:77`) |
 | Matriz de preços | 🟡 | 🟡 (o BFF já cita o slug `matriz-precos`, `app/api/comercial/[...rota]/route.ts:89,104`) | `B1`, `B2` | 🔴 tela ainda não construída |
@@ -182,12 +183,12 @@ Rotas do `api-comercial` (legado só para leitura, N16-117) que o Robert recria 
 
 Contratos: os do Orçamento foram removidos em 29/10/2026 e o Robert cria os novos. Dependências: [[Contratos-da-v2|LOG-52]] (fases 4 e 5).
 
-### Como está no código (✅)
+### Como está no código (✅ (`av-hub/api-comercial`))
 
 - ✅ **Oferta imutável com histórico:** `Oferta` (`prisma/models/suprimentos.prisma:138-183`): preço, unidade, IPI, ST, origem do ICMS, frete, `prazo` (**texto**), mínimo, `dataCotacao`, `validaAte`, `custoLiquidoUnit`, `status`, invalidação com motivo e quem. Chave única `(fonte, idDocumentoFonte, idProduto, idFornecedor)` para importar sem duplicar. Já há `validaAte` e `custoLiquidoUnit`, que apoiam o "dado recente" e a Nota Preço.
 - ✅ **Média "bolsa de valores":** `mediasDoProduto` e `GET /produtos/:id/precos` com janela de 7 a 730 dias, média ponderada pela quantidade comprada, mínimo, máximo, último preço e `delta_media_pct` por fornecedor (`suprimentos.routes.ts:823-875`; `domain/custo/medias.ts`).
 - ✅ **Pedido de custo:** `SolicitacaoCusto` (`suprimentos.prisma:216-245`) com `prazoResposta` obrigatório (**sai**), comprador que assumiu, oferta que respondeu, justificativa quando não há fornecedor; prazo padrão de 2 dias úteis (`custos.routes.ts:378`, **sai**); número `SC-AAAA-NNNN` (`custos.routes.ts:384-386`, com letras).
-- ✅ **Resposta com oferta no Painel do Comprador:** PR #201 (`33f21d3`).
+- ✅ (`av-hub`) **Resposta com oferta no Painel do Comprador:** PR #201 (`33f21d3`).
 - ✅ **Mapa de cotação importado:** `importarMapa.ts`, `mapaCotacao.ts` (oferta com fonte `MAPA_COTACAO`).
 - ✅ **Ofertas do Omie:** `PEDIDO_OMIE` nasce de pedidos de compra lidos direto do Omie; no desenho do LOG-52 isso vira derivado de `pedidos_compras_itens` da pipeline (LOG-52 seção 3.4, Q1 ❓). É a fonte "OC efetivada" da base (N16-41).
 - 🔴 **Não existe:** score, ranking por categoria e volatilidade; prazo de entrega em dias; frequência de vitória; matriz de preços; página do produto sem acesso a custo; vínculo do valor correto da OC (`C7`) com o histórico; cronômetro do pedido de custo; migração para a `api-acos-vital` (BL-062).

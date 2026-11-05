@@ -17,11 +17,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `pedidosVendas.ts` | 8, 96, 117, 135 | omie-elt-pipeline: `src/omie/resources/pedidosVendas.ts` | 134-136 | ok (252 linhas) |
 | `src/utils/omie.js` | 79 | api-acos-vital: `src/utils/omie.js` | — | ok (244 linhas) |
 
-## ✅ sem repositório nem arquivo citado (3)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 58: - ✅ Omie emite a nota; o pipeline traz pedido e nota; as telas de notas do hub.
-- linha 121: | Cron do pipeline | hoje a cada 3 min (`SYNC_HOJE_CRON`); mês a cada 20 min; últimos meses a cada 3 h; full 3h17 | `config` `:89-104` ✅ |
-- linha 128: #### O1 e O2 (lado Omie) ✅
 
 ## Citações deslocadas (o identificador está em outra linha) (0)
 

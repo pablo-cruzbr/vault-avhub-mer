@@ -25,19 +25,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `pedidos.service.ts` | 87, 91 | api-pcp: `src/pedidos/pedidos.service.ts` | 226-232, 695-699 | ok (807 linhas) |
 | `vw_ordens_compra_referencia_mes.swagger.json` | 163 | api-acos-vital: `src/schemas/core_vendas_faturamento/views/vw_ordens_compra_referencia_mes/vw_ordens_compra_referencia_mes.swagger.json` | 61-88 | ok (346 linhas) |
 
-## ✅ sem repositório nem arquivo citado (11)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 56: - ✅ Telas Atendimento, Saldo, Reservas, Movimentação e Lote com etiqueta.
-- linha 57: - ✅ Reserva, divisão da parcial, solicitar compra, entrada do item comprado e baixa na Embalagem.
-- linha 135: | Saldo | Consulta de Saldo | `/estoque-operacao/saldo` | `saldo` | ✅ |
-- linha 136: | Reservas | — | `/estoque-operacao/reservas` | `reservas` | ✅ consulta e liberação |
-- linha 137: | Movimentação | — | `/estoque-operacao/movimentacao` | `movimentacao` | ✅ entrada, ajuste, transferência |
-- linha 138: | Lote (detalhe, etiqueta) | — | `/estoque-operacao/lotes/[id]` | `saldo` | ✅ PDF Code128 `GET /estoque/lotes/:id/etiqueta` |
-- linha 155: | `PUT /estoque/lotes/:id/custo` | `estoque-custo:editar` | Informa ou corrige o custo do lote à mão, com motivo e histórico | [[Contratos-da-v2\|API-008]] ✅ `d
-- linha 173: ✅ **Custo do item (na `develop`, 27/10).** Cada `Reserva` liga lote e parcial, e `lote_custo.custo_liquido_unitario` guarda o custo. A saída grava o custo do lo
-- linha 179: ✅ **Enviar à produção** (`ROTEIRO`) move a parcial para a próxima etapa do roteiro. Na `develop`, o item de fabricação pode ser atendido com matéria-prima do es
-- linha 207: | 4 | `lote_custo` com `origem = OC` no recebimento e rota `MANUAL`: feitos na `develop`. Falta o custo obrigatório em todo lote (BL-066, N16-09) | Robert | R4 
-- linha 208: | 5 | Baixa de matéria-prima **na retirada** (N16-140), com genealogia (J2, J3, J4). Hoje baixa na hora do "Atender pelo estoque" (`develop`) | Robert | E4, F1 
 
 ## Citações deslocadas (o identificador está em outra linha) (5)
 

@@ -25,12 +25,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `pedido-embalagens.controller.ts` | 134 | api-pcp: `src/pedido-embalagens/pedido-embalagens.controller.ts` | 32-32 | ok (57 linhas) |
 | `producao.prisma` | 109, 144, 145 | api-pcp: `prisma/models/producao.prisma` | 57-64, 420-434, 294-338 | ok (580 linhas) |
 
-## ✅ sem repositório nem arquivo citado (4)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 62: - ✅ Fila, pallets, confirmar entrega com comprovante e fechamento do pedido.
-- linha 129: | `PATCH /itens-parciais/:id/pallets` `{ pesosPallets[], nomesPallets[], unidadesPallets[] }` | arrays paralelos por pallet | idem | `controller:182-190`, `serv
-- linha 130: | `PATCH /itens-parciais/:id/mover`, `/concluir` | passa da Embalagem à Logística e conclui no último setor | idem | `service:366`, `:520` ✅ |
-- linha 140: #### X1 · paletes ✅
 
 ## Citações deslocadas (o identificador está em outra linha) (1)
 

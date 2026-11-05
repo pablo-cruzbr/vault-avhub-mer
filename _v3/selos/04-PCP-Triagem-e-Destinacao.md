@@ -20,11 +20,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `producao.prisma` | 104, 122, 125, 126, 129, 167 | api-pcp: `prisma/models/producao.prisma` | 97-97, 11-16, 3-8, 23-26, 29-29, 97-97 | ok (580 linhas) |
 | `src/pedidos/ordem-producao-pdf.ts` | 167 | api-pcp: `src/pedidos/ordem-producao-pdf.ts` | — | ok (316 linhas) |
 
-## ✅ sem repositório nem arquivo citado (3)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 65: - ✅ Na `develop` (27/10): Ordem de Produção como documento impresso, com 2ª via (BL-052).
-- linha 66: - ✅ Na `develop` (22/10): Montagem do Roteiro separada da Destinação; roteiro individual do item lido pelo motor.
-- linha 178: | 4 | Baixa de matéria-prima na retirada do Estoque (J2, J3; N16-140). Na `develop` há a baixa imediata no "Atender pelo estoque" (19/10) | Robert | P2, E4 | 🟡
 
 ## Citações deslocadas (o identificador está em outra linha) (7)
 

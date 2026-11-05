@@ -27,22 +27,12 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `prisma/models/suprimentos.prisma` | 187 | av-hub: `api-comercial/prisma/models/suprimentos.prisma` | 138-183 | ok (261 linhas) |
 | `produtos.json` | 299 | — | — | 🔴 não existe na develop |
 | `suprimentos.prisma` | 8, 149, 189 | av-hub: `api-comercial/prisma/models/suprimentos.prisma` | 138-183, 216-245 | ok (261 linhas) |
-| `suprimentos.routes.ts` | 8, 174, 175, 188, 233, 238 | av-hub: `api-comercial/src/modules/suprimentos/suprimentos.routes.ts` | 29-29, 823-875, 823-880, 823-823, 823-880 | 🟡 linha 823-880, 823-880 passa do fim (875 linhas) |
+| `suprimentos.routes.ts` | 8, 174, 175, 188, 233, 238 | av-hub: `api-comercial/src/modules/suprimentos/suprimentos.routes.ts` | 29-29, 823-875, 823-875, 823-823, 823-875 | ok (875 linhas) |
 | `telas-vendas-orcamento-compras.sql` | 8 | — | — | 🔴 não existe na develop |
 | `vinculos.json` | 299 | — | — | 🔴 não existe na develop |
 
-## ✅ sem repositório nem arquivo citado (10)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 157: | Pedidos de custo (Painel do Comprador) | `/orcamento/painel-comprador` | fila do Painel do Comprador e Pedido de cotação (`PaginaComAbas`) | `B3`, `B4` | ✅ fi
-- linha 159: | Fornecedores (e ficha) | `/orcamento/fornecedores`, `/[id]` | lista e ficha | `B1` | ✅ |
-- linha 160: | Parâmetros de custo | `/orcamento/parametros-custo` | Custo (ICMS a recuperar, densidades, validade) e Telha (tabela da telha) | `B1` | ✅; 🟡 recebe também os
-- linha 161: | Custo por item | `/orcamento/custo-itens` | — | `B2` | ✅ itens, lotes e custo médio do pedido |
-- linha 162: | Custo do item (oculta) | — | — | `B2` | ✅ slug `custo-item`: libera ver custo, margem e sugestão |
-- linha 163: | Solicitações de custo (oculta, em Vendas) | — | — | `B3` | ✅ slug `solicitacoes-custo`: o vendedor pede custo pela proposta |
-- linha 177: | `GET /ofertas`, `POST /ofertas`, `POST /ofertas/:id/invalidar`, `GET /ofertas/importacoes`, `/exportar` | base com histórico | `B1`, `B4` | ✅ `:645`, `:687`, 
-- linha 185: ### Como está no código (✅)
-- linha 190: - ✅ **Resposta com oferta no Painel do Comprador:** PR #201 (`33f21d3`).
-- linha 192: - ✅ **Ofertas do Omie:** `PEDIDO_OMIE` nasce de pedidos de compra lidos direto do Omie; no desenho do LOG-52 isso vira derivado de `pedidos_compras_itens` da pi
 
 ## Citações deslocadas (o identificador está em outra linha) (1)
 

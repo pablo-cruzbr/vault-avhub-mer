@@ -25,13 +25,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `qualidade.service.ts` | 8, 86, 90, 121, 141, 142, 143, 152, 161, 211 | api-pcp: `src/qualidade/qualidade.service.ts` | 222-246, 226-234, 199-207, 39-81, 83-100, 102-265, 83-100, 102-265 | ok (275 linhas) |
 | `reprovar-lote.dto.ts` | 85 | api-pcp: `src/qualidade/dto/reprovar-lote.dto.ts` | 5-26 | ok (26 linhas) |
 
-## ✅ sem repositório nem arquivo citado (5)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 58: - ✅ Tela de inspeção, aprovação, reprovação com cisão do lote e devolução da parte reprovada a Compras.
-- linha 59: - ✅ Substituição que se une à parte em quarentena e segue ao Estoque.
-- linha 84: | Inspeção de entrada é por **lote**; a de saída é um setor tipo `QUALIDADE` no roteiro | EC-01 (Nathan, 29/09) | 📝 ✅ |
-- linha 88: | O sistema nunca emite a nota de devolução: só sinaliza (`nota_devolucao_pendente`); o Omie emite | Regra de Q10/Q11 do v1; Registro #30 (Omie é o fiscal) | 📝
-- linha 190: | Login | Escritório entra por Azure AD; chão de fábrica por usuário e senha | `POST /auth/azure`, `POST /auth/login` ✅ |
 
 ## Citações deslocadas (o identificador está em outra linha) (2)
 

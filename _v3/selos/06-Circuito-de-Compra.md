@@ -48,22 +48,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `vw_ordens_compra_referencia_mes.swagger.json` | 246 | api-acos-vital: `src/schemas/core_vendas_faturamento/views/vw_ordens_compra_referencia_mes/vw_ordens_compra_referencia_mes.swagger.json` | 61-88 | ok (346 linhas) |
 | `vw_pedido_venda_compras.route.js` | 246 | api-acos-vital: `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js` | 12-12, 52-52 | ok (158 linhas) |
 
-## ✅ sem repositório nem arquivo citado (14)
+## ✅ sem repositório nem arquivo citado (0)
 
-- linha 77: - ✅ Telas das duas origens, emissão da OC, lista de OCs, aprovações e follow-up do CCP.
-- linha 78: - ✅ Envio da OC ao Omie testado em 14/10. Produção ainda ❓.
-- linha 126: | 16 | Comprador só emite OC na unidade a que pertence; unidade que compra por outra unidade recusa (23514) | ✅ Dump `fn_ordens_compra_nascer`, `fn_ordens_compr
-- linha 181: | `GET /compras/requisicoes/esperados` | idem | Parciais em Compras · CCP com OC aprovada ou liberação manual, ordenadas por previsão | `:45-51` ✅ |
-- linha 182: | `POST /compras/requisicoes/sincronizar` | idem | Lê agora os marcos (pula se a última leitura boa < 30 s) | `:53-60` ✅ |
-- linha 183: | `GET /compras/requisicoes/:id`, `/:id/eventos` | idem | Detalhe e linha do tempo | `:62-73` ✅ |
-- linha 184: | `POST /compras/requisicoes` | `movimentacoes:editar` | Cria requisição e move a parcial a Compras · CCP; enfileira o envio | `:75-79` ✅ |
-- linha 185: | `POST /compras/requisicoes/:id/cancelar` | idem | Só requisição `ABERTA`; parcial volta a Requisições | `:81-91` ✅ |
-- linha 186: | `POST /compras/requisicoes/:id/chegada` | idem + `pode_atuar` no Recebimento | Chegada com NF ([[07-Recebimento]]) | `:93-103` ✅ |
-- linha 187: | `POST /compras/requisicoes/:id/liberar-recebimento` | idem + `compras-liberar` | Rede de segurança | `:105-115` ✅ |
-- linha 219: ✅ `fn_requisicao_mes_aplicar` aplica a ida (Dump Avhub, linha 8680). A caixa lê as **duas origens** sem distinção (`GET /compras/requisicoes`). Trigger grava ma
-- linha 221: #### C2 e C3: aprovação (✅ código igual à decisão)
-- linha 223: - ✅ 📝 **Regra (N14-21):** OC que **excede R$ 30 mil** é aprovada pelo Gerente de Compras; OC **até R$ 30 mil** sai livre para os compradores. A Diretoria não p
-- linha 336: | 8 | Aviso ao PCP e ao vendedor quando a previsão de chegada atrasa o pedido de venda | Nathan | C5 | ✅ decidido: a mudança de data do CCP só avisa o vendedor,
 
 ## Citações deslocadas (o identificador está em outra linha) (6)
 

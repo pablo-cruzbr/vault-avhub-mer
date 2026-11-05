@@ -150,3 +150,24 @@ if (fs.existsSync(build)) {
     .concat([...b.matchAll(/"(\d\d-[A-Za-z]+\/[^"]+)"/g)].map((m) => m[1]));
   secao('Caminhos do build.mjs que não existem', caminhos.filter((c) => !fs.existsSync(path.join(raiz, c + '.md'))));
 }
+
+// Selos (a partir do Bloco 3, F5): nas raias, todo ✅ cita repositório ou arquivo (ou o dump, ou o Omie),
+// e a nota traz `develop-conferida` no frontmatter com o commit lido. Nenhum ✅ apoiado só na main.
+{
+  const SEG = String.raw`(?:[\w.\-\[\]]|\([\w-]+\))+`;
+  const ARQ = new RegExp(String.raw`${SEG}(?:/${SEG})*\.(?:tsx|ts|json|mjs|js|prisma|sql)(?![\w])`);
+  const CIT = /\b(api-acos-vital|av-hub|api-pcp|app-pcp|omie-elt-pipeline|api-comercial|Dump|dump|Omie|Estudo-Omie-API)\b|(service|controller|helpers|route|dto)?:\d+(-\d+)?\b/;
+  const prob = [];
+  for (const f of notas.filter((x) => /02-Fluxo-de-Atividades[\/](0[1-9]|1[0-5])-/.test(x))) {
+    const t = fs.readFileSync(f, 'utf8');
+    if (!/^develop-conferida:/m.test((t.match(/^---\n([\s\S]*?)\n---/) || [, ''])[1])) prob.push(`${rel(f)}: sem develop-conferida`);
+    let cod = false;
+    t.split('\n').forEach((l, i) => {
+      if (/^\s*```/.test(l)) { cod = !cod; return; }
+      if (cod || !l.includes('✅')) return;
+      if (!ARQ.test(l) && !CIT.test(l)) prob.push(`${rel(f)}:${i + 1} ✅ sem citação`);
+      if (/✅[^|]*\b(só na|apenas na|na) `?main`?\b/.test(l) && !/develop/.test(l)) prob.push(`${rel(f)}:${i + 1} ✅ apoiado na main`);
+    });
+  }
+  secao('Selos ✅ sem citação ou sem develop-conferida', prob);
+}

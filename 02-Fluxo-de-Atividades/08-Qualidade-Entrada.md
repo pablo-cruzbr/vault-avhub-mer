@@ -4,6 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 nos: [Q1, Q2, Q3, Q4]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Qualidade (regra de negócio) · Nathan (decisões)
 fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Encaixe-Estoque-Revenda-no-PCP (EC-01, EC-07), api-pcp 579a625 (qualidade.service.ts, circuito-compra.ts, estoque.prisma), app-pcp 1fca8d3 (qualidade/inspecao-entrada), Registro-de-Decisoes #25 #26]
 ---
@@ -55,8 +56,8 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 
 ## O que já existe e o que falta
 
-- ✅ Tela de inspeção, aprovação, reprovação com cisão do lote e devolução da parte reprovada a Compras.
-- ✅ Substituição que se une à parte em quarentena e segue ao Estoque.
+- ✅ (`app-pcp`) Tela de inspeção, aprovação, reprovação com cisão do lote e devolução da parte reprovada a Compras.
+- ✅ (`api-pcp`) Substituição que se une à parte em quarentena e segue ao Estoque.
 - 🟡 Painel do Estoque com alerta de RNC pendentes: é protótipo, mas o alerta usa API real.
 - 🟡 Travar a decisão ao setor da Qualidade (decidido em N16-124, falta código).
 - 🔴 Fechar a RNC: registrar a nota de devolução e dar baixa do lote reprovado. Hoje é manual, fora do MES.
@@ -81,7 +82,7 @@ CCP = acompanhamento de compras. Os perfis são dados do banco (`perfis`, `permi
 
 | Regra | Decisão | Selo |
 |---|---|---|
-| Inspeção de entrada é por **lote**; a de saída é um setor tipo `QUALIDADE` no roteiro | EC-01 (Nathan, 29/09) | 📝 ✅ |
+| Inspeção de entrada é por **lote**; a de saída é um setor tipo `QUALIDADE` no roteiro | EC-01 (Nathan, 29/09) | 📝 ✅ (`api-pcp`) |
 | Aprovar exige laudo; reprovar exige laudo, motivo e evidência | Regra de Q4 do v1, trava dura no DTO | 📝 ✅ `api-pcp/src/qualidade/dto/aprovar-lote.dto.ts:4-9`, `reprovar-lote.dto.ts:5-26` |
 | Reprovação total ou parcial: a parte aprovada fica em **QUARENTENA** até a substituição; a parte reprovada volta a Compras, que alinha devolução e substituição com o fornecedor; a substituição passa de novo pela inspeção e, aprovada, **une-se** à parte em quarentena | EC-07 (Nathan, 29/09) | 📝 ✅ `circuito-compra.ts:166-250`, `qualidade.service.ts:222-246` |
 | Aprovado volta ao Estoque (entrada no saldo); nunca vai direto à Expedição | Decisão do Nathan de 24/09, reafirmada em 14/10 (tudo que é comprado vai ao Estoque) | 📝 ✅ `circuito-compra.ts:239-249` |
@@ -187,7 +188,7 @@ A parcial chega ao setor Estoque `EM_TRANSITO`. O almoxarife usa "Atender pelo e
 | Fila e decisão de lote | `RequirePermission('inspecao-entrada', 'visualizar'|'editar')`. Não há checagem de `PerfilSetor` no serviço | `qualidade.controller.ts:19-34` ✅ |
 | Fila do setor Qualidade · Entrada | Só aparece para quem tem `podeVisualizar` no setor `qualidade-entrada` (tabela `perfil_setores`) | `perfis.service.ts` / `useSetoresPermitidos` ✅ |
 | Inspeção de saída | Setor(es) tipo `QUALIDADE` do roteiro, fila `/qualidade/inspecao-saida`; agir exige `podeAtuar` no setor (`ensurePodeAtuar`) | `perfis.service.ts:278-289`, `itens-parciais.service.ts:909-918` ✅ |
-| Login | Escritório entra por Azure AD; chão de fábrica por usuário e senha | `POST /auth/azure`, `POST /auth/login` ✅ |
+| Login | Escritório entra por Azure AD; chão de fábrica por usuário e senha | `POST /auth/azure`, `POST /auth/login` ✅ (`api-pcp`) |
 
 Consequência de projeto: qualquer usuário com `inspecao-entrada:editar` decide qualquer lote, mesmo sem vínculo de setor. 🟡 se for desejado travar por setor (Robert). **Decidido em 29/10/2026 (N16-124): a decisão fica travada ao setor da Qualidade.**
 

@@ -46,7 +46,9 @@ export function resolver(cit, dica) {
 // segmento de caminho: letras, ., -, [id] e grupos como (protected); extensão mais longa primeiro (tsx antes de ts)
 const SEG = String.raw`(?:[\w.\-\[\]]|\([\w-]+\))+`;
 const RE_ARQ = new RegExp(String.raw`(${SEG}(?:/${SEG})*\.(?:tsx|ts|json|mjs|js|prisma|sql))(?![\w])(?::(\d+)(?:-(\d+))?)?`, 'g');
-const RE_REPO = new RegExp(`\\b(${REPOS.join('|')}|api-comercial|MES|av-hub|HUB)\\b`);
+// conta como citação: nome do repositório (não "MES"/"HUB" soltos), o dump do banco (fonte 2), o Omie (sistema
+// externo, ver Estudo-Omie-API) e referência curta de linha cujo arquivo está no título da seção (`service:224`, `:53-60`)
+const RE_REPO = new RegExp(`\\b(${REPOS.join('|')}|api-comercial|Dump|dump|Omie|Estudo-Omie-API)\\b|(service|controller|helpers|route|dto)?:\\d+(-\\d+)?\\b`);
 
 function relatorio(nota) {
   const arqNota = [path.join(raiz, '02-Fluxo-de-Atividades', nota + '.md')].find(fs.existsSync);

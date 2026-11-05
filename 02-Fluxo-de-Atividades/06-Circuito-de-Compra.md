@@ -4,6 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 nos: [P3, C0, C1, C2, C3, C4, C5, C6, C7, C8, FN1]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144]
 ---
@@ -74,7 +75,7 @@ O comprador manda o PDF ao fornecedor por fora. O CCP anota a confirmação e a 
 
 ## O que já existe e o que falta
 
-- ✅ Telas das duas origens, emissão da OC, lista de OCs, aprovações e follow-up do CCP.
+- ✅ (`av-hub`, `app-pcp`) Telas das duas origens, emissão da OC, lista de OCs, aprovações e follow-up do CCP.
 - ✅ Envio da OC ao Omie testado em 14/10. Produção ainda ❓.
 - 🟡 Regra de aprovação provisória: vai endurecer depois da conversa com Compras.
 - 📝 `C6` a `C8` decididos em 26/10; sem código na `api-acos-vital` nem no front 🔴 (conferido em 29/10: nenhuma rota `divergencias_compra`).
@@ -167,7 +168,7 @@ Efeito de cada marco no MES: tabela em [[Integracao-AvHub-MES]] (INT-03) e `requ
 | Ordens de Compra (lista, kanban, detalhe, Omie) | `/compras/ordens`, `/compras/ordem/[id]`, `/compras/pedido-omie/[id]` | HUB | Comprador | ✅ `components/Compras/ComprasOrdens.tsx`, `OrdemDetalhe.tsx`, `PedidoOmieDetalhe.tsx` |
 | Aprovações ("acima do limite da unidade") | `/compras/aprovacoes` | HUB | Gerência de Compras | ✅ `components/Compras/ComprasAprovacoes.tsx:78` |
 | Follow-up do CCP | `/compras/followup` | HUB | CCP | ✅ `components/Compras/Followup/FollowupLista.tsx`, `FollowupPainel.tsx` |
-| Dashboard de Compras, Compradores | `/compras/dashboard-compras`, `/compras/compradores` | HUB | Compras | ✅ fora da espinha |
+| Dashboard de Compras, Compradores | `/compras/dashboard-compras`, `/compras/compradores` | HUB | Compras | ✅ (`av-hub`) fora da espinha |
 
 Nome histórico no MES: o setor `COMPRAS` aparece como "Pedidos de Compra" em rótulos de 09/10 e hoje como **Compras · CCP**; a rota continua `/compras/pedidos-compra`. HUB confirmado em disco (`C:\Users\nathan.silva\Desktop\TI\NATHAN\00 - HUB`, b55ac55).
 
@@ -197,8 +198,8 @@ Nome histórico no MES: o setor `COMPRAS` aparece como "Pedidos de Compra" em r�
 | `GET /compras/ordens`, `POST /compras/ordens`, `PATCH /:id` (`aprovado` ou `cancelado`) | HUB | lista, emite, aprova ou cancela | `ordens_compra.route.js:607`, `:923`, `:1177` ✅ [[Contratos-da-v2\|LOG-23]], [[Contratos-da-v2\|LOG-36]] |
 | `GET /compras/ordens/fila-omie`, `PATCH /:id/sincronizacao`, `POST /:id/reenviar` | pipeline e HUB | fila e retorno do envio ao Omie | `ordens_compra.route.js:857`, `:1267`, `:1321` ✅ |
 | `GET /compras/acompanhamento`, `GET`/`PUT /compras/ordens/:id/acompanhamento`, `POST …/contatos`, `POST …/ocorrencias`, `PATCH /compras/ocorrencias/:id` | HUB (CCP) | follow-up | `ordens_compra_acompanhamento.route.js:298-586` ✅ [[Contratos-da-v2\|LOG-32]] |
-| `GET /ordens-compra/referencia` | MES (job) | referência e valores da OC | [[Contratos-da-v2\|API-004]], [[Contratos-da-v2\|API-007]]; lado hub ✅; o MES consome na `develop` (K4, `6914fe9`, 15/10) ✅ |
-| `GET /compras/requisicoes/referencia` | MES (job) | requisições do Compras com pedido de venda, antes de virarem OC | [[Contratos-da-v2\|API-009]]; lado hub ✅; o MES lê na `develop` (`9e75df5`, 23/10) ✅ |
+| `GET /ordens-compra/referencia` | MES (job) | referência e valores da OC | [[Contratos-da-v2\|API-004]], [[Contratos-da-v2\|API-007]]; lado hub ✅ (`api-acos-vital`); o MES consome na `develop` (K4, `6914fe9`, 15/10) ✅ |
+| `GET /compras/requisicoes/referencia` | MES (job) | requisições do Compras com pedido de venda, antes de virarem OC | [[Contratos-da-v2\|API-009]]; lado hub ✅ (`api-acos-vital`); o MES lê na `develop` (`9e75df5`, 23/10) ✅ |
 
 Montagem em `core_vendas_faturamento/index.js:190-193`. Contratos de banco: [[Contratos-da-v2|SQL-008]], [[Contratos-da-v2|SQL-007]], [[Contratos-da-v2|SQL-011]], [[Contratos-da-v2|SQL-012]].
 
@@ -218,9 +219,9 @@ Montagem em `core_vendas_faturamento/index.js:190-193`. Contratos de banco: [[Co
 
 ✅ `fn_requisicao_mes_aplicar` aplica a ida (Dump Avhub, linha 8680). A caixa lê as **duas origens** sem distinção (`GET /compras/requisicoes`). Trigger grava marcos `requisicao_recebida` (INSERT) e `em_cotacao` (`aberta → em_cotacao`) (Dump, linha 8966). Cotação e negociação com o fornecedor são **fora do sistema** 📝.
 
-#### C2 e C3: aprovação (✅ código igual à decisão)
+#### C2 e C3: aprovação (✅ (`api-acos-vital`) código igual à decisão)
 
-- ✅ 📝 **Regra (N14-21):** OC que **excede R$ 30 mil** é aprovada pelo Gerente de Compras; OC **até R$ 30 mil** sai livre para os compradores. A Diretoria não participa.
+- ✅ (`api-acos-vital`) 📝 **Regra (N14-21):** OC que **excede R$ 30 mil** é aprovada pelo Gerente de Compras; OC **até R$ 30 mil** sai livre para os compradores. A Diretoria não participa.
 - ✅ **Como o código faz:** a OC nasce `aguardando_aprovacao`; a trigger de recálculo **aprova automaticamente** a OC cujo total em BRL é **menor ou igual** ao limite da unidade (`parametros_compras.limite_aprovacao`, 30.000,00 por padrão) e deixa `aguardando_aprovacao` a que passa do limite; OC já aprovada que sobe acima do limite volta a `aguardando_aprovacao` (Dump, linhas 6779-6794; texto da função em `docs/ENVIAR - contrato-compras-backend.md:649-694` do HUB). O HUB avisa "Acima de {limite}, ela nasce Aguardando aprovação" (`FecharCompra.tsx:604-605`, `:1652`). Quem aprova ou cancela uma OC aguardando é um usuário com `pode_aprovar` na tela `compras` (Gerência de Compras): `ordens_compra.route.js:1230-1240`. `condicoes_pagamento_compras.route.js:17` devolve o limite padrão 30.000,00 quando a unidade não tem linha.
 - 🟡 **Regra provisória:** o Nathan precisa de algo funcional agora; a regra vai ficar mais rígida quando conversarem com o setor de Compras (por exemplo, finalidade, tipo de item ou aprovação do Gerente também abaixo do limite). Não há desenho nem data.
 - 🟡 Segregação comprador ≠ aprovador: o `aprovado_por` vem do BFF (sessão), mas a API **não** compara com `created_by` (`ordens_compra.route.js:1217-1240`) ❓ conferir se há trava no banco. Evento `oc_enviada_aprovacao` só marca a mudança para `aguardando_aprovacao` (Dump, linha 6929).
@@ -233,7 +234,7 @@ Montagem em `core_vendas_faturamento/index.js:190-193`. Contratos de banco: [[Co
 
 #### C5: follow-up do CCP
 
-✅ HUB `/compras/followup` e tabelas `ordens_compra_acompanhamento`, `_contatos`, `_ocorrencias`. Marcos `fornecedor_confirmou`, `previsao_alterada`, `despachada` (data, NF do fornecedor, transportadora), `ocorrencia` (aberta ou resolvida) chegam ao MES. 🔴 Perfil exclusivo do CCP (só ele edita): hoje vale a permissão da tela, conforme [[Contratos-da-v2|LOG-32]].
+✅ (`av-hub`, `api-acos-vital`) HUB `/compras/followup` e tabelas `ordens_compra_acompanhamento`, `_contatos`, `_ocorrencias`. Marcos `fornecedor_confirmou`, `previsao_alterada`, `despachada` (data, NF do fornecedor, transportadora), `ocorrencia` (aberta ou resolvida) chegam ao MES. 🔴 Perfil exclusivo do CCP (só ele edita): hoje vale a permissão da tela, conforme [[Contratos-da-v2|LOG-32]].
 
 #### Volta (LOG-35) e Compras · CCP
 
@@ -327,13 +328,13 @@ Estados propostos (N16-66, N16-73): `PENDENTE` (na lista do vendedor, sem tempo 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
 | 1 | **Endurecer a regra de aprovação** depois da conversa com Compras (a regra atual já funciona); sem desenho nem data. Pendência cadastral: vincular usuários à Gerência de Compras (PS-008) | Nathan, com Compras | C2, C3 | 🟡 |
-| 2 | **MES ler as OCs do hub:** a leitura e a entrada da mercadoria no Recebimento estão na `develop` (K4, BL-051). Falta a OC do pedido para o PCP (BL-049) e o saldo futuro no Estoque (BL-050); BL-028 no hub | Robert (MES), Gustavo (API) | C0, R0 | ✅ leitura e recebimento; 🔴 BL-049 e BL-050 |
-| 3 | Job do contrato 004/007 no MES (projeção da OC com fornecedor e valores, custo do lote): feito na `develop` (15 e 19/10, `6914fe9`, `97b9adc`). Falta o merge do MES para a `main` (BL-035) | Robert | C4, R4 | ✅ `develop` |
+| 2 | **MES ler as OCs do hub:** a leitura e a entrada da mercadoria no Recebimento estão na `develop` (K4, BL-051). Falta a OC do pedido para o PCP (BL-049) e o saldo futuro no Estoque (BL-050); BL-028 no hub | Robert (MES), Gustavo (API) | C0, R0 | ✅ (`api-pcp`) leitura e recebimento; 🔴 BL-049 e BL-050 |
+| 3 | Job do contrato 004/007 no MES (projeção da OC com fornecedor e valores, custo do lote): feito na `develop` (15 e 19/10, `6914fe9`, `97b9adc`). Falta o merge do MES para a `main` (BL-035) | Robert | C4, R4 | ✅ (`api-pcp`) `develop` |
 | 4 | **Perfil CCP:** edição só pelo CCP | Gustavo, Nathan | C5 | 🔴 |
 | 5 | Remover ou arquivar `GET /requisicoes-compra` (contrato 003) e o comentário velho | Gustavo, Robert | — | 🟡 |
 | 6 | **Versionar** `fn_requisicao_mes_aplicar` (migration 034) | Gustavo | P3 | ❓ |
 | 7 | Contrato de **recompra por RNC** (decidido: o Compras é avisado no av-hub, N16-127) e da **reabertura do recebimento** (N16-137) | Nathan, Gustavo, Robert | Q3, C1 | 🔴 sem contrato |
-| 8 | Aviso ao PCP e ao vendedor quando a previsão de chegada atrasa o pedido de venda | Nathan | C5 | ✅ decidido: a mudança de data do CCP só avisa o vendedor, em Meus Pedidos (N16-64, N16-91); a previsão de faturamento é derivada (N16-88, N16-97); o PCP vê a vigente e todas as datas (N16-104); e-mail e notificações ficam para o futuro (N16-113) |
+| 8 | Aviso ao PCP e ao vendedor quando a previsão de chegada atrasa o pedido de venda | Nathan | C5 | 📝 decidido: a mudança de data do CCP só avisa o vendedor, em Meus Pedidos (N16-64, N16-91); a previsão de faturamento é derivada (N16-88, N16-97); o PCP vê a vigente e todas as datas (N16-104); e-mail e notificações ficam para o futuro (N16-113) |
 | 9 | Dois formulários ou um para origem PCP e origem Compras (T-03): o MES exige pedido e prazo; o HUB aceita sem pedido | Nathan | P3, C0 | 🟡 |
 | 10 | Teste ponta a ponta do circuito com `AVHUB_MES_INTEGRACAO_KEY` e `API_KEY` reais | Robert, Gustavo | P3, C5 | ❓ |
 
