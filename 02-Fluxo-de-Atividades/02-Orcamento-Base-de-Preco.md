@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4]
 criado: 2026-10-16
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: proposta
+ordem: 2
 nos: [B1, B2, B3, B4]
+anterior: "[[01-Proposta-de-Venda]]"
+proxima: "[[03-Pedido-de-Venda-e-Liberacao]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
@@ -12,6 +15,10 @@ fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N
 # Orçamento e base de preço de compra
 
 **Em uma frase:** o Orçamento é o setor novo que mantém o preço de compra de cada produto, sempre com histórico, para o vendedor consultar ou pedir cotação quando não tem o custo.
+
+**Quando consultar:** dúvidas sobre o preço de compra de um produto: de onde vem, como o histórico é guardado e como o vendedor pede cotação.
+
+**Onde estamos no fluxo:** ← [[01-Proposta-de-Venda]] | [[03-Pedido-de-Venda-e-Liberacao]] → · nós desta nota: `B1`, `B2`, `B3`, `B4`
 
 Esta nota substitui o anexo [[Orcamento]], arquivado em 26/10/2026. Os nós são `B1` a `B4` do [[00-Fluxo-Mestre-0b]].
 
