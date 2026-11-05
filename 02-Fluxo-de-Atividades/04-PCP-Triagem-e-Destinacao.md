@@ -20,25 +20,17 @@ fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Mo
 
 **Onde estamos no fluxo:** ← [[03-Pedido-de-Venda-e-Liberacao]] | [[05-Estoque-Atendimento]] → · nós desta nota: `P1`, `P2`, `P6`
 
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - A Triagem não mostra o saldo do Estoque. Quem decide sobre saldo é o Estoque, na etapa dele (N16-138).
-> - Saldo zero continua exigindo o clique do almoxarife, mesmo depois do marco zero de 13/11 (N16-139).
-> - No retrabalho, o PCP escolhe o setor de volta. Hoje o código volta sempre ao setor anterior (N16-141).
-> - Pedido anterior à data de corte fica fora do MES e termina no sistema antigo. Falta trocar o erro 404 por uma mensagem clara (N16-142).
-> - Ordem de Produção: [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`, `app-pcp` `b9e8cb1`): toda ordem de destino de fabricação é uma OP emitida na criação, numerada `pedido/N`, com PDF e botão "Imprimir OP" (2ª via); revenda não gera OP.
-> - Roteiro: desde 22/10 (`develop`) a Destinação cria a OP só com o Estoque e o roteiro é montado depois, na tela Montagem do Roteiro (`/montagem-roteiro`), que libera a OP.
-> - Código: o que aparece como "develop" nesta nota não está na `main` do MES, parada em 08/10 (merge BL-035).
-
 ## Como funciona, passo a passo
 
-1. O PCP abre a Triagem do Pedido e vê os pedidos liberados, por mês, ano e filial. `P1`
+1. O PCP abre a Triagem do Pedido e vê os pedidos liberados, por mês, ano e filial. A Triagem não mostra o saldo do Estoque (N16-138). `P1`
 2. Para cada item, escolhe o destino: uma fábrica de fabricação ou a Revenda. `P2`
 3. Define quanto manda nesta rodada, até o que ainda resta do pedido, e a prioridade. Item sem destino fica para a próxima rodada.
-4. Cada destino ganha uma ordem com o Estoque fixo como primeira etapa. O roteiro dos demais setores é montado depois, na Montagem do Roteiro (`develop`); roteiro de fabricação precisa de uma inspeção de qualidade antes da expedição. Na `main` do MES o roteiro ainda é montado nesta mesma tela.
+4. Cada destino ganha uma ordem com o Estoque fixo como primeira etapa. A Destinação cria a ordem só com o Estoque (`develop`, desde 22/10). O roteiro dos demais setores é montado depois, na tela Montagem do Roteiro (`/montagem-roteiro`), que libera a OP (Ordem de Produção). Roteiro de fabricação precisa de uma inspeção de qualidade antes da expedição. Na `main` do MES o roteiro ainda é montado nesta mesma tela.
 5. O sistema grava a rodada de uma vez, com uma ordem por destino. Se uma falhar, nenhuma grava. Cada item vira uma parcial no Estoque, com 100% da quantidade. Enquanto o roteiro não é liberado, a parcial só sai do Estoque para compra (`develop`).
-6. O MES avisa o av-hub que importou o pedido, e a marcação do vendedor trava. Se o aviso falhar, ele tenta de novo a cada 10 minutos, por 7 dias.
-7. O Estoque responde se há saldo. Essa pergunta não é do PCP. `E1`
-8. Se a Qualidade de saída reprova um item, ou o Recebimento reabre a compra, o PCP decide o novo rumo: retrabalho ou nova compra. Essa fila ainda não existe. `P6`
+6. Toda ordem de destino de fabricação é uma OP, emitida na criação. Ela é numerada `pedido/N`, tem PDF e o botão "Imprimir OP" (2ª via). Revenda não gera OP ([[Contratos-da-v2|LOG-53]]).
+7. O MES avisa o av-hub que importou o pedido, e a marcação do vendedor trava. Se o aviso falhar, ele tenta de novo a cada 10 minutos, por 7 dias.
+8. O Estoque responde se há saldo. Essa pergunta não é do PCP. `E1`
+9. Se a Qualidade de saída reprova um item, ou o Recebimento reabre a compra, o PCP decide o novo rumo: retrabalho ou nova compra. No retrabalho, o PCP escolhe o setor de volta (N16-141). Essa fila ainda não existe. `P6`
 
 ## Exemplo
 
@@ -55,6 +47,8 @@ O pedido de 100 flanges de aço carbono do Cliente Exemplo S.A. aparece na Triag
 
 ## Regras que valem
 
+As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do [[Registro-de-Decisoes]].
+
 - Fabricação ou revenda não é do produto. É o tipo da fábrica escolhida na rodada.
 - Só pedido liberado vira ordem. Sem liberação, o sistema recusa.
 - O Estoque é sempre a primeira etapa. O PCP não inclui nem retira.
@@ -63,19 +57,26 @@ O pedido de 100 flanges de aço carbono do Cliente Exemplo S.A. aparece na Triag
 - A soma das ordens de um produto não passa do total do pedido de venda.
 - A rodada é tudo ou nada.
 - Saldo zero exige clique do almoxarife.
+- O clique vale sempre, mesmo depois do marco zero do Estoque, em 13/11 (N16-139).
+- A Triagem não mostra o saldo do Estoque. Quem decide sobre saldo é o Estoque, na etapa dele (N16-138).
+- No retrabalho, o PCP escolhe o setor para onde o item volta (N16-141).
+- Pedido anterior à data de corte fica fora do MES e termina no sistema antigo (N16-142).
 - Se o Compras já emitiu OC (ordem de compra) para o pedido, o PCP deveria ver isso no MES. Na `develop` o MES já lê as OCs e as requisições do Compras com pedido de venda aparecem na Triagem (23/10); a OC do pedido ainda não aparece (BL-049).
 
 ## O que já existe e o que falta
 
+O que aparece como "develop" nesta nota não está na `main` do MES, parada em 08/10 (merge BL-035).
+
 - ✅ Triagem, Destinação, gravação da rodada em lote e confirmação ao av-hub com reenvio.
 - 🟡 Nomes técnicos antigos no código: `/carteira`, `ordemProducao`, prefixo `OP-`. Os rótulos novos já estão na tela.
 - 🟡 Pedido manual fica fora da espinha.
-- ✅ (`api-pcp`, `app-pcp`) Na `develop` (27/10): Ordem de Produção como documento impresso, com 2ª via (BL-052).
+- ✅ (`api-pcp`, `app-pcp`) Na `develop` (27/10): Ordem de Produção como documento impresso, com 2ª via (BL-052). [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`, `app-pcp` `b9e8cb1`).
 - ✅ (`api-pcp`, `app-pcp`) Na `develop` (22/10): Montagem do Roteiro separada da Destinação; roteiro individual do item lido pelo motor.
 - 🔴 Mostrar a OC do pedido na Triagem, na Destinação e no Atendimento (BL-049).
 - 🔴 Fila "Novo norte" (P6).
+- Retrabalho (N16-141): hoje o código volta sempre ao setor anterior.
 - 🟡 Matéria-prima: a `develop` baixa no "Atender pelo estoque" (19/10); a decisão é baixar na retirada (N16-140) 🔴.
-- 📝 Pedido anterior à data de corte: decidido, falta a mensagem no lugar do 404.
+- 📝 Pedido anterior à data de corte: decidido, falta a mensagem no lugar do 404 (N16-142).
 
 Entrada: [[03-Pedido-de-Venda-e-Liberacao]]. Próxima raia: [[05-Estoque-Atendimento]].
 
