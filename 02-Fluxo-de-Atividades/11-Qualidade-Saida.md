@@ -14,7 +14,7 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts), app-pc
 
 # Qualidade de saída (Q7, Q8)
 
-**Em uma frase:** é a inspeção do que a produção fabricou, para que nada siga adiante sem conferência. Nós `Q7` (inspeção) e `Q8` (aprova?) do [[00-Fluxo-Mestre-0b]].
+**Em uma frase:** é a inspeção do que a produção fabricou: o inspetor aprova ou reprova com um clique e um motivo, e nada segue adiante sem essa conferência. Nós `Q7` (inspeção) e `Q8` (aprova?) do [[00-Fluxo-Mestre-0b]].
 
 **Quando consultar:** dúvidas sobre a inspeção do que a produção fabricou: aprovação e reprovação antes de seguir adiante.
 
@@ -22,29 +22,22 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts), app-pc
 
 Recebe a parcial concluída pela produção ([[10-Producao-e-Roteiro]]). A inspeção de entrada, por lote, é outra raia ([[08-Qualidade-Entrada]]).
 
-> [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
-> - N16-128: pode reprovar só parte (5 de 100 peças). Hoje reprova tudo.
-> - N16-129: sem laudo nem checklist. Um clique e um motivo.
-> - N16-141: no retrabalho, o PCP escolhe o setor de volta. Hoje volta ao anterior.
-> - Aprovado vai ao Estoque como lote ([[Contratos-da-v2|LOG-53]]); baixa na retirada ([[Contratos-da-v2|LOG-54]]).
-> - Código: o "sim" (`aprovar-saida`) e o lote do fabricado estão só na `develop` do `api-pcp` e do `app-pcp` (27/10/2026, `ab3318d`). A `main` do MES parou em 08/10 e só recebe com o merge BL-035.
-
 ## Como funciona, passo a passo
 
 1. A produção conclui a parcial e ela cai na fila da Qualidade. `Q7`
 2. O inspetor recebe a parcial e inicia a inspeção. `Q7`
-3. Ele decide com um clique e um motivo. `Q8`
+3. Ele decide com um clique e um motivo. Não há laudo nem checklist (N16-129). `Q8`
 4. Aprovado: o item volta ao Estoque e vira lote quando o almoxarife informa a localização (na `develop`; na `main` do MES ainda segue à Expedição). `Q8`
 5. Reprovado: o sistema abre uma divergência com o motivo. `Q8`
-6. O PCP decide: falso alarme, retrabalho ou reabrir a compra. `P6`
+6. A parcial reprovada tem duas saídas na fila: falso alarme ou retrabalho. Decisões maiores, como ajustar o roteiro ou reabrir a compra, são o novo norte do PCP (`P6`), que ainda não tem tela. `P6`
 
 ## Exemplo
 
 As 100 flanges chegam à inspeção de saída. O inspetor as confere.
 
 - Estando boas, ele as aprova (tudo ou só uma quantidade). Elas voltam ao Estoque e viram lote (`develop`); na `main` do MES vão direto à Expedição.
-- Havendo problema, ele reprova com um motivo. Pela decisão, pode ser só 5 das 100. Hoje são as 100.
-- O PCP vê a divergência e escolhe entre falso alarme e retrabalho.
+- Havendo problema, ele reprova com um motivo. Pela decisão N16-128, pode ser só 5 das 100. Hoje são as 100.
+- O PCP vê a divergência e escolhe entre falso alarme e retrabalho. Se o problema for da compra, a reabertura da compra é decisão do novo norte (`P6`).
 
 ## Quem atua
 
@@ -56,19 +49,25 @@ As 100 flanges chegam à inspeção de saída. O inspetor as confere.
 
 ## Regras que valem
 
+As decisões de 29/10/2026 (bloco N16-120 a N16-143) que tocam esta raia estão abaixo, com o ID.
+
 - Todo roteiro de fabricação tem um setor de Qualidade antes da Expedição. Revenda não exige.
 - Só se reprova em setor de Qualidade, com a inspeção em andamento.
-- Reprovado só tem duas saídas: falso alarme ou retrabalho.
-- Reprovação de saída não gera RNC nem nota de devolução. RNC é do lote comprado.
-- O fabricado aprovado vira lote e saldo no Estoque.
+- **Sem laudo nem checklist** (N16-129, 29/10/2026). A inspeção de saída é um clique e um motivo, como o código já faz. Nenhuma tela de laudo. A inspeção de entrada é diferente: lá a reprovação exige motivo e evidência.
+- **Pode reprovar só parte** (N16-128): por exemplo, 5 de 100 peças. Hoje o código reprova a parcela inteira.
+- **O que acontece com o reprovado:** na fila, só duas ações: falso alarme (volta à inspeção) ou retrabalho (volta a um setor). Pela N16-141, no retrabalho o PCP escolhe o setor de volta; hoje volta ao setor anterior. Ajustar o roteiro ou reabrir a compra é o novo norte do PCP (`P6`), fora da fila.
+- Reprovação de saída não gera RNC (Registro de Não Conformidade) nem nota de devolução. RNC é do lote comprado.
+- O fabricado aprovado vira lote e saldo no Estoque ([[Contratos-da-v2|LOG-53]]). A baixa acontece na retirada ([[Contratos-da-v2|LOG-54]]).
 
 ## O que já existe e o que falta
 
 - ✅ (`app-pcp`) Telas de inspeção e fila da Qualidade; reprovar, falso alarme e retrabalho.
 - ✅ (`api-pcp`) Na `develop` (27/10): o "sim" leva ao Estoque, com lote e saldo, por uma ação explícita de aprovar (`aprovar-saida`, com quantidade aprovada; o resto continua na inspeção).
+- O "sim" (`aprovar-saida`) e o lote do fabricado estão só na `develop` do `api-pcp` e do `app-pcp` (27/10/2026, `ab3318d`). A `main` do MES parou em 08/10 e só recebe com o merge BL-035.
+- 📝 ✅ (`api-pcp`) Sem laudo na saída (N16-129): é o que o código faz. A reprovação de saída pede só o motivo. Nada falta aqui.
 - 🔴 Reprovar só uma parte (N16-128): a reprovação continua sendo da parcela inteira.
+- 🔴 Escolha do setor de volta no retrabalho (N16-141): hoje volta ao anterior.
 - 🔴 Tela do novo norte do PCP; fila de inspeção de processo; reabrir divergência.
-- 🟡 Laudo ou evidência na reprovação de saída.
 - ❓ Uso real da tela em ambiente; regra de sucata e refugo.
 
 ## Detalhe técnico
@@ -77,7 +76,7 @@ As 100 flanges chegam à inspeção de saída. O inspetor as confere.
 
 Nada fabricado ou beneficiado segue sem inspeção. A inspeção é **um setor do roteiro** (tipo `QUALIDADE`), por parcial, não por lote. Reprovado: o PCP decide o novo norte (P6).
 
-**Código e decisão (atualizado em 29/10/2026).** A decisão do Nathan de 14/10 é que o "sim" do Q8 leva o item ao **Estoque** (`E5`: vira lote e saldo, sai pelo documento de retirada). Na `develop` do MES isso foi feito em 27/10 (`ab3318d`): `PATCH /itens-parciais/:id/aprovar-saida` leva a parcela ao Estoque e `receber-fabricado` cria o lote. 🔴 A saída pelo documento de retirada ainda não existe. Registro de 14/10 (superado na `develop`, ainda vale na `main`): não havia ação de aprovar; o inspetor usava `mover` e a parcial caía na próxima etapa do roteiro, de tipo `EXPEDICAO` (`itens-parciais.service.ts:426-435`, regra de ordem em `pedidos.service.ts:520-525`).
+**Código e decisão.** A decisão do Nathan de 14/10 é que o "sim" do Q8 leva o item ao **Estoque** (`E5`: vira lote e saldo, sai pelo documento de retirada). Na `develop` do MES isso foi feito em 27/10 (`ab3318d`): `PATCH /itens-parciais/:id/aprovar-saida` leva a parcela ao Estoque e `receber-fabricado` cria o lote. 🔴 A saída pelo documento de retirada ainda não existe. Na `main` do MES ainda vale o desenho antigo (registro de 14/10): não havia ação de aprovar; o inspetor usava `mover` e a parcial caía na próxima etapa do roteiro, de tipo `EXPEDICAO` (`itens-parciais.service.ts:426-435`, regra de ordem em `pedidos.service.ts:520-525`).
 
 ### Quem atua (onde)
 
@@ -97,10 +96,11 @@ Perfis são dados do banco; o inspetor precisa de `PerfilSetor.podeAtuar` no set
 | 1 | Todo roteiro de **fabricação** tem um setor tipo `QUALIDADE`, antes da primeira `EXPEDICAO` (EC-06). Revenda não exige | 📝 ✅ `pedidos.service.ts:512-525` |
 | 2 | `reprovar` só em setor tipo `QUALIDADE` e a partir de `EM_ANDAMENTO` | ✅ `itens-parciais.service.ts:966-989`, `:1017-1021` |
 | 3 | Reprovar grava histórico e abre `Divergencia` tipo `QUALIDADE`, `ABERTA`, com motivo | ✅ `:1036-1058` |
-| 4 | Reprovado só tem duas saídas: `resolver` (falso alarme, volta a `EM_ANDAMENTO`) ou `retrabalho` (volta ao setor anterior; pela N16-141, de 29/10, o PCP passará a escolher o setor). Mover, concluir, pausar e devolver somem | ✅ `acoes.ts:67` |
+| 4 | Na fila, reprovado só tem duas saídas: `resolver` (falso alarme, volta a `EM_ANDAMENTO`) ou `retrabalho` (volta ao setor anterior; pela N16-141, de 29/10, o PCP passará a escolher o setor). Mover, concluir, pausar e devolver somem. Ajustar roteiro e reabrir compra são do novo norte (`P6`, sem tela; item 3 de "O que falta desenvolver") | ✅ `acoes.ts:67` |
 | 5 | Aprovado volta ao Estoque: **lote e saldo do fabricado**, retirada depois ([[Contratos-da-v2\|LOG-53]], [[Contratos-da-v2\|LOG-54]]) | 📝 ✅ (`api-pcp`) lote e saldo na `develop` (27/10); 🔴 retirada |
 | 6 | Reprovação de inspeção de saída **não** gera RNC nem nota de devolução: RNC é conceito do lote comprado | ✅ `rncs` só em `qualidade.service.ts:212` |
-| 7 | Inspeção de saída tem trava de laudo? Pergunta T-04 para a inspeção documental (ciclo 2). Hoje não há laudo na saída. **Decidido em 29/10 (N16-129): sem laudo nem checklist.** | 📝 ✅ (`api-pcp`) |
+| 7 | Inspeção de saída sem laudo nem checklist: um clique e um motivo (N16-129, 29/10, responde a pergunta T-04 da inspeção documental, ciclo 2). Hoje não há laudo na saída | 📝 ✅ (`api-pcp`) |
+| 8 | Pode reprovar só parte da parcial (N16-128, 29/10) | 📝 🔴 |
 
 ### Estados
 
@@ -137,7 +137,7 @@ Contrato com o av-hub: só a etapa do item ([[Contratos-da-v2|API-005]], [[Contr
 
 - O "Aprovar" que aparece na tela (rótulo da ação `resolver`, `fila/CartaoItemParcial.tsx:150`, em 14/10) **não** aprovava a inspeção: só desfaz uma reprovação. Na `develop` há a ação explícita `aprovar-saida`; conferir o rótulo na tela do `app-pcp` (❓).
 - Como a Qualidade é um setor comum no roteiro, `ehUltimaEtapa` é falso nela (a Expedição vem depois), então a tela oferece `mover`, não `concluir` (`fila/CartaoItemParcial.tsx:301-302`).
-- Registro de 14/10 (superado na `develop`): o fabricado aprovado nunca passava pelo Estoque, e `mover` levava a parcial direto à primeira etapa `EXPEDICAO`. Na `develop`, a reserva do lote `PRODUCAO` nasce em `receber-fabricado`.
+- Na `main` do MES (registro de 14/10), o fabricado aprovado nunca passa pelo Estoque, e `mover` leva a parcial direto à primeira etapa `EXPEDICAO`. Na `develop`, a reserva do lote `PRODUCAO` nasce em `receber-fabricado`.
 - `ensureLotesCompradosLiberados` só barra envio a setor `ESTOQUE` com lote comprado pendente (`service:862-874`); não protege este caso.
 - `Pedidos.acompanhamentoQualidade` (V2) é gravado (`producao.prisma:118`) e mostrado na Triagem, mas nenhuma fila consome ([[03-Pedido-de-Venda-e-Liberacao]], item 7).
 - ❓ Ninguém conferiu o uso real da tela em ambiente.
@@ -147,17 +147,18 @@ Contrato com o av-hub: só a etapa do item ([[Contratos-da-v2|API-005]], [[Contr
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
 | 1 | O "sim" do Q8 leva ao Estoque, com lote e saldo do fabricado: feito na `develop` (27/10). Falta o documento de retirada | Robert | Q8, `E5`, `E6` | ✅ (`api-pcp`) lote; 🔴 retirada |
-| 2 | Ação explícita de aprovar na inspeção, com quantidade aprovada: feita na `develop` (`aprovar-saida`). Falta a quantidade reprovada (reprovação parcial, N16-128), o motivo e a evidência | Robert | Q7 | ✅ (`api-pcp`) aprovar; 🔴 reprovar em parte |
+| 2 | Ação explícita de aprovar na inspeção, com quantidade aprovada: feita na `develop` (`aprovar-saida`). Falta a quantidade reprovada (reprovação parcial, N16-128). O motivo já existe; laudo e evidência não entram (N16-129) | Robert | Q7 | ✅ (`api-pcp`) aprovar; 🔴 reprovar em parte |
 | 3 | Tela do novo norte para a reprovação (P6): retrabalho, ajustar roteiro, reabrir compra. `/decisoes-pcp` só trata recebimento | Robert, Nathan | P6 | 🔴 |
-| 4 | Laudo ou evidência na reprovação de saída (a reprovação de entrada exige motivo e evidência, a de saída só motivo) | Robert, Qualidade | Q7 | 🟡 |
+| 4 | Laudo ou evidência na reprovação de saída: resolvido pela N16-129 (sem laudo nem checklist; a de entrada exige motivo e evidência, a de saída só motivo, e assim fica) | Robert, Qualidade | Q7 | 📝 ✅ (`api-pcp`) |
 | 5 | Fila de inspeção de processo que usa `acompanhamentoQualidade` (ciclo 2, 22/01/2027) | Robert | V2 | 🔴 |
 | 6 | Reabertura de divergência encerrada | Robert | P6 | 🔴 |
+| 7 | Escolha do setor de volta no retrabalho (N16-141) | Robert | P6 | 🔴 |
 
 ### Pendências
 
-- Nathan e Qualidade: reprovação parcial na saída existe (parte aprovada segue, parte reprovada vai a retrabalho)? Hoje a parcial inteira é reprovada. (Decidido em 29/10, N16-128: pode reprovar só parte.)
 - Nathan: sucata e refugo da produção: como entram no saldo e no custo?
-- Qualidade: a inspeção de saída exige laudo (T-04)? (Decidido em 29/10, N16-129: sem laudo.)
+
+Respondidas em 29/10: a reprovação parcial na saída (parte aprovada segue, parte reprovada vai a retrabalho) existe (N16-128); a inspeção de saída não exige laudo (T-04, N16-129).
 
 ### Subfluxo
 
