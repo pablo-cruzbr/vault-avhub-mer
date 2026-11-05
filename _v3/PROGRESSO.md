@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 5 concluído, aguardando "ok" do Nathan para o Bloco 6
-Próxima ação: com o "ok", rodar a seção 1 e começar o Bloco 6 (CLAUDE.md na raiz do vault)
+Estado atual: Bloco 6 em andamento (falta aplicar a conferência do Backlog na develop)
+Próxima ação: aplicar nas 4 notas Backlog-Frente-* os selos conferidos na develop; depois validar, push e resumo do Bloco 6
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -85,7 +85,20 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Conferir a lista de fatos depois da divisão (2026-11-05: 0 fatos sumiram em 20 listas, 8.607 fatos; 11 linhas "conferir à mão", todas esperadas: 7 links cujo alvo virou a parte e 4 instruções de uso do Registro reescritas de propósito; `_v3/fatos/bloco5/conferencia.txt`). `fatos.mjs conferir` passou a ignorar flags como nome de nota
 - [x] Extras: `build.mjs` do mapa lê os IDs também em `Contratos-da-v2-Lista-Completa` (442770a; 0 contratos sem nota); Regras e Guia explicam as notas divididas (ea913a1); o validador confere os selos também nas partes das raias e conta os contratos nas partes (859f4ce)
 
-### Blocos 6 a 9
+### Bloco 6: Entrada da IA, dicionário e manutenção
+- [x] Rodar a seção 1 (2026-11-05: nada novo na `develop` nem na `main`; `v3` = `origin/v3` b2fba97)
+- [x] Criar o `CLAUDE.md` na raiz do vault (2026-11-05, b1f9dd3; 41 linhas)
+- [x] Criar `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md` (2026-11-05, b426358; commits b97981c, 2e5456d, befd973, 93f96de e master 5e7e94d; reconferir no Bloco 7)
+- [x] Criar a nota `Tipos-de-ID` (2026-11-05, e0335c2; em `01-Projeto/`; próximos livres: N16-150, BL-082, PS-042, OQ-49, RS-023, CR-20, INT-10, LOG-56, SQL-022, API-019, CON-04)
+- [~] Dar dono único ao status: `Onde-Estamos` e `Backlog`, ambos conferidos na `develop`
+  - [x] `Onde-Estamos` alinhado às raias conferidas no Bloco 3 e com `develop-conferida` (ce95553): 08 deixa de ser "✅ Pronto" (fechar RNC 🔴), 10 passa de "🔴 consumo" a "🟡 matéria-prima", 11 fica "✅ aprovar · 🔴 reprovar parte", 02 ganha "🔴 sem API e sem banco (F3)", 15 ganha "🟡 core_comissao testado no banco"; nova seção "Publicado na main (informação)" com a contagem de 05/11 (api-acos-vital 0, av-hub 12, api-pcp 53, app-pcp 51), vinda de `Sistemas-e-Responsabilidades`; o `Roteiro-da-Proposta-em-Diante` ganhou aviso de que o status é do Onde-Estamos e do Backlog. Fatos: 0 sumiram (`_v3/fatos/bloco6`)
+  - [~] Backlog: 78 itens BL conferidos na `develop` por 3 agentes de leitura (Robert; Gustavo; Nathan + Comercial); falta aplicar
+- [x] Reordenar `Home` e `Comece-Aqui`; trilhas para Vendas, Orçamento e Compras, Estoque, Qualidade, Produção, Expedição, Fiscal e Comissão (56ab10e)
+- [x] Corrigir as referências à numeração antiga (56ab10e: só a frase "notas 11 a 14" do Home; em Telas não havia mais; "a nota 11 da tag v2" nas partes é histórica e ficou)
+- [x] Criar `00-Inicio/Manual-de-Manutencao-do-Vault` (dcf1852; 14 seções, todos os itens da instrução)
+- [x] Mover os scripts de validação para `scripts/` (f2c482f: `validar.mjs`, `fatos.mjs` (agora com `--dir=`, padrão `scripts/fatos/`) e `dividir.mjs`); citados no Manual e no `CLAUDE.md`. Os scripts de bloco ficam em `_v3/scripts/`
+
+### Blocos 7 a 9
 - [ ] Pendentes (ver `_v3/INSTRUCAO.md`, seção 8)
 
 ## Validações
