@@ -35,6 +35,7 @@ Quando o Nathan disser "atualizar o vault" (ou "atualiza o vault", "sincroniza o
 ## Scripts (Node, em `scripts/`)
 
 - `node scripts/validar.mjs`: links, órfãs, CRLF, codificação, tamanho, dono dos nós e selos. Rode depois de toda mudança.
+- `node scripts/autoteste-validador.mjs`: prova, numa cópia temporária, que o validador acusa o que deve. Rode depois de mexer no validador.
 - `node scripts/fatos.mjs extrair <nota.md>` antes de reescrever ou dividir uma nota, e `node scripts/fatos.mjs conferir` depois.
 - `node scripts/dividir.mjs <chave> --simular`: divide uma nota acima de 25 KB (acrescente a entrada no `PLANO`).
 - `cd 09-Diagramas/mapa && node build.mjs`: regenera o mapa HTML.
