@@ -113,13 +113,14 @@ Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (C
 
 Tomadas pelo Nathan entre 16 e 26/10/2026, com respostas da Controladoria (Michele), de Compras e da Gerência. Desenham a proposta (`V0`), o Orçamento (`B1` a `B4`), o pedido de venda do Hub, as datas, o faturamento em partes, o custo real por evento e a comissão nova (`K1` a `K6`). O fluxo foi aprovado em 26/10/2026 ([[01-Proposta-de-Venda|11-Proposta-e-Pedido-de-Venda]] e `09-Diagramas/artifact-proposta-pedido.html`). Os contratos dessa parte foram removidos em 29/10/2026 ([[Contratos-da-v2]]); o Robert cria os novos.
 
-A tabela fica em 5 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3). As linhas foram movidas sem mudança:
+A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3). As linhas foram movidas sem mudança:
 
 - [[Registro-N16-01-a-N16-43]]: N16-01 a N16-43
 - [[Registro-N16-44-a-N16-72]]: N16-44 a N16-72
 - [[Registro-N16-73-a-N16-96]]: N16-73 a N16-96
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
+- [[Registro-N16-150-a-N16-152]]: N16-150 a N16-152 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026)
 
 ## Onde está cada decisão
 

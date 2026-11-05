@@ -5,7 +5,7 @@ estado-em: 2026-11-05
 status: proposta
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
 parte-de: "[[01-Proposta-de-Venda]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 1654f65, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10]
 ---
 
@@ -92,7 +92,7 @@ O enum antigo, no `api-comercial` do Pablo (legado só para leitura), era `Statu
 
 ### Pedido de venda do hub (`status_sincronizacao_omie`)
 
-Mesmo vocabulário da OC (`pendente`, `sincronizado`, `erro`; Dump Avhub 17315-17320): `pendente` (na fila), `sincronizado` (Omie criou; guarda o número do Omie), `erro` (Omie recusou; texto do erro; botão "Tentar novamente", N16-36). ✅ `POST /comercial/propostas/:id/transformar` já grava o pedido do Hub `pendente` (`develop`, 29/10); 🔴 nada o envia ao Omie ainda.
+Mesmo vocabulário da OC (`pendente`, `sincronizado`, `erro`; Dump Avhub 17315-17320): `pendente` (criado no Hub), `sincronizado` (Omie criou; guarda o número do Omie), `erro` (Omie recusou; texto do erro; botão "Tentar novamente", N16-36). ✅ `POST /comercial/propostas/:id/transformar` grava o pedido do Hub e já tenta enviá-lo ao Omie na mesma requisição, e `POST /comercial/pedidos/:id/enviar-omie` reenvia (`api-acos-vital` `propostas.route.js:597-618` e `pedidos.route.js:30`, `develop` 1654f65). ❓ O banco dessas funções (`fn_pedido_venda_envio_iniciar`, `fn_pedido_venda_omie_registrar`, `fn_pedido_venda_omie_erro`) vem da migration `2026-11-05_comercial_pedido_venda_omie.sql`, fora do repositório e do dump de 04/11.
 
 O pedido de aprovação do vendedor (`C8`) está em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
 
@@ -133,7 +133,10 @@ Em 29/10/2026 a `api-acos-vital` (`develop`, `cc30c85`) monta estas rotas sob `/
 | `POST /comercial/propostas/:id/aprovar` | `ABERTA` para `APROVADA` | `V0.4`, `V0.5` | ✅ `api-acos-vital` |
 | `POST /comercial/propostas/:id/cancelar` `{ motivo }` | cancelar (`ABERTA` ou `APROVADA`) | `V0C` | ✅ `api-acos-vital` |
 | `POST /comercial/propostas/:id/copiar` | nova `ABERTA` a partir desta | `V0.1` | ✅ `api-acos-vital` |
-| `POST /comercial/propostas/:id/transformar` | pedido do Hub (`pendente`) e simulação v1, numa transação; não escreve no Omie | `V0.6` | ✅ `api-acos-vital`; 🔴 envio ao Omie (`V0.7`) |
+| `POST /comercial/propostas/:id/transformar` | pedido do Hub (`pendente`) e simulação v1, numa transação; recebe no corpo `data_previsao` (obrigatória), `numero_pedido_cliente`, `codigo_categoria`, `numero_contrato` (`SPOT` ou `CONTRATO`), `bloqueado` e `frete_modalidade`, e em seguida envia o pedido ao Omie (`IncluirPedido`, uma tentativa só) | `V0.6`, `V0.7` | ✅ `api-acos-vital` `propostas.route.js:579-618`, `develop` 1654f65; ❓ banco (migration de 05/11 fora do repositório); 🔴 tela e BFF |
+| `POST /comercial/pedidos/:id/enviar-omie` | "Tentar novamente": reenvia ao Omie o pedido do Hub `pendente` ou com `erro`; aceita os mesmos seis campos do modal para trocar o gravado; 409 `ENVIO_EM_ANDAMENTO` ou `PEDIDO_JA_SINCRONIZADO` | `V0.7` | ✅ `api-acos-vital` `pedidos.route.js:30`, `develop` 1654f65; ❓ banco |
+| `GET /comercial/produtos?codigo_empresa=` | catálogo da unidade da proposta, só ativos; unidade obrigatória | `V0.2` | ✅ `api-acos-vital` `produtos.route.js:42`, `develop` 1654f65 |
+| `GET /categorias?codigo_empresa=&tipo=receita` | categorias de receita lançáveis (sem totalizadoras e sem `nao_exibir`) da unidade, para o campo categoria | `V0.6` | ✅ `api-acos-vital` `categorias.route.js:47-57`, `develop` 1654f65 |
 | `POST /comercial/clientes`, `GET /comercial/parceiros` | cadastrar cliente no Omie da unidade; listar parceiros | `V0.1` | ✅ `api-acos-vital` (28 e 29/10) |
 
 Rotas do `api-comercial` de teste (legado) ainda sem equivalente na `api-acos-vital`, e rotas novas ainda por fazer:

@@ -7,7 +7,7 @@ ordem: 1
 nos: [V0.1, V0.2, V0.3, V0.4, V0.5, V0.6, V0.7, V0C]
 anterior: "[[00-Fluxo-Mestre-0b]]"
 proxima: "[[02-Orcamento-Base-de-Preco]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 1654f65, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
 fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10]
 ---
@@ -29,7 +29,7 @@ Nesta etapa o vendedor também acompanha o pedido, aprova compras mais caras e p
 3. O sistema calcula margem e comissão estimada. Só o vendedor vê. Item sem custo e sem fornecedor deixa a proposta incompleta, e ela não pode ser aprovada. `V0.3`
 4. A Gerência aprova desconto e margem pessoalmente, fora do sistema, neste ciclo. `V0.4`
 5. O vendedor marca "aprovada" no sistema. O sistema grava quem, quando e qual revisão, e a proposta trava. Se a proposta não segue, ela é cancelada e não reabre. `V0.5`, `V0C`
-6. O vendedor clica em "Transformar em pedido de venda". Ele precisa dizer se a Qualidade acompanha o pedido. `V0.6`
+6. O vendedor clica em "Transformar em pedido de venda" e responde seis campos (N16-150): se a Qualidade acompanha o pedido por todos os processos (`Sim` ou `Não`); a previsão de faturamento, que é a data de entrega ao cliente; se a venda é `SPOT` (cliente sem contrato) ou `CONTRATO`; se o pedido fatura em partes ou só quando tudo estiver pronto; o número do pedido do cliente (opcional); e a categoria, escolhida numa lista com código e descrição. Se fatura em partes, a data do pedido é a data final e cada item leva a sua data, igual ou anterior a ela. `V0.6`
 7. O sistema coloca o pedido numa fila e a integração o cria no Omie. Se o Omie recusar, aparece o motivo e o botão "Tentar novamente". `V0.7`
 8. O pedido nasce liberado e o PCP o vê na triagem (`V1` a `V3`): ver [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 9. Compras confere a parte de compras e, se comprar acima do valor da proposta, o vendedor aprova ou reprova por produto: `C6`, `C7` e `C8` estão em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
@@ -70,6 +70,9 @@ Quem desenvolve (N16-117 a N16-119):
 - Proposta incompleta (item sem custo e sem fornecedor) não pode ser aprovada.
 - O botão "Transformar em pedido" só aparece na proposta aprovada.
 - Sem a resposta "a Qualidade acompanha?", o pedido não é criado. O vendedor pode corrigir até o MES (sistema de chão de fábrica) importar o pedido.
+- Sem os campos obrigatórios do modal (Qualidade, previsão de faturamento, `SPOT` ou `CONTRATO`, faturamento em partes ou não e categoria), o pedido não é criado. O tipo da venda (`SPOT` ou `CONTRATO`) é só informativo. Em faturamento em partes, a data por item é obrigatória (N16-150) 📝.
+- Qualidade "Sim": o PCP é obrigado a pôr a Qualidade em todo o roteiro e em todas as etapas da fábrica. É mudança do lado do MES, em contrato à parte (N16-151) 📝.
+- Refaturamento: se a categoria escolhida é de refaturamento, a comissão do vendedor nesse pedido é desconsiderada. Quais categorias são refaturamento ainda será definido (N16-152, PS-040) 📝.
 - O pedido nasce liberado; o cancelamento do pedido (antes e depois de faturar) está em [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 - O vendedor não é dono do dado de custo. Ele decide o valor que põe e responde por ele.
 - Regras de Compras sobre a proposta (não altera a proposta, compra acima do valor, reprovação, aviso favorável): [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
@@ -93,14 +96,16 @@ Quem desenvolve (N16-117 a N16-119):
 
 - ✅ API da proposta na `api-acos-vital` (`develop`, `cc30c85`, de 28 e 29/10). As rotas ficam em `/comercial/propostas`: criar, listar, resumo, detalhe, linha do tempo, revisar (`PUT`, com `If-Match`), aprovar, cancelar com motivo, copiar e **transformar em pedido do Hub**.
 - ✅ Também existem `POST /comercial/clientes` (cadastra o cliente no Omie da unidade), `GET /comercial/parceiros`, `/me`, `/empresas_emissoras`, `/responsaveis` e `/parametros_custo`.
-- 🔴 Criar o pedido no Omie (`V0.7`). Desde 03/11/2026 o envio é síncrono, direto da `api-acos-vital` ao `IncluirPedido`, sem fila nem pipeline (N16-149; [[Mapa-IncluirPedido-Omie]]); o desenho anterior era por fila e pipeline, com a pipeline como 2ª etapa. Hoje o pedido do Hub nasce com `status_sincronizacao_omie = pendente`. Ele fica `pendente`, e nada o envia: a API **não escreve no Omie** nesse passo.
+- 🟡 Criar o pedido no Omie (`V0.7`). Desde 03/11/2026 o envio é síncrono, direto da `api-acos-vital` ao `IncluirPedido`, sem fila nem pipeline (N16-149; [[Mapa-IncluirPedido-Omie]]). ✅ O código existe na `develop`: o `transformar` cria o pedido do Hub e, na mesma requisição, chama `ConsultarPedido` e depois `IncluirPedido` com uma tentativa só, para não duplicar (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:74` e `:151`, `develop` 1654f65). Se o Omie recusar, o pedido fica no Hub com status `erro` e a rota `POST /comercial/pedidos/:id/enviar-omie` faz o "Tentar novamente" (`pedidos.route.js:30`). 🔴 Falta o BFF e a tela chamarem essas rotas, e ❓ falta o banco (ver "O banco"). Nenhum teste real no Omie está registrado (BL-081).
 - 🟡 Nomes de rota das partes que faltam: o Gustavo e o Robert fecham.
+- 🟡 O corpo do `transformar` já recebe previsão de faturamento (obrigatória), número do pedido do cliente, categoria (opcional), `numero_contrato` (`SPOT` ou `CONTRATO`, opcional), `bloqueado` e `frete_modalidade` (✅ `api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:579-618`, `develop` 1654f65). Também há `GET /comercial/produtos` (catálogo da unidade da proposta, `produtos.route.js:42`) e `GET /categorias?tipo=receita` (categorias de receita lançáveis, `categorias.route.js:47-57`), que alimentam o item e o campo categoria do modal.
+- 🔴 Faltam no `transformar`: a resposta da Qualidade, o faturamento em partes com a data por item, e tornar obrigatórios o tipo da venda e a categoria (N16-150). O refaturamento sem comissão e a Qualidade no roteiro do PCP também não existem no código (N16-151, N16-152).
 
 **O banco**
 
 - ✅ No banco, o dump de 29/10 traz `core_comercial.propostas`, os itens, as versões, os eventos e a função `fn_proposta_criar`.
 - ✅ No banco de teste (dump de 04/11/2026, [[Dump-AvHub-Teste-2026-11-04]]), as funções de revisar, aprovar, cancelar, copiar, transformar e expirar existem: `fn_proposta_revisar`, `fn_proposta_aprovar`, `fn_proposta_cancelar`, `fn_proposta_copiar`, `fn_proposta_transformar` e `fn_propostas_expirar`. No dump de 29/10 elas não estavam.
-- ✅ (`api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:548-568`, que chama `core_comercial.fn_proposta_transformar`; a função e as tabelas estão no Dump de 04/11, [[Dump-AvHub-Teste-2026-11-04]]) O `transformar` grava o pedido do Hub em `core_comercial.pedidos_venda` e `pedidos_venda_itens` (status `ABERTO` ou `CANCELADO`, `status_sincronizacao_omie` `pendente`) e a simulação de comissão (`core_comissionamento.simulacoes`). 🔴 Ele não grava liberação (N16-05; BL-069).
+- 🟡 A rota chama `fn_proposta_transformar` com **4 argumentos** (`api-acos-vital` `propostas.route.js:605`, `develop` 1654f65), mas o Dump de 04/11 ([[Dump-AvHub-Teste-2026-11-04]]) só tem a versão de **3 argumentos**. A versão nova vem da migration `2026-11-05_comercial_pedido_venda_omie.sql`, citada no código e **ausente do repositório e do dump** ❓: sem ela aplicada, a rota não funciona. O que o dump de 04/11 mostra: o `transformar` grava o pedido do Hub em `core_comercial.pedidos_venda` e `pedidos_venda_itens` (status `ABERTO` ou `CANCELADO`, `status_sincronizacao_omie` `pendente`) e a simulação de comissão (`core_comissionamento.simulacoes`). 🔴 Ele não grava liberação (N16-05; BL-069).
 - ❓ A migration dessas funções continua fora do repositório (Gustavo).
 
 **Regras, contratos e testes**

@@ -11,6 +11,8 @@ fontes: ["Dump do Avhub para referência tst (esqueleto).sql, enviado pelo Natha
 
 **Em uma frase:** é o retrato mais novo do esquema do banco do av-hub, tirado do ambiente de **teste** em 04/11/2026, e mostra o que mudou desde o dump de 29/10: o módulo da proposta ganhou as funções e as tabelas do pedido do Hub, e as tabelas do módulo de teste do Pablo saíram.
 
+**Atenção (05/11/2026):** a `api-acos-vital` `develop` 1654f65 chama no banco o que **não está neste dump**, conferido por busca no arquivo: as funções `fn_pedido_venda_envio_iniciar`, `fn_pedido_venda_omie_registrar` e `fn_pedido_venda_omie_erro`; `fn_proposta_transformar` de 4 argumentos (o dump só tem a de 3); e, em `core_comercial.pedidos_venda`, as colunas `data_previsao`, `numero_contrato`, `bloqueado` e `tentativas_envio_omie`, além de `codigo_parcela`. O código as atribui à migration `2026-11-05_comercial_pedido_venda_omie.sql`, que não está no repositório. Já estão no dump a coluna `encargos` de `condicoes_pagamento_compras` e `fn_proposta_itens_produtos_conferir`. O arquivo do dump de 29/10 também saiu da `develop` nesse commit.
+
 **Quando consultar:** quando uma nota citar o banco do av-hub e você precisar saber se o que ela diz ainda vale; a nota geral do banco é o [[Banco-AvHub]].
 
 ## Ficha do arquivo
