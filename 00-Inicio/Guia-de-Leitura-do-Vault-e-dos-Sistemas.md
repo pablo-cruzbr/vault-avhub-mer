@@ -129,7 +129,7 @@ Antes de ler qualquer código, confirme a estrutura real de cada pasta (`README`
 
 **Achar pelo ID, não pela leitura.** Busque o ID exato (`N16-60`, `BL-035`, `PS-037`, `OQ-15`, `LOG-46`, `V0.3`) em vez de abrir a nota inteira. Prefixos: `N16`/`N14`/`DEC`/`EN`/`EC`/`#` são decisões, `BL` é tarefa do backlog, `PS` é ponta solta, `OQ` é pergunta em aberto, `RS` é risco, `LOG`/`SQL`/`API`/`CON` são contratos (os da v2 estão no `Contratos-da-v2`).
 
-**O que não ler inteiro.** `Registro-de-Decisoes` (190 KB), `Backlog-por-Frente`, `00-Fluxo-Mestre-0b` e `03-Modelo-Novo-core_comissao` passam de 45 KB; o `Contratos-da-v2` tem 30 KB (busque pelo ID). Leia o índice ou a seção e busque o resto. Os `.csv`, `.sql`, `.html` e PDFs de `04-Dados/Sequenciais`, `09-Diagramas` e `10-Anexo-Fora-do-Fluxo` só se a tarefa pedir.
+**Notas divididas.** Desde a v3, nenhuma nota passa de ~25 KB. A nota grande ficou com o resumo e um índice, e o detalhe foi para notas-parte em `<pasta>/Partes/` (frontmatter `parte-de`). Exemplos: o `Registro-de-Decisoes` é um índice, e as decisões estão em `Registro-N16-01-a-N16-43` e nas outras notas por faixa de ID; a tabela nó → raia do `00-Fluxo-Mestre-0b` está em `00-Fluxo-Mestre-0b-Tabela-1` a `-3`; o `Backlog-por-Frente` tem uma nota por frente; a lista completa de contratos está em `Contratos-da-v2-Lista-Completa`. Para achar um ID, use a busca do vault com o ID inteiro. Os `.csv`, `.sql`, `.html` e PDFs de `04-Dados/Sequenciais`, `09-Diagramas` e `10-Anexo-Fora-do-Fluxo` só se a tarefa pedir.
 
 **Regra do perfil de teste.** `Admin (Dev)` é perfil de teste do time de TI, não é ator. Nunca o liste em "quem atua", diagramas ou papéis.
 

@@ -32,7 +32,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca
 
 O que **falta desenvolver** no fluxo de Atividades ([[00-Fluxo-Mestre-0b]]), conferido no código em 14/10/2026. Cada item tem ID `BL-nnn` (estável, citado por outras notas), nó do 0b, contrato, selo e evidência. Dentro de cada frente a ordem é a dos nós do 0b (V, P, E, C, FN, R, Q, F, X, O) e depois o transversal. Divisão: Robert = MES (`api-pcp`, `app-pcp`); Gustavo = banco e API do av-hub; Nathan = front do HUB e coordenação; Robert também conduz o módulo Comercial & Suprimentos na `api-acos-vital` (N16-117, 28/10), com Pablo acompanhando ([[Equipe-e-Divisao]]). Selos: [[Regras-do-Vault]]. Lacunas de decisão e dúvidas: [[Pontas-Soltas]]; riscos: [[Riscos]].
 
-O lista completa desta nota fica em 4 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
+A lista completa desta nota fica em 4 notas à parte, uma por frente, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
 
 - [[Backlog-Frente-Robert]]: Frente Robert (MES: `api-pcp` e `app-pcp`)
 - [[Backlog-Frente-Gustavo]]: Frente Gustavo (banco e API do av-hub)
