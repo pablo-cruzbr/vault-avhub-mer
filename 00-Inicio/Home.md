@@ -38,7 +38,7 @@ O pedido começa na proposta (ou no pedido digitado no Omie) e termina na nota f
 
 ## Os setores do fluxo, na ordem do pedido
 
-[[11-Proposta-e-Pedido-de-Venda]] (com [[12-Orcamento-Base-de-Preco]]) → [[01-Vendas-Liberacao]] → [[02-PCP-Triagem-e-Destinacao]] → [[03-Estoque-Atendimento-e-Despacho]] → [[04-Circuito-de-Compra]] → [[05-Recebimento]] → [[06-Qualidade-Entrada]] → [[07-Producao-e-Roteiro]] → [[08-Qualidade-Saida]] → [[09-Expedicao]] → [[10-Fiscal-Omie]] → [[13-Custo-Real-e-Comissao-no-Fluxo]]
+[[01-Proposta-e-Pedido-de-Venda]] (com [[02-Orcamento-Base-de-Preco]]) → [[03-Pedido-de-Venda-e-Liberacao]] → [[04-PCP-Triagem-e-Destinacao]] → [[05-Estoque-Atendimento-e-Despacho]] → [[06-Circuito-de-Compra]] → [[07-Recebimento]] → [[08-Qualidade-Entrada]] → [[10-Producao-e-Roteiro]] → [[11-Qualidade-Saida]] → [[13-Expedicao]] → [[14-Fiscal-Omie]] → [[15-Custo-Real-e-Comissao]]
 
 As notas 11 a 14 vieram depois das 01 a 10. Por isso o número não segue a ordem do fluxo.
 

@@ -13,7 +13,7 @@ fontes: [v1 08-Integracao-Omie/01-Dados-Extraidos/Pedidos-de-Venda, omie-elt-pip
 
 **Quando consultar esta nota:** ao procurar o significado de uma coluna do pedido ou do item, ou ao entender como o pedido chega ao hub (nó V1).
 
-Nó V1 do [[00-Fluxo-Mestre-0b]]: o pedido nasce no Omie e chega ao av-hub travado ([[01-Vendas-Liberacao]]).
+Nó V1 do [[00-Fluxo-Mestre-0b]]: o pedido nasce no Omie e chega ao av-hub travado ([[03-Pedido-de-Venda-e-Liberacao]]).
 
 ## `core_vendas_faturamento.pedidos_vendas`
 

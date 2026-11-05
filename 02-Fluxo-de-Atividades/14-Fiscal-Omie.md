@@ -11,7 +11,7 @@ fontes: [omie-elt-pipeline 0f739f0 (notasFiscais.ts, pedidosVendas.ts, scheduler
 
 **Em uma frase:** é a etapa em que o Omie emite a nota fiscal e dá baixa nos itens do pedido. O sistema nunca emite nem edita nota; só recebe o que o Omie emitiu.
 
-Nós `O1` (emite a nota) e `O2` (baixa o item) do [[00-Fluxo-Mestre-0b]], depois de `X4` ([[09-Expedicao]]). Contexto: [[Pipeline-Omie]] e [[Omie-Integracao-Estado]].
+Nós `O1` (emite a nota) e `O2` (baixa o item) do [[00-Fluxo-Mestre-0b]], depois de `X4` ([[13-Expedicao]]). Contexto: [[Pipeline-Omie]] e [[Omie-Integracao-Estado]].
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-130: o vendedor decide nota inteira ou em partes, pela marca "pode faturar em partes".
@@ -72,10 +72,10 @@ O Omie é o sistema fiscal e financeiro (decisão #30 do registro de 07/10). O M
 |---|---|---|
 | 1 | Emissão fiscal 100% no Omie; nenhum módulo do ERP emite ou edita NF | 📝 (#30) |
 | 2 | A baixa de item no pedido volta pelo **pipeline** (polling), sem tela e sem escrita do MES | 📝 ✅ |
-| 3 | Parcial x integral na faturação é decisão da Expedição ([[09-Expedicao]], X2, T-06); pela N16-130, de 29/10, quem decide é o vendedor, pela marca "pode faturar em partes" | 📝 |
+| 3 | Parcial x integral na faturação é decisão da Expedição ([[13-Expedicao]], X2, T-06); pela N16-130, de 29/10, quem decide é o vendedor, pela marca "pode faturar em partes" | 📝 |
 | 4 | A sinalização ao Omie é uma fila de cargas prontas (tela 11.1), com acompanhamento do número e da chave da NF pelo pipeline | 🟡 desenho, sem código |
 | 5 | Remessa de produtos (registro de remessa) fica para o Ciclo 2 (22/01/2027) | 📝 |
-| 6 | Só uma escrita do pipeline no Omie: envio da OC (`UpsertPedCompra`, `ExcluirPedCompra`; `omie-elt-pipeline` `master` sem mudança desde 08/10). A `api-acos-vital` (`develop`) já escreve cliente no Omie por `UpsertClienteCpfCnpj` (`260e835`, 28/10, `src/utils/omie.js`); o pedido da proposta (`IncluirPedido`) ainda não é enviado: `POST /comercial/propostas/:id/transformar` grava o pedido do Hub com `status_sincronizacao_omie = pendente` e deixa o envio para a pipeline | ✅ [[04-Circuito-de-Compra]]; 🔴 envio do pedido |
+| 6 | Só uma escrita do pipeline no Omie: envio da OC (`UpsertPedCompra`, `ExcluirPedCompra`; `omie-elt-pipeline` `master` sem mudança desde 08/10). A `api-acos-vital` (`develop`) já escreve cliente no Omie por `UpsertClienteCpfCnpj` (`260e835`, 28/10, `src/utils/omie.js`); o pedido da proposta (`IncluirPedido`) ainda não é enviado: `POST /comercial/propostas/:id/transformar` grava o pedido do Hub com `status_sincronizacao_omie = pendente` e deixa o envio para a pipeline | ✅ [[06-Circuito-de-Compra]]; 🔴 envio do pedido |
 
 ### Estados
 
@@ -92,9 +92,9 @@ O Omie é o sistema fiscal e financeiro (decisão #30 do registro de 07/10). O M
 | 7 | `autorizado` | `Autorizado` |
 | 8 | nenhuma | `Pendente` |
 
-Os flags vêm dos campos `S`/`N` do cabeçalho e de `infoCadastro` (`pedidosVendas.ts:134-136`). `pedidos_vendas.etapa` (`numeric(2,0)`) é a etapa do Omie (`cabecalho.etapa`); os nomes por operação estão em `core.etapas_faturamento` (Dump Avhub linha 11084; recurso `etapasFaturamento` habilitado, tabela populada em produção, registro #5). `sequencial` 0 é o pedido guarda-chuva e 1, 2... são parciais. A liberação (`status_liberacao`) usa `situacao = 'Pendente'` ([[01-Vendas-Liberacao]]).
+Os flags vêm dos campos `S`/`N` do cabeçalho e de `infoCadastro` (`pedidosVendas.ts:134-136`). `pedidos_vendas.etapa` (`numeric(2,0)`) é a etapa do Omie (`cabecalho.etapa`); os nomes por operação estão em `core.etapas_faturamento` (Dump Avhub linha 11084; recurso `etapasFaturamento` habilitado, tabela populada em produção, registro #5). `sequencial` 0 é o pedido guarda-chuva e 1, 2... são parciais. A liberação (`status_liberacao`) usa `situacao = 'Pendente'` ([[03-Pedido-de-Venda-e-Liberacao]]).
 
-O MES não tem estado fiscal: guarda só `Entrega.numeroNf` (texto de até 30 caracteres) digitado na entrega e `ItensPedido.quantidadePendente` ([[09-Expedicao]]).
+O MES não tem estado fiscal: guarda só `Entrega.numeroNf` (texto de até 30 caracteres) digitado na entrega e `ItensPedido.quantidadePendente` ([[13-Expedicao]]).
 
 ### Telas
 
@@ -171,4 +171,4 @@ flowchart TD
     O2 -.->|"volta da NF ao MES (sem codigo)"| X4
 ```
 
-Raia anterior: [[09-Expedicao]]. Visão geral: [[00-Fluxo-Mestre-0b]].
+Raia anterior: [[13-Expedicao]]. Visão geral: [[00-Fluxo-Mestre-0b]].

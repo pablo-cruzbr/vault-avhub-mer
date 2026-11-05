@@ -39,17 +39,17 @@ O ERP reúne quatro sistemas que se falam por contratos (mais a `api-comercial`,
 Os IDs entre parênteses são os nós do [[00-Fluxo-Mestre-0b]].
 
 1. **O pedido nasce no Omie** e chega travado ao av-hub pela pipeline (`V1`) ✅.
-2. **O vendedor libera o pedido.** Ele marca se a Qualidade acompanha desde o início (`V2`, `V3`) ✅. Nota: [[01-Vendas-Liberacao]].
+2. **O vendedor libera o pedido.** Ele marca se a Qualidade acompanha desde o início (`V2`, `V3`) ✅. Nota: [[03-Pedido-de-Venda-e-Liberacao]].
 3. **PCP, Triagem do Pedido.** A tela lista só os pedidos liberados (`P1`) ✅.
-4. **PCP, Destinação do Pedido.** O PCP define o destino de cada item (`FABRICACAO` ou `REVENDA`) e a quantidade. O backend insere o Estoque como etapa 1 e confirma a importação ao av-hub (`P2`) ✅. Nota: [[02-PCP-Triagem-e-Destinacao]].
-5. **Estoque.** Confere o saldo na filial do pedido e atende o que puder (divide a parcial e reserva). Para o resto, pede compra ou envia à produção (`E1` a `E4`) ✅. Nota: [[03-Estoque-Atendimento-e-Despacho]].
-6. **Compra, se faltou material.** O fluxo é requisição, cotação, aprovação, ordem de compra (OC), envio ao Omie e acompanhamento (`P3`, `C0` a `C5`) ✅. A requisição nasce no PCP (no MES) ou no Compras (no av-hub). O MES já lê as OCs do Hub (job K4, na `develop` desde 15/10); falta usar essa leitura para o PCP ver a OC do pedido e o Estoque ver o saldo futuro 📝 🔴 (N14-20, BL-049, BL-050). Nota: [[04-Circuito-de-Compra]].
-7. **Recebimento.** A OC aprovada vira "esperada". A doca registra a chegada com a nota fiscal (NF), confere, pesa e cria o lote em quarentena (`R0` a `R4`, `R6`) ✅. Nota: [[05-Recebimento]].
-8. **Qualidade de entrada.** Inspeciona por lote. O aprovado vira saldo no Estoque. O reprovado abre uma RNC, o relatório de não conformidade (`Q1` a `Q4`, `E5`) ✅. Nota: [[06-Qualidade-Entrada]].
-9. **Produção.** O que o Estoque envia à produção passa pelos setores do roteiro (`F1`) ✅. Nota: [[07-Producao-e-Roteiro]].
-10. **Qualidade de saída.** Inspeciona no roteiro. O aprovado deve voltar ao Estoque. O reprovado vai ao PCP (`Q7`, `Q8`, `P6`) 🟡. Nota: [[08-Qualidade-Saida]].
-11. **Despacho e Expedição.** O Estoque despacha com um **documento de retirada** e baixa o saldo na retirada (`E6`): decidido em 29/10 (N16-120 a N16-122), sem código 🔴. A Expedição embala, paletiza, consolida a carga e cuida do transporte (`X1` a `X4`) 🟡. Notas: [[03-Estoque-Atendimento-e-Despacho]], [[09-Expedicao]].
-12. **Fiscal.** O Omie emite a nota e baixa o item no pedido (`O1`, `O2`) ✅ no lado do Omie. O MES ainda não avisa o Omie 🔴. Nota: [[10-Fiscal-Omie]].
+4. **PCP, Destinação do Pedido.** O PCP define o destino de cada item (`FABRICACAO` ou `REVENDA`) e a quantidade. O backend insere o Estoque como etapa 1 e confirma a importação ao av-hub (`P2`) ✅. Nota: [[04-PCP-Triagem-e-Destinacao]].
+5. **Estoque.** Confere o saldo na filial do pedido e atende o que puder (divide a parcial e reserva). Para o resto, pede compra ou envia à produção (`E1` a `E4`) ✅. Nota: [[05-Estoque-Atendimento-e-Despacho]].
+6. **Compra, se faltou material.** O fluxo é requisição, cotação, aprovação, ordem de compra (OC), envio ao Omie e acompanhamento (`P3`, `C0` a `C5`) ✅. A requisição nasce no PCP (no MES) ou no Compras (no av-hub). O MES já lê as OCs do Hub (job K4, na `develop` desde 15/10); falta usar essa leitura para o PCP ver a OC do pedido e o Estoque ver o saldo futuro 📝 🔴 (N14-20, BL-049, BL-050). Nota: [[06-Circuito-de-Compra]].
+7. **Recebimento.** A OC aprovada vira "esperada". A doca registra a chegada com a nota fiscal (NF), confere, pesa e cria o lote em quarentena (`R0` a `R4`, `R6`) ✅. Nota: [[07-Recebimento]].
+8. **Qualidade de entrada.** Inspeciona por lote. O aprovado vira saldo no Estoque. O reprovado abre uma RNC, o relatório de não conformidade (`Q1` a `Q4`, `E5`) ✅. Nota: [[08-Qualidade-Entrada]].
+9. **Produção.** O que o Estoque envia à produção passa pelos setores do roteiro (`F1`) ✅. Nota: [[10-Producao-e-Roteiro]].
+10. **Qualidade de saída.** Inspeciona no roteiro. O aprovado deve voltar ao Estoque. O reprovado vai ao PCP (`Q7`, `Q8`, `P6`) 🟡. Nota: [[11-Qualidade-Saida]].
+11. **Despacho e Expedição.** O Estoque despacha com um **documento de retirada** e baixa o saldo na retirada (`E6`): decidido em 29/10 (N16-120 a N16-122), sem código 🔴. A Expedição embala, paletiza, consolida a carga e cuida do transporte (`X1` a `X4`) 🟡. Notas: [[05-Estoque-Atendimento-e-Despacho]], [[13-Expedicao]].
+12. **Fiscal.** O Omie emite a nota e baixa o item no pedido (`O1`, `O2`) ✅ no lado do Omie. O MES ainda não avisa o Omie 🔴. Nota: [[14-Fiscal-Omie]].
 
 Três acompanhamentos correm em paralelo: o **status por item** (cartão "Etapa dos itens" no HUB), a **Torre de Fluxo** e o **custo do lote**. Ver [[Rastreabilidade-e-Torre-de-Fluxo]] e [[Modelo-Estoque-e-Custo-do-Lote]].
 
@@ -67,7 +67,7 @@ Cada regra tem o selo de confiança. A evidência de cada uma está em "Detalhe 
 8. **Segregação de função.** Quem conferiu o recebimento não faz a recontagem. Aprovar ou cancelar OC exige a permissão `pode_aprovar` ✅. A regra antiga "comprador diferente do aprovador" não foi achada no código ❓.
 9. **Cada banco tem seu esquema de schemas.** O MES usa só o `public`. O av-hub usa um schema por domínio 📝 ✅. Ver [[Schemas-Postgres]].
 10. **Todo item passa pelo Estoque**, seja fabricado ou comprado. Ele vira lote e saldo, e o despacho sai do Estoque com documento de retirada 📝. O fabricado aprovado na inspeção de saída já vira lote de origem `PRODUCAO` na `develop` do MES (LOG-53, 27/10) ✅; o documento de retirada e a baixa na retirada ainda não existem 🔴.
-11. **Aprovação da OC.** A OC acima de R$ 30 mil é aprovada pelo Gerente de Compras. Até R$ 30 mil, os compradores ficam livres. A Diretoria não aprova. A regra é provisória e endurece depois da conversa com Compras 🟡 📝 ✅ (N14-21 em [[Registro-de-Decisoes]]). Ver [[04-Circuito-de-Compra]].
+11. **Aprovação da OC.** A OC acima de R$ 30 mil é aprovada pelo Gerente de Compras. Até R$ 30 mil, os compradores ficam livres. A Diretoria não aprova. A regra é provisória e endurece depois da conversa com Compras 🟡 📝 ✅ (N14-21 em [[Registro-de-Decisoes]]). Ver [[06-Circuito-de-Compra]].
 12. **O recebimento confere contra a NF** (chave de 44 dígitos), não contra o pedido de venda ✅.
 
 ## O que existe e o que falta
@@ -101,7 +101,7 @@ Plano completo em [[Cronograma]].
 | 7 | Lote nasce em quarentena (`PENDENTE`); carga inicial nasce `LIBERADO` | ✅ | `api-pcp/src/compras/compras.service.ts` e `recebimento.service.ts` (lote `PENDENTE` com `ENTRADA`); `qualidade.service.ts` (aprovar libera) |
 | 8 | Segregação de função: quem conferiu não faz a recontagem; aprovar ou cancelar OC exige `pode_aprovar` na tela `compras` | ✅ | `api-pcp/src/compras/recebimento.service.ts`; `api-acos-vital/src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js` (contrato 22, B9; [[RBAC-e-Permissoes]]). A regra v1 "comprador diferente do aprovador" não foi achada no código ❓ |
 | 9 | Schemas. MES: tudo no `public`. av-hub: `auth`, `core`, `core_vendas_faturamento`, `core_fluxo`, `core_comissionamento`, `core_compras`, `core_estoque` (vazio), `core_organograma`, `core_aprovacao_de_vagas`, `core_mapas`, `historico`, `omie_ctl`, `omie_raw` | 📝 ✅ | Dump MES (sem `CREATE SCHEMA` além de `public`); Dump Avhub linhas 113-242. Ver [[Schemas-Postgres]] |
-| 10 | Todo item, fabricado ou comprado, passa pelo Estoque; despacho com documento de retirada | 📝 🔴 | Código ainda baixa na Embalagem (`itens-parciais.service.ts`, nota [[03-Estoque-Atendimento-e-Despacho]]) e não há documento de retirada. O fabricado já vira lote na `develop` (`OrigemLote.PRODUCAO` em `estoque.prisma`, LOG-53); na `main` do MES só existem `RECEBIMENTO` e `CARGA_INICIAL` |
+| 10 | Todo item, fabricado ou comprado, passa pelo Estoque; despacho com documento de retirada | 📝 🔴 | Código ainda baixa na Embalagem (`itens-parciais.service.ts`, nota [[05-Estoque-Atendimento-e-Despacho]]) e não há documento de retirada. O fabricado já vira lote na `develop` (`OrigemLote.PRODUCAO` em `estoque.prisma`, LOG-53); na `main` do MES só existem `RECEBIMENTO` e `CARGA_INICIAL` |
 | 11 | Aprovação da OC: acima de R$ 30 mil, Gerente de Compras; até R$ 30 mil, compradores livres; a Diretoria não aprova. Regra provisória | 📝 ✅ | N14-21 em [[Registro-de-Decisoes]]. O limite é parâmetro por unidade (`limite_aprovacao`, padrão `30000.00`: `condicoes_pagamento_compras.route.js`); a trigger `fn_ordens_compra_recalcular` aprova até o limite e a API exige `pode_aprovar` acima dele (`ordens_compra.route.js`). Quem emite pode ser o próprio Gerente que aprova, como o código faz hoje (N16-123) |
 | 12 | Recebimento confere contra a NF (chave de 44 dígitos), não contra o pedido de venda | ✅ | `compras.service.ts` (`chegada` exige NF); `app-pcp` tela `/logistica/logistica-entrada` |
 

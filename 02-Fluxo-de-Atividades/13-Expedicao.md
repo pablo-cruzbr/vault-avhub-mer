@@ -9,7 +9,7 @@ fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens
 
 # Expedição e logística de saída (X1 a X4)
 
-**Em uma frase:** a Expedição recebe o que está pronto, embala em pallets, decide se o pedido sai inteiro ou por partes, monta a carga e registra a entrega ao cliente. Nós `X1` a `X4` do [[00-Fluxo-Mestre-0b]]: embalagem e paletização, parcial ou integral, consolida a carga e transporte. Termina na emissão da nota no Omie ([[10-Fiscal-Omie]]). O sistema nunca emite nota fiscal.
+**Em uma frase:** a Expedição recebe o que está pronto, embala em pallets, decide se o pedido sai inteiro ou por partes, monta a carga e registra a entrega ao cliente. Nós `X1` a `X4` do [[00-Fluxo-Mestre-0b]]: embalagem e paletização, parcial ou integral, consolida a carga e transporte. Termina na emissão da nota no Omie ([[14-Fiscal-Omie]]). O sistema nunca emite nota fiscal.
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-120, N16-121 e N16-122: a Expedição pede a retirada ao Estoque e só o Estoque confirma. A reserva é consumida junto com a baixa. A Embalagem só recebe depois da retirada confirmada. O que o documento imprime segue aberto. Contrato: [[Contratos-da-v2|LOG-54]].
@@ -70,7 +70,7 @@ As 100 flanges do Cliente Exemplo S.A. chegam à Embalagem, que registra os pall
 
 ### Objetivo (original)
 
-A Expedição tem **duas portas de entrada** na `main` do MES (parada em 08/10): a parcial atendida pelo Estoque (`atendidoPeloEstoque`) e a parcial que a Qualidade moveu (fabricado, [[08-Qualidade-Saida]]). Na `develop` (27/10, `ab3318d`) o fabricado aprovado já volta ao Estoque antes de seguir ([[03-Estoque-Atendimento-e-Despacho]]); ❓ conferir se ainda sobra alguma porta direta. Pela decisão de 14/10 haverá uma só: o **documento de retirada do Estoque**, porque tudo que é fabricado ou comprado passa pelo Estoque ([[03-Estoque-Atendimento-e-Despacho]]).
+A Expedição tem **duas portas de entrada** na `main` do MES (parada em 08/10): a parcial atendida pelo Estoque (`atendidoPeloEstoque`) e a parcial que a Qualidade moveu (fabricado, [[11-Qualidade-Saida]]). Na `develop` (27/10, `ab3318d`) o fabricado aprovado já volta ao Estoque antes de seguir ([[05-Estoque-Atendimento-e-Despacho]]); ❓ conferir se ainda sobra alguma porta direta. Pela decisão de 14/10 haverá uma só: o **documento de retirada do Estoque**, porque tudo que é fabricado ou comprado passa pelo Estoque ([[05-Estoque-Atendimento-e-Despacho]]).
 
 O sistema **nunca emite nota fiscal**. Ele sinaliza a necessidade e o Omie emite. No v1 as telas são 10.1 a 10.4.
 
@@ -85,7 +85,7 @@ Papéis como no resumo do topo; aqui só onde cada um atua.
 | PCP | `/ordens-producao/[id]` |
 | Vendedor | HUB |
 | Cliente | externo |
-| Faturamento (Omie) | [[10-Fiscal-Omie]] |
+| Faturamento (Omie) | [[14-Fiscal-Omie]] |
 
 ### Regras decididas
 
@@ -118,7 +118,7 @@ Pedido: `StatusPedido` `AGUARDANDO`, `EM_PRODUCAO`, `BLOQUEADO`, `ENTREGUE`. Tod
 | Acompanhamento dos Pedidos, seção Embalagens | Ordens de Produção | `/ordens-producao/[id]` | app-pcp | `ordens-producao` | ✅ `EmbalagensSection.tsx` |
 | Consolidação de carga (10.2) | — | — | — | — | 🔴 não existe |
 | Transporte e roteiro (10.3) | — | — | — | — | 🔴 não existe |
-| Fila de sinalização de faturamento (11.1) | — | — | — | — | 🔴 [[10-Fiscal-Omie]] |
+| Fila de sinalização de faturamento (11.1) | — | — | — | — | 🔴 [[14-Fiscal-Omie]] |
 
 ### Endpoints e contratos
 
@@ -199,4 +199,4 @@ flowchart TD
     X4 -.->|"POST entregas, quantidade pendente baixa"| PED["Pedido ENTREGUE quando zera o pendente"]
 ```
 
-Raias vizinhas: [[03-Estoque-Atendimento-e-Despacho]], [[08-Qualidade-Saida]], [[10-Fiscal-Omie]].
+Raias vizinhas: [[05-Estoque-Atendimento-e-Despacho]], [[11-Qualidade-Saida]], [[14-Fiscal-Omie]].

@@ -39,7 +39,7 @@ fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vi
 
 **Menor dos dois.** No pedido 27917, o vendedor deu letra A (2,0%) ao item 1. Compras refez o custo e ele caiu para letra C (0,7%). Vale **0,7%**. O item 2 ficou em 2,0% nos dois e vale **2,0%**.
 
-**Várias notas.** Exemplo da Michele: venda de R$ 1.000 a 2%, faturada em seis notas (500, 100, 100, 100, 100 e 100). A comissão é 2% sobre cada nota, R$ 20 no total. O caso está em [[13-Custo-Real-e-Comissao-no-Fluxo]].
+**Várias notas.** Exemplo da Michele: venda de R$ 1.000 a 2%, faturada em seis notas (500, 100, 100, 100, 100 e 100). A comissão é 2% sobre cada nota, R$ 20 no total. O caso está em [[15-Custo-Real-e-Comissao]].
 
 ## Quem faz o quê hoje
 

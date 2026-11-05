@@ -70,11 +70,11 @@ O pedido tem 100 flanges. O almoxarife encontra 40 em lotes liberados e informa 
 - 🔴 Custo obrigatório em todo lote (BL-066) e custo do fabricado (BL-067).
 - 🔴 Contagem cíclica, transferência entre filiais e separação física.
 
-Entrada: [[02-PCP-Triagem-e-Destinacao]]. Próxima raia: [[04-Circuito-de-Compra]].
+Entrada: [[04-PCP-Triagem-e-Destinacao]]. Próxima raia: [[06-Circuito-de-Compra]].
 
 ## Detalhe técnico
 
-Nós do [[00-Fluxo-Mestre-0b]]: `E1` saldo disponível, `E2` saldo cobre?, `E3` atende pelo saldo (split e reserva, custo do item), `E4` o que fazer com o restante, `E5` entrada no Estoque, `E6` despacho. Entrada: [[02-PCP-Triagem-e-Destinacao]]. Vizinhos: [[04-Circuito-de-Compra]], [[05-Recebimento]], [[06-Qualidade-Entrada]], [[08-Qualidade-Saida]], [[09-Expedicao]]. Selos em [[Regras-do-Vault]].
+Nós do [[00-Fluxo-Mestre-0b]]: `E1` saldo disponível, `E2` saldo cobre?, `E3` atende pelo saldo (split e reserva, custo do item), `E4` o que fazer com o restante, `E5` entrada no Estoque, `E6` despacho. Entrada: [[04-PCP-Triagem-e-Destinacao]]. Vizinhos: [[06-Circuito-de-Compra]], [[07-Recebimento]], [[08-Qualidade-Entrada]], [[11-Qualidade-Saida]], [[13-Expedicao]]. Selos em [[Regras-do-Vault]].
 
 ### Quem atua (onde)
 
@@ -82,9 +82,9 @@ Nós do [[00-Fluxo-Mestre-0b]]: `E1` saldo disponível, `E2` saldo cobre?, `E3` 
 |---|---|---|
 | Almoxarife | Atende pelo saldo, solicita compra, dá entrada, ajusta e transfere saldo | MES, `/estoque-operacao/atendimento` e demais telas de Estoque |
 | Gestor de Estoque | Supervisiona; não aparece nas conversas operacionais | MES, painel e saldo |
-| Expedição (Embalagem) | Hoje dispara a baixa ao receber a parcial; no desenho final pede a retirada | MES, [[09-Expedicao]] |
-| Produção | Receberia matéria-prima por documento de retirada (não existe) | MES, [[07-Producao-e-Roteiro]] |
-| Compras · CCP | Recebe o "Solicitar compra" via setor Requisições | [[04-Circuito-de-Compra]] |
+| Expedição (Embalagem) | Hoje dispara a baixa ao receber a parcial; no desenho final pede a retirada | MES, [[13-Expedicao]] |
+| Produção | Receberia matéria-prima por documento de retirada (não existe) | MES, [[10-Producao-e-Roteiro]] |
+| Compras · CCP | Recebe o "Solicitar compra" via setor Requisições | [[06-Circuito-de-Compra]] |
 | Robert | Dono do código | `api-pcp`, `app-pcp` |
 
 Permissão: agir no setor exige `PerfilSetor.podeAtuar` (`ensurePodeAtuar`, `itens-parciais.service.ts:617`); movimentação e carga inicial exigem `PerfilDeposito.podeAtuar` no depósito (`estoque.prisma:86-106`, `estoque-operacao.service.ts:399-401`).
@@ -118,9 +118,9 @@ Permissão: agir no setor exige `PerfilSetor.podeAtuar` (`ensurePodeAtuar`, `ite
 
 | `StatusQualidadeLote` | Conta no disponível? | Quem muda |
 |---|---|---|
-| `PENDENTE` | Não | Recebimento cria ([[05-Recebimento]]) |
+| `PENDENTE` | Não | Recebimento cria ([[07-Recebimento]]) |
 | `LIBERADO` | **Sim** | Qualidade aprova ou carga inicial |
-| `REPROVADO` | Não | Qualidade ([[06-Qualidade-Entrada]]) |
+| `REPROVADO` | Não | Qualidade ([[08-Qualidade-Entrada]]) |
 | `QUARENTENA` | Não | Reprovação parcial |
 
 `OrigemLote` = `RECEBIMENTO`, `CARGA_INICIAL` e, na `develop`, `PRODUCAO` (fabricado aprovado, um lote por OP e produto, `estoque.prisma`) ✅. `TipoMovimentoEstoque` = `ENTRADA`, `SAIDA`, `TRANSFERENCIA`, `AJUSTE` (`estoque.prisma:38-43`). `OrigemCusto` = `CARGA_INICIAL`, `OC`, `MANUAL` (`estoque.prisma:378-382`).
@@ -175,7 +175,7 @@ Aceita agir em `CRIADO`, `EM_TRANSITO`, `RECEBIDO`, `EM_ANDAMENTO` (`itens-parci
 
 ✅ O modal busca `GET /estoque/saldo/disponivel-parcial/:id` e sugere lotes (inclusive os da compra daquele item). `E2` não é um nó automático: o almoxarife informa quanto atende (0 a quantidade da parcial) e de quais lotes (`alocacoes` somando exatamente a quantidade atendida, `itens-parciais.service.ts:650-659`). Só é possível agir em setor tipo `ESTOQUE` (`:623-627`).
 
-🔴 **Saldo futuro (N14-20).** O modal e a tela Saldo só mostram o saldo atual (lotes `LIBERADO` menos reservas). Falta mostrar as OCs em andamento. Do lado do hub já há: `ordens_compra.finalidade` (`estoque` é o padrão, `ordens_compra.route.js:982`), `ordens_compra_itens_vinculos` (item da OC para pedido de venda), a view `vw_pedido_venda_itens_compra` e a referência `GET /ordens-compra/referencia`, cujo item traz `destino[]` (`pedido_venda` ou `estoque`, somando a quantidade) ✅ (`vw_ordens_compra_referencia_mes.swagger.json:61-88`). No MES, o job que lê a referência já existe na `develop` (K4, `6914fe9`, 15/10, `oc-referencia-avhub.service.ts`) ✅ e o aviso de compra em andamento aparece ao requisitar (API-011, 20/10). Falta o cálculo do saldo futuro (OC aprovada, parte `estoque` do `destino`, menos o que já foi recebido) e a coluna no Atendimento e no Saldo (BL-050). A referência só traz OC `aprovado` e as canceladas que já foram aprovadas (`vw_ordens_compra_referencia_mes`, [[Banco-AvHub]]): OC em aprovação não entra, e o Gustavo confere se isso basta (BL-028). Como a mercadoria entra no Estoque: [[05-Recebimento]].
+🔴 **Saldo futuro (N14-20).** O modal e a tela Saldo só mostram o saldo atual (lotes `LIBERADO` menos reservas). Falta mostrar as OCs em andamento. Do lado do hub já há: `ordens_compra.finalidade` (`estoque` é o padrão, `ordens_compra.route.js:982`), `ordens_compra_itens_vinculos` (item da OC para pedido de venda), a view `vw_pedido_venda_itens_compra` e a referência `GET /ordens-compra/referencia`, cujo item traz `destino[]` (`pedido_venda` ou `estoque`, somando a quantidade) ✅ (`vw_ordens_compra_referencia_mes.swagger.json:61-88`). No MES, o job que lê a referência já existe na `develop` (K4, `6914fe9`, 15/10, `oc-referencia-avhub.service.ts`) ✅ e o aviso de compra em andamento aparece ao requisitar (API-011, 20/10). Falta o cálculo do saldo futuro (OC aprovada, parte `estoque` do `destino`, menos o que já foi recebido) e a coluna no Atendimento e no Saldo (BL-050). A referência só traz OC `aprovado` e as canceladas que já foram aprovadas (`vw_ordens_compra_referencia_mes`, [[Banco-AvHub]]): OC em aprovação não entra, e o Gustavo confere se isso basta (BL-028). Como a mercadoria entra no Estoque: [[07-Recebimento]].
 
 #### E3: atender pelo saldo (split e reserva)
 
@@ -189,13 +189,13 @@ A reserva valida lote `LIBERADO`, mesmo produto (`codigoProdutoOmie`) e mesma fi
 
 #### E4: o restante
 
-✅ `destinoRestante = COMPRA` (ou Revenda, sempre) move a parcial para o setor `REQUISICAO` (`setorDoCircuito`, `itens-parciais.service.ts:727-730`); o PCP abre a requisição lá ([[04-Circuito-de-Compra]], nó `P3`). A observação de histórico diz "Sem saldo no estoque: N vão para compra (Requisições)" (`:808-811`).
+✅ `destinoRestante = COMPRA` (ou Revenda, sempre) move a parcial para o setor `REQUISICAO` (`setorDoCircuito`, `itens-parciais.service.ts:727-730`); o PCP abre a requisição lá ([[06-Circuito-de-Compra]], nó `P3`). A observação de histórico diz "Sem saldo no estoque: N vão para compra (Requisições)" (`:808-811`).
 
 ✅ **Enviar à produção** (`ROTEIRO`) move a parcial para a próxima etapa do roteiro. Na `develop`, o item de fabricação pode ser atendido com matéria-prima do estoque: lote(s) de qualquer produto, com a quantidade baixada e as unidades do item cobertas (`ConsumoMateriaPrima`, 19/10, `8d07917`; a baixa é imediata e devolver a parcial ao Estoque estorna). 🔴 Diverge da N16-140: a decisão é baixar na retirada, pelo documento, e não na hora do atendimento. A genealogia (J4) segue sem código.
 
 #### E5: entrada no Estoque
 
-✅ **Comprado:** a Qualidade aprova o lote, e `devolverAoEstoqueParciaisProntas` funde as parciais do item e devolve a parcial ao setor Estoque com `idLoteCompra = null` (`circuito-compra.ts:166-250`). O lote já nasceu no Recebimento com `ENTRADA` no saldo e `origem = RECEBIMENTO`. A reserva é criada na **segunda passada** pelo almoxarife: "Atender pelo estoque" com a quantidade toda (`itens-parciais.service.ts:592-593`). Detalhe em [[06-Qualidade-Entrada]].
+✅ **Comprado:** a Qualidade aprova o lote, e `devolverAoEstoqueParciaisProntas` funde as parciais do item e devolve a parcial ao setor Estoque com `idLoteCompra = null` (`circuito-compra.ts:166-250`). O lote já nasceu no Recebimento com `ENTRADA` no saldo e `origem = RECEBIMENTO`. A reserva é criada na **segunda passada** pelo almoxarife: "Atender pelo estoque" com a quantidade toda (`itens-parciais.service.ts:592-593`). Detalhe em [[08-Qualidade-Entrada]].
 
 ✅ **Fabricado (na `develop`, 27/10, `ab3318d`):** o "sim" da inspeção de saída é `PATCH /itens-parciais/:id/aprovar-saida` (aprova tudo ou só uma `quantidade`; o resto continua na inspeção). A parcela aprovada volta ao setor Estoque, `EM_TRANSITO`, marcada como fabricado aprovado. O almoxarife informa a localização em `PATCH /itens-parciais/:id/receber-fabricado`, e só então nasce o lote `PRODUCAO` (um por OP e produto, sem custo), com `ENTRADA`, saldo e reserva para a própria parcela. Decisão de 14/10 cumprida. 🔴 O lote nasce sem custo (BL-067).
 
@@ -226,7 +226,7 @@ Modelo completo e custo em [[Modelo-Estoque-e-Custo-do-Lote]] e [[Banco-MES]].
 
 #### Custo do lote (resumo)
 
-`custo_liquido_unitario = valor_unitario × (1 − desconto) × cotação − ICMS a recuperar + IPI + ST`; frete fica gravado e fora do líquido; moeda estrangeira usa a PTAX da OC; só revenda no ciclo 1. **O que está gravado na `develop`:** carga inicial (`origem CARGA_INICIAL`), cisão, custo da OC no recebimento (`origem OC`, 19/10, `97b9adc`; unidade diferente da OC ou OC fora da projeção gera lote sem custo e sinalizado) e custo à mão (`MANUAL`, `PUT /estoque/lotes/:id/custo`, com motivo e histórico, 27/10). Falta o custo obrigatório em todo lote (BL-066) e o custo do fabricado (BL-067). Ver [[05-Recebimento]], nó `R4`.
+`custo_liquido_unitario = valor_unitario × (1 − desconto) × cotação − ICMS a recuperar + IPI + ST`; frete fica gravado e fora do líquido; moeda estrangeira usa a PTAX da OC; só revenda no ciclo 1. **O que está gravado na `develop`:** carga inicial (`origem CARGA_INICIAL`), cisão, custo da OC no recebimento (`origem OC`, 19/10, `97b9adc`; unidade diferente da OC ou OC fora da projeção gera lote sem custo e sinalizado) e custo à mão (`MANUAL`, `PUT /estoque/lotes/:id/custo`, com motivo e histórico, 27/10). Falta o custo obrigatório em todo lote (BL-066) e o custo do fabricado (BL-067). Ver [[07-Recebimento]], nó `R4`.
 
 ### O que falta desenvolver
 

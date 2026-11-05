@@ -9,7 +9,7 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, diverge
 
 # Produção e roteiro (F1, P6)
 
-**Em uma frase:** a Produção leva cada parte do item (a "parcial") pelos setores do roteiro do pedido, na ordem, até o último setor, e registra tudo no histórico. Nós `F1` (setores produtivos) e `P6` (novo norte: retrabalho ou reabre compra) do [[00-Fluxo-Mestre-0b]]. A entrada vem do despacho do Estoque (`E6`, [[03-Estoque-Atendimento-e-Despacho]]). A saída vai para a inspeção de saída `Q7` ([[08-Qualidade-Saida]]). Selos em [[Regras-do-Vault]].
+**Em uma frase:** a Produção leva cada parte do item (a "parcial") pelos setores do roteiro do pedido, na ordem, até o último setor, e registra tudo no histórico. Nós `F1` (setores produtivos) e `P6` (novo norte: retrabalho ou reabre compra) do [[00-Fluxo-Mestre-0b]]. A entrada vem do despacho do Estoque (`E6`, [[05-Estoque-Atendimento-e-Despacho]]). A saída vai para a inspeção de saída `Q7` ([[11-Qualidade-Saida]]). Selos em [[Regras-do-Vault]].
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-140: a matéria-prima sai do Estoque na retirada, pela quantidade pedida, no mesmo documento de retirada da Expedição. O operador não lança consumo ao concluir a etapa.
@@ -180,7 +180,7 @@ Todos sob `@UseGuards(JwtAuthGuard, PermissionsGuard)`; setor checado por `perfi
 | `PATCH /:id/mover` | `EM_ANDAMENTO` para `EM_TRANSITO` no próximo setor (ou `idSetorDestino`), com quantidade parcial | idem | `service:366` ✅ |
 | `PATCH /:id/concluir` | `CONCLUIDO` no último setor | idem | `service:520` ✅ |
 | `PATCH /:id/finalizar`, `PATCH /:id/reabrir` | finaliza o setor (com ou sem enviar) e reabre | idem | `develop` (23/10) ✅ |
-| `PATCH /:id/aprovar-saida`, `PATCH /:id/receber-fabricado` | o "sim" da inspeção de saída e a entrada do fabricado no Estoque | idem | `develop` (27/10) ✅ ([[08-Qualidade-Saida]]) |
+| `PATCH /:id/aprovar-saida`, `PATCH /:id/receber-fabricado` | o "sim" da inspeção de saída e a entrada do fabricado no Estoque | idem | `develop` (27/10) ✅ ([[11-Qualidade-Saida]]) |
 | `PATCH /:id/pausar`, `/:id/retomar` | pausa e retomada | idem | `service:881`, `:1199` ✅ |
 | `PATCH /:id/reprovar`, `/:id/resolver`, `/:id/retrabalho` | reprovação com `Divergencia`, falso alarme, retrabalho | idem | `service:1011`, `:1067`, `:1124` ✅ |
 | `POST /:id/split`, `PATCH /:id/consolidar` | divide e junta parciais `RECEBIDO` | idem | `service:1250`, `:1616` ✅ sem botão na tela |
@@ -209,7 +209,7 @@ Cada setor produtivo (Flange, Caldeiraria HRM, corte etc.) é um registro da tab
 
 #### Divergência de produção
 
-`reprovar` grava `HistoricoItemParcial` e abre uma `Divergencia` tipo `QUALIDADE` `ABERTA` na mesma transação (`service:1036-1058`). `resolver` e `retrabalho` fecham a divergência como `RESOLVIDA` (`:1101-1109`, `:1168-1176`). `DivergenciasService.resolver` só aceita `RESOLVIDA` ou `CANCELADA` e recusa divergência já encerrada: **divergência encerrada não reabre** (`divergencias.service.ts:resolver`) 🔴. Não há tela de divergências de produção; `/decisoes-pcp` trata só divergência de recebimento ([[05-Recebimento]]).
+`reprovar` grava `HistoricoItemParcial` e abre uma `Divergencia` tipo `QUALIDADE` `ABERTA` na mesma transação (`service:1036-1058`). `resolver` e `retrabalho` fecham a divergência como `RESOLVIDA` (`:1101-1109`, `:1168-1176`). `DivergenciasService.resolver` só aceita `RESOLVIDA` ou `CANCELADA` e recusa divergência já encerrada: **divergência encerrada não reabre** (`divergencias.service.ts:resolver`) 🔴. Não há tela de divergências de produção; `/decisoes-pcp` trata só divergência de recebimento ([[07-Recebimento]]).
 
 #### Consumo de matéria-prima 🟡
 

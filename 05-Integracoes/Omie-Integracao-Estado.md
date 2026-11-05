@@ -122,4 +122,4 @@ A modelagem anterior afirmava que CFOP e ICMS-ST não eram capturados. O pipelin
 
 O MES não lê o Omie. O que ele precisa do Omie chega pelo av-hub: pedido liberado, produtos e unidades ([[Integracao-AvHub-MES]]). `codigo_projeto` e `numero_contrato` do pedido estão no av-hub sem uso no MES.
 
-Ver também: [[Sistemas-e-Responsabilidades]], [[10-Fiscal-Omie]].
+Ver também: [[Sistemas-e-Responsabilidades]], [[14-Fiscal-Omie]].

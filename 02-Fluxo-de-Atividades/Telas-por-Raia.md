@@ -41,7 +41,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Proposta, Orçamento, comissão | Telas novas de 26/10/2026: proposta e Orçamento em andamento; comissão nova sem tela | 🟡 🔴 |
 | Todos | Login, Acessos, Inicial. Torre de Fluxo existe sobre dados de exemplo | ✅ 🟡 |
 
-## Vendas (V1 a V3) · [[01-Vendas-Liberacao]]
+## Vendas (V1 a V3) · [[03-Pedido-de-Venda-e-Liberacao]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
@@ -50,12 +50,12 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Meus Pedidos, detalhe (V1 a O2) | Cartão Etapa dos itens. 🟡 Falta linha do tempo, SLA e filtro | Vendedor | ✅ |
 | Pedidos da Equipe, detalhe | Mesmo cartão de etapa, para a equipe | Gerente | ✅ |
 | Pedidos do PCP | Acompanhamento comercial por diligenciador. **Não é o `app-pcp`** | Diligenciador | ✅ |
-| Propostas, lista, nova e detalhe (V0.1 a V0.7) | Ver [[11-Proposta-e-Pedido-de-Venda]] | Vendedor | 🟡 |
+| Propostas, lista, nova e detalhe (V0.1 a V0.7) | Ver [[01-Proposta-e-Pedido-de-Venda]] | Vendedor | 🟡 |
 | Acompanhamento de Clientes | Clientes e grupos de empresa (a antiga tela Clientes, N16-112) | Vendedor | ✅ |
 | Relatório Gerencial | Resumo por responsável, empresa e unidade | Gerência | ✅ |
 | Pedidos de Venda e Notas Fiscais de Saída | Páginas existem, inativas no menu (N16-33) | — | ✅ |
 
-## PCP (P1, P2, P6) · [[02-PCP-Triagem-e-Destinacao]]
+## PCP (P1, P2, P6) · [[04-PCP-Triagem-e-Destinacao]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
@@ -70,7 +70,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | OC do pedido (P1, P2) | Mostrar na Triagem e na Destinação que já há OC (N14-20, BL-049). Hoje a Triagem mostra só as requisições do Compras com pedido de venda (develop, 23/10) | PCP | 🟡 🔴 |
 | Ordem de Produção (P2) | Documento imprimível do que será fabricado (N14-22, BL-052): botão "Imprimir OP" e 2ª via no detalhe da ordem. Só na develop (27/10) | PCP | ✅ |
 
-## Estoque (E1 a E6) · [[03-Estoque-Atendimento-e-Despacho]]
+## Estoque (E1 a E6) · [[05-Estoque-Atendimento-e-Despacho]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
@@ -85,7 +85,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Documento de retirada (E6) | Não existe | Estoque | 🔴 |
 | Saldo futuro (E1) | Saldo atual + OCs em andamento (N14-20, BL-050) | Estoque | 🔴 |
 
-## Compras e fornecedor (P3, C0 a C5, FN1) · [[04-Circuito-de-Compra]]
+## Compras e fornecedor (P3, C0 a C5, FN1) · [[06-Circuito-de-Compra]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
@@ -100,7 +100,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Compradores | Cadastro usado pela OC (LOG-18, LOG-28, LOG-36) | Compras | ✅ |
 | Fornecedor (FN1) | Externo, sem tela | Fornecedor | — |
 
-## Recebimento (R0 a R6) · [[05-Recebimento]]
+## Recebimento (R0 a R6) · [[07-Recebimento]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
@@ -109,14 +109,14 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Detalhe do lote, "Imprimir etiqueta" (R4) | Imprime a etiqueta do lote | Operador do Recebimento | ✅ |
 | Logística (índice) | Índice da área | Operador do Recebimento | ✅ |
 
-## Qualidade de entrada (Q1 a Q4) · [[06-Qualidade-Entrada]]
+## Qualidade de entrada (Q1 a Q4) · [[08-Qualidade-Entrada]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
 | Inspeção de entrada (Q1 a Q4) | Inspeção do material recebido | Qualidade | ✅ |
 | Fila Qualidade · Entrada | Só leitura | Qualidade | ✅ |
 
-## Produção (F1) · [[07-Producao-e-Roteiro]]
+## Produção (F1) · [[10-Producao-e-Roteiro]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
@@ -127,14 +127,14 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Fábricas, Setores, Máquinas, Operadores | Cadastros operacionais | PCP | ✅ |
 | Relatórios | Relatórios de produção | PCP | ✅ |
 
-## Qualidade de saída (Q7, Q8) · [[08-Qualidade-Saida]]
+## Qualidade de saída (Q7, Q8) · [[11-Qualidade-Saida]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
 | Inspeção de saída (Q7, Q8) | Fila do setor Qualidade no roteiro | Qualidade | ✅ |
 | Qualidade, índice (Q7) | Índice da área | Qualidade | ✅ |
 
-## Expedição (X1 a X4) · [[09-Expedicao]]
+## Expedição (X1 a X4) · [[13-Expedicao]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
@@ -143,7 +143,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Consolidação de carga (X3) | Não existe | Logística | 🔴 |
 | Transporte e roteiro (X4) | Não existe | Logística | 🔴 |
 
-## Fiscal (O1, O2) · [[10-Fiscal-Omie]]
+## Fiscal (O1, O2) · [[14-Fiscal-Omie]]
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
@@ -151,7 +151,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Notas Fiscais de Saída (O2) | Lista das notas emitidas | Vendedor | ✅ |
 | Minhas Notas, Notas da Equipe, Notas do PCP (O2) | Mostram as notas depois do fato | Vendedor, gerente, PCP | ✅ |
 
-## Proposta, Orçamento e comissão nova (`V0`, `B1` a `B4`, `C6` a `C8`, `K1` a `K6`) · [[11-Proposta-e-Pedido-de-Venda]]
+## Proposta, Orçamento e comissão nova (`V0`, `B1` a `B4`, `C6` a `C8`, `K1` a `K6`) · [[01-Proposta-e-Pedido-de-Venda]]
 
 Desenho aprovado em 26/10/2026. Em 29/10/2026 a proposta já tem API na `api-acos-vital` e telas em andamento no `av-hub`; o resto segue sem código 🔴. As telas de proposta são do Robert e o Orçamento é do Pablo, com o Robert. Auditoria, conexões e menu: [[14-Telas-e-Experiencia-do-Usuario]].
 

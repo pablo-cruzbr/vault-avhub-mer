@@ -20,7 +20,7 @@ fontes: [omie-elt-pipeline 0f739f0 (master), README.md, ARCHITECTURE.md, src/con
 
 ## Como se encaixa no fluxo
 
-- **`V1`:** o pedido de venda do Omie chega ao av-hub **travado**. A liberação é do vendedor ([[01-Vendas-Liberacao]]).
+- **`V1`:** o pedido de venda do Omie chega ao av-hub **travado**. A liberação é do vendedor ([[03-Pedido-de-Venda-e-Liberacao]]).
 - **`O1` e `O2` (lado Omie):** a nota fiscal emitida volta para o av-hub.
 - **Compras (`C4`):** a OC aprovada é enviada ao Omie e o resultado volta ao av-hub.
 - **Estoque:** o saldo da fábrica vive no MES, não no Omie. Por isso esse recurso está desligado.
@@ -103,7 +103,7 @@ Os catálogos de Compras (condições, projetos, contas, categorias, compradores
 
 🟡 **Na branch `feat/produto-vendas-codigo-item-integracao` (sem PR, 05/11/2026):** o pedido de venda passa a mapear `det[].ide.codigo_item_integracao` para `produto_vendas.codigo_item_integracao` ([[Contratos-da-v2|SQL-021]]) e filtra as colunas pelo que a tabela tem de fato (`src/db/colunasExistentes.ts`, o mesmo filtro que o `pedidosCompras.ts` já usava), para a coluna ausente não derrubar o pedido inteiro; a coluna `encargos` de `condicoes_pagamento_compras` entra em `PROTECTED_COLUMNS`. Typecheck passa; não foi testado contra banco nem Omie. README `:118-120`. `core.estoque_saldo` fica vazia: **o saldo do Estoque da fábrica vive no MES**, não no Omie ([[Modelo-Estoque-e-Custo-do-Lote]]).
 
-O pedido de venda entra no av-hub **travado** (sem marcação de liberação); a liberação é do vendedor ([[01-Vendas-Liberacao]]). O pipeline nunca escreve em `pedidos_vendas.manual` nem nas outras colunas protegidas ✅ `src/db/protectedColumns.ts:50-58`.
+O pedido de venda entra no av-hub **travado** (sem marcação de liberação); a liberação é do vendedor ([[03-Pedido-de-Venda-e-Liberacao]]). O pipeline nunca escreve em `pedidos_vendas.manual` nem nas outras colunas protegidas ✅ `src/db/protectedColumns.ts:50-58`.
 
 ### Envio da OC ao Omie (única escrita da pipeline)
 

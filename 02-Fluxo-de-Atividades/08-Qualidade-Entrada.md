@@ -9,7 +9,7 @@ fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Enc
 
 # Qualidade de entrada (Q1 a Q4)
 
-**Em uma frase:** a Qualidade inspeciona o lote que chegou do fornecedor e decide se ele entra no Estoque ou volta para Compras, para que nada comprado vire saldo sem laudo. Nós `Q1` a `Q4` do [[00-Fluxo-Mestre-0b]]. A inspeção de saída da produção é outra raia: [[08-Qualidade-Saida]].
+**Em uma frase:** a Qualidade inspeciona o lote que chegou do fornecedor e decide se ele entra no Estoque ou volta para Compras, para que nada comprado vire saldo sem laudo. Nós `Q1` a `Q4` do [[00-Fluxo-Mestre-0b]]. A inspeção de saída da produção é outra raia: [[11-Qualidade-Saida]].
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-124: só o setor da Qualidade decide o lote. Hoje qualquer usuário com permissão de editar a inspeção decide.
@@ -19,12 +19,12 @@ fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Enc
 
 ## Como funciona, passo a passo
 
-1. O [[05-Recebimento]] entrega o lote em quarentena (status `PENDENTE`). Ele aparece na fila da Qualidade, do mais antigo ao mais novo, e ainda não conta no saldo. `Q1`
+1. O [[07-Recebimento]] entrega o lote em quarentena (status `PENDENTE`). Ele aparece na fila da Qualidade, do mais antigo ao mais novo, e ainda não conta no saldo. `Q1`
 2. O inspetor da Qualidade abre o lote na tela de inspeção e decide: aprova ou reprova. `Q2`
 3. Para aprovar, ele anexa o laudo. Para reprovar, anexa laudo, motivo e evidência e informa a quantidade reprovada. `Q2`
-4. Aprovado: o lote fica `LIBERADO`. A parcial que esperava junta-se às outras do mesmo item e volta ao Estoque ([[03-Estoque-Atendimento-e-Despacho]]). `E5`
+4. Aprovado: o lote fica `LIBERADO`. A parcial que esperava junta-se às outras do mesmo item e volta ao Estoque ([[05-Estoque-Atendimento-e-Despacho]]). `E5`
 5. Reprovado em parte: a quantidade reprovada vira um lote filho separado e o sistema abre a RNC (registro de não conformidade). `Q3`
-6. A parte reprovada volta para Compras ([[04-Circuito-de-Compra]]), que combina com o fornecedor a devolução e a substituição. `Q3`
+6. A parte reprovada volta para Compras ([[06-Circuito-de-Compra]]), que combina com o fornecedor a devolução e a substituição. `Q3`
 7. Se ainda há parcial esperando, a parte aprovada fica em quarentena até a substituição chegar. `Q4`
 8. A substituição chega como nova entrega com nota, passa de novo pela inspeção e, aprovada, une-se à parte em quarentena. `Q4` → `E5`
 
@@ -100,7 +100,7 @@ CCP = acompanhamento de compras. Os perfis são dados do banco (`perfis`, `permi
 | `REPROVADO` | Lote inteiro reprovado, ou o **lote filho** da cisão com a quantidade reprovada | Não |
 | `QUARENTENA` | Parte aprovada de uma reprovação parcial, bloqueada até a substituição ser aprovada | Não |
 
-`OrigemLote` (`estoque.prisma:11-17`) tem `RECEBIMENTO`, `CARGA_INICIAL` e, desde 27/10 na `develop`, `PRODUCAO` (lote do fabricado, ver [[08-Qualidade-Saida]] e [[Estados-e-Status]]).
+`OrigemLote` (`estoque.prisma:11-17`) tem `RECEBIMENTO`, `CARGA_INICIAL` e, desde 27/10 na `develop`, `PRODUCAO` (lote do fabricado, ver [[11-Qualidade-Saida]] e [[Estados-e-Status]]).
 
 #### Transições
 
@@ -169,7 +169,7 @@ Não há contrato com o av-hub para a RNC. O Compras só vê o efeito indireto (
 
 #### Substituição (EC-07)
 
-A substituição chega como **nova chegada com NF** de uma requisição que voltou a Compras · CCP (lista de "esperados" do [[05-Recebimento]]). A conferência cria um lote novo `PENDENTE` e a parcial nova vai para Qualidade · Entrada com o novo `idLoteCompra`. Quando esse lote é aprovado, `devolverAoEstoqueParciaisProntas` encontra as duas parciais no setor (a que está em quarentena e a nova), libera o lote em `QUARENTENA`, funde as parciais e devolve ao Estoque (`circuito-compra.ts:188-249`). ✅
+A substituição chega como **nova chegada com NF** de uma requisição que voltou a Compras · CCP (lista de "esperados" do [[07-Recebimento]]). A conferência cria um lote novo `PENDENTE` e a parcial nova vai para Qualidade · Entrada com o novo `idLoteCompra`. Quando esse lote é aprovado, `devolverAoEstoqueParciaisProntas` encontra as duas parciais no setor (a que está em quarentena e a nova), libera o lote em `QUARENTENA`, funde as parciais e devolve ao Estoque (`circuito-compra.ts:188-249`). ✅
 
 #### Nota de devolução e RNC
 

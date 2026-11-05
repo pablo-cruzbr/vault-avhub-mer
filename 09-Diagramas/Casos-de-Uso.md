@@ -189,7 +189,7 @@ O mermaid não tem notação nativa de caso de uso: atores são nós arredondado
 
 | Caso | Estado | Selo |
 |---|---|---|
-| V2 V3 liberar | Tela `/liberar-pedidos` | ✅ ver [[01-Vendas-Liberacao]] |
+| V2 V3 liberar | Tela `/liberar-pedidos` | ✅ ver [[03-Pedido-de-Venda-e-Liberacao]] |
 | Corrigir a marcação | Trava com 409 `PEDIDO_IMPORTADO_MES` | ✅ |
 | Acompanhar a etapa | Cartão "Etapa dos itens" | ✅ ❓ teste ponta a ponta |
 | Ver a equipe | `/liberacao-equipe` | ✅ |
@@ -198,7 +198,7 @@ O mermaid não tem notação nativa de caso de uso: atores são nós arredondado
 
 | Caso | Estado | Selo |
 |---|---|---|
-| P1, P2 | `/carteira` e `/ordens-producao/novo` | ✅ ([[02-PCP-Triagem-e-Destinacao]]) |
+| P1, P2 | `/carteira` e `/ordens-producao/novo` | ✅ ([[04-PCP-Triagem-e-Destinacao]]) |
 | P3 | Setor Requisições, `POST /compras/requisicoes` | ✅ |
 | P6 | Decidido, sem tela | 🔴 |
 | Decidir divergência | `/decisoes-pcp`, `POST /compras/recebimentos/:id/decidir` | ✅ |
@@ -234,7 +234,7 @@ As duas opções do nó `E4` (compra ou produção) são alternativas para o res
 | R0 chegada | `POST /compras/requisicoes/:id/chegada` exige NF | ✅ |
 | Liberar sem OC | `POST …/liberar-recebimento`, permissão `compras-liberar` | ✅ |
 | R1, R2, R6 | `POST /compras/recebimentos`, `/recontar` | ✅ |
-| Q1 a Q4 | `/qualidade/inspecao-entrada` | ✅ ([[06-Qualidade-Entrada]]) |
+| Q1 a Q4 | `/qualidade/inspecao-entrada` | ✅ ([[08-Qualidade-Entrada]]) |
 | Q7, Q8 | `/qualidade/inspecao-saida` | ✅ ❓ ninguém conferiu |
 
 ### 6. Produção, Expedição e Fiscal (F1, X1 a X4, O1, O2)

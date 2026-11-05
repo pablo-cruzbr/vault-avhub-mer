@@ -85,7 +85,7 @@ No av-hub, a requisição passa por `aberta`, `em_cotacao`, `atendida` ou `cance
 - Se a conferência bate, o recebimento vai a `CONCLUIDO`.
 - Se diverge, vai a `AGUARDANDO_RECONTAGEM`.
 - Se continua divergindo, vai a `AGUARDANDO_DECISAO` e o PCP decide: `ACEITO` ou `REABERTO`.
-- Detalhes em [[05-Recebimento]].
+- Detalhes em [[07-Recebimento]].
 
 ### Lote de estoque
 
@@ -96,7 +96,7 @@ No av-hub, a requisição passa por `aberta`, `em_cotacao`, `atendida` ou `cance
 | `REPROVADO` | A Qualidade reprovou. |
 | `QUARENTENA` | É a parte aprovada de uma reprovação parcial. Fica parada até a substituição (EC-07). |
 
-A reserva não expira. Ela nasce `ATIVA`, vira `CONSUMIDA` na saída física e `LIBERADA` ao ser cancelada ([[06-Qualidade-Entrada]], [[03-Estoque-Atendimento-e-Despacho]]).
+A reserva não expira. Ela nasce `ATIVA`, vira `CONSUMIDA` na saída física e `LIBERADA` ao ser cancelada ([[08-Qualidade-Entrada]], [[05-Estoque-Atendimento-e-Despacho]]).
 
 ### Ordem de compra (OC)
 
@@ -107,7 +107,7 @@ A reserva não expira. Ela nasce `ATIVA`, vira `CONSUMIDA` na saída física e `
 | `aprovado` | Aprovada. Até o limite, a OC vira `aprovado` sozinha. A Diretoria não aprova (N14-21). |
 | `cancelado` | Cancelada. |
 
-Detalhes em [[04-Circuito-de-Compra]].
+Detalhes em [[06-Circuito-de-Compra]].
 
 ### Proposta e pedido do Hub
 
@@ -116,7 +116,7 @@ Detalhes em [[04-Circuito-de-Compra]].
 | `propostas.status` | `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`; a API e o front aceitam também `EXPIRADA` (validade vencida) ❓ o `CHECK` do dump de 29/10 tem só os quatro primeiros | `api-acos-vital` `propostas.route.js`; Dump Avhub 29/10 (`ck_propostas_status`) ✅ |
 | `pedido.status_sincronizacao_omie` | `pendente`, `sincronizado`, `erro` | N16-36; `transformar` grava `pendente` ✅ |
 
-Detalhe e transições em [[11-Proposta-e-Pedido-de-Venda]].
+Detalhe e transições em [[01-Proposta-e-Pedido-de-Venda]].
 
 ### Etapa do item vista pelo vendedor
 
@@ -136,7 +136,7 @@ Todos os valores das tabelas novas estão no Detalhe técnico.
 
 ## Nomes que enganam
 
-- `ENTREGUE` (pedido, MES) não é `Faturado` (pedido, Omie). São assuntos diferentes ([[10-Fiscal-Omie]]).
+- `ENTREGUE` (pedido, MES) não é `Faturado` (pedido, Omie). São assuntos diferentes ([[14-Fiscal-Omie]]).
 - `RECEBIDO` (parcial) não é `RECEBIDA` (requisição) nem o recebimento `CONCLUIDO`.
 - `REPROVADO` aparece em três lugares: no item (produção), no lote (qualidade de entrada) e na etapa `qualidade.reprovado`.
 - `CONCLUIDO` aparece no item (`StatusItemParcial`), no recebimento (`StatusRecebimento`) e no feed do av-hub (`encerramento`).
@@ -183,7 +183,7 @@ Uso: `ENTREGUE` é gravado por `EntregasService.create` quando zera o pendente e
 | `RETRABALHO` | Retrabalho | **Legado**: nenhuma ação chega aqui; só `retomar` aceita como origem |
 | `CANCELADO` | Cancelado | Terminal; origem de `devolver`, `retrabalho` e `cancelar` |
 
-Rótulos: `movimentacoes/labels.ts:7-17`. Ações por status: `movimentacoes/acoes.ts:61-71` (tabela em [[07-Producao-e-Roteiro]]). Estados fora da fila (`STATUS_FILA_MOVIMENTACOES`): `api-pcp/src/common/constants/item-parcial-status.constants.ts:30` ✅.
+Rótulos: `movimentacoes/labels.ts:7-17`. Ações por status: `movimentacoes/acoes.ts:61-71` (tabela em [[10-Producao-e-Roteiro]]). Estados fora da fila (`STATUS_FILA_MOVIMENTACOES`): `api-pcp/src/common/constants/item-parcial-status.constants.ts:30` ✅.
 
 Flags relacionadas: `atendidoPeloEstoque` (parcial atendida pelo saldo), `retrabalho` (linha de retorno de retrabalho), `idLoteCompra` (lote que espera a Qualidade), `idParcialOrigem` (split), `idDevolvidoDe` (devolução e retrabalho).
 
@@ -242,7 +242,7 @@ Resumo: `ABERTA` e `EM_COMPRA` alternam pelos marcos do av-hub; `RECEBIDA_PARCIA
 | `StatusRecebimento` | `AGUARDANDO_RECONTAGEM`, `AGUARDANDO_DECISAO`, `CONCLUIDO`, `ACEITO`, `REABERTO` | `compras.prisma:31-37` (276) ✅ |
 | `TipoDivergenciaRecebimento` | `QUANTIDADE`, `DESCRICAO`, `PESO`, `AVARIA` | `compras.prisma:42-47` (356) ✅ |
 
-Regras: bateu vai a `CONCLUIDO`; divergiu vai a `AGUARDANDO_RECONTAGEM`; continuou divergindo vai a `AGUARDANDO_DECISAO` (PCP); decisão `ACEITO` ou `REABERTO`. `QUANTIDADE` e `PESO` são calculados; `DESCRICAO` e `AVARIA` são informados (`AVARIA` exige foto). Etapa da divergência: `conferencia` ou `recontagem` (texto, `compras.prisma:252`). Detalhes em [[05-Recebimento]].
+Regras: bateu vai a `CONCLUIDO`; divergiu vai a `AGUARDANDO_RECONTAGEM`; continuou divergindo vai a `AGUARDANDO_DECISAO` (PCP); decisão `ACEITO` ou `REABERTO`. `QUANTIDADE` e `PESO` são calculados; `DESCRICAO` e `AVARIA` são informados (`AVARIA` exige foto). Etapa da divergência: `conferencia` ou `recontagem` (texto, `compras.prisma:252`). Detalhes em [[07-Recebimento]].
 
 #### Lote, estoque e reserva
 
@@ -255,7 +255,7 @@ Regras: bateu vai a `CONCLUIDO`; divergiu vai a `AGUARDANDO_RECONTAGEM`; continu
 | `StatusReserva` | `ATIVA`, `CONSUMIDA`, `LIBERADA` | `estoque.prisma:48-52` (308) ✅ |
 | `OrigemCusto` | `CARGA_INICIAL`, `OC`, `MANUAL` | `estoque.prisma:378-382` (141) ✅ |
 
-Saldo disponível conta só lote `LIBERADO` menos reservas `ATIVA` (`estoque-operacao.helpers.ts:165`). `QUARENTENA` é a parte aprovada de uma reprovação parcial até a substituição (EC-07). Reserva sem expiração: nasce `ATIVA`, vira `CONSUMIDA` na saída física e `LIBERADA` ao cancelar ([[06-Qualidade-Entrada]], [[03-Estoque-Atendimento-e-Despacho]]).
+Saldo disponível conta só lote `LIBERADO` menos reservas `ATIVA` (`estoque-operacao.helpers.ts:165`). `QUARENTENA` é a parte aprovada de uma reprovação parcial até a substituição (EC-07). Reserva sem expiração: nasce `ATIVA`, vira `CONSUMIDA` na saída física e `LIBERADA` ao cancelar ([[08-Qualidade-Entrada]], [[05-Estoque-Atendimento-e-Despacho]]).
 
 #### Anexos
 
@@ -288,7 +288,7 @@ Etapa desconhecida: a tela mostra o texto cru em tom neutro (`etapas-item.ts:49-
 | Campo | Valores | Fonte |
 |---|---|---|
 | `pedidos_vendas.situacao` (calculado por trigger) | `Cancelado`, `Denegado`, `Devolvido`, `Dev. Parcial`, `Encerrado`, `Faturado`, `Autorizado`, `Pendente` (ordem de precedência) | `fn_sync_situacao_pv`, Dump Avhub 9804 ✅ |
-| `vw_pedidos_liberacao.status_liberacao` | `pendente`, `liberado`, `importado` | Dump Avhub 20870; [[01-Vendas-Liberacao]] ✅ |
+| `vw_pedidos_liberacao.status_liberacao` | `pendente`, `liberado`, `importado` | Dump Avhub 20870; [[03-Pedido-de-Venda-e-Liberacao]] ✅ |
 | `acompanhamento_qualidade` | `true`, `false`, `null` | idem |
 | `pedidos_vendas_liberacao_historico.acao` | `liberado`, `alterado`, `importado_mes` | idem |
 | Erros da liberação | 404 `PEDIDO_FORA_DA_LIBERACAO`, 409 `PEDIDO_IMPORTADO_MES`, 409 `PEDIDO_NAO_LIBERADO`, 403 `PEDIDO_FORA_DO_ESCOPO`, 403 `SEM_VENDEDOR_VINCULADO` | `pedidos_liberacao.route.js:187-222`, `pedidos_liberados.route.js:50` ✅ |
@@ -316,7 +316,7 @@ Etapa desconhecida: a tela mostra o texto cru em tom neutro (`etapas-item.ts:49-
 | `pedidos_compras_etapas.status_equivalente` | `aprovado`, `cancelado` | 18148 ✅ |
 | `contadores_documento.tipo` | `ordem_compra`, `requisicao_compra` | 16560 ✅ |
 
-Aprovação (`C3`, N14-21): OC acima do limite da unidade (`parametros_compras.limite_aprovacao`, padrão R$ 30 mil) fica `aguardando_aprovacao` até o Gerente de Compras aprovar; OC até o limite vira `aprovado` sozinha (compradores livres); a Diretoria não aprova ✅. Detalhes em [[04-Circuito-de-Compra]].
+Aprovação (`C3`, N14-21): OC acima do limite da unidade (`parametros_compras.limite_aprovacao`, padrão R$ 30 mil) fica `aguardando_aprovacao` até o Gerente de Compras aprovar; OC até o limite vira `aprovado` sozinha (compradores livres); a Diretoria não aprova ✅. Detalhes em [[06-Circuito-de-Compra]].
 
 #### Torre de Fluxo (`core_fluxo`)
 
@@ -326,7 +326,7 @@ Aprovação (`C3`, N14-21): OC acima do limite da unidade (`parametros_compras.l
 | `item_estado_projetado.encerramento` | `cancelado`, `concluido` (preenchido junto com `encerrado_em`) | linha 2169 ✅ |
 | `item_estado_projetado.estado_macro` | `varchar(40)`, vocabulário não definido 🔴 | linha 2176 |
 
-Os 9 estados macro do desenho do vendedor (`AGUARDANDO_LIBERACAO`, `PENDENTE_PCP`, `EM_ESTOQUE`, `EM_COMPRA`, `EM_PRODUCAO`, `EM_RECEBIMENTO`, `EM_INSPECAO`, `PRONTO_EXPEDICAO`, `FATURADO`) não existem no código 🟡 ([[01-Vendas-Liberacao]]). O MES ainda não publica `/fluxo/eventos` 🔴 ([[Rastreabilidade-e-Torre-de-Fluxo]]).
+Os 9 estados macro do desenho do vendedor (`AGUARDANDO_LIBERACAO`, `PENDENTE_PCP`, `EM_ESTOQUE`, `EM_COMPRA`, `EM_PRODUCAO`, `EM_RECEBIMENTO`, `EM_INSPECAO`, `PRONTO_EXPEDICAO`, `FATURADO`) não existem no código 🟡 ([[03-Pedido-de-Venda-e-Liberacao]]). O MES ainda não publica `/fluxo/eventos` 🔴 ([[Rastreabilidade-e-Torre-de-Fluxo]]).
 
 #### Proposta, pedido de venda do Hub, custo real e comissão nova (proposta 🟡)
 

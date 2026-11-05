@@ -74,7 +74,7 @@ Depois, Compras emite a OC dos 100 flanges. O preço pago passa a ser a última 
 
 ### Ligações
 
-O que foi do antigo anexo [[Orcamento]] está na última seção. Nós do [[00-Fluxo-Mestre-0b]]: `B1` a `B4`. Ligações: `V0.2` (o vendedor preenche o custo, consulta ou pede cotação) e `V0.3` em [[11-Proposta-e-Pedido-de-Venda]]; `C6` a `C8` em [[04-Circuito-de-Compra]]. Selos em [[Regras-do-Vault]].
+O que foi do antigo anexo [[Orcamento]] está na última seção. Nós do [[00-Fluxo-Mestre-0b]]: `B1` a `B4`. Ligações: `V0.2` (o vendedor preenche o custo, consulta ou pede cotação) e `V0.3` em [[01-Proposta-e-Pedido-de-Venda]]; `C6` a `C8` em [[06-Circuito-de-Compra]]. Selos em [[Regras-do-Vault]].
 
 ### Objetivo
 

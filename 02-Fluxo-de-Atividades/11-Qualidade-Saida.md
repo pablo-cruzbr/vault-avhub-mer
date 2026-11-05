@@ -11,7 +11,7 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts), app-pc
 
 **Em uma frase:** é a inspeção do que a produção fabricou, para que nada siga adiante sem conferência. Nós `Q7` (inspeção) e `Q8` (aprova?) do [[00-Fluxo-Mestre-0b]].
 
-Recebe a parcial concluída pela produção ([[07-Producao-e-Roteiro]]). A inspeção de entrada, por lote, é outra raia ([[06-Qualidade-Entrada]]).
+Recebe a parcial concluída pela produção ([[10-Producao-e-Roteiro]]). A inspeção de entrada, por lote, é outra raia ([[08-Qualidade-Entrada]]).
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-128: pode reprovar só parte (5 de 100 peças). Hoje reprova tudo.
@@ -115,7 +115,7 @@ Não existe tela de laudo, checklist nem formulário de resultado de inspeção 
 |---|---|---|
 | `PATCH /itens-parciais/:id/receber`, `/iniciar` | inspetor assume a parcial | `service:224`, `:299` ✅ |
 | `PATCH /itens-parciais/:id/aprovar-saida` `{ observacao?, quantidade? }` | **"aprova"**: a parcela (ou só a `quantidade`) volta ao Estoque `EM_TRANSITO`, marcada como fabricado aprovado | `develop` (27/10, `itens-parciais.controller.ts`) ✅ |
-| `PATCH /itens-parciais/:id/receber-fabricado` `{ idLocalizacao }` | o Estoque recebe o fabricado e cria o lote `PRODUCAO` | `develop` (27/10) ✅ ([[03-Estoque-Atendimento-e-Despacho]]) |
+| `PATCH /itens-parciais/:id/receber-fabricado` `{ idLocalizacao }` | o Estoque recebe o fabricado e cria o lote `PRODUCAO` | `develop` (27/10) ✅ ([[05-Estoque-Atendimento-e-Despacho]]) |
 | `PATCH /itens-parciais/:id/mover` | na `main` do MES era o "aprova": segue ao próximo setor do roteiro | `service:366` ✅ |
 | `PATCH /itens-parciais/:id/reprovar` `{ motivo }` | reprova e abre divergência | `controller:205-213`, `service:1011` ✅ |
 | `PATCH /itens-parciais/:id/resolver` | falso alarme | `service:1067` ✅ |
@@ -130,7 +130,7 @@ Contrato com o av-hub: só a etapa do item ([[Contratos-da-v2|API-005]], [[Contr
 - Como a Qualidade é um setor comum no roteiro, `ehUltimaEtapa` é falso nela (a Expedição vem depois), então a tela oferece `mover`, não `concluir` (`FilaSetor.tsx:687-688`).
 - Registro de 14/10 (superado na `develop`): o fabricado aprovado nunca passava pelo Estoque, e `mover` levava a parcial direto à primeira etapa `EXPEDICAO`. Na `develop`, a reserva do lote `PRODUCAO` nasce em `receber-fabricado`.
 - `ensureLotesCompradosLiberados` só barra envio a setor `ESTOQUE` com lote comprado pendente (`service:862-874`); não protege este caso.
-- `Pedidos.acompanhamentoQualidade` (V2) é gravado (`producao.prisma:118`) e mostrado na Triagem, mas nenhuma fila consome ([[01-Vendas-Liberacao]], item 7).
+- `Pedidos.acompanhamentoQualidade` (V2) é gravado (`producao.prisma:118`) e mostrado na Triagem, mas nenhuma fila consome ([[03-Pedido-de-Venda-e-Liberacao]], item 7).
 - ❓ Ninguém conferiu o uso real da tela em ambiente.
 
 ### O que falta desenvolver
@@ -165,4 +165,4 @@ flowchart TD
     E6 --> X1
 ```
 
-Raias vizinhas: [[07-Producao-e-Roteiro]], [[03-Estoque-Atendimento-e-Despacho]], [[09-Expedicao]].
+Raias vizinhas: [[10-Producao-e-Roteiro]], [[05-Estoque-Atendimento-e-Despacho]], [[13-Expedicao]].

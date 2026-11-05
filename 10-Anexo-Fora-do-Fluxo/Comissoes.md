@@ -11,12 +11,12 @@ fontes: [api-acos-vital f322dcd src/schemas/core_comissionamento, HUB b55ac55 ap
 
 **Em uma frase:** descreve o módulo de comissões que já existe hoje no HUB (simulador, bloqueios, regras fixas e dashboard).
 
-**Quando consultar:** quando a dúvida é sobre o módulo **atual**. A comissão **nova** (a da proposta) está em [[13-Custo-Real-e-Comissao-no-Fluxo]].
+**Quando consultar:** quando a dúvida é sobre o módulo **atual**. A comissão **nova** (a da proposta) está em [[15-Custo-Real-e-Comissao]].
 
 Fora do fluxo 0b. Banco e API são do Gustavo; as telas são do Nathan. A comissão por faturamento e o custo real por item (Ciclo 2) dependem do `GET /itens/custo`, que o MES já publicou na `develop` (27/10, fora da `main`) e que o hub ainda precisa ler de ponta a ponta ([[Integracao-AvHub-MES]], INT-06).
 
 > [!info] Comissão nova (26/10/2026)
-> Este anexo descreve o módulo **atual** (`core_comissionamento`), que **não muda** (N16-11). A **comissão nova** entrou no [[00-Fluxo-Mestre-0b]] como `K1` a `K6`, em schema próprio (`core_comissao`), para o pedido da proposta e para o digitado no Omie: [[13-Custo-Real-e-Comissao-no-Fluxo]]. Como o motor atual calcula: [[01-Motor-Atual-Como-Calcula]]; o modelo novo: [[03-Modelo-Novo-core_comissao]].
+> Este anexo descreve o módulo **atual** (`core_comissionamento`), que **não muda** (N16-11). A **comissão nova** entrou no [[00-Fluxo-Mestre-0b]] como `K1` a `K6`, em schema próprio (`core_comissao`), para o pedido da proposta e para o digitado no Omie: [[15-Custo-Real-e-Comissao]]. Como o motor atual calcula: [[01-Motor-Atual-Como-Calcula]]; o modelo novo: [[03-Modelo-Novo-core_comissao]].
 
 ## O que existe
 
@@ -32,7 +32,7 @@ Fora do fluxo 0b. Banco e API são do Gustavo; as telas são do Nathan. A comiss
 - ❓ Confirmar em produção que as migrations 007 e 007b do DBA foram aplicadas.
 - 🔴 Comissão por faturamento com custo real: Ciclo 2, [[Contratos-da-v2|LOG-47]].
 
-Ver também: [[12-Orcamento-Base-de-Preco]] (a marca `GAMBIARRA` do LOG-42 saiu do Orçamento em 16/10), [[Dashboards]].
+Ver também: [[02-Orcamento-Base-de-Preco]] (a marca `GAMBIARRA` do LOG-42 saiu do Orçamento em 16/10), [[Dashboards]].
 
 ## Detalhe técnico
 

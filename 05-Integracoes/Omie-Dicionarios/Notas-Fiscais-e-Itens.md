@@ -13,7 +13,7 @@ fontes: [v1 08-Integracao-Omie/01-Dados-Extraidos/Notas-Fiscais-e-Itens, omie-el
 
 **Quando consultar esta nota:** ao procurar o significado de uma coluna da nota, ao ligar nota a pedido ou item, ou ao entender por que um número de nota pode não bater.
 
-Fonte: Omie `ListarNF` (`/produtos/nfconsultar/`), resource `notasFiscais.ts`. Destino: `core_vendas_faturamento.notas_fiscais`. Chave de conflito (identifica a linha e evita duplicar): `(codigo_empresa, codigo_nf_omie)`. Nós do fluxo: O1 e O2 ([[10-Fiscal-Omie]]).
+Fonte: Omie `ListarNF` (`/produtos/nfconsultar/`), resource `notasFiscais.ts`. Destino: `core_vendas_faturamento.notas_fiscais`. Chave de conflito (identifica a linha e evita duplicar): `(codigo_empresa, codigo_nf_omie)`. Nós do fluxo: O1 e O2 ([[14-Fiscal-Omie]]).
 
 | Coluna | Campo ou origem Omie |
 |---|---|
@@ -41,7 +41,7 @@ Fonte: Omie `ListarNF` (`/produtos/nfconsultar/`), resource `notasFiscais.ts`. D
 
 - **CFOP da nota como um todo**: não existe. O único CFOP capturado é por item, em `produto_vendas.cfop` ([[Omie-Integracao-Estado]], seção CFOP).
 - **ICMS-ST**: não é capturado em nenhuma tabela.
-- **NF de entrada (compras)**: o pipeline não extrai nenhuma. `ListarNF` é só de saída. A NF de entrada do fluxo de compra é digitada na chegada, no MES (`POST /compras/requisicoes/:id/chegada`, [[05-Recebimento]]).
+- **NF de entrada (compras)**: o pipeline não extrai nenhuma. `ListarNF` é só de saída. A NF de entrada do fluxo de compra é digitada na chegada, no MES (`POST /compras/requisicoes/:id/chegada`, [[07-Recebimento]]).
 
 ## Confiabilidade de `numero_nf`
 

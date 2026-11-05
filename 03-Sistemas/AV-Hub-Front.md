@@ -47,7 +47,7 @@ fontes: [av-hub 758d5f0 (develop, 29/10; repositório `av-hub`, antes `00 - HUB`
 - ✅ O MES lê a OC da "Nova requisição" pela referência da OC (desde 15/10, `develop` do MES) e as requisições do Compras com pedido de venda (API-009, 23/10). Falta só a produção receber a `develop` do MES.
 - 📝 Imposto por item decidido em 29/10 (N16-144); falta a tela: campos de imposto e selo de origem na emissão da OC, quando o desenvolvimento começar.
 - 🟡 Endurecer a regra de aprovação quando Compras definir.
-- ✅ O Orçamento antigo (JSON local) saiu em 16/10 (`c851cda`). As telas novas de Orçamento (Catálogo de produtos, Fornecedores, Painel do comprador, Parâmetros de custo, Custo dos itens) leem a API do Hub ([[12-Orcamento-Base-de-Preco]]).
+- ✅ O Orçamento antigo (JSON local) saiu em 16/10 (`c851cda`). As telas novas de Orçamento (Catálogo de produtos, Fornecedores, Painel do comprador, Parâmetros de custo, Custo dos itens) leem a API do Hub ([[02-Orcamento-Base-de-Preco]]).
 
 ## Detalhe técnico
 
@@ -111,7 +111,7 @@ Resumo; a tabela completa está em [[RBAC-e-Permissoes]].
 
 ### Pontas soltas conferidas no código
 
-- ✅ O módulo antigo de Orçamento (JSON local em `lib/orcamento/`, `app/api/orcamento/*`) foi removido em 16/10 (`c851cda`). O Orçamento de hoje são as telas em `app/(protected)/orcamento/` sobre `/api/comercial/*` ([[12-Orcamento-Base-de-Preco]]).
+- ✅ O módulo antigo de Orçamento (JSON local em `lib/orcamento/`, `app/api/orcamento/*`) foi removido em 16/10 (`c851cda`). O Orçamento de hoje são as telas em `app/(protected)/orcamento/` sobre `/api/comercial/*` ([[02-Orcamento-Base-de-Preco]]).
 - ✅ A aprovação lê `limite_aprovacao` de `GET /compras/parametros` apenas para avisar na tela de OC ("Acima de R$… ela nasce Aguardando aprovação") ✅ `components/Compras/FecharCompra.tsx:604-605,1652`.
 - 🟡 `api-comercial` continua dentro do mesmo repositório (pasta `api-comercial/`), agora como legado só de leitura, fora do BFF ([[API-Comercial]]).
 

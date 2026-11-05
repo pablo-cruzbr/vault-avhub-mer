@@ -68,11 +68,11 @@ O pedido de 100 flanges de aço carbono do Cliente Exemplo S.A. aparece na Triag
 - 🟡 Matéria-prima: a `develop` baixa no "Atender pelo estoque" (19/10); a decisão é baixar na retirada (N16-140) 🔴.
 - 📝 Pedido anterior à data de corte: decidido, falta a mensagem no lugar do 404.
 
-Entrada: [[01-Vendas-Liberacao]]. Próxima raia: [[03-Estoque-Atendimento-e-Despacho]].
+Entrada: [[03-Pedido-de-Venda-e-Liberacao]]. Próxima raia: [[05-Estoque-Atendimento-e-Despacho]].
 
 ## Detalhe técnico
 
-Nós do [[00-Fluxo-Mestre-0b]]: `P1` Triagem do Pedido, `P2` Destinação do Pedido, `P6` Novo norte. O nó `P3` (requisição de compra de origem PCP) fica em [[04-Circuito-de-Compra]]. Entrada: [[01-Vendas-Liberacao]]. Saída: [[03-Estoque-Atendimento-e-Despacho]]. Selos em [[Regras-do-Vault]].
+Nós do [[00-Fluxo-Mestre-0b]]: `P1` Triagem do Pedido, `P2` Destinação do Pedido, `P6` Novo norte. O nó `P3` (requisição de compra de origem PCP) fica em [[06-Circuito-de-Compra]]. Entrada: [[03-Pedido-de-Venda-e-Liberacao]]. Saída: [[05-Estoque-Atendimento-e-Despacho]]. Selos em [[Regras-do-Vault]].
 
 ### Quem atua (onde)
 
@@ -105,7 +105,7 @@ Nós do [[00-Fluxo-Mestre-0b]]: `P1` Triagem do Pedido, `P2` Destinação do Ped
 
 #### Matriz de destinação (eixo 1 × eixo 2)
 
-O diagrama antigo tratava Estoque, Revenda e Fabricação como três ramos. O modelo vigente tem **três eixos independentes**: (1) natureza, escolhida pela fábrica da rodada; (2) disponibilidade física, resolvida **no setor Estoque**; (3) destinação da reserva (a tabela `Reserva`, ver [[03-Estoque-Atendimento-e-Despacho]]). A matriz abaixo diz o que acontece com cada célula.
+O diagrama antigo tratava Estoque, Revenda e Fabricação como três ramos. O modelo vigente tem **três eixos independentes**: (1) natureza, escolhida pela fábrica da rodada; (2) disponibilidade física, resolvida **no setor Estoque**; (3) destinação da reserva (a tabela `Reserva`, ver [[05-Estoque-Atendimento-e-Despacho]]). A matriz abaixo diz o que acontece com cada célula.
 
 | | **Pronto em estoque** (lote `LIBERADO` livre na filial do pedido) | **Matéria-prima em estoque** | **Sem estoque** |
 |---|---|---|---|
@@ -136,7 +136,7 @@ Regra de bolso: **o PCP escolhe o destino; o Estoque decide quanto sai do saldo 
 | Acompanhamento dos Pedidos | Ordens de Produção | `/ordens-producao`, `/ordens-producao/[id]` | app-pcp | `ordens-producao` (visualizar) |
 | Montagem do Roteiro | — | `/montagem-roteiro`, `/montagem-roteiro/[id]` | app-pcp | `montagem-roteiro` (só na `develop`, 22/10) |
 | Produtos em Produção | — | `/produtos-em-producao` | app-pcp | `produtos-em-producao` (só na `develop`, 20/10) |
-| Divergências de Recebimento | Decisões do PCP | `/decisoes-pcp` | app-pcp | `decisoes-pcp` (ver [[05-Recebimento]]) |
+| Divergências de Recebimento | Decisões do PCP | `/decisoes-pcp` | app-pcp | `decisoes-pcp` (ver [[07-Recebimento]]) |
 | Filas de Produção | Movimentações | `/movimentacoes` | app-pcp | `movimentacoes` |
 
 A Triagem lista por mês, ano e **filial** (`codigoEmpresa`), mostra a coluna Qualidade ("Acompanha" ou "Não", `carteira/page.tsx:284-291`), o chip de envio e o de produção, e abre a Destinação com `router.push('/ordens-producao/novo?...')` (`carteira/page.tsx:155`). A Destinação distribui os itens entre destinos, com quantidade a enviar por item (começa cheia), prioridade, observação e montador de roteiro por destino (Estoque fixo travado no topo). Item sem destino **não vai na rodada** e continua na Triagem para a próxima (`ordens-producao/novo/page.tsx:359-366`, `:494-504`).
@@ -164,7 +164,7 @@ O `POST /pedidos/completo` singular foi apagado (PR #50); só o `/lote` existe.
 - ✅ **Reenvio do `importado`** com `AVHUB_REENVIO_IMPORTADO_MIN` (padrão 10; 0 desliga) (`pedidos.service.ts:80-85`).
 - 🟡 **Nomes técnicos antigos:** a rota é `/carteira`, o campo é `ordemProducao`, os códigos são `OP-`. Os rótulos novos já estão na tela (09/10, `9bb47e4`).
 - ✅ **Ordem de Produção como entidade e documento (N14-22), só na `develop`.** Desde 27/10 (`ab3318d`) toda ordem de destino de fabricação é emitida na criação e tem PDF (`src/pedidos/ordem-producao-pdf.ts`, `GET /pedidos/:id/op`, `opImpressoes` conta as 2ªs vias). Registro de 14/10 (superado na `develop`): `ordemProducao` era só o texto do pedido (`producao.prisma:97`).
-- 🔴 **OC do pedido na Triagem e na Destinação (N14-20).** O MES já lê a referência da OC do hub (K4, `develop`, 15/10) e mostra as requisições do Compras com pedido de venda (`GET /pedidos/requisicoes-hub/:pedidoVenda`, 23/10), mas ainda não mostra a OC ao lado do pedido e do item (BL-049); do lado do hub já existem o vínculo `ordens_compra_itens_vinculos`, a view `vw_pedido_venda_itens_compra` e `GET /compras/pedidos-venda/:numero/compras` ✅ ([[04-Circuito-de-Compra]]).
+- 🔴 **OC do pedido na Triagem e na Destinação (N14-20).** O MES já lê a referência da OC do hub (K4, `develop`, 15/10) e mostra as requisições do Compras com pedido de venda (`GET /pedidos/requisicoes-hub/:pedidoVenda`, 23/10), mas ainda não mostra a OC ao lado do pedido e do item (BL-049); do lado do hub já existem o vínculo `ordens_compra_itens_vinculos`, a view `vw_pedido_venda_itens_compra` e `GET /compras/pedidos-venda/:numero/compras` ✅ ([[06-Circuito-de-Compra]]).
 - 🔴 **P6 Novo norte:** a Qualidade de saída pode reprovar e abrir retrabalho (`PATCH /itens-parciais/:id/reprovar`, `/resolver`, `/retrabalho`, `itens-parciais.controller.ts:205-239`), mas **não existe a fila "Novo norte"** nem o `RoteiroItem` (C8, EC-03). A única fila de decisão do PCP existente é a de divergência de recebimento.
 
 ### O que falta desenvolver
@@ -176,7 +176,7 @@ O `POST /pedidos/completo` singular foi apagado (PR #50); só o `/lote` existe.
 | 3 | Renomear rota, campo e prefixo (`/carteira`, `ordemProducao`, `OP-`) para os nomes novos (BL-036) | Robert | P1, P2 | 🔴 |
 | 4 | Baixa de matéria-prima na retirada do Estoque (J2, J3; N16-140). Na `develop` há a baixa imediata no "Atender pelo estoque" (19/10) | Robert | P2, E4 | 🟡 baixa imediata ✅; 🔴 retirada |
 | 5 | Pedido manual (`SistemaOrigem.MANUAL`) fora da espinha; ver anexo [[Pedido-Manual]] | Nathan | P2 | 🟡 |
-| 6 | Pedido liberado anterior à data de corte não aparece na Triagem (404 nos itens) | Nathan | P1 | 📝 decidido em 29/10 (N16-142): ficam fora do MES e terminam no sistema antigo; falta a mensagem no lugar do 404 (ver [[01-Vendas-Liberacao]]) |
+| 6 | Pedido liberado anterior à data de corte não aparece na Triagem (404 nos itens) | Nathan | P1 | 📝 decidido em 29/10 (N16-142): ficam fora do MES e terminam no sistema antigo; falta a mensagem no lugar do 404 (ver [[03-Pedido-de-Venda-e-Liberacao]]) |
 | 7 | **Ordem de Produção: entidade e documento imprimível**, só para o que será fabricado (BL-052): feito na `develop` (27/10); falta o merge do MES para a `main` (BL-035) | Robert | P2 | 📝 N14-22 ✅ `develop` |
 | 8 | **Mostrar a OC do pedido** (Triagem, Destinação, Atendimento) lendo a referência da OC do hub (BL-049; a leitura, BL-001, já existe na `develop`) | Robert | P1, P2, E1 | 🔴 📝 N14-20 |
 

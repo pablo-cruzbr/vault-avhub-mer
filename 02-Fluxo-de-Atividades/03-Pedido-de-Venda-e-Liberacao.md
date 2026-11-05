@@ -12,7 +12,7 @@ fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005,
 **Em uma frase:** o pedido de venda só segue para a produção depois que o vendedor o libera. É o portão do fluxo e a única entrada de pedido de venda no MES: sem liberação, o PCP (planejamento e controle da produção) não enxerga o pedido.
 
 > [!info] Proposta ao pedido (decisões de 16 a 26/10/2026, fluxo aprovado em 26/10)
-> Esta nota descreve a liberação que **existe hoje** ✅. O desenho aprovado põe a proposta antes do `V1`, com duas origens no mesmo fluxo. O pedido que nasce da proposta já vem liberado (a Qualidade é respondida no "Transformar em pedido"). O pedido digitado no Omie continua chegando travado, mas o vendedor responde a Qualidade e o faturamento em partes na tela do pedido e preenche ali a parte de compras, sem travar o fluxo. A liberação gravada é a mesma desta nota, que o MES lê. Esse desenho ainda não está todo pronto 📝 (N16-05, N16-91, N16-106): a `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub, mas **não envia o pedido ao Omie** e a resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe 🔴. Detalhe em [[11-Proposta-e-Pedido-de-Venda]].
+> Esta nota descreve a liberação que **existe hoje** ✅. O desenho aprovado põe a proposta antes do `V1`, com duas origens no mesmo fluxo. O pedido que nasce da proposta já vem liberado (a Qualidade é respondida no "Transformar em pedido"). O pedido digitado no Omie continua chegando travado, mas o vendedor responde a Qualidade e o faturamento em partes na tela do pedido e preenche ali a parte de compras, sem travar o fluxo. A liberação gravada é a mesma desta nota, que o MES lê. Esse desenho ainda não está todo pronto 📝 (N16-05, N16-91, N16-106): a `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub, mas **não envia o pedido ao Omie** e a resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe 🔴. Detalhe em [[01-Proposta-e-Pedido-de-Venda]].
 
 ## Como funciona, passo a passo
 
@@ -64,7 +64,7 @@ O Cliente Exemplo S.A. pede 100 flanges, e o pedido é digitado no Omie. Ele che
 - 🔴 Pedido manual: o desenho só prevê pedido que chega do Omie.
 - ❓ Valor da data de corte em produção e migration `api005`.
 
-Raia seguinte: [[02-PCP-Triagem-e-Destinacao]].
+Raia seguinte: [[04-PCP-Triagem-e-Destinacao]].
 
 ## Detalhe técnico
 
@@ -79,7 +79,7 @@ Depois da liberação, esta raia continua como leitura: o vendedor acompanha o i
 | Vendedor | Marca Sim ou Não e libera os pedidos dele | Portal do Vendedor, `/liberar-pedidos` |
 | Auxiliar do titular | Libera pelos titulares que auxilia (mesmo escopo de Meus Pedidos) | idem |
 | Gerente (perfis que já veem Pedidos da Equipe) | Vê todos os pedidos da liberação, só leitura; descobre quem está segurando pedido | Portal do Gerente, `/liberacao-equipe` |
-| PCP | Consome os liberados (não marca nada) | MES, ver [[02-PCP-Triagem-e-Destinacao]] |
+| PCP | Consome os liberados (não marca nada) | MES, ver [[04-PCP-Triagem-e-Destinacao]] |
 | Gustavo (DBA) | Banco e API desta raia | `api-acos-vital` |
 | Nathan | Front do av-hub (telas e BFF) | HUB |
 | Robert | Lado MES do contrato (`importado`, polling) | `api-pcp` |
@@ -133,7 +133,7 @@ O desenho do v1 (estados do item visto pelo vendedor) tem 9 valores: `AGUARDANDO
 | Meus Pedidos (detalhe, cartão Etapa dos itens) | Meus Pedidos por etapa (tela 1.2) | `/meus-pedidos/pedido/:empresa/:numero` | HUB | Vendedor |
 | Pedidos da Equipe (detalhe, mesmo cartão) | idem | `/pedidos-equipe/pedido/:empresa/:numero` | HUB | Gerência |
 | Pedidos do PCP | Portal PCP | `/pcp-pedidos`, `/pcp-pedidos/pedido/...` | HUB | acompanhamento comercial, **não** é o `app-pcp` |
-| Triagem dos Pedidos | Carteira de Pedidos | `/carteira` | app-pcp | PCP (ver [[02-PCP-Triagem-e-Destinacao]]) |
+| Triagem dos Pedidos | Carteira de Pedidos | `/carteira` | app-pcp | PCP (ver [[04-PCP-Triagem-e-Destinacao]]) |
 
 Lista completa por raia em [[Telas-por-Raia]]. O "Portal PCP" do av-hub é acompanhamento comercial por diligenciador; não confundir com o setor PCP do MES.
 
@@ -219,7 +219,7 @@ Escopo (contrato 40, ✅ fixo na API): vale quando o usuário entrou por tela co
 | 4 | **Token expirado vira furo de acesso** quando o BFF para de filtrar: sem `req.usuario` a API não aplica escopo (`escopoVendedor.js`). Renovar o token antes de qualquer remoção de filtro | Gustavo | V2 | 🔴 |
 | 5 | **Reabrir marcação depois da importação.** Hoje ninguém destrava. Decidir se a Gerência ou o PCP pode reabrir (rota nova, permissão `pode_aprovar`) | Nathan decide, Gustavo implementa | V3 | 🔴 |
 | 6 | **Pedido parado.** Pedido que o vendedor nunca libera é invisível ao PCP. A tela do gerente mostra quem segura; falta alerta depois de N horas e definir quem recebe (decisão T-07 do v1) | Nathan | V3 | 🔴 |
-| 7 | **Fila de inspeção de processo** que consome `Pedidos.acompanhamentoQualidade`: o dado chega e é gravado, mas nenhuma tela do MES o usa além da coluna da Triagem | Robert | V2 e raia de [[08-Qualidade-Saida]] | 🔴 |
+| 7 | **Fila de inspeção de processo** que consome `Pedidos.acompanhamentoQualidade`: o dado chega e é gravado, mas nenhuma tela do MES o usa além da coluna da Triagem | Robert | V2 e raia de [[11-Qualidade-Saida]] | 🔴 |
 | 8 | **Estados macro do vendedor** (os 8 do desenho): decidir se entram ou se o vendedor fica com `status_liberacao` mais 11 etapas; se entrarem, depende do feed do MES (`estado_macro`) | Nathan decide, Robert (feed) | V1 a O2 | 🔴 |
 | 9 | **Cartão Etapa dos itens:** teste ponta a ponta com a migration `api005` aplicada; `quantidade_na_etapa` tipado como número e a API pode mandar `null`; sem linha do tempo, SLA nem filtro por etapa; `compras.fechamento` ainda aparece como "Em compra" (sem cotação, aprovação ou trânsito) | Nathan (front), Gustavo (migration), Robert (etapa de compra mais fina) | V1 | 🔴 |
 | 10 | **Migration `api005`** (função, tabela e mapa de rotas do status por item) não verificada no banco; DDL não versionado | Gustavo | V1 | ❓ |
