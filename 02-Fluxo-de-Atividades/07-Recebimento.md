@@ -138,7 +138,7 @@ Parcial no setor `LOGISTICA_ENTRADA` (nome "Recebimento", código `logistica-ent
 
 | Nome atual | Nome antigo | Rota | Slug | Ações |
 |---|---|---|---|---|
-| Recebimento | Logística de entrada | `/logistica/logistica-entrada` | `logistica-entrada` | lista de esperados, **Receber com NF** (`FilaSetor.tsx:594`, `ReceberComNfModal.tsx:56`), **Conferir recebimento** (`FilaSetor.tsx:923`, `ConferirRecebimentoModal.tsx:199`), **Recontar** (`FilaSetor.tsx:936`, `RecontarRecebimentoModal.tsx:91`), **Liberar para o Recebimento sem OC** (`FilaSetor.tsx:911`) |
+| Recebimento | Logística de entrada | `/logistica/logistica-entrada` | `logistica-entrada` | lista de esperados, **Receber com NF** (`FilaRecebimento.tsx:147`, `ReceberComNfModal.tsx:56`), **Conferir recebimento** (`fila/CartaoItemParcial.tsx:907`, `ConferirRecebimentoModal.tsx:199`), **Recontar** (`fila/CartaoItemParcial.tsx:895`, `RecontarRecebimentoModal.tsx:91`), **Liberar para o Recebimento sem OC** (`fila/CartaoItemParcial.tsx:761`) |
 | Divergências de Recebimento | Decisões do PCP | `/decisoes-pcp` | `decisoes-pcp` | Aceitar ou Reabrir com motivo (`decisoes-pcp/page.tsx`) |
 | Compras · CCP | Pedidos de Compra | `/compras/pedidos-compra` | `pedidos-compra` | onde a parcial espera até a NF chegar ([[06-Circuito-de-Compra]]) |
 

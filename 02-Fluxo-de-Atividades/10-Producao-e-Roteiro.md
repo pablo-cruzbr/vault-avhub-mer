@@ -92,7 +92,7 @@ Produção só recebe o que o Estoque não atendeu e que não foi para compra. R
 | Quem cancela | Permissão `ordens-producao:deletar` (não a de setor) | detalhe do pedido |
 | Robert | Dono do código MES | `api-pcp`, `app-pcp` |
 
-O acesso a cada fila depende de `PerfilSetor` (`podeVisualizar`, `podeAtuar`), default-deny (`fabricas.prisma:162-185`, `itens-parciais.service.ts:52-54`). A rota exige a tela `movimentacoes` (`itens-parciais.controller.ts:56`, `:99`).
+O acesso a cada fila depende de `PerfilSetor` (`podeVisualizar`, `podeAtuar`), default-deny (`fabricas.prisma:162-176`, `itens-parciais.service.ts:52-54`). A rota exige a tela `movimentacoes` (`itens-parciais.controller.ts:56`, `:99`).
 
 ### Regras decididas
 
@@ -129,7 +129,7 @@ Ações por status na fila (`app-pcp/app/(protected)/movimentacoes/acoes.ts:61-7
 | `CONCLUIDO` | `confirmar-entrega` |
 | `CANCELADO` | nenhuma |
 
-A tela filtra: `concluir` só com `ehUltimaEtapa`, `mover` só sem ela, `devolver` e `retrabalho` só com `idSetorOrigem`, `reprovar` só em setor `QUALIDADE` (`FilaSetor.tsx:685-691`). `cancelar` não aparece na fila: vive no detalhe do pedido (`acoes.ts:55-60`).
+A tela filtra: `concluir` só com `ehUltimaEtapa`, `mover` só sem ela, `devolver` e `retrabalho` só com `idSetorOrigem`, `reprovar` só em setor `QUALIDADE` (`fila/CartaoItemParcial.tsx:301-305`). `cancelar` não aparece na fila: vive no detalhe do pedido (`acoes.ts:55-60`).
 
 ```mermaid
 stateDiagram-v2
@@ -150,7 +150,7 @@ stateDiagram-v2
     CONCLUIDO --> [*] : entrega
 ```
 
-`StatusPedido` (`AGUARDANDO`, `EM_PRODUCAO`, `BLOQUEADO`, `ENTREGUE`) e `Prioridade` em [[Estados-e-Status]]. Só `AGUARDANDO` (inicial) e `ENTREGUE` são gravados; `EM_PRODUCAO` e `BLOQUEADO` nunca (`item-parcial-status.constants.ts:44-50`).
+`StatusPedido` (`AGUARDANDO`, `EM_PRODUCAO`, `BLOQUEADO`, `ENTREGUE`) e `Prioridade` em [[Estados-e-Status]]. Só `AGUARDANDO` (inicial) e `ENTREGUE` são gravados; `EM_PRODUCAO` e `BLOQUEADO` nunca (`item-parcial-status.constants.ts:31-41`).
 
 ### Telas
 
@@ -192,7 +192,7 @@ Todos sob `@UseGuards(JwtAuthGuard, PermissionsGuard)`; setor checado por `perfi
 | `GET /pedidos/setor-estoque-fixo` | etapa 1 fixa para a tela | idem | `pedidos.controller.ts:92` ✅ |
 | `/roteiros` CRUD, `/roteiro-item` CRUD | roteiro do pedido e roteiro individual do item | idem | `roteiros.controller.ts:24`, `roteiro-item.controller.ts:25` ✅ CRUD; na `develop`, `RoteiroItem` é lido pelo motor (`roteiro-efetivo.ts`) |
 | `GET /pedidos/roteiros`, `GET`/`PUT /pedidos/:id/roteiro`, `POST /pedidos/:id/devolver-destinacao` | Montagem do Roteiro | `montagem-roteiro` | `pedidos.controller.ts` ✅ `develop` (22/10) |
-| `/divergencias` (`POST`, `GET`, `PATCH :id`, `PATCH :id/resolver`) | divergência de produção | `movimentacoes` | `divergencias.controller.ts:26-63` ✅ |
+| `/divergencias` (`POST`, `GET`, `PATCH :id`, `PATCH :id/resolver`) | divergência de produção | `movimentacoes` | `divergencias.controller.ts:26-61` ✅ |
 | `GET /itens/status` | foto de cada parcial para o av-hub, com `etapa` | chave `MES_API_KEY` | `integracao-avhub.service.ts:114`, `etapaDoItem :167` ✅ ([[Contratos-da-v2\|API-005]]) |
 
 ### Como está no código

@@ -24,3 +24,39 @@ producao.prisma:454-468	producao.prisma:420-434	02-Fluxo-de-Atividades/13-Expedi
 itens-parciais.service.ts:927-961	itens-parciais.service.ts:1640-1674	02-Fluxo-de-Atividades/13-Expedicao.md:144	linha conferida na develop (Bloco 3, F5)
 itens-parciais.service.ts:278-285	itens-parciais.service.ts:317-324	02-Fluxo-de-Atividades/13-Expedicao.md:151	linha conferida na develop (Bloco 3, F5)
 estoque-operacao.helpers.ts:208-280	estoque-operacao.helpers.ts:317-389	02-Fluxo-de-Atividades/13-Expedicao.md:151	linha conferida na develop (Bloco 3, F5)
+FilaSetor.tsx:370-396	fila/compraAvhub.tsx:52-74	02-Fluxo-de-Atividades/06-Circuito-de-Compra.md:240	app-pcp c199d91 dividiu o FilaSetor; sincronizar está em compraAvhub.tsx
+integracao.prisma:290-320	integracao.prisma:20-28	02-Fluxo-de-Atividades/06-Circuito-de-Compra.md:155	api-pcp: enum StatusEnvioAvhub nas linhas 20-28
+FilaSetor.tsx:594	FilaRecebimento.tsx:147	02-Fluxo-de-Atividades/07-Recebimento.md:141	app-pcp: o Receber com NF abre de FilaRecebimento.tsx
+FilaSetor.tsx:923	fila/CartaoItemParcial.tsx:907	02-Fluxo-de-Atividades/07-Recebimento.md:141	app-pcp c199d91
+FilaSetor.tsx:936	fila/CartaoItemParcial.tsx:895	02-Fluxo-de-Atividades/07-Recebimento.md:141	app-pcp c199d91
+FilaSetor.tsx:911	fila/CartaoItemParcial.tsx:761	02-Fluxo-de-Atividades/07-Recebimento.md:141	app-pcp c199d91 (liberarSemOc)
+FilaSetor.tsx:685-691	fila/CartaoItemParcial.tsx:301-305	02-Fluxo-de-Atividades/10-Producao-e-Roteiro.md:132	app-pcp c199d91 (filtro das ações)
+divergencias.controller.ts:26-63	divergencias.controller.ts:26-61	02-Fluxo-de-Atividades/10-Producao-e-Roteiro.md:195	api-pcp: o arquivo tem 61 linhas
+fabricas.prisma:162-185	fabricas.prisma:162-176	02-Fluxo-de-Atividades/10-Producao-e-Roteiro.md:95	api-pcp: o arquivo tem 176 linhas
+item-parcial-status.constants.ts:44-50	item-parcial-status.constants.ts:31-41	02-Fluxo-de-Atividades/10-Producao-e-Roteiro.md:153	api-pcp: STATUS_EM_PRODUCAO e o comentário "EM_PRODUCAO nunca é gravado"
+FilaSetor.tsx:690	fila/CartaoItemParcial.tsx:305	02-Fluxo-de-Atividades/11-Qualidade-Saida.md:108	app-pcp c199d91
+FilaSetor.tsx:203	fila/CartaoItemParcial.tsx:150	02-Fluxo-de-Atividades/11-Qualidade-Saida.md:130	app-pcp c199d91 (resolver: Aprovar)
+FilaSetor.tsx:687-688	fila/CartaoItemParcial.tsx:301-302	02-Fluxo-de-Atividades/11-Qualidade-Saida.md:131	app-pcp c199d91
+FilaSetor.tsx:810-835	fila/CartaoItemParcial.tsx:435-444	02-Fluxo-de-Atividades/13-Expedicao.md:97	app-pcp c199d91 (pallets no setor EXPEDICAO)
+item-parcial-status.constants.ts:44-50	item-parcial-status.constants.ts:31-41	02-Fluxo-de-Atividades/13-Expedicao.md:109	api-pcp: idem
+entregas.controller.ts:40-50	entregas.controller.ts:40-44	02-Fluxo-de-Atividades/13-Expedicao.md:132	api-pcp: o arquivo tem 44 linhas
+integracao-avhub.service.ts:187-188	integracao-avhub.service.ts:158-184	02-Fluxo-de-Atividades/13-Expedicao.md:107	api-pcp: função etapaDoItem começa na linha 158
+suprimentos.routes.ts:823-880	suprimentos.routes.ts:823-875	02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md:175	o arquivo do módulo de teste tem 875 linhas
+**Saíram 3:** `categorias.json`, `historicoPrecos.json`, `vinculos.json` (`ededeea`). **Ficam 3:** `familias.json`, `fornecedores.json`, `produtos.json`, lidos por `lib/orcamento/dados.ts` para o cadastro de produtos e o simulador de comissão (`app/api/orcamento/{familias,produtos,todos-fornecedores}`). `fornecedores.json` (CNPJ, e-mail, telefone) continua versionado no git 🔴	**Saíram os 6** ✅ (av-hub `develop` 2e5456d): `categorias.json`, `historicoPrecos.json`, `vinculos.json` (`ededeea`) e depois `familias.json`, `fornecedores.json`, `produtos.json` e o `lib/orcamento/dados.ts` que os lia (`c851cda`, 16/10, "remove the legacy Orcamento module"). Registro anterior (v2): "ficam 3 … `fornecedores.json` (CNPJ, e-mail, telefone) continua versionado no git 🔴". Os arquivos seguem no histórico do git	02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md:299	selo muda pela develop (F5): av-hub c851cda tirou os 3 JSON que a v2 dava como presentes
+**Saíram:** o arquivo não tem mais a marca; as funções O1 e O2 foram removidas junto das telas	**Saíram** ✅: o arquivo `lib/orcamento/dados.ts` foi removido inteiro (av-hub `c851cda`, 16/10); as funções O1 e O2 foram removidas junto das telas	02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md:300	av-hub c851cda
+omie-integracao.ts:393-405	omie-integracao.ts:339-349	02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md:181	api-pcp: confirmação de importação nas linhas 339-349
+app/(protected)/liberar-pedidos/page.tsx	app/(protected)/vendas/liberar-pedidos/page.tsx	02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md:174	av-hub d5fa9a6
+`/liberar-pedidos`	`/vendas/liberar-pedidos`	02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md:80	av-hub d5fa9a6: a rota passou para /vendas
+`/liberar-pedidos`	`/vendas/liberar-pedidos`	02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md:132	av-hub d5fa9a6
+`/liberar-pedidos`, `/liberacao-equipe`	`/vendas/liberar-pedidos`, `/liberacao-equipe`	02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md:253	av-hub d5fa9a6 (liberacao-equipe continua na raiz)
+pedidos.controller.ts:211-260	pedidos.controller.ts:211-222	02-Fluxo-de-Atividades/04-PCP-Triagem-e-Destinacao.md:155	api-pcp: o controller tem 222 linhas
+pedidos.service.ts:773-863	pedidos.service.ts:773-807	02-Fluxo-de-Atividades/04-PCP-Triagem-e-Destinacao.md:164	api-pcp: o service tem 807 linhas
+circuito-compra.ts:256-300	circuito-compra.ts:256-298	02-Fluxo-de-Atividades/08-Qualidade-Entrada.md:167	api-pcp: o arquivo tem 298 linhas
+qualidade.controller.ts:31-35	qualidade.controller.ts:31-34	02-Fluxo-de-Atividades/08-Qualidade-Entrada.md:143	api-pcp: o arquivo tem 34 linhas
+qualidade.controller.ts:19-35	qualidade.controller.ts:19-34	02-Fluxo-de-Atividades/08-Qualidade-Entrada.md:187	api-pcp: o arquivo tem 34 linhas
+reprovar-lote.dto.ts:5-27	reprovar-lote.dto.ts:5-26	02-Fluxo-de-Atividades/08-Qualidade-Entrada.md:85	api-pcp: o arquivo tem 26 linhas
+`/minhas-notas` | HUB | ✅ `app/(protected)/minhas-notas/page.tsx`	`/vendas/minhas-notas` | HUB | ✅ `app/(protected)/vendas/minhas-notas/page.tsx`	02-Fluxo-de-Atividades/14-Fiscal-Omie.md:105	av-hub d5fa9a6
+`/liberar-pedidos`	`/vendas/liberar-pedidos`	02-Fluxo-de-Atividades/Transversais/Telas-por-Raia.md:191	av-hub d5fa9a6
+suprimentos.routes.ts:823-880	suprimentos.routes.ts:823-875	02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md:188	o arquivo do módulo de teste tem 875 linhas
+suprimentos.routes.ts:823-880	suprimentos.routes.ts:823-875	02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md:238	o arquivo do módulo de teste tem 875 linhas
+app/(protected)/minhas-notas/page.tsx	app/(protected)/vendas/minhas-notas/page.tsx	02-Fluxo-de-Atividades/14-Fiscal-Omie.md:105	av-hub d5fa9a6

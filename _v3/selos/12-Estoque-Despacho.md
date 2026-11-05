@@ -8,8 +8,8 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 
 | Arquivo citado | Linhas da nota | Repositório e caminho na develop | Linhas citadas | Situação |
 |---|---|---|---|---|
-| `estoque-operacao.helpers.ts` | 8, 78 | api-pcp: `src/estoque/operacao/estoque-operacao.helpers.ts` | 208-284 | ok (778 linhas) |
-| `itens-parciais.service.ts` | 8, 78 | api-pcp: `src/itens-parciais/itens-parciais.service.ts` | 275-285 | ok (2433 linhas) |
+| `estoque-operacao.helpers.ts` | 8, 78 | api-pcp: `src/estoque/operacao/estoque-operacao.helpers.ts` | 317-393 | ok (778 linhas) |
+| `itens-parciais.service.ts` | 8, 78 | api-pcp: `src/itens-parciais/itens-parciais.service.ts` | 318-328 | ok (2433 linhas) |
 
 ## ✅ sem repositório nem arquivo citado (0)
 

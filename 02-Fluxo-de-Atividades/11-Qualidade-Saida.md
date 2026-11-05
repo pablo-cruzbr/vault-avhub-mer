@@ -105,7 +105,7 @@ Etapa vista pelo vendedor: parcial em setor `QUALIDADE` que não é `qualidade-e
 | Nome atual | Nome antigo | Rota | App | Slug | Estado |
 |---|---|---|---|---|---|
 | Inspeção de saída | — | `/qualidade/inspecao-saida` | app-pcp | `inspecao-saida` | ✅ `qualidade/inspecao-saida/page.tsx:1-18`: `ModuloSetores` com `tipos={['QUALIDADE']}` e `excluirCodigos` do setor `qualidade-entrada` |
-| Fila do setor Qualidade | Movimentações | `/movimentacoes/[setorId]` | app-pcp | `movimentacoes` | ✅ mesma `FilaSetor`; botão Reprovar só com `setor.tipo === 'QUALIDADE'` (`FilaSetor.tsx:690`) |
+| Fila do setor Qualidade | Movimentações | `/movimentacoes/[setorId]` | app-pcp | `movimentacoes` | ✅ mesma `FilaSetor`; botão Reprovar só com `setor.tipo === 'QUALIDADE'` (`fila/CartaoItemParcial.tsx:305`) |
 | Qualidade (índice) | — | `/qualidade` | app-pcp | ❓ | ✅ `qualidade/page.tsx` |
 
 Não existe tela de laudo, checklist nem formulário de resultado de inspeção de saída: a decisão é um clique e um motivo.
@@ -127,8 +127,8 @@ Contrato com o av-hub: só a etapa do item ([[Contratos-da-v2|API-005]], [[Contr
 
 ### Como está no código
 
-- O "Aprovar" que aparece na tela (rótulo da ação `resolver`, `FilaSetor.tsx:203`, em 14/10) **não** aprovava a inspeção: só desfaz uma reprovação. Na `develop` há a ação explícita `aprovar-saida`; conferir o rótulo na tela do `app-pcp` (❓).
-- Como a Qualidade é um setor comum no roteiro, `ehUltimaEtapa` é falso nela (a Expedição vem depois), então a tela oferece `mover`, não `concluir` (`FilaSetor.tsx:687-688`).
+- O "Aprovar" que aparece na tela (rótulo da ação `resolver`, `fila/CartaoItemParcial.tsx:150`, em 14/10) **não** aprovava a inspeção: só desfaz uma reprovação. Na `develop` há a ação explícita `aprovar-saida`; conferir o rótulo na tela do `app-pcp` (❓).
+- Como a Qualidade é um setor comum no roteiro, `ehUltimaEtapa` é falso nela (a Expedição vem depois), então a tela oferece `mover`, não `concluir` (`fila/CartaoItemParcial.tsx:301-302`).
 - Registro de 14/10 (superado na `develop`): o fabricado aprovado nunca passava pelo Estoque, e `mover` levava a parcial direto à primeira etapa `EXPEDICAO`. Na `develop`, a reserva do lote `PRODUCAO` nasce em `receber-fabricado`.
 - `ensureLotesCompradosLiberados` só barra envio a setor `ESTOQUE` com lote comprado pendente (`service:862-874`); não protege este caso.
 - `Pedidos.acompanhamentoQualidade` (V2) é gravado (`producao.prisma:118`) e mostrado na Triagem, mas nenhuma fila consome ([[03-Pedido-de-Venda-e-Liberacao]], item 7).

@@ -102,7 +102,7 @@ O MES não tem estado fiscal: guarda só `Entrega.numeroNf` (texto de até 30 ca
 | Nome atual | Nome antigo | Rota | App | Estado |
 |---|---|---|---|---|
 | Fila de sinalização de faturamento (ligação do `O1`) | — | — | MES | 🔴 não existe |
-| Minhas Notas | — | `/minhas-notas` | HUB | ✅ `app/(protected)/minhas-notas/page.tsx` (pós-fato, por vendedor) |
+| Minhas Notas | — | `/vendas/minhas-notas` | HUB | ✅ `app/(protected)/vendas/minhas-notas/page.tsx` (pós-fato, por vendedor) |
 | Notas da Equipe | — | `/notas-equipe` | HUB | ✅ `app/(protected)/notas-equipe/page.tsx` |
 | Notas do PCP | — | `/pcp-notas` | HUB | ✅ `app/(protected)/pcp-notas/page.tsx` |
 | Notas Fiscais de Saída | — | `/vendas/notas-fiscais-saida` | HUB | ✅ `app/(protected)/vendas/notas-fiscais-saida/page.tsx` |

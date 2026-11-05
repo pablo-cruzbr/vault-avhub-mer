@@ -8,9 +8,9 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 
 | Arquivo citado | Linhas da nota | Repositório e caminho na develop | Linhas citadas | Situação |
 |---|---|---|---|---|
-| `app/(protected)/minhas-notas/page.tsx` | 105 | — | — | 🔴 não existe na develop |
 | `app/(protected)/notas-equipe/page.tsx` | 106 | av-hub: `app/(protected)/notas-equipe/page.tsx` | — | ok (9 linhas) |
 | `app/(protected)/pcp-notas/page.tsx` | 107 | av-hub: `app/(protected)/pcp-notas/page.tsx` | — | ok (9 linhas) |
+| `app/(protected)/vendas/minhas-notas/page.tsx` | 105 | av-hub: `app/(protected)/vendas/minhas-notas/page.tsx` | — | ok (9 linhas) |
 | `app/(protected)/vendas/notas-fiscais-saida/page.tsx` | 108 | av-hub: `app/(protected)/vendas/notas-fiscais-saida/page.tsx` | — | ok (235 linhas) |
 | `components/Pedidos/EtapaDosItens.tsx` | 109 | av-hub: `components/Pedidos/EtapaDosItens.tsx` | — | ok (115 linhas) |
 | `notasFiscais.ts` | 8, 118, 119, 120 | av-hub: `lib/api/notasFiscais.ts`<br>av-hub: `services/notasFiscais.ts`<br>omie-elt-pipeline: `src/omie/resources/notasFiscais.ts` | 21-46, 57-58, 125-165 | ok (171 linhas) |

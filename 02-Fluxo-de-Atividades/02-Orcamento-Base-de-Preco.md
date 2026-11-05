@@ -172,7 +172,7 @@ Rotas do `api-comercial` (legado só para leitura, N16-117) que o Robert recria 
 | Método e rota | Uso | Nó | Código |
 |---|---|---|---|
 | `GET /produtos`, `/produtos/:id`, `POST /produtos` | catálogo | `B2` | ✅ `suprimentos.routes.ts:29`, `:72`, `:106` |
-| `GET /produtos/:id/precos?dias=` | mínimo, máximo, último, média e por fornecedor com variação sobre a média | `B2` | ✅ `suprimentos.routes.ts:823-880` (exige `veCusto`) |
+| `GET /produtos/:id/precos?dias=` | mínimo, máximo, último, média e por fornecedor com variação sobre a média | `B2` | ✅ `suprimentos.routes.ts:823-875` (exige `veCusto`) |
 | `GET /produtos/:id/score_fornecedores`, `/volatilidade` | score, ranking por categoria, coeficiente de variação, dado recente | `B2` | 🔴 🟡 nomes |
 | `GET /ofertas`, `POST /ofertas`, `POST /ofertas/:id/invalidar`, `GET /ofertas/importacoes`, `/exportar` | base com histórico | `B1`, `B4` | ✅ `:645`, `:687`, `:791`, `:561`, `:597` |
 | `GET /solicitacoes_custo`, `POST /solicitacoes_custo` | fila e criação do pedido de custo | `B3` | ✅ `custos.routes.ts:304`, `:367` |
@@ -185,7 +185,7 @@ Contratos: os do Orçamento foram removidos em 29/10/2026 e o Robert cria os nov
 ### Como está no código (✅)
 
 - ✅ **Oferta imutável com histórico:** `Oferta` (`prisma/models/suprimentos.prisma:138-183`): preço, unidade, IPI, ST, origem do ICMS, frete, `prazo` (**texto**), mínimo, `dataCotacao`, `validaAte`, `custoLiquidoUnit`, `status`, invalidação com motivo e quem. Chave única `(fonte, idDocumentoFonte, idProduto, idFornecedor)` para importar sem duplicar. Já há `validaAte` e `custoLiquidoUnit`, que apoiam o "dado recente" e a Nota Preço.
-- ✅ **Média "bolsa de valores":** `mediasDoProduto` e `GET /produtos/:id/precos` com janela de 7 a 730 dias, média ponderada pela quantidade comprada, mínimo, máximo, último preço e `delta_media_pct` por fornecedor (`suprimentos.routes.ts:823-880`; `domain/custo/medias.ts`).
+- ✅ **Média "bolsa de valores":** `mediasDoProduto` e `GET /produtos/:id/precos` com janela de 7 a 730 dias, média ponderada pela quantidade comprada, mínimo, máximo, último preço e `delta_media_pct` por fornecedor (`suprimentos.routes.ts:823-875`; `domain/custo/medias.ts`).
 - ✅ **Pedido de custo:** `SolicitacaoCusto` (`suprimentos.prisma:216-245`) com `prazoResposta` obrigatório (**sai**), comprador que assumiu, oferta que respondeu, justificativa quando não há fornecedor; prazo padrão de 2 dias úteis (`custos.routes.ts:378`, **sai**); número `SC-AAAA-NNNN` (`custos.routes.ts:384-386`, com letras).
 - ✅ **Resposta com oferta no Painel do Comprador:** PR #201 (`33f21d3`).
 - ✅ **Mapa de cotação importado:** `importarMapa.ts`, `mapaCotacao.ts` (oferta com fonte `MAPA_COTACAO`).
@@ -235,7 +235,7 @@ Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-ant
 
 #### Como está no código (módulo de teste)
 
-- ✅ **Pedido de custo** com prazo padrão de 2 dias úteis (`custos.routes.ts:378`) e rótulos `ATRASADA`, `VENCE_HOJE`, `NO_PRAZO` (`:338`): **saem** com N16-58 (cronômetro, sem prazo). `GET /produtos/:id/precos` (`suprimentos.routes.ts:823-880`).
+- ✅ **Pedido de custo** com prazo padrão de 2 dias úteis (`custos.routes.ts:378`) e rótulos `ATRASADA`, `VENCE_HOJE`, `NO_PRAZO` (`:338`): **saem** com N16-58 (cronômetro, sem prazo). `GET /produtos/:id/precos` (`suprimentos.routes.ts:823-875`).
 
 #### O que falta (numeração da nota de proposta)
 
@@ -296,8 +296,8 @@ O anexo `10-Anexo-Fora-do-Fluxo/Orcamento.md` (14/10) dizia que o orçamento era
 |---|---|
 | 5 telas `orcamento/categorias`, `fornecedores`, `historico-produtos`, `sem-cadastro`, `vinculos` | **Removidas do av-hub em 16/10** (`ededeea`): páginas, estilos, tipos, services (`categoriasOrcamento`, `fornecedores`, `historicoPrecos`, `vinculosOrcamento`) e rotas BFF `app/api/orcamento/{categorias,fornecedores,historico-precos,vinculos}`; no banco o SQL de produção desativa os slugs antigos (`deleted_at`) |
 | Rotas BFF órfãs `app/api/historicoProdutos/*` | Removidas (`5aa5311`, 16/10) |
-| JSON `lib/orcamento/data/*.json` (6 arquivos, 4,4 MB de fornecedores com CNPJ, e-mail e telefone) | **Saíram 3:** `categorias.json`, `historicoPrecos.json`, `vinculos.json` (`ededeea`). **Ficam 3:** `familias.json`, `fornecedores.json`, `produtos.json`, lidos por `lib/orcamento/dados.ts` para o cadastro de produtos e o simulador de comissão (`app/api/orcamento/{familias,produtos,todos-fornecedores}`). `fornecedores.json` (CNPJ, e-mail, telefone) continua versionado no git 🔴 |
-| Marcas `GAMBIARRA` O1 e O2 (`lib/orcamento/dados.ts`) | **Saíram:** o arquivo não tem mais a marca; as funções O1 e O2 foram removidas junto das telas |
+| JSON `lib/orcamento/data/*.json` (6 arquivos, 4,4 MB de fornecedores com CNPJ, e-mail e telefone) | **Saíram os 6** ✅ (av-hub `develop` 2e5456d): `categorias.json`, `historicoPrecos.json`, `vinculos.json` (`ededeea`) e depois `familias.json`, `fornecedores.json`, `produtos.json` e o `lib/orcamento/dados.ts` que os lia, com as rotas BFF `app/api/orcamento/{familias,produtos,todos-fornecedores}` que os serviam ao cadastro de produtos e ao simulador de comissão (`c851cda`, 16/10, "remove the legacy Orcamento module"). Registro anterior (v2): "ficam 3 … `fornecedores.json` (CNPJ, e-mail, telefone) continua versionado no git 🔴". Os arquivos seguem no histórico do git |
+| Marcas `GAMBIARRA` O1 e O2 (`lib/orcamento/dados.ts`) | **Saíram** ✅: o arquivo `lib/orcamento/dados.ts` foi removido inteiro (av-hub `c851cda`, 16/10); as funções O1 e O2 foram removidas junto das telas |
 | Tabelas `orc_*` e views `orc_vw_*` no schema `core_compras` (13.896 linhas carregadas em 02/10, dump de 07/10) | **Seguem no banco** e as rotas `/orcamento/*` da `api-acos-vital` seguem montadas (`orcamento.route.js`), **sem consumidor**. Aposentadoria: fase 7 do LOG-52 ("só depois do Nathan confirmar o corte do orçamento", agora confirmado por N16-14 e N16-16), a cargo do Gustavo 🔴 |
 | Decisão "migrar a tela para a API ou removê-la" | Resolvida: removida (N16-14); o módulo novo é o do Pablo (N16-07, N16-15) |
 | Contratos [[Contratos-da-v2\|LOG-42]] e `LOG-07a` | LOG-42 encerrado (N16-14); a metade de coordenadores segue pendente e ganha item no backlog ([[Backlog-por-Frente]]) |

@@ -31,7 +31,7 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `propostas.routes.ts` | 8, 214, 218 | av-hub: `api-comercial/src/modules/propostas/propostas.routes.ts` | 146-164 | ok (215 linhas) |
 | `propostas.service.ts` | 8, 233, 234, 237 | av-hub: `api-comercial/src/modules/propostas/propostas.service.ts` | 478-481, 313-322, 853-903 | ok (1029 linhas) |
 | `simulador.routes.ts` | 241 | av-hub: `api-comercial/src/modules/simulador/simulador.routes.ts` | — | ok (261 linhas) |
-| `simulador/page.tsx` | 288 | av-hub: `app/(protected)/cadastros/acessos/auxiliares-vendedor/page.tsx`<br>av-hub: `app/(protected)/cadastros/acessos/compradores/page.tsx`<br>av-hub: `app/(protected)/cadastros/acessos/diligenciadores/page.tsx` | 1053-1053 | ambíguo (136 arquivos) |
+| `simulador/page.tsx` | 288 | av-hub: `app/(protected)/cadastros/acessos/auxiliares-vendedor/page.tsx`<br>av-hub: `app/(protected)/cadastros/acessos/compradores/page.tsx`<br>av-hub: `app/(protected)/cadastros/acessos/diligenciadores/page.tsx` | 1020-1020 | ambíguo (136 arquivos) |
 | `vendas.prisma` | 8 | av-hub: `api-comercial/prisma/models/vendas.prisma` | — | ok (242 linhas) |
 | `vendas/propostas/[id]/page.tsx` | 179 | av-hub: `app/(protected)/vendas/propostas/[id]/page.tsx` | — | ok (54 linhas) |
 | `vendas/propostas/nova/page.tsx` | 178 | av-hub: `app/(protected)/vendas/propostas/nova/page.tsx` | — | ok (31 linhas) |

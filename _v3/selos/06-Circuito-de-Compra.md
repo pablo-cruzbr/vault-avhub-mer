@@ -12,7 +12,6 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `ComprasRequisicoes.tsx` | 209 | av-hub: `components/Compras/ComprasRequisicoes.tsx` | 186-186 | ok (417 linhas) |
 | `EventosRequisicaoModal.tsx` | 164 | app-pcp: `app/(protected)/movimentacoes/components/EventosRequisicaoModal.tsx` | — | ok (250 linhas) |
 | `FecharCompra.tsx` | 115, 224 | av-hub: `components/Compras/FecharCompra.tsx` | 604-605, 604-605 | ok (1869 linhas) |
-| `FilaSetor.tsx` | 240 | app-pcp: `app/(protected)/movimentacoes/components/FilaSetor.tsx` | 370-396 | 🟡 linha 370-396 passa do fim (156 linhas) |
 | `FollowupPainel.tsx` | 169 | av-hub: `components/Compras/Followup/FollowupPainel.tsx` | — | ok (781 linhas) |
 | `OrdemDetalhe.tsx` | 167 | av-hub: `components/Compras/OrdemDetalhe.tsx` | — | ok (590 linhas) |
 | `PedidoOmieDetalhe.tsx` | 167 | av-hub: `components/Compras/PedidoOmieDetalhe.tsx` | — | ok (299 linhas) |
@@ -35,9 +34,10 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 | `envio-avhub.service.ts` | 113, 119, 215 | api-pcp: `src/integracao-avhub/envio-avhub.service.ts` | 21-21, 164-169, 21-21 | ok (237 linhas) |
 | `envioOrdensCompra.ts` | 101, 123, 230 | omie-elt-pipeline: `src/jobs/envioOrdensCompra.ts` | 18-40, 18-40 | ok (288 linhas) |
 | `eventos-avhub.service.ts` | 114, 240 | api-pcp: `src/integracao-avhub/eventos-avhub.service.ts` | 25-31, 31-31 | ok (260 linhas) |
+| `fila/compraAvhub.tsx` | 240 | app-pcp: `app/(protected)/movimentacoes/components/fila/compraAvhub.tsx` | 52-74 | ok (119 linhas) |
 | `index.js` | 246 | api-acos-vital: `src/schemas/auth/index.js`<br>api-acos-vital: `src/schemas/core/index.js`<br>api-acos-vital: `src/schemas/core_aprovacao_de_vagas/index.js` | 38-38, 195-195 | ambíguo (12 arquivos) |
 | `integracao-avhub.controller.ts` | 249 | api-pcp: `src/integracao-avhub/integracao-avhub.controller.ts` | 20-24 | ok (34 linhas) |
-| `integracao.prisma` | 155 | api-pcp: `prisma/models/integracao.prisma` | 290-320 | 🟡 linha 290-320 passa do fim (242 linhas) |
+| `integracao.prisma` | 155 | api-pcp: `prisma/models/integracao.prisma` | 20-28 | ok (242 linhas) |
 | `itens-parciais.service.ts` | 210 | api-pcp: `src/itens-parciais/itens-parciais.service.ts` | 727-730 | ok (2433 linhas) |
 | `ordens_compra.route.js` | 115, 123, 125, 138, 139, 140, 197, 198, 224, 226, 230, 246 | api-acos-vital: `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js` | 1230-1240, 857-889, 1230-1240, 91-91, 95-95, 92-94, 607-607, 857-857, 1230-1240, 1217-1240, 109-132, 92-94 | ok (1369 linhas) |
 | `ordens_compra_acompanhamento.route.js` | 199 | api-acos-vital: `src/schemas/core_vendas_faturamento/tables/ordens_compra_acompanhamento/ordens_compra_acompanhamento.route.js` | 298-586 | ok (656 linhas) |
@@ -65,13 +65,11 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 - linha 223: - ✅ 📝 **Regra (N14-21):** OC que **excede R$ 30 mil** é aprovada pelo Gerente de Compras; OC **até R$ 30 mil** sai livre para os compradores. A Diretoria não p
 - linha 336: | 8 | Aviso ao PCP e ao vendedor quando a previsão de chegada atrasa o pedido de venda | Nathan | C5 | ✅ decidido: a mudança de data do CCP só avisa o vendedor,
 
-## Citações deslocadas (o identificador está em outra linha) (8)
+## Citações deslocadas (o identificador está em outra linha) (6)
 
 - nota linha 111: `components/Compras/ComprasRequisicoes.tsx:186` (av-hub) — `REQUISICAO` não está perto; aparece na linha 14
 - nota linha 119: `requisicoes_compra.route.js:221-265` (api-acos-vital) — `REQUISICAO_COM_OC` não está perto; aparece na linha 335
-- nota linha 155: `integracao.prisma:290-320` (api-pcp) — `PENDENTE` não está perto; aparece na linha 13
 - nota linha 165: `components/Compras/ComprasRequisicoes.tsx:186-189` (av-hub) — `pode_criar` não está perto; aparece na linha 69
 - nota linha 194: `requisicoes_compra.route.js:221` (api-acos-vital) — `fn_requisicao_mes_aplicar` não está perto; aparece na linha 134
 - nota linha 210: `itens-parciais.service.ts:727-730` (api-pcp) — `REQUISICAO` não está perto; aparece na linha 1056
 - nota linha 215: `apiKeyAuth.js:94-100` (api-acos-vital) — `id_origem` não está perto; aparece na linha 28
-- nota linha 240: `FilaSetor.tsx:370-396` (app-pcp) — `acao` não está perto; aparece na linha 13

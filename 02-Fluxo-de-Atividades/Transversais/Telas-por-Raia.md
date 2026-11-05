@@ -188,7 +188,7 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 
 | Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
 |---|---|---|---|---|---|---|
-| V2, V3 | Liberar Pedidos | Caixa de entrada do vendedor (1.1) | HUB | `/liberar-pedidos` | `liberar-pedidos` | `app/(protected)/liberar-pedidos/page.tsx`; menu em "Portal do Vendedor" (`groupMap.ts:23`) |
+| V2, V3 | Liberar Pedidos | Caixa de entrada do vendedor (1.1) | HUB | `/vendas/liberar-pedidos` | `liberar-pedidos` | `app/(protected)/liberar-pedidos/page.tsx`; menu em "Portal do Vendedor" (`groupMap.ts:23`) |
 | V2 (leitura) | Liberação da Equipe | Visão do gerente da 1.1 | HUB | `/liberacao-equipe` | `liberacao-equipe` | "Portal do Gerente" (`groupMap.ts:27`) |
 | V1 a O2 | Meus Pedidos, detalhe com cartão Etapa dos itens | Meus Pedidos por etapa (1.2) | HUB | `/meus-pedidos`, `/meus-pedidos/pedido/[codigoEmpresa]/[pedidoVenda]` | `meus-pedidos` | Cartão `components/Pedidos/EtapaDosItens.tsx`, usado em `PedidoDetalhe.tsx:812` |
 | idem | Pedidos da Equipe, detalhe | idem | HUB | `/pedidos-equipe`, `/pedidos-equipe/pedido/...` | `pedidos-equipe` | Mesmo cartão |

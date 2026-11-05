@@ -8,9 +8,9 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 
 | Arquivo citado | Linhas da nota | Repositório e caminho na develop | Linhas citadas | Situação |
 |---|---|---|---|---|
-| `FilaSetor.tsx` | 108, 130, 131 | app-pcp: `app/(protected)/movimentacoes/components/FilaSetor.tsx` | 690-690, 203-203, 687-688 | 🟡 linha 690-690, 203-203, 687-688 passa do fim (156 linhas) |
 | `acoes.ts` | 92 | av-hub: `components/Compras/acoes.ts`<br>av-hub: `components/Funcionarios/acoes.ts`<br>av-hub: `components/Vagas/acoes.ts` | 67-67 | ambíguo (4 arquivos) |
 | `divergencias.controller.ts` | 124 | api-pcp: `src/divergencias/divergencias.controller.ts` | 38-43 | ok (61 linhas) |
+| `fila/CartaoItemParcial.tsx` | 108, 130, 131 | app-pcp: `app/(protected)/movimentacoes/components/fila/CartaoItemParcial.tsx` | 305-305, 150-150, 301-302 | ok (1051 linhas) |
 | `integracao-avhub.service.ts` | 101 | api-pcp: `src/integracao-avhub/integracao-avhub.service.ts` | 172-172 | ok (184 linhas) |
 | `itens-parciais.controller.ts` | 118 | api-pcp: `src/itens-parciais/itens-parciais.controller.ts` | — | ok (343 linhas) |
 | `itens-parciais.service.ts` | 8, 72, 83, 90 | api-pcp: `src/itens-parciais/itens-parciais.service.ts` | 426-435, 1014-1014, 966-989 | ok (2433 linhas) |
@@ -35,11 +35,10 @@ Base: api-acos-vital `origin/develop` b97981c · av-hub `origin/develop` 2e5456d
 - linha 141: | 1 | O "sim" do Q8 leva ao Estoque, com lote e saldo do fabricado: feito na `develop` (27/10). Falta o documento de retirada | Robert | Q8, `E5`, `E6` | ✅ lote
 - linha 142: | 2 | Ação explícita de aprovar na inspeção, com quantidade aprovada: feita na `develop` (`aprovar-saida`). Falta a quantidade reprovada (reprovação parcial, N1
 
-## Citações deslocadas (o identificador está em outra linha) (6)
+## Citações deslocadas (o identificador está em outra linha) (5)
 
 - nota linha 72: `pedidos.service.ts:520-525` (api-pcp) — `EXPEDICAO` não está perto; aparece na linha 584
 - nota linha 83: `itens-parciais.service.ts:1014` (api-pcp) — `QUALIDADE` não está perto; aparece na linha 157
 - nota linha 89: `pedidos.service.ts:512-525` (api-pcp) — `QUALIDADE` não está perto; aparece na linha 583
 - nota linha 90: `itens-parciais.service.ts:966-989` (api-pcp) — `reprovar` não está perto; aparece na linha 1698
-- nota linha 108: `FilaSetor.tsx:690` (app-pcp) — `FilaSetor` não está perto; aparece na linha 17
-- nota linha 131: `FilaSetor.tsx:687-688` (app-pcp) — `concluir` não está perto; aparece na linha 59
+- nota linha 108: `fila/CartaoItemParcial.tsx:305` (app-pcp) — `FilaSetor` não está perto; aparece na linha 68

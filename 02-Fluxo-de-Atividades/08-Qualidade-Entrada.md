@@ -82,7 +82,7 @@ CCP = acompanhamento de compras. Os perfis são dados do banco (`perfis`, `permi
 | Regra | Decisão | Selo |
 |---|---|---|
 | Inspeção de entrada é por **lote**; a de saída é um setor tipo `QUALIDADE` no roteiro | EC-01 (Nathan, 29/09) | 📝 ✅ |
-| Aprovar exige laudo; reprovar exige laudo, motivo e evidência | Regra de Q4 do v1, trava dura no DTO | 📝 ✅ `api-pcp/src/qualidade/dto/aprovar-lote.dto.ts:4-9`, `reprovar-lote.dto.ts:5-27` |
+| Aprovar exige laudo; reprovar exige laudo, motivo e evidência | Regra de Q4 do v1, trava dura no DTO | 📝 ✅ `api-pcp/src/qualidade/dto/aprovar-lote.dto.ts:4-9`, `reprovar-lote.dto.ts:5-26` |
 | Reprovação total ou parcial: a parte aprovada fica em **QUARENTENA** até a substituição; a parte reprovada volta a Compras, que alinha devolução e substituição com o fornecedor; a substituição passa de novo pela inspeção e, aprovada, **une-se** à parte em quarentena | EC-07 (Nathan, 29/09) | 📝 ✅ `circuito-compra.ts:166-250`, `qualidade.service.ts:222-246` |
 | Aprovado volta ao Estoque (entrada no saldo); nunca vai direto à Expedição | Decisão do Nathan de 24/09, reafirmada em 14/10 (tudo que é comprado vai ao Estoque) | 📝 ✅ `circuito-compra.ts:239-249` |
 | O sistema nunca emite a nota de devolução: só sinaliza (`nota_devolucao_pendente`); o Omie emite | Regra de Q10/Q11 do v1; Registro #30 (Omie é o fiscal) | 📝 ✅ sinalização, 🔴 fechamento |
@@ -140,7 +140,7 @@ A tela de inspeção lista os lotes `PENDENTE` com material, quantidade, fornece
 |---|---|---|---|---|
 | `GET /qualidade/lotes` | app-pcp → api-pcp | `inspecao-entrada:visualizar` | Fila: lotes com `statusQualidade = PENDENTE`, mais antigo primeiro | `qualidade.controller.ts:19-23`, `qualidade.service.ts:39-81` ✅ |
 | `POST /qualidade/lotes/:id/aprovar` | idem | `inspecao-entrada:editar` | Lote `LIBERADO`, devolve parciais ao Estoque | `qualidade.controller.ts:25-29`, `qualidade.service.ts:83-100` ✅ |
-| `POST /qualidade/lotes/:id/reprovar` | idem | `inspecao-entrada:editar` | RNC, cisão, devolução a Compras | `qualidade.controller.ts:31-35`, `qualidade.service.ts:102-265` ✅ |
+| `POST /qualidade/lotes/:id/reprovar` | idem | `inspecao-entrada:editar` | RNC, cisão, devolução a Compras | `qualidade.controller.ts:31-34`, `qualidade.service.ts:102-265` ✅ |
 | `GET /estoque/alertas/rnc-pendentes` | app-pcp → api-pcp | permissão do Estoque | Lista RNC com `notaDevolucaoPendente = true` | `estoque/alertas/alertas.service.ts:63-64` ✅ |
 
 Não há contrato com o av-hub para a RNC. O Compras só vê o efeito indireto (ver "O que falta desenvolver"). Contratos relacionados: [[Contratos-da-v2|LOG-35]] (marcos), [[Contratos-da-v2|LOG-34]] (ida da requisição), [[Contratos-da-v2|API-008]] (a cisão herda o custo do pai).
@@ -164,7 +164,7 @@ Não há contrato com o av-hub para a RNC. O Compras só vê o efeito indireto (
 2. **Total** (`reprovada >= saldo`): o próprio lote vira `REPROVADO` com `motivoReprovacao`, `evidenciaUrl`, `reprovadoPor`, `reprovadoEm` (`:124-128`).
 3. **Parcial** (cisão, `:129-208`): nasce o lote filho `LT-AAAAMMDD-NNNN`, `REPROVADO`, com `idLotePai`; o saldo é tirado das localizações do pai (maior saldo primeiro) com um `MovimentoEstoque` `SAIDA` no pai e um `ENTRADA` no filho, motivo "Cisão por reprovação (RNC)". O filho herda o custo do pai (`copiarCustoParaFilho`, `:153`). O pai fica `LIBERADO`.
 4. Abre a `Rnc` (`rncs`) do lote reprovado: motivo (300), evidência, quantidade reprovada, `notaDevolucaoPendente = true` por padrão (`:212-220`; modelo em `estoque.prisma:263-276`).
-5. EC-07: `devolverAComprasParteReprovada` (`circuito-compra.ts:256-300`) move a parte reprovada das parciais que esperavam o lote para o setor Compras (parcial inteira se a quantidade cobre, senão `splitParaDestino`); o restante continua no setor Qualidade · Entrada. Se ainda há parcial esperando (`STATUS_AGUARDANDO`), o **pai passa a `QUARENTENA`** (`:235-246`).
+5. EC-07: `devolverAComprasParteReprovada` (`circuito-compra.ts:256-298`) move a parte reprovada das parciais que esperavam o lote para o setor Compras (parcial inteira se a quantidade cobre, senão `splitParaDestino`); o restante continua no setor Qualidade · Entrada. Se ainda há parcial esperando (`STATUS_AGUARDANDO`), o **pai passa a `QUARENTENA`** (`:235-246`).
 6. Compras precisa recomprar: `RequisicaoCompraItem.quantidadeRecebida` decrementa a quantidade reprovada e a requisição `RECEBIDA` volta a `RECEBIDA_PARCIAL` (`:248-259`).
 7. Fecha chamando `devolverAoEstoqueParciaisProntas` de novo, para o caso da matéria-prima (`:261-262`).
 
@@ -184,7 +184,7 @@ A parcial chega ao setor Estoque `EM_TRANSITO`. O almoxarife usa "Atender pelo e
 
 | Recurso | Regra | Código |
 |---|---|---|
-| Fila e decisão de lote | `RequirePermission('inspecao-entrada', 'visualizar'|'editar')`. Não há checagem de `PerfilSetor` no serviço | `qualidade.controller.ts:19-35` ✅ |
+| Fila e decisão de lote | `RequirePermission('inspecao-entrada', 'visualizar'|'editar')`. Não há checagem de `PerfilSetor` no serviço | `qualidade.controller.ts:19-34` ✅ |
 | Fila do setor Qualidade · Entrada | Só aparece para quem tem `podeVisualizar` no setor `qualidade-entrada` (tabela `perfil_setores`) | `perfis.service.ts` / `useSetoresPermitidos` ✅ |
 | Inspeção de saída | Setor(es) tipo `QUALIDADE` do roteiro, fila `/qualidade/inspecao-saida`; agir exige `podeAtuar` no setor (`ensurePodeAtuar`) | `perfis.service.ts:278-289`, `itens-parciais.service.ts:909-918` ✅ |
 | Login | Escritório entra por Azure AD; chão de fábrica por usuário e senha | `POST /auth/azure`, `POST /auth/login` ✅ |
