@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, pcp, triagem, destinacao, mes, p1, p2, p6]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: vigente
+ordem: 4
 nos: [P1, P2, P6]
+anterior: "[[03-Pedido-de-Venda-e-Liberacao]]"
+proxima: "[[05-Estoque-Atendimento]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, v1 Fluxo-Estoque-Completo, api-pcp 579a625 (pedidos.service.ts, pedidos-carteira.service.ts, pedidos.controller.ts, fabricas.prisma), app-pcp 1fca8d3 (carteira, ordens-producao/novo), Registro-de-Decisoes #31b #50b, api-pcp e app-pcp develop de 27/10/2026 (OP, Montagem do Roteiro), N16-138 a N16-142]
@@ -12,6 +15,10 @@ fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Mo
 # Raia PCP: Triagem e Destinação do Pedido (P1, P2, P6)
 
 **Em uma frase:** o PCP (planejamento e controle da produção) vê os pedidos que o vendedor liberou e decide, para cada item, para onde ele vai, quanto vai agora e por quais setores passa.
+
+**Quando consultar:** dúvidas sobre o PCP: como o pedido liberado é triado e para onde cada item vai (estoque, compra ou produção).
+
+**Onde estamos no fluxo:** ← [[03-Pedido-de-Venda-e-Liberacao]] | [[05-Estoque-Atendimento]] → · nós desta nota: `P1`, `P2`, `P6`
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - A Triagem não mostra o saldo do Estoque. Quem decide sobre saldo é o Estoque, na etapa dele (N16-138).
