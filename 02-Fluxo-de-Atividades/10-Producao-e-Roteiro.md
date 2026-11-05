@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, producao, roteiro, f1, p6, mes]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: vigente
+ordem: 10
 nos: [F1]
+anterior: "[[09-Estoque-Entrada-do-Lote]]"
+proxima: "[[11-Qualidade-Saida]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, divergencias, roteiro-item, prisma/models/producao.prisma e fabricas.prisma), app-pcp 1fca8d3 (movimentacoes), v1 02-PRD-Estoque/Fluxo-Producao-OS-OP-Completo, v1 01-Fluxo-Operacional/Fluxograma-Telas-por-Bloco bloco 7, Dump MES 14/10, api-pcp e app-pcp develop de 27/10/2026 (finalizar, Montagem do Roteiro, aprovar-saida, ConsumoMateriaPrima), N16-140, N16-141]
@@ -12,6 +15,10 @@ fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, diverge
 # Produção e roteiro (F1, P6)
 
 **Em uma frase:** a Produção leva cada parte do item (a "parcial") pelos setores do roteiro do pedido, na ordem, até o último setor, e registra tudo no histórico. Nós `F1` (setores produtivos) e `P6` (novo norte: retrabalho ou reabre compra) do [[00-Fluxo-Mestre-0b]]. A entrada vem do despacho do Estoque (`E6`, [[12-Estoque-Despacho]]). A saída vai para a inspeção de saída `Q7` ([[11-Qualidade-Saida]]). Selos em [[Regras-do-Vault]].
+
+**Quando consultar:** dúvidas sobre a fábrica: o roteiro por setores, a ordem de passagem, o histórico e o retorno de retrabalho.
+
+**Onde estamos no fluxo:** ← [[09-Estoque-Entrada-do-Lote]] | [[11-Qualidade-Saida]] → · nós desta nota: `F1`
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-140: a matéria-prima sai do Estoque na retirada, pela quantidade pedida, no mesmo documento de retirada da Expedição. O operador não lança consumo ao concluir a etapa.
