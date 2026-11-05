@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 3, faltam a reconferência dos selos pela `develop` (uma raia por tarefa), o F3 e a conferência final dos fatos
-Próxima ação: com o ok do Nathan sobre o resumo parcial, reconferir os selos da raia 01-Proposta-de-Venda contra a `develop`
+Estado atual: Bloco 3, aguardando a resposta do Nathan sobre o F3 (api-comercial); depois, conferência final dos fatos e resumo
+Próxima ação: aplicar a resposta do F3 nas notas 01, 02 e 06 e fechar o Bloco 3
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -61,8 +61,8 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
   - [x] 01-Proposta-e-Pedido-de-Venda → 01-Proposta-de-Venda (V0.1–V0.7, V0C) (2026-11-05, b27a30d; links decididos em `_v3/scripts/renomear-proposta.mjs`; "Datas do pedido" do Mestre passou a apontar para 06, porque a nota de proposta não tinha esse conteúdo)
 - [x] Mover os trechos de nós com mais de uma casa (C6–C8 → 06 em c122c9b; V1–V3, liberação e cancelamento do pedido → 03 em b34dee0; B2–B4 → 02 em 315a621; P3: nada a mover, as outras notas só citam com link)
 - [x] Trocar `10.1–10.4` e `11.1` pelos IDs de nó (2026-11-05, c13593a: 40 trocas em 12 notas; conferido em app-pcp 93f96de e api-pcp befd973; Mapa-v1-para-v2 e Registro-de-Decisoes ficaram como estão)
-- [ ] Reconferir os selos de cada raia contra a `origin/develop` (F5), uma raia por tarefa
-- [ ] Aplicar o F3 nas notas de proposta, orçamento e compras
+- [x] Reconferir os selos de cada raia contra a `origin/develop` (F5) (2026-11-05, até 8351ea6. Decisão do Nathan: commit da develop uma vez por nota, em `develop-conferida`; cada ✅ cita repositório e arquivo:linha. Relatórios em `_v3/selos/`. 25 linhas corrigidas por script e 34 à mão (`_v3/fatos/substituicoes.tsv`); 100 ✅ ganharam o repositório; 3 ✅ viraram 📝; JSON do Orçamento 🔴 → ✅ removidos (av-hub c851cda). Limite: a checagem de conteúdo é por identificador perto da linha; ~50 citações sem identificador seguem só com arquivo e intervalo conferidos)
+- [!] Aplicar o F3 nas notas de proposta, orçamento e compras (bloqueado: o módulo de teste `av-hub/api-comercial` está na develop; pergunta feita ao Nathan se conta como ✅ ou como 🔴 "sem API e sem banco")
 - [ ] Conferir as listas de `_v3/fatos/`
 
 ### Blocos 4 a 9
