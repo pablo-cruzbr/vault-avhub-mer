@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: vigente
+ordem: 3
 nos: [V1, V2, V3]
+anterior: "[[02-Orcamento-Base-de-Preco]]"
+proxima: "[[04-PCP-Triagem-e-Destinacao]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan
 fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10]
@@ -12,6 +15,10 @@ fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005,
 # Raia Vendas: liberação do pedido (V1 a V3)
 
 **Em uma frase:** o pedido de venda só segue para a produção depois que o vendedor o libera. É o portão do fluxo e a única entrada de pedido de venda no MES: sem liberação, o PCP (planejamento e controle da produção) não enxerga o pedido.
+
+**Quando consultar:** dúvidas sobre o pedido de venda: o portão de liberação, o cancelamento e o que o MES enxerga do pedido.
+
+**Onde estamos no fluxo:** ← [[02-Orcamento-Base-de-Preco]] | [[04-PCP-Triagem-e-Destinacao]] → · nós desta nota: `V1`, `V2`, `V3`
 
 > [!info] Proposta ao pedido (decisões de 16 a 26/10/2026, fluxo aprovado em 26/10)
 > Esta nota descreve a liberação que **existe hoje** ✅. O desenho aprovado põe a proposta antes do `V1`, com duas origens no mesmo fluxo. O pedido que nasce da proposta já vem liberado (a Qualidade é respondida no "Transformar em pedido"). O pedido digitado no Omie continua chegando travado, mas o vendedor responde a Qualidade e o faturamento em partes na tela do pedido e preenche ali a parte de compras, sem travar o fluxo. A liberação gravada é a mesma desta nota, que o MES lê. Esse desenho ainda não está todo pronto 📝 (N16-05, N16-91, N16-106): a `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub, mas **não envia o pedido ao Omie** e a resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe 🔴. Detalhe em [[01-Proposta-de-Venda]].
