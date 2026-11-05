@@ -15,7 +15,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca
 
 - Cada tarefa tem um ID `BL-nnn` (BL = backlog, a lista de trabalho). O número não muda e outras notas o citam.
 - Colunas: **Nó** (a etapa do fluxo mestre, [[00-Fluxo-Mestre-0b]]), **O que falta**, **Contrato** (a nota que descreve a entrega), **Selo** e **Evidência** (onde no código se conferiu).
-- Selos: ✅ feito, 📝 decidido, 🟡 proposta ou parcial, 🔴 aberto ou sem código, ❓ não conferido em produção.
+- Selos (pela `develop`, F5): ✅ está na `develop`, 📝 decidido, 🟡 parcial na `develop`, 🔴 não está na `develop`, ❓ não conferido na `develop`.
 - Para achar o que é seu, vá direto à tabela da sua frente: Robert (MES), Gustavo (banco e API), Nathan (front e coordenação) ou Comercial.
 - Descrições longas começam com uma **frase em negrito** que resume a linha. O texto original vem logo depois, completo.
 - Siglas: MES = sistema de chão de fábrica; OC = ordem de compra; PCP = planejamento e controle da produção; pd = pessoa-dia; PR = pedido de mesclagem de código.

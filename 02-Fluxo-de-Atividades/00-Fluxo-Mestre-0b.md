@@ -13,7 +13,7 @@ fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML.md (0b, rev. 09/10), Regist
 
 O diagrama que acompanha um **pedido de venda de 0 a 100%**, da proposta (ou do pedido digitado direto no Omie) à nota fiscal e à comissão. Cada nó tem um ID (`V1`, `P2`, `E6`…). Todas as notas de raia desta pasta e todos os diagramas do vault usam esses IDs. O mesmo fluxo está no artifact "0b — Atividades"; a parte da proposta ao pedido, aprovada em 26/10/2026, está desenhada em `09-Diagramas/artifact-proposta-pedido.html` e contada em [[01-Proposta-de-Venda]].
 
-Selos: ✅ no código · 📝 decidido · 🟡 proposta · 🔴 aberto ou sem código · ❓ não conferido em produção. Veja [[Regras-do-Vault]].
+Selos (pela `develop`, F5): ✅ está na `develop` · 📝 decidido · 🟡 parcial na `develop` · 🔴 não está na `develop` · ❓ não conferido na `develop`. Veja [[Regras-do-Vault]].
 
 ## O que mudou em relação ao 0b de 09/10
 

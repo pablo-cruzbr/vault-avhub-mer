@@ -88,7 +88,7 @@ Os termos estão em ordem alfabética. Os nomes de tela seguem a regra de [[Regr
 - **Setor (tipo)** — a classe do setor no MES: `PRODUTIVO`, `ESTOQUE`, `COMPRAS`, `EXPEDICAO`, `REQUISICAO`, `LOGISTICA_ENTRADA` ou `QUALIDADE` ✅.
 - **Split atendido** — a parte do `ItemParcial` que o Estoque cobriu com saldo. Vira parcial própria, com reserva, e segue em trânsito para a Expedição.
 - **SLA por etapa** — a meta de tempo de cada etapa do fluxo. É proposta, com metas por definir. Ver [[Rastreabilidade-e-Torre-de-Fluxo]].
-- **Selos** — ✅ no código, 📝 decidido, 🟡 proposta, 🔴 aberto ou sem código, ❓ não conferido em produção ([[Regras-do-Vault]]).
+- **Selos** — pela `develop` dos sistemas (F5): ✅ está na `develop`, 📝 decidido, 🟡 parcial na `develop`, 🔴 não está na `develop`, ❓ não conferido na `develop` ([[Regras-do-Vault]]).
 - **Torre de Fluxo** — a visualização do 0b: mapa por setor, contagem por etapa, tempo contra o SLA e trilha do item. O hub tem a rotina e as rotas, e o HUB tem as telas sobre dados de teste (29/10). O MES não publica `/fluxo/eventos` 🔴.
 - **Triagem do Pedido** — ver a tabela de telas.
 - **Prefixos nas notas** — **DEC** decisão-chave; **EC** pergunta do encaixe do Estoque e da Revenda; **EN** decisão do encaixe; **IM** pergunta da integração; **CC** ponto da conferência de código; **T** tela do mapa de telas; **L-nn** lacuna de lógica; **CA** pergunta de Compras e acessos; **R** pergunta de rastreabilidade; **BL**, **PS**, **RS** itens do [[Backlog-por-Frente]], de [[Pontas-Soltas]] e de [[Riscos]].

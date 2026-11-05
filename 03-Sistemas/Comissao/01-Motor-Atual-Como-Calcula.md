@@ -94,7 +94,7 @@ As perguntas M01 a M19, com os padrões, estão no detalhe técnico.
 
 Esta nota explica, em linguagem simples, **o que o módulo Comissões de hoje faz**. Serve para a Michele (Controladoria) conferir antes de o motor ir para a proposta ([[Registro-de-Decisoes]], N16-11: o motor novo é o mesmo). Nada do módulo atual é alterado. A lista de perguntas está no fim, em "O que a Michele precisa confirmar".
 
-Como ler: **✅** está no código ou no banco (com arquivo e linha) · **📝** decisão do Nathan · **🟡** proposta · **🔴** aberto · **❓** não conferido em produção. Nos números, `dump` é `09-Diagramas/fontes/core_comissionamento-dump-convertido.sql`.
+Como ler: **✅** está na `develop` ou no banco (com arquivo e linha) · **📝** decisão do Nathan · **🟡** parcial na `develop` · **🔴** não está na `develop` · **❓** não conferido na `develop`. Nos números, `dump` é `09-Diagramas/fontes/core_comissionamento-dump-convertido.sql`.
 
 ### Resumo em dez linhas
 
