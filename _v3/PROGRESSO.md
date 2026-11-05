@@ -1,7 +1,7 @@
 # Progresso da v3
-Estado atual: Bloco 0, em andamento (ambiente, decisões, branch e tag feitos; faltam perguntas de aceite e validação base)
-Próxima ação: escrever `_v3/perguntas-de-aceite.md` (10 perguntas conferidas na `develop`) e criar `_v3/scripts/validar.mjs`
-Branch: v3   Último commit: (ver `git log`)   Push: não   Atualizado em: 2026-11-05
+Estado atual: Bloco 0 concluído, aguardando "ok" do Nathan (aprovar `perguntas-de-aceite.md` e a base de validação)
+Próxima ação: com o "ok" do Nathan e o Obsidian fechado, iniciar o Bloco 1 (índice `Contratos-da-v2`)
+Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
 Data: 2026-11-05  Vault: branch `v3` criada a partir de `main` 5203232 (tag `v2-antes-da-v3`); `origin/v3` ainda não existe  origin/main: 5203232 (sem commits novos)
@@ -33,9 +33,9 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Perguntar D1–D7 (2026-11-05)
 - [x] Resolver a D2; criar a tag `v2-antes-da-v3` na `main` do vault; criar a branch `v3` (2026-11-05; tag e branch locais, ainda não enviadas)
 - [x] Copiar a instrução, inteira e sem mudanças, para `_v3/INSTRUCAO.md` (cópia byte a byte conferida)
-- [~] Criar `_v3/PROGRESSO.md`; commitar; testar o push
-- [ ] Escrever `_v3/perguntas-de-aceite.md` com 10 perguntas-padrão; pedir aprovação
-- [ ] Rodar a validação (seção 9) na v2 e gravar o resultado como base
+- [x] Criar `_v3/PROGRESSO.md`; commitar; testar o push (push de `v3` e da tag `v2-antes-da-v3` ok, 2026-11-05)
+- [~] Escrever `_v3/perguntas-de-aceite.md` com 10 perguntas-padrão; pedir aprovação (escrito; 3 respostas com "a conferir" no Bloco 3; aguarda aprovação)
+- [x] Rodar a validação (seção 9) na v2 e gravar o resultado como base (`_v3/validacao-base-v2.md`, script `_v3/scripts/validar.mjs`)
 
 ### Bloco 1: Retirar os contratos da v2
 - [ ] Gerar o índice `Contratos-da-v2` e conferir as 97 linhas e os links do GitHub
@@ -60,7 +60,7 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [ ] Pendentes (ver `_v3/INSTRUCAO.md`, seção 8)
 
 ## Validações
-(a base da v2 será gravada aqui ao fim do Bloco 0)
+Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 0 CRLF; 0 caracteres corrompidos reais (o único achado é o texto da própria instrução); 37 notas acima de 25 KB; 354 links de contrato (regex `LOG|SQL|API|CON|ATV-n`) em 52 notas fora de `06-Contratos` (a instrução cita 1.278; a diferença será reconciliada no Bloco 1). Ajuste na checagem: `Ã` sozinho é letra válida em português, então só `Ã` + byte de continuação, `â€` e `�` contam.
 
 ## Problemas e pendências
 - Nathan precisa avisar Robert e Gustavo que a `main` do vault fica congelada (D4).
