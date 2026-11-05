@@ -93,7 +93,7 @@ Quem desenvolve (N16-117 a N16-119):
 
 - ✅ API da proposta na `api-acos-vital` (`develop`, `cc30c85`, de 28 e 29/10). As rotas ficam em `/comercial/propostas`: criar, listar, resumo, detalhe, linha do tempo, revisar (`PUT`, com `If-Match`), aprovar, cancelar com motivo, copiar e **transformar em pedido do Hub**.
 - ✅ Também existem `POST /comercial/clientes` (cadastra o cliente no Omie da unidade), `GET /comercial/parceiros`, `/me`, `/empresas_emissoras`, `/responsaveis` e `/parametros_custo`.
-- 🔴 Criar o pedido no Omie por fila e pipeline (`V0.7`). O pedido do Hub nasce com `status_sincronizacao_omie = pendente`. Ele fica `pendente`, e nada o envia. A API **não escreve no Omie** nesse passo; a pipeline é a 2ª etapa.
+- 🔴 Criar o pedido no Omie (`V0.7`). Desde 03/11/2026 o envio é síncrono, direto da `api-acos-vital` ao `IncluirPedido`, sem fila nem pipeline (N16-149; [[Mapa-IncluirPedido-Omie]]); o desenho anterior era por fila e pipeline, com a pipeline como 2ª etapa. Hoje o pedido do Hub nasce com `status_sincronizacao_omie = pendente`. Ele fica `pendente`, e nada o envia: a API **não escreve no Omie** nesse passo.
 - 🟡 Nomes de rota das partes que faltam: o Gustavo e o Robert fecham.
 
 **O banco**

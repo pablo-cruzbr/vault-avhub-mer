@@ -205,7 +205,7 @@ flowchart TD
     P1 --> P2["P2 · Destinação do Pedido<br/>destino, quantidade e roteiro por rodada<br/>Estoque entra como etapa 1<br/>POST pedidos completo lote"]
     P2 -->|"POST importado ao av-hub"| V3
     P2 --> E1["E1 · Saldo disponível na filial do pedido<br/>mais saldo futuro das OCs do hub"]
-    C0["C0 · OC do hub, lida pela referência"] -.->|"PCP vê a OC do pedido"| P1
+    C0["C0 · Requisição de compra (Compras, av-hub)<br/>a OC chega ao MES pela referência"] -.->|"PCP vê a OC do pedido"| P1
     E1 --> E2{"E2 · Saldo cobre o item?"}
     E2 --> E4{"E4 · O que fazer com o restante?"}
     E4 -->|"solicitar compra"| P3["P3 · Requisição de compra, origem PCP"]

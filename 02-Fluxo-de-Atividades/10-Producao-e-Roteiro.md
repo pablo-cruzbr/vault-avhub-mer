@@ -265,5 +265,5 @@ flowchart TD
     Q8 -->|nao| P6["P6 · Novo norte"]
     P6 -->|retrabalho| F1
     P6 -->|reabre compra| P3["P3 · Requisicao de compra"]
-    F1 -.->|"consumo de materia-prima (sem codigo)"| E1["E1 · Estoque"]
+    F1 -.->|"consumo de materia-prima (baixa no atendimento na develop; na retirada, sem codigo)"| E1["E1 · Estoque"]
 ```
