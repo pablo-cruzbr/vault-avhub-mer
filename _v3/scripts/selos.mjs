@@ -51,7 +51,7 @@ const RE_ARQ = new RegExp(String.raw`(${SEG}(?:/${SEG})*\.(?:tsx|ts|json|mjs|js|
 const RE_REPO = new RegExp(`\\b(${REPOS.join('|')}|api-comercial|Dump|dump|Omie|Estudo-Omie-API)\\b|(service|controller|helpers|route|dto)?:\\d+(-\\d+)?\\b`);
 
 function relatorio(nota) {
-  const arqNota = [path.join(raiz, '02-Fluxo-de-Atividades', nota + '.md')].find(fs.existsSync);
+  const arqNota = [path.join(raiz, '02-Fluxo-de-Atividades', nota + '.md'), path.join(raiz, '07-Desenvolvimento', 'Partes', nota + '.md'), path.join(raiz, '00-Inicio', nota + '.md')] /* Bloco 6: Backlog e Onde-Estamos */.find(fs.existsSync);
   if (!arqNota) throw new Error('nota não achada: ' + nota);
   const t = fs.readFileSync(arqNota, 'utf8');
   const ls = t.split('\n');
