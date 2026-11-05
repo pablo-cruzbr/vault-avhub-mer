@@ -1,9 +1,12 @@
 ---
 tags: [fluxo, raia, qualidade, qualidade-entrada, lote, rnc, quarentena, mes]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-05
 status: vigente
+ordem: 8
 nos: [Q1, Q2, Q3, Q4]
+anterior: "[[07-Recebimento]]"
+proxima: "[[09-Estoque-Entrada-do-Lote]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Qualidade (regra de negócio) · Nathan (decisões)
 fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Encaixe-Estoque-Revenda-no-PCP (EC-01, EC-07), api-pcp 579a625 (qualidade.service.ts, circuito-compra.ts, estoque.prisma), app-pcp 1fca8d3 (qualidade/inspecao-entrada), Registro-de-Decisoes #25 #26]
@@ -12,6 +15,10 @@ fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Enc
 # Qualidade de entrada (Q1 a Q4)
 
 **Em uma frase:** a Qualidade inspeciona o lote que chegou do fornecedor e decide se ele entra no Estoque ou volta para Compras, para que nada comprado vire saldo sem laudo. Nós `Q1` a `Q4` do [[00-Fluxo-Mestre-0b]]. A inspeção de saída da produção é outra raia: [[11-Qualidade-Saida]].
+
+**Quando consultar:** dúvidas sobre a inspeção do material comprado: laudo, liberação do lote ou devolução para Compras.
+
+**Onde estamos no fluxo:** ← [[07-Recebimento]] | [[09-Estoque-Entrada-do-Lote]] → · nós desta nota: `Q1`, `Q2`, `Q3`, `Q4`
 
 > [!info] Decisões de 29/10/2026 (N16-120 a N16-143)
 > - N16-124: só o setor da Qualidade decide o lote. Hoje qualquer usuário com permissão de editar a inspeção decide.
