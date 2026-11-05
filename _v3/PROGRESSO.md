@@ -1,6 +1,6 @@
 # Progresso da v3
-Estado atual: Bloco 1, tarefa 3 (amostra de 20 links aguardando aprovação do Nathan)
-Próxima ação: com o "ok" da amostra, rodar `node _v3/scripts/contratos-links.mjs` (grava 372 links em 57 notas) e commitar
+Estado atual: Bloco 1 concluído, aguardando "ok" do Nathan para o Bloco 2
+Próxima ação: com o "ok" e o Obsidian fechado, rodar a seção 1 e gerar `_v3/mapa-renomeacao.csv` (Bloco 2)
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -39,10 +39,10 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 
 ### Bloco 1: Retirar os contratos da v2
 - [x] Gerar o índice `Contratos-da-v2` e conferir as 97 linhas e os links do GitHub (2026-11-05, e5d763d). Os 97 `.md` de `06-Contratos` = 92 contratos + 3 HIST + Painel + Modelo-de-Consulta. O índice tem 92 linhas de contrato e uma tabela à parte com os 3 HIST e o Painel; o Modelo vai para `Modelos/`. Todos os links do GitHub conferidos contra a tag. Próximos IDs: API-019, CON-04, LOG-56, SQL-022.
-- [~] Reescrever os links de contrato e do Painel por script (`_v3/scripts/contratos-links.mjs`: 372 links em 57 notas na simulação; idempotente; nada sobra fora de código. A contagem da instrução, 1.278, incluía links internos de `06-Contratos`, que saem com as pastas)
-- [~] Mostrar ao Nathan uma amostra de 20 links reescritos (`_v3/amostra-links-bloco1.txt`; aguardando ok)
-- [ ] Ajustar `build.mjs` e as fichas; rodar `node build.mjs`
-- [ ] Mover o `Modelo-de-Consulta` para `Modelos/`; `git rm -r` nos contratos e no Painel
+- [x] Reescrever os links de contrato e do Painel por script (2026-11-05, 2fb8a01: 372 links em 57 notas; segunda rodada = 0)
+- [x] Mostrar ao Nathan uma amostra de 20 links reescritos (aprovada em 2026-11-05; `_v3/amostra-links-bloco1.txt`)
+- [x] Ajustar `build.mjs` e as fichas; rodar `node build.mjs` (2026-11-05, e0364bc: 9 campos `arquivo` nas fichas; IDs apontam para o índice; "0 contratos sem nota achada")
+- [x] Mover o `Modelo-de-Consulta` para `Modelos/`; `git rm -r` nos contratos e no Painel (2026-11-05, e0364bc: saiu no mesmo commit do mapa, porque o `git rm` já estava no índice do git)
 
 ### Bloco 2: Renomear um para um
 - [ ] Gerar o `mapa-renomeacao.csv`
@@ -62,7 +62,11 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 ## Validações
 Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 0 CRLF; 0 caracteres corrompidos reais (o único achado é o texto da própria instrução); 37 notas acima de 25 KB; 354 links de contrato (regex `LOG|SQL|API|CON|ATV-n`) em 52 notas fora de `06-Contratos` (a instrução cita 1.278; a diferença será reconciliada no Bloco 1). Ajuste na checagem: `Ã` sozinho é letra válida em português, então só `Ã` + byte de continuação, `â€` e `�` contam.
 
+### Bloco 1 (2026-11-05, `_v3/validacao-bloco1.md`)
+92 notas; 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 links para contrato da v2 fora do índice; índice com 92 contratos distintos; 19 notas acima de 25 KB (Bloco 5); mapa regenerado (12 fichas). Validador ajustado: `_v3/` fica fora de órfãs e de codificação (cita os padrões de propósito).
+
 ## Problemas e pendências
+- Referências entre crases a `Painel-de-Contratos` ficam no `Guia-de-Leitura` (linhas 112 e 133; atualizar no Bloco 4), no frontmatter `fontes` de `Onde-Estamos` (histórico) e em `Analise-de-Organizacao-do-Vault` (exceção).
 - Nathan precisa avisar Robert e Gustavo que a `main` do vault fica congelada (D4).
 - `omie-elt-pipeline` sem `develop`: confirmar que `origin/master` é a base correta.
 
