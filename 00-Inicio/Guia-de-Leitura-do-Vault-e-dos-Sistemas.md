@@ -4,7 +4,7 @@ criado: 2026-11-05
 estado-em: 2026-11-05
 status: vigente
 dono: Nathan
-fontes: [análise do vault de 05/11/2026, Regras-do-Vault, Comece-Aqui, instrução da v3 (_v3/INSTRUCAO.md, seção 1 e fatos F1 a F5)]
+fontes: [análise do vault de 05/11/2026, Regras-do-Vault, Comece-Aqui, instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, seção 1 e fatos F1 a F5)]
 ---
 
 # Guia de leitura do vault e dos sistemas (para a IA)

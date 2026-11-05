@@ -1,10 +1,10 @@
 // Bloco 6: depois da conferência na develop, Backlog-Frente-Nathan passou de 25 KB. Os itens BL-075 a BL-081
 // (proposta, pedido no Omie e comissão) vão, sem mudança, para Backlog-Frente-Nathan-Proposta-Omie-e-Comissao.
-// Uso: node _v3/scripts/backlog-nathan-dividir.mjs [--simular]   (idempotente)
+// Uso: node 07-Desenvolvimento/v3/scripts/backlog-nathan-dividir.mjs [--simular]   (idempotente)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const P = path.join(raiz, '07-Desenvolvimento', 'Partes');
 const simular = process.argv.includes('--simular');
 const NOVA = 'Backlog-Frente-Nathan-Proposta-Omie-e-Comissao';

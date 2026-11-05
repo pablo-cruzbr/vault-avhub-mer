@@ -1,14 +1,14 @@
 // Bloco 3: confere, para uma nota de raia, as citações de código contra a origin/develop dos sistemas (F5).
 // Só lê os repositórios dos sistemas (git ls-tree / git show), nunca troca de branch.
-//   node _v3/scripts/selos.mjs relatorio <nota>   → _v3/selos/<nota>.md: cada arquivo citado, em que repositório
+//   node 07-Desenvolvimento/v3/scripts/selos.mjs relatorio <nota>   → 07-Desenvolvimento/v3/selos/<nota>.md: cada arquivo citado, em que repositório
 //                                                    está na develop, se a linha citada ainda existe, e os ✅ sem citação
-//   node _v3/scripts/selos.mjs commits             → commit de origin/develop (ou master) de cada sistema
+//   node 07-Desenvolvimento/v3/scripts/selos.mjs commits             → commit de origin/develop (ou master) de cada sistema
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const RAIZ_SIS = path.resolve(raiz, '..');
 export const REPOS = ['api-acos-vital', 'av-hub', 'api-pcp', 'app-pcp', 'omie-elt-pipeline'];
 const git = (repo, ...a) => execFileSync('git', a, { cwd: path.join(RAIZ_SIS, repo), encoding: 'utf8', maxBuffer: 256 << 20, stdio: ['ignore', 'pipe', 'ignore'] });
@@ -68,7 +68,7 @@ function relatorio(nota) {
       if (m[2]) cits.get(k).refs.push([Number(m[2]), Number(m[3] || m[2])]);
     }
   });
-  const out = [`# Selos de ${nota} contra a develop`, '', `Gerado em ${new Date().toISOString().slice(0, 10)} por \`node _v3/scripts/selos.mjs relatorio ${nota}\`.`, '',
+  const out = [`# Selos de ${nota} contra a develop`, '', `Gerado em ${new Date().toISOString().slice(0, 10)} por \`node 07-Desenvolvimento/v3/scripts/selos.mjs relatorio ${nota}\`.`, '',
     'Base: ' + REPOS.map((r) => `${r} \`${base(r).ref}\` ${base(r).hash}`).join(' · '), '', '## Arquivos citados', '',
     '| Arquivo citado | Linhas da nota | Repositório e caminho na develop | Linhas citadas | Situação |', '|---|---|---|---|---|'];
   let problemas = 0;
@@ -120,8 +120,8 @@ function relatorio(nota) {
     }
   });
   out.push(`## Citações deslocadas (o identificador está em outra linha) (${desl.length})`, '', ...desl, '');
-  fs.mkdirSync(path.join(raiz, '_v3', 'selos'), { recursive: true });
-  fs.writeFileSync(path.join(raiz, '_v3', 'selos', nota + '.md'), out.join('\n'), 'utf8');
+  fs.mkdirSync(path.join(raiz, '07-Desenvolvimento', 'v3', 'selos'), { recursive: true });
+  fs.writeFileSync(path.join(raiz, '07-Desenvolvimento', 'v3', 'selos', nota + '.md'), out.join('\n'), 'utf8');
   console.log(`${nota}: ${cits.size} arquivos citados, ${problemas} com problema; ${semCit.length} ✅ sem citação`);
 }
 

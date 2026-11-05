@@ -1,11 +1,11 @@
 // Bloco 4: cabeçalho padrão e frontmatter de navegação das notas de raia (01 a 15) e `ordem`/`proxima` no Mestre.
 // - frontmatter: `ordem`, `nos` (já existe), `anterior`, `proxima`, `estado-em` (no lugar de `atualizado`), `develop-conferida` (já existe)
 // - corpo: depois do parágrafo "Em uma frase", entram "Quando consultar" e "Onde estamos no fluxo"
-// Uso: node _v3/scripts/cabecalho-raias.mjs [--simular]   (idempotente)
+// Uso: node 07-Desenvolvimento/v3/scripts/cabecalho-raias.mjs [--simular]   (idempotente)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const R = path.join(raiz, '02-Fluxo-de-Atividades');
 const simular = process.argv.includes('--simular');
 const ESTADO_EM = '2026-11-05'; // data da reconferência dos selos contra a develop (Bloco 3)

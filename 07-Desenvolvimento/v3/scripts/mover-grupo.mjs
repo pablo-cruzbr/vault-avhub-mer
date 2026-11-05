@@ -2,11 +2,11 @@
 // Genérico: cada "parte" tira linhas exatas da origem e as põe, iguais, numa subseção da dona.
 // Na origem fica uma frase com o link: no lugar da linha (texto) ou logo depois da tabela (linha de tabela).
 // Idempotente: se o título da seção já existe na dona, nada muda.
-// Uso: node _v3/scripts/mover-grupo.mjs <grupo> [--simular]     grupos: v1-v3, b1-b4
+// Uso: node 07-Desenvolvimento/v3/scripts/mover-grupo.mjs <grupo> [--simular]     grupos: v1-v3, b1-b4
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const R = path.join(raiz, '02-Fluxo-de-Atividades');
 const [, , grupo] = process.argv;
 const simular = process.argv.includes('--simular');

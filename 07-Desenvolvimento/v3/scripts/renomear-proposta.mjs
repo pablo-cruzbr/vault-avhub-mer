@@ -1,12 +1,12 @@
 // Bloco 3: a nota provisória 01-Proposta-e-Pedido-de-Venda vira 01-Proposta-de-Venda (V0.1–V0.7, V0C),
 // depois que C6–C8, V1–V3 e B2–B4 saíram para as notas donas. Os links são decididos pelo assunto:
 // os que falavam de C6–C8 ou do pedido apontam para a nota dona; os demais, para a proposta.
-// Uso: node _v3/scripts/renomear-proposta.mjs [--simular]   (idempotente)
+// Uso: node 07-Desenvolvimento/v3/scripts/renomear-proposta.mjs [--simular]   (idempotente)
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const V = '01-Proposta-e-Pedido-de-Venda', N = '01-Proposta-de-Venda';
 const F = '02-Fluxo-de-Atividades/';
@@ -25,7 +25,7 @@ const ESPECIAIS = [
   [F + 'Transversais/Telas-por-Raia.md', `## Proposta, Orçamento e comissão nova (\`V0\`, \`B1\` a \`B4\`, \`C6\` a \`C8\`, \`K1\` a \`K6\`) · [[${V}]]`, `## Proposta, Orçamento e comissão nova (\`V0\`, \`B1\` a \`B4\`, \`C6\` a \`C8\`, \`K1\` a \`K6\`) · [[${N}]] · [[02-Orcamento-Base-de-Preco]] · [[06-Circuito-de-Compra]] · [[15-Custo-Real-e-Comissao]]`, 'título da seção cobre quatro notas donas'],
 ];
 
-const IGN = new Set(['.git', '.obsidian', 'node_modules', '_v3']);
+const IGN = new Set(['.git', '.obsidian', 'node_modules', '_v3', 'v3']);
 const notas = [];
 (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { if (IGN.has(e.name)) continue; const p = path.join(d, e.name); if (e.isDirectory()) walk(p); else if (e.name.endsWith('.md')) notas.push(p); } })(raiz);
 const rel = (f) => path.relative(raiz, f).split(path.sep).join('/');

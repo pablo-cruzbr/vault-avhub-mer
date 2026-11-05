@@ -7,8 +7,8 @@
 //       (a lista é a foto de ANTES); use --refazer para forçar.
 //   node scripts/fatos.mjs conferir [nota] [--dir=<pasta>]
 //       para cada lista da pasta, confere se cada fato aparece em alguma nota do vault (fora de _v3, v3 e scripts).
-//   --dir=<pasta> é relativo à raiz do vault. As listas da v3 estão em _v3/fatos e _v3/fatos/bloco5
-//   (depois do Bloco 9, em 07-Desenvolvimento/v3/fatos).
+//   --dir=<pasta> é relativo à raiz do vault. As listas da v3 estão em 07-Desenvolvimento/v3/fatos (e nas subpastas bloco5,
+//   bloco6, bloco8 e dump0411); até o Bloco 9 a pasta era `_v3` (na raiz).
 //       Fatos "token" precisam aparecer literalmente. Linhas de regra são conferidas pelo texto sem
 //       selos e sem formatação; as que não batem vão para "conferir à mão" (o selo pode mudar pelo F5,
 //       o fato não pode sumir).

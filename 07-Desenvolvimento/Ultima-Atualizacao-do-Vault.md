@@ -4,7 +4,7 @@ criado: 2026-11-05
 estado-em: 2026-11-05
 status: vigente
 dono: Nathan
-fontes: [git log -1 origin/develop de cada sistema em 2026-11-05 (origin/master no omie-elt-pipeline), _v3/PROGRESSO.md (seção Ambiente)]
+fontes: [git log -1 origin/develop de cada sistema em 2026-11-05 (origin/master no omie-elt-pipeline), 07-Desenvolvimento/v3/PROGRESSO.md (seção Ambiente)]
 ---
 
 # Última atualização do vault

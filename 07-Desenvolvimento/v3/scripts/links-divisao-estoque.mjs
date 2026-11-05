@@ -1,10 +1,10 @@
 // Bloco 3: links para a nota provisória 05-Estoque-Atendimento-e-Despacho, decididos um por um
 // pelo assunto (atendimento/saldo/reserva → 05, entrada do lote/fabricado → 09, retirada/despacho → 12).
-// Uso: node _v3/scripts/links-divisao-estoque.mjs [--simular]   (idempotente: depois de aplicado, nada casa)
+// Uso: node 07-Desenvolvimento/v3/scripts/links-divisao-estoque.mjs [--simular]   (idempotente: depois de aplicado, nada casa)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const V = '05-Estoque-Atendimento-e-Despacho';
 const A = '05-Estoque-Atendimento', L = '09-Estoque-Entrada-do-Lote', D = '12-Estoque-Despacho';

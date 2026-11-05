@@ -1,11 +1,11 @@
 // Bloco 3: ajustes de citações feitos à mão contra a develop (05/11/2026), um por um, com o motivo.
-// Cada troca vale só na linha da nota que contém a âncora. Registra antigo → novo em _v3/fatos/substituicoes.tsv.
+// Cada troca vale só na linha da nota que contém a âncora. Registra antigo → novo em 07-Desenvolvimento/v3/fatos/substituicoes.tsv.
 // Base: av-hub 2e5456d · api-pcp befd973 · app-pcp 93f96de · api-acos-vital b97981c (origin/develop).
-// Uso: node _v3/scripts/ajustes-citacoes.mjs [--simular]   (idempotente)
+// Uso: node 07-Desenvolvimento/v3/scripts/ajustes-citacoes.mjs [--simular]   (idempotente)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const F = '02-Fluxo-de-Atividades/';
 const FILA = 'fila/CartaoItemParcial.tsx';
@@ -76,7 +76,7 @@ for (const [nota, lista] of Object.entries(porNota)) {
   if (mudou && !simular) fs.writeFileSync(p, ls.join('\n'), 'utf8');
 }
 if (!simular && log.length) {
-  const ps = path.join(raiz, '_v3', 'fatos', 'substituicoes.tsv');
+  const ps = path.join(raiz, '07-Desenvolvimento', 'v3', 'fatos', 'substituicoes.tsv');
   const ant = fs.readFileSync(ps, 'utf8').split('\n').filter(Boolean);
   for (const l of log) if (!ant.includes(l)) ant.push(l);
   fs.writeFileSync(ps, ant.join('\n') + '\n', 'utf8');

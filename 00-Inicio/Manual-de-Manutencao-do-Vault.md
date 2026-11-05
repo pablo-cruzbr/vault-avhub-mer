@@ -4,7 +4,7 @@ criado: 2026-11-05
 estado-em: 2026-11-05
 status: vigente
 dono: Nathan
-fontes: [instrução da v3 (_v3/INSTRUCAO.md, seções 1, 3, 6 e 9), Regras-do-Vault, Guia-de-Leitura-do-Vault-e-dos-Sistemas, scripts/validar.mjs, scripts/fatos.mjs, scripts/dividir.mjs, 09-Diagramas/mapa/build.mjs]
+fontes: [instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, seções 1, 3, 6 e 9), Regras-do-Vault, Guia-de-Leitura-do-Vault-e-dos-Sistemas, scripts/validar.mjs, scripts/fatos.mjs, scripts/dividir.mjs, 09-Diagramas/mapa/build.mjs]
 ---
 
 # Manual de manutenção do vault

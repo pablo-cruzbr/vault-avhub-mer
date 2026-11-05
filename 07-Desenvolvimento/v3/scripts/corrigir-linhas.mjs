@@ -2,12 +2,12 @@
 // Para cada citação de uma linha da nota que também cita identificadores de código (`nomeDaFuncao`),
 // se nenhum identificador aparece perto da linha citada (±30), procura a ocorrência do identificador mais
 // próxima da linha antiga e desloca o intervalo inteiro pela mesma diferença. Só troca números; o selo não muda.
-// Uso: node _v3/scripts/corrigir-linhas.mjs <nota> [--simular]   (idempotente: depois de corrigido, nada casa)
+// Uso: node 07-Desenvolvimento/v3/scripts/corrigir-linhas.mjs <nota> [--simular]   (idempotente: depois de corrigido, nada casa)
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const SIS = path.resolve(raiz, '..');
 const REPOS = ['api-acos-vital', 'av-hub', 'api-pcp', 'app-pcp', 'omie-elt-pipeline'];
 const [, , nota] = process.argv;

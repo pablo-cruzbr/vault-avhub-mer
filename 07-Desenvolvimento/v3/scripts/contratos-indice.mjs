@@ -1,13 +1,13 @@
 // Bloco 1: gera 06-Contratos/Contratos-da-v2.md a partir do frontmatter dos contratos da v2.
 // Lê da tag v2-antes-da-v3 (git), então funciona igual antes e depois do `git rm`.
-// Uso: node _v3/scripts/contratos-indice.mjs --simular   (mostra o resumo, não grava)
-//      node _v3/scripts/contratos-indice.mjs             (grava o índice)
+// Uso: node 07-Desenvolvimento/v3/scripts/contratos-indice.mjs --simular   (mostra o resumo, não grava)
+//      node 07-Desenvolvimento/v3/scripts/contratos-indice.mjs             (grava o índice)
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const TAG = 'v2-antes-da-v3';
 const GH = `https://github.com/Acosvital/vault-avhub-mer/blob/${TAG}/`;
 const PASTAS = ['Ativos', 'Consultas', 'Entregues', 'Arquivados'];
@@ -86,7 +86,7 @@ criado: 2026-11-05
 estado-em: 2026-11-05
 status: vigente
 dono: Nathan
-fontes: ["tag ${TAG} do vault (06-Contratos)", "gerado por _v3/scripts/contratos-indice.mjs"]
+fontes: ["tag ${TAG} do vault (06-Contratos)", "gerado por 07-Desenvolvimento/v3/scripts/contratos-indice.mjs"]
 ---
 
 # Contratos da v2
@@ -95,7 +95,7 @@ fontes: ["tag ${TAG} do vault (06-Contratos)", "gerado por _v3/scripts/contratos
 
 **Quando consultar:** quando uma nota cita um ID de contrato antigo (\`LOG-34\`, \`SQL-014\`, \`API-011\`, \`CON-02\`) ou quando for registrar um contrato novo (veja a numeração no fim).
 
-Esta nota é gerada por script a partir do frontmatter dos contratos. Não edite as linhas à mão: rode \`node _v3/scripts/contratos-indice.mjs\`.
+Esta nota é gerada por script a partir do frontmatter dos contratos. Não edite as linhas à mão: rode \`node 07-Desenvolvimento/v3/scripts/contratos-indice.mjs\`.
 
 Total: **${contratos.length} contratos** (${porPasta}), mais ${historicos.length} documentos históricos e ${anexos.length} anexos (\`.sql\`, \`.patch\`), todos acessíveis pela tag.
 

@@ -5,7 +5,7 @@ estado-em: 2026-11-05
 status: vigente
 dono: Nathan
 parte-de: "[[Contratos-da-v2]]"
-fontes: ["tag v2-antes-da-v3 do vault (06-Contratos)", "gerado por _v3/scripts/contratos-indice.mjs"]
+fontes: ["tag v2-antes-da-v3 do vault (06-Contratos)", "gerado por 07-Desenvolvimento/v3/scripts/contratos-indice.mjs"]
 ---
 
 # Contratos da v2: Todos os contratos da v2

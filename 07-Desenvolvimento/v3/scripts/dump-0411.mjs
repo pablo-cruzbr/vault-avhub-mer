@@ -2,11 +2,11 @@
 // Este script acrescenta às notas o que mudou em relação ao dump de 29/10 (comparação na nota 04-Dados/Dump-AvHub-Teste-2026-11-04).
 // Regra: nada é apagado; o fato de 29/10 continua e o de 04/11 entra ao lado. Só a linha ❓ da 01 e a linha 78 do
 // Diferencas-Codigo-x-Banco são reescritas, porque o dump novo responde a dúvida (os fatos antigos continuam no texto).
-// Uso: node _v3/scripts/dump-0411.mjs [--simular]   (idempotente)
+// Uso: node 07-Desenvolvimento/v3/scripts/dump-0411.mjs [--simular]   (idempotente)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const D = '[[Dump-AvHub-Teste-2026-11-04]]';
 const AJ = [

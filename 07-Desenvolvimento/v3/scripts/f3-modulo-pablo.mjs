@@ -6,11 +6,11 @@
 // (`src/schemas/core_compras/aggregates/orcamento/orcamento.route.js:140-312`) e `parametros_custo`; NÃO tem
 // `produtos/:id/precos` nem `orcamento/matriz_precos`, embora o BFF aponte para elas.
 // O fato continua escrito (o que o módulo de teste fazia); só o selo muda.
-// Uso: node _v3/scripts/f3-modulo-pablo.mjs [--simular]   (idempotente)
+// Uso: node 07-Desenvolvimento/v3/scripts/f3-modulo-pablo.mjs [--simular]   (idempotente)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const F = path.join(raiz, '02-Fluxo-de-Atividades');
 const SO = '🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503)';

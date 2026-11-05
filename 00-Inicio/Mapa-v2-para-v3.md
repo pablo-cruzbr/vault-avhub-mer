@@ -4,7 +4,7 @@ criado: 2026-11-05
 estado-em: 2026-11-05
 status: vigente
 dono: Nathan
-fontes: ["_v3/mapa-renomeacao.csv", "tag v2-antes-da-v3 do vault"]
+fontes: ["07-Desenvolvimento/v3/mapa-renomeacao.csv", "tag v2-antes-da-v3 do vault"]
 ---
 
 # Mapa v2 para v3
@@ -49,4 +49,4 @@ A v2 está guardada na tag `v2-antes-da-v3`. Na v3, as notas de raia seguem a or
 | `Painel-de-Contratos` | [[Contratos-da-v2]] | O índice substitui o painel |
 | `06-Contratos/Consultas/Modelo-de-Consulta` | [[Modelo-de-Consulta]] | É modelo, não contrato: foi para `06-Contratos/Modelos/` |
 
-O mapa completo, legível por script, está em `_v3/mapa-renomeacao.csv`.
+O mapa completo, legível por script, está em `07-Desenvolvimento/v3/mapa-renomeacao.csv`.

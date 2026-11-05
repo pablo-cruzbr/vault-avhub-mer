@@ -1,14 +1,14 @@
 // Bloco 1: reescreve os [[links]] para contratos da v2 e para o Painel, apontando para [[Contratos-da-v2]].
 // Regras: mantém o ID visível; respeita |alias, #seção, \| em tabela, embeds ![[...]], caminho e .md;
 // não toca em blocos de código (``` e `inline`). Idempotente: rodar de novo não muda nada.
-// Uso: node _v3/scripts/contratos-links.mjs --simular   (lista o que mudaria e uma amostra de 20)
-//      node _v3/scripts/contratos-links.mjs             (grava)
+// Uso: node 07-Desenvolvimento/v3/scripts/contratos-links.mjs --simular   (lista o que mudaria e uma amostra de 20)
+//      node 07-Desenvolvimento/v3/scripts/contratos-links.mjs             (grava)
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const TAG = 'v2-antes-da-v3';
 const INDICE = 'Contratos-da-v2';
 const PASTAS = ['Ativos', 'Consultas', 'Entregues', 'Arquivados'];
@@ -35,7 +35,7 @@ for (const f of git('ls-tree', '-r', '--name-only', TAG, '--', '06-Contratos').s
 }
 const PAINEL = 'Painel-de-Contratos';
 
-const IGNORAR = new Set(['.git', '.obsidian', 'node_modules', '_v3']);
+const IGNORAR = new Set(['.git', '.obsidian', 'node_modules', '_v3', 'v3']);
 function listar(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (IGNORAR.has(e.name)) continue;

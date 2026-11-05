@@ -1,11 +1,11 @@
 // Bloco 3: move trechos de nós com mais de uma casa para a nota dona.
 // Cada grupo tira linhas exatas da nota de origem (deixando uma frase e o link) e monta uma seção na
 // nota dona com as mesmas linhas, sem reescrever. Idempotente: se a seção de destino já existe, pula.
-// Uso: node _v3/scripts/mover-trechos.mjs <grupo> [--simular]     grupos: c6-c8, v1-v3, b1-b4
+// Uso: node 07-Desenvolvimento/v3/scripts/mover-trechos.mjs <grupo> [--simular]     grupos: c6-c8, v1-v3, b1-b4
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const R = path.join(raiz, '02-Fluxo-de-Atividades');
 const [, , grupo] = process.argv;
 const simular = process.argv.includes('--simular');

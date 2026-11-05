@@ -3,11 +3,11 @@
 // Conferido na develop em 05/11/2026: app-pcp 93f96de tem PalletsModal, EmbalagensSection e ConfirmarEntregaModal (X1, X4 comprovante);
 // não há consolidação de carga, romaneio, transporte de saída nem sinalização ao Omie (X3, X4 transporte, O1) em app-pcp nem em api-pcp befd973.
 // Lista explícita (sem regex geral): "L10.1" e outros IDs parecidos não são tocados. Mapa-v1-para-v2 e Registro-de-Decisoes ficam como estão.
-// Uso: node _v3/scripts/telas-v1-para-nos.mjs [--simular]   (idempotente)
+// Uso: node 07-Desenvolvimento/v3/scripts/telas-v1-para-nos.mjs [--simular]   (idempotente)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const F = '02-Fluxo-de-Atividades/';
 const TROCAS = {

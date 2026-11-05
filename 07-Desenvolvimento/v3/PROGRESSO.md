@@ -1,6 +1,8 @@
 # Progresso da v3
-Estado atual: Bloco 8 concluído e dump de teste de 04/11 incorporado; aguardando "ok" do Nathan para o Bloco 9
-Próxima ação: com o "ok", Bloco 9: mover `_v3/` para `07-Desenvolvimento/v3/` (ajustar os caminhos que citam `_v3/`); o PR da `v3` para a `main` só se o Nathan pedir
+
+> Esta pasta era `_v3/` na raiz do vault até o Bloco 9 (05/11/2026); foi movida para `07-Desenvolvimento/v3/` com `git mv`. Os caminhos `_v3/...` citados abaixo são os da época e hoje ficam em `07-Desenvolvimento/v3/...`.
+Estado atual: Bloco 9 em andamento — `_v3/` já está em `07-Desenvolvimento/v3/`; falta o PR da `v3` para a `main` (só se o Nathan pedir) e, depois do merge, a tag `v2-final`
+Próxima ação: esperar o Nathan pedir o PR da `v3` para a `main`; depois do merge, criar a tag `v2-final` no último commit da v2 (`5203232`, a `main` de hoje)
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -109,7 +111,9 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Linguagem simples no topo e detalhe no fim; nenhuma regra, número, ID ou selo sumiu (fatos: 0 sumidos nas 15 fotos do bloco 8 e nas fotos dos blocos 3, 5 e 6; "conferir à mão" revistas pelos agentes e listadas no relatório de cada um). Tamanhos: todas abaixo de 25 KB (a maior, 10, com 24,8 KB)
 
 ### Bloco 9: Encerramento
-- [ ] Pendente (ver `_v3/INSTRUCAO.md`, seção 8)
+- [x] Mover `_v3/` para `07-Desenvolvimento/v3/` (2026-11-05: `git mv` de 119 arquivos; os 22 scripts de bloco passam a achar a raiz três pastas acima e a usar `07-Desenvolvimento/v3` (`scripts/encerramento-caminhos.mjs`, idempotente); 8 notas e `scripts/fatos.mjs` e `dividir.mjs` citam o caminho novo; os históricos desta pasta ficaram como estavam. Scripts de bloco rodados em `--simular`: 0 mudanças. Validação verde; fatos 0 sumidos nas 5 pastas, com 2 substituições de caminho registradas em `fatos/bloco5/substituicoes.tsv`)
+- [ ] Abrir o PR da `v3` para a `main` do vault, se o Nathan pedir
+- [ ] Depois do merge, criar a tag `v2-final` no último commit da v2
 
 ## Validações
 Base v2 (2026-11-05, `_v3/validacao-base-v2.md`): 186 notas; 0 links quebrados; 0 CRLF; 0 caracteres corrompidos reais (o único achado é o texto da própria instrução); 37 notas acima de 25 KB; 354 links de contrato (regex `LOG|SQL|API|CON|ATV-n`) em 52 notas fora de `06-Contratos` (a instrução cita 1.278; a diferença será reconciliada no Bloco 1). Ajuste na checagem: `Ã` sozinho é letra válida em português, então só `Ã` + byte de continuação, `â€` e `�` contam.
@@ -137,6 +141,9 @@ Verde; aceite em `_v3/aceite-bloco7.md` (10/10 respondidas pelo vault, até 2 cl
 
 ### Bloco 8 (2026-11-05, `_v3/validacao-bloco8.md`)
 0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 notas acima de 25 KB; 92 contratos; 0 nomes antigos; 60 nós com dono único; 0 ✅ sem citação; mapa ok. Fatos: 0 sumidos em `_v3/fatos`, `bloco5`, `bloco6` e `bloco8` (a `bloco5` ganhou 1 substituição: o comando do `contratos-indice.mjs` tirado no Bloco 7).
+
+### Bloco 9 (2026-11-05, `validacao-bloco9.md`)
+0 links quebrados; 0 órfãs; 0 CRLF; 0 corrompidos; 0 notas acima de 25 KB; 92 contratos; 0 nomes antigos; 60 nós com dono único; 0 ✅ sem citação; mapa ok (12 fichas, 0 contratos sem nota). Fatos: 0 sumidos em `fatos`, `bloco5`, `bloco6`, `bloco8` e `dump0411`.
 
 ## Relatório final da v3 (Bloco 7, 2026-11-05)
 

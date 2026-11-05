@@ -3,11 +3,11 @@
 // api-acos-vital; MES → api-pcp; pipeline → omie-elt-pipeline; módulo de teste do Pablo → av-hub/api-comercial.
 // "decidir" troca ✅ por 📝: a linha registra uma decisão ou resposta, não código (tabela de selos, F5).
 // O commit lido da develop vai no frontmatter (develop-conferida), uma vez por nota (decisão do Nathan, 05/11).
-// Uso: node _v3/scripts/selos-repositorio.mjs [--simular]   (idempotente: linha já marcada não muda)
+// Uso: node 07-Desenvolvimento/v3/scripts/selos-repositorio.mjs [--simular]   (idempotente: linha já marcada não muda)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const F = path.join(raiz, '02-Fluxo-de-Atividades');
 const H = 'av-hub', A = 'api-acos-vital', P = 'api-pcp', M = 'app-pcp', O = 'omie-elt-pipeline', T = 'av-hub/api-comercial';

@@ -1,11 +1,11 @@
 // Bloco 3: grava `nos: [...]` no frontmatter de cada nota de raia (dono único de cada nó do mermaid).
 // A tabela abaixo é a da seção 5 da instrução (D1: três notas de Estoque). Notas provisórias
 // recebem os nós que terão depois da divisão; a nota que nascer da divisão recebe os seus ao nascer.
-// Uso: node _v3/scripts/nos-frontmatter.mjs [--simular]   (idempotente: troca a linha `nos:` se já existir)
+// Uso: node 07-Desenvolvimento/v3/scripts/nos-frontmatter.mjs [--simular]   (idempotente: troca a linha `nos:` se já existir)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const R = path.join(raiz, '02-Fluxo-de-Atividades');
 const simular = process.argv.includes('--simular');
 export const DONOS = {

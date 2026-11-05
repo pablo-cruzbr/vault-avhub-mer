@@ -1,20 +1,20 @@
 // Bloco 6: aplica nas notas Backlog-Frente-* a conferência dos itens BL na origin/develop (05/11/2026),
-// feita item a item e gravada em _v3/selos/Backlog-*-develop.md (colunas: BL | selo atual | selo pela develop |
+// feita item a item e gravada em 07-Desenvolvimento/v3/selos/Backlog-*-develop.md (colunas: BL | selo atual | selo pela develop |
 // evidência na develop | o que mudou | a evidência antiga ainda vale?).
 // - Selo: passa a ser o "selo pela develop".
 // - Evidência: "develop 05/11: <nova>"; a antiga fica depois ("14/10: ...") só quando ainda vale.
 // - O que falta: ganha "Conferido na develop em 05/11/2026: <o que mudou>" quando algo mudou. Nada é apagado
 //   além da evidência antiga que deixou de valer (linha ou arquivo mudou).
-// Uso: node _v3/scripts/backlog-develop.mjs [--simular]   (idempotente: não reaplica linha já marcada)
+// Uso: node 07-Desenvolvimento/v3/scripts/backlog-develop.mjs [--simular]   (idempotente: não reaplica linha já marcada)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const celulas = (l) => l.trim().replace(/^\||\|$/g, '').split(/(?<!\\)\|/).map((c) => c.trim());
 const conf = new Map();
 for (const f of ['Backlog-robert-develop.md', 'Backlog-gustavo-develop.md', 'Backlog-nathan-comercial-develop.md']) {
-  for (const l of fs.readFileSync(path.join(raiz, '_v3', 'selos', f), 'utf8').split('\n')) {
+  for (const l of fs.readFileSync(path.join(raiz, '07-Desenvolvimento', 'v3', 'selos', f), 'utf8').split('\n')) {
     if (!l.startsWith('| BL-')) continue;
     const c = celulas(l);
     if (c.length < 6) throw new Error('linha com colunas a menos: ' + l.slice(0, 60));

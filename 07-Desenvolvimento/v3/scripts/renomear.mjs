@@ -1,11 +1,11 @@
-// Bloco 2: renomeação um para um a partir de _v3/mapa-renomeacao.csv.
+// Bloco 2: renomeação um para um a partir de 07-Desenvolvimento/v3/mapa-renomeacao.csv.
 // Aplica o mapa inteiro de uma vez (sem cadeia de substituições): cada [[link]] é resolvido
 // contra o nome ANTIGO e trocado uma única vez pelo nome NOVO.
 //
 // Uso:
-//   node _v3/scripts/renomear.mjs --simular [--grupo=raias|transversais]   lista o que mudaria
-//   node _v3/scripts/renomear.mjs [--grupo=...]                            git mv + reescrita de links
-//   node _v3/scripts/renomear.mjs --crases [--simular]                     nomes entre crases (`...`)
+//   node 07-Desenvolvimento/v3/scripts/renomear.mjs --simular [--grupo=raias|transversais]   lista o que mudaria
+//   node 07-Desenvolvimento/v3/scripts/renomear.mjs [--grupo=...]                            git mv + reescrita de links
+//   node 07-Desenvolvimento/v3/scripts/renomear.mjs --crases [--simular]                     nomes entre crases (`...`)
 // Grupos: "raias" = linhas cujo destino não está em Transversais/; "transversais" = as demais.
 // Idempotente: linha cujo arquivo antigo não existe e o novo existe é pulada no git mv;
 // links já no nome novo não casam com nenhum nome antigo.
@@ -19,7 +19,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const args = process.argv.slice(2);
 const simular = args.includes('--simular');
 const crases = args.includes('--crases');
@@ -41,7 +41,7 @@ function lerCsv(p) {
   });
 }
 
-const todas = lerCsv(path.join(raiz, '_v3', 'mapa-renomeacao.csv'))
+const todas = lerCsv(path.join(raiz, '07-Desenvolvimento', 'v3', 'mapa-renomeacao.csv'))
   .filter((r) => ['final', 'provisorio'].includes(r.tipo) && r.antigo.endsWith('.md') && !r.antigo.includes('*'));
 const linhas = todas.filter((r) => {
   if (!grupo) return true;
@@ -51,7 +51,7 @@ const linhas = todas.filter((r) => {
 const base = (p) => path.basename(p, '.md');
 const mapa = new Map(linhas.map((r) => [base(r.antigo), { novoNome: base(r.novo), novoCaminho: r.novo.replace(/\.md$/, '') }]));
 
-const IGNORAR = new Set(['.git', '.obsidian', 'node_modules', '_v3']);
+const IGNORAR = new Set(['.git', '.obsidian', 'node_modules', '_v3', 'v3']);
 function listar(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (IGNORAR.has(e.name)) continue;

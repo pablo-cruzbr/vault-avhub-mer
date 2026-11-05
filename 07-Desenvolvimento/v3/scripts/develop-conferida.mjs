@@ -1,11 +1,11 @@
 // Bloco 3 (F5, decisão do Nathan de 05/11/2026): o commit da develop lido fica uma vez por nota, no frontmatter.
 // Grava `develop-conferida: [...]` logo depois de `nos:` em cada nota de raia. Idempotente (troca a linha se existir).
-// Uso: node _v3/scripts/develop-conferida.mjs [--simular]
+// Uso: node 07-Desenvolvimento/v3/scripts/develop-conferida.mjs [--simular]
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const simular = process.argv.includes('--simular');
 const REPOS = ['api-acos-vital', 'av-hub', 'api-pcp', 'app-pcp', 'omie-elt-pipeline'];
 const ref = (r) => { for (const x of ['origin/develop', 'origin/master']) { try { return [x, execFileSync('git', ['rev-parse', '--short', x], { cwd: path.join(raiz, '..', r), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()]; } catch {} } };
