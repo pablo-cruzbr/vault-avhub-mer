@@ -1,8 +1,8 @@
 # Progresso da v3
 
 > Esta pasta era `_v3/` na raiz do vault até o Bloco 9 (05/11/2026); foi movida para `07-Desenvolvimento/v3/` com `git mv`. Os caminhos `_v3/...` citados abaixo são os da época e hoje ficam em `07-Desenvolvimento/v3/...`.
-Estado atual: Bloco 9 em andamento — `_v3/` já está em `07-Desenvolvimento/v3/`; falta o PR da `v3` para a `main` (só se o Nathan pedir) e, depois do merge, a tag `v2-final`
-Próxima ação: esperar o Nathan pedir o PR da `v3` para a `main`; depois do merge, criar a tag `v2-final` no último commit da v2 (`5203232`, a `main` de hoje)
+Estado atual: Bloco 9 — PR #74 aberto (v3 → main), aguardando revisão e merge do Nathan
+Próxima ação: depois do merge do PR #74, criar e enviar a tag `v2-final` em `5203232` (último commit da v2) e marcar o Bloco 9 como concluído
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
@@ -112,7 +112,7 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 
 ### Bloco 9: Encerramento
 - [x] Mover `_v3/` para `07-Desenvolvimento/v3/` (2026-11-05: `git mv` de 119 arquivos; os 22 scripts de bloco passam a achar a raiz três pastas acima e a usar `07-Desenvolvimento/v3` (`scripts/encerramento-caminhos.mjs`, idempotente); 8 notas e `scripts/fatos.mjs` e `dividir.mjs` citam o caminho novo; os históricos desta pasta ficaram como estavam. Scripts de bloco rodados em `--simular`: 0 mudanças. Validação verde; fatos 0 sumidos nas 5 pastas, com 2 substituições de caminho registradas em `fatos/bloco5/substituicoes.tsv`)
-- [ ] Abrir o PR da `v3` para a `main` do vault, se o Nathan pedir
+- [x] Abrir o PR da `v3` para a `main` do vault (2026-11-05, a pedido do Nathan: https://github.com/Acosvital/vault-avhub-mer/pull/74; 117 commits, sem conflito com a `main`, que segue em `5203232`; o repositório não tem CI)
 - [ ] Depois do merge, criar a tag `v2-final` no último commit da v2
 
 ## Validações
