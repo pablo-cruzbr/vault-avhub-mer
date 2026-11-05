@@ -12,7 +12,7 @@ fontes: [av-hub 758d5f0 (pasta api-comercial/, com LEIA-ME-LEGADO.md; README.md,
 **Em uma frase:** é o backend de teste que o Pablo fez para o módulo AV Comercial & Suprimentos (propostas, ofertas de fornecedor, custo de referência e sincronização com o Omie). **Saiu de produção e do BFF em 27/10 (N16-111) e ficou no repositório só para leitura (N16-117, 28/10)**: o Robert lê as regras daqui para refazer o módulo dentro da `api-acos-vital`.
 
 > [!info] Decisões do Nathan 📝
-> 14/10: a `api-comercial` não será publicada; tudo migra para a `api-acos-vital` ([[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]]).
+> 14/10: a `api-comercial` não será publicada; tudo migra para a `api-acos-vital` ([[Contratos-da-v2|LOG-52]]).
 > 27/10 (N16-111): a `api-comercial` de teste saiu do BFF e de produção. 28/10 (N16-117): a pasta fica só para leitura (`LEIA-ME-LEGADO.md`: não rodar, não publicar, não alterar). Nada novo nasce aqui.
 > O BFF do av-hub (`comercialApi.ts`) só fala com a `api-acos-vital`; rota ainda não migrada responde 503 `RECURSO_NAO_MIGRADO`. As primeiras rotas já existem na API do Hub (`/comercial/*`, 28 e 29/10; ver [[AV-Hub-API]]).
 
@@ -50,7 +50,7 @@ fontes: [av-hub 758d5f0 (pasta api-comercial/, com LEIA-ME-LEGADO.md; README.md,
 
 > **Decisão do Nathan, 14/10/2026 📝:** a `api-comercial` é só uma API de teste do Pablo, não será publicada, e o que está descrito abaixo é o estado do código de teste (como estava em 14/10, HUB b55ac55), não um serviço de produção. Desde 27/10 ela está fora do BFF e desde 28/10 é só leitura.
 
-**Como a migração será feita:** [[LOG-52-Migracao-do-Modulo-Comercial-para-a-API-do-Hub]] (proposta de 15/10/2026). Das 30 tabelas, 22 migram e 8 são descartadas (espelhos do Omie e do hub); a sincronização própria some e a pipeline é a fonte; o domínio de cálculo é portado como está. A auditoria de 15/10 achou defeitos **neste** código de teste (o filtro `?responsavel=` anula o escopo `proprios`, o escopo `vinculados` não restringe, CNPJ alfanumérico rejeitado, entre outros) que o LOG-52 lista como critérios de aceite para **não** serem herdados.
+**Como a migração será feita:** [[Contratos-da-v2|LOG-52]] (proposta de 15/10/2026). Das 30 tabelas, 22 migram e 8 são descartadas (espelhos do Omie e do hub); a sincronização própria some e a pipeline é a fonte; o domínio de cálculo é portado como está. A auditoria de 15/10 achou defeitos **neste** código de teste (o filtro `?responsavel=` anula o escopo `proprios`, o escopo `vinculados` não restringe, CNPJ alfanumérico rejeitado, entre outros) que o LOG-52 lista como critérios de aceite para **não** serem herdados.
 
 Backend (legado) do módulo **AV Comercial & Suprimentos**: propostas, ofertas de fornecedor, custo de referência, configurador de telha, solicitações de custo, dashboards e a sincronização com o Omie (produtos, fornecedores, pedidos de compra). Autor: Pablo. Está **fora do fluxo de Atividades**: o pedido de venda do Omie entra no fluxo pelo av-hub ([[AV-Hub-API]]), e não por aqui. Mesmo assim ele compartilha RBAC, usuários e a fonte Omie com o av-hub. Anexo: [[Comercial-Suprimentos]]. Selos: [[Regras-do-Vault]].
 

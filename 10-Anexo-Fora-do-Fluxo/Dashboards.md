@@ -13,7 +13,7 @@ fontes: [api-acos-vital f322dcd src/schemas/core_vendas_faturamento, HUB b55ac55
 
 **Quando consultar:** quando a dúvida é "de onde vem este número?" ou "que regra define a venda líquida e a unidade do vendedor?".
 
-Fora do fluxo 0b (nota de 09/10: dashboards, comissões, orçamento e pedidos manuais não fazem parte do desenho). Contratos arquivados que descrevem as regras: [[LOG-04b-Pedidos-Notas-Dashboards-Agregacao-no-Banco]], [[LOG-31-Compras-Dashboard]], [[LOG-33-Dashboards-Unidade-de-Origem-do-Vendedor]], [[LOG-37-Dashboard-Mensal-Variacao]].
+Fora do fluxo 0b (nota de 09/10: dashboards, comissões, orçamento e pedidos manuais não fazem parte do desenho). Contratos arquivados que descrevem as regras: [[Contratos-da-v2|LOG-04b]], [[Contratos-da-v2|LOG-31]], [[Contratos-da-v2|LOG-33]], [[Contratos-da-v2|LOG-37]].
 
 ## Telas do HUB
 

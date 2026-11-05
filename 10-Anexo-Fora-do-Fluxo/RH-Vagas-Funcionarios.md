@@ -11,7 +11,7 @@ fontes: [api-acos-vital f322dcd src/schemas/core_aprovacao_de_vagas e core_organ
 
 **Em uma frase:** o RH do HUB cuida de três coisas: pedidos de vaga (com aprovação), cadastro de funcionários e organograma.
 
-**Quando consultar:** quando a dúvida é "quem decide uma vaga?" ou "o que existe de RH no sistema?". Esta nota fica fora do fluxo 0b. Os contratos [[LOG-02-Funcionarios-Listagem-Filtros-Ordenacao-Resumo]], [[LOG-03-Funcionarios-Cadastro-Organograma-Transacional]] e [[LOG-04a-Vagas-Fila-Decisao-no-Banco]] estão arquivados: o que vale é o código.
+**Quando consultar:** quando a dúvida é "quem decide uma vaga?" ou "o que existe de RH no sistema?". Esta nota fica fora do fluxo 0b. Os contratos [[Contratos-da-v2|LOG-02]], [[Contratos-da-v2|LOG-03]] e [[Contratos-da-v2|LOG-04a]] estão arquivados: o que vale é o código.
 
 ## Vagas
 

@@ -21,7 +21,7 @@ Fonte: Omie `ListarEtapasFaturamento` (`/produtos/etapafat/`), resource `etapasF
 |---|---|---|
 | Recurso `etapasFaturamento` ligado (`enabled:true`), nas 4 camadas (hoje, mês, últimos meses, full) | no código | ✅ |
 | Tabela `core.etapas_faturamento` populada em produção | confirmada pelo Nathan em 07/10 ([[Registro-de-Decisoes]] #5) | 📝 |
-| Ligação ao dicionário de nomes de etapa do Portal do Vendedor | falta; a ordem das etapas no cadastro é o contrato [[LOG-43-Ordem-das-Etapas-de-Faturamento-no-Cadastro]] (seed de `ordem_fluxo`, Gustavo) | 🔴 |
+| Ligação ao dicionário de nomes de etapa do Portal do Vendedor | falta; a ordem das etapas no cadastro é o contrato [[Contratos-da-v2\|LOG-43]] (seed de `ordem_fluxo`, Gustavo) | 🔴 |
 
 A resposta do Omie vem aninhada (`cadastros[].etapas[]`) e é achatado antes do mapeamento. Chave de conflito (o conjunto que identifica a linha e evita duplicar): `(codigo_empresa, codigo_operacao, codigo_etapa)`.
 

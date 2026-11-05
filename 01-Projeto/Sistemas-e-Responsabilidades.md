@@ -54,7 +54,7 @@ flowchart LR
     API -->|"GET itens status contrato 005"| MESB
 ```
 
-Versão completa por contrato em [[Componentes-e-Implantacao|Diagrama-Componentes-e-Implantacao]]. Chaves e autenticação entre os sistemas em [[Chaves-e-Autenticacao]]. Contratos em [[Integracao-AvHub-MES]] e [[Painel-de-Contratos]].
+Versão completa por contrato em [[Componentes-e-Implantacao|Diagrama-Componentes-e-Implantacao]]. Chaves e autenticação entre os sistemas em [[Chaves-e-Autenticacao]]. Contratos em [[Integracao-AvHub-MES]] e [[Contratos-da-v2]].
 
 ## Em que ambiente cada um está
 
@@ -69,9 +69,9 @@ Versão completa por contrato em [[Componentes-e-Implantacao|Diagrama-Componente
 
 Topologia dos servidores em [[Infraestrutura]].
 
-## Pendência: levar a `develop` para a `main`
+## Publicação na `main`
 
-O Nathan afirma que tudo o que está na `develop` foi testado e funciona, e que o merge para a `main` pode ser feito a qualquer momento 📝. Situação em 29/10/2026: a `api-acos-vital` já tem a `main` igual à `develop` (PR #305, 29/10) ✅; o HUB tem a `develop` 29 commits à frente da `main`; o MES segue com a `main` parada em 08/10 e a `develop` 53 (`api-pcp`) e 51 (`app-pcp`) commits à frente 🔴 (Robert, BL-035). O banco de produção do MES, pelo dump de 07/10, não tem as migrations da `develop` ❓ ([[Banco-MES]]).
+Pelo F5, o que está na `develop` já conta como pronto; a `main` é só o que foi publicado. Quanto falta publicar em cada sistema, e a pendência do MES (BL-035), está em [[Onde-Estamos#Publicado na main (informação)]].
 
 ## Detalhe técnico
 

@@ -136,7 +136,7 @@ flowchart TB
     S_COMERCIAL -.->|"cadastros usados pelo comercial"| S_CORE
 ```
 - ✅ A lista de schemas confere com o Dump Avhub de 29/10.
-- 🔴 `core_comercial` aparece no dump de 29/10 com 23 tabelas (`propostas`, `clientes`, `ofertas`, `unidades_emissoras` e outras), e as rotas `/comercial/*` da API o usam. A N16-116 (27/10) disse que ele não existiria e que a proposta ficaria em `core_vendas_faturamento`; a divergência está em decisão (Nathan e Robert).
+- 🔴 `core_comercial` aparece no dump de 29/10 com 23 tabelas (`propostas`, `clientes`, `ofertas`, `unidades_emissoras` e outras), e as rotas `/comercial/*` da API o usam. No dump do banco de teste de 04/11/2026 o `core_comercial` tem 12 tabelas: saíram `ofertas`, `clientes` e as outras do módulo de teste, e entraram `pedidos_venda` e `pedidos_venda_itens`. A N16-116 (27/10) disse que ele não existiria e que a proposta ficaria em `core_vendas_faturamento`; a divergência está em decisão (Nathan e Robert).
 - 🟡 As ligações entre schemas vieram do v1 e não foram relidas no dump.
 - `core_estoque` não tem tabela: o Estoque é do MES.
 

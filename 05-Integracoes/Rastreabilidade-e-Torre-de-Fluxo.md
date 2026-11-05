@@ -11,7 +11,7 @@ fontes: [LOG-46, v1 Rastreabilidade-e-SLA-de-Eventos, v1 Campos-e-API-para-Rastr
 
 **Em uma frase:** a Torre de Fluxo é uma tela de consulta (só leitura) que mostra onde cada item do pedido está, há quanto tempo, com quem e quem autorizou.
 
-**Quando consultar esta nota:** ao trabalhar no histórico de eventos, no prazo por etapa (SLA, a meta de tempo), nas telas T.3 a T.6 ou na troca de eventos entre MES e av-hub. Ela atravessa **todos os nós** do [[00-Fluxo-Mestre-0b]]. Contrato completo: [[LOG-46-Torre-de-Fluxo-Feed-Jobs-e-Telas]] (status `parcial`).
+**Quando consultar esta nota:** ao trabalhar no histórico de eventos, no prazo por etapa (SLA, a meta de tempo), nas telas T.3 a T.6 ou na troca de eventos entre MES e av-hub. Ela atravessa **todos os nós** do [[00-Fluxo-Mestre-0b]]. Contrato completo: [[Contratos-da-v2|LOG-46]] (status `parcial`).
 
 ## Quem manda dado para quem, quando e por quê
 
@@ -39,7 +39,7 @@ fontes: [LOG-46, v1 Rastreabilidade-e-SLA-de-Eventos, v1 Campos-e-API-para-Rastr
 
 ## Detalhe técnico
 
-A Torre de Fluxo responde: onde cada item do pedido está, há quanto tempo, com quem e quem autorizou. Ela atravessa **todos os nós** do [[00-Fluxo-Mestre-0b]]. É só leitura. O contrato completo é [[LOG-46-Torre-de-Fluxo-Feed-Jobs-e-Telas]] (status `parcial`). O fluxo de transporte entre os sistemas está em [[Integracao-AvHub-MES]], INT-07.
+A Torre de Fluxo responde: onde cada item do pedido está, há quanto tempo, com quem e quem autorizou. Ela atravessa **todos os nós** do [[00-Fluxo-Mestre-0b]]. É só leitura. O contrato completo é [[Contratos-da-v2|LOG-46]] (status `parcial`). O fluxo de transporte entre os sistemas está em [[Integracao-AvHub-MES]], INT-07.
 
 ### Princípio
 
@@ -114,7 +114,7 @@ Estados comuns das telas: carregando (esqueleto), vazio ("Nenhum item acompanhad
 
 ### Como o front avança sem esperar o MES
 
-Tipos em `lib/domain/fluxo-torre.ts` (modelo `lib/domain/etapas-item.ts`), interface `FonteTorre { listar(filtros); item(id) }`, fixtures com os casos de borda, fonte HTTP começando em `disponivel: false`, BFF com `requirePermission`, `headersDaApi()` (Bearer) e filtros em lista fechada (`HUB lib/api/escopoUnidade.ts`). A fonte é escolhida por constante no código, nunca por variável de ambiente. Plano completo na seção 8 do [[LOG-46-Torre-de-Fluxo-Feed-Jobs-e-Telas]].
+Tipos em `lib/domain/fluxo-torre.ts` (modelo `lib/domain/etapas-item.ts`), interface `FonteTorre { listar(filtros); item(id) }`, fixtures com os casos de borda, fonte HTTP começando em `disponivel: false`, BFF com `requirePermission`, `headersDaApi()` (Bearer) e filtros em lista fechada (`HUB lib/api/escopoUnidade.ts`). A fonte é escolhida por constante no código, nunca por variável de ambiente. Plano completo na seção 8 do [[Contratos-da-v2|LOG-46]].
 
 ### Ordem de subida
 

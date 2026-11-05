@@ -1,0 +1,330 @@
+# Fatos de Conexao-das-Telas-do-Pablo-com-a-API-do-Hub
+
+Foto tirada em 2026-11-05 de `03-Sistemas/Conexao-das-Telas-do-Pablo-com-a-API-do-Hub.md`, antes de mexer na nota.
+Gerada por `node _v3/scripts/fatos.mjs extrair`. Conferência: `node _v3/scripts/fatos.mjs conferir Conexao-das-Telas-do-Pablo-com-a-API-do-Hub`.
+
+## decisões e IDs (5)
+
+- `N16-02`
+- `N16-109`
+- `N16-111`
+- `N16-112`
+- `N16-80`
+
+## contratos (1)
+
+- `LOG-52`
+
+## commits (0)
+
+
+## arquivo:linha (1)
+
+- `lib/simulador/motor.ts`
+
+## rotas (5)
+
+- `GET /comercial/parceiros`
+- `GET /propostas/:id`
+- `POST /comercial/clientes`
+- `POST /parceiros`
+- `POST /propostas`
+
+## datas (5)
+
+- `26/10/2026`
+- `27/10`
+- `27/10/2026`
+- `29/10`
+- `29/10/2026`
+
+## código entre crases (127)
+
+- `/acompanhamento_clientes`
+- `/acompanhamento_clientes/movimento`
+- `/api/comercial`
+- `/catalogo_de_produtos`
+- `/clientes_setor`
+- `/comercial/empresas_emissoras`
+- `/comercial/parametros_custo`
+- `/comissoes/simulador`
+- `/compras/fornecedores`
+- `/compras/ordens?q=`
+- `/cotacoes_moeda/atual`
+- `/dashboards/dash-comercial`
+- `/familias_produtos`
+- `/historico_precos`
+- `/me/permissoes`
+- `/novo`
+- `/orcamento`
+- `/orcamento/*`
+- `/orcamento/catalogo-produtos`
+- `/orcamento/catalogo-produtos/[id]`
+- `/orcamento/categorias`
+- `/orcamento/cotacoes`
+- `/orcamento/fornecedores`
+- `/orcamento/fornecedores/:codigo`
+- `/orcamento/fornecedores/[id]`
+- `/orcamento/painel-comprador`
+- `/orcamento/parametros-custo`
+- `/orcamento/produtos`
+- `/orcamento/vinculos`
+- `/orcamento/vinculos?categoria=`
+- `/parceiros`
+- `/parceiros/:id`
+- `/parceiros_produtos`
+- `/parceiros_produtos?id_parceiro=`
+- `/pedido_venda_itens?codigo_cliente=`
+- `/produtos`
+- `/produtos/:id`
+- `/produtos/:id/fornecedores`
+- `/produtos?q=&codigo_empresa=`
+- `/propostas/calcular`
+- `/propostas/resumo`
+- `/setores_clientes`
+- `/simulador_parametros`
+- `/simulador_parametros?codigo_empresa=&vigente=true`
+- `/todos_os_clientes`
+- `/todos_os_fornecedores`
+- `/unidades`
+- `/vendas/acompanhamento-clientes`
+- `/vendas/clientes`
+- `/vendas/clientes/[id]`
+- `/vendas/propostas`
+- `/vendas/propostas/[id]`
+- `/vendas/propostas/nova`
+- `/vendas/relatorio-gerencial`
+- `/vendedores`
+- `B2`
+- `GET`
+- `GET /comercial/parceiros`
+- `GET /propostas/:id`
+- `POST /comercial/clientes`
+- `POST /parceiros`
+- `POST /propostas`
+- `PUT`
+- `RECURSO_NAO_MIGRADO`
+- `acompanhamento-clientes`
+- `api-comercial`
+- `auth.rotas_telas`
+- `auth.telas`
+- `auth.usuarios`
+- `auxiliar_vendedor`
+- `avhub_prd_db`
+- `categorias_suprimento`
+- `clientes`
+- `clientes_contatos`
+- `clientes_setor`
+- `codigo_vendedor_omie`
+- `condicoes_pagamento_vendas`
+- `core.categorias`
+- `core.cotacoes_moeda`
+- `core.parceiros`
+- `core.parceiros_produtos`
+- `core.produtos`
+- `core.produtos.especificacoes`
+- `core.unidades`
+- `core_comercial`
+- `core_comercial.categorias_suprimento`
+- `core_comercial.clientes`
+- `core_comercial.notificacoes`
+- `core_comercial.ofertas`
+- `core_comercial.unidades_emissoras`
+- `core_comissionamento.simulador_parametros`
+- `core_compras`
+- `core_compras /orcamento/*`
+- `core_compras.orc_cotacoes`
+- `custo-item`
+- `densidades`
+- `diligenciador_vendedor`
+- `email`
+- `fn_responsaveis_proposta`
+- `fornecedores_perfil`
+- `grupos_clientes`
+- `lib/simulador/motor.ts`
+- `orc_*`
+- `orc_categorias`
+- `orc_cotacoes`
+- `orc_fornecedores`
+- `orc_produtos`
+- `orc_vinculos`
+- `ordens_compra`
+- `origin/develop`
+- `painel-comprador`
+- `parametros_custo`
+- `parceiros_produtos`
+- `parceiros_tipos`
+- `pedidos`
+- `pedidos_compras`
+- `pedidos_compras_itens`
+- `perfis_comerciais`
+- `produtos_pendentes`
+- `produtos_perfil`
+- `refactor/menu-enxuto-vendas-orcamento-compras`
+- `setores_clientes`
+- `simulador_parametros`
+- `solicitacoes-custo`
+- `titular`
+- `unidades_emissoras`
+- `vendedores`
+
+## regras e linhas de conteúdo (158)
+
+- | Conceito | Fica | Sai ou se funde |
+- | Empresa que emite | `core.unidades` | Cadastro próprio do módulo |
+- | Cliente | `core.parceiros` e o Acompanhamento de Clientes | Clientes e contatos do módulo |
+- | Fornecedor e categoria | `core.parceiros` e o Orçamento antigo | Perfil e categorias repetidas do módulo |
+- | Cotação e oferta | Uma tabela só, a decidir | `core_comercial.ofertas` |
+- | Câmbio e motor de margem | PTAX do Hub e um motor só na API | Cópias no front e no módulo |
+- | E-mail e notificações | Serviço do Hub inteiro | Envio próprio do módulo |
+- | Tela | Ligada a | Observação |
+- | Fornecedores (lista e ficha) | Orçamento antigo do Hub | Perfil, categorias e certificados só leitura |
+- | Produtos (lista e detalhe) | Rotas de produtos do Hub | A família aparece como código: o Hub nega a permissão ao Admin (Dev) |
+- | Proposta: busca de produto e opções de margem | Produtos e parâmetros do simulador | Opções só com a tela `custo-item` |
+- | Cotação: fornecedores da categoria | Vínculos do Orçamento antigo | — |
+- | Clientes | Acompanhamento de Clientes | A tela Clientes do Pablo saiu do front |
+- | Parâmetros de custo, câmbio, "emitir em nome de" | Hub | Falta gravar "emitir em nome de" na proposta |
+- | Cadastro do cliente no Omie e lista de parceiros da proposta | `POST /comercial/clientes`, `GET /comercial/parceiros` (28 e 29/10) | Upsert por CNPJ no Omie da unidade e gravação em `core.parceiros` |
+- | Tela | Situação | O que falta |
+- | Propostas (lista) | 🟡 | Lista, criar e abrir já ligados ao Hub (`GET`/`POST /propostas`, `GET /propostas/:id`, 28 e 29/10). Filtros, KPIs (`/propostas/resumo`) e excluir ainda não: a rota de resumo existe na API do Hub, mas o BFF responde 503. Os status mudam |
+- | Proposta (nova e detalhe) | 🟡 | A API do Hub já tem revisar (`PUT`), aprovar, cancelar, copiar, transformar em pedido e a linha do tempo (29/10); o BFF ainda não liga essas rotas e o cálculo (`/propostas/calcular`) continua sem rota no Hub. Fechar, perder e reabrir saem 🚫 |
+- | Clientes | ✅ | CRM próprio (potencial, próximo contato) ❌ ou sai |
+- | Relatórios e Dashboard Comercial | ❌ | Dependem de propostas |
+- | Produtos e página do produto | ✅ 🟡 | Dados técnicos e produtos pendentes ❌ |
+- | Fornecedores | ✅ | Perfil de compras e certificados ❌ |
+- | Ofertas | 🟡 | Decidir se estende a tabela existente ou cria outra |
+- | Pedidos de custo | ❌ | Fila, respostas e painéis |
+- | Parâmetros | ✅ | Tabela da telha ❌ |
+- | Sino de notificações | ❌ | Esconder até existir |
+- O schema do módulo do Pablo está em produção, vazio. Só 3 tabelas têm dado.
+- A tabela de cotação por produto está vazia. As cotações estão no Orçamento antigo (2.697) e o preço de compra real no histórico do Omie (47.125 itens).
+- O Hub não tem e-mail nem notificações. São infraestrutura, um contrato à parte.
+- Clientes do Pablo e Acompanhamento de Clientes: unir numa tela só?
+- Oferta: estender `parceiros_produtos` ou criar tabela própria?
+- Receita, prospect e compradores: ficam?
+- Importar e exportar planilhas: ficam?
+- Telha: continua no escopo?
+- **Fornecedores** (lista, filtro por categoria e ficha) → `/orcamento/fornecedores`, `/orcamento/vinculos`, `/orcamento/categorias`, `/orcamento/cotacoes`. Perfil de compras, categorias e certificados ficam **só leitura** até o Hub gravar.
+- **Produtos** (lista e detalhe) → `/produtos`, `/produtos/:id`, `/produtos/:id/fornecedores`. A família aparece como código: o Hub recusa `/familias_produtos` para o perfil Admin (permissão).
+- **Proposta**: busca de produto → `/produtos`; opções da análise de margem → `/simulador_parametros` (só com a tela `custo-item`).
+- **Cotação**: fornecedores da categoria com e-mail → `/orcamento/vinculos`.
+- **Clientes**: Vendas › Clientes **é** o Acompanhamento de Clientes (`/vendas/acompanhamento-clientes`). A tela Clientes do Pablo saiu do front; na API de teste a tela `acompanhamento-clientes` foi para Vendas com o nome "Clientes" e a tela `clientes` foi desativada.
+- | Conceito | Fica (fonte única no Hub) | Sai ou se funde |
+- | Empresa que emite | `core.unidades` (+ extensão do PDF: logo, CRC, textos, se o Gustavo mantiver) | `core_comercial.unidades_emissoras` como cadastro próprio |
+- | Quem vende e em nome de quem | `auth.usuarios`, `vendedores`, `auxiliar_vendedor`, `/me/permissoes` | `perfis_comerciais`, `fn_responsaveis_proposta` |
+- | Permissão | `auth.telas`, `auth.rotas_telas` | capacidades próprias do módulo |
+- | Cliente | `core.parceiros` (tipo cliente), grupos e setores; **uma tela**: Acompanhamento de Clientes, que ganha a ficha e o que o comercial acrescentar | `core_comercial.clientes`, `clientes_contatos` e a tela Clientes paralela |
+- | Fornecedor | `core.parceiros` (tipo fornecedor) + o Orçamento antigo (`orc_fornecedores`, vínculos) | `fornecedores_perfil` como cadastro próprio (vira extensão, se precisar) |
+- | Categoria de fornecimento | **uma lista**: `orc_categorias` (16) | `core_comercial.categorias_suprimento` (17, repetida) |
+- | Produto | `core.produtos` / catálogo (+ extensão técnica) | `produtos_perfil` como cadastro próprio; `produtos_pendentes` vira extensão |
+- | Cotação / oferta de fornecedor | **uma tabela**: `orc_cotacoes` ou `parceiros_produtos` (decidir qual absorve a outra) | `core_comercial.ofertas` |
+- | Preço de compra real | `pedidos_compras_itens` (Omie) | cópias do módulo |
+- | Câmbio | `core.cotacoes_moeda` | câmbio próprio |
+- | Motor de margem e comissão | **um** motor na API, com `simulador_parametros` | cópias no front e no módulo |
+- | E-mail e notificações | serviço **do Hub inteiro** (qualquer módulo usa) | `core_comercial.notificacoes` e envio próprio |
+- | O que | Linhas | O que isso diz |
+- | `core_comercial` (schema do Pablo) | 23 tabelas | **Está em produção, vazio.** Só têm dado `categorias_suprimento` (17), `parametros_custo` (1) e `unidades_emissoras` (3). Propostas, clientes, ofertas, notificações, solicitações de custo, telha, perfis: **0**. Tirar a `api-comercial` de produção inclui decidir o que fazer com esse schema (Gustavo) |
+- | ⚠️ `core.parceiros_produtos` (cotação por produto) | **0** | A tabela existe, mas **não tem cotação nenhuma**. `/parceiros_produtos` e a parte "cotação" de `/produtos/:id/fornecedores` voltam vazias |
+- | `core_compras.orc_cotacoes` / `orc_fornecedores` / `orc_produtos` / `orc_categorias` / `orc_vinculos` | 2.697 / 10.524 / 400 / 16 / 234 | **É aqui que estão as cotações** (carga do Orçamento antigo, contrato 07). Categorias de fornecimento: 16 no Hub contra 17 em `core_comercial.categorias_suprimento` (lista repetida) |
+- | `pedidos_compras` / `pedidos_compras_itens` (Omie) | 24.171 / 47.125 | Histórico real de **preço de compra** por produto e fornecedor: a melhor fonte para "Sugerir custo" e para a página do produto |
+- | `ordens_compra` (OC do Hub) | 0 | O circuito de compra do Hub ainda não emitiu OC em produção |
+- | ⚠️ `core.produtos.especificacoes` | 125.852 com jsonb | Todos com os campos genéricos do Omie (marca, modelo, peso, medidas), **125.806 zerados**. Não há norma, material nem kg/m: o perfil técnico (`produtos_perfil`) é mesmo novo |
+- | `core.parceiros` / `parceiros_tipos` | 23.138 / 28.899 | Clientes e fornecedores juntos; o tipo existe e dá para filtrar cliente |
+- | `grupos_clientes` / `setores_clientes` / `clientes_setor` | 33 / 13 / 5 | O Acompanhamento de Clientes já tem grupos e setores em uso |
+- | `auxiliar_vendedor` / `diligenciador_vendedor` | 2 / 47 | Só **2 auxiliares** cadastrados: o "Emitir em nome de" aparece para eles |
+- | `core_comissionamento.simulador_parametros` | 3 | Uma vigência por unidade: a análise de margem tem os parâmetros |
+- | `core.cotacoes_moeda` | 406 | PTAX para o câmbio |
+- | `core.categorias` | 787 | Plano de contas do Omie, não categoria de produto |
+- | `auth.telas` / `auth.rotas_telas` | 102 / 415 | — |
+- **Achado 2 e páginas 7b, 7c, 8 e 11b:** onde a análise diz "cotação por produto em `parceiros_produtos`", ler **`orc_cotacoes`** (2.697 cotações, via `/orcamento/cotacoes` e `/orcamento/produtos`) e o **histórico de compra do Omie** (`pedidos_compras_itens`, 47 mil itens). A decisão da oferta fica mais simples: `parceiros_produtos` está vazia e pode ganhar o formato que o contrato decidir, ou a oferta nasce de `orc_cotacoes`.
+- **Página 7a e 8:** dados técnicos do produto confirmados como inexistentes.
+- **O Hub já tem um "Orçamento" antigo** (`core_compras /orcamento/*`, contrato 07): fornecedores com **categorias de fornecimento**, vínculos categoria × fornecedor (inclusive sem cadastro), produtos com cotação mais recente e preço médio, e histórico de cotações. É a base natural de Fornecedores, Produtos e Pedido de cotação, no lugar das tabelas do Pablo.
+- **Cotação de fornecedor por produto já existe** em `core.parceiros_produtos` (`/parceiros_produtos`, com valor, IPI, ICMS e data) e há **histórico de preço** (`/historico_precos`, `/orcamento/cotacoes`) e **fornecedores do produto com última cotação e última compra** (`/produtos/:id/fornecedores`). A "oferta" do Pablo (preço com prazo, frete, validade, custo líquido) é uma cotação mais rica: decidir se **estende `parceiros_produtos`** ou cria tabela nova.
+- **O Hub já tem "Acompanhamento de Clientes"** (status, última compra, dias sem comprar, setores, grupos, movimento do mês). A tela Clientes do Pablo é um CRM paralelo sobre outra tabela.
+- **Não há e-mail na API do Hub** (sem biblioteca nem rotina de envio). Proposta por e-mail e pedido de cotação dependem disso: é infraestrutura, um contrato à parte.
+- **Não há notificações (sino)** em nenhum schema. Também é transversal.
+- **Clientes e fornecedores ficam juntos em `core.parceiros`**, e `/parceiros` **não filtra por tipo**. Só `/compras/fornecedores` filtra (fornecedor e transportadora). Falta o equivalente para cliente com CNPJ e unidade (`/todos_os_clientes` não traz nenhum dos dois).
+- **O motor de margem e letra existe no front** (`lib/simulador/motor.ts`) e os parâmetros no Hub (`/simulador_parametros?codigo_empresa=&vigente=true`). O vault manda o cálculo para a API (N16-109 "uma fonte").
+- **Permissões tortas no BFF** (do Pablo): na proposta, "Sugerir custo" exige a tela `custo-item` e "Pedir custo" exige `solicitacoes-custo`; no Painel do Comprador, ofertas, produtos, categorias e fornecedores não aceitam a tela `painel-comprador`. Rever junto com cada contrato.
+- | Lista, busca, filtros e excluir | — | ❌ (só lista e detalhe estão lá; **filtros e KPIs não**) |
+- | KPIs do topo | — | ❌ os status mudam para ABERTA, APROVADA, TRANSFORMADA, CANCELADA (KPIs "fechadas/perdidas" deixam de existir) |
+- | Filtro por responsável | `/vendedores` e o escopo do token | 🟡 trocar "responsável" (usuário do `core_comercial`) por **vendedor** (`codigo_vendedor_omie`), como os outros portais |
+- | PDF em lote | o PDF é montado no BFF | 🟡 depende só da proposta existir no Hub |
+- | Empresa emissora | `/comercial/empresas_emissoras` (Pablo, `core_comercial`) ou `/unidades` | 🟡 ligado ao do Pablo; pela N16-111 vai para `/unidades` + extensão do PDF (logo, CRC, textos), decisão do Gustavo (N16-80) |
+- | Emitir em nome de | `/me/permissoes` (vendedores `titular`) | ✅ ligado (27/10). Falta gravar na proposta |
+- | Buscar cliente | `/parceiros` (sem filtro de tipo) | 🟡 falta filtro de **cliente** + busca por CNPJ e nome com unidade |
+- | Consulta CNPJ na Receita | — | ❌ decidir se fica (prospect, N16-109 em aberto) |
+- | Compradores do cliente | só e-mail e telefone únicos em `core.parceiros` | ❌ contatos do cliente (ou sai) |
+- | Câmbio | `/cotacoes_moeda/atual` | ✅ ligado |
+- | Condições de pagamento de venda | — | ❌ (`condicoes_pagamento_vendas`, a criar) |
+- | Destino, condição da tabela, origens (análise) | `/simulador_parametros` | ✅ dado existe; falta a rota que entrega as opções à proposta (ou o front lê direto) |
+- | Cálculo (totais, margem, letra) | motor só no front | ❌ cálculo na API |
+- | Buscar produto | `/produtos?q=&codigo_empresa=` e `/catalogo_de_produtos` | ✅ |
+- | Sugerir custo do item | `/produtos/:id/fornecedores` (última cotação e compra), `/historico_precos`, `/catalogo_de_produtos` (preço médio) | 🟡 dados existem; a **regra** (menor custo líquido válido, média 90 d, conversão de unidade) ❌ contrato |
+- | Pedir custo ao Orçamento | — | ❌ (pedido de custo) |
+- | Telha (configurador) | só `densidades` em parâmetros de custo | ❌ |
+- | Importar itens de planilha e baixar modelo | — | ❌ (ou leitura no front, se o Nathan aceitar) |
+- | Salvar, revisões, eventos, duplicar | — | ❌ |
+- | Aprovar, cancelar, transformar em pedido (Qualidade, faturar em partes, data) | — | ❌ + |
+- | Fechar, fechar itens, perder, reabrir, planilha do pedido no Omie | — | 🚫 saem (N16-02, N16-109) |
+- | PDFs comercial, técnico e de aprovação | montados no BFF | 🟡 dependem da proposta no Hub |
+- | Enviar por e-mail | — | ❌ infraestrutura de e-mail (achado 4) |
+- | Lista de clientes da carteira | `/acompanhamento_clientes` (status, última compra, dias sem comprar, setor, grupo, escopo do vendedor) e `/parceiros` | ✅ |
+- | Segmento | setores de cliente (`/setores_clientes`, `/clientes_setor`) | ✅ equivalente |
+- | Potencial, próximo contato, responsável próprio (CRM) | — | ❌ ou sai (N16-109 deixou o cadastro de clientes em aberto) |
+- | "Com proposta em 90 d" | — | ❌ depende de propostas |
+- | **Pergunta para o Nathan** | Esta tela duplica o Acompanhamento de Clientes. Unir as duas? | ❓ |
+- | Dados e endereço de entrega | `/parceiros/:id` | ✅ |
+- | Criar cliente | `POST /parceiros` (upsert por conta Omie) | 🟡 o Omie é a fonte do cadastro; prospect sem Omie ❓ |
+- | Compradores | — | ❌ (mesma decisão da proposta) |
+- | Compras do cliente | `/pedido_venda_itens?codigo_cliente=`, `/acompanhamento_clientes/movimento` | ✅ |
+- | Propostas do cliente e estatísticas de cotação | — | ❌ |
+- | Relatório gerencial e de cotações | — | ❌ depende de propostas; motivos de **perda** viram motivos de **cancelamento** |
+- | PDF | montado no BFF | 🟡 |
+- | Lista e busca | `/produtos`, `/catalogo_de_produtos` (com cotação mais recente e preço médio) | ✅ |
+- | Dados técnicos (norma, material, kg/m, dimensões) | `core.produtos.especificacoes` (jsonb), sem os campos | ❌ `produtos_perfil` (LOG-52 §3.2) |
+- | Produtos pendentes (sem cadastro no Omie) e ligar ao Omie | — | ❌ |
+- | Cotações por material | `/parceiros_produtos`, `/orcamento/cotacoes`, `/historico_precos` | 🟡 |
+- | Vencedor por custo líquido, validade, prazo e frete | — | ❌ depende da "oferta" (achado 2) |
+- | PDF da cotação | montado no BFF | 🟡 |
+- | Lista, lançar, invalidar | `/parceiros_produtos` (cotação simples) | 🟡 decidir: estender ou tabela nova (achado 2) |
+- | Importar mapa de cotação (.xlsx) e histórico de importações | — | ❌ |
+- | Cadastro | `/produtos/:id` | ✅ |
+- | Fornecedores com última cotação e última compra | `/produtos/:id/fornecedores` | ✅ |
+- | Histórico de preços | `/historico_precos`, `/orcamento/cotacoes` | ✅ |
+- | Média, mínimo e máximo de 90 d por fornecedor | — | ❌ (rota de resumo; o dado existe) |
+- | Dados técnicos | — | ❌ `produtos_perfil` |
+- | É a página do produto `B2` do vault (: histórico, top fornecedores, flutuação) | | ❓ alinhar com o contrato do `B2` |
+- | Lista, busca, cidade e UF | `/compras/fornecedores`, `/todos_os_fornecedores`, `/orcamento/fornecedores` | ✅ |
+- | Categorias de fornecimento e filtro por categoria | `/orcamento/categorias`, `/orcamento/vinculos` | ✅ |
+- | Copiar e-mails | `email` do parceiro | ✅ |
+- | Cadastro | `/parceiros/:id` | ✅ |
+- | Categorias | `/orcamento/fornecedores/:codigo` | ✅ (editar ❌: o `/orcamento` é só leitura) |
+- | Perfil de compras (tipo de venda, regime, e-mail de cotação, mínimo, prazo, origem do ICMS) | — | ❌ `fornecedores_perfil` (LOG-52 §3.2) |
+- | Cotações recentes | `/parceiros_produtos?id_parceiro=` | ✅ |
+- | Ordens de compra | `/compras/ordens?q=` | ✅ |
+- | Fila do pedido de custo e respostas | — | ❌ |
+- | Ranking, cobertura, itens sem preço, ofertas vencendo | — | ❌ (dependem de ofertas e do pedido de custo) |
+- | Certificados vencendo | — | ❌ (dependem dos certificados) |
+- | Fornecedores por categoria com e-mail | `/orcamento/vinculos?categoria=`, e-mail do parceiro | ✅ |
+- | Análise do item (última compra, cotações) | `/produtos/:id/fornecedores`, `/historico_precos` | ✅ |
+- | Enviar o pedido por e-mail | — | ❌ infraestrutura de e-mail (achado 4) |
+- | Custo (ICMS a recuperar, validade, histórico) | `/comercial/parametros_custo` | ✅ ligado e testado (27/10). É do `core_comercial`, mas é conceito novo, não duplicado |
+- | Tabela da telha | — | ❌ |
+- | Proposta ligada ao pedido (pré-preencher a compra) | — | ❌ depende de `pedidos` ↔ proposta |
+- | Sugerir compra | — | ❌ mesma regra do "Sugerir custo" da proposta |
+- **Proposta no Hub** — já cobre o ciclo; falta acrescentar filtros e KPIs da lista, cálculo na API, PDF e relatórios/dashboard de propostas.
+- **Cliente para vendas** — filtro de cliente em `/parceiros` (CNPJ, unidade); compradores; prospect e Receita (se ficarem).
+- **Produto: perfil técnico e pendentes** (`produtos_perfil`, `produtos_pendentes`).
+- **Fornecedor: perfil de compras e certificados** (`fornecedores_perfil`) e edição de categorias.
+- **Oferta de fornecedor** — estender `parceiros_produtos` ou tabela nova; importar mapa; vencedor e resumo de 90 d.
+- **Sugerir custo** (regra no backend, usada pela proposta e pelo simulador).
+- **E-mail** (proposta e pedido de cotação) — infraestrutura.
+- **Notificações** — infraestrutura.
+- **Condições de pagamento de venda**.
+- **Exportar planilhas** (clientes, fornecedores, ofertas, relatórios) — ou decidir que sai.
+- Clientes do Pablo e Acompanhamento de Clientes: unir numa tela só?
+- Oferta: estender `parceiros_produtos` ou tabela própria?
+- Receita, prospect e compradores: ficam?
+- Importar planilha de itens e exportar planilhas: ficam?
+- Telha: continua no escopo?

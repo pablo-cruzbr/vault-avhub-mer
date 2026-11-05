@@ -18,17 +18,17 @@ fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML, v1 01-Fluxo-Operacional (F
 | Quer saber… | Veja… |
 |---|---|
 | O processo inteiro, do pedido à nota fiscal | [[00-Fluxo-Mestre-0b]] |
-| Da proposta ao pedido de venda | `artifact-proposta-pedido.html` (página "Fluxo da Proposta ao Pedido"), [[11-Proposta-e-Pedido-de-Venda]] |
+| Da proposta ao pedido de venda | `artifact-proposta-pedido.html` (página "Fluxo da Proposta ao Pedido"), [[01-Proposta-de-Venda]] |
 | A jornada do usuário num caso real (Mogi: flanges, tubos, flanges cegas) | `Historia-da-Proposta-ao-Pedido.pdf` |
-| Como o Orçamento mantém o preço de compra | [[12-Orcamento-Base-de-Preco]] |
-| Como o custo real e a comissão entram no fluxo | [[13-Custo-Real-e-Comissao-no-Fluxo]] |
+| Como o Orçamento mantém o preço de compra | [[02-Orcamento-Base-de-Preco]] |
+| Como o custo real e a comissão entram no fluxo | [[15-Custo-Real-e-Comissao]] |
 | Quem faz o quê em cada área | [[Casos-de-Uso]] |
 | Quem pede o quê a quem, passo a passo (pedido ao PCP, Estoque, compra, Recebimento, Qualidade, Expedição) | [[Sequencia]] |
 | Por quais fases passa um lote, uma reserva, um recebimento, uma requisição, uma proposta ou uma comissão | [[Estados]] |
 | Que "coisas" o sistema guarda e como se ligam | [[Classes]] |
 | Quais programas existem, onde rodam e como se falam | [[Componentes-e-Implantacao]] |
 | Quais tabelas existem nos bancos do MES e do av-hub | [[Modelo-de-Dados]] |
-| O circuito de compra em forma de grafo | [[04-Circuito-de-Compra]] |
+| O circuito de compra em forma de grafo | [[06-Circuito-de-Compra]] |
 | As conversas entre o av-hub e o MES (INT-01 a INT-09) | [[Integracao-AvHub-MES]] |
 | A transferência de estoque entre filiais | [[Transferencia-entre-Filiais]] |
 
@@ -39,7 +39,7 @@ fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML, v1 01-Fluxo-Operacional (F
 | [[00-Fluxo-Mestre-0b]] | Fluxo de ponta a ponta, com passos `V0.1` a `O2` e `K1` a `K6` | 1 |
 | `artifact-proposta-pedido.html` | Da proposta ao pedido, aprovado em 26/10/2026: proposta, compra, datas, faturamento em partes, custo real, comissão e cancelamento (página publicada "Fluxo da Proposta ao Pedido") | 1 página |
 | `Historia-da-Proposta-ao-Pedido.pdf` | A jornada do usuário de ponta a ponta, num caso só (Mogi: flanges, tubos, flanges cegas e flange sobre desenho) | 3 páginas |
-| [[11-Proposta-e-Pedido-de-Venda]], [[12-Orcamento-Base-de-Preco]], [[13-Custo-Real-e-Comissao-no-Fluxo]] | Subfluxos da proposta ao pedido, do Orçamento e do custo real e da comissão | 3 |
+| [[01-Proposta-de-Venda]], [[02-Orcamento-Base-de-Preco]], [[15-Custo-Real-e-Comissao]] | Subfluxos da proposta ao pedido, do Orçamento e do custo real e da comissão | 3 |
 | [[Sequencia]] | Pedido ao PCP, atendimento do Estoque, requisição ida e volta, chegada com NF e Recebimento, inspeção de entrada, produção e Expedição, despacho | 8 |
 | [[Estados]] | Parcial, lote, reserva, recebimento, divergência, requisição (MES e hub), etapa de compra, OC, envio, liberação, etapa do item; proposta, pedido do Hub, pedido de custo e comissão nova (13 a 16, 🟡) | 17 |
 | [[Classes]] | Estoque e compras, produção, compras e integração, api-comercial | 4 |
@@ -47,7 +47,7 @@ fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML, v1 01-Fluxo-Operacional (F
 | [[Componentes-e-Implantacao]] | Componentes e integrações, implantação, pacotes de schema, fluxo de dados | 4 |
 | [[Modelo-de-Dados]] | PK e FK do MES (estoque e compras, produção), integração, av-hub, mapa dos dois bancos | 4 |
 
-Diagramas de apoio em outras pastas: o grafo do Circuito de Compra em [[04-Circuito-de-Compra]], as sequências de integração em [[Integracao-AvHub-MES]] (INT-01 a INT-07) e a transferência entre filiais em [[Transferencia-entre-Filiais]].
+Diagramas de apoio em outras pastas: o grafo do Circuito de Compra em [[06-Circuito-de-Compra]], as sequências de integração em [[Integracao-AvHub-MES]] (INT-01 a INT-07) e a transferência entre filiais em [[Transferencia-entre-Filiais]].
 
 ## O que aconteceu com os desenhos do v1
 
@@ -85,7 +85,7 @@ As duas tabelas abaixo, em "Detalhe técnico", dão o motivo de cada um. Um limi
 | 16 | Tempo (Gantt) do item contra o SLA | Descartado | Dados fictícios de exemplo; o SLA real é da Torre de Fluxo | [[Rastreabilidade-e-Torre-de-Fluxo]] |
 | 17 | Modelo de dados: Estoque (PK e FK) | Redesenhado | `lote_custo`, `depositos.codigo_empresa`, recebimento e colunas de CCP | [[Modelo-de-Dados]] 1 |
 | 18 | Modelo de dados: MES Produção | Redesenhado | Reescrito do Prisma de 14/10 | [[Modelo-de-Dados]] 2 |
-| 19 | Objetos: MES, Flange no roteiro | Descartado | Instância ilustrativa de um roteiro | [[07-Producao-e-Roteiro]] |
+| 19 | Objetos: MES, Flange no roteiro | Descartado | Instância ilustrativa de um roteiro | [[10-Producao-e-Roteiro]] |
 | 20 | Estados: Reserva | Mantido, ajustado | Enum bate; o v1 já dizia que a baixa passa ao despacho; agora o desenho mostra a retirada decidida como 🔴 | [[Estados]] 3 |
 | 21 | Mapa geral dos dois bancos | Redesenhado | Mostrava 4 fluxos; são 7 mais o legado | [[Modelo-de-Dados]] 5 |
 | 22 | Fluxo de dados Omie até o Estoque | Redesenhado | "O hub não consome o status" estava errado | [[Componentes-e-Implantacao]] 4 |
@@ -98,13 +98,13 @@ As duas tabelas abaixo, em "Detalhe técnico", dão o motivo de cada um. Um limi
 | Origem no v1 | Diagrama | Destino | Por quê |
 |---|---|---|---|
 | `Fluxogramas-Completos` 1 | Fluxograma mestre (desenho de 24/09) | Descartado | Substituído pelo [[00-Fluxo-Mestre-0b]] |
-| `Fluxogramas-Completos` 2 a 4 | Compras, Recebimento, Qualidade (atividades) | Descartados | Cobertos pelas notas de raia [[04-Circuito-de-Compra]], [[05-Recebimento]], [[06-Qualidade-Entrada]] e pelos diagramas [[Sequencia]] 3 a 5; o desenho anterior tinha "confere contra a OC" |
+| `Fluxogramas-Completos` 2 a 4 | Compras, Recebimento, Qualidade (atividades) | Descartados | Cobertos pelas notas de raia [[06-Circuito-de-Compra]], [[07-Recebimento]], [[08-Qualidade-Entrada]] e pelos diagramas [[Sequencia]] 3 a 5; o desenho anterior tinha "confere contra a OC" |
 | `Fluxogramas-Completos` 5 | Produção como máquina de estados (`ItemParcial`) | Redesenhado | [[Estados]] 1 |
-| `Fluxogramas-Completos` 6 | Estoque (etapa 1, entrada do comprado, operação contínua) | Redesenhado | [[Sequencia]] 2 e 7; a operação contínua do depósito (movimentação e ajuste) é tela de [[03-Estoque-Atendimento-e-Despacho]] |
+| `Fluxogramas-Completos` 6 | Estoque (etapa 1, entrada do comprado, operação contínua) | Redesenhado | [[Sequencia]] 2 e 7; a operação contínua do depósito (movimentação e ajuste) é tela de [[05-Estoque-Atendimento]] |
 | `Fluxograma-Telas-por-Bloco` (mestre com contagem de telas) | Mestre com contagem por raia | Descartado | A contagem de telas é de 08/10 e as telas mudaram; a fonte agora é [[Telas-por-Raia]] |
 | `Fluxo-Sistema-no-Meio` (3 diagramas) | "O sistema no centro" e mestre com o sistema interposto | Descartados | Desenho conceitual de 29/09 com 19 atos; o que vale está nas notas de raia |
 | `Fluxo-Operacional-Visao-Geral` | ASCII macro das quatro fases | Descartado | Superado pelo encaixe de 24/09 e pelo Mestre |
-| `Encaixe-Estoque-Revenda-no-PCP` 3.2 | Roteiros por tipo de fábrica | Descartado | Mistura o circuito de compra dentro do roteiro da Revenda; hoje o circuito é fixo e fora do roteiro. Ver [[07-Producao-e-Roteiro]] |
+| `Encaixe-Estoque-Revenda-no-PCP` 3.2 | Roteiros por tipo de fábrica | Descartado | Mistura o circuito de compra dentro do roteiro da Revenda; hoje o circuito é fixo e fora do roteiro. Ver [[10-Producao-e-Roteiro]] |
 | `Fluxo-Compras-Completo` | Sequência de Compras (29/09) | Redesenhado | [[Sequencia]] 3 |
 | `Fluxo-Recebimento-Completo` ("Como é no código") | Sequência do Recebimento com recontagem | Redesenhado | O desenho valia na conferência, mas ainda usava o `PATCH :id/compra`; agora [[Sequencia]] 4 |
 | `Fluxo-Recebimento-Completo` ("Desenho original") | Arquitetura de 29/09 | Descartado | Histórico |

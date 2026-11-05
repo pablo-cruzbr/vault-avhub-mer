@@ -191,7 +191,7 @@ stateDiagram-v2
     cancelada --> excluida : DELETE, so criada no Hub (LOG-55)
     excluida --> [*]
 ```
-🔴 O estado `excluida` é proposta 📝 ([[LOG-55-Compras-Excluir-Requisicao]]): só vale para requisição criada no Hub, sem OC. A requisição do MES continua só cancelável. Banco e API ainda não existem.
+🔴 O estado `excluida` é proposta 📝 ([[Contratos-da-v2|LOG-55]]): só vale para requisição criada no Hub, sem OC. A requisição do MES continua só cancelável. Banco e API ainda não existem.
 
 ## 9. Ordem de compra no av-hub
 
@@ -239,7 +239,7 @@ stateDiagram-v2
     liberado --> importado : P2 MES confirma a importacao
     importado --> [*]
 ```
-Veja as regras em [[01-Vendas-Liberacao]].
+Veja as regras em [[03-Pedido-de-Venda-e-Liberacao]].
 
 ## 12. Do setor e do status para a etapa do item
 
@@ -264,7 +264,7 @@ flowchart TD
 
 ## 13. Proposta (🟡)
 
-A proposta nasce aberta, o vendedor a revisa, aprova (só se estiver completa) e a transforma em pedido. Cancelada não reabre: o vendedor duplica. Regras: [[11-Proposta-e-Pedido-de-Venda]].
+A proposta nasce aberta, o vendedor a revisa, aprova (só se estiver completa) e a transforma em pedido. Cancelada não reabre: o vendedor duplica. Regras: [[01-Proposta-de-Venda]].
 
 ```mermaid
 stateDiagram-v2
@@ -301,7 +301,7 @@ stateDiagram-v2
 
 ## 15. Pedido de custo ao Orçamento
 
-O vendedor sem o dado de custo pede ao Orçamento. O pedido fica aberto até o orçamentista responder com uma oferta, avisar que não há fornecedor ou cancelar com motivo. Regras: [[12-Orcamento-Base-de-Preco]].
+O vendedor sem o dado de custo pede ao Orçamento. O pedido fica aberto até o orçamentista responder com uma oferta, avisar que não há fornecedor ou cancelar com motivo. Regras: [[02-Orcamento-Base-de-Preco]].
 
 ```mermaid
 stateDiagram-v2
@@ -390,7 +390,7 @@ Espelho dos marcos do contrato 35 ([[Integracao-AvHub-MES]], INT-03). Selo ✅ `
 
 ### 8. Requisição no av-hub (`requisicoes_compra.status`)
 
-🔴 `excluida` é 📝 proposta ([[LOG-55-Compras-Excluir-Requisicao]]): exclusão lógica (`deleted_at`), sem OC e sem `id_origem`; a requisição do MES continua só cancelável. Banco e API ainda não existem.
+🔴 `excluida` é 📝 proposta ([[Contratos-da-v2|LOG-55]]): exclusão lógica (`deleted_at`), sem OC e sem `id_origem`; a requisição do MES continua só cancelável. Banco e API ainda não existem.
 
 Selo ✅ `requisicoes_compra.route.js:13-22` (`atendida` só pela trigger da OC, nunca pelo PATCH); 409 `REQUISICAO_COM_OC` ao cancelar com OC (`:221-265`).
 
@@ -404,7 +404,7 @@ Selo ✅ `integracao.prisma:17-29`, `envio-avhub.service.ts:164-169`.
 
 ### 11. Liberação do pedido (`status_liberacao`)
 
-Selo ✅ valores da view `vw_pedidos_liberacao` e travas: [[01-Vendas-Liberacao]]; importado trava a marcação (409 `PEDIDO_IMPORTADO_MES`).
+Selo ✅ valores da view `vw_pedidos_liberacao` e travas: [[03-Pedido-de-Venda-e-Liberacao]]; importado trava a marcação (409 `PEDIDO_IMPORTADO_MES`).
 
 ### 12. Do setor e do status para a etapa do item (contrato 005)
 
@@ -414,15 +414,15 @@ Não é um diagrama de transição: o MES calcula a etapa por regra (`etapaDoIte
 
 O enum de hoje, no módulo do Pablo, é `ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA` (`api-comercial/prisma/models/enums.prisma:69-76` ✅). O desenho é o da migração (`ck_propostas_status`), pelas N16-02 e N16-03: sem fechamento parcial, ajuste só até aprovar, proposta incompleta não aprova, cancelada não reabre.
 
-Selo ✅ no código de 29/10: a `ck_propostas_status` do dump de 29/10 tem `ABERTA`, `APROVADA`, `TRANSFORMADA` e `CANCELADA`, e a `api-acos-vital` já tem `PUT /comercial/propostas/:id`, `aprovar`, `cancelar`, `copiar` e `transformar` (Robert, 28 e 29/10); produção ❓. Nós do Mestre: `V0.1` a `V0.7`, `V0C`. No legado (✅ no teste) `atualizar` só roda em `ABERTA` (`propostas.service.ts:478-481`), `perder` leva a `PERDIDA` (`:555-575`), `reabrir` e `fechar` parcial existem (`:578-649`) e saem. Regras: [[11-Proposta-e-Pedido-de-Venda]].
+Selo ✅ no código de 29/10: a `ck_propostas_status` do dump de 29/10 tem `ABERTA`, `APROVADA`, `TRANSFORMADA` e `CANCELADA`, e a `api-acos-vital` já tem `PUT /comercial/propostas/:id`, `aprovar`, `cancelar`, `copiar` e `transformar` (Robert, 28 e 29/10); produção ❓. Nós do Mestre: `V0.1` a `V0.7`, `V0C`. No legado (✅ no teste) `atualizar` só roda em `ABERTA` (`propostas.service.ts:478-481`), `perder` leva a `PERDIDA` (`:555-575`), `reabrir` e `fechar` parcial existem (`:578-649`) e saem. Regras: [[01-Proposta-de-Venda]].
 
 ### 14. Pedido de venda do Hub (`status_sincronizacao_omie`, 🟡)
 
-Selo 🟡. A rota `POST /comercial/propostas/:id/transformar` cita a tabela `core_comercial.pedidos_venda`, que **não existe** no dump de 29/10; o schema final (`core_comercial` ou `core_vendas_faturamento`, N16-116) está em decisão. Mesmo vocabulário da OC (`ck_ordens_compra_status`, Dump Avhub 17315-17320 ✅). O pedido tem `origem` `PROPOSTA` ou `OMIE` (N16-106); o da proposta nasce com `status_liberacao = liberado` (diagrama 11), e o do Omie segue o diagrama 11 desde `pendente`. Na recusa, o vendedor vê o motivo e o botão "Tentar novamente" (N16-36).
+Selo 🟡. A rota `POST /comercial/propostas/:id/transformar` cita a tabela `core_comercial.pedidos_venda`, que **não existe** no dump de 29/10 e existe no dump do banco de teste de 04/11/2026 (status `ABERTO` ou `CANCELADO`, `ck_pedidos_venda_status`); o schema final (`core_comercial` ou `core_vendas_faturamento`, N16-116) está em decisão. Mesmo vocabulário da OC (`ck_ordens_compra_status`, Dump Avhub 17315-17320 ✅). O pedido tem `origem` `PROPOSTA` ou `OMIE` (N16-106); o da proposta nasce com `status_liberacao = liberado` (diagrama 11), e o do Omie segue o diagrama 11 desde `pendente`. Na recusa, o vendedor vê o motivo e o botão "Tentar novamente" (N16-36).
 
 ### 15. Pedido de custo ao Orçamento (`StatusSolicitacao`)
 
-Selo ✅ valores em `enums.prisma:188-195`; transições conforme `custos.routes.ts:406-510` ❓ não relidas linha a linha. O prazo obrigatório (`prazo_resposta`, 2 dias úteis por padrão, `custos.routes.ts:378`) **sai**: a migração do Orçamento deixa a coluna nula, e o tempo é só cronometrado (N16-58). O setor de Orçamento é novo; o Moisés é uma das pessoas (N16-104). Regras: [[12-Orcamento-Base-de-Preco]].
+Selo ✅ valores em `enums.prisma:188-195`; transições conforme `custos.routes.ts:406-510` ❓ não relidas linha a linha. O prazo obrigatório (`prazo_resposta`, 2 dias úteis por padrão, `custos.routes.ts:378`) **sai**: a migração do Orçamento deixa a coluna nula, e o tempo é só cronometrado (N16-58). O setor de Orçamento é novo; o Moisés é uma das pessoas (N16-104). Regras: [[02-Orcamento-Base-de-Preco]].
 
 ### 16. Comissão nova (`core_comissao`, 🟡)
 

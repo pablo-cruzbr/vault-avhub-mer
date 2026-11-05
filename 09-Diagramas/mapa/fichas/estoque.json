@@ -254,7 +254,7 @@
     "situacao": "Parcial",
     "st": "part",
     "muda": "O custo do lote já é gravado na carga inicial e na cisão. Falta gravar o custo vindo da OC no recebimento e criar a rota de custo médio do item.",
-    "arquivo": "06-Contratos/Ativos, API-008-Custo-do-Lote-no-MES"
+    "arquivo": "06-Contratos/Contratos-da-v2, API-008"
   },
   "palavrasFonte": 3023,
   "duvidas": [

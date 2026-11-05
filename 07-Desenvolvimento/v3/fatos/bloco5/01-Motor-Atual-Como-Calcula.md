@@ -1,0 +1,483 @@
+# Fatos de 01-Motor-Atual-Como-Calcula
+
+Foto tirada em 2026-11-05 de `03-Sistemas/Comissao/01-Motor-Atual-Como-Calcula.md`, antes de mexer na nota.
+Gerada por `node _v3/scripts/fatos.mjs extrair`. Conferência: `node _v3/scripts/fatos.mjs conferir 01-Motor-Atual-Como-Calcula`.
+
+## decisões e IDs (19)
+
+- `N14-23`
+- `N16-08`
+- `N16-09`
+- `N16-10`
+- `N16-103`
+- `N16-106`
+- `N16-11`
+- `N16-20`
+- `N16-22`
+- `N16-38`
+- `N16-39`
+- `N16-42`
+- `N16-44`
+- `N16-45`
+- `N16-46`
+- `N16-47`
+- `N16-48`
+- `N16-51`
+- `N16-74`
+
+## contratos (2)
+
+- `LOG-42`
+- `LOG-47`
+
+## commits (1)
+
+- `00051698`
+
+## arquivo:linha (33)
+
+- `/route.ts:50`
+- `/route.ts:60`
+- `09-Diagramas/fontes/core_comissionamento-dump-convertido.sql`
+- `_lib/calculo.ts:268`
+- `analise-simuladores/page.ts`
+- `api/comissoes/simulacoes/route.ts:30`
+- `app/api/comissoes/minhas-comissoes/route.ts:27-31`
+- `av-hub/docs/comissao/processo-comissionamento.md`
+- `comissoes/analise-simuladores/page.ts`
+- `comissoes/simulador/page.ts`
+- `comissoes_provisoria.route.js`
+- `coordenadores.js`
+- `core_comissionamento/index.js`
+- `fn_dashboard_comissoes.route.js:20-22`
+- `lib/comissoes/coordenadores.js`
+- `lib/simulador/motor.ts`
+- `lib/simulador/motor.ts:176-179`
+- `lib/simulador/motor.ts:277-283`
+- `lib/simulador/motor.ts:336-348`
+- `minhas-comissoes/route.ts:27-31`
+- `motor.ts:119-133`
+- `motor.ts:187-548`
+- `motor.ts:277`
+- `motor.ts:277-312`
+- `motor.ts:363-388`
+- `motor.ts:391-401`
+- `motor.ts:467-484`
+- `route.ts:11`
+- `services/comissoes/simulador.ts:260-270`
+- `simulacoes.route.js`
+- `simulacoes.route.js:233-259`
+- `simulacoes.route.js:30-36`
+- `simulador/page.ts`
+
+## rotas (2)
+
+- `POST /simulacoes`
+- `PUT /simulacoes/:id`
+
+## datas (5)
+
+- `01/01/2000`
+- `06/10/2026`
+- `15/12`
+- `19/10`
+- `19/10/2026`
+
+## código entre crases (238)
+
+- `(compra_bruta + IPI + valor_st) × pct_rateio_logistica ÷ 100`
+- `(total da NF − compra bruta) ÷ compra bruta`
+- `00051698`
+- `09-Diagramas/fontes/core_comissionamento-dump-convertido.sql`
+- `:104-110`
+- `:1105-1113`
+- `:1129`
+- `:1136-1142`
+- `:1148-1190`
+- `:1410-1419`
+- `:144-167`
+- `:1444`
+- `:1788`
+- `:179-194`
+- `:207-210`
+- `:229`
+- `:233-243`
+- `:233-259`
+- `:249-264`
+- `:259-261`
+- `:277-312`
+- `:278`
+- `:289`
+- `:307-312`
+- `:309`
+- `:310`
+- `:311-345`
+- `:312`
+- `:324-325`
+- `:328-335`
+- `:348-351`
+- `:364-371`
+- `:389-401`
+- `:40-55`
+- `:434`
+- `:437-438`
+- `:536`
+- `; senão a alíquota de`
+- `?modo=compras&id_simulacao=…`
+- `AGUARDANDO_COMPRAS`
+- `APROVADO`
+- `Análise de Simuladores`
+- `BLOQUEADA`
+- `C7`
+- `COALESCE(sequencial, -1)`
+- `COMPRAS`
+- `CONFIRMAR`
+- `CONTESTADO`
+- `CONTESTAR`
+- `DEVOLVIDO`
+- `ENVIADO`
+- `FABRICACAO_INTERNA`
+- `ITENS_FORA_DO_SIMULADOR`
+- `K1`
+- `K2`
+- `K4`
+- `K5`
+- `K6`
+- `LEAST`
+- `LEAST(...)`
+- `LETRA`
+- `LOG-42`
+- `NOT EXISTS`
+- `POST /simulacoes`
+- `PREJUIZO`
+- `PUT`
+- `PUT /simulacoes/:id {status: APROVADO}`
+- `RASCUNHO`
+- `RASCUNHO → ENVIADO → APROVADO | CONTESTADO | DEVOLVIDO`
+- `ROUNDUP`
+- `SEM_SIMULADOR`
+- `Simulador`
+- `TETO_CONDICIONAL`
+- `TETO_PADRAO`
+- `VALIDADO`
+- `[id]/route.ts:50, 60`
+- `_lib/calculo.ts:268`
+- `analise-simuladores`
+- `analise-simuladores/page.tsx:20, 85-89`
+- `api-acos-vital\...\simulacoes.route.js`
+- `api/comissoes/simulacoes/route.ts:30, 59`
+- `app/api/comissoes/minhas-comissoes/route.ts:27-31`
+- `app/api/comissoes/simulacoes/[id]/route.ts:60`
+- `arredondarParaCima(custo_liquido ÷ qtd × mark-up, 2) × (1 + encargo ÷ 100)`
+- `av-hub/docs/comissao/processo-comissionamento.md`
+- `av-hub\app\api\comissoes\simulacoes\route.ts:11`
+- `av-hub\lib\simulador\motor.ts:187-548`
+- `blacklist_comissoes_destinatario`
+- `blacklist_comissoes_vendedores`
+- `blacklist_vendedor_g5`
+- `bloqueio_comissoes`
+- `calcularSimulacao(entrada, parametros, regraFixa)`
+- `calcularSimulacao(form, parametros)`
+- `codigo_empresa`
+- `codigo_item_omie`
+- `comissao_coordenadores`
+- `comissao_final_pct = LEAST(cotada, real)`
+- `comissoes/analise-simuladores/page.tsx`
+- `comissoes/bloqueio-comissoes`
+- `comissoes/simulador/page.tsx`
+- `comissoes/simulador/page.tsx:1192-1234`
+- `comissoes/visao-geral`
+- `comissoes_provisoria`
+- `comissoes_provisoria.route.js`
+- `compra_bruta`
+- `compra_bruta = IPI = ICMS = 0`
+- `compra_bruta × icms_entrada ÷ 100`
+- `compra_bruta × pct_ipi ÷ 100`
+- `compra_bruta − ICMS a recuperar + IPI + valor_st + frete`
+- `compras_estado = PENDENTE`
+- `coordenadores.json`
+- `core_comissionamento/index.js`
+- `custos_eventos`
+- `da **origem da compra** | ORIGEM, ST |`
+- `dash-comissoes`
+- `develop`
+- `dump`
+- `dump:111-287`
+- `dump:1128`
+- `dump:1151-1198`
+- `dump:1186-1190`
+- `dump:1227-1377`
+- `dump:1305`
+- `dump:1305-1309`
+- `dump:1338-1347, 1368`
+- `dump:1348-1360`
+- `dump:1361-1365`
+- `dump:1367`
+- `dump:1386`
+- `dump:1388-1392`
+- `dump:1426-1465`
+- `dump:1520`
+- `dump:1522`
+- `dump:1549, 1556-1563`
+- `dump:1570-1571`
+- `dump:1578-1583`
+- `dump:158-161, 197-214`
+- `dump:158-214`
+- `dump:1648-1649`
+- `dump:1660`
+- `dump:1660-1662`
+- `dump:1701`
+- `dump:333-342, 372-381`
+- `dump:333-381`
+- `dump:35-322`
+- `dump:35-54, 70-76, 1883-1890`
+- `dump:410-420`
+- `dump:447-450`
+- `dump:465-468`
+- `dump:475-498, 1693`
+- `dump:589-603`
+- `dump:697-699`
+- `dump:704, 754-756`
+- `dump:745-747`
+- `dump:85-95`
+- `dump:863-865`
+- `dump:891-894`
+- `dump:901-902`
+- `dump:909-952`
+- `dump:961-965`
+- `dump:998-1000`
+- `economia_compras`
+- `exige_conferencia_compras = false`
+- `experimental/simulador-comissao`
+- `faixaDaMargem`
+- `fn_comissao_coordenadores_mes`
+- `fn_dashboard_comissoes`
+- `fn_dashboard_comissoes.route.js:20-22, 50`
+- `fn_jsonb_numero`
+- `frete_total`
+- `gatilho_markup_pct`
+- `icms_recuperar_total`
+- `id_parametros`
+- `id_simulacao_contestada`
+- `imposto_completo = false`
+- `ipi_total`
+- `is_total`
+- `lib/comissoes/coordenadores.json`
+- `lib/simulador/motor.ts`
+- `lib/simulador/motor.ts:176-179`
+- `lib/simulador/motor.ts:277-283`
+- `lib/simulador/motor.ts:336-348`
+- `margem`
+- `mark-up = 1 ÷ (1 − (margem desejada + despesas + impostos + provisão))`
+- `minhas-comissoes/route.ts:27-31, 229, 249-264`
+- `mostrarComissao = modoCompras`
+- `motor.ts:119-133, 324-326`
+- `motor.ts:277`
+- `motor.ts:277-312`
+- `motor.ts:363-388`
+- `motor.ts:391-401`
+- `motor.ts:467-484`
+- `ordem_desempate`
+- `origem = COMPRAS`
+- `pct_comissao_provisao`
+- `pct_despesas_operacionais`
+- `pct_fabricacao_interna`
+- `pct_final`
+- `pct_final = LEAST(percentual do vendedor, percentual de Compras)`
+- `pct_rateio_logistica`
+- `pode_editar`
+- `qtd_compra`
+- `qtd_compra × preco_unit_compra`
+- `qtd_itens_sem_vinculo`
+- `regra_fixa_aplicada`
+- `regras_comissoes_fixas`
+- `se`
+- `sequencial`
+- `services/comissoes/simulador.ts:260-270`
+- `simulacao_itens.margem_item`
+- `simulacao_itens.regra_aplicada`
+- `simulacoes.letra_equivalente`
+- `simulacoes.route.js`
+- `simulacoes.route.js:233-259`
+- `simulacoes.route.js:30-36`
+- `simulador`
+- `simulador/page.tsx:1053`
+- `simulador/page.tsx:1117-1122`
+- `simulador/page.tsx:1148-1190`
+- `simulador/page.tsx:1192-1234`
+- `simulador/page.tsx:1800-1803`
+- `simulador/page.tsx:536`
+- `simulador/page.tsx:767-843`
+- `simulador_parametros`
+- `simulador_parametros.faixas_comissao`
+- `simulador_parametros.icms_entrada`
+- `slug`
+- `st_total`
+- `total = ajuda de custo + comissão − bloqueado`
+- `valor da comissão = valor faturado do item × pct_final ÷ 100`
+- `valor_comissao`
+- `valor_faturado_nf × 0`
+- `valor_total`
+- `vendedores.ajuda_custo`
+- `vendedores.comissao`
+- `vw_comissao_master`
+- `vw_comissao_nf`
+- `vw_simulacao_resolvida`
+
+## regras e linhas de conteúdo (142)
+
+- O vendedor preenche o simulador do pedido, item a item: custo de compra, impostos e preço de venda.
+- O simulador calcula a margem líquida de cada item. Cada margem cai numa faixa, com uma letra e um percentual.
+- Compras abre a mesma simulação e corrige o custo para o valor real. Isso gera o percentual de Compras.
+- Vale o menor dos dois. Custo real melhor que o cotado não aumenta a comissão.
+- Alguns clientes têm regra fixa: um teto de percentual.
+- Item de fabricação interna paga 2% fixo. Item em prejuízo paga 0%.
+- A comissão só vira dinheiro depois de faturar: valor faturado do item vezes o percentual final.
+- Bloqueio por nota fiscal (NF) zera a comissão daquela nota. Cliente ou vendedor na lista de bloqueio tira a nota do cálculo.
+- | Letra | Margem líquida do item | Percentual |
+- | A | 15% ou mais | 2,0% |
+- | B | 12% até menos de 15% | 1,3% |
+- | C | 9% até menos de 12% | 0,7% |
+- | D | 0% até menos de 9% | 0,5% |
+- | Vendedor | Preenche, salva rascunho e envia o simulador do pedido |
+- | Compras | Aprova a simulação como está ou cria uma versão com os custos corrigidos |
+- | Analista e Gerência | Acompanham o mês na Visão Geral e bloqueiam NF |
+- | Coordenador | Recebe ajuda de custo mais um percentual do faturamento total do mês |
+- **Prejuízo:** item de revenda sem lucro paga 0%, qualquer que seja a letra.
+- **Regra fixa:** o teto muda conforme o markup bruto do pedido (venda menos compra, dividido pela compra).
+- **Bloqueio por NF:** o número da nota é digitado com zeros à esquerda. Sem os zeros, o bloqueio não casa e ninguém é avisado.
+- **Coordenadores:** total = ajuda de custo mais percentual sobre o faturamento do mês. O bloqueio por NF não vale para eles.
+- **Parâmetros:** faixas, impostos e despesas ficam em tabela com vigência. Hoje é "Maio/23", nas três unidades.
+- O percentual de Compras deixa de ser digitado. Ele passa a ser calculado sozinho, a cada evento de custo.
+- A Controladoria decide no final, com justificativa. O vendedor só vê o valor real depois da decisão.
+- O passo "Compras aprova o percentual" fica pronto no sistema, mas desligado (N16-51).
+- O cálculo sai do navegador. Hoje ele roda só lá e a API apenas grava.
+- O resumo mensal mostra "bloqueado" sempre R$ 0, mesmo com NF bloqueada. ✅
+- O teto da regra fixa só é aplicado pelo banco. O motor da tela não o recebe. ✅
+- Bloqueio e listas de bloqueio não têm data nem motivo obrigatório. Valem para sempre, até sobre meses pagos. ✅
+- Quem aprova não é separado de quem digita. A tela esconde o botão, mas o servidor não barra. ✅
+- Nada reconfere o custo líquido gravado, porque só o navegador o calcula. ✅
+- Decidem Controladoria, Gerência e Coordenação, sem teto (M10).
+- O vendedor lê a justificativa (M11).
+- Só entram as peças com custo real (M12).
+- Cancelamento e devolução abatem na mesma proporção (M13).
+- O **vendedor** preenche um "simulador" por pedido, item a item: custo de compra, impostos, preço de venda. O simulador calcula a **margem líquida de cada item** e dá uma **letra** (A, B, C ou D) e um **percentual** de comissão.
+- **Compras** abre a mesma simulação, corrige os custos para o valor real e gera uma segunda versão, com o **percentual de Compras**.
+- A comissão de cada item usa o **menor** entre o percentual do vendedor e o de Compras (`pct_final`).
+- Alguns clientes têm **regra fixa**: um teto de percentual, que muda conforme o markup do pedido.
+- Item de **fabricação interna** paga um percentual fixo (hoje 2%) e não entra na margem. Item em **prejuízo** não paga nada.
+- A comissão só vira dinheiro **depois de faturar**: valor faturado do item na NF × `pct_final`.
+- **Bloqueio por NF** zera a comissão daquela nota. **Lista de bloqueio** (cliente ou vendedor) tira a nota do cálculo.
+- O vendedor **não vê o valor** antes de Compras aprovar.
+- Os **coordenadores** têm conta à parte: ajuda de custo mais um percentual do faturamento total do mês.
+- Quem valida hoje é **Compras**; não existe etapa de Controladoria. Isso muda no módulo novo (N16-10).
+- | Quem | O que faz | Onde |
+- | Vendedor | Preenche, salva rascunho e envia o simulador do pedido | `comissoes/simulador/page.tsx` (envio em `:1148-1190`) |
+- | Compras | Aprova a simulação como está, ou cria uma versão com os custos corrigidos e aprova | `comissoes/simulador/page.tsx:1192-1234`, fila em `comissoes/analise-simuladores/page.tsx` |
+- | Analista/Gerência | Acompanha o mês na Visão Geral e bloqueia NF | `comissoes/visao-geral`, `comissoes/bloqueio-comissoes` |
+- | Coordenador | Recebe ajuda de custo e percentual sobre o faturamento do mês | `comissao_coordenadores`, `fn_dashboard_comissoes` |
+- Compra bruta = quantidade comprada × preço unitário de compra.
+- ICMS recuperável = compra bruta × alíquota da **origem da compra** (zero se o item tem ST).
+- IPI = compra bruta × % de IPI.
+- Frete: ou **rateio** (`pct_rateio_logistica`, hoje 1,438975% sobre compra + IPI + ST) ou **valor** informado por linha.
+- **Custo líquido** = compra bruta − ICMS recuperável + IPI + ST + frete.
+- | Compra bruta | 50 × 100 | R$ 5.000,00 |
+- | ICMS recuperável | 5.000 × 12% | R$ 600,00 |
+- | Frete (rateio) | 5.000 × 1,438975% | R$ 71,95 |
+- | **Custo líquido** | 5.000 − 600 + 0 + 0 + 71,95 | **R$ 4.471,95** |
+- Despesas operacionais: `pct_despesas_operacionais` (hoje 11,451734%).
+- Impostos sobre a venda: ICMS efetivo do destino + PIS + COFINS + IRPJ + CSLL + adicional de IR. Com ICMS 12% a soma é **18,252%**.
+- Provisão de comissão: `pct_comissao_provisao` (hoje 2%).
+- Item "isento de imposto" zera o bloco de impostos inteiro.
+- | Venda do item | 50 × 230 | R$ 11.500,00 |
+- | Despesas operacionais | 11.500 × 11,451734% | R$ 1.316,95 |
+- | Impostos | 11.500 × 18,252% | R$ 2.098,98 |
+- | Provisão de comissão | 11.500 × 2% | R$ 230,00 |
+- | Lucro do item | 11.500 − 4.471,95 − 1.316,95 − 2.098,98 − 230 | R$ 3.382,12 |
+- | **Margem líquida** | 3.382,12 ÷ 11.500 | **29,41%** |
+- | Letra | Margem líquida do item | Percentual |
+- | A | 15% ou mais | 2,0% |
+- | B | 12% até menos de 15% | 1,3% |
+- | C | 9% até menos de 12% | 0,7% |
+- | D | 0% até menos de 9% | 0,5% |
+- **Prejuízo:** item de revenda com lucro menor ou igual a zero (ou sem preço de venda) paga **0%**, qualquer que seja a letra.
+- **Fabricação interna:** item fabricado pela empresa paga um **percentual fixo** (`pct_fabricacao_interna`, hoje 2%). Não tem custo de compra informado, então **não entra na margem do pedido** e **não tem teto de regra fixa**.
+- | Item | % vendedor | % Compras | `pct_final` |
+- | 1 | 2,0% (A) | 0,7% (C) | **0,7%** |
+- | 2 | 2,0% (A) | 2,0% (A) | **2,0%** |
+- **Gerência:** ranking próprio; comissão = percentual ÷ 100 × **faturamento total do mês** (todas as vendas líquidas).
+- **Exceção:** entra no ranking dos vendedores, com a mesma conta.
+- | Passo | Fórmula | Entrada da tela | Código |
+- | Compra bruta | `qtd_compra × preco_unit_compra` | Compra: QTD, PREÇO | `motor.ts:277` |
+- | IPI | `compra_bruta × pct_ipi ÷ 100` | % IPI | `:278` |
+- | ICMS de entrada | `0` se `valor_st > 0`; senão a alíquota de `icms_entrada` da **origem da compra** | ORIGEM, ST | `:280-283` |
+- | ICMS a recuperar | `compra_bruta × icms_entrada ÷ 100` | | `:289` |
+- | Frete, tipo RATEIO | `(compra_bruta + IPI + valor_st) × pct_rateio_logistica ÷ 100` (hoje 1,438975%) | Frete na compra: rateio | `:310` |
+- | Frete, tipo VALOR | o frete **da linha** (fabricação interna: zero) | FRETE | `:207-210`, `:309` |
+- | **Custo líquido** | `compra_bruta − ICMS a recuperar + IPI + valor_st + frete` | CUSTO LÍQ. | `:312` |
+- Em **fabricação interna** não há compra: `compra_bruta = IPI = ICMS = 0` (`:259-261`) e o custo líquido é zero; a comissão é o percentual fixo (R4).
+- O **encargo da condição de pagamento não entra no custo líquido.** Entra só no preço sugerido: `arredondarParaCima(custo_liquido ÷ qtd × mark-up, 2) × (1 + encargo ÷ 100)` (`:324-325`).
+- **DIFAL, ST e frete da venda** são valores do cabeçalho: entram no **total da NF** (`:437-438`), não no custo. O DIFAL **da compra** não existe no motor.
+- O **custo do pedido** é a soma dos itens (`:434`). A margem e a letra usam o custo líquido do item (R2, R3).
+- | Etapa | O que acontece | Onde |
+- | 1. Vendedor envia | A simulação passa de `RASCUNHO` a `ENVIADO` | `simulador/page.tsx:1148-1190` |
+- | 2. Fila de Compras | A tela `Análise de Simuladores` lista as versões `ENVIADO` do vendedor (e as de Compras que ficaram sem aprovar). Botão "Analisar" abre o simulador em `?modo=compras&id_simulacao=…` | `analise-simuladores/page.tsx:20, 85-89`; `services/comissoes/simulador.ts:260-270` |
+- | 3. Compras revisa | A mesma tela do simulador, com "Compra — Compras revisa", editável; a simulação carrega **os parâmetros congelados** da versão (`id_parametros`), não os vigentes de hoje | `simulador/page.tsx:767-843`, `:1788` |
+- | 4a. Aprova como está | `PUT /simulacoes/:id {status: APROVADO}` | `simulador/page.tsx:1192-1234` |
+- | 4b. Ajusta e aprova | `POST /simulacoes` com `origem = COMPRAS` e `id_simulacao_contestada`; no mesmo POST a versão do vendedor vira `CONTESTADO`; depois a versão de Compras vai a `APROVADO` (retomável se a segunda chamada falhar) | `simulacoes.route.js:233-259`; `simulador/page.tsx:1192-1234` |
+- | 5. Menor percentual | Por item, `pct_final = LEAST(percentual do vendedor, percentual de Compras)`; sem Compras, vale o do vendedor | `vw_simulacao_resolvida`, `dump:1186-1190` |
+- | 6. Vendedor vê | Só depois de alguma versão `APROVADO` o BFF libera percentual e valor em reais | `minhas-comissoes/route.ts:27-31, 229, 249-264` |
+- | Vendedor "envia" o simulador do pedido a Compras | Não há envio: a proposta salva já grava o cálculo **cotado** (comissão estimada, `K1`). O vendedor só vê esse |
+- | Compras redigita o custo (versão `COMPRAS`) | Ninguém redigita: o cálculo **real** nasce sozinho dos eventos de custo (OC, lote, matéria-prima), cada evento com as suas condições (`K2`, N16-20). Compras **não altera a proposta** (N16-08) e usa o valor correto na OC (`C7`) |
+- | `pct_final` = menor entre vendedor e Compras | Igual, por item e por NF: `comissao_final_pct = LEAST(cotada, real)` (R6) |
+- | Compras aprova (`APROVADO`) e só então o vendedor vê | **Conferência de Compras** por NF (🟡): `CONFIRMAR` ou `CONTESTAR`, sem alterar valor. Padrão **desligado** (`exige_conferencia_compras = false`): a decisão da Controladoria não espera Compras. Se a Michele e o Nathan mantiverem o passo, liga-se o parâmetro e a Controladoria só aprova, corta ou altera depois da confirmação |
+- | Quem valida o pedido é Compras; **não existe etapa de Controladoria** | A **Controladoria decide uma vez**, no final, com justificativa (`K4`); o vendedor só vê a comissão real depois dessa decisão |
+- | `Análise de Simuladores` (fila de Compras) | Visão **Compras** da mesma tela de comissão da NF (nota 04, "três visões"): lista as NFs com `compras_estado = PENDENTE`, mostra o cálculo real por evento e permite confirmar ou contestar |
+- | # | O que | Onde | Selo |
+- | 1 | O resumo mensal mostra "bloqueado" sempre zero | `dump:1522` | ✅ |
+- | 2 | O teto da regra fixa só é aplicado pela view; o motor do front não recebe a regra | `simulador/page.tsx:1053`, `motor.ts:467-484` | ✅ |
+- | 3 | O bloqueio por NF casa pelo número com zeros; sem os zeros não casa e não avisa | `dump:447-450` | ✅ |
+- | 4 | As listas de bloqueio e a regra fixa não têm data nem motivo obrigatório; bloqueio vale retroativo | `dump:333-381` | ✅ |
+- | 5 | A simulação guarda `sequencial` sempre nulo, e a `vw_comissao_master` casa `COALESCE(sequencial, -1)` com o da NF (que é 0 ou maior em pedido de família). Pode não casar em NF de pedido com sequencial | `dump:1367`, `simulador/page.tsx:1117-1122` | ❓ conferir em produção |
+- | 6 | O protótipo `experimental/simulador-comissao` calcula a letra pelo **pedido inteiro** e a documentação `av-hub/docs/comissao/processo-comissionamento.md` descreve esse protótipo. O motor de verdade é por **item** (`lib/simulador/motor.ts`) | `_lib/calculo.ts:268`, `motor.ts:391-401` | ✅ |
+- | 7 | O dashboard de vendedores depende de um JSON gerado fora do repositório | `dump:158-214` | ✅ / ❓ gerador |
+- | 8 | O coordenador não tem API de cadastro; valores mudam só por SQL | `core_comissionamento/index.js` (sem rota) | ✅ |
+- | 9 | O comentário da `vw_comissao_master` no dump está truncado ("(texto atual)") | `dump:1386` | ✅ |
+- | 10 | O flag `vendedores.comissao` (cadastro) não é lido pelo motor nem pelas views | `dump:1227-1377` | ✅ / ❓ uso |
+- | 11 | O briefing diz 6 funções; o dump tem 5 (`fn_dashboard_comissoes`, `fn_comissao_coordenadores_mes`, `fn_jsonb_numero` e as 2 do histórico) | `dump:35-322` | ✅ |
+- | 12 | Refaturamento e devolução não aparecem na lógica da view (a nota diz zero casos em 6 meses) | `dump:1388-1392` | ✅ / ❓ |
+- | 13 | O BFF não separa quem aprova de quem digita: o `PUT` de status aceita `pode_editar` do `Simulador` do vendedor | `app/api/comissoes/simulacoes/[id]/route.ts:60` | ✅ |
+- | 14 | O custo líquido só existe no navegador; nenhuma rota nem função de banco o recalcula, então nada reconfere o valor gravado | `motor.ts:277-312`, `simulacoes.route.js` | ✅ |
+- | # | Pergunta | Padrão proposto 🟡 |
+- | M01 | As **faixas A/B/C/D** (15/12/9/0 e 2/1,3/0,7/0,5) e o **2% de fabricação interna** continuam valendo? | Sim, vira parâmetro com vigência |
+- | M02 | Os **percentuais de despesa, impostos e provisão de 2%** de "Maio/23" ainda são os vigentes? A margem desejada é 10%? | ✅ Provisoriamente sim (N16-39): "Maio/23" continua até haver nova vigência com novos dados |
+- | M03 | Custo real **melhor** que o cotado: o vendedor fica com o percentual cotado (menor dos dois). É o desejado? | Sim, igual ao atual |
+- | M04 | **Regras fixas por cliente**: continuam? O gatilho é o markup bruto do pedido? Podem ter data de fim? (OQ-06) | Continuam, com vigência; campo renomeado |
+- | M05 | **Lista de bloqueio** de cliente e de vendedor: continua? Quem está nela hoje (1 cliente, 8 vendedores) migra? A comissão excluída deve **aparecer com valor zero e motivo** para a Controladoria, em vez de sumir? (OQ-06) | Migra com vigência a partir de 2000-01-01; aparece zerada com motivo |
+- | M06 | **Bloqueio por NF** vira a decisão "bloquear" da Controladoria (com justificativa)? As 2 linhas antigas (desbloqueadas) podem ficar só no módulo antigo? (OQ-06) | Sim; não migra |
+- | M07 | **Coordenadores**: continuam no módulo novo, com a mesma conta e sem bloqueio por NF? Quem aprova a apuração do mês? (OQ-06) | Sim, mesma conta; apuração mensal fechada pela Controladoria |
+- | M08 | **Item de fabricação interna**: com o custo real da matéria-prima agora disponível (N16-09), continua 2% fixo sem olhar a margem, ou passa a ter letra? | Continua 2% fixo; custo só informativo |
+- | M09 | **Mão de obra** (serviço comprado por OC): comissiona como revenda (letra pela margem)? Que origem de compra usar para o ICMS (hoje exigida na revenda)? | Revenda, sem crédito de ICMS (origem "Optante Simples" = 0%) |
+- | M10 | **"Desaprovar"** zera e encerra? **"Bloquear"** retém e pode ser liberado depois? **"Alterar"** pode aumentar acima do calculado? Há teto? | ✅ Respondida (N16-44, N16-45): aprovar, desaprovar, bloquear (e desbloquear), cortar ou alterar, por valor ou percentual, **sem teto**, sempre com justificativa e rastro; decidem a Controladoria, a Gerência e a Coordenação; ninguém decide sobre a própria comissão |
+- | M11 | O vendedor pode ler a **justificativa** da Controladoria? | ✅ Respondida (N16-46): **sim**; o vendedor vê a justificativa depois da decisão (`K5`); desaprovada aparece com R$ 0 e o motivo |
+- | M12 | A comissão da NF entra na fila **mesmo com o custo real incompleto**, ou só quando o custo estiver completo? | ✅ Respondida (N16-48): paga-se **só sobre as peças com custo real**; quando o custo completa, a diferença vai para a apuração seguinte, para nova decisão. O restante **não** usa o cotado |
+- | M17 | **Passo de Compras** (seção 4): Compras continua conferindo o percentual de Compras antes da Controladoria? (OQ-28) | Não; o cálculo real por evento o substitui; a conferência fica pronta no banco, desligada (`exige_conferencia_compras = false`) |
+- | M18 | **Encargo da condição de pagamento**: entra no custo líquido do evento? Hoje só entra no preço sugerido (seção 3). (OQ-12) | ✅ Respondida (N16-22): não entra no custo; segue só no preço sugerido |
+- | M19 | **Imposto real do evento** (IPI, ICMS, ST, DIFAL): ✅ respondida (N16-38, OQ-11): vem dos campos novos da OC, pré-preenchidos com os dados da proposta e editados por Compras. O evento herda da proposta só se Compras não tiver editado | Respondida |
+- | M13 | NF **cancelada** depois da decisão, e **devolução**: como fica a comissão paga? | ✅ Respondida (N16-47, N16-74): **abate na mesma proporção, desde a primeira versão**; se já paga, desconta na próxima apuração. Devolução total vem do Omie; a parcial o Fiscal ou a Controladoria informam (item, quantidade, valor), com pendência até lá (`K6`) |
+- | M14 | **Pedido que chega do Omie sem proposta** (V1, segunda origem): continua no módulo atual? | ✅ Respondida (N16-103 a N16-106): o módulo atual não muda; o pedido do Omie entra no módulo **novo** pelo mesmo fluxo do Hub, e a estimativa é a parte de compras que o vendedor preenche no pedido; a nota que sair antes dela espera |
+- | M15 | O flag **`vendedores.comissao`** e a **ajuda de custo do vendedor** (`vendedores.ajuda_custo`) valem para quê? O motor atual não os lê | Fora do motor; ficam no cadastro |
+- | M16 | O **valor retido** (comissões bloqueadas) deve aparecer no resumo mensal da Controladoria, o que hoje mostra zero por defeito? (OQ-05) | Sim |
+
+## subfluxo mermaid
+
+```text
+flowchart LR
+    V["Vendedor<br/>preenche o simulador<br/>(RASCUNHO → ENVIADO)"] --> C["Compras<br/>analisa e corrige<br/>(APROVADO)"]
+    C --> M["Menor percentual<br/>por item<br/>(pct_final)"]
+    R["Regra fixa<br/>do cliente<br/>(teto)"] --> M
+    M --> F["NF faturada<br/>valor do item × pct_final"]
+    F --> B["Bloqueio por NF<br/>zera o valor"]
+    L["Lista de bloqueio<br/>cliente / vendedor<br/>tira a nota"] --> F
+    B --> P["Comissão a pagar<br/>(situação VALIDADO)"]
+```

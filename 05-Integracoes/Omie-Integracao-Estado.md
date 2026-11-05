@@ -45,7 +45,7 @@ O Omie é o sistema **fiscal e financeiro** e segue assim, sem plano de desligar
 | V1 | Pedido criado no Omie chega ao av-hub travado | Omie para pipeline para `pedidos_vendas` | ✅ `ListarPedidos`, a cada 3 min para o dia |
 | C4 | OC emitida no av-hub é enviada ao Omie | av-hub para pipeline para Omie | ✅ `UpsertPedCompra` |
 | C4 | Pedidos de compra do Omie voltam como espelho | Omie para `pedidos_compras` | ✅ `PesquisarPedCompra` |
-| O1 | Omie emite a NF | Omie para `notas_fiscais` | ✅ lado Omie; sinalização do MES ao Omie (tela 11.1) 🔴 |
+| O1 | Omie emite a NF | Omie para `notas_fiscais` | ✅ lado Omie; sinalização do MES ao Omie (ligação do O1) 🔴 |
 | O2 | Omie baixa o item no pedido | Omie para `pedidos_vendas`, `produto_vendas` | ✅ lado Omie |
 
 ### Recursos de leitura (todos conferidos em `omie/resources/*.ts`, 0f739f0)
@@ -122,4 +122,4 @@ A modelagem anterior afirmava que CFOP e ICMS-ST não eram capturados. O pipelin
 
 O MES não lê o Omie. O que ele precisa do Omie chega pelo av-hub: pedido liberado, produtos e unidades ([[Integracao-AvHub-MES]]). `codigo_projeto` e `numero_contrato` do pedido estão no av-hub sem uso no MES.
 
-Ver também: [[Sistemas-e-Responsabilidades]], [[10-Fiscal-Omie]].
+Ver também: [[Sistemas-e-Responsabilidades]], [[14-Fiscal-Omie]].

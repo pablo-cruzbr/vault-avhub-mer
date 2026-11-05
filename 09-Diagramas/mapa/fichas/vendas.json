@@ -268,7 +268,7 @@
     "situacao": "Feito no código",
     "st": "ok",
     "muda": "Front: telas Liberar Pedidos e Liberação da Equipe. MES: o PCP consulta a lista de liberados e confirma a importação.",
-    "arquivo": "06-Contratos, nota LOG-26"
+    "arquivo": "06-Contratos/Contratos-da-v2, LOG-26"
   },
   "palavrasFonte": 8413,
   "duvidas": []

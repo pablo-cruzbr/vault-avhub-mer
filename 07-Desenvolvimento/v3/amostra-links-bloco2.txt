@@ -1,0 +1,83 @@
+[simular] git mv 02-Fluxo-de-Atividades/11-Proposta-e-Pedido-de-Venda.md -> 02-Fluxo-de-Atividades/01-Proposta-e-Pedido-de-Venda.md
+[simular] git mv 02-Fluxo-de-Atividades/12-Orcamento-Base-de-Preco.md -> 02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md
+[simular] git mv 02-Fluxo-de-Atividades/01-Vendas-Liberacao.md -> 02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md
+[simular] git mv 02-Fluxo-de-Atividades/02-PCP-Triagem-e-Destinacao.md -> 02-Fluxo-de-Atividades/04-PCP-Triagem-e-Destinacao.md
+[simular] git mv 02-Fluxo-de-Atividades/03-Estoque-Atendimento-e-Despacho.md -> 02-Fluxo-de-Atividades/05-Estoque-Atendimento-e-Despacho.md
+[simular] git mv 02-Fluxo-de-Atividades/04-Circuito-de-Compra.md -> 02-Fluxo-de-Atividades/06-Circuito-de-Compra.md
+[simular] git mv 02-Fluxo-de-Atividades/05-Recebimento.md -> 02-Fluxo-de-Atividades/07-Recebimento.md
+[simular] git mv 02-Fluxo-de-Atividades/06-Qualidade-Entrada.md -> 02-Fluxo-de-Atividades/08-Qualidade-Entrada.md
+[simular] git mv 02-Fluxo-de-Atividades/07-Producao-e-Roteiro.md -> 02-Fluxo-de-Atividades/10-Producao-e-Roteiro.md
+[simular] git mv 02-Fluxo-de-Atividades/08-Qualidade-Saida.md -> 02-Fluxo-de-Atividades/11-Qualidade-Saida.md
+[simular] git mv 02-Fluxo-de-Atividades/09-Expedicao.md -> 02-Fluxo-de-Atividades/13-Expedicao.md
+[simular] git mv 02-Fluxo-de-Atividades/10-Fiscal-Omie.md -> 02-Fluxo-de-Atividades/14-Fiscal-Omie.md
+[simular] git mv 02-Fluxo-de-Atividades/13-Custo-Real-e-Comissao-no-Fluxo.md -> 02-Fluxo-de-Atividades/15-Custo-Real-e-Comissao.md
+
+SIMULAÇÃO — links reescritos: 330 em 46 notas (grupo raias)
+- 00-Inicio/Comece-Aqui.md: 6
+- 00-Inicio/Home.md: 13
+- 00-Inicio/Mapa-v1-para-v2.md: 19
+- 00-Inicio/Onde-Estamos.md: 28
+- 01-Projeto/Cronograma.md: 3
+- 01-Projeto/Equipe-e-Divisao.md: 12
+- 01-Projeto/Glossario.md: 6
+- 01-Projeto/Visao-do-Projeto.md: 13
+- 02-Fluxo-de-Atividades/00-Fluxo-Mestre-0b.md: 21
+- 02-Fluxo-de-Atividades/01-Vendas-Liberacao.md: 5
+- 02-Fluxo-de-Atividades/02-PCP-Triagem-e-Destinacao.md: 9
+- 02-Fluxo-de-Atividades/03-Estoque-Atendimento-e-Despacho.md: 17
+- 02-Fluxo-de-Atividades/04-Circuito-de-Compra.md: 10
+- 02-Fluxo-de-Atividades/05-Recebimento.md: 10
+- 02-Fluxo-de-Atividades/06-Qualidade-Entrada.md: 6
+- 02-Fluxo-de-Atividades/07-Producao-e-Roteiro.md: 4
+- 02-Fluxo-de-Atividades/08-Qualidade-Saida.md: 7
+- 02-Fluxo-de-Atividades/09-Expedicao.md: 9
+- 02-Fluxo-de-Atividades/10-Fiscal-Omie.md: 6
+- 02-Fluxo-de-Atividades/11-Proposta-e-Pedido-de-Venda.md: 12
+- 02-Fluxo-de-Atividades/12-Orcamento-Base-de-Preco.md: 2
+- 02-Fluxo-de-Atividades/13-Custo-Real-e-Comissao-no-Fluxo.md: 1
+- 02-Fluxo-de-Atividades/14-Telas-e-Experiencia-do-Usuario.md: 3
+- 02-Fluxo-de-Atividades/Estados-e-Status.md: 13
+- 02-Fluxo-de-Atividades/Telas-por-Raia.md: 12
+- 03-Sistemas/AV-Hub-Front.md: 2
+- 03-Sistemas/Comissao/01-Motor-Atual-Como-Calcula.md: 1
+- 03-Sistemas/Pipeline-Omie.md: 2
+- 04-Dados/Modelo-Estoque-e-Custo-do-Lote.md: 1
+- 05-Integracoes/Integracao-AvHub-MES.md: 3
+- 05-Integracoes/Mapa-IncluirPedido-Omie.md: 1
+- 05-Integracoes/Omie-Dicionarios/Notas-Fiscais-e-Itens.md: 2
+- 05-Integracoes/Omie-Dicionarios/Pedidos-de-Venda.md: 1
+- 05-Integracoes/Omie-Integracao-Estado.md: 1
+- 07-Desenvolvimento/Backlog-por-Frente.md: 11
+- 07-Desenvolvimento/Contradicoes-Resolvidas.md: 1
+- 07-Desenvolvimento/Perguntas-Proposta-Pedido-Comissao.md: 4
+- 07-Desenvolvimento/Pontas-Soltas.md: 8
+- 08-Decisoes/Registro-de-Decisoes.md: 14
+- 09-Diagramas/Casos-de-Uso.md: 3
+- 09-Diagramas/Estados.md: 6
+- 09-Diagramas/Indice-de-Diagramas.md: 14
+- 09-Diagramas/Sequencia.md: 2
+- 10-Anexo-Fora-do-Fluxo/Comercial-Suprimentos.md: 1
+- 10-Anexo-Fora-do-Fluxo/Comissoes.md: 3
+- 10-Anexo-Fora-do-Fluxo/Orcamento.md: 2
+
+## Amostra (até 20 notas diferentes)
+00-Inicio/Comece-Aqui.md:33  [[04-Circuito-de-Compra]]  →  [[06-Circuito-de-Compra]]
+00-Inicio/Mapa-v1-para-v2.md:39  [[07-Producao-e-Roteiro]]  →  [[10-Producao-e-Roteiro\|07-Producao-e-Roteiro]]
+01-Projeto/Cronograma.md:148  [[12-Orcamento-Base-de-Preco]]  →  [[02-Orcamento-Base-de-Preco]]
+01-Projeto/Glossario.md:101  [[11-Proposta-e-Pedido-de-Venda]]  →  [[01-Proposta-e-Pedido-de-Venda]]
+02-Fluxo-de-Atividades/00-Fluxo-Mestre-0b.md:295  [[02-PCP-Triagem-e-Destinacao]]  →  [[04-PCP-Triagem-e-Destinacao]]
+02-Fluxo-de-Atividades/02-PCP-Triagem-e-Destinacao.md:75  [[03-Estoque-Atendimento-e-Despacho]]  →  [[05-Estoque-Atendimento-e-Despacho]]
+02-Fluxo-de-Atividades/04-Circuito-de-Compra.md:89  [[06-Qualidade-Entrada]]  →  [[08-Qualidade-Entrada]]
+02-Fluxo-de-Atividades/06-Qualidade-Entrada.md:27  [[04-Circuito-de-Compra]]  →  [[06-Circuito-de-Compra]]
+02-Fluxo-de-Atividades/08-Qualidade-Saida.md:133  [[01-Vendas-Liberacao]]  →  [[03-Pedido-de-Venda-e-Liberacao]]
+02-Fluxo-de-Atividades/10-Fiscal-Omie.md:95  [[01-Vendas-Liberacao]]  →  [[03-Pedido-de-Venda-e-Liberacao]]
+02-Fluxo-de-Atividades/12-Orcamento-Base-de-Preco.md:77  [[04-Circuito-de-Compra]]  →  [[06-Circuito-de-Compra]]
+02-Fluxo-de-Atividades/14-Telas-e-Experiencia-do-Usuario.md:199  [[12-Orcamento-Base-de-Preco]]  →  [[02-Orcamento-Base-de-Preco]]
+02-Fluxo-de-Atividades/Telas-por-Raia.md:112  [[06-Qualidade-Entrada]]  →  [[08-Qualidade-Entrada]]
+03-Sistemas/Comissao/01-Motor-Atual-Como-Calcula.md:42  [[13-Custo-Real-e-Comissao-no-Fluxo]]  →  [[15-Custo-Real-e-Comissao]]
+04-Dados/Modelo-Estoque-e-Custo-do-Lote.md:72  [[03-Estoque-Atendimento-e-Despacho]]  →  [[05-Estoque-Atendimento-e-Despacho]]
+05-Integracoes/Mapa-IncluirPedido-Omie.md:287  [[11-Proposta-e-Pedido-de-Venda]]  →  [[01-Proposta-e-Pedido-de-Venda]]
+05-Integracoes/Omie-Dicionarios/Pedidos-de-Venda.md:16  [[01-Vendas-Liberacao]]  →  [[03-Pedido-de-Venda-e-Liberacao]]
+07-Desenvolvimento/Backlog-por-Frente.md:55  [[05-Recebimento]]  →  [[07-Recebimento]]
+07-Desenvolvimento/Perguntas-Proposta-Pedido-Comissao.md:198  [[13-Custo-Real-e-Comissao-no-Fluxo]]  →  [[15-Custo-Real-e-Comissao]]
+08-Decisoes/Registro-de-Decisoes.md:274  [[12-Orcamento-Base-de-Preco]]  →  [[02-Orcamento-Base-de-Preco\|12-Orcamento-Base-de-Preco]]

@@ -238,7 +238,7 @@
     "situacao": "Feito no código",
     "st": "ok",
     "muda": "Front: o cartão de etapas do pedido mostra os rótulos de expedição. MES: nenhuma mudança prevista; a Expedição não tem outro contrato com o av-hub.",
-    "arquivo": "06-Contratos/Entregues, nota API-005"
+    "arquivo": "06-Contratos/Contratos-da-v2, API-005"
   },
   "palavrasFonte": 1662,
   "duvidas": [

@@ -13,28 +13,43 @@ const dirFichas = join(aqui, "fichas");
 // Nota(s) de raia de cada setor, como caminho no site de consulta (pasta/arquivo sem .md).
 const R = "02-Fluxo-de-Atividades/";
 const NOTAS = {
-  vendas: [["Vendas: liberação do pedido", R + "01-Vendas-Liberacao"], ["Proposta e pedido de venda", R + "11-Proposta-e-Pedido-de-Venda"]],
-  orcamento: [["Orçamento e base de preço", R + "12-Orcamento-Base-de-Preco"]],
-  pcp: [["PCP: triagem e destinação", R + "02-PCP-Triagem-e-Destinacao"]],
-  estoque: [["Estoque: atendimento e despacho", R + "03-Estoque-Atendimento-e-Despacho"]],
-  compras: [["Circuito de compra", R + "04-Circuito-de-Compra"]],
-  recebimento: [["Recebimento", R + "05-Recebimento"]],
-  "qualidade-entrada": [["Qualidade de entrada", R + "06-Qualidade-Entrada"]],
-  producao: [["Produção e roteiro", R + "07-Producao-e-Roteiro"]],
-  "qualidade-saida": [["Qualidade de saída", R + "08-Qualidade-Saida"]],
-  expedicao: [["Expedição", R + "09-Expedicao"]],
-  fiscal: [["Fiscal e Omie", R + "10-Fiscal-Omie"]],
-  controladoria: [["Custo real e comissão no fluxo", R + "13-Custo-Real-e-Comissao-no-Fluxo"], ["Regras e estados da comissão nova", "03-Sistemas/Comissao/04-Regras-e-Estados-da-Comissao-Nova"]]
+  vendas: [["Pedido de venda e liberação", R + "03-Pedido-de-Venda-e-Liberacao"], ["Proposta de venda", R + "01-Proposta-de-Venda"]],
+  orcamento: [["Orçamento e base de preço", R + "02-Orcamento-Base-de-Preco"]],
+  pcp: [["PCP: triagem e destinação", R + "04-PCP-Triagem-e-Destinacao"]],
+  estoque: [["Estoque: atendimento", R + "05-Estoque-Atendimento"], ["Estoque: entrada do lote", R + "09-Estoque-Entrada-do-Lote"], ["Estoque: despacho", R + "12-Estoque-Despacho"]],
+  compras: [["Circuito de compra", R + "06-Circuito-de-Compra"]],
+  recebimento: [["Recebimento", R + "07-Recebimento"]],
+  "qualidade-entrada": [["Qualidade de entrada", R + "08-Qualidade-Entrada"]],
+  producao: [["Produção e roteiro", R + "10-Producao-e-Roteiro"]],
+  "qualidade-saida": [["Qualidade de saída", R + "11-Qualidade-Saida"]],
+  expedicao: [["Expedição", R + "13-Expedicao"]],
+  fiscal: [["Fiscal e Omie", R + "14-Fiscal-Omie"]],
+  controladoria: [["Custo real e comissão no fluxo", R + "15-Custo-Real-e-Comissao"], ["Regras e estados da comissão nova", "03-Sistemas/Comissao/04-Regras-e-Estados-da-Comissao-Nova"]]
 };
-const GERAIS = [["Registro de decisões", "08-Decisoes/Registro-de-Decisoes"], ["Painel de contratos", "06-Contratos/Painel-de-Contratos"], ["Fluxo mestre (o diagrama completo)", R + "00-Fluxo-Mestre-0b"]];
+const INDICE_CONTRATOS = "06-Contratos/Contratos-da-v2";
+const GERAIS = [["Registro de decisões", "08-Decisoes/Registro-de-Decisoes"], ["Contratos da v2 (índice)", INDICE_CONTRATOS], ["Fluxo mestre (o diagrama completo)", R + "00-Fluxo-Mestre-0b"]];
 
-// id do contrato -> caminho no site de consulta
+// id do contrato -> caminho no site de consulta.
+// Na v3 os contratos da v2 ficaram na tag v2-antes-da-v3; todo ID listado no índice aponta para ele.
+// Contratos novos da v3 (pastas Ativos/Entregues/Arquivados/Consultas) apontam para a própria nota.
 const contratos = new Map();
-for (const pasta of ["Ativos", "Entregues", "Arquivados"]) {
+const arqIndice = join(vault, INDICE_CONTRATOS + ".md");
+if (existsSync(arqIndice)) {
+  for (const m of readFileSync(arqIndice, "utf8").matchAll(/^\| ((?:LOG|API|SQL|CON)-\d+[a-z]?) \|/gm)) contratos.set(m[1], INDICE_CONTRATOS);
+}
+// Bloco 5 da v3: a lista completa saiu do índice para 06-Contratos/Partes/Contratos-da-v2-*; o ID aponta para a parte
+const dirPartesContratos = join(vault, "06-Contratos", "Partes");
+if (existsSync(dirPartesContratos)) {
+  for (const n of readdirSync(dirPartesContratos).filter((x) => x.startsWith("Contratos-da-v2-") && x.endsWith(".md"))) {
+    const p = ["06-Contratos", "Partes", n.replace(/\.md$/, "")].join("/");
+    for (const m of readFileSync(join(dirPartesContratos, n), "utf8").matchAll(/^\| ((?:LOG|API|SQL|CON)-\d+[a-z]?) \|/gm)) if (!contratos.has(m[1])) contratos.set(m[1], p);
+  }
+}
+for (const pasta of ["Ativos", "Entregues", "Arquivados", "Consultas"]) {
   const dir = join(vault, "06-Contratos", pasta);
   if (!existsSync(dir)) continue;
   for (const n of readdirSync(dir)) {
-    const m = n.match(/^((?:LOG|API|SQL)-\d+[a-z]?)-.*\.md$/);
+    const m = n.match(/^((?:LOG|API|SQL|CON)-\d+[a-z]?)-.*\.md$/);
     if (m) contratos.set(m[1], `06-Contratos/${pasta}/${n.replace(/\.md$/, "")}`);
   }
 }

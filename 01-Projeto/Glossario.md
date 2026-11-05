@@ -42,9 +42,9 @@ Os termos estão em ordem alfabética. Os nomes de tela seguem a regra de [[Regr
 - **Chegada** — o registro da doca de que a mercadoria chegou com a NF. A parcial sai de Compras · CCP e vai ao Recebimento ✅.
 - **Ciclo 1 e Ciclo 2** — o Ciclo 1 fecha em 18/02/2027 (era 21/01; deslocado pelo N14-30 e abatido pelo K4, N14-32; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida). O Ciclo 2 começa em 19/02/2027 e leva transferência entre filiais (etapas 2 a 4), `GET /itens/custo`, sobras e perdas, entre outros 📝. Ver [[Cronograma]].
 - **CIF e FOB** — quem paga e contrata o frete da compra. No CIF, o fornecedor entrega direto. No FOB, a Aços Vital coleta no fornecedor. A escolha é feita na emissão da OC (nó `C4`) ✅.
-- **Circuito de compra** — o caminho fixo, fora do roteiro do PCP: Estoque, Requisições, Compras, Recebimento, Qualidade de entrada e volta ao mesmo Estoque. Ver [[04-Circuito-de-Compra]].
+- **Circuito de compra** — o caminho fixo, fora do roteiro do PCP: Estoque, Requisições, Compras, Recebimento, Qualidade de entrada e volta ao mesmo Estoque. Ver [[06-Circuito-de-Compra]].
 - **Compras · CCP** — ver a tabela de telas.
-- **Conferência** — contagem, peso e divergência na doca, feitas contra a NF e não contra a OC. Ver [[05-Recebimento]].
+- **Conferência** — contagem, peso e divergência na doca, feitas contra a NF e não contra a OC. Ver [[07-Recebimento]].
 - **Custo do lote** — o custo de cada lote do Estoque. Na `develop` do MES ele é gravado na carga inicial, no Recebimento (custo da OC, desde 19/10) e à mão (27/10); a decisão N16-09 torna o custo obrigatório em todo lote, o que ainda não vale no código 🔴. Ver [[Modelo-Estoque-e-Custo-do-Lote]].
 - **Custo médio do item** — soma de quantidade vezes custo unitário dos lotes usados, dividida pela quantidade do item (regra A, decidida em 09/10) 📝. O `GET /itens/custo` existe na `develop` do MES desde 27/10, fora da `main` ✅.
 - **Destino (de uma fábrica)** — diz se a fábrica é de produção própria (`FABRICACAO`) ou de revenda (`REVENDA`). Na tela, o nome é "Destino" ✅.
@@ -66,14 +66,14 @@ Os termos estão em ordem alfabética. Os nomes de tela seguem a regra de [[Regr
 - **Inspeção de entrada e de saída** — ver a tabela de telas.
 - **`ItemParcial`** — uma fração de um item percorrendo o roteiro ✅ ([[Estados]]).
 - **Lote** — a unidade de saldo, com origem e status de qualidade. O lote recebido nasce `PENDENTE` (quarentena). Quando é cisão, aponta para o lote de origem.
-- **Liberação (do pedido)** — o vendedor marca se a Qualidade acompanha e libera, numa ação só. Só pedido liberado vai ao MES ([[01-Vendas-Liberacao]]).
+- **Liberação (do pedido)** — o vendedor marca se a Qualidade acompanha e libera, numa ação só. Só pedido liberado vai ao MES ([[03-Pedido-de-Venda-e-Liberacao]]).
 - **MES** — o sistema de execução da produção. Tem o `api-pcp` (back, NestJS e Prisma) e o `app-pcp` (front, Next.js). Dono: Robert.
 - **Movimento de estoque** — a entrada, a saída, a transferência ou o ajuste de saldo ✅.
 - **OC (Ordem de Compra)** — nasce no HUB (nó `C4`) e é enviada ao Omie pela pipeline. Se **exceder R$ 30 mil**, o Gerente de Compras aprova. Se for **até** R$ 30 mil, sai sem aprovação, com os compradores livres ✅ 📝 N14-21. A regra é provisória e endurece depois com Compras 🟡.
 - **OP (Ordem de Produção)** — uma **entidade** do sistema e também um **documento para impressão** (formalidade), emitido só para o que será fabricado 📝 N14-22, #74. Na `develop` do MES a OP já é emitida na criação da ordem de destino de fabricação (27/10, LOG-53); a `main` ainda não a tem (BL-052). O termo antigo designava a Destinação do Pedido e hoje é só o texto do pedido no código.
 - **Saldo futuro** — o que o Estoque ainda vai receber das **OCs em andamento** de itens de estoque (sem pedido de venda). O Estoque do MES mostra **saldo atual + saldo futuro** 📝 N14-20. A OC ligada a pedido de venda não entra: o PCP a vê no pedido. O MES já lê as OCs (K4), mas ainda não mostra o saldo futuro no Estoque 🔴 (BL-050).
 - **OS (Ordem de Serviço)** — o beneficiamento ou retrabalho de item de Revenda, como o corte de chapa. O setor `PRODUTIVO` é opcional no roteiro da Revenda.
-- **Parcial** — tem três sentidos que não se misturam: (1) o `sequencial` do Omie, uma linha de pedido por nota fiscal parcial (o 0 é o guarda-chuva); (2) o `ItemParcial` do MES; (3) a `Entrega`, entrega parcial ao cliente. Exemplo: o pedido 27645 tem sequenciais 0 a 4, e a soma bate com os 10 itens ([[LOG-08-Itens-por-Parcela-Pedidos]]).
+- **Parcial** — tem três sentidos que não se misturam: (1) o `sequencial` do Omie, uma linha de pedido por nota fiscal parcial (o 0 é o guarda-chuva); (2) o `ItemParcial` do MES; (3) a `Entrega`, entrega parcial ao cliente. Exemplo: o pedido 27645 tem sequenciais 0 a 4, e a soma bate com os 10 itens ([[Contratos-da-v2|LOG-08]]).
 - **PCP** — planejamento e controle da produção. É o mesmo departamento nos dois sistemas: o Portal PCP do HUB e o MES. Não é ambiguidade a corrigir.
 - **`PerfilSetor`** — a ligação entre perfil e setor no MES (visualizar, atuar). É conveniência de tela, não barreira de segurança.
 - **Pipeline** — o `omie-elt-pipeline`: extrai dados do Omie para o banco do av-hub e envia a OC. Essa é a única escrita no Omie.
@@ -88,7 +88,7 @@ Os termos estão em ordem alfabética. Os nomes de tela seguem a regra de [[Regr
 - **Setor (tipo)** — a classe do setor no MES: `PRODUTIVO`, `ESTOQUE`, `COMPRAS`, `EXPEDICAO`, `REQUISICAO`, `LOGISTICA_ENTRADA` ou `QUALIDADE` ✅.
 - **Split atendido** — a parte do `ItemParcial` que o Estoque cobriu com saldo. Vira parcial própria, com reserva, e segue em trânsito para a Expedição.
 - **SLA por etapa** — a meta de tempo de cada etapa do fluxo. É proposta, com metas por definir. Ver [[Rastreabilidade-e-Torre-de-Fluxo]].
-- **Selos** — ✅ no código, 📝 decidido, 🟡 proposta, 🔴 aberto ou sem código, ❓ não conferido em produção ([[Regras-do-Vault]]).
+- **Selos** — pela `develop` dos sistemas (F5): ✅ está na `develop`, 📝 decidido, 🟡 parcial na `develop`, 🔴 não está na `develop`, ❓ não conferido na `develop` ([[Regras-do-Vault]]).
 - **Torre de Fluxo** — a visualização do 0b: mapa por setor, contagem por etapa, tempo contra o SLA e trilha do item. O hub tem a rotina e as rotas, e o HUB tem as telas sobre dados de teste (29/10). O MES não publica `/fluxo/eventos` 🔴.
 - **Triagem do Pedido** — ver a tabela de telas.
 - **Prefixos nas notas** — **DEC** decisão-chave; **EC** pergunta do encaixe do Estoque e da Revenda; **EN** decisão do encaixe; **IM** pergunta da integração; **CC** ponto da conferência de código; **T** tela do mapa de telas; **L-nn** lacuna de lógica; **CA** pergunta de Compras e acessos; **R** pergunta de rastreabilidade; **BL**, **PS**, **RS** itens do [[Backlog-por-Frente]], de [[Pontas-Soltas]] e de [[Riscos]].
@@ -98,19 +98,19 @@ Os termos estão em ordem alfabética. Os nomes de tela seguem a regra de [[Regr
 
 ## Proposta, Orçamento, custo real e comissão nova (desenho aprovado em 26/10/2026)
 
-- **Proposta** — o documento do vendedor no Hub, antes do pedido (nós `V0.1` a `V0.7`). Só a aprovada vira pedido, e uma proposta vira um pedido só (N16-02). Estados: `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` ✅ (a `ck_propostas_status` do dump de 29/10 tem esses quatro). Ver [[11-Proposta-e-Pedido-de-Venda]].
+- **Proposta** — o documento do vendedor no Hub, antes do pedido (nós `V0.1` a `V0.7`). Só a aprovada vira pedido, e uma proposta vira um pedido só (N16-02). Estados: `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` ✅ (a `ck_propostas_status` do dump de 29/10 tem esses quatro). Ver [[01-Proposta-de-Venda]].
 - **Proposta incompleta** — a que tem item sem custo e sem fornecedor. Não é um estado, é um campo calculado. Ela impede a aprovação (N16-03, N16-31).
 - **Transformar em pedido** — o botão da proposta aprovada (`V0.6`). Pede a previsão de faturamento, se a Qualidade acompanha e se o pedido pode faturar em partes. Depois o Hub cria o pedido no Omie, por fila e pipeline (`V0.7`).
 - **Pedido do Hub** — o pedido de venda do Hub, com origem `PROPOSTA` ou `OMIE`. O schema (`core_vendas_faturamento` pela N16-116; o código de 29/10 ainda usa `core_comercial`) é ponto em aberto. Os dois seguem o mesmo fluxo e a mesma tela. O do Omie chega com a parte de vendas pronta, que só se altera no Omie (N16-106).
 - **Parte de vendas e parte de compras** — as duas metades do item da proposta ou do pedido. A de vendas tem cliente, itens, valores, impostos e previsão. A de compras tem custo, fornecedor, origem e frete: o vendedor a preenche, e ela é a simulação da comissão (N16-104, N16-106).
-- **Orçamento (setor)** — o setor novo que cota com fornecedores e mantém a base de preço de compra, sempre com histórico (`B1` a `B4`). O Moisés é uma das pessoas (N16-104). Ver [[12-Orcamento-Base-de-Preco]].
+- **Orçamento (setor)** — o setor novo que cota com fornecedores e mantém a base de preço de compra, sempre com histórico (`B1` a `B4`). O Moisés é uma das pessoas (N16-104). Ver [[02-Orcamento-Base-de-Preco]].
 - **Orçamentista** — o perfil de quem atende o pedido de custo no setor de Orçamento (N16-59).
 - **Pedido de custo** — o pedido do vendedor ao Orçamento para cotar um item de que ele não tem o dado (`B3`). Não tem prazo fixo, e o tempo é cronometrado. O vendedor nunca fica bloqueado (N16-58).
 - **Página do produto** — a consulta do vendedor (`B2`) com histórico de preço, top fornecedores com score, flutuação, volatilidade e média. É só de leitura.
 - **Compra acima do valor** — o caso em que Compras comprou por mais que o custo que o vendedor pôs (`C8`). O vendedor é avisado em Meus Pedidos e aprova ou reprova, por produto e sem tolerância (N16-60 a N16-67). Fica na tabela `divergencias_compra`.
 - **Previsão vigente** — a data de faturamento que vale agora: a maior entre a inicial e a última de cada item, mais 1 dia útil pelo calendário da unidade. Fica só no Hub; o Omie guarda a inicial (N16-88, N16-96, N16-97).
 - **Sequencial** — o agrupamento que o Fiscal cria para faturar o mesmo pedido em várias notas, por item e quantidade. Não é outro pedido nem parcela de pagamento (N16-92 a N16-94).
-- **Custo real (por evento)** — o custo do item do pedido, somado das linhas de cada evento: OC (com o valor da NF de entrada no recebimento), lote do Estoque ou matéria-prima do fabricado (`K2`, N16-09, N16-40). Ver [[13-Custo-Real-e-Comissao-no-Fluxo]].
+- **Custo real (por evento)** — o custo do item do pedido, somado das linhas de cada evento: OC (com o valor da NF de entrada no recebimento), lote do Estoque ou matéria-prima do fabricado (`K2`, N16-09, N16-40). Ver [[15-Custo-Real-e-Comissao]].
 - **Comissão estimada e comissão real** — a estimada nasce na proposta ou na parte de compras do pedido do Omie (`K1`) e é a única que o vendedor vê antes da decisão. A real fecha por nota fiscal, com o custo real (`K3`), e só aparece ao vendedor depois da decisão (`K5`).
 - **Apuração seguinte** — quando o custo completa depois da decisão, a diferença (complemento ou desconto) vai para a próxima apuração, para nova decisão (N16-49).
 - **Abatimento** — a redução da comissão na mesma proporção da nota cancelada, devolvida ou recusada (`K6`, N16-47).

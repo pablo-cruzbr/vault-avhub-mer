@@ -1,22 +1,26 @@
 ---
 tags: [inicio, status]
 criado: 2026-10-14
-atualizado: 2026-11-05
+estado-em: 2026-11-05
 status: vigente
 dono: Nathan
-fontes: [00-Fluxo-Mestre-0b, notas de raia 02-Fluxo-de-Atividades, Registro-de-Decisoes (N16-01 a N16-148), Painel-de-Contratos de 29/10, develop do api-pcp e do app-pcp (27/10), develop da api-acos-vital (29/10), develop do av-hub (29/10), omie-elt-pipeline 0f739f0]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas de raia 01 a 15 (conferidas na develop em 05/11/2026, Bloco 3 da v3), Backlog-por-Frente, Registro-de-Decisoes (N16-01 a N16-149), Contratos-da-v2, api-pcp src/common/constants/item-parcial-status.constants.ts:33 (EM_PRODUCAO nunca gravado), av-hub lib/api/custoItensFixtures.ts (custo por item ainda com dados de exemplo)]
 ---
 
-# Onde estamos (estado de 29/10/2026)
+# Onde estamos (estado conferido na develop em 05/11/2026)
 
-**Em uma frase:** o fluxo do pedido já funciona da liberação ao recebimento, e a OP, o lote do fabricado e o custo por item já estão na `develop` do MES; o que falta é, sobretudo, o pedido da proposta no Omie, o Orçamento, a comissão nova e levar o MES para a `main`.
+**Em uma frase:** o fluxo do pedido já funciona da liberação ao recebimento, e a OP, o lote do fabricado e o custo por item já estão na `develop` do MES; o que falta é, sobretudo, o pedido da proposta no Omie, a API e o banco do Orçamento, a comissão nova e o documento de retirada. Publicar o MES na `main` (BL-035) é informação de publicação, não critério de pronto.
 
 **Quando consultar esta nota:** quando você precisar saber o que está pronto, o que falta e quem toca cada setor.
 
-> [!warning] O que é "produção" e o que está em uso (Nathan, 30/10/2026)
-> No av-hub, **produção é a `main`**: a última versão pronta e testada. Isso não quer dizer que alguém usa. **Em uso real hoje, só os dashboards, a tela de aprovação de vagas e as telas da gerência.** O resto (Compras, ordem de compra, requisição, proposta, pedido manual, Torre, custo e as demais telas) ainda não tem uso real: nenhuma OC criada no av-hub existe no banco de produção. Onde as notas dizem "produção ❓" ou "não conferido em produção", leia "ainda não foi para a `main`" ou "ainda não foi usado". Mudanças de formato, como a numeração só com dígitos (N16-148), não têm dado real para migrar.
+**Dono do status:** esta nota é o único resumo do estado do projeto, e o [[Backlog-por-Frente]] é a única lista de tarefas. As outras notas não repetem o status: as raias têm o detalhe dos seus nós (com arquivo:linha) e apontam para cá.
 
-O estado do código é o de 29/10/2026 (`develop` do MES, da `api-acos-vital` e do av-hub). A `main` do MES parou em 08/10: a OP, o lote do fabricado e o custo por item (26 e 27/10) estão só na `develop` (BL-035). A API da proposta e as telas já existem; o Orçamento, a conferência de Compras (`C6` a `C8`) e a comissão nova ainda não têm código. A fila de trabalho está em [[Backlog-por-Frente]].
+> [!warning] Pronto é estar na `develop` (F5, Nathan, 05/11/2026)
+> **O critério de pronto é a `develop` dos sistemas**: se está na `develop`, o selo é ✅. A `develop` está congelada e é a versão mais atualizada; o software ainda não foi lançado. A `main` (a última versão publicada e testada) não é critério de pronto e só aparece como informação ("publicado na `main`: sim/não").
+> **Em uso real hoje, só os dashboards, a tela de aprovação de vagas e as telas da gerência** (Nathan, 30/10/2026). O resto (Compras, ordem de compra, requisição, proposta, pedido manual, Torre, custo e as demais telas) ainda não tem uso real: nenhuma OC criada no av-hub existe no banco de produção. Onde uma nota antiga ainda disser "produção ❓" ou "não conferido em produção", leia "não conferido na `develop`" e confira. Mudanças de formato, como a numeração só com dígitos (N16-148), não têm dado real para migrar.
+
+O estado é o da `develop` dos cinco sistemas lida em 05/11/2026 (commits no `develop-conferida` acima e em [[Ultima-Atualizacao-do-Vault]]). Cada linha resume a seção "O que já existe e o que falta" da raia, que cita repositório e arquivo:linha. Publicado na `main`: a `main` do MES parou em 08/10, então a OP, o lote do fabricado e o custo por item (26 e 27/10) ainda não foram publicados (BL-035). A API da proposta e as telas já existem; o Orçamento, a conferência de Compras (`C6` a `C8`) e a comissão nova ainda não têm código. A fila de trabalho está em [[Backlog-por-Frente]].
 
 **Decisões de 30/10/2026 (N16-145 a N16-148):** o Ciclo 1 passa a incluir o documento de retirada (BL-007), BL-049 e BL-050 (déficit do Robert de 36,1 pd e fim em 03/03/2027 a 75% de foco; o Robert valida a conta); os modelos dos documentos de retirada e de devolução da sobra ao Estoque foram aprovados; o número da proposta e da ordem de compra é só dígitos no banco, com o prefixo só na tela e no PDF; só o perfil Admin vê a Torre de Fluxo por enquanto.
 
@@ -24,20 +28,20 @@ O estado do código é o de 29/10/2026 (`develop` do MES, da `api-acos-vital` e 
 
 | Setor | Como está | Quem toca | O que falta |
 |---|---|---|---|
-| [[11-Proposta-e-Pedido-de-Venda]] | 🟡 API e telas da proposta existem na `develop`; falta o pedido no Omie | Robert (rotas e telas), Gustavo, Pablo acompanha | Confirmar no banco o "Transformar em pedido"; enviar o pedido ao Omie direto pela API (a fila caiu em 03/11) e fazer o teste do pedido mínimo (BL-081); motor da comissão na API; decidir o schema (`core_comercial` ou `core_vendas_faturamento`, N16-116) |
-| [[12-Orcamento-Base-de-Preco]] | 🟡 Menu e abas no front; o resto sem código | Pablo, Robert, Gustavo | Base de preço gerada das compras; página do produto com score e volatilidade; pedido de custo ao Orçamento |
-| [[01-Vendas-Liberacao]] | ✅ Liberação funciona · 🔴 pedido no Hub | Nathan, Gustavo | Pedido do Omie no mesmo fluxo do pedido da proposta; compras e faturamento em partes na tela do pedido |
-| [[02-PCP-Triagem-e-Destinacao]] | ✅ Triagem e Destinação · 🔴 volta de reprovado | Robert | Caminho para o item reprovado (retrabalho ou nova compra); mostrar a OC do pedido ao PCP. A Ordem de Produção já é emitida e impressa e a Triagem mostra as requisições do hub (`develop`, 23 e 27/10) |
-| [[03-Estoque-Atendimento-e-Despacho]] | ✅ Atendimento · 🔴 despacho | Robert | Documento de retirada com baixa na retirada (no Ciclo 1; modelos de retirada e de devolução aprovados em 30/10, N16-145 e N16-146); saldo futuro. O custo do item e o fabricado virando lote já estão na `develop` (27/10) |
-| [[04-Circuito-de-Compra]] | ✅ Compra, aprovação e envio ao Omie · ✅ o MES lê a OC (`develop`) | Robert, Gustavo | Mostrar a OC do pedido ao PCP e o saldo futuro; regra de aprovação definitiva com Compras |
+| [[01-Proposta-de-Venda]] | 🟡 API e telas da proposta existem na `develop`; falta o pedido no Omie | Robert (rotas e telas), Gustavo, Pablo acompanha | Confirmar no banco o "Transformar em pedido"; no banco de teste de 04/11/2026 a função já existe e grava o pedido do Hub em `core_comercial.pedidos_venda`, sem liberação; falta a migration no repositório ([[Dump-AvHub-Teste-2026-11-04]]); enviar o pedido ao Omie direto pela API (a fila caiu em 03/11) e fazer o teste do pedido mínimo (BL-081); motor da comissão na API; decidir o schema (`core_comercial` ou `core_vendas_faturamento`, N16-116) |
+| [[02-Orcamento-Base-de-Preco]] | 🟡 Telas no front (`develop`) · 🔴 sem API e sem banco (o que existe está só no `api-comercial` de teste, F3) | Pablo, Robert, Gustavo | Portar oferta, histórico e pedido de custo para a `api-acos-vital`; base de preço gerada das compras; página do produto com score e volatilidade; pedido de custo ao Orçamento |
+| [[03-Pedido-de-Venda-e-Liberacao]] | ✅ Liberação funciona · 🔴 pedido no Hub | Nathan, Gustavo | Pedido do Omie no mesmo fluxo do pedido da proposta; compras e faturamento em partes na tela do pedido |
+| [[04-PCP-Triagem-e-Destinacao]] | ✅ Triagem e Destinação · 🔴 volta de reprovado | Robert | Caminho para o item reprovado (retrabalho ou nova compra); mostrar a OC do pedido ao PCP. A Ordem de Produção já é emitida e impressa e a Triagem mostra as requisições do hub (`develop`, 23 e 27/10) |
+| [[05-Estoque-Atendimento]] · [[09-Estoque-Entrada-do-Lote]] · [[12-Estoque-Despacho]] | ✅ Atendimento · 🔴 despacho | Robert | Documento de retirada com baixa na retirada (no Ciclo 1; modelos de retirada e de devolução aprovados em 30/10, N16-145 e N16-146); saldo futuro. O custo do item e o fabricado virando lote já estão na `develop` (27/10) |
+| [[06-Circuito-de-Compra]] | ✅ Compra, aprovação e envio ao Omie · ✅ o MES lê a OC (`develop`) | Robert, Gustavo | Mostrar a OC do pedido ao PCP e o saldo futuro; regra de aprovação definitiva com Compras |
 | Conferência de Compras (`C6` a `C8`) | 🔴 Desenhada e aprovada, sem código | Nathan, Gustavo | Conferir a parte do vendedor ao emitir a OC; avisar o vendedor se a compra sair mais cara |
-| [[05-Recebimento]] | ✅ Recebimento por OC e por NF na `develop` | Robert | Conferir contra a OC (preço, quantidade, fornecedor, N16-135); rateio da chegada; testar em homologação |
-| [[06-Qualidade-Entrada]] | ✅ Pronto | Robert, Gustavo | Recompra por RNC (relatório de não conformidade) ainda sem contrato |
-| [[07-Producao-e-Roteiro]] | ✅ Filas · 🔴 consumo | Robert | Baixar a matéria-prima consumida; gravar os status `EM_PRODUCAO` e `BLOQUEADO`; tela de divergência de produção |
-| [[08-Qualidade-Saida]] | 🟡 Parcial | Robert | O aprovado já volta ao Estoque como lote `PRODUCAO` (`develop`, 27/10); confirmar se ainda sobra porta direta na Expedição |
-| [[09-Expedicao]] | 🟡 Parcial | Robert | Consolidar carga; transporte; resolver o pedido integral travado por item que não chega; confirmar as portas de entrada |
-| [[10-Fiscal-Omie]] | ✅ Lado Omie · 🔴 aviso do MES | Robert, Gustavo, Nathan | Ligar a Expedição à nota do Omie; faturamento em partes; testar como o Omie cria o sequencial |
-| [[13-Custo-Real-e-Comissao-no-Fluxo]] | 🔴 Desenhado e aprovado, sem código | Gustavo, Nathan, Robert | Schema novo da comissão; motor de cálculo; custo real por evento; decisão da Controladoria; custo obrigatório em todo lote |
+| [[07-Recebimento]] | ✅ Recebimento por OC e por NF na `develop` | Robert | Conferir contra a OC (preço, quantidade, fornecedor, N16-135); rateio da chegada; testar em homologação |
+| [[08-Qualidade-Entrada]] | ✅ Inspeção, aprovação e cisão do lote · 🔴 fechar a RNC | Robert, Gustavo | Fechar a RNC (relatório de não conformidade) no MES; avisar Compras da recompra por RNC (sem contrato); travar a decisão ao setor da Qualidade (N16-124) |
+| [[10-Producao-e-Roteiro]] | ✅ Filas, roteiro individual e OP impressa · 🟡 matéria-prima | Robert | A matéria-prima já baixa no "Atender pelo estoque"; a decisão é baixar na retirada (N16-140); gravar os status `EM_PRODUCAO` e `BLOQUEADO` do pedido (nunca são gravados); tela do novo norte e de divergência de produção |
+| [[11-Qualidade-Saida]] | ✅ Aprovar leva ao Estoque · 🔴 reprovar só uma parte | Robert | O aprovado já volta ao Estoque como lote `PRODUCAO` (`develop`, 27/10); reprovar só uma parte (N16-128); confirmar se ainda sobra porta direta na Expedição |
+| [[13-Expedicao]] | 🟡 Parcial | Robert | Consolidar carga; transporte; resolver o pedido integral travado por item que não chega; confirmar as portas de entrada |
+| [[14-Fiscal-Omie]] | ✅ Lado Omie · 🔴 aviso do MES | Robert, Gustavo, Nathan | Ligar a Expedição à nota do Omie; faturamento em partes; testar como o Omie cria o sequencial |
+| [[15-Custo-Real-e-Comissao]] | 🔴 Sem API e sem tela · 🟡 `core_comissao` modelado e testado no banco | Gustavo, Nathan, Robert | Schema novo da comissão; motor de cálculo; custo real por evento; decisão da Controladoria; custo obrigatório em todo lote |
 
 ## Assuntos que cruzam os setores
 
@@ -46,9 +50,22 @@ O estado do código é o de 29/10/2026 (`develop` do MES, da `api-acos-vital` e 
 | Requisição MES ↔ av-hub | ✅ Funciona nos dois sentidos, por pedido imediato e por consulta a cada 5 minutos |
 | Status por item | ✅ Pronto |
 | Torre de Fluxo (painel de acompanhamento) | 🟡 API, rotinas e telas prontas no av-hub (telas sobre dados de exemplo, desde 15/10); o MES não envia os eventos; só o perfil Admin (os desenvolvedores) vê as telas, por enquanto (N16-148, BL-021) |
-| Custo por item | 🟡 O lote nasce com o custo da OC e o MES publica `GET /itens/custo` (27/10, na `develop`); falta o hub ler. O Ciclo 1 segue sem imposto; o modelo com impostos foi desenhado em 29/10 (N16-144) |
+| Custo por item | 🟡 O lote nasce com o custo da OC e o MES publica `GET /itens/custo` (27/10, na `develop`); falta o hub ler (a tela usa dados de exemplo). O Ciclo 1 segue sem imposto; o modelo com impostos foi desenhado em 29/10 (N16-144) |
 | Cadastros TESTE no Omie | 🟡 O Omie não tem ambiente de teste. Os cadastros TESTE do Nathan entram nos relatórios: filtre ao conferir |
 | Pendências de cadastro | O perfil CCP e o vínculo de usuários à Gerência de Compras saem em breve. É cadastro simples e não trava o desenho |
+
+## Publicado na main (informação)
+
+Não é critério de pronto (F5): mostra o que já foi publicado. Contagem de 05/11/2026 (`git rev-list --count origin/main..origin/develop`):
+
+| Sistema | Commits da `develop` fora da `main` | Última `main` |
+|---|---|---|
+| `api-acos-vital` | 0: tudo o que está na `develop` já foi publicado (a `main` tem 35 commits de merge a mais) | 03/11/2026 |
+| `av-hub` | 12 | 04/11/2026 |
+| `api-pcp` | 53 | 08/10/2026 |
+| `app-pcp` | 51 | 08/10/2026 |
+
+O Nathan afirma que tudo o que está na `develop` foi testado e funciona, e que o merge para a `main` pode ser feito a qualquer momento 📝. No MES, a OP, o lote do fabricado e o custo por item ainda não foram publicados: o merge é do Robert (BL-035). O banco de produção do MES, pelo dump de 07/10, não tem as migrations da `develop` ❓ ([[Banco-MES]]). Em 29/10/2026 a `api-acos-vital` igualou a `main` à `develop` (PR #305).
 
 ## Próximos passos
 
@@ -60,20 +77,20 @@ Versão completa da tabela por setor, com os nós do [[00-Fluxo-Mestre-0b]] e o 
 
 | Raia | Nós | Estado | O que falta | Dono |
 |---|---|---|---|---|
-| [[11-Proposta-e-Pedido-de-Venda]] | V0.1–V0.7, V0C | 🟡 API e telas da proposta na `develop` | A rota de proposta (criar, revisar, aprovar, cancelar, copiar, transformar) existe na `api-acos-vital` e as telas, no av-hub, com o Robert; falta confirmar o banco do "Transformar em pedido", o pedido por API no Omie, direto da API (a fila caiu em 03/11), e decidir o schema (N16-116 diz `core_vendas_faturamento`, o código usa `core_comercial`); estados `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` (validade sem decisão N16) | Robert, Gustavo, Pablo acompanha |
-| [[12-Orcamento-Base-de-Preco]] | B1–B4 | 🟡 menu e abas no front | Base de preço gerada das OCs; página do produto com score e volatilidade; pedido de custo sem prazo, com o tempo cronometrado | Pablo, Robert, Gustavo |
-| [[01-Vendas-Liberacao]] | V1–V3 | ✅ liberação · 🔴 pedido no Hub | Pedido do Omie no mesmo fluxo do pedido da proposta (N16-106); parte de compras e faturamento em partes na tela do pedido | Nathan, Gustavo |
-| [[02-PCP-Triagem-e-Destinacao]] | P1, P2, P6 | ✅ P1/P2 · 🔴 P6 | Novo norte (retrabalho ou reabre compra): o motor passou a ler o `RoteiroItem`, mas a volta de reprovado segue sem tela; renomear rotas antigas; **OC do pedido** visível ao PCP. ✅ **Ordem de Produção** emitida na criação e imprimível (27/10, `develop`); ✅ requisições do hub na Triagem (23/10) | Robert |
-| [[03-Estoque-Atendimento-e-Despacho]] | E1–E6 | ✅ E1–E5 · 🔴 E6 | **Documento de retirada com baixa na retirada** (hoje baixa em `receber()`); ✅ custo do item (`GET /itens/custo`) e fabricado virando lote `PRODUCAO` (27/10, `develop`); **saldo futuro** (saldo atual + OCs em andamento de estoque) | Robert |
-| [[04-Circuito-de-Compra]] | P3, C0–C5, FN1 | ✅ ida e volta e aprovação (C3) · ✅ o MES lê a OC do hub (C0, `develop`) | Aprovação já funciona (OC acima de R$ 30 mil: Gerente de Compras; até R$ 30 mil: compradores livres) e endurece depois com Compras 🟡; o MES já lê as OCs (K4, 15/10) e a referência das requisições (23/10); falta mostrar a OC do pedido ao PCP e o saldo futuro ao Estoque; envio real da OC ao Omie testado em 14/10, produção ❓ | Robert, Gustavo |
-| [[04-Circuito-de-Compra]] e [[11-Proposta-e-Pedido-de-Venda]] | C6–C8 | 🔴 (desenho aprovado em 26/10) | Conferência da parte de compras na emissão da OC; aviso de compra acima do custo do vendedor em Meus Pedidos e lista de reprovados de Compras (`divergencias_compra`) | Nathan, Gustavo |
-| [[05-Recebimento]] | R0–R6 | ✅ | ✅ custo da OC no lote, recebimento por OC e por NF (várias OCs na mesma nota, N16-136) na `develop`; falta a conferência contra a OC (N16-135), o rateio da chegada e testar em homologação | Robert |
-| [[06-Qualidade-Entrada]] | Q1–Q4 | ✅ | Recompra por RNC sem contrato | Robert, Gustavo |
-| [[07-Producao-e-Roteiro]] | F1 | ✅ filas · 🔴 consumo | Consumo de matéria-prima; `EM_PRODUCAO` e `BLOQUEADO` nunca são gravados; divergência de produção sem tela | Robert |
-| [[08-Qualidade-Saida]] | Q7, Q8 | 🟡 | ✅ `aprovar-saida` e `receber-fabricado`: o aprovado volta ao Estoque como lote `PRODUCAO` (`develop`, 27/10); confirmar se ainda sobra porta direta na Expedição | Robert |
-| [[09-Expedicao]] | X1–X4 | 🟡 | Consolidar carga (10.2), transporte (10.3); integral travado por item que não chega (T-06); confirmar as portas de entrada depois do fabricado voltar ao Estoque | Robert |
-| [[10-Fiscal-Omie]] | O1, O2 | ✅ lado Omie · 🔴 sinalização | Contrato que ligue a Expedição à NF do Omie (11.1); faturamento em partes (sequenciais ligados ao item do pedido) e teste de como o Omie cria o sequencial (PS-037) | Robert, Gustavo, Nathan |
-| [[13-Custo-Real-e-Comissao-no-Fluxo]] | K1–K6 | 🔴 (desenho aprovado em 26/10) | Schema `core_comissao`; motor na API; custo real por evento; fila e decisão da Controladoria; custo obrigatório em todo lote no MES | Gustavo, Nathan, Robert |
+| [[01-Proposta-de-Venda]] | V0.1–V0.7, V0C | 🟡 API e telas da proposta na `develop` | A rota de proposta (criar, revisar, aprovar, cancelar, copiar, transformar) existe na `api-acos-vital` e as telas, no av-hub, com o Robert; falta confirmar o banco do "Transformar em pedido", (no banco de teste de 04/11/2026 a função existe e grava o pedido do Hub em `core_comercial.pedidos_venda`; a migration segue fora do repositório), o pedido por API no Omie, direto da API (a fila caiu em 03/11), e decidir o schema (N16-116 diz `core_vendas_faturamento`, o código usa `core_comercial`); estados `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` (validade sem decisão N16) | Robert, Gustavo, Pablo acompanha |
+| [[02-Orcamento-Base-de-Preco]] | B1–B4 | 🟡 menu e abas no front | Base de preço gerada das OCs; página do produto com score e volatilidade; pedido de custo sem prazo, com o tempo cronometrado | Pablo, Robert, Gustavo |
+| [[03-Pedido-de-Venda-e-Liberacao]] | V1–V3 | ✅ liberação · 🔴 pedido no Hub | Pedido do Omie no mesmo fluxo do pedido da proposta (N16-106); parte de compras e faturamento em partes na tela do pedido | Nathan, Gustavo |
+| [[04-PCP-Triagem-e-Destinacao]] | P1, P2, P6 | ✅ P1/P2 · 🔴 P6 | Novo norte (retrabalho ou reabre compra): o motor passou a ler o `RoteiroItem`, mas a volta de reprovado segue sem tela; renomear rotas antigas; **OC do pedido** visível ao PCP. ✅ **Ordem de Produção** emitida na criação e imprimível (27/10, `develop`); ✅ requisições do hub na Triagem (23/10) | Robert |
+| [[05-Estoque-Atendimento]] (E1–E4) · [[09-Estoque-Entrada-do-Lote]] (E5) · [[12-Estoque-Despacho]] (E6) | E1–E6 | ✅ E1–E5 · 🔴 E6 | **Documento de retirada com baixa na retirada** (hoje baixa em `receber()`); ✅ custo do item (`GET /itens/custo`) e fabricado virando lote `PRODUCAO` (27/10, `develop`); **saldo futuro** (saldo atual + OCs em andamento de estoque) | Robert |
+| [[06-Circuito-de-Compra]] | P3, C0–C5, FN1 | ✅ ida e volta e aprovação (C3) · ✅ o MES lê a OC do hub (C0, `develop`) | Aprovação já funciona (OC acima de R$ 30 mil: Gerente de Compras; até R$ 30 mil: compradores livres) e endurece depois com Compras 🟡; o MES já lê as OCs (K4, 15/10) e a referência das requisições (23/10); falta mostrar a OC do pedido ao PCP e o saldo futuro ao Estoque; envio real da OC ao Omie testado em 14/10, produção ❓ | Robert, Gustavo |
+| [[06-Circuito-de-Compra]] | C6–C8 | 🔴 (desenho aprovado em 26/10) | Conferência da parte de compras na emissão da OC; aviso de compra acima do custo do vendedor em Meus Pedidos e lista de reprovados de Compras (`divergencias_compra`) | Nathan, Gustavo |
+| [[07-Recebimento]] | R0–R6 | ✅ | ✅ custo da OC no lote, recebimento por OC e por NF (várias OCs na mesma nota, N16-136) na `develop`; falta a conferência contra a OC (N16-135), o rateio da chegada e testar em homologação | Robert |
+| [[08-Qualidade-Entrada]] | Q1–Q4 | ✅ inspeção · 🔴 fechar RNC | Fechar a RNC (nota de devolução e baixa do lote reprovado, hoje manual); recompra por RNC sem contrato; travar a decisão à Qualidade (N16-124) | Robert, Gustavo |
+| [[10-Producao-e-Roteiro]] | F1 | ✅ filas · 🟡 matéria-prima | Matéria-prima baixa no "Atender pelo estoque" (19/10), a decisão é na retirada (N16-140) 🔴; `StatusPedido.EM_PRODUCAO` e `BLOQUEADO` nunca são gravados (`api-pcp` `src/common/constants/item-parcial-status.constants.ts:33`; `BLOQUEADO` só é lido em `src/dashboard/dashboard.service.ts:86`); divergência de produção sem tela | Robert |
+| [[11-Qualidade-Saida]] | Q7, Q8 | ✅ aprovar · 🔴 reprovar parte | 🔴 reprovar só uma parte (N16-128); ✅ `aprovar-saida` e `receber-fabricado`: o aprovado volta ao Estoque como lote `PRODUCAO` (`develop`, 27/10); confirmar se ainda sobra porta direta na Expedição | Robert |
+| [[13-Expedicao]] | X1–X4 | 🟡 | Consolidar carga (X3), transporte (X4); integral travado por item que não chega (T-06); confirmar as portas de entrada depois do fabricado voltar ao Estoque | Robert |
+| [[14-Fiscal-Omie]] | O1, O2 | ✅ lado Omie · 🔴 sinalização | Contrato que ligue a Expedição à NF do Omie (ligação do O1); faturamento em partes (sequenciais ligados ao item do pedido) e teste de como o Omie cria o sequencial (PS-037) | Robert, Gustavo, Nathan |
+| [[15-Custo-Real-e-Comissao]] | K1–K6 | 🔴 sem API e tela (desenho aprovado em 26/10) · 🟡 schema testado no banco | Schema `core_comissao` na API; motor na API; custo real por evento; fila e decisão da Controladoria; custo obrigatório em todo lote no MES | Gustavo, Nathan, Robert |
 
 Transversais, na versão técnica:
 
@@ -82,6 +99,6 @@ Transversais, na versão técnica:
 | Integração requisição MES ↔ av-hub (LOG-34, LOG-35) | ✅ ida e volta; sob demanda e polling de 5 min ([[Integracao-AvHub-MES]]) |
 | Status por item (API-005, API-006) | ✅ |
 | Torre de Fluxo (LOG-46) | 🟡 API e jobs no av-hub; BFF `/api/fluxo/*` e 4 telas no HUB sobre dados de exemplo (15/10); o MES não publica `/fluxo/eventos`; a 046b só deu as telas ao perfil de testes do time de TI, e só o Admin as vê por enquanto (N16-148, BL-021) |
-| Custo por item (API-008, LOG-47) | 🟡 `lote_custo` nasce com o custo da OC (19/10) e `GET /itens/custo` está publicada na `develop` do MES (27/10); falta o hub ler e subir para a `main`. O Ciclo 1 segue sem imposto; o modelo com impostos foi desenhado em 29/10 (N16-144); falta código; a fórmula do custo com imposto segue o motor do comissionamento, e cada setor confere as mudanças na implementação |
+| Custo por item (API-008, LOG-47) | 🟡 `lote_custo` nasce com o custo da OC (19/10) e `GET /itens/custo` está publicada na `develop` do MES (27/10); falta o hub ler (a tela usa `custoItensFixtures`, `av-hub` `lib/api/custoItensFixtures.ts`); publicado na `main`: ainda não (BL-035). O Ciclo 1 segue sem imposto; o modelo com impostos foi desenhado em 29/10 (N16-144); falta código; a fórmula do custo com imposto segue o motor do comissionamento, e cada setor confere as mudanças na implementação |
 | Cadastros TESTE no Omie | 🟡 O Omie não tem ambiente de teste; os cadastros TESTE do Nathan entram na pipeline e nos relatórios: filtrar ao conferir (BL-055) |
 | Pendências cadastrais | Perfil CCP e vínculo de usuários à Gerência de Compras: serão criados em breve, assunto cadastral simples (Nathan e Gustavo), sem bloqueio de desenho |

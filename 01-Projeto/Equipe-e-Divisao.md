@@ -43,16 +43,16 @@ O plano pede mais trabalho do Robert do que ele consegue entregar no prazo. O Ci
 
 | Ator | Onde atua | Nota |
 |---|---|---|
-| Vendedor, Gerente (equipe) | HUB: Liberar Pedidos, Pedidos da equipe | [[01-Vendas-Liberacao]] |
-| PCP e Almoxarife (setor Estoque) | `app-pcp`: Triagem, Destinação, Atendimento | [[02-PCP-Triagem-e-Destinacao]], [[03-Estoque-Atendimento-e-Despacho]] |
-| Comprador (livre até R$ 30 mil), Gerente de Compras (aprova acima de R$ 30 mil) | HUB: Compras | [[04-Circuito-de-Compra]] |
+| Vendedor, Gerente (equipe) | HUB: Liberar Pedidos, Pedidos da equipe | [[03-Pedido-de-Venda-e-Liberacao]] |
+| PCP e Almoxarife (setor Estoque) | `app-pcp`: Triagem, Destinação, Atendimento | [[04-PCP-Triagem-e-Destinacao]], [[05-Estoque-Atendimento]] |
+| Comprador (livre até R$ 30 mil), Gerente de Compras (aprova acima de R$ 30 mil) | HUB: Compras | [[06-Circuito-de-Compra]] |
 | CCP (acompanhamento de compras) | HUB Follow-up; MES Compras · CCP (leitura) | O pessoal do CCP faz parte do PCP e acompanha as compras. Compras acessa só para ler. Havendo ocorrência, o CCP interage aprovando ou não 📝 (Nathan, 14/10). O perfil será criado em breve: tarefa cadastral simples, sem bloqueio de desenho (Nathan, Gustavo; N14-24) |
-| Recebimento (doca), Qualidade | `app-pcp` | [[05-Recebimento]], [[06-Qualidade-Entrada]], [[08-Qualidade-Saida]] |
-| Operador de fábrica, Expedição | `app-pcp` | [[07-Producao-e-Roteiro]], [[09-Expedicao]] |
-| Fiscal | Omie | Emite a nota e separa o pedido em sequenciais para faturar em partes. Informa a devolução parcial ([[10-Fiscal-Omie]], N16-92, N16-74) |
-| Orçamento (setor orçamentário, novo; o Moisés é uma das pessoas) | HUB: Orçamento | Cota com fornecedores e mantém a base de preço de compra com histórico. O vendedor só consulta ([[12-Orcamento-Base-de-Preco]], N16-104) |
+| Recebimento (doca), Qualidade | `app-pcp` | [[07-Recebimento]], [[08-Qualidade-Entrada]], [[11-Qualidade-Saida]] |
+| Operador de fábrica, Expedição | `app-pcp` | [[10-Producao-e-Roteiro]], [[13-Expedicao]] |
+| Fiscal | Omie | Emite a nota e separa o pedido em sequenciais para faturar em partes. Informa a devolução parcial ([[14-Fiscal-Omie]], N16-92, N16-74) |
+| Orçamento (setor orçamentário, novo; o Moisés é uma das pessoas) | HUB: Orçamento | Cota com fornecedores e mantém a base de preço de compra com histórico. O vendedor só consulta ([[02-Orcamento-Base-de-Preco]], N16-104) |
 | Gerência (João Vitor, Sérgio Vital) | Fora do sistema neste ciclo | Aprova desconto e margem da proposta fisicamente. Recebe de Compras os casos de compra acima do valor reprovados pelo vendedor (N16-12, N16-66) |
-| Controladoria (Michele) | HUB: Operações | Decide a comissão ao fim, com o custo real. Tem a visão geral e os relatórios ([[13-Custo-Real-e-Comissao-no-Fluxo]], N16-10, N16-50) |
+| Controladoria (Michele) | HUB: Operações | Decide a comissão ao fim, com o custo real. Tem a visão geral e os relatórios ([[15-Custo-Real-e-Comissao]], N16-10, N16-50) |
 | Marketing | HUB: calendário | Cadastra as exceções do calendário da unidade (feriados e dias úteis), usadas na previsão de faturamento (N16-104) |
 
 ## Tarefas de cadastro (não são desenvolvimento)

@@ -1,0 +1,499 @@
+# Fatos de 10-Producao-e-Roteiro
+
+Foto tirada em 2026-11-05 de `02-Fluxo-de-Atividades/10-Producao-e-Roteiro.md`, antes de mexer na nota.
+Gerada por `node scripts/fatos.mjs extrair`. Conferência: `node scripts/fatos.mjs conferir 10-Producao-e-Roteiro`.
+
+## decisões e IDs (6)
+
+- `BL-035`
+- `EC-06`
+- `N16-120`
+- `N16-140`
+- `N16-141`
+- `N16-143`
+
+## contratos (2)
+
+- `API-005`
+- `LOG-53`
+
+## commits (2)
+
+- `8d07917`
+- `ab3318d`
+
+## arquivo:linha (36)
+
+- `/movimentacoes/acoes.ts:61-71`
+- `FilaSetor.ts`
+- `acoes.ts:55-60`
+- `circuito-compra.ts:19-25`
+- `compras.prisma:17-22`
+- `divergencias.controller.ts:26-61`
+- `divergencias.service.ts`
+- `estoque-operacao.helpers.ts:317`
+- `fabricas.prisma:162-176`
+- `fabricas.prisma:17-32`
+- `fabricas.prisma:5-8`
+- `fila/CartaoItemParcial.ts`
+- `integracao-avhub.service.ts:114`
+- `item-parcial-status.constants.ts:31-41`
+- `itens-parciais.controller.ts:56`
+- `itens-parciais.service.ts:227`
+- `itens-parciais.service.ts:245-257`
+- `itens-parciais.service.ts:52-54`
+- `itens-parciais.service.ts:722-730`
+- `movimentacoes/labels.ts:7-17`
+- `movimentacoes/page.ts`
+- `pedidos.controller.ts`
+- `pedidos.controller.ts:58`
+- `pedidos.controller.ts:92`
+- `pedidos.service.ts:459-463`
+- `pedidos.service.ts:500-506`
+- `pedidos.service.ts:512-525`
+- `pedidos.service.ts:545-569`
+- `producao.prisma`
+- `producao.prisma:262-275`
+- `producao.prisma:29-54`
+- `producao.prisma:47-52`
+- `roteiro-efetivo.ts`
+- `roteiro-item.controller.ts:25`
+- `roteiros.controller.ts:24`
+- `seed.ts`
+
+## rotas (27)
+
+- `GET /dashboard`
+- `GET /dashboard/tv`
+- `GET /itens-parciais/:id`
+- `GET /itens-parciais/contagem-por-setor`
+- `GET /itens-parciais?idSetorAtual=&status=&idItemPedido=`
+- `GET /itens/status`
+- `GET /pedidos/roteiros`
+- `GET /pedidos/setor-estoque-fixo`
+- `PATCH /:id/aprovar-saida`
+- `PATCH /:id/cancelar`
+- `PATCH /:id/concluir`
+- `PATCH /:id/consolidar`
+- `PATCH /:id/desfazer-recebimento`
+- `PATCH /:id/finalizar`
+- `PATCH /:id/iniciar`
+- `PATCH /:id/mover`
+- `PATCH /:id/pausar`
+- `PATCH /:id/reabrir`
+- `PATCH /:id/receber`
+- `PATCH /:id/receber-fabricado`
+- `PATCH /:id/reprovar`
+- `POST /:id/devolver`
+- `POST /:id/split`
+- `POST /itens-parciais/lote/:acao`
+- `POST /pedidos/:id/devolver-destinacao`
+- `POST /pedidos/completo/lote`
+- `PUT /pedidos/:id/roteiro`
+
+## datas (9)
+
+- `08/10`
+- `14/10`
+- `19/10`
+- `22/10`
+- `23/10`
+- `27/10`
+- `27/10/2026`
+- `29/10`
+- `29/10/2026`
+
+## código entre crases (253)
+
+- `/:id/resolver`
+- `/:id/retomar`
+- `/:id/retrabalho`
+- `/:id/setores-percorridos`
+- `/cadastros/operacional/fabricas`
+- `/cadastros/operacional/maquinas`
+- `/dashboard`
+- `/decisoes-pcp`
+- `/divergencias`
+- `/fluxo/eventos`
+- `/montagem-roteiro`
+- `/montagem-roteiro/[id]`
+- `/movimentacoes`
+- `/movimentacoes/[setorId]`
+- `/ordens-producao`
+- `/ordens-producao/[id]`
+- `/ordens-producao/novo`
+- `/produtos-em-producao`
+- `/roteiro-item`
+- `/roteiros`
+- `8d07917`
+- `:1011-1021`
+- `:1067`
+- `:1101-1109`
+- `:1124`
+- `:1124-1192`
+- `:1134-1142`
+- `:1168-1176`
+- `:1199`
+- `:1387-1488`
+- `:1391`
+- `:1557`
+- `:1616`
+- `:202-208`
+- `:299-321`
+- `:324-337`
+- `:426-434`
+- `:540-547`
+- `:966-989`
+- `:99`
+- `@UseGuards(JwtAuthGuard, PermissionsGuard)`
+- `ABERTA`
+- `ACOES_LOTE_ITEM_PARCIAL`
+- `AGUARDANDO`
+- `BLOQUEADO`
+- `CANCELADA`
+- `CANCELADO`
+- `CARGA_INICIAL`
+- `COMPRAS`
+- `CONCLUIDO`
+- `CRIADO`
+- `ConsumoMateriaPrima`
+- `Divergencia`
+- `DivergenciasService.resolver`
+- `E5`
+- `E6`
+- `EM_ANDAMENTO`
+- `EM_PRODUCAO`
+- `EM_TRANSITO`
+- `ENTREGUE`
+- `ESTOQUE`
+- `EXPEDICAO`
+- `F1`
+- `FABRICACAO`
+- `FINALIZADO`
+- `FabricaSetor`
+- `FilaSetor.tsx`
+- `GET`
+- `GET /dashboard`
+- `GET /dashboard/tv`
+- `GET /itens-parciais/:id`
+- `GET /itens-parciais/contagem-por-setor`
+- `GET /itens-parciais?idSetorAtual=&status=&idItemPedido=`
+- `GET /itens/status`
+- `GET /pedidos/roteiros`
+- `GET /pedidos/setor-estoque-fixo`
+- `HistoricoItemParcial`
+- `ItemParcial`
+- `ItensPedido`
+- `LOGISTICA_ENTRADA`
+- `MES_API_KEY`
+- `MovimentoEstoque`
+- `OrigemLote`
+- `OrigemLote.PRODUCAO`
+- `P6`
+- `PATCH /:id/aprovar-saida`
+- `PATCH /:id/cancelar`
+- `PATCH /:id/concluir`
+- `PATCH /:id/consolidar`
+- `PATCH /:id/desfazer-recebimento`
+- `PATCH /:id/finalizar`
+- `PATCH /:id/iniciar`
+- `PATCH /:id/mover`
+- `PATCH /:id/pausar`
+- `PATCH /:id/reabrir`
+- `PATCH /:id/receber`
+- `PATCH /:id/receber-fabricado`
+- `PATCH /:id/reprovar`
+- `PATCH :id`
+- `PATCH :id/resolver`
+- `PAUSADO`
+- `POST`
+- `POST /:id/devolver`
+- `POST /:id/split`
+- `POST /itens-parciais/lote/:acao`
+- `POST /pedidos/:id/devolver-destinacao`
+- `POST /pedidos/completo/lote`
+- `PRODUCAO`
+- `PRODUTIVO`
+- `PUT /pedidos/:id/roteiro`
+- `PerfilSetor`
+- `Prioridade`
+- `Q7`
+- `QUALIDADE`
+- `REABERTO`
+- `RECEBIDO`
+- `RECEBIMENTO`
+- `REPROVADO`
+- `REQUISICAO`
+- `RESOLVIDA`
+- `RETRABALHO`
+- `REVENDA`
+- `RoteiroItem`
+- `Roteiros`
+- `SAIDA`
+- `STATUS_FILA_MOVIMENTACOES`
+- `StatusItemParcial`
+- `StatusPedido`
+- `TipoFabrica`
+- `TipoItemRequisicao.MATERIA_PRIMA`
+- `TipoSetor`
+- `ab3318d`
+- `acoes.ts:55-60`
+- `api-pcp`
+- `app-pcp`
+- `app-pcp/app/(protected)/movimentacoes/acoes.ts:61-71`
+- `aprovar-saida`
+- `atender-estoque`
+- `atenderEstoque`
+- `cancelar`
+- `circuito-compra.ts:19-25`
+- `codigo = 'estoque'`
+- `compras`
+- `compras.prisma:17-22`
+- `concluir`
+- `confirmar-entrega`
+- `consolidar`
+- `consumirReservasDaParcial`
+- `controller:274-282`
+- `controller:56-60`
+- `controller:66-70`
+- `controller:78-91`
+- `controller:93-149`
+- `count === 0`
+- `desfazer-recebimento`
+- `destinoRestante: 'ROTEIRO'`
+- `develop`
+- `devolver`
+- `divergencias.controller.ts:26-61`
+- `divergencias.service.ts:resolver`
+- `ehUltimaEtapa`
+- `ensureDevolucaoForaDaCompra`
+- `estoque`
+- `estoque-operacao.helpers.ts:317`
+- `etapa`
+- `etapaDoItem :167`
+- `exigeMaquinaOperador`
+- `fabrica_setores`
+- `fabricas.prisma:162-176`
+- `fabricas.prisma:17-32`
+- `fabricas.prisma:5-8`
+- `fila/CartaoItemParcial.tsx:301-305`
+- `finalizar`
+- `findAll`
+- `idDevolvidoDe`
+- `idMaquina`
+- `idOperador`
+- `idPedido`
+- `idSetor`
+- `idSetorDestino`
+- `idSetorOrigem`
+- `id_consumo_mp`
+- `iniciar`
+- `integracao-avhub.service.ts:114`
+- `item-parcial-status.constants.ts:31-41`
+- `itens-parciais.controller.ts:56`
+- `itens-parciais.service.ts:227`
+- `itens-parciais.service.ts:245-257`
+- `itens-parciais.service.ts:52-54`
+- `itens-parciais.service.ts:722-730`
+- `logistica-entrada`
+- `main`
+- `maquinas`
+- `montagem-roteiro`
+- `mover`
+- `movimentacoes`
+- `movimentacoes/labels.ts:7-17`
+- `movimentacoes/page.tsx`
+- `movimentacoes:editar`
+- `movimentacoes:visualizar`
+- `operadores`
+- `ordem`
+- `ordens-producao`
+- `ordens-producao:deletar`
+- `pausar`
+- `pedidos.controller.ts`
+- `pedidos.controller.ts:58`
+- `pedidos.controller.ts:92`
+- `pedidos.service.ts:459-463`
+- `pedidos.service.ts:500-506`
+- `pedidos.service.ts:512-525`
+- `pedidos.service.ts:545-569`
+- `perfisService.ensurePodeAtuar`
+- `podeAtuar`
+- `podeVisualizar`
+- `producao.prisma`
+- `producao.prisma:262-275`
+- `producao.prisma:29-54`
+- `producao.prisma:47-52`
+- `produtos-em-producao`
+- `qualidade-entrada`
+- `reabrir`
+- `receber`
+- `receber-fabricado`
+- `reprovar`
+- `requisicoes-compra`
+- `resolver`
+- `retomar`
+- `retrabalho`
+- `retrabalho = true`
+- `roteiro-efetivo.ts`
+- `roteiro-item.controller.ts:25`
+- `roteiroEfetivoDoItem`
+- `roteiros.controller.ts:24`
+- `seed.ts`
+- `service:1011`
+- `service:1036-1058`
+- `service:1250`
+- `service:1387`
+- `service:1506`
+- `service:158-182`
+- `service:224`
+- `service:299`
+- `service:366`
+- `service:43-145`
+- `service:520`
+- `service:722-742`
+- `service:881`
+- `setores`
+- `split`
+- `startedAt`
+- `telas`
+- `updateMany`
+
+## regras e linhas de conteúdo (115)
+
+- O PCP destina o pedido na Destinação do Pedido (a OP nasce só com o Estoque como etapa 1) e monta o roteiro na tela Montagem do Roteiro, que libera a OP. `F1`
+- O Estoque despacha à produção só o que não atendeu e que não foi para compra. `E6`
+- O operador do setor recebe a parcial. `F1`
+- Ele inicia a etapa. O cronômetro começa. Em setor que exige, informa máquina e operador. `F1`
+- Durante a etapa, o operador pode pausar e retomar. `F1`
+- Terminada a etapa, ele move a parcial ao próximo setor. Pode mover só parte da quantidade. `F1`
+- No último setor do roteiro, o operador conclui. `F1`
+- Setor de Qualidade no roteiro: a parcial chega à inspeção de saída. `Q7`
+- Se reprovar, abre-se uma divergência e o PCP decide o novo norte: retrabalho ou reabrir a compra. `P6`
+- | PCP (planejamento e controle da produção) | Monta o roteiro e decide o novo norte |
+- | Operador de setor | Recebe, inicia, move, pausa, retoma e conclui |
+- | Máquina e operador (cadastros) | Exigidos ao iniciar em certos setores |
+- | Quem cancela | Cancela pelo detalhe do pedido, com permissão própria |
+- | Robert | Dono do código do MES (sistema de chão de fábrica) |
+- O Estoque é sempre a etapa 1. O sistema o insere sozinho.
+- Setores de estoque, requisição, compras e logística de entrada ficam fora do roteiro, porque o circuito de compra é fixo.
+- Roteiro de fabricação precisa de um setor de Qualidade antes da primeira Expedição.
+- Enquanto o roteiro não é liberado, a parcial só sai do Estoque para compra (`develop`, 22/10).
+- O roteiro só usa setores da fábrica do pedido, sem repetir setor nem ordem.
+- Em todo setor, é preciso receber e iniciar antes de mover ou concluir.
+- Só o último setor conclui. Nos outros, move-se.
+- Só a Qualidade reprova. Retrabalho nasce de item reprovado.
+- Devolver cria uma linha nova. A antiga vira cancelada e nunca é editada.
+- Item de pedido inativo bloqueia tudo, menos cancelar.
+- Revenda não produz. A fábrica de revenda só envia o restante para compra.
+- Tudo que é fabricado volta ao Estoque como lote e saldo (decisão de 14/10; feito na `develop` em 27/10).
+- Retrabalho: o PCP escolhe o setor de volta (N16-141). O código ainda volta ao setor anterior.
+- ✅ (`api-pcp`, `app-pcp`) Roteiro, filas por setor, receber, iniciar, mover, pausar, retomar, concluir, reprovar, devolver, cancelar. É o único subfluxo com motor completo desde o início.
+- ✅ (`app-pcp`) Telas: Filas de Produção, Destinação do Pedido, Acompanhamento dos Pedidos, Cadastros operacionais; na `develop`, também Montagem do Roteiro e Produtos em Produção.
+- ✅ (`api-pcp`) Na `develop` (23/10): ação "finalizar" no setor (status `FINALIZADO`, para o cronômetro e a peça aguarda no setor; `reabrir` volta a `EM_ANDAMENTO`).
+- ✅ (`api-pcp`) Na `develop` (27/10): Ordem de Produção impressa (PDF, 2ª via) e fabricado aprovado vira lote e saldo no Estoque (LOG-53).
+- ✅ Na `develop`: roteiro individual do item (`RoteiroItem`) lido por `mover`, `concluir`, `atender-estoque`, `reprovar` e `aprovar-saida` (`roteiro-efetivo.ts`).
+- 🟡 Matéria-prima: a `develop` já baixa na hora do "Atender pelo estoque" (19/10); a decisão (N16-140) é baixar na retirada, ainda sem código 🔴.
+- 🔴 Tela do novo norte, reabrir divergência e reabrir compra a partir da produção.
+- 🔴 Painel TV, `PerfilSetor` por filial e feed `/fluxo/eventos`.
+- 🟡 Botões de dividir e juntar parciais na fila (a API existe).
+- ❓ Nomes e filas reais dos setores produtivos no ambiente.
+- | PCP | Monta o roteiro na Destinação do Pedido, decide o novo norte (P6) | MES, `/ordens-producao/novo`, `/ordens-producao/[id]` |
+- | Operador de setor | Recebe, inicia, move, pausa, retoma, conclui | MES, Filas de Produção `/movimentacoes/[setorId]` |
+- | Máquina e operador | Cadastros exigidos por setor com `exigeMaquinaOperador` | `/cadastros/operacional/maquinas`, `operadores` |
+- | Quem cancela | Permissão `ordens-producao:deletar` (não a de setor) | detalhe do pedido |
+- | Robert | Dono do código MES | `api-pcp`, `app-pcp` |
+- | 1 | O setor Estoque (`codigo = 'estoque'`) é a **etapa 1 de todo roteiro** e é inserido pelo backend. O payload não pode trazê-lo (`pedidos.service.ts:459-463`). Decisão EN-03. Na `develop` a Destinação cria a OP só com o Estoque e a Montagem do Roteiro (`PUT /pedidos/:id/roteiro`, permissão `montagem-roteiro`) monta e libera o roteiro; `POST /pedidos/:id/devolver-destinacao` devolve a OP à Destinação | ✅ 📝 |
+- | 2 | Setores de tipo `ESTOQUE`, `REQUISICAO`, `COMPRAS` e `LOGISTICA_ENTRADA` **não entram no roteiro** do PCP: o circuito de compra é fixo (`pedidos.service.ts:500-506`) | ✅ |
+- | 3 | Roteiro de **fabricação** exige um setor `QUALIDADE` (inspeção de saída) e ele vem antes da primeira `EXPEDICAO` (`pedidos.service.ts:512-525`). Decisão EC-06 | ✅ 📝 |
+- | 4 | O roteiro só pode usar setores vinculados à fábrica do pedido (`FabricaSetor`), sem repetir setor nem ordem (`pedidos.service.ts:545-569`) | ✅ |
+- | 5 | `receber` e `iniciar` são obrigatórios em todo setor antes de `mover` ou `concluir`. `iniciar` preenche `startedAt` (cronômetro) e, em setor com `exigeMaquinaOperador`, exige `idMaquina` e `idOperador` (`:299-321`) | ✅ |
+- | 6 | `concluir` só no **último** setor do roteiro; `mover` só quando existe próximo (`:540-547`, `:426-434`). `mover` aceita `idSetorDestino` livre dentro da fábrica e quantidade parcial (split na passagem) | ✅ |
+- | 7 | `reprovar` é exclusivo de setor tipo `QUALIDADE` (403 fora dele) e exige `EM_ANDAMENTO` (`:966-989`, `:1011-1021`) | ✅ |
+- | 8 | `retrabalho` só sai de `REPROVADO`: cancela a linha e cria outra `EM_TRANSITO` no setor anterior com `retrabalho = true` (`:1124-1192`). Não altera a quantidade do `ItensPedido` | ✅; **superada em parte pela N16-141 (29/10): o PCP passa a escolher o setor de volta, ainda sem código** |
+- | 9 | `devolver` cria linha nova ligada por `idDevolvidoDe`; a antiga vira `CANCELADO` e nunca é editada (`:1387-1488`). Não vale para parcial com requisição de compra viva (`ensureDevolucaoForaDaCompra`, `:1391`) | ✅ |
+- | 10 | Item de pedido inativo bloqueia toda ação, menos `cancelar` (`:202-208`) | ✅ |
+- | 11 | **Tudo que é fabricado volta ao Estoque** como lote e saldo, e só sai pelo documento de retirada. Decisão do Nathan de 14/10 | 📝 ✅ (`api-pcp`) lote e saldo na `develop` (27/10, `aprovar-saida` e `receber-fabricado`); 🔴 a saída pelo documento de retirada |
+- | 12 | **Matéria-prima é consumida do Estoque** na produção (J2/J3 do v1). **Decidido em 29/10 (N16-140): a baixa é na retirada do Estoque, pela quantidade pedida** | 📝 🔴 na retirada; hoje a `develop` baixa na hora do "Atender pelo estoque" (`ConsumoMateriaPrima`, 19/10) |
+- | 13 | Novo norte (P6): o PCP decide entre retrabalho e reabrir a compra. Roteiro individual do item (`RoteiroItem`, C8) é a ferramenta decidida | 📝 ✅ (`api-pcp`) `RoteiroItem` lido pelo motor na `develop`; 🔴 a tela do novo norte |
+- | `CRIADO`, `EM_TRANSITO` | `receber`, `devolver` |
+- | `RECEBIDO` | `iniciar`, `desfazer-recebimento` |
+- | `EM_ANDAMENTO` | `mover`, `concluir`, `pausar`, `reprovar`, `devolver`; na `develop` também `finalizar` e, na inspeção de saída, `aprovar-saida` |
+- | `FINALIZADO` (`develop`) | `mover`, `reabrir` (volta a `EM_ANDAMENTO`); na inspeção de saída, `aprovar-saida` |
+- | `PAUSADO`, `RETRABALHO` | `retomar` (volta a `EM_ANDAMENTO`) |
+- | `REPROVADO` | `retrabalho`, `resolver` |
+- | `CONCLUIDO` | `confirmar-entrega` |
+- | Nome atual | Nome antigo | Rota | App | Slug | Estado |
+- | Filas de Produção (escolha de setor) | Movimentações | `/movimentacoes` | app-pcp | `movimentacoes` | ✅ `movimentacoes/page.tsx` (177 linhas) |
+- | Fila do setor | idem | `/movimentacoes/[setorId]` | app-pcp | `movimentacoes` | ✅ `FilaSetor.tsx` (1272 linhas, 17 ações) |
+- | Destinação do Pedido | Nova Ordem de Produção | `/ordens-producao/novo` | app-pcp | `ordens-producao` | ✅ distribui os itens entre destinos; o roteiro é montado depois (`develop`, 22/10) |
+- | Montagem do Roteiro | — | `/montagem-roteiro`, `/montagem-roteiro/[id]` | app-pcp | `montagem-roteiro` | ✅ só na `develop`: OPs destinadas aguardando roteiro, roteiro base e alternativos por item |
+- | Produtos em Produção | — | `/produtos-em-producao` | app-pcp | `produtos-em-producao` | ✅ só na `develop`: uma linha por split, onde cada produto está no roteiro |
+- | Acompanhamento dos Pedidos | Ordens de Produção | `/ordens-producao`, `/ordens-producao/[id]` | app-pcp | `ordens-producao` | ✅ mini-roteiro por item, histórico, anexos |
+- | Dashboard | idem | `/dashboard` | app-pcp | ❓ | ✅ `GET /dashboard`; `GET /dashboard/tv` sem página 🔴 |
+- | Cadastros operacionais | idem | `/cadastros/operacional/fabricas`, `setores`, `maquinas`, `operadores` | app-pcp | ❓ | ✅ |
+- | Método e rota | Efeito | Permissão | Código |
+- | `GET /itens-parciais?idSetorAtual=&status=&idItemPedido=` | fila do setor, com `ehUltimaEtapa` | `movimentacoes:visualizar` | `controller:56-60`, `service:43-145` ✅ |
+- | `GET /itens-parciais/contagem-por-setor` | badge por setor | idem | `controller:66-70` ✅ |
+- | `GET /itens-parciais/:id`, `/:id/setores-percorridos` | detalhe e destinos válidos de devolução | idem | `controller:93-149` ✅ |
+- | `PATCH /:id/receber` | `CRIADO` ou `EM_TRANSITO` para `RECEBIDO` | `movimentacoes:editar` | `service:224` ✅ |
+- | `PATCH /:id/iniciar` | `RECEBIDO` para `EM_ANDAMENTO` (máquina e operador) | idem | `service:299` ✅ |
+- | `PATCH /:id/mover` | `EM_ANDAMENTO` para `EM_TRANSITO` no próximo setor (ou `idSetorDestino`), com quantidade parcial | idem | `service:366` ✅ |
+- | `PATCH /:id/concluir` | `CONCLUIDO` no último setor | idem | `service:520` ✅ |
+- | `PATCH /:id/finalizar`, `PATCH /:id/reabrir` | finaliza o setor (com ou sem enviar) e reabre | idem | `develop` (23/10) ✅ (`api-pcp`) |
+- | `PATCH /:id/aprovar-saida`, `PATCH /:id/receber-fabricado` | o "sim" da inspeção de saída e a entrada do fabricado no Estoque | idem | `develop` (27/10) ✅ (`api-pcp`) ([[11-Qualidade-Saida]]) |
+- | `PATCH /:id/pausar`, `/:id/retomar` | pausa e retomada | idem | `service:881`, `:1199` ✅ |
+- | `PATCH /:id/reprovar`, `/:id/resolver`, `/:id/retrabalho` | reprovação com `Divergencia`, falso alarme, retrabalho | idem | `service:1011`, `:1067`, `:1124` ✅ |
+- | `POST /:id/split`, `PATCH /:id/consolidar` | divide e junta parciais `RECEBIDO` | idem | `service:1250`, `:1616` ✅ sem botão na tela |
+- | `POST /:id/devolver`, `PATCH /:id/desfazer-recebimento` | devolução e desfazer | idem | `service:1387`, `:1557` ✅ |
+- | `PATCH /:id/cancelar` | cancela de qualquer status não terminal; libera reservas | `ordens-producao:deletar` | `controller:274-282`, `service:1506` ✅ |
+- | `POST /itens-parciais/lote/:acao` | ação em lote (`ACOES_LOTE_ITEM_PARCIAL`) | `movimentacoes:editar` | `controller:78-91` ✅ sem UI |
+- | `POST /pedidos/completo/lote` | cria pedido, itens, parciais e roteiro (Estoque etapa 1) | `ordens-producao` | `pedidos.controller.ts:58` ✅ |
+- | `GET /pedidos/setor-estoque-fixo` | etapa 1 fixa para a tela | idem | `pedidos.controller.ts:92` ✅ |
+- | `/roteiros` CRUD, `/roteiro-item` CRUD | roteiro do pedido e roteiro individual do item | idem | `roteiros.controller.ts:24`, `roteiro-item.controller.ts:25` ✅ CRUD; na `develop`, `RoteiroItem` é lido pelo motor (`roteiro-efetivo.ts`) |
+- | `GET /pedidos/roteiros`, `GET`/`PUT /pedidos/:id/roteiro`, `POST /pedidos/:id/devolver-destinacao` | Montagem do Roteiro | `montagem-roteiro` | `pedidos.controller.ts` ✅ `develop` (22/10) |
+- | `/divergencias` (`POST`, `GET`, `PATCH :id`, `PATCH :id/resolver`) | divergência de produção | `movimentacoes` | `divergencias.controller.ts:26-61` ✅ |
+- | `GET /itens/status` | foto de cada parcial para o av-hub, com `etapa` | chave `MES_API_KEY` | `integracao-avhub.service.ts:114`, `etapaDoItem :167` ✅ ([[Contratos-da-v2\|API-005]]) |
+- `Roteiros` (`idPedido`, `idSetor`, `ordem`, único por pedido e ordem) é o roteiro do pedido, lido por `mover`, `concluir`, `atenderEstoque` e `findAll` (`producao.prisma:262-275`).
+- `RoteiroItem` (roteiro individual do item, ex.: sub-item de composição) tem CRUD e tabela (`producao.prisma`). Em 14/10 nenhum serviço de movimentação o consultava (registro superado). Na `develop` o motor passa por `roteiroEfetivoDoItem` (`roteiro-efetivo.ts`): o roteiro alternativo do item, quando válido, substitui o base da OP em `mover`, `concluir`, `atender-estoque`, `reprovar` e `aprovar-saida` ✅. Falta a tela do novo norte (P6) 🔴.
+- Tipos de setor (`TipoSetor`, `fabricas.prisma:17-32`): `PRODUTIVO`, `ESTOQUE`, `COMPRAS`, `EXPEDICAO`, `REQUISICAO`, `LOGISTICA_ENTRADA`, `QUALIDADE`. Códigos fixos do circuito de compra em `circuito-compra.ts:19-25`: `requisicoes-compra`, `compras`, `logistica-entrada`, `qualidade-entrada`, `estoque`.
+- Fábrica: `TipoFabrica` `FABRICACAO` ou `REVENDA`, escolhido por rodada na Destinação (`fabricas.prisma:5-8`).
+- `destinoRestante: 'ROTEIRO'` em `atenderEstoque` só move a parcial para a próxima etapa, sem reservar nem consumir material (`service:722-742`).
+- `TipoItemRequisicao.MATERIA_PRIMA` existe só para a compra, com o comentário "ação no Estoque·Entrada na próxima rodada" (`compras.prisma:17-22`).
+- Consumo de reserva (`consumirReservasDaParcial`, `estoque-operacao.helpers.ts:317`) só trata a parte "atendida pelo estoque", que é a que vai à Expedição.
+- | # | O quê | Dono | Nó | Selo |
+- | 1 | Baixa de matéria-prima na retirada do Estoque (N16-140) e genealogia; hoje há a baixa imediata no "Atender pelo estoque" (`develop`) | Robert | F1 | 🟡 baixa imediata ✅ (`api-pcp`); 🔴 retirada |
+- | 2 | Fabricado aprovado vira lote e saldo: feito na `develop` (27/10). Falta a saída pelo documento de retirada | Robert | F1, `E5` | ✅ (`api-pcp`) lote; 🔴 retirada |
+- | 3 | `RoteiroItem` lido por `mover`, `concluir` e Expedição: lido pelo motor na `develop`; conferir a Expedição | Robert | P6 | ✅ (`api-pcp`) motor; ❓ Expedição |
+- | 4 | Tela do novo norte para divergência de produção (reprovada na inspeção de saída), com retrabalho e reabrir compra; `/decisoes-pcp` só cobre recebimento | Robert, Nathan decide | P6 | 🔴 |
+- | 5 | Reabertura de divergência (hoje `RESOLVIDA` e `CANCELADA` são terminais) | Robert | P6 | 🔴 |
+- | 6 | Reabertura de compra a partir da produção (P6 para P3): sem rota; só a divergência de recebimento reabre (`REABERTO`) | Robert | P6 | 🔴 |
+- | 7 | Botões de `split` e `consolidar` na fila (API existe) | Robert | F1 | 🟡 |
+- | 8 | Painel TV (`GET /dashboard/tv` sem página) | Robert | F1 | 🔴 |
+- | 9 | `PerfilSetor` sem dimensão de filial (T.2/C3) | Robert | F1 | 🔴 |
+- | 10 | Feed `/fluxo/eventos` com ator, autorizador e tempo por etapa ([[Rastreabilidade-e-Torre-de-Fluxo]]) | Robert | todos | 🔴 |
+- Nathan: quem informa o consumo de matéria-prima e em que momento (retirada do Estoque ou conclusão da etapa)? **Decidido em 29/10/2026 (N16-140): na retirada do Estoque, pela quantidade pedida.**
+- Nathan e Robert: a fábrica com múltiplos setores `PRODUTIVO` consome por etapa ou só no primeiro?
+- Nathan: retrabalho volta sempre ao setor imediatamente anterior? Hoje é `idSetorOrigem`, sem escolha (`:1134-1142`). **Decidido em 29/10/2026 (N16-141): não; o PCP escolhe o setor de volta.**
+- Robert: confirmar nomes de setores e filas reais do ambiente de produção (código só traz o seed) ❓.
+
+## subfluxo mermaid
+
+```text
+stateDiagram-v2
+    [*] --> CRIADO : primeiro setor
+    [*] --> EM_TRANSITO : mover, devolver, retrabalho, atender estoque
+    CRIADO --> RECEBIDO : receber
+    EM_TRANSITO --> RECEBIDO : receber
+    RECEBIDO --> EM_ANDAMENTO : iniciar
+    RECEBIDO --> EM_TRANSITO : desfazer recebimento (com setor de origem)
+    EM_ANDAMENTO --> EM_TRANSITO : mover (para o proximo setor)
+    EM_ANDAMENTO --> CONCLUIDO : concluir (ultimo setor)
+    EM_ANDAMENTO --> PAUSADO : pausar
+    PAUSADO --> EM_ANDAMENTO : retomar
+    EM_ANDAMENTO --> REPROVADO : reprovar (so setor QUALIDADE)
+    REPROVADO --> EM_ANDAMENTO : resolver (falso alarme)
+    REPROVADO --> CANCELADO : retrabalho (nasce linha EM_TRANSITO no setor anterior)
+    EM_ANDAMENTO --> CANCELADO : devolver (nasce linha nova)
+    CONCLUIDO --> [*] : entrega
+```

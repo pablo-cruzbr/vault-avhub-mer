@@ -13,7 +13,7 @@ fontes: [v1 08-Integracao-Omie/01-Dados-Extraidos/Pedidos-de-Venda, omie-elt-pip
 
 **Quando consultar esta nota:** ao procurar o significado de uma coluna do pedido ou do item, ou ao entender como o pedido chega ao hub (nó V1).
 
-Nó V1 do [[00-Fluxo-Mestre-0b]]: o pedido nasce no Omie e chega ao av-hub travado ([[01-Vendas-Liberacao]]).
+Nó V1 do [[00-Fluxo-Mestre-0b]]: o pedido nasce no Omie e chega ao av-hub travado ([[03-Pedido-de-Venda-e-Liberacao]]).
 
 ## `core_vendas_faturamento.pedidos_vendas`
 
@@ -41,7 +41,7 @@ Fonte: `ListarPedidos` (`/produtos/pedido/`), resource `pedidosVendas.ts`. Chave
 | `motivo_encerramento`, `usuario_encerramento` | `cabecalho.enc_motivo`, `enc_user` |
 | `autorizado`, `denegado`, `faturado`, `cancelado`, `devolvido`, `devolucao_parcial`, `encerrado` | flags S/N convertidas para boolean |
 | `situacao` | **não é escrita pelo pipeline**: recalculada por trigger no banco (`trg_sync_situacao_pv`) |
-| `manual` | coluna protegida: pedido manual do av-hub ([[LOG-45-Pedido-de-Venda-Manual]]; [[Colunas-Protegidas]]) |
+| `manual` | coluna protegida: pedido manual do av-hub ([[Contratos-da-v2\|LOG-45]]; [[Colunas-Protegidas]]) |
 | `id`, `created_at/by`, `updated_at/by`, `deleted_at/by` | controle do banco (identificador, autoria e datas de criação, alteração e exclusão) |
 
 `devolucao_parcial` é só boolean: o valor da devolução parcial não existe em coluna nenhuma (devolução é nativa do Estoque, Ciclo 2, 📝 DEC-10, [[Registro-de-Decisoes]]).
@@ -66,7 +66,7 @@ Sem endpoint próprio: vem embutido em `pedido.det[]` de `ListarPedidos`, gravad
 
 ## Atenção
 
-- O mesmo produto pode aparecer em duas linhas do mesmo pedido (confirmado no Omie); por isso a chave é o `codigo_item_omie`, não o produto. O custo do item no MES soma as linhas por **produto** ([[API-008-Custo-do-Lote-no-MES]], A1).
+- O mesmo produto pode aparecer em duas linhas do mesmo pedido (confirmado no Omie); por isso a chave é o `codigo_item_omie`, não o produto. O custo do item no MES soma as linhas por **produto** ([[Contratos-da-v2|API-008]], A1).
 - O `exclusionSync` apaga pedidos por empresa e janela sem filtrar `manual`: risco 🔴 ([[Riscos]] RS-001).
 
 Ver também: [[Omie-Integracao-Estado]].

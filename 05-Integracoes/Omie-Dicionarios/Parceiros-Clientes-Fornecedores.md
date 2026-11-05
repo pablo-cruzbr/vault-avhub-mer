@@ -46,7 +46,7 @@ Mesmo `ListarClientes`, sem chamada nova.
 | `valor_limite_credito`, `bloquear_faturamento` | mesmo nome |
 | `inativo` | `inativo` (S/N para bool) |
 
-A IE alimenta o PDF da OC ([[LOG-30-Compras-Pedido-Omie-PDF-Completo]]). Seguem **sem escrita** `enderecoEntrega` (`parceiros_endereco_entrega`) e `dadosBancarios` (`parceiros_dados_bancarios`): as tabelas existem e estão vazias; ficam fora do escopo 📝 ([[Registro-de-Decisoes]] #30).
+A IE alimenta o PDF da OC ([[Contratos-da-v2|LOG-30]]). Seguem **sem escrita** `enderecoEntrega` (`parceiros_endereco_entrega`) e `dadosBancarios` (`parceiros_dados_bancarios`): as tabelas existem e estão vazias; ficam fora do escopo 📝 ([[Registro-de-Decisoes]] #30).
 
 ## Tags de parceiro
 

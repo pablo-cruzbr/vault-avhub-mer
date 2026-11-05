@@ -30,9 +30,9 @@ Colunas que existem nas tabelas sincronizadas do Omie mas pertencem a **outro si
 | Tabela | Colunas protegidas | Quem preenche | Selo |
 |---|---|---|---|
 | `core.parceiros` | `latitude_y`, `longitude_x` | job `geocodeParceiros.ts` (Nominatim, diário 05:37) | ✅ |
-| `core_vendas_faturamento.vendedores` | `comissao`, `ajuda_custo`, `filial`, `id_usuario`, `id_funcionario` | tela de Vendedores do HUB (`PUT`) e [[LOG-39-Vendedores-Fila-de-Vinculo]]. Significado de `comissao` (boolean): 🔴 Nathan | ✅ lista; 🟡 dono |
-| `core_vendas_faturamento.pedidos_vendas` | `manual` | pedido de venda manual do HUB ([[LOG-45-Pedido-de-Venda-Manual]], `pedidoVendaManual.js`). Pedido manual tem `codigo_pedido_omie` negativo | ✅ lista; 🟡 dono |
-| `core_vendas_faturamento.notas_fiscais` | `descontos`, `manual`, `averbado` | NF manual do HUB, só administrador ([[LOG-29-Notas-Fiscais-Manuais-So-Admin]]) | ✅ lista; 🟡 dono |
+| `core_vendas_faturamento.vendedores` | `comissao`, `ajuda_custo`, `filial`, `id_usuario`, `id_funcionario` | tela de Vendedores do HUB (`PUT`) e [[Contratos-da-v2\|LOG-39]]. Significado de `comissao` (boolean): 🔴 Nathan | ✅ lista; 🟡 dono |
+| `core_vendas_faturamento.pedidos_vendas` | `manual` | pedido de venda manual do HUB ([[Contratos-da-v2\|LOG-45]], `pedidoVendaManual.js`). Pedido manual tem `codigo_pedido_omie` negativo | ✅ lista; 🟡 dono |
+| `core_vendas_faturamento.notas_fiscais` | `descontos`, `manual`, `averbado` | NF manual do HUB, só administrador ([[Contratos-da-v2\|LOG-29]]) | ✅ lista; 🟡 dono |
 | `core_vendas_faturamento.produto_vendas` | `codigo_nf_omie`, `numero_nf` | `UPDATE` direcionado de `notasFiscais.ts`, nunca pelo upsert do pedido | ✅ |
 | `core_vendas_faturamento.compradores` | `id_funcionario`, `nome_exibicao`, `ativo_desde`, `inativo_desde` | tela de Compradores do HUB (`PUT /compras/compradores/{id}`); `ativo` vem do Omie (`cInativo !== 'S'`) | ✅ |
 | `core.produtos`, `core.familia_produtos` | nenhuma (lista vazia) | | ✅ |
@@ -41,7 +41,7 @@ Colunas que existem nas tabelas sincronizadas do Omie mas pertencem a **outro si
 
 - **O comentário do próprio `protectedColumns.ts` ainda diz** que o dono de `vendedores` é "pendente de confirmação" e que `comissao` pode vir de outro sistema (`protectedColumns.ts:15-24`). Os donos já estão nomeados nesta nota. Atualizar o comentário: Gustavo ([[Pontas-Soltas]] PS-017).
 - **Conflito com o `exclusionSync`:** pedido manual (coluna protegida `manual`) entra na lista de apagados porque o job não filtra `manual` (`omie-elt-pipeline/src/jobs/exclusionSync.ts:103` filtra só empresa, `deleted_at` e janela; `DELETE` em `:136`). 🔴 [[Riscos]] RS-001, [[Backlog-por-Frente]] BL-027.
-- **Contrato 43** acrescenta a ordem das etapas de faturamento ao cadastro: `protectedColumns.ts` deve proteger a coluna nova (`ordem_fluxo`) quando o seed existir ([[LOG-43-Ordem-das-Etapas-de-Faturamento-no-Cadastro]]).
+- **Contrato 43** acrescenta a ordem das etapas de faturamento ao cadastro: `protectedColumns.ts` deve proteger a coluna nova (`ordem_fluxo`) quando o seed existir ([[Contratos-da-v2|LOG-43]]).
 - **Pedido manual e custo:** o pedido manual nunca entra no custo (D6 do contrato 008) e precisa de marca de origem; a coluna `manual` serve, mas o MES não a recebe hoje 🔴 BL-026.
 
 ### Regra para quem escreve em tabela sincronizada

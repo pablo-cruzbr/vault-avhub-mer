@@ -9,7 +9,7 @@ fontes: [api-pcp befd973 develop (estoque-operacao.service.ts, estoque-operacao.
 
 # Modelo de Estoque e custo do lote
 
-Como o Estoque do MES guarda e movimenta o material e como o custo acompanha o lote. Tabelas: [[Banco-MES]]. Telas: [[MES-Front]]. Nós do 0b: E1 a E6, R4, Q1 a Q4 ([[00-Fluxo-Mestre-0b]]). Contratos: [[API-008-Custo-do-Lote-no-MES]], [[API-007-Referencia-OC-Valores-no-MES]], [[LOG-47-Custo-Real-por-Item-no-Hub]]. Selos: [[Regras-do-Vault]]. As mudanças de 15 a 28/10 (custo da OC, custo manual, `GET /itens/custo`, lote do fabricado) estão **só na `develop`** do `api-pcp`; a `main` parou em 08/10. Números de linha desta nota são de 14/10, exceto onde dito.
+Como o Estoque do MES guarda e movimenta o material e como o custo acompanha o lote. Tabelas: [[Banco-MES]]. Telas: [[MES-Front]]. Nós do 0b: E1 a E6, R4, Q1 a Q4 ([[00-Fluxo-Mestre-0b]]). Contratos: [[Contratos-da-v2|API-008]], [[Contratos-da-v2|API-007]], [[Contratos-da-v2|LOG-47]]. Selos: [[Regras-do-Vault]]. As mudanças de 15 a 28/10 (custo da OC, custo manual, `GET /itens/custo`, lote do fabricado) estão **só na `develop`** do `api-pcp`; a `main` parou em 08/10. Números de linha desta nota são de 14/10, exceto onde dito.
 
 ## Conceitos
 
@@ -69,7 +69,7 @@ stateDiagram-v2
 | Código | `itens-parciais.service.ts:318` e `entregas.service.ts:72` (no-op se já consumida) | não existe 🔴 |
 | Efeito no saldo | `SAIDA` com `id_reserva` | `SAIDA` com o documento de retirada, a pedido da raia que precisa da mercadoria |
 
-Lacuna para o Robert: criar o documento de retirada (E6) e mover para ele a chamada de `consumirReservasDaParcial` 🔴. Ver [[03-Estoque-Atendimento-e-Despacho]].
+Lacuna para o Robert: criar o documento de retirada (E6) e mover para ele a chamada de `consumirReservasDaParcial` 🔴. Ver [[12-Estoque-Despacho]].
 
 ## Tudo que é fabricado ou comprado vai para o Estoque
 
@@ -90,9 +90,9 @@ Lacuna para o Robert: criar o documento de retirada (E6) e mover para ele a cham
 | `cotacao_a_conferir` | verdadeiro quando a cotação da OC é manual (`cotacao_origem = manual`) |
 | `atualizado_por_id`, `atualizado_em` | auditoria |
 
-Fórmula do contrato (D5): `custo_liquido_unitario = valor_unitario × (1 − desconto_pct/100) × (cotacao ?? 1)` no Ciclo 1; com impostos no Ciclo 2 (`− icms_recuperar_unit + ipi_unit + st_unit`) ✅ [[API-008-Custo-do-Lote-no-MES]] §1.
+Fórmula do contrato (D5): `custo_liquido_unitario = valor_unitario × (1 − desconto_pct/100) × (cotacao ?? 1)` no Ciclo 1; com impostos no Ciclo 2 (`− icms_recuperar_unit + ipi_unit + st_unit`) ✅ [[Contratos-da-v2|API-008]] §1.
 
-**Imposto por item (PS-014, 🟡 aberta, 📝 N14-23).** O Ciclo 1 segue **sem imposto** (ICMS, IPI, ST e frete). Mas em breve será preciso ter **todos os cenários, também com impostos**, e é preciso pensar desde já em como adequar o modelo. Hoje a OC não tem imposto por item (`ordens_compra_itens` só tem `valor_unitario`, `desconto`, `valor_desconto`, `valor_total_item`: [[Banco-AvHub]]), então a **fonte do imposto** (digitado na OC, vindo do Omie, ou tabela fiscal) é a decisão em aberto. O que precisa ser desenhado (Nathan e Gustavo, BL-053): de onde vem o imposto por item na OC; como `lote_custo` passa a receber `icms_recuperar_unit`, `ipi_unit`, `st_unit` e `frete_unit` (as colunas já existem, vazias); como o custo do item e o `GET /itens/custo` mostram os dois cenários (sem imposto e com imposto) sem quebrar o contrato do Ciclo 1 (`custo_sem_impostos: true`). Os contratos não são editados: se o API-008 precisar mudar, só o [[Painel-de-Contratos]] aponta a pendência.
+**Imposto por item (PS-014, 🟡 aberta, 📝 N14-23).** O Ciclo 1 segue **sem imposto** (ICMS, IPI, ST e frete). Mas em breve será preciso ter **todos os cenários, também com impostos**, e é preciso pensar desde já em como adequar o modelo. Hoje a OC não tem imposto por item (`ordens_compra_itens` só tem `valor_unitario`, `desconto`, `valor_desconto`, `valor_total_item`: [[Banco-AvHub]]), então a **fonte do imposto** (digitado na OC, vindo do Omie, ou tabela fiscal) é a decisão em aberto. O que precisa ser desenhado (Nathan e Gustavo, BL-053): de onde vem o imposto por item na OC; como `lote_custo` passa a receber `icms_recuperar_unit`, `ipi_unit`, `st_unit` e `frete_unit` (as colunas já existem, vazias); como o custo do item e o `GET /itens/custo` mostram os dois cenários (sem imposto e com imposto) sem quebrar o contrato do Ciclo 1 (`custo_sem_impostos: true`). Os contratos não são editados: se o API-008 precisar mudar, só o [[Contratos-da-v2]] aponta a pendência.
 
 **Desenho decidido em 29/10/2026 (N16-144).** OC de pedido de venda ou recompra traz o imposto da parte de compras do item do pedido; OC de estoque ou uso interno, o Comprador digita; o Comprador pode editar antes de aprovar. Uma linha da OC por pedido, sem média. O frete do cabeçalho é rateado pelas linhas na proporção do valor e vira `frete_unit`. No Recebimento o lote copia da linha da OC `icms_recuperar_unit`, `ipi_unit`, `st_unit`, `frete_unit` e uma coluna nova, `difal_unit`. O contrato só será escrito quando o desenvolvimento começar. A fórmula do custo com imposto segue o motor do comissionamento, e cada setor confere as mudanças na implementação.
 
