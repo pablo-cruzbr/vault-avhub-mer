@@ -20,9 +20,6 @@ fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005,
 
 **Onde estamos no fluxo:** ← [[02-Orcamento-Base-de-Preco]] | [[04-PCP-Triagem-e-Destinacao]] → · nós desta nota: `V1`, `V2`, `V3`
 
-> [!info] Proposta ao pedido (decisões de 16 a 26/10/2026, fluxo aprovado em 26/10)
-> Esta nota descreve a liberação que **existe hoje** ✅. O desenho aprovado põe a proposta antes do `V1`, com duas origens no mesmo fluxo. O pedido que nasce da proposta já vem liberado (a Qualidade é respondida no "Transformar em pedido"). O pedido digitado no Omie continua chegando travado, mas o vendedor responde a Qualidade e o faturamento em partes na tela do pedido e preenche ali a parte de compras, sem travar o fluxo. A liberação gravada é a mesma desta nota, que o MES lê. Esse desenho ainda não está todo pronto 📝 (N16-05, N16-91, N16-106): a `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub, mas **não envia o pedido ao Omie** e a resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe 🔴. Detalhe em [[01-Proposta-de-Venda]].
-
 ## Como funciona, passo a passo
 
 1. O pedido nasce no Omie (o sistema de gestão) e chega ao av-hub **travado**. `V1`
@@ -33,6 +30,17 @@ fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005,
 6. O MES (sistema de chão de fábrica) consulta a lista de liberados. Ninguém empurra o pedido para ele. `P1`
 7. Quando o PCP grava as ordens, o MES avisa o av-hub. O pedido vira "No PCP" e a resposta trava, com um cadeado. `P2`
 8. Depois disso, o vendedor só acompanha. O cartão "Etapa dos itens" mostra em que etapa está cada item.
+
+Os passos acima descrevem a liberação que **existe hoje** ✅.
+
+### O pedido pode vir de dois lugares (desenho decidido)
+
+O desenho aprovado em 26/10/2026 (decisões de 16 a 26/10/2026) põe a proposta antes do `V1`. São duas origens no mesmo fluxo 📝 (N16-05, N16-91, N16-106):
+
+- **Pedido que nasce da proposta:** já vem liberado. O vendedor responde a Qualidade no botão "Transformar em pedido". Detalhe em [[01-Proposta-de-Venda]].
+- **Pedido digitado no Omie:** continua chegando travado. O vendedor responde a Qualidade e o faturamento em partes na tela do pedido. Ali ele também preenche a parte de compras, sem travar o fluxo.
+
+Nas duas origens, a liberação gravada é a mesma desta nota, e é ela que o MES lê. Esse desenho ainda não está todo pronto (veja "O que já existe e o que falta").
 
 ## Exemplo
 
@@ -71,6 +79,8 @@ O Cliente Exemplo S.A. pede 100 flanges, e o pedido é digitado no Omie. Ele che
 - 🔴 Renovar o token expirado, reabrir marcação depois da importação e alertar pedido parado.
 - 🔴 Fila de inspeção de processo da Qualidade e refinos do cartão Etapa dos itens.
 - 🔴 Pedido manual: o desenho só prevê pedido que chega do Omie.
+- A `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub.
+- 🔴 A API **não envia o pedido ao Omie**, e a resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe.
 - ❓ Valor da data de corte em produção e migration `api005`.
 
 Raia seguinte: [[04-PCP-Triagem-e-Destinacao]].
