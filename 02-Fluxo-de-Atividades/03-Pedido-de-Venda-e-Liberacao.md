@@ -7,7 +7,7 @@ ordem: 3
 nos: [V1, V2, V3]
 anterior: "[[02-Orcamento-Base-de-Preco]]"
 proxima: "[[04-PCP-Triagem-e-Destinacao]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 1654f65, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan
 fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10]
 ---
@@ -80,7 +80,7 @@ O Cliente Exemplo S.A. pede 100 flanges, e o pedido é digitado no Omie. Ele che
 - 🔴 Fila de inspeção de processo da Qualidade e refinos do cartão Etapa dos itens.
 - 🔴 Pedido manual: o desenho só prevê pedido que chega do Omie.
 - A `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub.
-- 🔴 A API **não envia o pedido ao Omie**, e a resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe.
+- 🟡 O envio do pedido da proposta ao Omie existe no código da API (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:151`, `develop` 1654f65), mas o banco dessa função está fora do repositório ❓ e a tela não a chama; detalhe em [[01-Proposta-de-Venda]]. 🔴 A resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe.
 - ❓ Valor da data de corte em produção e migration `api005`.
 
 Raia seguinte: [[04-PCP-Triagem-e-Destinacao]].
