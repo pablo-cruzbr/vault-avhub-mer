@@ -2,7 +2,7 @@
 // para notas-parte em <pasta da nota>/Partes/. Os títulos movidos sobem de nível (### → ##) para a parte
 // abrir em ##; o texto do título não muda, então links [[Nota#Título]] são reescritos para [[Parte#Título]].
 //
-//   node _v3/scripts/dividir.mjs <chave> [--simular]     (chave = entrada de PLANO; "todas" roda todas)
+//   node scripts/dividir.mjs <chave> [--simular]     (chave = entrada de PLANO; "todas" roda todas)
 //
 // Modos:
 //   subsecoes: a seção `##` indicada fica na original como índice; seus `###` (ou `####`, se um `###` passar
@@ -15,11 +15,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const simular = process.argv.includes('--simular');
 const LIMITE = 20 * 1024;
 const HOJE = '2026-11-05';
 
+// Para dividir uma nota nova, acrescente uma entrada ao PLANO, rode com --simular e depois sem.
+// As entradas abaixo são as do Bloco 5 da v3; rodar de novo não muda nada.
 export const PLANO = {
   'mestre': { nota: '02-Fluxo-de-Atividades/00-Fluxo-Mestre-0b.md', modo: 'linhas', secao: 'Tabela nó → raia, tela, endpoint, contrato, código', prefixo: '00-Fluxo-Mestre-0b-Tabela', rotulo: 'tabela nó → raia', nomePorId: false },
   '01': { nota: '02-Fluxo-de-Atividades/01-Proposta-de-Venda.md', modo: 'subsecoes', secao: 'Detalhe técnico' },
@@ -55,7 +57,7 @@ export const PLANO = {
 };
 
 const bytes = (s) => Buffer.byteLength(s, 'utf8');
-const IGN = new Set(['.git', '.obsidian', 'node_modules', '_v3']);
+const IGN = new Set(['.git', '.obsidian', 'node_modules', '_v3', 'v3', 'scripts']);
 function todasNotas() {
   const out = [];
   (function w(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { if (IGN.has(e.name)) continue; const p = path.join(d, e.name); if (e.isDirectory()) w(p); else if (e.name.endsWith('.md')) out.push(p); } })(raiz);
@@ -123,6 +125,7 @@ function dividir(chave) {
   const arq = path.join(raiz, p.nota);
   const origem = path.basename(arq, '.md');
   const dirPartes = path.join(path.dirname(arq), 'Partes');
+  if (p.partes && p.partes.every((pt) => fs.existsSync(path.join(dirPartes, pt.nome + '.md')))) { console.log(`${origem}: partes já existem; nada a fazer`); return; }
   let txt = fs.readFileSync(arq, 'utf8');
   const lin = txt.split('\n');
   const tit = titulos(lin);
@@ -199,6 +202,7 @@ function dividir(chave) {
     if (!s) throw new Error(`${origem}: seção não achada`);
     const fim = fimDaSecao(tit, s.i, 2, lin.length);
     const iTab = lin.findIndex((l, i) => i > s.i && i < fim && l.startsWith('|'));
+    if (iTab < 0) { console.log(`${origem}: a seção não tem mais tabela (já foi dividida?)`); return; }
     let iFimTab = iTab; while (iFimTab < fim && lin[iFimTab].startsWith('|')) iFimTab++;
     const cab = lin.slice(iTab, iTab + 2), rows = lin.slice(iTab + 2, iFimTab);
     const pacotes = empacotar(rows.map((r) => ({ r, tam: bytes(r) + 1 }))).map((pk) => ({ rows: pk.blocos.map((b) => b.r), tam: pk.tam }));
@@ -214,6 +218,7 @@ function dividir(chave) {
     novaOrig = [...lin.slice(0, iTab), ...indice, ...lin.slice(iFimTab)];
   }
 
+  if (!partes.length) { console.log(`${origem}: nada a dividir (já foi dividida?)`); return; }
   const nomes = partes.map((pt) => pt.nome);
   const ja = nomes.filter((n) => fs.existsSync(path.join(dirPartes, n + '.md')));
   if (ja.length) { console.log(`${origem}: partes já existem (${ja.join(', ')}); nada a fazer`); return; }

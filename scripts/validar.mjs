@@ -1,10 +1,10 @@
 // Validação do vault (seção 9 da instrução). Somente leitura.
-// Uso: node _v3/scripts/validar.mjs [--simular]   (sem escrita; --simular aceito por padrão do projeto)
+// Uso: node scripts/validar.mjs [--simular]   (sem escrita; --simular aceito por padrão do projeto)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const IGNORAR = new Set(['.git', '.obsidian', 'node_modules']);
 
 function listar(dir, out = []) {
@@ -20,6 +20,9 @@ function listar(dir, out = []) {
 const arquivos = listar(raiz);
 const notas = arquivos.filter((f) => f.endsWith('.md'));
 const rel = (f) => path.relative(raiz, f).split(path.sep).join('/');
+// material de trabalho, fora das checagens de nota (órfã, codificação, tamanho, nomes antigos):
+// _v3/ durante a v3, 07-Desenvolvimento/v3/ depois do Bloco 9 e scripts/ (listas de fatos)
+const trabalho = (r) => r.startsWith('_v3/') || r.startsWith('07-Desenvolvimento/v3/') || r.startsWith('scripts/');
 
 // nomes resolvíveis: base sem extensão (notas) e nome com extensão (anexos)
 const porNome = new Map();
@@ -51,7 +54,7 @@ for (const f of notas) {
   }
 }
 
-const orfas = notas.filter((f) => !recebidos.has(f) && path.basename(f) !== 'CLAUDE.md' && !rel(f).startsWith('_v3/')).map(rel);
+const orfas = notas.filter((f) => !recebidos.has(f) && path.basename(f) !== 'CLAUDE.md' && !trabalho(rel(f))).map(rel);
 
 const crlf = [];
 const corrompidos = [];
@@ -61,9 +64,9 @@ for (const f of notas) {
   const txt = buf.toString('utf8');
   if (txt.includes('\r')) crlf.push(rel(f));
   // "Ã" sozinho é letra válida (AÇÃO); só conta quando seguido de byte de continuação (Ã§, Ã£...)
-  if ((/Ã[\u0080-¿]|â€|�/.test(txt)) && !rel(f).startsWith('_v3/')) corrompidos.push(rel(f));
+  if ((/Ã[\u0080-¿]|â€|�/.test(txt)) && !trabalho(rel(f))) corrompidos.push(rel(f));
   // _v3/ é material de trabalho (fotos de fatos); fica fora do limite de tamanho
-  if (buf.length > 25 * 1024 && !rel(f).startsWith('_v3/')) grandes.push(`${rel(f)} (${(buf.length / 1024).toFixed(1)} KB)`);
+  if (buf.length > 25 * 1024 && !trabalho(rel(f))) grandes.push(`${rel(f)} (${(buf.length / 1024).toFixed(1)} KB)`);
 }
 
 const contratosLinks = [];
@@ -94,7 +97,7 @@ const textoIdx = () => [idx, ...(fs.existsSync(path.join(raiz, '06-Contratos', '
 if (fs.existsSync(idx)) { const ids = new Set([...textoIdx().matchAll(/^\| ((?:LOG|SQL|API|CON)-\d+[a-z]?) \|/gm)].map((m) => m[1])); console.log(`Índice Contratos-da-v2: ${ids.size} contratos distintos (esperado 92)`); }
 
 // Nomes antigos do mapa (a partir do Bloco 2): em [[links]] e em texto entre crases.
-const csv = path.join(raiz, '_v3', 'mapa-renomeacao.csv');
+const csv = [path.join(raiz, '_v3', 'mapa-renomeacao.csv'), path.join(raiz, '07-Desenvolvimento', 'v3', 'mapa-renomeacao.csv')].find((x) => fs.existsSync(x)) || '';
 if (fs.existsSync(csv)) {
   const EXC = ['Mapa-v2-para-v3', 'Mapa-v1-para-v2', 'Contratos-da-v2', 'Analise-de-Organizacao-do-Vault', 'Registro-de-Decisoes'];
   const antigos = fs.readFileSync(csv, 'utf8').split('\n').slice(1)
@@ -108,7 +111,7 @@ if (fs.existsSync(csv)) {
     const txt = fs.readFileSync(f, 'utf8');
     // Bloco 5: a parte de uma nota de exceção (frontmatter parte-de) também é exceção
     const origem = (txt.match(/^parte-de: "\[\[([^\]]+)\]\]"/m) || [])[1];
-    if (r.startsWith('_v3/') || EXC.includes(path.basename(f, '.md')) || EXC.includes(origem)) continue;
+    if (trabalho(r) || EXC.includes(path.basename(f, '.md')) || EXC.includes(origem)) continue;
     for (const [i, l] of txt.split('\n').entries()) {
       const trechos = [...l.matchAll(/\[\[[^\]\n]+?\]\]/g), ...l.replace(/\[\[[^\]\n]+?\]\]/g, (m) => 'x'.repeat(m.length)).matchAll(/`[^`]*`/g)]
         .map((m) => l.slice(m.index, m.index + m[0].length));

@@ -1,12 +1,14 @@
 // Blocos 3, 5 e 8: lista de fatos de uma nota, salva ANTES de mexer nela, e conferência DEPOIS.
 //
-//   node _v3/scripts/fatos.mjs extrair <caminho/da/nota.md> [--simular]
-//       grava _v3/fatos/<nota>.md com: IDs (decisões, BL, PS, contratos), commits, arquivo:linha,
+//   node scripts/fatos.mjs extrair <caminho/da/nota.md> [--simular] [--dir=<pasta>]
+//       grava <pasta>/<nota>.md (padrão: scripts/fatos/) com: IDs (decisões, BL, PS, contratos), commits, arquivo:linha,
 //       rotas, identificadores de código entre crases, datas, números com unidade, nós e as linhas
 //       de regra (linhas de tabela e de lista). Não sobrescreve um arquivo de fatos que já existe
 //       (a lista é a foto de ANTES); use --refazer para forçar.
-//   node _v3/scripts/fatos.mjs conferir [nota] [--pasta=<sub>]
-//       para cada lista em _v3/fatos/, confere se cada fato aparece em alguma nota do vault (fora de _v3).
+//   node scripts/fatos.mjs conferir [nota] [--dir=<pasta>]
+//       para cada lista da pasta, confere se cada fato aparece em alguma nota do vault (fora de _v3, v3 e scripts).
+//   --dir=<pasta> é relativo à raiz do vault. As listas da v3 estão em _v3/fatos e _v3/fatos/bloco5
+//   (depois do Bloco 9, em 07-Desenvolvimento/v3/fatos).
 //       Fatos "token" precisam aparecer literalmente. Linhas de regra são conferidas pelo texto sem
 //       selos e sem formatação; as que não batem vão para "conferir à mão" (o selo pode mudar pelo F5,
 //       o fato não pode sumir).
@@ -14,10 +16,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-// --pasta=<sub> grava e confere em _v3/fatos/<sub>/ (Bloco 5: _v3/fatos/bloco5, porque já há fotos do Bloco 3 com o mesmo nome)
-const pastaArg = (process.argv.find((a) => a.startsWith('--pasta=')) || '').slice(8);
-const dirFatos = path.join(raiz, '_v3', 'fatos', pastaArg);
+const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const dirArg = (process.argv.find((a) => a.startsWith('--dir=')) || '').slice(6);
+const dirFatos = path.join(raiz, dirArg || path.join('scripts', 'fatos'));
 const [modo, alvo] = process.argv.slice(2).filter((a) => !a.startsWith('--')); // flags não são nome de nota
 const simular = process.argv.includes('--simular');
 const refazer = process.argv.includes('--refazer');
@@ -60,7 +61,7 @@ function gravar(arq) {
   if (fs.existsSync(destino) && !refazer) { console.log(`já existe ${path.relative(raiz, destino)} (foto de antes); nada muda`); return; }
   const { grupos, regras, mermaid } = extrair(arq);
   const rel = path.relative(raiz, arq).split(path.sep).join('/');
-  let out = `# Fatos de ${nome}\n\nFoto tirada em ${new Date().toISOString().slice(0, 10)} de \`${rel}\`, antes de mexer na nota.\nGerada por \`node _v3/scripts/fatos.mjs extrair\`. Conferência: \`node _v3/scripts/fatos.mjs conferir ${nome}\`.\n`;
+  let out = `# Fatos de ${nome}\n\nFoto tirada em ${new Date().toISOString().slice(0, 10)} de \`${rel}\`, antes de mexer na nota.\nGerada por \`node scripts/fatos.mjs extrair\`. Conferência: \`node scripts/fatos.mjs conferir ${nome}\`.\n`;
   for (const [g, l] of Object.entries(grupos)) {
     out += `\n## ${g} (${l.length})\n\n`;
     for (const x of l) out += `- ${'`'}${x.replace(/`/g, '')}${'`'}\n`;
@@ -90,7 +91,7 @@ function lerLista(f) {
 }
 
 function corpus() {
-  const IGN = new Set(['.git', '.obsidian', 'node_modules', '_v3']);
+  const IGN = new Set(['.git', '.obsidian', 'node_modules', '_v3', 'v3', 'scripts']);
   const out = [];
   (function walk(d) {
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
