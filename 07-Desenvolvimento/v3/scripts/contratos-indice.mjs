@@ -132,7 +132,17 @@ const contratos = dados.notas.filter((n) => !n.historico);
 console.log(`contratos: ${contratos.length} · históricos: ${dados.notas.length - contratos.length} · anexos: ${dados.anexos.length}`);
 const semNos = contratos.filter((n) => !n.nos.length).map((n) => n.id);
 console.log(`sem etapa_0b: ${semNos.length}${semNos.length ? ' (' + semNos.join(', ') + ')' : ''}`);
+// Trava (05/11/2026): no Bloco 5 o índice foi dividido. Hoje Contratos-da-v2.md é um índice curto e a
+// lista completa fica em 06-Contratos/Partes/Contratos-da-v2-Lista-Completa.md. Gravar aqui juntaria tudo
+// de novo num arquivo de 30 KB e desfaria a divisão. Por isso o script só grava sem a pasta Partes/
+// (estado de antes do Bloco 5) e, com ela, apenas mostra o resumo. É histórico da v3, não ferramenta de uso.
+const dividido = fs.existsSync(path.join(raiz, '06-Contratos', 'Partes'));
+if (dividido && !simular) {
+  console.log('NADA GRAVADO: o índice de contratos já está dividido (06-Contratos/Partes/). Este script é histórico da v3 e');
+  console.log('regravaria tudo num arquivo só. Para mudar o índice, edite as notas à mão (veja o Manual de Manutenção).');
+  process.exit(1);
+}
 const atual = fs.existsSync(destino) ? fs.readFileSync(destino, 'utf8') : null;
-if (simular) console.log(atual === texto ? 'índice já está igual (nada muda)' : `gravaria ${destino} (${texto.length} bytes)`);
+if (simular) console.log(atual === texto ? 'índice já está igual (nada muda)' : `gravaria ${destino} (${texto.length} bytes)${dividido ? ' — mas NÃO grava: o índice está dividido' : ''}`);
 else if (atual !== texto) { fs.writeFileSync(destino, texto, 'utf8'); console.log(`gravado ${destino}`); }
 else console.log('índice já está igual (nada muda)');
