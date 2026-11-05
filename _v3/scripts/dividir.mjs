@@ -37,7 +37,7 @@ export const PLANO = {
   'comissao-03': { nota: '03-Sistemas/Comissao/03-Modelo-Novo-core_comissao.md', modo: 'subsecoes', secao: 'Detalhe técnico' },
   'int-mes': { nota: '05-Integracoes/Integracao-AvHub-MES.md', modo: 'subsecoes', secao: 'Detalhe técnico' },
   'incluir-pedido': { nota: '05-Integracoes/Mapa-IncluirPedido-Omie.md', modo: 'subsecoes', secao: 'Detalhe técnico' },
-  'backlog': { nota: '07-Desenvolvimento/Backlog-por-Frente.md', modo: 'subsecoes', secao: 'Lista completa', nomes: ['Backlog-Frente-Robert', 'Backlog-Frente-Gustavo', 'Backlog-Frente-Nathan', 'Backlog-Frente-Comercial-e-Suprimentos'] },
+  'backlog': { nota: '07-Desenvolvimento/Backlog-por-Frente.md', modo: 'subsecoes', secao: 'Lista completa', artigo: 'A', nomes: ['Backlog-Frente-Robert', 'Backlog-Frente-Gustavo', 'Backlog-Frente-Nathan', 'Backlog-Frente-Comercial-e-Suprimentos'] },
   'perguntas': { nota: '07-Desenvolvimento/Perguntas-Proposta-Pedido-Comissao.md', modo: 'secoes', indice: 'Lista completa', partes: [
     { nome: 'Perguntas-Proposta-Pedido-Comissao-Quadro-Geral', secoes: ['1. Quadro geral'] },
     { nome: 'Perguntas-Proposta-Pedido-Comissao-OQ-02-a-OQ-30', secoes: ['2. OQ-02 a OQ-12 (do briefing)', '3. OQ-13 a OQ-30 (descobertas ao documentar)', '4. Consultas que saem daqui', '5. Perguntas do documento de 16/10 já respondidas por decisão'] },
@@ -161,7 +161,7 @@ function dividir(chave) {
     });
     const rotuloSecao = p.secao.toLowerCase();
     const indice = [lin[s.i], '', ...lin.slice(s.i + 1, introFim).filter((l, i, a) => !(l === '' && (i === 0 || a[i - 1] === ''))),
-      `O ${rotuloSecao} desta nota fica em ${partes.length === 1 ? 'uma nota à parte' : partes.length + ' notas à parte'}, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):`, '',
+      `${p.artigo || 'O'} ${rotuloSecao} desta nota fica em ${partes.length === 1 ? 'uma nota à parte' : partes.length + ' notas à parte'}, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):`, '',
       ...partes.map((pt) => `- [[${pt.nome}]]: ${pt.principais.join(' · ')}`), ''];
     novaOrig = [...lin.slice(0, s.i), ...indice, ...lin.slice(fim)];
     partes.forEach((pt) => { pt.frase = `${rotuloSecao} da nota [[${origem}]]${partes.length > 1 ? ` (parte ${partes.indexOf(pt) + 1} de ${partes.length})` : ''}: ${pt.principais.join('; ')}.`; pt.titulo = `${tituloNota}: ${p.secao.toLowerCase()}${partes.length > 1 ? ` (${partes.indexOf(pt) + 1}/${partes.length})` : ''}`; });

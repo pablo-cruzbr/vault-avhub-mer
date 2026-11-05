@@ -89,7 +89,9 @@ secao('Arquivos com caractere corrompido (Ã, â€, �)', corrompidos);
 secao('Notas acima de 25 KB', grandes);
 console.log(`\n## Links para contratos fora de 06-Contratos: ${contratosLinks.reduce((s, x) => s + x[1], 0)} em ${contratosLinks.length} notas`);
 const idx = path.join(raiz, '06-Contratos', 'Contratos-da-v2.md');
-if (fs.existsSync(idx)) { const ids = new Set([...fs.readFileSync(idx, 'utf8').matchAll(/^\| ((?:LOG|SQL|API|CON)-\d+[a-z]?) \|/gm)].map((m) => m[1])); console.log(`Índice Contratos-da-v2: ${ids.size} contratos distintos (esperado 92)`); }
+// Bloco 5: a lista completa fica em Partes/Contratos-da-v2-*; conta o índice e as partes
+const textoIdx = () => [idx, ...(fs.existsSync(path.join(raiz, '06-Contratos', 'Partes')) ? fs.readdirSync(path.join(raiz, '06-Contratos', 'Partes')).filter((x) => x.startsWith('Contratos-da-v2-')).map((x) => path.join(raiz, '06-Contratos', 'Partes', x)) : [])].map((x) => fs.readFileSync(x, 'utf8')).join('\n');
+if (fs.existsSync(idx)) { const ids = new Set([...textoIdx().matchAll(/^\| ((?:LOG|SQL|API|CON)-\d+[a-z]?) \|/gm)].map((m) => m[1])); console.log(`Índice Contratos-da-v2: ${ids.size} contratos distintos (esperado 92)`); }
 
 // Nomes antigos do mapa (a partir do Bloco 2): em [[links]] e em texto entre crases.
 const csv = path.join(raiz, '_v3', 'mapa-renomeacao.csv');
@@ -103,8 +105,10 @@ if (fs.existsSync(csv)) {
   const achados = [];
   for (const f of notas) {
     const r = rel(f);
-    if (r.startsWith('_v3/') || EXC.includes(path.basename(f, '.md'))) continue;
     const txt = fs.readFileSync(f, 'utf8');
+    // Bloco 5: a parte de uma nota de exceção (frontmatter parte-de) também é exceção
+    const origem = (txt.match(/^parte-de: "\[\[([^\]]+)\]\]"/m) || [])[1];
+    if (r.startsWith('_v3/') || EXC.includes(path.basename(f, '.md')) || EXC.includes(origem)) continue;
     for (const [i, l] of txt.split('\n').entries()) {
       const trechos = [...l.matchAll(/\[\[[^\]\n]+?\]\]/g), ...l.replace(/\[\[[^\]\n]+?\]\]/g, (m) => 'x'.repeat(m.length)).matchAll(/`[^`]*`/g)]
         .map((m) => l.slice(m.index, m.index + m[0].length));
