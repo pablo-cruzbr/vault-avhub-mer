@@ -21,19 +21,19 @@ Faça isto no início de toda sessão, antes de ler ou escrever (é a seção 1 
 2. **Vault:** traga o remoto com `git pull --ff-only`. Se não for fast-forward, pare e avise; não faça merge nem rebase por conta própria.
 3. **Sistemas:** só leitura, sempre pela `origin/develop` (F5). Nunca troque de branch, faça commit ou stash neles. O `omie-elt-pipeline` não tem `develop`: a base é `origin/master`.
 4. **Quebra de linha:** no vault, `git config core.autocrlf` tem de ser `false`. O `.gitattributes` exige `eol=lf`.
-5. **Obsidian:** antes de mexer em muitas notas de uma vez (renomear, mover, dividir), confirme com o Nathan que o Obsidian está fechado.
+5. **Obsidian:** antes de mexer em muitas notas de uma vez (renomear, mover, dividir), confirme com quem está usando que o Obsidian está fechado.
 
 **Os cinco fatos que valem (05/11/2026):**
 
 - **F1.** A ordem do vault é a ordem do fluxo do mermaid: as raias vão de `01-Proposta-de-Venda` a `15-Custo-Real-e-Comissao`.
 - **F2.** Os contratos da v2 ficaram na v2 (tag `v2-antes-da-v3`); o vault os consulta pelo índice [[Contratos-da-v2]].
 - **F3.** O módulo do Pablo (proposta e suprimentos) não tem API nem banco. O que não estiver na `develop` é 🔴 "sem API e sem banco"; o `api-comercial` de teste será removido inteiro.
-- **F4.** O Nathan fecha o Obsidian enquanto a IA trabalha em lote.
+- **F4.** Quem está usando fecha o Obsidian enquanto a IA trabalha em lote.
 - **F5.** A base é a `develop` dos sistemas: se está na `develop`, está pronto (✅). A `main` não é critério de pronto; só aparece como informação ("publicado na `main`: sim/não").
 
 ## Comando: "atualizar o vault"
 
-Quando o Nathan disser "atualizar o vault" (ou "atualiza o vault", "sincroniza o vault"), siga estes passos, nesta ordem. A base é sempre a `develop` dos sistemas: se está na `develop`, está ok (✅).
+Quando quem estiver usando disser "atualizar o vault" (ou "atualiza o vault", "sincroniza o vault"), siga estes passos, nesta ordem. A base é sempre a `develop` dos sistemas: se está na `develop`, está ok (✅).
 
 **1. Proteja o que é local, no repositório do vault.**
 
@@ -68,7 +68,7 @@ Mostre uma lista com:
 - quais notas e selos mudam;
 - o que ficou em dúvida.
 
-Espere o "ok" do Nathan.
+Espere o "ok" de quem pediu.
 
 **5. Atualize e registre.**
 
@@ -78,15 +78,15 @@ Espere o "ok" do Nathan.
 4. Registre cada divergência como `PS` em `Pontas-Soltas`.
 5. Atualize `Ultima-Atualizacao-do-Vault` com os novos commits de `origin/develop` e a data.
 6. Rode a validação (links resolvem, nenhuma nota órfã).
-7. Faça push da branch e abra o PR só quando o Nathan pedir.
+7. Faça push da branch e abra o PR só quando quem estiver usando pedir.
 
 ## Mapa das pastas
 
-Tudo fica dentro de `C:\Users\nathan.silva\Desktop\Gerenciamento-de-Integracoes`. Essa pasta só agrupa os projetos; o que importa está em cada subpasta.
+Tudo fica dentro de uma **pasta-mãe**: a pasta que contém o vault e os outros cinco repositórios, lado a lado, com os nomes da tabela abaixo. O nome e o lugar dela variam de computador para computador; o que vale é os seis estarem juntos. Essa pasta só agrupa os projetos; o que importa está em cada subpasta. A partir do vault, os sistemas estão em `../api-acos-vital`, `../av-hub`, `../api-pcp`, `../app-pcp` e `../omie-elt-pipeline`.
 
 | Pasta | Grupo | O que é | Onde o vault descreve |
 | --- | --- | --- | --- |
-| `vault-avhub-mer-v2` | Vault | O manual do fluxo de Atividades (pedido de 0 a 100%) | `Home`, `Comece-Aqui`, `Regras-do-Vault` |
+| `vault-avhub-mer` | Vault | O manual do fluxo de Atividades (pedido de 0 a 100%) | `Home`, `Comece-Aqui`, `Regras-do-Vault` |
 | `api-acos-vital` | ERP | API do av-hub (dono: Gustavo; rotas comerciais com o Robert desde 28/10) | `AV-Hub-API`, `Banco-AvHub` |
 | `av-hub` | ERP | Front do av-hub, o HUB em Next.js, com o BFF e a pasta `api-comercial/` (módulo de teste do Pablo, será removido inteiro; não conta como pronto, F3) | `AV-Hub-Front`, `Mapa-Rotas-BFF-Bearer`, `Telas-por-Raia` |
 | `api-pcp` | MES | Backend do MES, o sistema de chão de fábrica (dono: Robert) | `MES-Backend`, `Banco-MES` |
@@ -115,7 +115,7 @@ Antes de ler qualquer código, confirme a estrutura real de cada pasta (`README`
 2. Dumps de esquema (MES e av-hub, de 14/10/2026).
 3. `Registro-de-Decisoes`.
 4. `00-Fluxo-Mestre-0b`.
-5. O vault anterior (`vault-avhub-mer`, congelado), só quando não conflita com os itens acima.
+5. As versões anteriores do vault (v1 na tag `arquivo/v1`, v2 na tag `v2-final`, congeladas), só quando não conflitam com os itens acima.
 
 **Selos de confiança.** Leia o selo antes da afirmação.
 
@@ -158,14 +158,14 @@ O vault diz o que procurar; o código diz o que existe. Para cada afirmação re
 
 ## Protocolo de certeza
 
-O Nathan precisa de máxima certeza em cada decisão. Antes de recomendar ou afirmar algo, a IA cumpre este protocolo.
+Quem decide precisa de máxima certeza em cada decisão. Antes de recomendar ou afirmar algo, a IA cumpre este protocolo.
 
 1. **Separe fato de hipótese.** Todo ponto da resposta leva a origem: `arquivo:linha` e commit (código), tabela e coluna (banco), ID da decisão (vault). Sem origem, escreva "não conferido".
 2. **Uma fonte não basta para decisão.** Cruze pelo menos duas: nota do vault e código; código e banco; banco e tela. Quando divergem, aplique a precedência e relate a divergência.
 3. **Não complete lacunas por analogia.** Se o código ou o dump não mostra, diga o que falta e como obter, em vez de supor.
 4. **Diga o grau de certeza.** Use as palavras: *confirmado* (código ou banco lido), *indicado* (só o vault), *não verificado*.
 5. **Pare e pergunte quando a decisão não dá para desfazer** (migration, gravação no Omie, apagar dado) ou quando o vault e o código se contradizem sem decisão que resolva.
-6. **Registre o que descobrir.** Divergência vira `PS`; dúvida de negócio vira `OQ` ou consulta `CON`; decisão do Nathan vai ao `Registro-de-Decisoes` com ID novo.
+6. **Registre o que descobrir.** Divergência vira `PS`; dúvida de negócio vira `OQ` ou consulta `CON`; decisão de negócio vai ao `Registro-de-Decisoes` com ID novo.
 
 ### O que conta como prova
 
@@ -179,7 +179,7 @@ O Nathan precisa de máxima certeza em cada decisão. Antes de recomendar ou afi
 
 ## Preview das telas
 
-A IA pode abrir o preview das telas (o navegador embutido do app, com o front rodando no computador do Nathan) para ver o que o código faz na prática. É a prova aceita para qualquer afirmação sobre comportamento de tela.
+A IA pode abrir o preview das telas (o navegador embutido do app, com o front rodando no computador de quem está usando) para ver o que o código faz na prática. É a prova aceita para qualquer afirmação sobre comportamento de tela.
 
 **Abra o preview sempre que a decisão depender de:**
 
@@ -190,16 +190,16 @@ A IA pode abrir o preview das telas (o navegador embutido do app, com o front ro
 
 **Como proceder:**
 
-1. Peça ao Nathan para subir o projeto certo (`av-hub` ou `app-pcp`) na `develop` atualizada, e confirme o commit em uso. É a `develop` que vale.
+1. Peça a quem está usando para subir o projeto certo (`av-hub` ou `app-pcp`) na `develop` atualizada, e confirme o commit em uso. É a `develop` que vale.
 2. Navegue pelo caminho do nó no `00-Fluxo-Mestre-0b`, anotando o que viu e o que o vault dizia.
 3. Teste com um perfil de negócio, não só com `Admin (Dev)`: esse perfil vê tudo e esconde problemas de permissão. A Torre de Fluxo, por exemplo, só aparece para o Admin por enquanto (N16-148).
 4. Registre divergências como `PS` e cite a rota e o branch.
 
-**Cuidados:** não grave dados em ambiente real. Peça ao Nathan o usuário e o ambiente de teste; não guarde senhas nem chaves em notas. Tela que só existe com dados de exemplo (a Torre de Fluxo, desde 15/10) não prova integração com o MES.
+**Cuidados:** não grave dados em ambiente real. Peça a quem está usando o usuário e o ambiente de teste; não guarde senhas nem chaves em notas. Tela que só existe com dados de exemplo (a Torre de Fluxo, desde 15/10) não prova integração com o MES.
 
 ## Dump do banco
 
-A IA pode, e deve, pedir ao Nathan um dump do banco sempre que a resposta depender do que o banco tem de fato. Os dumps de esquema do vault são de 14/10/2026; migrations e dados posteriores não aparecem neles.
+A IA pode, e deve, pedir a quem está usando um dump do banco sempre que a resposta depender do que o banco tem de fato. Os dumps de esquema do vault são de 14/10/2026; migrations e dados posteriores não aparecem neles.
 
 **Peça um dump quando:**
 
@@ -222,6 +222,6 @@ A IA pode, e deve, pedir ao Nathan um dump do banco sempre que a resposta depend
 - **Segredos.** `Chaves-e-Autenticacao` e os arquivos `.env` dos projetos tratam de chaves. Leia para entender o desenho, mas nunca copie chave, token ou senha para o vault, para respostas ou para este guia.
 - **Omie não tem ambiente de teste.** Qualquer chamada que grava no Omie (por exemplo `IncluirPedido`) afeta dado real. Só teste com autorização expressa do Nathan, e consulte `Colunas-Protegidas` antes.
 - **Cadastros TESTE no Omie.** Os cadastros TESTE do Nathan entram nos relatórios e na pipeline; filtre-os ao conferir números (BL-055).
-- **Vault anterior congelado.** `vault-avhub-mer` (v1) só serve para consulta; não edite.
+- **Versões anteriores congeladas.** A v1 (tag `arquivo/v1`) e a v2 (tag `v2-final`) só servem para consulta; não edite.
 - **Edição das notas.** Siga `Regras-do-Vault`: abra com "Em uma frase", mantenha frontmatter, mantenha todos os `[[links]]` resolvendo, e reescreva a nota em vez de empilhar histórico. Cada ID existente continua o mesmo.
-- **Arquivos do computador.** Trabalhe sobre cópia ou em novo arquivo ao lado do original. Altere um arquivo existente só quando o Nathan pedir, e nunca apague nada sem pedir permissão.
+- **Arquivos do computador.** Trabalhe sobre cópia ou em novo arquivo ao lado do original. Altere um arquivo existente só quando quem está usando pedir, e nunca apague nada sem pedir permissão.

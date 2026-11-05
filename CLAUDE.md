@@ -1,6 +1,6 @@
 # CLAUDE.md: vault do fluxo de Atividades (Aços Hub)
 
-Este repositório é um vault Obsidian em português: o manual do fluxo de um pedido de venda de 0 a 100% no ERP da Aços Vital. Os sistemas ficam nas pastas vizinhas de `C:\Users\nathan.silva\Desktop\Gerenciamento-de-Integracoes` (`api-acos-vital`, `av-hub`, `api-pcp`, `app-pcp`, `omie-elt-pipeline`).
+Este repositório é um vault Obsidian em português: o manual do fluxo de um pedido de venda de 0 a 100% no ERP da Aços Vital. Os sistemas ficam nas pastas vizinhas do vault, dentro da mesma pasta-mãe (`api-acos-vital`, `av-hub`, `api-pcp`, `app-pcp`, `omie-elt-pipeline`). Quem usar o vault precisa ter os seis repositórios clonados lado a lado nessa pasta-mãe, com estes nomes; o vault fica em `vault-avhub-mer`, o mesmo nome do repositório no GitHub. Os caminhos são sempre relativos ao vault (por exemplo, `../api-pcp`).
 
 ## Leia primeiro
 
@@ -11,10 +11,10 @@ Este repositório é um vault Obsidian em português: o manual do fluxo de um pe
 ## Antes de qualquer tarefa: preparar o ambiente
 
 1. Em cada um dos seis repositórios: `git fetch --all --prune`; anote o commit de `origin/develop` (no `omie-elt-pipeline`, `origin/master`).
-2. No vault: `git pull --ff-only`. Se não for fast-forward, pare e avise o Nathan; nada de merge ou rebase por conta própria.
+2. No vault: `git pull --ff-only`. Se não for fast-forward, pare e avise quem pediu a tarefa; nada de merge ou rebase por conta própria.
 3. Sistemas são **só leitura**: nunca troque de branch, faça commit ou stash neles. Leia sem checkout: `git show origin/develop:<arquivo>`, `git grep <termo> origin/develop`.
 4. No vault, `git config core.autocrlf` tem de ser `false` (o `.gitattributes` exige LF).
-5. Antes de mexer em muitas notas de uma vez, confirme com o Nathan que o Obsidian está fechado.
+5. Antes de mexer em muitas notas de uma vez, confirme com quem está usando que o Obsidian está fechado.
 
 ## A regra de estado (F5)
 
@@ -22,7 +22,7 @@ Este repositório é um vault Obsidian em português: o manual do fluxo de um pe
 
 ## Gatilho: "atualizar o vault"
 
-Quando o Nathan disser "atualizar o vault" (ou "atualiza o vault", "sincroniza o vault"), siga a seção **"Comando: atualizar o vault"** do Guia de Leitura. O ponto de partida é `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md`. Mostre o plano e espere o "ok" antes de escrever.
+Quando quem estiver usando disser "atualizar o vault" (ou "atualiza o vault", "sincroniza o vault"), siga a seção **"Comando: atualizar o vault"** do Guia de Leitura. O ponto de partida é `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md`. Mostre o plano e espere o "ok" antes de escrever.
 
 ## Como achar as coisas
 

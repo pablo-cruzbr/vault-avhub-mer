@@ -81,12 +81,12 @@ O branch de trabalho é `develop` (no pipeline, `master`). Os repositórios fora
 
 | Sistema | Repositório (GitHub `Acosvital/…`) | Pasta local | `develop` em 14/10 | `main` | Dono |
 |---|---|---|---|---|---|
-| MES back (`api-pcp`) | `api-pcp` | `Gerenciamento de Integrações\api-pcp` | 14/10: `de68086` (PR #58). **29/10: `befd973`** (PR #78, OP e lote do fabricado, 27/10) | 14/10: `8e2bf56` (08/10), `develop` 13 à frente. **29/10: igual, `develop` 53 à frente** | Robert |
-| MES front (`app-pcp`) | `app-pcp` | `Gerenciamento de Integrações\app-pcp` | 14/10: `df4a258` (PR #45). **29/10: `93f96de`** (PR #63, 27/10) | 14/10: `3b0f463` (08/10), `develop` 10 à frente. **29/10: igual, `develop` 51 à frente** | Robert |
-| API do av-hub (`api-acos-vital`) | `api-acos-vital` | `Gerenciamento de Integrações\api-acos-vital` | 14/10: `276dab8`. **29/10: `f2fa237`** (rotas de parceiros; o clone local tem mais 1 commit, `0384e89`, ainda não enviado) | 14/10: `49596ca` (09/10), `develop` 11 à frente. **29/10: `4151467` (PR #305), `develop` 0 à frente** | Gustavo (DBA); módulo comercial: Robert |
-| HUB (front do av-hub) | `av-hub` | `TI\NATHAN\00 - HUB` (14/10); `Gerenciamento de Integrações\av-hub` (29/10) | 14/10: `b55ac55` (PR #194). **29/10: `758d5f0`** (PR #251, abas da proposta) | 14/10: `cfed113` (06/10), `develop` 284 à frente. **29/10: `b977529` (23/10), `develop` 29 à frente** | Nathan |
+| MES back (`api-pcp`) | `api-pcp` | `<pasta-mãe>\api-pcp` | 14/10: `de68086` (PR #58). **29/10: `befd973`** (PR #78, OP e lote do fabricado, 27/10) | 14/10: `8e2bf56` (08/10), `develop` 13 à frente. **29/10: igual, `develop` 53 à frente** | Robert |
+| MES front (`app-pcp`) | `app-pcp` | `<pasta-mãe>\app-pcp` | 14/10: `df4a258` (PR #45). **29/10: `93f96de`** (PR #63, 27/10) | 14/10: `3b0f463` (08/10), `develop` 10 à frente. **29/10: igual, `develop` 51 à frente** | Robert |
+| API do av-hub (`api-acos-vital`) | `api-acos-vital` | `<pasta-mãe>\api-acos-vital` | 14/10: `276dab8`. **29/10: `f2fa237`** (rotas de parceiros; o clone local tem mais 1 commit, `0384e89`, ainda não enviado) | 14/10: `49596ca` (09/10), `develop` 11 à frente. **29/10: `4151467` (PR #305), `develop` 0 à frente** | Gustavo (DBA); módulo comercial: Robert |
+| HUB (front do av-hub) | `av-hub` | `TI\NATHAN\00 - HUB` (14/10); `<pasta-mãe>\av-hub` (29/10) | 14/10: `b55ac55` (PR #194). **29/10: `758d5f0`** (PR #251, abas da proposta) | 14/10: `cfed113` (06/10), `develop` 284 à frente. **29/10: `b977529` (23/10), `develop` 29 à frente** | Nathan |
 | `api-comercial` | `av-hub` (pasta `api-comercial/` dentro do HUB) | `av-hub\api-comercial` | junto com o HUB; legado de leitura desde `a90d306` (28/10) | **não existe em `main`** | Ninguém altera (N16-117); o Robert lê para portar |
-| Pipeline Omie | `omie-elt-pipeline` | `Gerenciamento de Integrações\omie-elt-pipeline` | `master` `0f739f0` (PR #3, envio da OC fixo, 08/10) | — | Nathan 📝 |
+| Pipeline Omie | `omie-elt-pipeline` | `<pasta-mãe>\omie-elt-pipeline` | `master` `0f739f0` (PR #3, envio da OC fixo, 08/10) | — | Nathan 📝 |
 
 Evidência: `git log -1`, `git branch --show-current` e `git rev-list --count origin/main..origin/develop` em cada repositório, 14/10/2026 ✅.
 

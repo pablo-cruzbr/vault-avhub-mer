@@ -13,7 +13,7 @@ fontes: [plano de 14/10/2026, estrutura da v3 (05/11/2026)]
 
 **Quando consultar esta nota:** quando você quiser achar qualquer assunto do projeto. Ela é o índice de todas as pastas.
 
-O pedido começa na proposta (ou no pedido digitado no Omie) e termina na nota fiscal e na comissão. Este vault substitui o `vault-avhub-mer` (v1, congelado).
+O pedido começa na proposta (ou no pedido digitado no Omie) e termina na nota fiscal e na comissão. Este vault substitui a v1 e a v2 (tags `arquivo/v1` e `v2-final`, congeladas).
 
 ## Por onde começar
 

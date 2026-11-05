@@ -13,7 +13,7 @@ fontes: [vault-avhub-mer (v1, congelado)]
 
 **Quando consultar esta nota:** quando você achar uma referência a uma nota do v1 e quiser saber onde ela está hoje.
 
-O v1 (`vault-avhub-mer`) tem **171 notas** e está congelado. Os contratos mantêm o texto integral. As demais notas foram reescritas ou juntadas. Quando uma nota ficou só no v1, a tabela diz o motivo.
+O v1 (hoje na tag `arquivo/v1` do repositório `vault-avhub-mer`) tem **171 notas** e está congelado. Os contratos mantêm o texto integral. As demais notas foram reescritas ou juntadas. Quando uma nota ficou só no v1, a tabela diz o motivo.
 
 | Nota do v1 | Destino no v2 |
 |---|---|
