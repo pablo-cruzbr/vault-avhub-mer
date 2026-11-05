@@ -151,7 +151,7 @@ node scripts/validar.mjs
 
 Tem de dar 0 em: links quebrados, notas órfãs, CRLF, caractere corrompido, notas acima de 25 KB, nomes antigos, nós sem dono único, caminhos do `build.mjs` que não existem e ✅ sem citação nas raias. O índice de contratos tem de somar 92. A última linha diz "RESULTADO: tudo verde"; com qualquer problema, o validador sai com código 1.
 
-**No GitHub, isso roda sozinho.** A Action `.github/workflows/validar.yml` roda o validador e o autoteste em todo PR para a `main` e em todo push nela. A `main` é protegida: só recebe mudança por PR, e o PR só entra com o check `validar` verde. O caminho de toda mudança é branch → PR → check verde → merge; push direto na `main` é recusado. Se mexeu em mapa ou fichas, rode também `cd 09-Diagramas/mapa && node build.mjs` ("0 contratos sem nota achada").
+**No GitHub, isso roda sozinho.** A Action `.github/workflows/validar.yml` roda o validador e o autoteste em todo PR para a `main` e em todo push nela. O resultado aparece no PR como o check `validar`, verde ou vermelho. O caminho de toda mudança é branch → PR → check verde → merge: **não mergeie PR com o check vermelho e não faça push direto na `main`.** Hoje isso é regra de equipe, não trava do GitHub: com o repositório privado e a organização no plano gratuito, o GitHub não deixa proteger a `main` (exige o plano Team). Se a organização mudar de plano, ative a proteção exigindo o check `validar`. Se mexeu em mapa ou fichas, rode também `cd 09-Diagramas/mapa && node build.mjs` ("0 contratos sem nota achada").
 
 Se mudou o próprio validador, ou se ele der tudo 0 e você desconfiar, rode o autoteste:
 

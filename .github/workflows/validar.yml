@@ -1,7 +1,7 @@
 # Roda o validador do vault em todo PR para a main (e em todo push nela).
 # O validador sai com código 1 quando acha problema: link quebrado, nota órfã, CRLF, caractere
 # corrompido, nota acima de 25 KB, nome antigo, nó sem dono, caminho do mapa, selo ✅ sem citação.
-# Com a proteção da main exigindo este check, nada entra sem passar por ele.
+# O GitHub não deixa exigir este check (repositório privado no plano gratuito): não mergeie PR com ele vermelho.
 name: Validar o vault
 
 on:
