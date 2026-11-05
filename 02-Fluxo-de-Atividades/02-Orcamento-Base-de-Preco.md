@@ -60,7 +60,7 @@ Depois, Compras emite a OC dos 100 flanges. O preço pago passa a ser a última 
 ## O que já existe e o que falta
 
 - ✅ Telas no `av-hub` (`develop`, menu enxuto de 27/10, N16-107 e N16-108): Pedidos de custo (Painel do Comprador e Pedido de cotação, em abas), Produtos (Catálogo, Pesquisa de materiais e Ofertas, em abas), Fornecedores, Parâmetros (custo e Telha, em abas) e Custo por item.
-- ✅ Oferta imutável com histórico, média por período e pedido de custo, no `api-comercial` de teste (legado de consulta, N16-117); falta portar para a `api-acos-vital`.
+- 🔴 Sem API e sem banco: oferta imutável com histórico, média por período e pedido de custo existem só no `api-comercial` de teste (legado de consulta, N16-117), que será removido; falta portar para a `api-acos-vital`. Na API do Hub já há a leitura de fornecedores, vínculos, categorias e cotações (✅ `api-acos-vital` `orcamento.route.js:140-312`).
 - 📝 As regras acima estão decididas.
 - 🟡 Valor correto da OC (`C7`) entrando no histórico de compras.
 - 🟡 Cadastro das telas em produção.
@@ -141,11 +141,11 @@ Valores reais do módulo do Pablo (`api-comercial/prisma/models/enums.prisma`, h
 
 | Campo | Valores | Fonte |
 |---|---|---|
-| `StatusSolicitacao` (pedido de custo) | `ABERTA`, `RESPONDIDA`, `SEM_FORNECEDOR`, `CANCELADA` | `enums.prisma:188-195` ✅ |
-| SLA da solicitação (calculado) | `ATRASADA`, `VENCE_HOJE`, `NO_PRAZO` | `custos.routes.ts:338` ✅; **sai** com N16-58 (sem prazo; o tempo é cronometrado) 🔴 |
-| `StatusOferta` | `VIGENTE`, `VENCIDA`, `INVALIDADA`, `HISTORICA` | `enums.prisma:179-186` ✅ |
-| `FonteOferta` | `MANUAL`, `MAPA_COTACAO`, `PEDIDO_OMIE`, `MIGRACAO` | `enums.prisma:170-177` ✅ |
-| `OrigemCusto` (item da proposta) | `VIGENTE`, `HISTORICO`, `MANUAL`, `SEM_CUSTO` | `enums.prisma:110-117` ✅ |
+| `StatusSolicitacao` (pedido de custo) | `ABERTA`, `RESPONDIDA`, `SEM_FORNECEDOR`, `CANCELADA` | `enums.prisma:188-195` 🔴 só no módulo de teste |
+| SLA da solicitação (calculado) | `ATRASADA`, `VENCE_HOJE`, `NO_PRAZO` | `custos.routes.ts:338` 🔴 só no módulo de teste; **sai** com N16-58 (sem prazo; o tempo é cronometrado) 🔴 |
+| `StatusOferta` | `VIGENTE`, `VENCIDA`, `INVALIDADA`, `HISTORICA` | `enums.prisma:179-186` 🔴 só no módulo de teste |
+| `FonteOferta` | `MANUAL`, `MAPA_COTACAO`, `PEDIDO_OMIE`, `MIGRACAO` | `enums.prisma:170-177` 🔴 só no módulo de teste |
+| `OrigemCusto` (item da proposta) | `VIGENTE`, `HISTORICO`, `MANUAL`, `SEM_CUSTO` | `enums.prisma:110-117` 🔴 só no módulo de teste |
 
 A oferta é **imutável** (RN-130): corrigir é invalidar com motivo e lançar outra, o que garante o histórico (`suprimentos.prisma:138-183`). O pedido de custo passa a guardar **abertura e resposta** para o cronômetro, no lugar do prazo obrigatório 🔴.
 
@@ -155,7 +155,7 @@ Menu **Orçamento** desde 16/10/2026; enxugado em 27/10/2026 (N16-107 e N16-108,
 
 | Nome atual | Rota | Abas (conferidas no código) | Nó | Estado |
 |---|---|---|---|---|
-| Pedidos de custo (Painel do Comprador) | `/orcamento/painel-comprador` | fila do Painel do Comprador e Pedido de cotação (`PaginaComAbas`) | `B3`, `B4` | ✅ (`av-hub`) fila de solicitações de custo; responde com oferta (PR #201) |
+| Pedidos de custo (Painel do Comprador) | `/orcamento/painel-comprador` | fila do Painel do Comprador e Pedido de cotação (`PaginaComAbas`) | `B3`, `B4` | 🟡 tela no `av-hub`; os dados (`/painel-comprador`, `/solicitacoes-custo`) respondem 503 no BFF: sem API e sem banco 🔴 — fila de solicitações de custo; responde com oferta (PR #201) |
 | Produtos (Catálogo) | `/orcamento/catalogo-produtos`, `/[id]` | Catálogo, Pesquisa de materiais e Ofertas | `B1`, `B2` | ✅ o detalhe do produto mostra os preços (`components/Suprimentos/ProdutoDetalhe.tsx`); é a base da página do produto |
 | Fornecedores (e ficha) | `/orcamento/fornecedores`, `/[id]` | lista e ficha | `B1` | ✅ (`av-hub`) |
 | Parâmetros de custo | `/orcamento/parametros-custo` | Custo (ICMS a recuperar, densidades, validade) e Telha (tabela da telha) | `B1` | ✅ (`av-hub`); 🟡 recebe também os pesos do score e os limites |
@@ -172,25 +172,27 @@ Rotas do `api-comercial` (legado só para leitura, N16-117) que o Robert recria 
 
 | Método e rota | Uso | Nó | Código |
 |---|---|---|---|
-| `GET /produtos`, `/produtos/:id`, `POST /produtos` | catálogo | `B2` | ✅ `suprimentos.routes.ts:29`, `:72`, `:106` |
-| `GET /produtos/:id/precos?dias=` | mínimo, máximo, último, média e por fornecedor com variação sobre a média | `B2` | ✅ `suprimentos.routes.ts:823-875` (exige `veCusto`) |
+| `GET /produtos`, `/produtos/:id`, `POST /produtos` | catálogo | `B2` | 🟡 `GET /produtos` e `/produtos/:id` vão à API do Hub (✅ `api-acos-vital` `src/schemas/core/tables/produtos/produtos.route.js`); `POST /produtos` 🔴 só no módulo de teste (`suprimentos.routes.ts:29`, `:72`, `:106`) |
+| `GET /produtos/:id/precos?dias=` | mínimo, máximo, último, média e por fornecedor com variação sobre a média | `B2` | 🔴 sem API e sem banco: o BFF aponta para a API do Hub, mas a `api-acos-vital` não tem a rota; existe só no módulo de teste (`suprimentos.routes.ts:823-875`) (exige `veCusto`) |
 | `GET /produtos/:id/score_fornecedores`, `/volatilidade` | score, ranking por categoria, coeficiente de variação, dado recente | `B2` | 🔴 🟡 nomes |
 | `GET /ofertas`, `POST /ofertas`, `POST /ofertas/:id/invalidar`, `GET /ofertas/importacoes`, `/exportar` | base com histórico | `B1`, `B4` | ✅ `:645`, `:687`, `:791`, `:561`, `:597` |
-| `GET /solicitacoes_custo`, `POST /solicitacoes_custo` | fila e criação do pedido de custo | `B3` | ✅ `custos.routes.ts:304`, `:367` |
-| `POST /solicitacoes_custo/:id/assumir`, `liberar`, `responder`, `cancelar` | comprador pega, devolve, responde, cancela | `B4` | ✅ `custos.routes.ts:494`, `:500`, `:406`, `:508` |
-| `POST /custos/sugerir` | sugestão de custo | `B2` | ✅ `custos.routes.ts:30` |
+| `GET /solicitacoes_custo`, `POST /solicitacoes_custo` | fila e criação do pedido de custo | `B3` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `custos.routes.ts:304`, `:367` |
+| `POST /solicitacoes_custo/:id/assumir`, `liberar`, `responder`, `cancelar` | comprador pega, devolve, responde, cancela | `B4` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `custos.routes.ts:494`, `:500`, `:406`, `:508` |
+| `POST /custos/sugerir` | sugestão de custo | `B2` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `custos.routes.ts:30` |
 | Matriz de preços | 🟡 | `B1`, `B2` | 🔴 |
 
 Contratos: os do Orçamento foram removidos em 29/10/2026 e o Robert cria os novos. Dependências: [[Contratos-da-v2|LOG-52]] (fases 4 e 5).
 
-### Como está no código (✅ (`av-hub/api-comercial`))
+### Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, que será removido)
 
-- ✅ **Oferta imutável com histórico:** `Oferta` (`prisma/models/suprimentos.prisma:138-183`): preço, unidade, IPI, ST, origem do ICMS, frete, `prazo` (**texto**), mínimo, `dataCotacao`, `validaAte`, `custoLiquidoUnit`, `status`, invalidação com motivo e quem. Chave única `(fonte, idDocumentoFonte, idProduto, idFornecedor)` para importar sem duplicar. Já há `validaAte` e `custoLiquidoUnit`, que apoiam o "dado recente" e a Nota Preço.
-- ✅ **Média "bolsa de valores":** `mediasDoProduto` e `GET /produtos/:id/precos` com janela de 7 a 730 dias, média ponderada pela quantidade comprada, mínimo, máximo, último preço e `delta_media_pct` por fornecedor (`suprimentos.routes.ts:823-875`; `domain/custo/medias.ts`).
-- ✅ **Pedido de custo:** `SolicitacaoCusto` (`suprimentos.prisma:216-245`) com `prazoResposta` obrigatório (**sai**), comprador que assumiu, oferta que respondeu, justificativa quando não há fornecedor; prazo padrão de 2 dias úteis (`custos.routes.ts:378`, **sai**); número `SC-AAAA-NNNN` (`custos.routes.ts:384-386`, com letras).
-- ✅ (`av-hub`) **Resposta com oferta no Painel do Comprador:** PR #201 (`33f21d3`).
-- ✅ **Mapa de cotação importado:** `importarMapa.ts`, `mapaCotacao.ts` (oferta com fonte `MAPA_COTACAO`).
-- ✅ **Ofertas do Omie:** `PEDIDO_OMIE` nasce de pedidos de compra lidos direto do Omie; no desenho do LOG-52 isso vira derivado de `pedidos_compras_itens` da pipeline (LOG-52 seção 3.4, Q1 ❓). É a fonte "OC efetivada" da base (N16-41).
+**O Nathan confirmou em 05/11/2026 que o `api-comercial` será removido integralmente:** pelo F3, o que só existe nele é 🔴 "sem API e sem banco". No `av-hub` `develop` (2e5456d) o BFF já não fala com ele: as rotas que ainda não existem na API do Hub respondem 503 `RECURSO_NAO_MIGRADO` (`lib/api/comercialApi.ts`, N16-111).
+
+- 🔴 (só no módulo de teste) **Oferta imutável com histórico:** `Oferta` (`prisma/models/suprimentos.prisma:138-183`): preço, unidade, IPI, ST, origem do ICMS, frete, `prazo` (**texto**), mínimo, `dataCotacao`, `validaAte`, `custoLiquidoUnit`, `status`, invalidação com motivo e quem. Chave única `(fonte, idDocumentoFonte, idProduto, idFornecedor)` para importar sem duplicar. Já há `validaAte` e `custoLiquidoUnit`, que apoiam o "dado recente" e a Nota Preço.
+- 🔴 (só no módulo de teste) **Média "bolsa de valores":** `mediasDoProduto` e `GET /produtos/:id/precos` com janela de 7 a 730 dias, média ponderada pela quantidade comprada, mínimo, máximo, último preço e `delta_media_pct` por fornecedor (`suprimentos.routes.ts:823-875`; `domain/custo/medias.ts`).
+- 🔴 (só no módulo de teste) **Pedido de custo:** `SolicitacaoCusto` (`suprimentos.prisma:216-245`) com `prazoResposta` obrigatório (**sai**), comprador que assumiu, oferta que respondeu, justificativa quando não há fornecedor; prazo padrão de 2 dias úteis (`custos.routes.ts:378`, **sai**); número `SC-AAAA-NNNN` (`custos.routes.ts:384-386`, com letras).
+- 🔴 (só no módulo de teste) **Resposta com oferta no Painel do Comprador:** PR #201 (`33f21d3`).
+- 🔴 (só no módulo de teste) **Mapa de cotação importado:** `importarMapa.ts`, `mapaCotacao.ts` (oferta com fonte `MAPA_COTACAO`).
+- 🔴 (só no módulo de teste) **Ofertas do Omie:** `PEDIDO_OMIE` nasce de pedidos de compra lidos direto do Omie; no desenho do LOG-52 isso vira derivado de `pedidos_compras_itens` da pipeline (LOG-52 seção 3.4, Q1 ❓). É a fonte "OC efetivada" da base (N16-41).
 - 🔴 **Não existe:** score, ranking por categoria e volatilidade; prazo de entrega em dias; frequência de vitória; matriz de preços; página do produto sem acesso a custo; vínculo do valor correto da OC (`C7`) com o histórico; cronômetro do pedido de custo; migração para a `api-acos-vital` (BL-062).
 
 ### Dados 🟡
@@ -231,8 +233,8 @@ Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-ant
 
 | Método e rota | Uso | Nó | Estado |
 |---|---|---|---|
-| `GET /produtos/:id/precos` | histórico, média e fornecedores | `B2` | ✅ `suprimentos.routes.ts:823` |
-| `POST /solicitacoes_custo` e `responder`, `assumir`, `liberar`, `cancelar` | pedido de custo (o prazo obrigatório de 2 dias úteis **sai**: N16-58) | `B3`, `B4` | ✅ `custos.routes.ts:304-510`; 🔴 ajuste |
+| `GET /produtos/:id/precos` | histórico, média e fornecedores | `B2` | 🔴 sem API e sem banco (só no módulo de teste, `suprimentos.routes.ts:823`; a `api-acos-vital` não tem a rota) |
+| `POST /solicitacoes_custo` e `responder`, `assumir`, `liberar`, `cancelar` | pedido de custo (o prazo obrigatório de 2 dias úteis **sai**: N16-58) | `B3`, `B4` | 🔴 só no módulo de teste: `custos.routes.ts:304-510`; 🔴 ajuste |
 
 #### Como está no código (módulo de teste)
 

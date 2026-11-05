@@ -1,5 +1,5 @@
 # Validação do vault (2026-11-05)
-Notas: 120  Arquivos: 171
+Notas: 120  Arquivos: 172
 
 ## Links quebrados: 0
 
@@ -11,8 +11,8 @@ Notas: 120  Arquivos: 171
 
 ## Notas acima de 25 KB: 24
 - 02-Fluxo-de-Atividades/00-Fluxo-Mestre-0b.md (69.3 KB)
-- 02-Fluxo-de-Atividades/01-Proposta-de-Venda.md (40.7 KB)
-- 02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md (26.0 KB)
+- 02-Fluxo-de-Atividades/01-Proposta-de-Venda.md (41.5 KB)
+- 02-Fluxo-de-Atividades/02-Orcamento-Base-de-Preco.md (27.7 KB)
 - 02-Fluxo-de-Atividades/03-Pedido-de-Venda-e-Liberacao.md (29.4 KB)
 - 02-Fluxo-de-Atividades/06-Circuito-de-Compra.md (39.6 KB)
 - 02-Fluxo-de-Atividades/07-Recebimento.md (26.8 KB)

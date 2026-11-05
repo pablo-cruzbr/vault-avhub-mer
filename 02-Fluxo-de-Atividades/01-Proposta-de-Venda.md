@@ -212,11 +212,11 @@ Rotas do `api-comercial` de teste (legado) ainda sem equivalente na `api-acos-vi
 
 | Método e rota | Uso | Nó | Estado |
 |---|---|---|---|
-| `GET /propostas/:id/versoes`, `/:id/versoes/:revisao` | listar versões | `V0.1` | ✅ `propostas.routes.ts` (módulo de teste); 🔴 na `api-acos-vital` |
-| `POST /propostas/calcular`, `/itens/importar`, `GET /itens/modelo` | pré-visualizar, planilha de itens | `V0.1` | ✅ `:27`, `:55`, `:68` (módulo de teste); 🔴 na `api-acos-vital` |
-| `POST /custos/sugerir` | sugestão de custo para o item | `V0.2` | ✅ `custos.routes.ts:30` |
+| `GET /propostas/:id/versoes`, `/:id/versoes/:revisao` | listar versões | `V0.1` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `propostas.routes.ts` |
+| `POST /propostas/calcular`, `/itens/importar`, `GET /itens/modelo` | pré-visualizar, planilha de itens | `V0.1` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `:27`, `:55`, `:68` |
+| `POST /custos/sugerir` | sugestão de custo para o item | `V0.2` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `custos.routes.ts:30` |
 | `GET /pedidos_venda_hub/fila-omie`, `PATCH /pedidos_venda_hub/:id/sincronizacao`, `POST /:id/reenviar` | fila e retorno da pipeline, espelho de `/compras/ordens/fila-omie` | `V0.7` | 🔴 (nome em aberto; o pedido já nasce `pendente` em `transformar`) |
-| `GET /propostas/:id/pedido_omie`, `PUT` (digitar o número à mão) | **substituídas**: o pedido deixa de ser digitado | `V0.7` | ✅ `propostas.routes.ts:146-164`, saem |
+| `GET /propostas/:id/pedido_omie`, `PUT` (digitar o número à mão) | **substituídas**: o pedido deixa de ser digitado | `V0.7` | 🔴 só no módulo de teste (`propostas.routes.ts:146-164`), saem |
 
 As rotas de preço do produto e de pedido de custo (`B2` a `B4`) estão em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
 
@@ -226,20 +226,20 @@ Auditoria das telas e a nova página de proposta: [[Telas-e-Experiencia-do-Usuar
 
 Contratos: os desta parte foram removidos em 29/10/2026 e o Robert cria os novos. Nomes de rota 🟡: o Gustavo e o Robert fecham.
 
-### Como está no código (✅ (`av-hub/api-comercial`) do módulo do Pablo)
+### Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, que será removido)
 
-Tudo abaixo é do `api-comercial` (pasta `av-hub/api-comercial`), serviço **só de teste** (N14-15), hoje **legado só para leitura** (N16-117). Parte disto já foi refeita na `api-acos-vital` (rotas da proposta, `develop`, 29/10; ver o quadro de endpoints); o que não foi segue 🔴 lá. As regras antigas de fechamento parcial, perda, reabrir e pedido digitado no Omie saíram do front em 28/10 (`av-hub` `2008344`).
+Tudo abaixo é do `api-comercial` (pasta `av-hub/api-comercial`), serviço **só de teste** (N14-15), hoje **legado só para leitura** (N16-117). **O Nathan confirmou em 05/11/2026 que o `api-comercial` será removido integralmente:** pelo F3, o que só existe nele é 🔴 "sem API e sem banco". No `av-hub` `develop` (2e5456d) o BFF já não fala com ele: as rotas que ainda não existem na API do Hub respondem 503 `RECURSO_NAO_MIGRADO` (`lib/api/comercialApi.ts`, N16-111). Parte disto já foi refeita na `api-acos-vital` (rotas da proposta, `develop`, 29/10; ver o quadro de endpoints); o que não foi segue 🔴 lá. As regras antigas de fechamento parcial, perda, reabrir e pedido digitado no Omie saíram do front em 28/10 (`av-hub` `2008344`).
 
-- ✅ **Proposta completa:** modelo `Proposta` (`prisma/models/vendas.prisma:45-109`) com cliente, empresa emissora, itens, moeda, incoterm, frete, condição, totais, `valorFechado`, `acompanhamentoQualidade`, `numeroPedidoOmie`; itens com snapshot de custo (`PropostaItem`, `:111-166`: `custo`, `margemPct`, `origemCusto`, `idOferta`, `fornecedor`, `custoLiquidoUnit`, `margemRealPct`).
-- ✅ **Revisão:** `atualizar` só roda em `ABERTA` (`propostas.service.ts:478-481`); se o conteúdo comercial muda, `revisao + 1` e uma linha em `propostas_versoes` com o snapshot (`:483-515`); evento `REVISADA`.
-- ✅ **Numeração atômica** (`proximoSequencial`, `propostas.service.ts:313-322`), mas com formato `CO-AV2026-0012-R03` (`domain/numeracao/numeroProposta.ts:3-12`), por empresa e ano: **diverge de N16-04 e N16-26** 🔴.
-- ✅ **Comandos de status:** `perder` (`:555-575`), `reabrir` (`:578-606`), `fechar` com fechamento parcial por item (`:609-649`) e `calcularFechamento`. **Divergem de N16-02, N16-03 e N16-24** 🔴: reabrir e fechar em parte deixam de existir.
-- ✅ **Pedido no Omie à mão:** `pedidoOmie` monta o resumo para o vendedor digitar (`:663-691`), com planilha (`pedidoOmie.ts`), e `registrarPedidoOmie` grava o número e a marcação da Qualidade (`:694-725`); `exigirGanha` aceita `FECHADA` e `PARCIAL` (`:652-656`). Sai com N16-02 🔴.
-- ✅ **Duplicar e copiar para outra empresa** (`propostas.service.ts:853-903`).
-- ✅ **PDF e e-mail da proposta** (HUB gera o PDF; `emailProposta.ts`; evento `PDF_GERADO`).
-- ✅ **Capacidades** derivadas das telas do hub: `propostas`, `propostas-valores`, `custo-item`, `painel-comprador`, `propostas-delegacao` (`domain/permissoes/capacidades.ts:47-56`).
+- 🔴 (só no módulo de teste) **Proposta completa:** modelo `Proposta` (`prisma/models/vendas.prisma:45-109`) com cliente, empresa emissora, itens, moeda, incoterm, frete, condição, totais, `valorFechado`, `acompanhamentoQualidade`, `numeroPedidoOmie`; itens com snapshot de custo (`PropostaItem`, `:111-166`: `custo`, `margemPct`, `origemCusto`, `idOferta`, `fornecedor`, `custoLiquidoUnit`, `margemRealPct`).
+- 🔴 (só no módulo de teste) **Revisão:** `atualizar` só roda em `ABERTA` (`propostas.service.ts:478-481`); se o conteúdo comercial muda, `revisao + 1` e uma linha em `propostas_versoes` com o snapshot (`:483-515`); evento `REVISADA`.
+- 🔴 (só no módulo de teste) **Numeração atômica** (`proximoSequencial`, `propostas.service.ts:313-322`), mas com formato `CO-AV2026-0012-R03` (`domain/numeracao/numeroProposta.ts:3-12`), por empresa e ano: **diverge de N16-04 e N16-26** 🔴.
+- 🔴 (só no módulo de teste) **Comandos de status:** `perder` (`:555-575`), `reabrir` (`:578-606`), `fechar` com fechamento parcial por item (`:609-649`) e `calcularFechamento`. **Divergem de N16-02, N16-03 e N16-24** 🔴: reabrir e fechar em parte deixam de existir.
+- 🔴 (só no módulo de teste) **Pedido no Omie à mão:** `pedidoOmie` monta o resumo para o vendedor digitar (`:663-691`), com planilha (`pedidoOmie.ts`), e `registrarPedidoOmie` grava o número e a marcação da Qualidade (`:694-725`); `exigirGanha` aceita `FECHADA` e `PARCIAL` (`:652-656`). Sai com N16-02 🔴.
+- 🔴 (só no módulo de teste) **Duplicar e copiar para outra empresa** (`propostas.service.ts:853-903`).
+- 🔴 (só no módulo de teste) **PDF e e-mail da proposta** (HUB gera o PDF; `emailProposta.ts`; evento `PDF_GERADO`).
+- 🔴 (só no módulo de teste) **Capacidades** derivadas das telas do hub: `propostas`, `propostas-valores`, `custo-item`, `painel-comprador`, `propostas-delegacao` (`domain/permissoes/capacidades.ts:47-56`).
 - O pedido de custo no módulo de teste está em [[02-Orcamento-Base-de-Preco#Orçamento visto da proposta (B2 a B4)]].
-- ✅ **Simulador do Hub** lê a proposta ligada ao pedido para pré-preencher o lado da compra (`simulador.routes.ts`, PR #207). Não é a comissão estimada da proposta.
+- 🔴 (só no módulo de teste) **Simulador do Hub** lê a proposta ligada ao pedido para pré-preencher o lado da compra (`simulador.routes.ts`, PR #207). Não é a comissão estimada da proposta.
 
 No HUB (branch `feat/menu-orcamento-vendas-compras`, `5aa5311`): as páginas de Vendas já estão em `app/(protected)/vendas/*` ✅ (`av-hub`).
 
