@@ -1,12 +1,12 @@
 # Progresso da v3
-Estado atual: Bloco 1 concluído, aguardando "ok" do Nathan para o Bloco 2
-Próxima ação: com o "ok" e o Obsidian fechado, rodar a seção 1 e gerar `_v3/mapa-renomeacao.csv` (Bloco 2)
+Estado atual: Bloco 2, amostra de 20 links (simulada) aguardando aprovação do Nathan
+Próxima ação: com o "ok", rodar `node _v3/scripts/renomear.mjs --grupo=raias`, commitar; depois `--crases`, mapa/build, `--grupo=transversais` e `Mapa-v2-para-v3`
 Branch: v3   Último commit: (ver `git log`)   Push: sim   Atualizado em: 2026-11-05
 
 ## Ambiente (última preparação)
 Data: 2026-11-05  Vault: branch `v3` criada a partir de `main` 5203232 (tag `v2-antes-da-v3`); `origin/v3` ainda não existe  origin/main: 5203232 (sem commits novos)
 origin/develop: api-acos-vital b97981c · av-hub 2e5456d · api-pcp befd973 · app-pcp 93f96de · omie-elt-pipeline **sem develop** (só `origin/master` 5e7e94d)
-autocrlf: false (ajustado só no vault; estava `true`)   Obsidian fechado: sim no Bloco 1 (processo não está rodando, conferido em 2026-11-05)
+autocrlf: false (ajustado só no vault; estava `true`)   Obsidian fechado: sim no Bloco 1 e no Bloco 2 (processo não está rodando, conferido em 2026-11-05)
 Observações:
 - `omie-elt-pipeline` não tem `develop` nem `main`: a base é `origin/master`. Avisado ao Nathan.
 - Primeiro fetch de api-pcp, app-pcp e omie falhou por rede; repetido com sucesso.
@@ -45,10 +45,10 @@ Tabela alvo que vale: seção 5 da instrução (três notas de Estoque: 05, 09 e
 - [x] Mover o `Modelo-de-Consulta` para `Modelos/`; `git rm -r` nos contratos e no Painel (2026-11-05, e0364bc: saiu no mesmo commit do mapa, porque o `git rm` já estava no índice do git)
 
 ### Bloco 2: Renomear um para um
-- [ ] Gerar o `mapa-renomeacao.csv`
-- [ ] Rodar o script de renomeação
+- [x] Gerar o `mapa-renomeacao.csv` (2026-11-05: 13 raias, 3 transversais, 3 linhas de contrato/modelo do Bloco 1)
+- [~] Rodar o script de renomeação (`_v3/scripts/renomear.mjs`; simulação: 13 `git mv`, 330 links em 46 notas; transversais: 3 `git mv`, 10 links em 8 notas)
 - [ ] Atualizar as referências entre crases aos nomes de notas
-- [ ] Mostrar ao Nathan uma amostra de 20 links reescritos
+- [~] Mostrar ao Nathan uma amostra de 20 links reescritos (`_v3/amostra-links-bloco2.txt`, aguardando ok)
 - [ ] Atualizar `build.mjs`, fichas e `exemplo-mapa-vendas.html`; rodar `node build.mjs`
 - [ ] Mover as transversais para `Transversais/`
 - [ ] Criar `Mapa-v2-para-v3`
