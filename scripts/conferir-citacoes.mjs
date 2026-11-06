@@ -33,11 +33,18 @@ const REPOS = {
   'api-pcp': 'origin/develop',
   'app-pcp': 'origin/develop',
   'omie-elt-pipeline': 'origin/master',
+  // Legado: o protótipo api-comercial saiu do av-hub (PR #261); as citações a ele são lidas no
+  // último commit que o tinha, dentro do clone do av-hub.
+  'api-comercial': 'f7d8d7f',
 };
 const NOMES = Object.keys(REPOS);
+// Pasta do clone e subpasta de cada "repositório" (o legado mora dentro do av-hub).
+const PASTA = { 'api-comercial': 'av-hub' };
+const SUB = { 'api-comercial': 'api-comercial/' };
+const pastaDe = (repo) => PASTA[repo] || repo;
 
 const git = (repo, args) =>
-  execFileSync('git', ['-C', path.join(pastaSistemas, repo), ...args], {
+  execFileSync('git', ['-C', path.join(pastaSistemas, pastaDe(repo)), ...args], {
     encoding: 'utf8',
     maxBuffer: 256 * 1024 * 1024,
     stdio: ['ignore', 'pipe', 'ignore'],
@@ -49,13 +56,17 @@ const ausentes = [];
 console.log('# Conferência das citações de código\n');
 for (const repo of NOMES) {
   const base = REPOS[repo];
-  if (!fs.existsSync(path.join(pastaSistemas, repo, '.git'))) {
-    ausentes.push(`${repo} (pasta ${path.join(pastaSistemas, repo)} não existe)`);
+  if (!fs.existsSync(path.join(pastaSistemas, pastaDe(repo), '.git'))) {
+    ausentes.push(`${repo} (pasta ${path.join(pastaSistemas, pastaDe(repo))} não existe)`);
     continue;
   }
   try {
     const commit = git(repo, ['rev-parse', '--short', base]).trim();
-    arquivos[repo] = git(repo, ['ls-tree', '-r', '--name-only', base]).split('\n').filter(Boolean);
+    const sub = SUB[repo] || '';
+    arquivos[repo] = git(repo, ['ls-tree', '-r', '--name-only', base, ...(sub ? [sub] : [])])
+      .split('\n')
+      .filter(Boolean)
+      .map((x) => x.slice(sub.length));
     console.log(`Base: ${repo} ${base} ${commit} (${arquivos[repo].length} arquivos)`);
   } catch {
     ausentes.push(`${repo} (sem ${base}; rode git fetch)`);
@@ -89,7 +100,7 @@ const conteudo = new Map();
 const lerArquivo = (repo, arq) => {
   const k = `${repo}:${arq}`;
   if (!conteudo.has(k)) {
-    try { conteudo.set(k, git(repo, ['show', `${REPOS[repo]}:${arq}`]).split('\n')); } catch { conteudo.set(k, null); }
+    try { conteudo.set(k, git(repo, ['show', `${REPOS[repo]}:${SUB[repo] || ''}${arq}`]).split('\n')); } catch { conteudo.set(k, null); }
   }
   return conteudo.get(k);
 };
@@ -111,6 +122,7 @@ const coladoAntes = (linha, pos) => {
 const res = { total: 0, conferidas: 0, comAncora: 0, semAncora: [], naoAchado: [], ambiguo: [], outroRepo: [], alemDoFim: [], deslocada: [], sumiu: [], semRepo: 0 };
 for (const f of notas) {
   const linhas = fs.readFileSync(f, 'utf8').split('\n');
+  const notaCita = new Set(linhas.flatMap((l) => mencoes(l).map((x) => x.r)));
   let codigo = false;
   linhas.forEach((linha, i) => {
     if (/^\s*```/.test(linha)) { codigo = !codigo; return; }
@@ -139,9 +151,12 @@ for (const f of notas) {
       const detectado = colado ? [colado] : [];
       const casa = (repo) => (arquivos[repo] || []).filter((x) => x === alvo || x.endsWith('/' + alvo));
       if (colado && !arquivos[colado]) { res.semRepo++; continue; }
-      let achados = (colado ? [colado] : Object.keys(arquivos)).flatMap((r) => casa(r).map((x) => ({ r, x })));
+      // o legado só entra quando a nota fala dele (senão `motor.ts` viraria ambíguo com o do Hub)
+      const citaLegado = (r) => !SUB[r] || notaCita.has(r);
+      const candidatos = Object.keys(arquivos).filter(citaLegado);
+      let achados = (colado ? [colado] : candidatos).flatMap((r) => casa(r).map((x) => ({ r, x })));
       if (!achados.length && colado) {
-        const fora = Object.keys(arquivos).filter((r) => r !== colado).flatMap((r) => casa(r).map((x) => ({ r, x })));
+        const fora = candidatos.filter((r) => r !== colado).flatMap((r) => casa(r).map((x) => ({ r, x })));
         if (fora.length === 1) { res.outroRepo.push(`${onde}  \`${cit}\`: citado como ${colado}, achado em ${fora[0].r} ${fora[0].x}`); achados = fora; }
       }
       if (achados.length > 1) {

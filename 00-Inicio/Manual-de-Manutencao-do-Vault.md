@@ -1,7 +1,7 @@
 ---
 tags: [inicio, manual, manutencao, ia]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-06
 status: vigente
 dono: Nathan
 fontes: [instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, seções 1, 3, 6 e 9), Regras-do-Vault, Guia-de-Leitura-do-Vault-e-dos-Sistemas, scripts/validar.mjs, scripts/fatos.mjs, scripts/dividir.mjs, 09-Diagramas/mapa/build.mjs]
@@ -130,7 +130,7 @@ O status do projeto tem **dois donos, e só dois**: o [[Onde-Estamos]] (estado p
 
 ## 10. Módulo do Pablo: registrar o estado quando chegar à `develop`
 
-1. Hoje o que é do módulo comercial (proposta e suprimentos) e não está na `develop` é 🔴 "sem API e sem banco"; o `av-hub/api-comercial` é teste e será removido inteiro.
+1. Hoje o que é do módulo comercial (proposta e suprimentos) e não está na `develop` é 🔴 "sem API e sem banco"; o `av-hub/api-comercial` era teste e foi removido inteiro (o protótipo saiu do av-hub no PR #261 e fica legível no commit `f7d8d7f`).
 2. Quando uma parte chegar à `develop` (rota na `api-acos-vital`, tabela, tela no `av-hub`), confira o caminho inteiro (seção 3) e troque o selo para ✅ com o arquivo:linha, nas raias 01, 02 e 06 e nas notas [[Mapa-do-Modulo-do-Pablo]] e [[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]].
 3. Atualize a linha do setor no [[Onde-Estamos]] e as tarefas BL da [[Backlog-Frente-Comercial-e-Suprimentos]].
 

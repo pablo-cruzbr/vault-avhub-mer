@@ -1,7 +1,7 @@
 ---
 tags: [inicio, guia, ia]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-06
 status: vigente
 dono: Nathan
 fontes: [análise do vault de 05/11/2026, Regras-do-Vault, Comece-Aqui, instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, seção 1 e fatos F1 a F5)]
@@ -27,7 +27,7 @@ Faça isto no início de toda sessão, antes de ler ou escrever (é a seção 1 
 
 - **F1.** A ordem do vault é a ordem do fluxo do mermaid: as raias vão de `01-Proposta-de-Venda` a `15-Custo-Real-e-Comissao`.
 - **F2.** Os contratos da v2 ficaram na v2 (tag `v2-antes-da-v3`); o vault os consulta pelo índice [[Contratos-da-v2]].
-- **F3.** O módulo do Pablo (proposta e suprimentos) não tem API nem banco. O que não estiver na `develop` é 🔴 "sem API e sem banco"; o `api-comercial` de teste será removido inteiro.
+- **F3.** O módulo do Pablo (proposta e suprimentos) não tem API nem banco. O que não estiver na `develop` é 🔴 "sem API e sem banco"; o `api-comercial` de teste foi removido inteiro (o protótipo saiu do av-hub no PR #261 e fica legível no commit `f7d8d7f`).
 - **F4.** Quem está usando fecha o Obsidian enquanto a IA trabalha em lote.
 - **F5.** A base é a `develop` dos sistemas: se está na `develop`, está pronto (✅). A `main` não é critério de pronto; só aparece como informação ("publicado na `main`: sim/não").
 
@@ -88,7 +88,7 @@ Tudo fica dentro de uma **pasta-mãe**: a pasta que contém o vault e os outros 
 | --- | --- | --- | --- |
 | `vault-avhub-mer` | Vault | O manual do fluxo de Atividades (pedido de 0 a 100%) | `Home`, `Comece-Aqui`, `Regras-do-Vault` |
 | `api-acos-vital` | ERP | API do av-hub (dono: Gustavo; rotas comerciais com o Robert desde 28/10) | `AV-Hub-API`, `Banco-AvHub` |
-| `av-hub` | ERP | Front do av-hub, o HUB em Next.js, com o BFF e a pasta `api-comercial/` (módulo de teste do Pablo, será removido inteiro; não conta como pronto, F3) | `AV-Hub-Front`, `Mapa-Rotas-BFF-Bearer`, `Telas-por-Raia` |
+| `av-hub` | ERP | Front do av-hub, o HUB em Next.js, com o BFF e o legado `api-comercial/` (módulo de teste do Pablo, removido no PR #261 e legível em `git show f7d8d7f:api-comercial/<arquivo>`; não conta como pronto, F3) | `AV-Hub-Front`, `Mapa-Rotas-BFF-Bearer`, `Telas-por-Raia` |
 | `api-pcp` | MES | Backend do MES, o sistema de chão de fábrica (dono: Robert) | `MES-Backend`, `Banco-MES` |
 | `app-pcp` | MES | Front do MES (dono: Robert) | `MES-Front`, `Estados-e-Status` |
 | `omie-elt-pipeline` | Pipeline | Carrega dados do Omie para o Postgres do av-hub | `Pipeline-Omie`, `Omie-Integracao-Estado` |

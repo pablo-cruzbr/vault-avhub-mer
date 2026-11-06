@@ -27,7 +27,7 @@ Os dois repositórios ficam ao lado do vault: `../av-hub` e `../api-acos-vital`.
 | Autenticação e CSP de todas as rotas | `proxy.ts` (next-auth) |
 | Padrão visual | `docs/design/guia-de-interface.md` e a skill do próprio repositório em `.claude/skills/interface-hub/` |
 
-**Não são fonte de estado:** `docs/ENVIAR - *.md` (contratos antigos da v1) e `api-comercial/` (módulo de teste do Pablo, que será removido: o que só existe nele é 🔴, regra F3).
+**Não são fonte de estado:** `docs/ENVIAR - *.md` (contratos antigos da v1) e `api-comercial/` (módulo de teste do Pablo, removido no PR #261: o que só existe nele é 🔴, regra F3). Os dois saíram do av-hub e ficam legíveis no commit `f7d8d7f`: `git -C ../av-hub show f7d8d7f:api-comercial/<arquivo>`. O `conferir-citacoes.mjs` já lê ali as citações do `api-comercial`.
 
 ## 2. Onde fica cada coisa na `api-acos-vital` (API)
 | O que procuro | Onde |

@@ -1,7 +1,7 @@
 ---
 tags: [vault, regras]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-06
 status: vigente
 dono: Nathan
 fontes: [plano de 14/10/2026, instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, fatos F1 a F5 de 05/11/2026)]
@@ -61,7 +61,7 @@ Toda afirmação relevante leva um selo. A base é a `develop` dos sistemas (F5)
 
 - O commit da `develop` lido fica uma vez por nota, no `develop-conferida` do frontmatter; cada ✅ cita o repositório e o arquivo:linha.
 - **Citação de código com âncora:** `` `repositório` `caminho/arquivo:linha` (`âncora`) ``, em que a âncora é um trecho literal e curto daquela linha (nome de função, constante, rota). Exemplo: `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:42` (`EXIGIR_PODE_APROVAR`). A linha muda quando o código muda; a âncora deixa achar o lugar de novo. Toda citação nova leva âncora; as antigas ganham âncora quando a nota for mexida. `node scripts/conferir-citacoes.mjs` aponta as citações quebradas ou deslocadas.
-- **Módulo do Pablo** (proposta e suprimentos, F3): o que for dele e não estiver na `develop` é 🔴 "sem API e sem banco". O `api-comercial` de teste (`av-hub/api-comercial`) será removido inteiro e não conta como pronto. Quando a parte chegar à `develop`, o selo vira ✅.
+- **Módulo do Pablo** (proposta e suprimentos, F3): o que for dele e não estiver na `develop` é 🔴 "sem API e sem banco". O `api-comercial` de teste (`av-hub/api-comercial`) foi removido inteiro (o protótipo saiu do av-hub no PR #261 e fica legível no commit `f7d8d7f`) e não conta como pronto. Quando a parte chegar à `develop`, o selo vira ✅.
 
 ## Nomes de telas
 
@@ -84,7 +84,7 @@ Use o nome novo. O código ainda usa o antigo em alguns pontos, então registre 
 - **Gustavo (DBA):** banco e API do av-hub (`api-acos-vital`).
 - **Nathan:** front do av-hub (telas e BFF, a camada que liga o front à API).
 - **Robert:** MES (`api-pcp` e `app-pcp`) e, desde 28/10/2026, as rotas do módulo comercial na `api-acos-vital` (N16-117).
-- **Pablo:** acompanha o módulo comercial e cuida do Orçamento, com a supervisão do Robert. A `api-comercial` dele é de teste e será removida inteira (F3, 05/11/2026).
+- **Pablo:** acompanha o módulo comercial e cuida do Orçamento, com a supervisão do Robert. A `api-comercial` dele era de teste e foi removida inteira (F3, 05/11/2026; PR #261 do av-hub).
 
 ## Contratos
 
