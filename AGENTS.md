@@ -8,11 +8,12 @@ Instruções para qualquer IA que abrir este repositório (Claude, Codex, Copilo
 | Skill | Quando usar | Quem |
 |---|---|---|
 | `ler-o-vault` | Qualquer pergunta sobre o projeto. Comece sempre por ela | Todos |
-| `pedir-contrato` | Precisa que o sistema mude (regra, banco, API): gera o PDF do contrato | Todos |
+| `criar-contrato` | Cria o contrato direto no vault, com ID, numa branch com PR | Só o admin |
+| `pedir-contrato` | Precisa que o sistema mude: gera o PDF do contrato (arquivo único com frontend, backend, API e banco) | Quem não é admin |
 | `abrir-consulta` | Precisa de uma resposta de negócio de quem opera: gera o PDF da consulta | Todos |
 | `relatorio-de-entrega` | Terminou uma task que já está na `develop`: gera o PDF com o que mudar no vault | Todos |
 | `gerar-pdf` | Último passo das três anteriores | Todos |
-| `aplicar-documento-recebido` | Aplicar no vault um PDF recebido no grupo | Só o Nathan |
-| `atualizar-o-vault` | Trazer o remoto e atualizar o vault pela `develop` | Só o Nathan (os demais só fazem `git pull`) |
+| `aplicar-documento-recebido` | Aplicar no vault um PDF recebido no grupo | Só o admin |
+| `atualizar-o-vault` | Trazer o remoto e atualizar o vault pela `develop` | Só o admin (os demais só fazem `git pull`) |
 
-3. **Só o Nathan altera o vault.** Para os demais, o vault é só leitura: os pedidos e as entregas vão em PDF para o grupo do WhatsApp.
+3. **Só o admin altera o vault: Nathan, Coordenador de TI (GitHub `oluccaa`).** Confira com `git config user.name` e `git config user.email`: é o admin se o nome for `oluccaa` ou `Nathan Lucca`, ou se o e-mail contiver `oluccaa`. Para os demais, o vault é só leitura: os pedidos e as entregas vão em PDF para o grupo do WhatsApp.

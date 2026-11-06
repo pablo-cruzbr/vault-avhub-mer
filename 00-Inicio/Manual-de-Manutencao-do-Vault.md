@@ -93,7 +93,7 @@ fontes: [repositório arquivo:linha, IDs de decisão, notas]
 
 ## 6. Criar um contrato novo
 
-Os contratos chegam ao Nathan como PDF no grupo do WhatsApp, escritos a partir dos modelos [[Modelo-de-Contrato]] (`LOG`, `SQL`, `API`), [[Modelo-de-Consulta]] (`CON`) e [[Modelo-de-Relatorio-de-Entrega]] (entrega de task). Para aplicar um PDF recebido, use a skill `aplicar-documento-recebido` (`.claude/skills/`). Quem escreve não escolhe o ID: o Nathan dá o próximo livre.
+Contrato é **um arquivo único por demanda**: contexto (o que deve ser feito e por quê) e as seções de frontend, backend, API e banco, conforme a demanda, no formato do [[Modelo-de-Contrato]]. O admin (Nathan, GitHub `oluccaa`) cria direto no vault com a skill `criar-contrato`. Os demais mandam em PDF no grupo do WhatsApp, escritos a partir dos modelos [[Modelo-de-Contrato]] (prefixo `LOG`, `SQL` ou `API` pela camada principal), [[Modelo-de-Consulta]] (`CON`) e [[Modelo-de-Relatorio-de-Entrega]] (entrega de task). Para aplicar um PDF recebido, use a skill `aplicar-documento-recebido` (`.claude/skills/`). Quem escreve não escolhe o ID: o Nathan dá o próximo livre.
 
 1. O próximo ID está no fim do [[Contratos-da-v2]] e em [[Tipos-de-ID]]: `LOG-56`, `SQL-022`, `API-019`, `CON-04` (a numeração continua depois do maior ID da v2).
 2. Crie a nota em `06-Contratos/<Pasta>/<ID>-<Apelido>.md`, com a pasta pelo estado: `Ativos/` (a fazer ou parcial), `Entregues/` (está na `develop`), `Arquivados/` ou `Consultas/` (as `CON`, a partir do [[Modelo-de-Consulta]]).
