@@ -4,14 +4,14 @@ criado: 2026-10-23
 atualizado: 2026-11-05
 status: proposta
 dono: Nathan
-fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api/v1/produtos/pedido/ (serviço PedidoVendaProduto, método IncluirPedido e tipos complexos)", "Exemplo de IncluirPedido enviado pelo Nathan em 23/10/2026", "05-Integracoes/Estudo-Omie-API (estudo de 21/10)", "av-hub components/Propostas/PropostaForm (PedidoOmieModal.tsx, ItemProposta.tsx, PropostaForm.tsx)", "Pedido do Robert ao Nathan de 03/11/2026 e errata de 05/11/2026", "Consultas só de leitura ao Omie nas três contas em 04/11/2026 (ListarCategorias, ListarFormasPagCompras, ListarFormasPagVendas, ListarContasCorrentes)", "Dump do Avhub de 29/10/2026 (vw_faturamento_planilha, vw_comissao_master)"]
+fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api/v1/produtos/pedido/ (serviço PedidoVendaProduto, método IncluirPedido e tipos complexos)", "Exemplo de IncluirPedido enviado pelo Nathan em 23/10/2026", "05-Integracoes/Estudo-Omie-API (estudo de 21/10)", "av-hub components/Propostas/PropostaForm (PedidoOmieModal.tsx, ItemProposta.tsx, PropostaForm.tsx)", "Pedido do Robert ao Nathan de 03/11/2026 e errata de 05/11/2026", "api-acos-vital develop 1654f65 (pedidoOmie.js, propostas.route.js, pedidos.route.js, categorias.route.js), conferido em 05/11/2026", "Consultas só de leitura ao Omie nas três contas em 04/11/2026 (ListarCategorias, ListarFormasPagCompras, ListarFormasPagVendas, ListarContasCorrentes)", "Dump do Avhub de 29/10/2026 (vw_faturamento_planilha, vw_comissao_master)"]
 ---
 
 # Mapa do `IncluirPedido` do Omie: o que o hub manda, de onde vem cada campo e o que ainda não sabemos
 
 **Em uma frase:** esta nota lista, campo a campo, o que o hub vai mandar ao Omie quando uma proposta virar pedido de venda, de onde vem cada dado e o que ainda precisa de teste.
 
-**Quando consultar esta nota:** ao desenhar ou revisar o envio do pedido ao Omie (o ERP, sistema fiscal e financeiro), ou ao decidir qual dado da proposta vira campo do pedido. Status: 🟡 proposta. **Nenhum pedido foi criado no Omie.** A documentação foi lida em 23/10/2026, e em 04/11/2026 fizemos consultas só de leitura aos catálogos das três contas (categorias, condições de pagamento e contas correntes).
+**Quando consultar esta nota:** ao desenhar ou revisar o envio do pedido ao Omie (o ERP, sistema fiscal e financeiro), ou ao decidir qual dado da proposta vira campo do pedido. Status: 🟡 proposta. **Nenhum pedido foi criado no Omie:** o código do envio existe na `api-acos-vital` desde o commit `1654f65` (05/11/2026), mas nenhum teste real foi registrado e o banco que monta o payload está fora do repositório ❓. A documentação foi lida em 23/10/2026, e em 04/11/2026 fizemos consultas só de leitura aos catálogos das três contas (categorias, condições de pagamento e contas correntes).
 
 ## Quem manda dado para quem, quando e por quê
 
@@ -26,20 +26,21 @@ fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api
 
 ## O pedido mínimo e o que está fechado (04 e 05/11/2026)
 
-O primeiro pedido de teste sai com o payload mínimo: cabeçalho (cliente, código de integração do pedido, previsão, etapa, condição de pagamento, quantidade de itens), itens (código de integração do item, produto, descrição, quantidade, unidade e valor unitário), vendedor, categoria, número do pedido do cliente, consumidor final, e-mail e frete. O envio é **síncrono**: a `api-acos-vital` chama o Omie direto pelo cliente `utils/omie.js`, sem fila e sem worker na pipeline (pedido do Robert, 03/11).
+O primeiro pedido de teste sai com o payload mínimo: cabeçalho (cliente, código de integração do pedido, previsão, etapa, condição de pagamento, quantidade de itens), itens (código de integração do item, produto, descrição, quantidade, unidade e valor unitário), vendedor, categoria, número do pedido do cliente, consumidor final, e-mail e frete. O envio é **síncrono**: a `api-acos-vital` chama o Omie direto pelo cliente `utils/omie.js`, sem fila e sem worker na pipeline (pedido do Robert, 03/11). ✅ Está no código: o `transformar` cria o pedido do Hub e chama `ConsultarPedido` pelo número do pedido (`PV-000001`, o código de integração) antes de incluir; se o Omie já tem, só grava o retorno. Depois chama `IncluirPedido` com uma tentativa só, para não duplicar após um timeout (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:74` e `:151`, `develop` `1654f65`). Se o Omie recusar, o pedido fica no Hub com status `erro` e `POST /comercial/pedidos/:id/enviar-omie` reenvia (`pedidos.route.js:30`). O payload sai pronto de `fn_pedido_venda_envio_iniciar`, função do banco que **não está no repositório nem no dump de 04/11** ❓: os campos da tabela abaixo não podem ser conferidos no que é enviado.
 
 | Ponto | Situação |
 |---|---|
-| Etapa | 📝 sempre `"10"` (Nathan, 04/11) |
-| `bloqueado` | 📝 `"S"` no primeiro teste, para ver como o pedido aparece no Omie (Nathan, 04/11) |
+| Etapa | 📝 sempre `"10"` (Nathan, 04/11). ❓ O Hub tem a coluna `etapa` no pedido (`pedidoOmie.js:52`), mas o valor enviado vem do banco |
+| `bloqueado` | 📝 `"S"` no primeiro teste, para ver como o pedido aparece no Omie (Nathan, 04/11). ✅ O corpo do `transformar` aceita `bloqueado` (booleano) e o padrão é `true` (`propostas.route.js:585`) |
 | Condição de pagamento | 📝 vem de `condicoes_pagamento_compras`; não há recurso novo de venda (Nathan, 04/11) |
-| Categoria | 📝 lista por unidade, filtrada pela unidade emissora; o vendedor escolhe (Nathan, 04/11). 🟡 Pré-selecionar `1.01.01` e avisar a consequência do refaturamento (Robert, 05/11; seção 5.3.1) |
+| Categoria | 📝 lista por unidade, filtrada pela unidade emissora; o vendedor escolhe (Nathan, 04/11). ✅ `GET /categorias?codigo_empresa=&tipo=receita` devolve as de receita lançáveis (`categorias.route.js:47-57`) e o `transformar` recebe `codigo_categoria` (opcional hoje, `propostas.route.js:587`). 🟡 Pré-selecionar `1.01.01` e avisar a consequência do refaturamento (Robert, 05/11; seção 5.3.1; N16-152) |
+| `numero_contrato` | ✅ o `transformar` recebe `SPOT` ou `CONTRATO` (opcional hoje, `propostas.route.js:589-591`); só informativo (N16-150) |
 | Conta corrente | ⚠️ **em aberto, decisão do Nathan.** O vendedor não preenche conta no Omie hoje (quem tem acesso é o Financeiro). O Robert propõe **omitir** o campo e ver no teste o que o Omie grava 🟡; a ideia de 04/11 era uma lista por unidade |
 | CFOP | 🟡 não mandar: o vendedor também não o preenche, e se o pedido sai certo assim é o cenário de impostos que resolve. O teste confirma |
 | Impostos (`det[].imposto`) | 📝 não viajam (decidido em 03/11, registrado pelo Robert) |
 | Vendedor (`codVend`) | 📝 obrigatório: sem ele o pedido existe no Omie e some do Hub e da comissão |
 
-O teste do item 4 (pedido do Robert) segue o roteiro: `IncluirPedido` com o payload mínimo, `ConsultarPedido`, comparar com um pedido equivalente digitado à mão e `ExcluirPedido`, com cadastros TESTE de cliente e produto. Ele responde o que o Omie grava de CFOP e de conta corrente quando omitimos, se o `valor_unitario` é base com IPI e ST por fora e se o cenário padrão resolve. 🔴 Ainda não foi feito: espera a unidade, a categoria e a decisão da conta.
+O teste do item 4 (pedido do Robert) segue o roteiro: `IncluirPedido` com o payload mínimo, `ConsultarPedido`, comparar com um pedido equivalente digitado à mão e `ExcluirPedido`, com cadastros TESTE de cliente e produto. Ele responde o que o Omie grava de CFOP e de conta corrente quando omitimos, se o `valor_unitario` é base com IPI e ST por fora e se o cenário padrão resolve. 🔴 Ainda não foi feito: o código existe (`1654f65`), mas o teste espera o banco com as migrations de 05/11 aplicadas, a unidade, a categoria e a decisão da conta.
 
 ## O que ainda não sabemos
 

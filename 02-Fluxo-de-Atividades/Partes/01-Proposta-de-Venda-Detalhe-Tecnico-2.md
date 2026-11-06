@@ -127,7 +127,7 @@ flowchart TD
         V05{"V0.5 · Vendedor marca aprovada?"}
         V0C["V0C · Proposta cancelada<br/>estado único, não reabre<br/>comissão estimada vira histórico"]
         V06["V0.6 · Transformar em pedido de venda<br/>obriga marcar se a Qualidade acompanha"]
-        V07["V0.7 · Cria o pedido por API no Omie<br/>fila e pipeline<br/>erro: Tentar novamente"]
+        V07["V0.7 · Cria o pedido por API no Omie<br/>direto pela API, síncrono<br/>erro: Tentar novamente"]
         V1["V1 · Pedido de venda no av-hub<br/>da proposta: nasce liberado<br/>digitado no Omie: chega travado, vendas pronta"]
         V2["V2 · Vendedor marca se a Qualidade acompanha<br/>e se fatura em partes · pedido do Omie"]
         V3["V3 · Vendedor libera e preenche a parte de compras<br/>pedido do Omie"]
