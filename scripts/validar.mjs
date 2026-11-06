@@ -191,5 +191,28 @@ if (fs.existsSync(build)) {
   secao('Selos ✅ sem citação ou sem develop-conferida', prob);
 }
 
+// Contratos novos (v3): nome <ID>-<Apelido>.md, ID único e sem repetir um ID da v2 (06/11/2026)
+{
+  const prob = [];
+  const listaV2 = path.join(raiz, '06-Contratos', 'Partes', 'Contratos-da-v2-Lista-Completa.md');
+  const idsV2 = new Set(fs.existsSync(listaV2) ? (fs.readFileSync(listaV2, 'utf8').match(/\b(?:LOG|SQL|API|CON)-\d+[a-z]?\b/g) || []) : []);
+  const vistos = new Map();
+  for (const p of ['Ativos', 'Entregues', 'Arquivados', 'Consultas']) {
+    const dir = path.join(raiz, '06-Contratos', p);
+    if (!fs.existsSync(dir)) continue;
+    for (const n of fs.readdirSync(dir)) {
+      if (!n.endsWith('.md')) continue;
+      const onde = `06-Contratos/${p}/${n}`;
+      const m = n.match(/^((?:LOG|SQL|API|CON)-\d+[a-z]?)-.+\.md$/);
+      if (!m) { prob.push(`${onde}: nome fora do padrão <ID>-<Apelido>.md`); continue; }
+      if (idsV2.has(m[1])) prob.push(`${onde}: ${m[1]} já existe na v2 (use o próximo ID livre)`);
+      if (vistos.has(m[1])) prob.push(`${m[1]} repetido: ${vistos.get(m[1])} e ${onde}`);
+      else vistos.set(m[1], onde);
+    }
+  }
+  console.log(`\nContratos novos (v3) conferidos: ${vistos.size}; IDs da v2 conhecidos: ${idsV2.size}`);
+  secao('Contratos novos com ID repetido, já usado na v2 ou nome fora do padrão', prob);
+}
+
 console.log(problemas ? `\nRESULTADO: ${problemas} problema(s). O validador sai com código 1.` : '\nRESULTADO: tudo verde.');
 process.exitCode = problemas ? 1 : 0;
