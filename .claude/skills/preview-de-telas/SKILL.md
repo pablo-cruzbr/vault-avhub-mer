@@ -12,7 +12,7 @@ Ler o componente não prova o que a tela faz; o preview prova. Siga estes passos
 - O que precisa conferir: campos, botões, estados (vazio, erro, carregando), mensagens, o que cada perfil vê.
 
 ## 2. Suba a `develop` sem mexer no trabalho de ninguém
-A pasta local do repositório pode estar numa branch de feature. **Não troque de branch.** Crie uma cópia de trabalho separada da `develop`:
+Se `../<repo>` não existir, ou se a sessão não roda no computador de quem usa (por exemplo, na nuvem), não há preview: diga isso e use só a leitura do código. A pasta local do repositório pode estar numa branch de feature. **Não troque de branch.** Crie uma cópia de trabalho separada da `develop`:
 
 ```
 git -C ../<repo> fetch --all --prune

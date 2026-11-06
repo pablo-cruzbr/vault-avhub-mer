@@ -74,7 +74,7 @@ Espere o "ok" de quem pediu.
 
 1. Crie a branch `docs/atualizacao-AAAA-MM-DD` (padrão do repositório).
 2. Faça um commit por nota, seguindo `Regras-do-Vault`.
-3. Ajuste os selos pela `develop`, citando repositório, commit e arquivo:linha.
+3. Ajuste os selos pela `develop`, citando repositório, commit e arquivo:linha com âncora. Rode `node scripts/conferir-citacoes.mjs` e corrija as citações deslocadas ou quebradas das notas que você tocou.
 4. Registre cada divergência como `PS` em `Pontas-Soltas`.
 5. Atualize `Ultima-Atualizacao-do-Vault` com os novos commits de `origin/develop` e a data.
 6. Rode a validação (links resolvem, nenhuma nota órfã).
@@ -121,7 +121,7 @@ Antes de ler qualquer código, confirme a estrutura real de cada pasta (`README`
 
 | Selo | Significa | O que fazer |
 | --- | --- | --- |
-| ✅ | Está na `develop` | Confira na `origin/develop` o `arquivo:linha` citado; o código pode ter mudado |
+| ✅ | Está na `develop` | Confira na `origin/develop` o `arquivo:linha` citado; se a linha mudou, ache pela âncora entre parênteses |
 | 📝 | Decidido | Procure o ID da decisão no registro e veja se algo a supera |
 | 🟡 | Parcial na `develop` | Não trate como pronto; veja o que falta na nota |
 | 🔴 | Não está na `develop` | Não assuma que existe (no módulo do Pablo: "sem API e sem banco", F3) |
@@ -160,7 +160,7 @@ O vault diz o que procurar; o código diz o que existe. Para cada afirmação re
 
 Quem decide precisa de máxima certeza em cada decisão. Antes de recomendar ou afirmar algo, a IA cumpre este protocolo.
 
-1. **Separe fato de hipótese.** Todo ponto da resposta leva a origem: `arquivo:linha` e commit (código), tabela e coluna (banco), ID da decisão (vault). Sem origem, escreva "não conferido".
+1. **Separe fato de hipótese.** Todo ponto da resposta leva a origem: `arquivo:linha` com âncora e commit (código), tabela e coluna (banco), ID da decisão (vault). Sem origem, escreva "não conferido".
 2. **Uma fonte não basta para decisão.** Cruze pelo menos duas: nota do vault e código; código e banco; banco e tela. Quando divergem, aplique a precedência e relate a divergência.
 3. **Não complete lacunas por analogia.** Se o código ou o dump não mostra, diga o que falta e como obter, em vez de supor.
    - **Ausência só se afirma depois de buscar em tudo.** "O vault não cita" exige `grep -rn "<termo>" --include=*.md .` no vault inteiro; "não existe no código" exige `git grep` na `origin/develop` do repositório inteiro; "não está no banco" exige a busca no dump mais recente. Diga onde buscou.

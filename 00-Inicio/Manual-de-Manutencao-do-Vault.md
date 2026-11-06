@@ -44,7 +44,7 @@ Gatilho: quem está usando diz "atualizar o vault" (ou "atualiza", "sincroniza")
 
 | Selo | Quando |
 |---|---|
-| ✅ | Está na `develop`: cite o repositório e o arquivo:linha (ex.: `api-pcp` `src/qualidade/qualidade.service.ts:97`) |
+| ✅ | Está na `develop`: cite o repositório e o arquivo:linha com âncora, um trecho literal da linha (ex.: `api-pcp` `src/qualidade/qualidade.service.ts:97` (`aprovarLote`)) |
 | 🟡 | Parcial na `develop`: diga o que falta |
 | 🔴 | Não está na `develop` (no módulo do Pablo: "sem API e sem banco") |
 | 📝 | Decidido: cite o ID da decisão |
@@ -52,6 +52,7 @@ Gatilho: quem está usando diz "atualizar o vault" (ou "atualiza", "sincroniza")
 
 3. Na nota, atualize o `develop-conferida` (repositórios e commits lidos, com a data) e o `estado-em`.
 4. Se o vault e o código se contradizem sem decisão que resolva, não escolha sozinho: registre um `PS` e pergunte.
+5. Rode `node scripts/conferir-citacoes.mjs --nota=<nome da nota>` e corrija as citações que ele apontar.
 
 ## 4. Criar uma nota
 
@@ -152,6 +153,15 @@ node scripts/validar.mjs
 Tem de dar 0 em: links quebrados, notas órfãs, CRLF, caractere corrompido, notas acima de 25 KB, nomes antigos, nós sem dono único, caminhos do `build.mjs` que não existem e ✅ sem citação nas raias. O índice de contratos tem de somar 92. A última linha diz "RESULTADO: tudo verde"; com qualquer problema, o validador sai com código 1.
 
 **No GitHub, isso roda sozinho.** A Action `.github/workflows/validar.yml` roda o validador e o autoteste em todo PR para a `main` e em todo push nela. O resultado aparece no PR como o check `validar`, verde ou vermelho. O caminho de toda mudança é branch → PR → check verde → merge: **não mergeie PR com o check vermelho e não faça push direto na `main`.** Hoje isso é regra de equipe, não trava do GitHub: com o repositório privado e a organização no plano gratuito, o GitHub não deixa proteger a `main` (exige o plano Team). Se a organização mudar de plano, ative a proteção exigindo o check `validar`. Se mexeu em mapa ou fichas, rode também `cd 09-Diagramas/mapa && node build.mjs` ("0 contratos sem nota achada").
+
+**Citações de código.** O validador não abre os sistemas. Para conferir as citações `arquivo:linha` contra a `develop`, rode na sua máquina, com os repositórios ao lado do vault:
+
+```bash
+node scripts/conferir-citacoes.mjs            # problemas
+node scripts/conferir-citacoes.mjs --detalhe  # também as citações sem âncora
+```
+
+Ele lista o arquivo que sumiu, a linha além do fim do arquivo, a âncora deslocada (com a linha nova) e a âncora que sumiu. Corrija ao mexer na nota; na atualização do vault, corrija as das notas tocadas.
 
 Se mudou o próprio validador, ou se ele der tudo 0 e você desconfiar, rode o autoteste:
 
