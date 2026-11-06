@@ -90,6 +90,7 @@ Use o nome novo. O código ainda usa o antigo em alguns pontos, então registre 
 Contrato é o combinado por escrito entre dois sistemas ou entre duas pessoas sobre uma entrega.
 
 - **Os contratos da v2 ficaram na v2** (F2). Eles são consultados pelo índice [[Contratos-da-v2]], que leva ao texto no GitHub, fixado na tag `v2-antes-da-v3`. Link para contrato antigo é sempre `[[Contratos-da-v2|LOG-34]]`, com o ID visível.
+- **Contrato é um arquivo único por demanda**, com contexto e as seções de frontend, backend, API e banco ([[Modelo-de-Contrato]]); o prefixo é o da camada principal. Só o admin (Nathan, GitHub `oluccaa`) cria contrato direto no vault.
 - Trabalho que continuar ganha **contrato novo**, escrito na v3 em `06-Contratos/`. A numeração continua depois do maior ID da v2: `LOG-56`, `SQL-022`, `API-019`, `CON-04`. Confira os próximos IDs livres no fim do [[Contratos-da-v2]] e atualize a linha ao registrar.
 - O texto do contrato é copiado inteiro. Só o frontmatter, um bloco "Resumo em linguagem natural" (o que é, quem é afetado, situação) e um bloco "Situação em DD/MM" no topo são acrescentados.
 - Os IDs são únicos: `SQL-007`, `API-004`, `LOG-34`. O número original é preservado. Os duplicados ganham letra (`LOG-04a`, `LOG-04b`).
