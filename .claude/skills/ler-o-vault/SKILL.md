@@ -14,7 +14,7 @@ O vault é **só leitura** para quem não é o admin (Nathan, GitHub `oluccaa`; 
    - `01-Projeto/Tipos-de-ID.md` para entender um código (`N16-60`, `BL-035`, `PS-037`, `LOG-34`);
    - o `Registro-de-Decisoes` só por busca do ID; o detalhe técnico das notas grandes fica em `Partes/`.
    - Nunca abra inteiro um arquivo acima de 25 KB: busque pelo ID ou leia os títulos.
-3. **Pergunta sobre estado (existe? está pronto?):** confira na `origin/develop` do sistema, sem trocar de branch (`git show origin/develop:<arquivo>`, `git grep <termo> origin/develop`). Se está na `develop`, está pronto (✅). O `omie-elt-pipeline` usa `origin/master`.
+3. **Pergunta sobre estado (existe? está pronto?):** use a skill do sistema (`sistema-avhub`, `sistema-mes` ou `sistema-pipeline-omie`) para saber onde procurar, `banco-de-dados` para o banco e `preview-de-telas` para ver a tela. Confira na `origin/develop` do sistema, sem trocar de branch (`git show origin/develop:<arquivo>`, `git grep <termo> origin/develop`). Se está na `develop`, está pronto (✅). O `omie-elt-pipeline` usa `origin/master`.
 4. **Responda citando** a nota, o nó e o selo de cada afirmação, e a origem no código (repositório, commit, arquivo:linha) quando conferiu.
    - Se o vault não tiver a resposta, diga isso. Não invente.
    - Se o código e o vault divergirem, mostre os dois lados.

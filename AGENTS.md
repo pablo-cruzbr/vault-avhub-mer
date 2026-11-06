@@ -9,6 +9,11 @@ Instruções para qualquer IA que abrir este repositório (Claude, Codex, Copilo
 |---|---|---|
 | `ler-o-vault` | Qualquer pergunta sobre o projeto. Comece sempre por ela | Todos |
 | `criar-contrato` | Cria o contrato direto no vault, com ID, numa branch com PR | Só o admin |
+| `sistema-avhub` | Ler e procurar no av-hub (front `av-hub` e API `api-acos-vital`): tela → BFF → rota → banco | Todos |
+| `sistema-mes` | Ler e procurar no MES (API `api-pcp` e front `app-pcp`), incluindo as migrations Prisma | Todos |
+| `sistema-pipeline-omie` | Ler e procurar no `omie-elt-pipeline` (sincronização com o Omie e envio de OC) | Todos |
+| `banco-de-dados` | Conferir tabela, coluna ou função no dump e pedir um dump atualizado | Todos |
+| `preview-de-telas` | Ver uma tela da `develop` funcionando no navegador embutido | Todos |
 | `pedir-contrato` | Precisa que o sistema mude: gera o PDF do contrato (arquivo único com frontend, backend, API e banco) | Quem não é admin |
 | `abrir-consulta` | Precisa de uma resposta de negócio de quem opera: gera o PDF da consulta | Todos |
 | `relatorio-de-entrega` | Terminou uma task que já está na `develop`: gera o PDF com o que mudar no vault | Todos |
