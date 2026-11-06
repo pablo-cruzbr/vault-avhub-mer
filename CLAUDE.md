@@ -28,7 +28,7 @@ Quando quem estiver usando disser "atualizar o vault" (ou "atualiza o vault", "s
 
 - **Admin do vault: Nathan, Coordenador de TI (GitHub `oluccaa`).** Só ele altera o vault (commit, PR, merge) e cria contratos direto no vault. Para saber se quem está usando é o admin, rode `git config user.name` e `git config user.email`: é o admin se o nome for `oluccaa` ou `Nathan Lucca`, ou se o e-mail contiver `oluccaa`. Se não for, trabalhe em modo leitura e não grave nada no vault.
 - Robert, Gustavo e Pablo só leem: fazem `git pull` e mandam pedidos e entregas em PDF no grupo do WhatsApp.
-- Os passo a passo ficam em `.claude/skills/<nome>/SKILL.md` (lista e quando usar em `AGENTS.md`): `ler-o-vault`, `pedir-contrato`, `abrir-consulta`, `relatorio-de-entrega`, `gerar-pdf`, e, só para o admin, `criar-contrato`, `aplicar-documento-recebido` e `atualizar-o-vault`.
+- Os passo a passo ficam em `.claude/skills/<nome>/SKILL.md` (lista e quando usar em `AGENTS.md`): `ler-o-vault`, `pedir-contrato`, `abrir-consulta`, `relatorio-de-entrega`, `gerar-pdf`; por sistema, `sistema-avhub`, `sistema-mes` e `sistema-pipeline-omie`, mais `banco-de-dados` e `preview-de-telas`; e, só para o admin, `criar-contrato`, `aplicar-documento-recebido` e `atualizar-o-vault`.
 - **Contrato é um arquivo único por demanda:** contexto (o que e por quê) e as seções de frontend, backend, API e banco, com "Não se aplica" na camada que a demanda não toca. Modelo: `06-Contratos/Modelos/Modelo-de-Contrato.md`. Também há `Modelo-de-Consulta.md` (CON) e `Modelo-de-Relatorio-de-Entrega.md`. O ID final de contrato e de consulta é sempre do admin.
 - Relatório de entrega só para o que já está na `develop`.
 
