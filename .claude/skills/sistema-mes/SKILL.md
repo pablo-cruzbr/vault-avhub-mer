@@ -8,9 +8,10 @@ description: Ler e procurar no MES, o sistema de chão de fábrica da Aços Vita
 Os repositórios ficam ao lado do vault: `../api-pcp` e `../app-pcp`. **Só leitura:** nunca troque de branch, faça commit ou stash neles. **A base é a `origin/develop`** (regra F5). Atenção: a `main` do MES fica atrás da `develop`; o que vale é a `develop`.
 
 ## 0. Antes de ler
+0. Se `../api-pcp` ou `../app-pcp` não existir, siga "Repositório ausente" no `CLAUDE.md`: não adivinhe o código.
 1. `git -C ../api-pcp fetch --all --prune` e `git -C ../app-pcp fetch --all --prune`; anote o commit de `origin/develop`.
 2. Leia sem checkout: `git -C ../api-pcp show origin/develop:<arquivo>`, `git -C ../api-pcp grep -n "<termo>" origin/develop -- src prisma`.
-3. Cite repositório, commit e arquivo:linha. Nunca abra `.env` nem chaves.
+3. Cite repositório, commit e arquivo:linha com âncora (um trecho literal da linha, entre parênteses: `recebimento.service.ts:169` (`receber`)). Nunca abra `.env` nem chaves.
 
 ## 1. Onde fica cada coisa na `api-pcp` (API)
 | O que procuro | Onde |

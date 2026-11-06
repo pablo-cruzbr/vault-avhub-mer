@@ -14,4 +14,5 @@ Para o admin, siga **à risca** a seção "Comando: atualizar o vault" de `00-In
 3. `git fetch` nos sistemas e ler a `origin/develop` sem checkout.
 4. Descobrir o que mudou desde o commit registrado e ligar a cada nota.
 5. Mostrar o plano e esperar o "ok".
-6. Atualizar numa branch, um commit por nota, validar, registrar os novos commits em `Ultima-Atualizacao-do-Vault` e abrir o PR.
+6. Rodar `node scripts/conferir-citacoes.mjs` e corrigir as citações quebradas ou deslocadas das notas tocadas.
+7. Atualizar numa branch, um commit por nota, validar, registrar os novos commits em `Ultima-Atualizacao-do-Vault` e abrir o PR.

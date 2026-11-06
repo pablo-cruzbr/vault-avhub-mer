@@ -9,7 +9,7 @@ description: Conferir o banco de dados do av-hub ou do MES (tabelas, colunas, fu
 | Banco | Schemas | Onde conferir |
 |---|---|---|
 | **av-hub** (Postgres) | `core_*`, `auth`, `historico`, `omie_*` | **Só no dump**: o esquema não está no repositório da `api-acos-vital` |
-| **MES** (Postgres) | `public` | `prisma/migrations/` da `origin/develop` do `api-pcp` (skill `sistema-mes`); o dump confirma o banco real |
+| **MES** (Postgres) | `public` | `prisma/migrations/` da `origin/develop` do `api-pcp` (skill `sistema-mes`; se `../api-pcp` não existir, "Repositório ausente" no `CLAUDE.md`); o dump confirma o banco real |
 
 Os dumps ficam em `04-Dados/Dumps/` (no git desde 05/11/2026; o repositório é privado). Cada dump tem uma ficha em `04-Dados/Dump-<Banco>-<Ambiente>-AAAA-MM-DD.md` (exemplo: `Dump-AvHub-Teste-2026-11-04`), que diz de quando é, de qual ambiente e o que mudou. As notas `04-Dados/Banco-AvHub`, `Banco-MES`, `Schemas-Postgres` e `Diferencas-Codigo-x-Banco` resumem o banco.
 
@@ -35,7 +35,10 @@ Você **nunca** pede senha nem conecta no banco. Quem gera o dump é o Nathan. P
 Nathan, preciso de um dump atualizado para conferir <o quê e por quê>.
 Banco: <av-hub | MES>   Ambiente: <teste | outro>
 Só o esquema, sem dados:
-  pg_dump --schema-only --no-owner --no-privileges <-n schemas, ex.: -n 'core_*' -n auth -n historico -n 'omie_*'> -f <banco>-<ambiente>-esqueleto-AAAA-MM-DD.sql
+  pg_dump --schema-only --no-owner --no-privileges -h <host> -p <porta> -U <usuário> -d <banco> \
+    <-n schemas: av-hub -n 'core_*' -n auth -n historico -n 'omie_*' | MES -n public> \
+    -f <banco>-<ambiente>-esqueleto-AAAA-MM-DD.sql
+  (a senha o pg_dump pede no terminal, ou vem do PGPASSWORD de quem roda; nunca no chat)
 <Dados só se necessário: tabelas exatas, sem dado pessoal.>
 ```
 

@@ -8,8 +8,9 @@ description: Ler e procurar no omie-elt-pipeline, que traz os dados do Omie para
 Fica ao lado do vault: `../omie-elt-pipeline`. **Só leitura.** **A base é a `origin/master`**: este repositório não tem `develop`.
 
 ## 0. Antes de ler
+0. Se `../omie-elt-pipeline` não existir, siga "Repositório ausente" no `CLAUDE.md`: não adivinhe o código.
 1. `git -C ../omie-elt-pipeline fetch --all --prune`; anote o commit de `origin/master`.
-2. Leia sem checkout: `git -C ../omie-elt-pipeline show origin/master:<arquivo>`, `git -C ../omie-elt-pipeline grep -n "<termo>" origin/master -- src sql`.
+2. Leia sem checkout: `git -C ../omie-elt-pipeline show origin/master:<arquivo>`, `git -C ../omie-elt-pipeline grep -n "<termo>" origin/master -- src sql`. Cite repositório, commit e arquivo:linha com âncora.
 3. **Nunca abra o `.env`** (tem chaves do Omie, senhas e segredos de TOTP). Os nomes das variáveis estão no `.env.example`.
 4. **Nunca rode** worker, job ou CLI do pipeline (`full-sync`, `envio-oc`, `scheduler`...). **O Omie não tem ambiente de teste**: qualquer escrita afeta dado real.
 

@@ -25,7 +25,7 @@ A regra do vault (F5) é: **se está na `develop`, está pronto**. Trabalho que 
 ## Regras de escrita
 
 1. **O texto atual do vault é copiado igual**, palavra por palavra, para o Nathan achar o trecho.
-2. **Toda entrega cita a origem:** repositório, commit da `develop` e arquivo:linha.
+2. **Toda entrega cita a origem:** repositório, commit da `develop` e arquivo:linha com âncora (um trecho literal da linha, entre parênteses).
 3. **Só proponha ✅ para o que está na `develop`.** Parcial é 🟡.
 4. **Diga o que ficou de fora.** Um relatório que só conta o que deu certo esconde pendência.
 5. **Uma task por relatório** (ou um grupo de tasks do mesmo contrato).

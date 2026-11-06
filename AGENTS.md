@@ -13,6 +13,7 @@ Instruções para qualquer IA que abrir este repositório (Claude, Codex, Copilo
 | `sistema-mes` | Ler e procurar no MES (API `api-pcp` e front `app-pcp`), incluindo as migrations Prisma | Todos |
 | `sistema-pipeline-omie` | Ler e procurar no `omie-elt-pipeline` (sincronização com o Omie e envio de OC) | Todos |
 | `banco-de-dados` | Conferir tabela, coluna ou função no dump e pedir um dump atualizado | Todos |
+| `status-do-projeto` | Panorama em formato fixo: pronto, falta, parado e feito sem registro, por raia e por pessoa | Todos |
 | `preview-de-telas` | Ver uma tela da `develop` funcionando no navegador embutido | Todos |
 | `pedir-contrato` | Precisa que o sistema mude: gera o PDF do contrato (arquivo único com frontend, backend, API e banco) | Quem não é admin |
 | `abrir-consulta` | Precisa de uma resposta de negócio de quem opera: gera o PDF da consulta | Todos |

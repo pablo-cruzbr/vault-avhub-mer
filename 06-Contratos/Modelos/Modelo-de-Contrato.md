@@ -40,7 +40,7 @@ Os prefixos e os próximos números livres estão em [[Tipos-de-ID]] e no fim do
 
 1. **O porquê vem antes do como.** O contexto diz o problema, quem sofre com ele e o que acontece se não for feito.
 2. **Resumo em linguagem simples em cima, detalhe técnico nas seções de camada.** Quem não programa precisa entender o topo.
-3. **Toda afirmação tem origem:** repositório, `origin/develop`, commit e arquivo:linha; ou a nota e o ID do vault (`N16-60`, `BL-035`, `V0.3`).
+3. **Toda afirmação tem origem:** repositório, `origin/develop`, commit e arquivo:linha com âncora (um trecho literal da linha, entre parênteses: `ordens_compra.route.js:42` (`EXIGIR_PODE_APROVAR`)); ou a nota e o ID do vault (`N16-60`, `BL-035`, `V0.3`).
 4. **Só é ✅ o que está na `develop`** (regra F5). O resto é 🟡 (parcial), 🔴 (não existe) ou 📝 (decidido, sem código).
 5. **Cada item de mudança é testável.** O critério de aceite diz o que conferir na `develop` para dar como feito, camada por camada.
 6. **Nomes exatos:** tabelas, colunas, rotas, telas e valores de enum vão em `código`, com o nome real (ou o proposto, marcado como novo).

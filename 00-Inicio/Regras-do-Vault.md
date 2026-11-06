@@ -53,13 +53,14 @@ Toda afirmação relevante leva um selo. A base é a `develop` dos sistemas (F5)
 
 | Selo | Significa |
 |---|---|
-| ✅ | Está na `develop` (citar repositório, commit e arquivo:linha) |
+| ✅ | Está na `develop` (citar repositório, commit e arquivo:linha com âncora) |
 | 📝 | Decidido (citar o ID da decisão) |
 | 🟡 | Parcial na `develop` |
 | 🔴 | Não está na `develop` |
 | ❓ | Não conferido na `develop` |
 
 - O commit da `develop` lido fica uma vez por nota, no `develop-conferida` do frontmatter; cada ✅ cita o repositório e o arquivo:linha.
+- **Citação de código com âncora:** `` `repositório` `caminho/arquivo:linha` (`âncora`) ``, em que a âncora é um trecho literal e curto daquela linha (nome de função, constante, rota). Exemplo: `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:42` (`EXIGIR_PODE_APROVAR`). A linha muda quando o código muda; a âncora deixa achar o lugar de novo. Toda citação nova leva âncora; as antigas ganham âncora quando a nota for mexida. `node scripts/conferir-citacoes.mjs` aponta as citações quebradas ou deslocadas.
 - **Módulo do Pablo** (proposta e suprimentos, F3): o que for dele e não estiver na `develop` é 🔴 "sem API e sem banco". O `api-comercial` de teste (`av-hub/api-comercial`) será removido inteiro e não conta como pronto. Quando a parte chegar à `develop`, o selo vira ✅.
 
 ## Nomes de telas
