@@ -5,7 +5,7 @@ description: Responder perguntas sobre o ERP da Aços Vital (fluxo do pedido, av
 
 # Ler o vault e responder
 
-O vault é **só leitura** para quem não é o Nathan. Não edite, não commite, não faça push.
+O vault é **só leitura** para quem não é o admin (Nathan, GitHub `oluccaa`; veja como conferir no `CLAUDE.md`). Não edite, não commite, não faça push.
 
 1. **Prepare o ambiente** como manda o `CLAUDE.md` ("Antes de qualquer tarefa"): `git fetch --all --prune` no vault e nos cinco sistemas vizinhos; no vault, `git checkout main` e `git pull --ff-only` (se houver alteração local, avise e pare).
 2. **Leia o necessário, nada além:**
@@ -18,4 +18,4 @@ O vault é **só leitura** para quem não é o Nathan. Não edite, não commite,
 4. **Responda citando** a nota, o nó e o selo de cada afirmação, e a origem no código (repositório, commit, arquivo:linha) quando conferiu.
    - Se o vault não tiver a resposta, diga isso. Não invente.
    - Se o código e o vault divergirem, mostre os dois lados.
-5. **Se a resposta mostrar que falta algo:** ofereça a skill certa: `pedir-contrato` (precisa mudar o sistema), `abrir-consulta` (precisa de resposta de negócio) ou `relatorio-de-entrega` (a pessoa já fez uma task e o vault está desatualizado).
+5. **Se a resposta mostrar que falta algo:** ofereça a skill certa: `criar-contrato` se for o admin, ou `pedir-contrato` se não for (precisa mudar o sistema), `abrir-consulta` (precisa de resposta de negócio) ou `relatorio-de-entrega` (a pessoa já fez uma task e o vault está desatualizado).
