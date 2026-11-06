@@ -16,6 +16,7 @@ O vault é **só leitura** para quem não é o admin (Nathan, GitHub `oluccaa`; 
    - Nunca abra inteiro um arquivo acima de 25 KB: busque pelo ID ou leia os títulos.
 3. **Pergunta sobre estado (existe? está pronto?):** use a skill do sistema (`sistema-avhub`, `sistema-mes` ou `sistema-pipeline-omie`) para saber onde procurar, `banco-de-dados` para o banco e `preview-de-telas` para ver a tela. Confira na `origin/develop` do sistema, sem trocar de branch (`git show origin/develop:<arquivo>`, `git grep <termo> origin/develop`). Se está na `develop`, está pronto (✅). O `omie-elt-pipeline` usa `origin/master`.
 4. **Responda citando** a nota, o nó e o selo de cada afirmação, e a origem no código (repositório, commit, arquivo:linha) quando conferiu.
+   - **Antes de dizer que o vault não cita algo, busque o termo no vault inteiro**, não só na nota ou na raia que você leu: `grep -rn "<termo>" --include=*.md .` na raiz do vault (inclui `Partes/`, `03-Sistemas`, `04-Dados`, `05-Integracoes`). Só diga "o vault não cita" se essa busca der zero, e diga que buscou.
    - Se o vault não tiver a resposta, diga isso. Não invente.
    - Se o código e o vault divergirem, mostre os dois lados.
 5. **Se a resposta mostrar que falta algo:** ofereça a skill certa: `criar-contrato` se for o admin, ou `pedir-contrato` se não for (precisa mudar o sistema), `abrir-consulta` (precisa de resposta de negócio) ou `relatorio-de-entrega` (a pessoa já fez uma task e o vault está desatualizado).

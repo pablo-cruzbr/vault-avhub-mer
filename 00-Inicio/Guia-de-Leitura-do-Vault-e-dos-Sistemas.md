@@ -163,6 +163,7 @@ Quem decide precisa de máxima certeza em cada decisão. Antes de recomendar ou 
 1. **Separe fato de hipótese.** Todo ponto da resposta leva a origem: `arquivo:linha` e commit (código), tabela e coluna (banco), ID da decisão (vault). Sem origem, escreva "não conferido".
 2. **Uma fonte não basta para decisão.** Cruze pelo menos duas: nota do vault e código; código e banco; banco e tela. Quando divergem, aplique a precedência e relate a divergência.
 3. **Não complete lacunas por analogia.** Se o código ou o dump não mostra, diga o que falta e como obter, em vez de supor.
+   - **Ausência só se afirma depois de buscar em tudo.** "O vault não cita" exige `grep -rn "<termo>" --include=*.md .` no vault inteiro; "não existe no código" exige `git grep` na `origin/develop` do repositório inteiro; "não está no banco" exige a busca no dump mais recente. Diga onde buscou.
 4. **Diga o grau de certeza.** Use as palavras: *confirmado* (código ou banco lido), *indicado* (só o vault), *não verificado*.
 5. **Pare e pergunte quando a decisão não dá para desfazer** (migration, gravação no Omie, apagar dado) ou quando o vault e o código se contradizem sem decisão que resolva.
 6. **Registre o que descobrir.** Divergência vira `PS`; dúvida de negócio vira `OQ` ou consulta `CON`; decisão de negócio vai ao `Registro-de-Decisoes` com ID novo.
