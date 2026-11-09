@@ -4,12 +4,15 @@ criado: 2026-10-14
 estado-em: 2026-11-09
 status: vigente
 dono: Gustavo (DBA)
-fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4)]
+fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), Dump-AvHub-Teste-2026-11-09 (09/11/2026)]
 ---
 
 # Banco do av-hub
 
-> [!info] Dump mais novo: banco de teste, 04/11/2026
+> [!info] Dump mais novo: banco de teste, 09/11/2026
+> O esqueleto do banco de **teste** de 09/11/2026 15:51 ([[Dump-AvHub-Teste-2026-11-09]]) tem **250 funções e 192 triggers**, com as mesmas 146 tabelas e 51 views. Entraram as três migrations do pedido do Hub de 05/11 e 06/11, que continuam fora do repositório (BL-024): o envio ao Omie (`fn_pedido_venda_envio_iniciar`, `_omie_registrar`, `_omie_erro` e `_payload_omie`), a `fn_proposta_transformar` de 4 argumentos e as colunas novas de `core_comercial.pedidos_venda`. Também entraram `auth.permissoes.pode_exportar` (LOG-48) e o setor da requisição de uso interno. O quadro abaixo, de 04/11, continua valendo para o resto.
+>
+> **Dump de 04/11/2026:**
 > O Nathan enviou o esqueleto do banco de **teste** (`tst`) de 04/11/2026 23:58 (PostgreSQL 18.6), sem dados: [[Dump-AvHub-Teste-2026-11-04]]. Frente ao de 29/10 abaixo: **15 schemas, 146 tabelas, 51 views, 238 funções e 191 triggers**. Mudou só o `core_comercial` e entrou o schema `orcamento_pdf` (tabela `relatorio`):
 > - `core_comercial` passa a ter **12 tabelas** (`propostas`, `propostas_itens`, `propostas_eventos`, `propostas_versoes`, `pedidos_venda`, `pedidos_venda_itens`, `parametros_custo`, `unidades_emissoras`, `perfis_comerciais`, `sequencias_documento`, `sequencias_proposta`, `chaves_idempotencia`), 2 views e 28 funções (entre elas `fn_proposta_aprovar`, `_cancelar`, `_revisar`, `_copiar`, `_transformar` e `fn_propostas_expirar`).
 > - Saíram as 13 tabelas do módulo de teste do Pablo: `ofertas`, `solicitacoes_custo`, `clientes`, `clientes_contatos`, `fornecedores_perfil`, `fornecedores_categorias`, `categorias_suprimento`, `apelidos_fornecedor`, `certificados`, `notificacoes`, `produtos_pendentes`, `produtos_perfil` e `tabelas_custo_telha` (com a view `vw_fornecedores_por_cnpj`).

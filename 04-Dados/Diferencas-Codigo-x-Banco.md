@@ -4,7 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 dono: Nathan
-fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 0384e89 (develop), av-hub 758d5f0 (develop), omie-elt-pipeline 0f739f0, Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, conferência por script em 14/10 e 29/10]
+fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 0384e89 (develop), av-hub 758d5f0 (develop), omie-elt-pipeline 0f739f0, Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, conferência por script em 14/10 e 29/10, Dump-AvHub-Teste-2026-11-09 (09/11/2026)]
 ---
 
 # Diferenças entre código e banco
@@ -75,7 +75,7 @@ Resolvidos desde 14/10 (só na `develop`): `GET /itens/custo` com `alterado_desd
 | objetos do contrato 46 (046) | ✅ existem (`core_fluxo.*`, funções da Torre); **a 046b** (zeros no mapa, concessão só ao Admin) não se prova por esqueleto | ❓ | `item_estado_projetado.route.js:16-30` |
 | API-004/007 (`moeda`, `cotacao_*`, `valor_frete`, `valor_seguro` na referência) e api007b (fornecedor) | ✅ colunas na view (fornecedor no dump de 29/10) | ✅ | dump `vw_ordens_compra_referencia_mes` |
 | API-009 (`requisicoes_compra_referencia_mes` e a view) | ✅ existem no dump de 29/10 | ✅ | `vw_requisicoes_compra_referencia_mes.route.js:59` |
-| rotas `/comercial/*` (funções `core_comercial.fn_proposta_*`, `fn_cliente_omie_registrar`, `fn_parametros_custo_salvar`, `vw_propostas_lista`) | ✅ existem no dump de 29/10 só a criação e o cálculo do item (`fn_proposta_criar`, `fn_proposta_item_calcular`); as de revisar, aprovar, cancelar, copiar, transformar e expirar, e as tabelas `core_comercial.pedidos_venda` e `pedidos_venda_itens`, aparecem no dump do banco de teste de 04/11/2026 | ✅ | `core_comercial/aggregates/*` |
+| rotas `/comercial/*` (funções `core_comercial.fn_proposta_*`, `fn_cliente_omie_registrar`, `fn_parametros_custo_salvar`, `vw_propostas_lista`) | ✅ existem no dump de 29/10 só a criação e o cálculo do item (`fn_proposta_criar`, `fn_proposta_item_calcular`); as de revisar, aprovar, cancelar, copiar, transformar e expirar, e as tabelas `core_comercial.pedidos_venda` e `pedidos_venda_itens`, aparecem no dump do banco de teste de 04/11/2026; o envio ao Omie (`fn_pedido_venda_*`) e a `fn_proposta_transformar` de 4 argumentos, no de 09/11/2026 ([[Dump-AvHub-Teste-2026-11-09]]), com as migrations fora do repositório (BL-024) | ✅ | `core_comercial/aggregates/*` |
 | views `vw_ritmo_*_hora`, `vw_volume_pedidos_diario*` | não existem; **só aparecem em comentários** (as rotas foram reconstruídas) | ✅ sem problema | `ritmo_faturamento_hora.route.js:8` |
 | `auth.rotas_telas` com `/fluxo/*`, `/itens_pedido_custo`, `/compras/requisicoes/eventos`, `/comercial/*` | tabela existe; linhas ❓ | ❓ | [[RBAC-e-Permissoes]] |
 
