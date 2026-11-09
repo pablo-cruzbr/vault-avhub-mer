@@ -201,6 +201,8 @@ O `CLAUDE.md` do av-hub já diz "procure se já existe" e o `conferir-mapa.mjs` 
 
 **2. Verifique contra a fonte, não contra um retrato dela.** A v1 descreveu a árvore de trabalho e chamou de `develop`; a v3 citou `655896a` lendo um checkout de um dia antes; a v4 deu a correção do refaturamento como presente no remoto porque conferiu o começo idêntico das duas versões (`const ehRefaturamento = (c: CategoriaUnidadeProps) =>`). Daí: a §4 lê `git show origin/develop:` no momento de escrever, e cada âncora usa o trecho que distingue a versão nova da antiga.
 
+O número da linha também é fonte: só de `grep -n` ou de leitura contígua, nunca de trechos concatenados e renumerados. Foi o que deslocou as duas citações de `pedidos_liberacao.route.js` na v8 (a regra geral está em [[Regras-do-Vault]]).
+
 **3. Nome parecido não é a mesma coisa, e regra repetida em dois lugares não é a mesma regra (nova na v8).**
 - `/pedidos_liberacao` × `/pedidos_liberados`: dois nomes quase iguais, montados em linhas vizinhas (`index.js:193-194`), finalidades opostas. A v7 citava as âncoras certas e o nome errado: ler a âncora não basta, é preciso conferir o nome contra o que a tela chama (`route.ts:53`).
 - "G6" na `vw_vendas_planilha` × na `vw_faturamento_planilha`: o mesmo conceito, duas redações no mesmo banco, e a nota do vault documentava uma só.
