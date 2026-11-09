@@ -153,7 +153,7 @@ Quem faz: a view, o `COLUNAS` e o corpo são do Gustavo (§14, passos 7a a 7c); 
 
 ❓ **Pergunta ao Gustavo, item 1: o join.** O pedido do Hub tem dois campos de empresa: `codigo_empresa` (a emissora) e `codigo_empresa_omie` (a conta Omie). A `vw_vendas_planilha` traz `codigo_empresa` de `pedidos_vendas`, que a pipeline preenche a partir da conta Omie. O join é `pedidos_venda.codigo_empresa_omie = pedidos_vendas.codigo_empresa`, e não pelo `codigo_empresa` do Hub? Com três contas e a pendência da HRM, errar isso mistura unidades em silêncio.
 
-❓ **Pergunta ao Gustavo, item 2: view ou SELECT.** A proposta é pôr os campos na view, para não escrever o join duas vezes. Mas a `vw_pedidos_liberacao` já é cara (`pedidos_liberacao.route.js:49-50`: "a view é cara (`vw_vendas_planilha` por baixo)"). Se for melhor no SELECT da rota, tudo bem, mas a escolha precisa estar feita antes do passo 7a.
+❓ **Pergunta ao Gustavo, item 2: view ou SELECT.** A proposta é pôr os campos na view, para não escrever o join duas vezes. Mas a `vw_pedidos_liberacao` já é cara (`pedidos_liberacao.route.js:107`, `a view é cara (vw_vendas_planilha por baixo)`; a v8 citava `:49-50`, corrigido em 09/11). Se for melhor no SELECT da rota, tudo bem, mas a escolha precisa estar feita antes do passo 7a.
 
 ### 7.7 Refaturamento: o alcance real, e o que a N16-152 muda
 
