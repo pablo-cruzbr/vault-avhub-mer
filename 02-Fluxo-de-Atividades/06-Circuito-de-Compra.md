@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, compras, ccp, requisicao, oc, aprovacao, omie, fornecedor, p3, c0, c1, c2, c3, c4, c5, fn1]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-09
 status: vigente
 ordem: 6
 nos: [P3, C0, C1, C2, C3, C4, C5, C6, C7, C8, FN1]
@@ -95,7 +95,7 @@ O fluxo foi aprovado em 26/10. As decisões N16-120 a N16-143 são de 29/10/2026
 - 📝 `C6` a `C8` decididos em 26/10; sem código na `api-acos-vital` nem no front 🔴 (conferido em 29/10: nenhuma rota `divergencias_compra`). Detalhe em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
 - ✅ O MES lê a OC do hub desde 15/10 (K4, `develop` do `api-pcp`) e as requisições do Compras com pedido de venda aparecem ao PCP na Triagem desde 23/10 (API-009). 🔴 Falta o PCP ver a OC do pedido na Triagem e na Destinação (BL-049) e o saldo futuro no Estoque (BL-050).
 - ✅ (`api-pcp` `src/compras/recebimento.service.ts:169` e `src/compras/recebimento.controller.ts:20`; leitura da OC em `src/integracao-avhub/oc-referencia-avhub.service.ts:97`) O recebimento e a leitura da OC pelo MES estão na `develop` do MES (15 a 26/10). A `main` do MES parou em 08/10.
-- 🔴 Perfil exclusivo do CCP (hoje vale a permissão da tela).
+- ❓ Perfil do CCP criado pelo Nathan em 30/10/2026 (cadastro no banco, não conferido no ambiente; BL-017). No MES as rotas de Compras · CCP continuam exigindo só a permissão `movimentacoes`, então quem edita depende das permissões dadas ao perfil.
 - 🔴 Contrato de recompra por RNC e aviso de atraso ao PCP e ao vendedor.
 - 🔴 Contrato novo entre MES e hub para `C6` a `C8` e para os avisos da recompra por RNC (N16-127) e da reabertura do recebimento (N16-137).
 - ❓ Teste ponta a ponta com as chaves reais; versionar `fn_requisicao_mes_aplicar`.
