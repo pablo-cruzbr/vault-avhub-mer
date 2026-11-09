@@ -1,12 +1,12 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3, parte]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-09
 status: vigente
 dono: Nathan
 parte-de: "[[03-Pedido-de-Venda-e-Liberacao]]"
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
-fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10]
+fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4)]
 ---
 
 # Raia Vendas: liberação do pedido (V1 a V3): detalhe técnico (1/2)
@@ -44,7 +44,7 @@ Origem: [[Contratos-da-v2|LOG-26]] §2, decisões do Nathan de 28/09/2026, salvo
 | 7 | Quem libera: o vendedor e o auxiliar dos titulares que ele auxilia. | 📝 |
 | 8 | O gerente tem tela própria, **só visualização**, com todos os vendedores. | 📝 |
 | 9 | O escopo do vendedor é aplicado **pela API a partir do token** (contrato [[Contratos-da-v2\|LOG-40]]): sem a chave `vendedor`, a API preenche com os vendedores do usuário. O BFF não filtra mais. | 📝 |
-| 10 | Pedido do Omie entra na liberação com os mesmos filtros que a Carteira antiga usava: `sequencial = 0`, sem track record, grupo líquido (sem dedução ou blacklist), `etapa <> 0`, incluído a partir da data de corte e `situacao = 'Pendente'` (ou já liberado). | 📝 |
+| 10 | Pedido do Omie entra na liberação com os mesmos filtros que a Carteira antiga usava: `sequencial = 0`, sem track record, grupo líquido (sem dedução ou blacklist; o G6 do refaturamento também fica fora, ver "Endpoints e contratos"), `etapa <> 0`, incluído a partir da data de corte e `situacao = 'Pendente'` (ou já liberado). | 📝 |
 | 11 | A marcação "Qualidade acompanha" é **capturada agora e consumida depois** pela fila de inspeção de processo da Qualidade (não existe, ver "O que falta"). | 📝 |
 
 ## Estados
@@ -96,6 +96,15 @@ Abas com contagem vinda do backend (`contagem.pendente`, `liberado`, `importado`
 | `GET /api/liberar-pedidos` e `PUT /api/liberar-pedidos/:empresa/:numero` | BFF do HUB | repassa à API; `?fonte=equipe` exige a tela `liberacao-equipe` | idem §5 |
 | `GET /itens/status` (MES) e `GET /itens_pedido_status?codigo_empresa=&pedido_venda=&historico=` (hub) | MES para hub (job de 90 s) e HUB lê | cartão Etapa dos itens | [[Contratos-da-v2\|API-005]], [[Contratos-da-v2\|API-006]], [[Contratos-da-v2\|SQL-010]] |
 | `GET /api/pedidos-venda/:fonte/:empresa/:pedido/etapas` | BFF do HUB | repassa `/itens_pedido_status`; responde `disponivel: false` quando o hub ainda não tem a rota | API-006 |
+
+**As duas rotas leem a mesma view, mas servem a lados diferentes** ✅ (`api-acos-vital` `src/schemas/core_vendas_faturamento/index.js:193-194` (`/pedidos_liberacao`), `develop` `655896a`; `av-hub` `develop` `6fcbba6`):
+
+- **`/pedidos_liberacao` grava e serve a tela Liberar Pedidos.** `GET /` em `aggregates/pedidos_liberacao/pedidos_liberacao.route.js:89` (`router.get("/"`); `PUT /:codigo_empresa/:numero_pedido` em `:165` (`router.put`), que exige `acompanhamento_qualidade` booleano (`:174`, `typeof acompanha !== "boolean"`) e grava com `ON CONFLICT` (`:204`). O BFF chama `${process.env.API_URL}/pedidos_liberacao` (`av-hub` `app/api/liberar-pedidos/route.ts:53` (`/pedidos_liberacao?`) e `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:46` (`/pedidos_liberacao/`), com o corpo montado à mão em `:51` (`acompanhamento_qualidade: acompanha`)).
+- **`/pedidos_liberados` só lê e serve o MES (Fluxo 4).** `GET /` filtra `v.status_liberacao IN ('liberado', 'importado')` (`aggregates/pedidos_liberados/pedidos_liberados.route.js:59`); `GET /:numero/itens` em `:115`; `POST /:numero/importado` em `:143`, que só confirma a importação. Não tem PUT.
+- Cada rota escolhe suas colunas da view (`COLUNAS`, `pedidos_liberacao.route.js:39` e `pedidos_liberados.route.js:25`).
+- O `LOG-56` (`06-Contratos/Ativos/LOG-56-Transformar-Proposta-em-Pedido`) é o contrato que acrescenta o valor inicial sugerido e o `faturar_em_partes`.
+
+**Pedido do grupo G6 nunca aparece na Liberar Pedidos** ✅ (nem chega ao MES, que lê a mesma view). A `vw_pedidos_liberacao` é construída sobre a `vw_vendas_planilha` e filtra `p.grupo IS NULL` (dump de teste de 04/11, linha 25492). Nessa view o G6 pega todo pedido com `refat` ou `reaft` na observação, em qualquer unidade (Mogi, Uberaba, HRM), e todo pedido com categoria `1.01.96` (o refaturamento de Mogi), também pela família (uma parcial basta para levar o pedido-pai). Pela categoria, o `1.01.99` (refaturamento de Uberaba) e o `1.01.98` (da HRM) não caem em G6. Detalhe das duas redações do G6 em [[Banco-AvHub]]; risco em [[Riscos]] (RS-022); correção decidida na N16-152 (b) ([[Registro-N16-150-a-N16-152]]).
 
 Banco e telas (DDL e `auth.telas`): apêndices A e B do contrato 26. Diagnóstico das chaves (a do MES só vale para o PUT do contrato 34; as leituras e o `POST importado` usam outra): [[Chaves-e-Autenticacao]].
 
