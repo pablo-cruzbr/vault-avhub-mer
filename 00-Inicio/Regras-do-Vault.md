@@ -61,6 +61,7 @@ Toda afirmação relevante leva um selo. A base é a `develop` dos sistemas (F5)
 
 - O commit da `develop` lido fica uma vez por nota, no `develop-conferida` do frontmatter; cada ✅ cita o repositório e o arquivo:linha.
 - **Citação de código com âncora:** `` `repositório` `caminho/arquivo:linha` (`âncora`) ``, em que a âncora é um trecho literal e curto daquela linha (nome de função, constante, rota). Exemplo: `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:42` (`EXIGIR_PODE_APROVAR`). A linha muda quando o código muda; a âncora deixa achar o lugar de novo. Toda citação nova leva âncora; as antigas ganham âncora quando a nota for mexida. `node scripts/conferir-citacoes.mjs` aponta as citações quebradas ou deslocadas.
+- **Número de linha só de `grep -n` ou de leitura contígua do arquivo; nunca de renumeração de trechos concatenados.** Ler `sed -n '1,30p;89,150p'` e numerar a saída com `nl` recomeça do 1 e desloca todo número depois do buraco entre as faixas; a âncora continua certa e a linha mente (duas citações do LOG-56 em 09/11, §17).
 - **Módulo do Pablo** (proposta e suprimentos, F3): o que for dele e não estiver na `develop` é 🔴 "sem API e sem banco". O `api-comercial` de teste (`av-hub/api-comercial`) foi removido inteiro (o protótipo saiu do av-hub no PR #261 e fica legível no commit `f7d8d7f`) e não conta como pronto. Quando a parte chegar à `develop`, o selo vira ✅.
 
 ## Nomes de telas
