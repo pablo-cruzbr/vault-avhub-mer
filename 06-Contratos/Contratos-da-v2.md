@@ -1,10 +1,10 @@
 ---
 tags: [contratos, indice, v2]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-09
 status: vigente
 dono: Nathan
-fontes: ["tag v2-antes-da-v3 do vault (06-Contratos)", "gerado por 07-Desenvolvimento/v3/scripts/contratos-indice.mjs"]
+fontes: ["tag v2-antes-da-v3 do vault (06-Contratos)", "gerado por 07-Desenvolvimento/v3/scripts/contratos-indice.mjs", "PDF de Robert de 09/11/2026 (contrato LOG-56 v8)"]
 ---
 
 # Contratos da v2
@@ -56,5 +56,10 @@ Estas seções ficam em notas à parte, para cada arquivo ficar abaixo de 25 KB 
 
 ## Contratos novos (v3)
 
-A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-019`, `CON-04`, `LOG-56`, `SQL-022`.
+A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-019`, `CON-04`, `LOG-57`, `SQL-022`.
+
+| ID | Título | Status | Autor | Data |
+|---|---|---|---|---|
+| [[LOG-56-Transformar-Proposta-em-Pedido\|LOG-56]] | Transformar proposta em pedido: as respostas que faltam e as pontas soltas da tela (v8) | `para-implementar` | Robert | 2026-11-09 |
+
 O modelo de consulta está em [[Modelo-de-Consulta]].
