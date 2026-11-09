@@ -192,7 +192,7 @@ mais a porta da família (linha 25390): se alguma parcial (`sequencial > 0`, nã
 2. Precisa, e a view muda para deixar passar o refaturamento com um marcador próprio: mexe numa view que a comissão também usa, então não é barato.
 3. Precisa, e o MES lê do Hub para esses casos: vira parte do contrato do MES (§6.7), não deste.
 
-**Medição pendente (PS-040, ampliada).** A consulta do [[Mapa-IncluirPedido-Omie]] (parte 2, linhas 102-126) media o vazamento de comissão de Uberaba. Com esta correção, ela mede também quantos pedidos somem da Liberar Pedidos, adaptada: sobre a `vw_vendas_planilha`, pelas três unidades, com as portas em separado. O SQL está pronto (fora do vault, `../Perguntas-e-Respostas/medicao-V3_refaturamento-liberacao.sql`). O resultado vem antes da conversa com a Qualidade e não bloqueia nenhum passo da §14.
+**Medição feita (PS-040, ampliada; rodada pelo Nathan em 09/11/2026 no banco de teste: o G6 tira 142 de 2.028 pedidos, 36 pela categoria, 98 pela observação e 8 pela família; números em [[Pontas-Soltas]]).** A consulta do [[Mapa-IncluirPedido-Omie]] (parte 2, linhas 102-126) media o vazamento de comissão de Uberaba. Com esta correção, ela mede também quantos pedidos somem da Liberar Pedidos, adaptada: sobre a `vw_vendas_planilha`, pelas três unidades, com as portas em separado. O SQL está pronto (fora do vault, `../Perguntas-e-Respostas/medicao-V3_refaturamento-liberacao.sql`). O resultado vem antes da conversa com a Qualidade e não bloqueia nenhum passo da §14.
 
 ### 7.8 Quem preenche a configuração padrão, decidido: SQL, sem tela
 
