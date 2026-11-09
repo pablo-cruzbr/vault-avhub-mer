@@ -1,11 +1,11 @@
 ---
 tags: [omie, pedido-de-venda, incluir-pedido, api, mapa-de-campos, pesquisa, parte]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-09
 status: proposta
 dono: Nathan
 parte-de: "[[Mapa-IncluirPedido-Omie]]"
-fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api/v1/produtos/pedido/ (serviço PedidoVendaProduto, método IncluirPedido e tipos complexos)", "Exemplo de IncluirPedido enviado pelo Nathan em 23/10/2026", "05-Integracoes/Estudo-Omie-API (estudo de 21/10)", "av-hub components/Propostas/PropostaForm (PedidoOmieModal.tsx, ItemProposta.tsx, PropostaForm.tsx)", "Pedido do Robert ao Nathan de 03/11/2026 e errata de 05/11/2026", "Consultas só de leitura ao Omie nas três contas em 04/11/2026 (ListarCategorias, ListarFormasPagCompras, ListarFormasPagVendas, ListarContasCorrentes)", "Dump do Avhub de 29/10/2026 (vw_faturamento_planilha, vw_comissao_master)"]
+fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api/v1/produtos/pedido/ (serviço PedidoVendaProduto, método IncluirPedido e tipos complexos)", "Exemplo de IncluirPedido enviado pelo Nathan em 23/10/2026", "05-Integracoes/Estudo-Omie-API (estudo de 21/10)", "av-hub components/Propostas/PropostaForm (PedidoOmieModal.tsx, ItemProposta.tsx, PropostaForm.tsx)", "Pedido do Robert ao Nathan de 03/11/2026 e errata de 05/11/2026", "Consultas só de leitura ao Omie nas três contas em 04/11/2026 (ListarCategorias, ListarFormasPagCompras, ListarFormasPagVendas, ListarContasCorrentes)", "Dump do Avhub de 29/10/2026 (vw_faturamento_planilha, vw_comissao_master)", "PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4)"]
 ---
 
 # Mapa do `IncluirPedido` do Omie: o que o hub manda, de onde vem cada campo e o que ainda não sabemos: detalhe técnico (2/2)
@@ -91,12 +91,15 @@ O que isso resolve e o que não resolve:
 | `1.01.01` | Venda de Cliente | Venda de Cliente | Venda de Mercadoria Fabricadas |
 | `1.01.96` | Venda Cliente - Refaturamento (ativa) | Venda Cliente - Avanço (**inativa e oculta**) | `<Disponível>` (**inativa e oculta**) |
 | `1.01.99` | Cobranças Jurídicas | **Venda Cliente - Refaturamento** (ativa) | Revenda de Mercadoria |
+| `1.01.98` | fora da lista ativa | Venda de Sucata | **Venda Cliente - Refaturamento** (ativa) |
 | `1.01.03` | Venda de Sucata | Venda para Coligadas (inativa) | Venda de Sucata |
+
+A linha do `1.01.98` vem da leitura do Robert do `ListarCategorias` em 06/11/2026 (PDF de 09/11/2026). **Cada unidade tem o seu código de refaturamento, e eles colidem:** `1.01.96` em Mogi, `1.01.99` em Uberaba e `1.01.98` na HRM. O `1.01.98` é Venda de Sucata em Uberaba; o `1.01.99` é Cobranças Jurídicas em Mogi e Revenda de Mercadoria na HRM. Acrescentar um desses códigos à regra global do G6 marcaria venda comum de outra unidade como refaturamento; por isso a N16-152 seguiu pela tabela `refaturamentos` (saída (b), 09/11/2026, [[Registro-N16-150-a-N16-152]]).
 
 - **O `1.01.96` não serve como padrão:** só vale em Mogi. Nas outras duas está inativo e oculto, e o Omie recusaria o pedido ou o lançaria no lugar errado.
 - A lista de venda deve trazer só categorias de **receita, lançáveis e ativas**; senão aparece o grupo `1.01 - Receitas Diretas`, que só agrupa.
-- **A categoria decide se o pedido gera comissão.** ✅ Na cascata do grupo da `vw_faturamento_planilha`, o pedido cai em **G6** quando a categoria do pedido é o código literal `'1.01.96'` (e a observação não tem `refat`), e a `core_comissionamento.vw_comissao_master` só lê `grupo IS NULL`. A categoria que o Hub manda em `informacoes_adicionais.codigo_categoria` entra direto nessa regra. Oferecer "Refaturamento" entre as opções é oferecer um jeito de zerar a própria comissão: não se bloqueia (refaturamento é operação legítima), mas 🟡 a tela mostra a consequência na hora de escolher.
-- **A regra não olha a unidade** ✅ (o literal `'1.01.96'` aparece em cerca de 14 pontos de views e funções do dump de 29/10). O refaturamento de Uberaba é o `1.01.99`, que **não** cai em G6; ele só é excluído pela outra porta da regra (`refat` ou `reaft` na observação da venda, e só quando não há refaturamento com referência válida). Ver [[Riscos]] (RS-022) e [[Pontas-Soltas]] (PS-040).
+- **A categoria decide se o pedido gera comissão.** ✅ Na cascata do grupo da `vw_faturamento_planilha`, o pedido cai em **G6** quando a categoria do pedido é o código literal `'1.01.96'` (e a observação não tem `refat`), e a `core_comissionamento.vw_comissao_master` só lê `grupo IS NULL`. A categoria que o Hub manda em `informacoes_adicionais.codigo_categoria` entra direto nessa regra. **Essa cascata é a da `vw_faturamento_planilha`** (dump de teste de 04/11, linhas 18042 e 18043), que pesa na comissão. **A tela Liberar Pedidos lê outra view**, a `vw_vendas_planilha` (pela `vw_pedidos_liberacao`, que filtra `grupo IS NULL`), e lá o G6 tem outra redação, com duas portas: observação com `refat` ou `reaft` **ou** categoria `'1.01.96'`, sem olhar a tabela `refaturamentos` (linha 25386); e a porta da família, em que uma parcial com essa categoria ou observação leva o pedido-pai a G6 (linha 25390). As duas redações não são equivalentes ✅ ([[Banco-AvHub]]). Oferecer "Refaturamento" entre as opções é oferecer um jeito de zerar a própria comissão: não se bloqueia (refaturamento é operação legítima), mas 🟡 a tela mostra a consequência na hora de escolher.
+- **A regra não olha a unidade** ✅ (o literal `'1.01.96'` aparece em cerca de 14 pontos de views e funções do dump de 29/10). O refaturamento de Uberaba é o `1.01.99`, que **não** cai em G6; ele só é excluído pela outra porta da regra (`refat` ou `reaft` na observação da venda, e só quando não há refaturamento com referência válida). O mesmo vale para o refaturamento da HRM (`1.01.98`). Na `vw_vendas_planilha` a observação basta, em qualquer unidade: todo pedido com `refat` ou `reaft` na observação some da Liberar Pedidos. Caminho de correção decidido: N16-152 (b), em [[Registro-N16-150-a-N16-152]]. Ver [[Riscos]] (RS-022) e [[Pontas-Soltas]] (PS-040).
 - **O CFOP não entra na comissão** ✅ (errata do Robert, 05/11, conferida no dump de 29/10). A cascata do grupo não tem CFOP. Ele aparece em três lugares: a coluna informativa `cfop` da planilha (`string_agg`), o `valor_nao_permitido` (soma dos itens fora da lista fixa de 18 CFOPs, coluna e não filtro) e o CTE de itens, que descarta item de CFOP nulo. O único efeito concreto do CFOP nulo é que o `valor_itens` da nota perde aquela parcela, e o `valor_itens` é o segundo fallback da base da comissão (`COALESCE(valor_faturado_item, valor_itens, total_nota_fiscal_ajustado)`). Com simulação, a base é `valor_faturado_item` e o CFOP nulo é irrelevante. Conferir a lista curada `core_vendas_faturamento.cfop` continua valendo, mas não bloqueia o primeiro pedido.
 
 Consulta (só leitura) para dimensionar o vazamento de Uberaba. Aplica o `grupo IS NULL` e o `faturado` da master, mas não as listas negras da comissão, então o resultado é um teto. Os nomes das colunas vêm do dump de 29/10:
@@ -125,9 +128,13 @@ SELECT u.nome_fantasia                                        AS unidade,
 
 Em Uberaba todo pedido com `1.01.99` é refaturamento por definição; `sem_refat_na_obs` é o número que importa. Mogi e HRM entram só para comparar (lá o `1.01.99` não é refaturamento).
 
+**A medição da PS-040 foi adaptada (09/11/2026).** A consulta acima olha só a `vw_faturamento_planilha` e só o `1.01.99`. A medição passou para a `vw_vendas_planilha`, nas três unidades, com as portas do G6 separadas (categoria, observação, família). O SQL, só de leitura, fica fora do vault, em `../Perguntas-e-Respostas/medicao-V3_refaturamento-liberacao.sql`. 🔴 Ainda não foi rodado (Nathan ou Gustavo). Ver [[Pontas-Soltas]] (PS-040).
+
 ### 5.4 Observações (`observacoes.obs_venda`)
 
 **Não usamos** (decisão do Nathan, 23/10): os dados que o Hub tem e o Omie não (Qualidade, faturamento em partes, previsões, requisitos, moeda de origem) **ficam só no Hub**. O Omie recebe o que ele precisa para faturar e nada mais.
+
+❓ **Pergunta aberta ao Gustavo (09/11/2026):** o envio ao Omie manda `observacoes.obs_venda` (`api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.swagger.json:2552` (`observacoes.obs_venda`), `develop` `655896a`), e o payload sai de `fn_pedido_venda_payload_omie` (`src/schemas/core_comercial/pedidoOmie.js:37` (`fn_pedido_venda_payload_omie`)). Essa função não está no repositório nem no dump de 04/11: vem da migration `2026-11-05_comercial_pedido_venda_omie.sql`, que falta. Se o `obs_venda` vier das observações da proposta, escrever "refat" na proposta derruba o pedido da Liberar Pedidos (G6 pela observação, seção 5.3.1).
 
 ## 6. O que a documentação **não** responde (testes no Omie, OQ-16)
 
