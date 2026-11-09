@@ -30,7 +30,7 @@ fontes: ["PDF de Robert de 09/11/2026 (contrato v8, 20 páginas, substitui a v7 
 - **Continuam abertas, sem bloquear o começo:**
   - **Gustavo:** o join do valor inicial (§7.6, item 1); view ou SELECT da rota (§7.6, item 2), que precisa de resposta **antes** do passo 7a; de qual coluna `fn_pedido_venda_payload_omie` tira o `obs_venda` (§7.7, item 3), o maior risco aberto; e onde estão as duas migrations da §9.
   - **Qualidade (o Nathan leva):** refaturamento passa por processo de qualidade? Escolhe entre a saída 1 e a 3 da §7.7.
-  - **Medição do alcance do G6** nas três unidades (§7.7, PS-040): SQL pronto, só leitura, fora do vault em `../Perguntas-e-Respostas/medicao-V3_refaturamento-liberacao.sql`; falta rodar (Nathan ou Gustavo).
+  - **Medição do alcance do G6** nas três unidades (§7.7, PS-040): SQL pronto, só leitura, fora do vault em `../Perguntas-e-Respostas/medicao-V3_refaturamento-liberacao.sql`. ✅ Rodada pelo Nathan em 09/11/2026, no banco de teste: o G6 tira 142 de 2.028 pedidos, 98 deles pela porta da observação (números em [[Pontas-Soltas]], PS-040).
 
 **Partes deste contrato:**
 - [[LOG-56-Transformar-Proposta-em-Pedido-Detalhe-1]]: §6 Frontend e §7 Backend (decisões de 09/11, valor inicial na Liberar Pedidos, refaturamento).
