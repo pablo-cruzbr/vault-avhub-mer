@@ -112,6 +112,7 @@ Quem desenvolve (N16-117 a N16-119):
 
 - 📝 Todas as regras acima estão decididas.
 - O contrato do menu e os 15 contratos de proposta, orçamento, custo real e comissão nova foram removidos em 29/10/2026. O Robert cria os novos.
+- `LOG-56` (`06-Contratos/Ativos/LOG-56-Transformar-Proposta-em-Pedido`) (`para-implementar`, 09/11/2026): as respostas que faltam no modal de transformar (Qualidade e faturamento em partes), a conta corrente padrão por conta Omie e o valor inicial na Liberar Pedidos. Nós `V0.6` e `V0.7`.
 - Liberação e cancelamento do pedido: ver [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 - ❓ Testes no Omie: número próprio do pedido, pedido bloqueado e `ExcluirPedido`. O primeiro teste (item 4 do pedido do Robert de 03/11) sai com etapa `"10"`, `bloqueado = "S"`, sem CFOP e sem impostos no payload, e categoria de uma lista da unidade; ver [[Mapa-IncluirPedido-Omie]].
 
