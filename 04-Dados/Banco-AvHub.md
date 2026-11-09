@@ -1,10 +1,10 @@
 ---
 tags: [dados, banco, av-hub, postgres]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-09
 status: vigente
 dono: Gustavo (DBA)
-fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio]
+fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4)]
 ---
 
 # Banco do av-hub
@@ -53,7 +53,14 @@ Convenções ✅: chave `uuid` com `DEFAULT uuidv7()`; colunas de auditoria (`cr
 | **`pedidos_vendas_liberacao`** | PK `(codigo_empresa, numero_pedido)`; `acompanhamento_qualidade boolean NOT NULL`, `liberado_por`, `liberado_em`, `updated_by`, `updated_at`, **`importado_mes_em`**, **`importado_mes_referencia`** (60) | `:18285` |
 | `pedidos_vendas_liberacao_historico` | `acao` em `liberado`, `alterado`, `importado_mes`; `valor_anterior`, `usuario`, `referencia` | dump |
 | `parametros_vendas` | linha única (`id = 1`); **`data_inicio_liberacao`** (corte da caixa) | `:18031` |
-| view `vw_pedidos_liberacao` | `status_liberacao` = `importado` (tem `importado_mes_em`), `liberado` (tem linha de liberação) ou `pendente`; só pedidos com `sequencial = 0`, `etapa <> 0`, sem `deleted_at`, `data_inclusao >= data_inicio_liberacao` e (liberado **ou** `situacao = 'Pendente'`) | dump |
+| view `vw_pedidos_liberacao` | `status_liberacao` = `importado` (tem `importado_mes_em`), `liberado` (tem linha de liberação) ou `pendente`; só pedidos com `sequencial = 0`, `etapa <> 0`, sem `deleted_at`, `data_inclusao >= data_inicio_liberacao` e (liberado **ou** `situacao = 'Pendente'`); construída sobre a `vw_vendas_planilha`, com `grupo IS NULL` (o G6 fica fora, ver abaixo) | dump; teste 04/11 `:25460`, filtro `:25492` |
+
+**O grupo G6 (refaturamento) tem duas redações diferentes no mesmo banco** ✅ (dump de teste de 04/11, [[Dump-AvHub-Teste-2026-11-04]]):
+
+- **`vw_vendas_planilha`** (CREATE na linha 25250; base da `vw_pedidos_liberacao` e, por ela, da tela Liberar Pedidos). Linha 25386: `obs_venda ~* 'refat|reaft'` **ou** `codigo_categoria = '1.01.96'` dá G6. Linha 25390, a porta da família: `bool_or` da mesma condição sobre as parciais (`sequencial > 0`, sem `deleted_at`, `etapa <> 0`) leva o pedido-pai a G6. Não consulta a tabela `refaturamentos` para decidir, embora exponha `status_refaturamento` (linha 25363).
+- **`vw_faturamento_planilha`** (CREATE na linha 17848; base da comissão). Linha 18042: `obs_venda ~* 'refat|reaft'` **e** (`status_refaturamento` nulo, `Proibido` ou `Sem Referência`) dá G6. Linha 18043: observação sem `refat` **e** categoria `'1.01.96'` dá G6.
+- As duas não são equivalentes. Na Liberar Pedidos some todo pedido com `refat`/`reaft` na observação, em qualquer unidade, e todo pedido `1.01.96`; os refaturamentos de Uberaba (`1.01.99`) e da HRM (`1.01.98`) não caem em G6 pela categoria.
+- Tabela `core_vendas_faturamento.refaturamentos` (linha 17487): chave `codigo_pedido_omie`, `status_refaturamento` em `Permitido`, `Proibido` ou `Sem Referência`, calculada (`computed_at`, `periodo`), por `codigo_empresa`. A N16-152 (b), de 09/11/2026, faz dela a fonte do refaturamento e tira a observação da porta do G6 ([[Registro-N16-150-a-N16-152]]); 🔴 sem código. Risco: [[Riscos]] (RS-022).
 
 ### Requisição de compra (P3, C0, C1)
 
