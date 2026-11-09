@@ -4,7 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 dono: Gustavo (DBA)
-fontes: [omie-elt-pipeline 0f739f0 src/db/protectedColumns.ts, v1 08-Integracao-Omie/02-Analise-de-Lacunas/Colunas-Protegidas, Registro-de-Decisoes #15 #62, contratos 28 29 39 45]
+fontes: [omie-elt-pipeline 0f739f0 src/db/protectedColumns.ts, v1 08-Integracao-Omie/02-Analise-de-Lacunas/Colunas-Protegidas, Registro-de-Decisoes #15 #62, contratos 28 29 39 45, PDF de Gustavo de 09/11/2026 (entrega BL-026)]
 ---
 
 # Colunas protegidas
@@ -42,7 +42,7 @@ Colunas que existem nas tabelas sincronizadas do Omie mas pertencem a **outro si
 - **O comentário do próprio `protectedColumns.ts` ainda diz** que o dono de `vendedores` é "pendente de confirmação" e que `comissao` pode vir de outro sistema (`protectedColumns.ts:15-24`). Os donos já estão nomeados nesta nota. Atualizar o comentário: Gustavo ([[Pontas-Soltas]] PS-017).
 - **Conflito com o `exclusionSync`:** pedido manual (coluna protegida `manual`) entra na lista de apagados porque o job não filtra `manual` (`omie-elt-pipeline/src/jobs/exclusionSync.ts:103` filtra só empresa, `deleted_at` e janela; `DELETE` em `:136`). 🔴 [[Riscos]] RS-001, [[Backlog-por-Frente]] BL-027.
 - **Contrato 43** acrescenta a ordem das etapas de faturamento ao cadastro: `protectedColumns.ts` deve proteger a coluna nova (`ordem_fluxo`) quando o seed existir ([[Contratos-da-v2|LOG-43]]).
-- **Pedido manual e custo:** o pedido manual nunca entra no custo (D6 do contrato 008) e precisa de marca de origem; a coluna `manual` serve, mas o MES não a recebe hoje 🔴 BL-026.
+- **Pedido manual e custo:** o pedido manual nunca entra no custo (D6 do contrato 008). Não precisa de marca no MES: ele não tem parcelas nem itens e fica fora da carteira do MES (`vw_pedidos_liberacao` só pega `sequencial = 0`); o hub o descarta ao gravar o custo ✅ BL-026 (detalhe e citações em [[Backlog-por-Frente]]).
 
 ### Regra para quem escreve em tabela sincronizada
 

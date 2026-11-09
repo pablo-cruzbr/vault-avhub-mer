@@ -5,7 +5,7 @@ estado-em: 2026-10-29
 status: vigente
 dono: Nathan
 parte-de: "[[Integracao-AvHub-MES]]"
-fontes: [api-pcp develop befd973 e api-acos-vital develop 0384e89 (conferência de 29/10; antes 579a625 e f322dcd), app-pcp 1fca8d3, HUB b55ac55, Dump Avhub e Dump MES de 14/10, v1 Chaves-de-Integracao-AvHub-MES-Pipeline, Integracao-AvHub-MES-Especificacao-F1, Integracao-AvHub-MES-Volta-Plano, MES-Arquitetura-Decisoes]
+fontes: [api-pcp develop befd973 e api-acos-vital develop 0384e89 (conferência de 29/10; antes 579a625 e f322dcd), app-pcp 1fca8d3, HUB b55ac55, Dump Avhub e Dump MES de 14/10, v1 Chaves-de-Integracao-AvHub-MES-Pipeline, Integracao-AvHub-MES-Especificacao-F1, Integracao-AvHub-MES-Volta-Plano, MES-Arquitetura-Decisoes, PDF de Gustavo de 09/11/2026 (entrega BL-026)]
 ---
 
 # Integração av-hub ↔ MES: detalhe técnico (2/2)
@@ -78,7 +78,7 @@ sequenceDiagram
 - **Rota de leitura no hub:** `GET /itens_pedido_custo?codigo_empresa=&numero_pedido=` exige sempre `custo-itens:pode_visualizar`; a tela nasce sem perfil, então responde 403 a todos 🔴 Gustavo (BL-020). Devolve `custo_sem_impostos: true` (custo do Ciclo 1 não tem ICMS, IPI nem ST).
 - **Chave:** `MES_API_KEY` (a mesma do INT-05).
 - **Banco:** a função `fn_itens_pedido_custo_gravar` ainda grava por `item integer` no Dump Avhub; a migration 047b troca para produto. 🔴 Gustavo aplicar (BL-019). A API já exige a 047b.
-- **Pedido manual nunca participa do custo** 📝 (D6 do contrato 008); precisa de marca de origem manual 🔴 ([[Backlog-por-Frente]] BL-026).
+- **Pedido manual nunca participa do custo** 📝 (D6 do contrato 008): ele não chega ao MES (sem parcelas nem itens; a carteira só pega `sequencial = 0`) e o hub o descarta ao gravar o custo ✅ ([[Backlog-por-Frente]] BL-026, resolvido pelo desenho em 09/11).
 - **Do lado do MES** (`develop`): o Recebimento já grava `lote_custo` com origem `OC` quando a unidade da OC bate (BL-005, 19/10, `97b9adc`); unidade diferente ou OC fora da projeção gera lote sem custo e sinalizado; o custo também pode ser informado ou corrigido à mão em `PUT /estoque/lotes/:id/custo` (27/10) ([[Modelo-Estoque-e-Custo-do-Lote]]).
 
 ```mermaid
