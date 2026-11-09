@@ -17,6 +17,7 @@ Instruções para qualquer IA que abrir este repositório (Claude, Codex, Copilo
 | `preview-de-telas` | Ver uma tela da `develop` funcionando no navegador embutido | Todos |
 | `pedir-contrato` | Precisa que o sistema mude: gera o PDF do contrato (arquivo único com frontend, backend, API e banco) | Quem não é admin |
 | `abrir-consulta` | Precisa de uma resposta de negócio de quem opera: gera o PDF da consulta | Todos |
+| `perguntas-e-respostas` | Dúvida de trabalho para outra pessoa do time: monta, responde e incorpora um Q&A em `.md` que vai e volta (fica fora do vault) | Todos |
 | `relatorio-de-entrega` | Terminou uma task que já está na `develop`: gera o PDF com o que mudar no vault | Todos |
 | `gerar-pdf` | Último passo das três anteriores | Todos |
 | `aplicar-documento-recebido` | Aplicar no vault um PDF recebido no grupo | Só o admin |
