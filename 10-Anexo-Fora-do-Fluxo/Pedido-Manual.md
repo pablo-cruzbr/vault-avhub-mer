@@ -4,7 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 dono: Gustavo (DBA)
-fontes: [api-acos-vital f322dcd pedidos_vendas.route.js e utils/pedidoVendaManual.js, conferência de 29/10/2026 em api-acos-vital develop 0384e89 e av-hub develop 758d5f0, HUB b55ac55, LOG-45, LOG-29]
+fontes: [api-acos-vital f322dcd pedidos_vendas.route.js e utils/pedidoVendaManual.js, conferência de 29/10/2026 em api-acos-vital develop 0384e89 e av-hub develop 758d5f0, HUB b55ac55, LOG-45, LOG-29, PDF de Gustavo de 09/11/2026 (entrega BL-026)]
 ---
 
 # Pedido de venda manual
@@ -42,7 +42,7 @@ Fora do fluxo 0b. O pedido manual **não percorre o MES**: sem liberação, sem 
 | Só cabeçalho: sem itens e sem parcelas | ✅ `pedidoVendaManual.js` |
 | Entra em `vw_vendas_base` como líquido, fora da cascata G1 a G6; exclusão lógica (`deleted_at`) | ✅ `vw_vendas_base.model.js` ([[Dashboards]]) |
 | Uma NF manual pode apontar para ele (`codigo_pedido_omie` negativo) | ✅ `notas_fiscais.route.js` ([[Contratos-da-v2\|LOG-29]]) |
-| Nunca participa do custo por item (decisão D6 do contrato 008); falta marca de origem manual no `itens_pedido_custo` | 📝 🔴 BL-026 |
+| Nunca participa do custo por item (decisão D6 do contrato 008): fica fora da carteira do MES (sem parcelas nem itens) e `itens_pedido_custo` devolve `pedido_manual: true` com itens vazios | 📝 ✅ BL-026 `itens_pedido_custo.route.js:111` (`Pedido manual (contrato 45) nunca entra no custo`) |
 
 ### Pendências (detalhe)
 
