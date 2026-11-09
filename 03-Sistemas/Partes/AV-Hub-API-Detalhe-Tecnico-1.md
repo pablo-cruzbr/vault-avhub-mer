@@ -45,7 +45,7 @@ Os números de linha desta seção são de 14/10 (`f322dcd`); só os da requisi�
 | `GET /pedidos_liberados/:numero/itens?codigo_empresa=` | MES | itens; 409 `PEDIDO_NAO_LIBERADO` | ✅ `:115`, `:53-56` |
 | `POST /pedidos_liberados/:numero/importado?codigo_empresa=` corpo `{referencia}` (até 60 caracteres) | MES | grava `importado_mes_em` e a referência (idempotente) | ✅ `:143-170` |
 
-Trava no banco: `trg_pedidos_vendas_liberacao_regras` e `_historico` (função no dump `:7751`; tabela `:18285`). A caixa só mostra pedidos a partir de `parametros_vendas.data_inicio_liberacao` ✅ tabela no dump `:18031`; o valor em produção ❓ Gustavo.
+Trava no banco: `trg_pedidos_vendas_liberacao_regras` e `_historico` (função no dump `:7751`; tabela `:18285`). A caixa só mostra pedidos a partir de `parametros_vendas.data_inicio_liberacao` ✅ tabela no dump `:18031`; no banco de teste o valor é `2026-09-01` 📝 (Nathan, 09/11/2026); em produção será definido ao publicar a Liberação, que ainda não está lá (BL-025).
 
 ### Requisição de compra (LOG-34, LOG-35) — P3, C0, C1
 

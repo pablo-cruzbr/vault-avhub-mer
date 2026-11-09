@@ -56,7 +56,7 @@ Detalhe da Torre: [[Rastreabilidade-e-Torre-de-Fluxo]].
 - **Se o av-hub cai:** a Triagem responde 422 "Não foi possível carregar a carteira de pedidos" ✅ `omie-integracao.ts:354-360`; a Destinação não cria ordem; nada se perde.
 - **Se o MES cai:** o vendedor segue liberando; os pedidos acumulam como `liberado` (status da view `vw_pedidos_liberacao`: `pendente`, `liberado`, `importado`).
 - **Pedido anterior à data de corte** 📝 (N16-142, 29/10): fica fora do MES e termina no sistema antigo; falta só uma mensagem clara no lugar do erro 404 nos itens 🔴.
-- **Pendências:** data de corte `parametros_vendas.data_inicio_liberacao` em produção (01/09 ou 28/07) ❓ Gustavo; `auth.rotas_telas` para as rotas ❓ Gustavo; chave própria do MES com escopo mínimo: o recurso existe no código, falta cadastrar a lista e ligar o modo `exigir` ❓ Gustavo ([[Chaves-e-Autenticacao]]).
+- **Pendências:** data de corte `parametros_vendas.data_inicio_liberacao`: `2026-09-01` no banco de teste 📝 (Nathan, 09/11/2026), a definir em produção ao publicar a Liberação (BL-025); `auth.rotas_telas` para as rotas ❓ Gustavo; chave própria do MES com escopo mínimo: o recurso existe no código, falta cadastrar a lista e ligar o modo `exigir` ❓ Gustavo ([[Chaves-e-Autenticacao]]).
 
 ```mermaid
 sequenceDiagram
