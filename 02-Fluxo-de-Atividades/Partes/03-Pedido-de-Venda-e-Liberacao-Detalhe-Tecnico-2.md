@@ -31,7 +31,7 @@ Modelo do banco do av-hub em [[Banco-AvHub]]; do MES em [[Banco-MES]].
 ### Data de corte
 
 - Regra: `data_inclusao >= parametros_vendas.data_inicio_liberacao`. Pedido anterior não trava, **e também não aparece na Triagem**: os itens dele respondem 404 e o MES mostra "não encontrado" (observação do Robert, 30/09). Os pedidos anteriores à data de corte ficam fora do MES e terminam no sistema antigo 📝 (N16-142, 29/10/2026); falta uma mensagem clara no lugar do erro 404 🔴.
-- Valor vigente: ❓. O contrato registra `2026-07-28` na `api-test` (conferido em 01/10) e `2026-09-01` no banco local. O vault anterior dizia 01/09/2026 em produção. O Dump Avhub é de esqueleto e não traz o dado. Conferir com `SELECT data_inicio_liberacao FROM core_vendas_faturamento.parametros_vendas` (Gustavo).
+- Valor vigente no **banco de teste**: **`2026-09-01`** 📝 (Nathan, 09/11/2026: `SELECT data_inicio_liberacao FROM core_vendas_faturamento.parametros_vendas`, no mesmo banco em que rodou a medição do G6 para o contrato LOG-56). Bate com o `2026-09-01` do banco local; o `2026-07-28` que o contrato registrava na `api-test` (conferido em 01/10) não vale mais. **Produção:** a Liberação ainda não foi publicada; em produção só estão os dashboards da gerência (Nathan, 09/11/2026). O valor de produção será definido ao publicar, e o "01/09/2026 em produção" do vault anterior não se confirma. O Dump Avhub é de esqueleto e não traz o dado.
 
 ## Quem vê o quê
 
