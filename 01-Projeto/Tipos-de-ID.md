@@ -1,7 +1,7 @@
 ---
 tags: [projeto, ids, dicionario]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-09
 status: vigente
 dono: Nathan
 fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07-Desenvolvimento/v3), Registro-de-Decisoes, Backlog-por-Frente, Pontas-Soltas, Perguntas-Proposta-Pedido-Comissao, Riscos, Contradicoes-Resolvidas, Contratos-da-v2, Integracao-AvHub-MES, 00-Fluxo-Mestre-0b]
@@ -34,7 +34,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 | `RS-nn` | Risco | [[Riscos]] | 22 (até `RS-022`) | `RS-023` |
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |
 | `INT-nn` | Troca de dados entre o av-hub e o MES | [[Integracao-AvHub-MES]] | 9 (até `INT-09`) | `INT-10` |
-| `LOG-nn` | Contrato de lógica (regra de negócio, fluxo) | [[Contratos-da-v2]] (v2) e `06-Contratos/` (v3) | 55 na v2 | `LOG-56` |
+| `LOG-nn` | Contrato de lógica (regra de negócio, fluxo) | [[Contratos-da-v2]] (v2) e `06-Contratos/` (v3) | 55 na v2 e 1 na v3 (`LOG-56`) | `LOG-57` |
 | `SQL-nnn` | Contrato de banco (tabela, migration, view) | idem | 17 na v2 | `SQL-022` |
 | `API-nnn` | Contrato de rota de API | idem | 17 na v2 | `API-019` |
 | `CON-nn` | Consulta: pergunta formal a alguém, com resposta registrada | idem; modelo em [[Modelo-de-Consulta]] | 3 na v2 | `CON-04` |
