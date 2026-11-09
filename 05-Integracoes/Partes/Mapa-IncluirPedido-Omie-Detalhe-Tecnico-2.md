@@ -128,7 +128,7 @@ SELECT u.nome_fantasia                                        AS unidade,
 
 Em Uberaba todo pedido com `1.01.99` é refaturamento por definição; `sem_refat_na_obs` é o número que importa. Mogi e HRM entram só para comparar (lá o `1.01.99` não é refaturamento).
 
-**A medição da PS-040 foi adaptada (09/11/2026).** A consulta acima olha só a `vw_faturamento_planilha` e só o `1.01.99`. A medição passou para a `vw_vendas_planilha`, nas três unidades, com as portas do G6 separadas (categoria, observação, família). O SQL, só de leitura, fica fora do vault, em `../Perguntas-e-Respostas/medicao-V3_refaturamento-liberacao.sql`. 🔴 Ainda não foi rodado (Nathan ou Gustavo). Ver [[Pontas-Soltas]] (PS-040).
+**A medição da PS-040 foi adaptada (09/11/2026).** A consulta acima olha só a `vw_faturamento_planilha` e só o `1.01.99`. A medição passou para a `vw_vendas_planilha`, nas três unidades, com as portas do G6 separadas (categoria, observação, família). O SQL, só de leitura, fica fora do vault, em `../Perguntas-e-Respostas/medicao-V3_refaturamento-liberacao.sql`. ✅ Rodado pelo Nathan em 09/11/2026, no banco de teste (corte 2026-09-01): o G6 tira 142 de 2.028 pedidos, 36 pela categoria (só Mogi), 98 pela observação e 8 pela família; em Uberaba são só 2 pedidos, pela observação. Ver [[Pontas-Soltas]] (PS-040).
 
 ### 5.4 Observações (`observacoes.obs_venda`)
 
