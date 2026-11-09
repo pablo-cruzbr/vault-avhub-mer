@@ -1,10 +1,10 @@
 ---
 tags: [desenvolvimento, pontas-soltas, pendencias]
 criado: 2026-10-14
-atualizado: 2026-11-05
+atualizado: 2026-11-09
 status: vigente
 dono: Nathan
-fontes: [Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55, Registro-de-Decisoes]
+fontes: [Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55, av-hub 2cabfdb (PS-042 a PS-044, 09/11), Registro-de-Decisoes]
 ---
 
 # Pontas soltas
@@ -27,6 +27,7 @@ fontes: [Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, api-pcp 579a625, api-acos-vit
 - **Segurança e chaves (Gustavo, Nathan).** Bearer no BFF (PS-018), valores das chaves nos ambientes (PS-019) e exposição pública do `api-pcp` (PS-029).
 - **Pipeline do Omie (Gustavo).** Erros de sincronização em Mogi (PS-020), manifesto de Uberaba (PS-022), planilha de vendas (PS-023), filial padrão fixa (PS-016) e comentário desatualizado (PS-017).
 - **Proposta, pedido e comissão.** Quem escreve o módulo na `api-acos-vital` (PS-031; desde 28/10 o Robert conduz a migração, veja o Backlog), o que é `vinculados` (PS-032, ✅ decidido na N16-147), ciclo da proposta (PS-035), Carteira do PCP (PS-036), cancelar pelo Omie (PS-037) e formato do número da proposta (PS-038, ✅ decidido na N16-147 e N16-148: só dígitos). As perguntas abertas estão em [[Perguntas-Proposta-Pedido-Comissao]] (PS-039).
+- **BFF do av-hub (Nathan).** Saíram da organização do código do av-hub (PRs #260 a #273): as rotas `menu` e `uploads` sem tela (PS-042), o erro próprio das rotas de compras (PS-043) e as 13 rotas antigas que escondem o erro da API (PS-044). As tarefas de código da mesma organização estão no [[Backlog-Frente-Nathan]] (BL-082 a BL-085).
 - **Imposto.** O desenho do imposto por item na OC foi decidido em 29/10 (N16-144); a fórmula do custo com imposto segue o motor do comissionamento, e cada setor confere as mudanças na implementação (PS-014).
 - **Já fechadas.** PS-005 e PS-031 (28/10), PS-001, PS-024, PS-025 e PS-033 (29/10) e as sete decididas em 14/10, abaixo.
 
@@ -70,6 +71,9 @@ Dúvidas, lacunas de decisão e pontos sem dono que **não são tarefa de códig
 | PS-039 | **Perguntas abertas da proposta, do Orçamento e da comissão** (OQ-xx, C-xx) | vários | V0, B, K | Ver a lista | [[Perguntas-Proposta-Pedido-Comissao]] |
 | PS-040 | **Refaturamento de Uberaba na comissão.** Quantos pedidos de Uberaba com categoria `1.01.99` (o refaturamento de lá) entraram na base de comissão, e quantos tinham `refat` na observação. O Robert pediu a medida em 05/11 | Nathan (medir), Gustavo (regra) | V0.7 | Rodar a consulta e decidir se a regra do G6 passa a ler a categoria de refaturamento por unidade ou se o texto livre já cobre. **Nathan, 05/11:** a comissão do pedido de refaturamento é desconsiderada em todas as unidades, e quais categorias são refaturamento será definido pelo time (N16-152) 🟡 | [[Mapa-IncluirPedido-Omie]] (seção 5.3.1), [[Riscos]] (RS-022) |
 | PS-041 | **Conta corrente do pedido de venda.** Omitir o campo (o vendedor não preenche conta no Omie, e ela define onde nasce o título; proposta do Robert, 05/11) ou oferecer lista por unidade (ideia de 04/11)? | Nathan | V0.7 | Decidir; o teste do item 4 mostra o que o Omie grava sem a conta 🟡 | [[Mapa-IncluirPedido-Omie]], BL-081 |
+| PS-042 | **`menu` e `uploads` só exigem estar logado.** São as duas rotas do BFF do av-hub que checam só a sessão, sem tela: `av-hub` `app/api/menu/route.ts:11` (`getServerSession`) e `app/api/uploads/route.ts:15` (`getServerSession`). As outras exigem uma tela pelo `requirePermission`, direto ou por um helper da área; `me/vendedores` lê as permissões do próprio usuário | Nathan | transversal | Decidir se as duas passam a exigir uma tela. Se sim, é mudança de comportamento e vai num PR próprio no av-hub 🟡 | [[RBAC-e-Permissoes]], `CLAUDE.md` do av-hub ("O caminho de uma chamada") |
+| PS-043 | **Erro das rotas de compras.** As rotas de `app/api/compras/**` usam um `respostaDeErro` próprio, `av-hub` `lib/compras/api.ts:61` (`respostaDeErro`), que não repassa o `codigo` do erro nem o registra no log, diferente do padrão, `lib/api/respostaDeErro.ts:11` (`respostaDeErro`). Unificar muda a resposta dessas rotas | Nathan | transversal | Decidir se o padrão passa a valer para compras; destrava parte da BL-083 🟡 | BL-083 |
+| PS-044 | **Rotas antigas que escondem o erro da API.** As 13 rotas com `erroGenerico: true` (11 de `app/api/dashboard/`, `comissoes/vendedores-comissao` e `notas-fiscais-saida`) devolvem 500 "Erro interno" até quando a API responde 4xx: `av-hub` `lib/api/rotaDeRepasse.ts:65` (`erroGenerico`) | Nathan | transversal | Decidir se passam a repassar a mensagem real da API, como as outras. Se sim, é mudança de comportamento e vai num PR próprio no av-hub 🟡 | BL-083 |
 
 ## Resolvidas em 14/10/2026
 
