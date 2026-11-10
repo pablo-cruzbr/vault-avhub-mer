@@ -1,12 +1,12 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3, parte]
 criado: 2026-11-05
-estado-em: 2026-11-09
+estado-em: 2026-11-10
 status: vigente
 dono: Nathan
 parte-de: "[[03-Pedido-de-Venda-e-Liberacao]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
-fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4)]
+develop-conferida: [av-hub 44bb770, em 2026-11-10; api-acos-vital b97981c, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), av-hub develop 44bb770 (EtapaDosItens.tsx)]
 ---
 
 # Raia Vendas: liberação do pedido (V1 a V3): detalhe técnico (1/2)
@@ -73,7 +73,7 @@ O desenho do v1 (estados do item visto pelo vendedor) tem 9 valores: `AGUARDANDO
 |---|---|---|---|---|
 | Liberar Pedidos | Caixa de entrada do vendedor (tela 1.1) | `/vendas/liberar-pedidos` | HUB (Portal do Vendedor) | Vendedor: `pode_visualizar` e `pode_editar` |
 | Liberação da Equipe | visão do gerente da 1.1 | `/liberacao-equipe` | HUB (Portal do Gerente) | perfis com `pedidos-equipe`: só `pode_visualizar` |
-| Meus Pedidos (detalhe, cartão Etapa dos itens) | Meus Pedidos por etapa (tela 1.2) | `/meus-pedidos/pedido/:empresa/:numero` | HUB | Vendedor |
+| Meus Pedidos (detalhe, cartão "Andamento na produção") | Meus Pedidos por etapa (tela 1.2) | `/meus-pedidos/pedido/:empresa/:numero` | HUB | Vendedor |
 | Pedidos da Equipe (detalhe, mesmo cartão) | idem | `/pedidos-equipe/pedido/:empresa/:numero` | HUB | Gerência |
 | Pedidos do PCP | Portal PCP | `/pcp-pedidos`, `/pcp-pedidos/pedido/...` | HUB | acompanhamento comercial, **não** é o `app-pcp` |
 | Triagem dos Pedidos | Carteira de Pedidos | `/carteira` | app-pcp | PCP (ver [[04-PCP-Triagem-e-Destinacao]]) |
@@ -94,12 +94,12 @@ Abas com contagem vinda do backend (`contagem.pendente`, `liberado`, `importado`
 | `GET /pedidos_liberados/:numero/itens?codigo_empresa=` | MES lê | itens do pedido mais o objeto `liberacao`; 409 `PEDIDO_NAO_LIBERADO` | idem |
 | `POST /pedidos_liberados/:numero/importado?codigo_empresa=` `{ referencia }` | MES escreve | confirma a importação (idempotente); trava a marcação | idem |
 | `GET /api/liberar-pedidos` e `PUT /api/liberar-pedidos/:empresa/:numero` | BFF do HUB | repassa à API; `?fonte=equipe` exige a tela `liberacao-equipe` | idem §5 |
-| `GET /itens/status` (MES) e `GET /itens_pedido_status?codigo_empresa=&pedido_venda=&historico=` (hub) | MES para hub (job de 90 s) e HUB lê | cartão Etapa dos itens | [[Contratos-da-v2\|API-005]], [[Contratos-da-v2\|API-006]], [[Contratos-da-v2\|SQL-010]] |
+| `GET /itens/status` (MES) e `GET /itens_pedido_status?codigo_empresa=&pedido_venda=&historico=` (hub) | MES para hub (job de 90 s) e HUB lê | cartão "Andamento na produção" (`av-hub` `components/Pedidos/EtapaDosItens.tsx:61`, `<h2>Andamento na produção</h2>`) | [[Contratos-da-v2\|API-005]], [[Contratos-da-v2\|API-006]], [[Contratos-da-v2\|SQL-010]] |
 | `GET /api/pedidos-venda/:fonte/:empresa/:pedido/etapas` | BFF do HUB | repassa `/itens_pedido_status`; responde `disponivel: false` quando o hub ainda não tem a rota | API-006 |
 
 **As duas rotas leem a mesma view, mas servem a lados diferentes** ✅ (`api-acos-vital` `src/schemas/core_vendas_faturamento/index.js:193-194` (`/pedidos_liberacao`), `develop` `655896a`; `av-hub` `develop` `6fcbba6`):
 
-- **`/pedidos_liberacao` grava e serve a tela Liberar Pedidos.** `GET /` em `aggregates/pedidos_liberacao/pedidos_liberacao.route.js:89` (`router.get("/"`); `PUT /:codigo_empresa/:numero_pedido` em `:165` (`router.put`), que exige `acompanhamento_qualidade` booleano (`:174`, `typeof acompanha !== "boolean"`) e grava com `ON CONFLICT` (`:204`). O BFF chama `${process.env.API_URL}/pedidos_liberacao` (`av-hub` `app/api/liberar-pedidos/route.ts:53` (`/pedidos_liberacao?`) e `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:46` (`/pedidos_liberacao/`), com o corpo montado à mão em `:51` (`acompanhamento_qualidade: acompanha`)).
+- **`/pedidos_liberacao` grava e serve a tela Liberar Pedidos.** `GET /` em `aggregates/pedidos_liberacao/pedidos_liberacao.route.js:97` (`router.get("/"`); `PUT /:codigo_empresa/:numero_pedido` em `:173` (`router.put`), que exige `acompanhamento_qualidade` booleano (`:184`, `typeof acompanha !== "boolean"`) e grava com `ON CONFLICT` (`:217`). O BFF chama `${process.env.API_URL}/pedidos_liberacao` (`av-hub` `app/api/liberar-pedidos/route.ts:53` (`/pedidos_liberacao?`) e `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:46` (`/pedidos_liberacao/`), com o corpo montado à mão em `:51` (`acompanhamento_qualidade: acompanha`)).
 - **`/pedidos_liberados` só lê e serve o MES (Fluxo 4).** `GET /` filtra `v.status_liberacao IN ('liberado', 'importado')` (`aggregates/pedidos_liberados/pedidos_liberados.route.js:59`); `GET /:numero/itens` em `:115`; `POST /:numero/importado` em `:143`, que só confirma a importação. Não tem PUT.
 - Cada rota escolhe suas colunas da view (`COLUNAS`, `pedidos_liberacao.route.js:39` e `pedidos_liberados.route.js:25`).
 - O `LOG-56` (`06-Contratos/Ativos/LOG-56-Transformar-Proposta-em-Pedido`) é o contrato que acrescenta o valor inicial sugerido e o `faturar_em_partes`.
@@ -123,7 +123,7 @@ Banco e telas (DDL e `auth.telas`): apêndices A e B do contrato 26. Diagnóstic
 
 - ✅ BFF `app/api/liberar-pedidos/route.ts` (GET): para a fonte `vendedor` exige token de usuário (sem ele, 401 "Sessão sem identidade no backend") e **não manda `vendedor`**; 403 `SEM_VENDEDOR_VINCULADO` vira "sem vínculo". `[codigoEmpresa]/[numeroPedido]/route.ts` (PUT): exige token, põe o autor pela sessão, e o dono do pedido é conferido pela API.
 - ✅ `components/LiberarPedidos/` (lista, tabela, hook e `fontes.ts`) e páginas `app/(protected)/vendas/liberar-pedidos/page.tsx` e `liberacao-equipe/page.tsx`.
-- ✅ Cartão `components/Pedidos/EtapaDosItens.tsx`, embutido em `PedidoDetalhe.tsx:1051` (ao lado de `ComprasDoPedido`, `:814`), alimentado por `app/api/pedidos-venda/[fonte]/[codigoEmpresa]/[pedidoVenda]/etapas/route.ts`. Tradução das etapas em `lib/domain/etapas-item.ts:30-41`; aviso de dado velho acima de 10 minutos (`ETAPA_ATRASO_MINUTOS`).
+- ✅ Cartão `components/Pedidos/EtapaDosItens.tsx`, com o título "Andamento na produção" (`:61`, `<h2>Andamento na produção</h2>`), embutido em `components/Pedidos/PedidoDetalhe.tsx:93` (`<EtapaDosItens`; ao lado de `ComprasDoPedido`, `:95`, `<ComprasDoPedido`), alimentado por `app/api/pedidos-venda/[fonte]/[codigoEmpresa]/[pedidoVenda]/etapas/route.ts`. Tradução das etapas em `lib/domain/etapas-item.ts:30-41`; aviso de dado velho acima de 10 minutos (`ETAPA_ATRASO_MINUTOS`).
 
 ### MES (`api-pcp` 579a625, `app-pcp` 1fca8d3)
 
