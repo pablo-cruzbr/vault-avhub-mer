@@ -4,7 +4,7 @@ criado: 2026-11-05
 estado-em: 2026-11-10
 status: vigente
 dono: Nathan
-fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07-Desenvolvimento/v3), Registro-de-Decisoes, Backlog-por-Frente, Pontas-Soltas, Perguntas-Proposta-Pedido-Comissao, Riscos, Contradicoes-Resolvidas, Contratos-da-v2, Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault) (BL-086 a BL-088, PS-046 a PS-051, RS-023, OQ-49 a OQ-53)]
+fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07-Desenvolvimento/v3), Registro-de-Decisoes, Backlog-por-Frente, Pontas-Soltas, Perguntas-Proposta-Pedido-Comissao, Riscos, Contradicoes-Resolvidas, Contratos-da-v2, Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault) (BL-086 a BL-088, PS-046 a PS-053, RS-023, OQ-49 a OQ-53)]
 ---
 
 # Tipos de ID
@@ -29,7 +29,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 | `EN-nn`, `EC-nn` | Encaixe do Estoque e da Revenda no PCP (EN) e do circuito de compra (EC) | [[Registro-DEC-EN-EC-e-1-a-38]] | 7 e 8 | séries fechadas |
 | `#n` | Decisão do registro de 07/10/2026 (vault v1) | [[Registro-DEC-EN-EC-e-1-a-38]], [[Registro-39-a-80]], [[Registro-81-a-100-e-Estado-no-Codigo]] | `#1` a `#106` | série fechada |
 | `BL-nnn` | Tarefa do backlog: o que falta desenvolver | [[Backlog-por-Frente]] (uma nota por frente) | 87 (até `BL-088`) | `BL-089` |
-| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 51 (até `PS-051`) | `PS-052` |
+| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 53 (até `PS-053`) | `PS-054` |
 | `OQ-nn` | Pergunta em aberto (de negócio ou técnica) | [[Perguntas-Proposta-Pedido-Comissao]] e notas de estudo (por exemplo [[Estudo-Omie-API]]) | 52 (até `OQ-53`) | `OQ-54` |
 | `RS-nn` | Risco | [[Riscos]] | 23 (até `RS-023`) | `RS-024` |
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |
