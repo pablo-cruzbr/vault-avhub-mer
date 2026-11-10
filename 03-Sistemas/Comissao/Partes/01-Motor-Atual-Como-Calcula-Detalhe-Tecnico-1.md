@@ -1,7 +1,7 @@
 ---
 tags: [comissao, motor-atual, core_comissionamento, proposta, validacao, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-10
 status: proposta
 dono: Nathan
 parte-de: "[[01-Motor-Atual-Como-Calcula]]"
@@ -45,11 +45,11 @@ flowchart LR
 | Quem | O que faz | Onde |
 |---|---|---|
 | Vendedor | Preenche, salva rascunho e envia o simulador do pedido | `comissoes/simulador/page.tsx` (envio em `:1148-1190`) |
-| Compras | Aprova a simulação como está, ou cria uma versão com os custos corrigidos e aprova | `comissoes/simulador/page.tsx:1192-1234`, fila em `comissoes/analise-simuladores/page.tsx` |
+| Compras | Aprova a simulação como está, ou cria uma versão com os custos corrigidos e aprova | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803-845` (`aprovarCompras`), fila em `comissoes/analise-simuladores/page.tsx` |
 | Analista/Gerência | Acompanha o mês na Visão Geral e bloqueia NF | `comissoes/visao-geral`, `comissoes/bloqueio-comissoes` |
 | Coordenador | Recebe ajuda de custo e percentual sobre o faturamento do mês | `comissao_coordenadores`, `fn_dashboard_comissoes` |
 
-✅ O simulador é **calculado no navegador** (`calcularSimulacao(form, parametros)`, `simulador/page.tsx:1053`) por uma função do front, `lib/simulador/motor.ts`. O banco guarda o resultado e só faz a conta do **menor percentual** (view `vw_simulacao_resolvida`). Isso importa para o módulo novo: o motor precisa sair do navegador (ver nota 03).
+✅ O simulador é **calculado no navegador** (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)) por uma função do front, `lib/simulador/motor.ts`. O banco guarda o resultado e só faz a conta do **menor percentual** (view `vw_simulacao_resolvida`). Isso importa para o módulo novo: o motor precisa sair do navegador (ver nota 03).
 
 ## 2. Regra a regra
 
@@ -109,7 +109,7 @@ flowchart LR
 
 **Exemplo.** Margem 29,41% → letra A → 2%. Comissão estimada do item: 11.500 × 2% = **R$ 230,00**.
 
-**De onde vem.** ✅ `lib/simulador/motor.ts:176-179` (`faixaDaMargem`) e `:389-401`. Faixas em `simulador_parametros.faixas_comissao` (`dump:998-1000`, valores em `dump:1660`). A letra é decidida **por item**; a letra do pedido (`simulacoes.letra_equivalente`) é só informativa (`dump:901-902`).
+**De onde vem.** ✅ `av-hub` `lib/simulador/motor.ts:165-168` (`faixaDaMargem`) e `:364-376`. Faixas em `simulador_parametros.faixas_comissao` (`dump:998-1000`, valores em `dump:1660`). A letra é decidida **por item**; a letra do pedido (`simulacoes.letra_equivalente`) é só informativa (`dump:901-902`).
 
 ### R4. Prejuízo e fabricação interna
 
@@ -127,7 +127,7 @@ flowchart LR
 
 **Estados da simulação:** `RASCUNHO` → `ENVIADO` → `APROVADO`, `CONTESTADO` ou `DEVOLVIDO`. Os três últimos são finais; versão enviada não muda, correção é versão nova.
 
-**De onde vem.** ✅ `simulacoes.route.js:30-36` (transições), `:233-259` (Compras contesta a do vendedor no mesmo POST), `:311-345` (transição; `DEVOLVIDO` exige motivo), `:348-351` (só rascunho edita). Tela: `simulador/page.tsx:1192-1234`.
+**De onde vem.** ✅ `simulacoes.route.js:30-36` (transições), `:233-259` (Compras contesta a do vendedor no mesmo POST), `:311-345` (transição; `DEVOLVIDO` exige motivo), `:348-351` (só rascunho edita). Tela: `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803-845` (`aprovarCompras`).
 
 ### R6. `pct_final`: o menor dos dois
 
@@ -150,7 +150,7 @@ Atenção: o gatilho usa o **markup bruto** do pedido, `(total da NF − compra 
 
 **Exemplo.** Cliente com padrão 0,5%, condicional 1,3% e gatilho 100%. Pedido com markup bruto de 127,87%: usa a condicional (1,3%). Item de letra A (2%) fica em **1,3%**. Se Compras refez o custo e o markup do pedido dela caiu para 60,19% (abaixo de 100%), o teto da versão de Compras é 0,5%; o `pct_final` é o menor dos dois tetos, **0,5%**. Esse é o caso do pedido 27917: 5.709,01 × 0,5% + 5.125,68 × 0,5% = **R$ 54,18** (e não os R$ 142,48 de Compras sem o teto). Conta feita sobre o valor do pedido; o real usa o faturado.
 
-**De onde vem.** ✅ A view aplica o teto: `dump:1151-1198` (cada versão usa o markup da própria versão; `regra_fixa_aplicada` em `:1136-1142`). Regra em `regras_comissoes_fixas` (`dump:589-603`). ⚠️ O motor do front **tem** um trecho que aplica o teto (`motor.ts:467-484`), mas a tela chama `calcularSimulacao(form, parametros)` **sem** a regra fixa (`simulador/page.tsx:1053`): na prática o teto só é aplicado pela view.
+**De onde vem.** ✅ A view aplica o teto: `dump:1151-1198` (cada versão usa o markup da própria versão; `regra_fixa_aplicada` em `:1136-1142`). Regra em `regras_comissoes_fixas` (`dump:589-603`). ⚠️ O motor do front **tem** um trecho que aplica o teto (`av-hub` `lib/simulador/motor.ts:436-453` (`regraFixa`)), mas a tela chama `calcularSimulacao(form, parametros)` **sem** a regra fixa (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)): na prática o teto só é aplicado pela view.
 
 ### R8. Comissão em reais: sobre o faturado, por item
 
@@ -172,7 +172,7 @@ Também conta os itens da NF **sem vínculo** com a simulação (`qtd_itens_sem_
 
 **O que faz.** Enquanto Compras não aprova, o vendedor vê a **letra** e a margem do item, mas **não o valor em reais**. O corte é feito no servidor da tela (BFF), não no CSS, para o número não ir no JSON.
 
-**De onde vem.** ✅ `app/api/comissoes/minhas-comissoes/route.ts:27-31` (corte), `:229` (validado = alguma versão `APROVADO`), `:233-243` (situação), `:249-264` (percentual, valor e teto só se validado). ✅ No simulador a coluna de comissão em reais só aparece na visão de Compras (`simulador/page.tsx:536`). 🟡 No módulo novo o corte passa para o banco e a API (nota 03), porque o BFF não é barreira de segurança.
+**De onde vem.** ✅ `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:26-29` (`O CORTE DO VALOR`), `:221` (validado = alguma versão `APROVADO`), `:225-235` (situação), `:241-256` (percentual, valor e teto só se validado). ✅ No simulador a coluna de comissão em reais só aparece na visão de Compras (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:152` (`mostrarComissao = modoCompras`)). 🟡 No módulo novo o corte passa para o banco e a API (nota 03), porque o BFF não é barreira de segurança.
 
 ### R11. Bloqueio por NF
 
