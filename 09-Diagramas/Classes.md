@@ -326,9 +326,9 @@ classDiagram
 ```
 ✅ Conferido no código. O registro manual da compra saiu: `pedidoCompra`, `fornecedor` e `previsaoEntrega` vêm do av-hub, nunca digitados.
 
-## 4. api-comercial (schema `core_comercial`, Comercial e Suprimentos; legado de leitura)
+## 4. api-comercial (schema `core_comercial`, Comercial e Suprimentos; removida em 06/11/2026)
 
-Fora do fluxo 0b; ver [[Comercial-Suprimentos]]. **O desenho é o do legado de 14/10**: desde 28/10 a `api-comercial` é só de leitura (N16-117) e o Robert refaz o módulo na `api-acos-vital`, com a proposta sem fechamento parcial e `StatusProposta` novo (`ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`, ver [[Estados]] 13). Mostra clientes, propostas, fornecedores, ofertas de preço e ordens de compra do módulo do Pablo. As caixas sem campos só entram para mostrar a ligação.
+Fora do fluxo 0b; ver [[Comercial-Suprimentos]]. **O desenho é o do legado de 14/10**: a `api-comercial` foi só de leitura desde 28/10 (N16-117) e saiu do av-hub em 06/11 (PR #261, legível no `f7d8d7f`), e o Robert refaz o módulo na `api-acos-vital`, com a proposta sem fechamento parcial e `StatusProposta` novo (`ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`, ver [[Estados]] 13). Mostra clientes, propostas, fornecedores, ofertas de preço e ordens de compra do módulo do Pablo. As caixas sem campos só entram para mostrar a ligação.
 
 ```mermaid
 classDiagram

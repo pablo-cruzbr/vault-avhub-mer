@@ -11,13 +11,13 @@ fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N
 
 # Orçamento e base de preço de compra: detalhe técnico (2/2)
 
-**Em uma frase:** detalhe técnico da nota [[02-Orcamento-Base-de-Preco]] (parte 2 de 2): Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, que será removido); Dados 🟡; Quem vê o quê; Orçamento visto da proposta (B2 a B4); O que falta desenvolver; Pendências; Diagrama do subfluxo; O que foi do antigo anexo `Orcamento.md`.
+**Em uma frase:** detalhe técnico da nota [[02-Orcamento-Base-de-Preco]] (parte 2 de 2): Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, removido em 06/11/2026); Dados 🟡; Quem vê o quê; Orçamento visto da proposta (B2 a B4); O que falta desenvolver; Pendências; Diagrama do subfluxo; O que foi do antigo anexo `Orcamento.md`.
 
 **Onde estamos:** ← [[02-Orcamento-Base-de-Preco]] (resumo e índice) · partes: [[02-Orcamento-Base-de-Preco-Detalhe-Tecnico-1]] · **02-Orcamento-Base-de-Preco-Detalhe-Tecnico-2**
 
-## Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, que será removido)
+## Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, removido em 06/11/2026)
 
-**O Nathan confirmou em 05/11/2026 que o `api-comercial` será removido integralmente:** pelo F3, o que só existe nele é 🔴 "sem API e sem banco". No `av-hub` `develop` (2e5456d) o BFF já não fala com ele: as rotas que ainda não existem na API do Hub respondem 503 `RECURSO_NAO_MIGRADO` (`lib/api/comercialApi.ts`, N16-111).
+**O `api-comercial` foi removido do av-hub em 06/11/2026 (PR #261, `dd9d729`)**; o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>`. pelo F3, o que só existe nele é 🔴 "sem API e sem banco". No `av-hub` `develop` (2e5456d) o BFF já não fala com ele: as rotas que ainda não existem na API do Hub respondem 503 `RECURSO_NAO_MIGRADO` (`lib/api/comercialApi.ts`, N16-111).
 
 - 🔴 (só no módulo de teste) **Oferta imutável com histórico:** `Oferta` (`prisma/models/suprimentos.prisma:138-183`): preço, unidade, IPI, ST, origem do ICMS, frete, `prazo` (**texto**), mínimo, `dataCotacao`, `validaAte`, `custoLiquidoUnit`, `status`, invalidação com motivo e quem. Chave única `(fonte, idDocumentoFonte, idProduto, idFornecedor)` para importar sem duplicar. Já há `validaAte` e `custoLiquidoUnit`, que apoiam o "dado recente" e a Nota Preço.
 - 🔴 (só no módulo de teste) **Média "bolsa de valores":** `mediasDoProduto` e `GET /produtos/:id/precos` com janela de 7 a 730 dias, média ponderada pela quantidade comprada, mínimo, máximo, último preço e `delta_media_pct` por fornecedor (`suprimentos.routes.ts:823-875`; `domain/custo/medias.ts`).

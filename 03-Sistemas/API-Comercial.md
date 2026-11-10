@@ -9,11 +9,11 @@ fontes: [av-hub 758d5f0 (pasta api-comercial/, com LEIA-ME-LEGADO.md; README.md,
 
 # API Comercial (`api-comercial`)
 
-**Em uma frase:** é o backend de teste que o Pablo fez para o módulo AV Comercial & Suprimentos (propostas, ofertas de fornecedor, custo de referência e sincronização com o Omie). **Saiu de produção e do BFF em 27/10 (N16-111) e ficou no repositório só para leitura (N16-117, 28/10)**: o Robert lê as regras daqui para refazer o módulo dentro da `api-acos-vital`.
+**Em uma frase:** é o backend de teste que o Pablo fez para o módulo AV Comercial & Suprimentos (propostas, ofertas de fornecedor, custo de referência e sincronização com o Omie). **Saiu de produção e do BFF em 27/10 (N16-111), ficou no repositório só para leitura (N16-117, 28/10) e foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`)**: o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>`, e o Robert lê as regras dali para refazer o módulo dentro da `api-acos-vital`.
 
 > [!info] Decisões do Nathan 📝
 > 14/10: a `api-comercial` não será publicada; tudo migra para a `api-acos-vital` ([[Contratos-da-v2|LOG-52]]).
-> 27/10 (N16-111): a `api-comercial` de teste saiu do BFF e de produção. 28/10 (N16-117): a pasta fica só para leitura (`LEIA-ME-LEGADO.md`: não rodar, não publicar, não alterar). Nada novo nasce aqui.
+> 27/10 (N16-111): a `api-comercial` de teste saiu do BFF e de produção. 28/10 (N16-117): a pasta fica só para leitura (`LEIA-ME-LEGADO.md`: não rodar, não publicar, não alterar). 06/11: a pasta saiu do av-hub (PR #261, `dd9d729`; conferido na `develop` `6fcbba6` em 10/11/2026: `lib/api/comercialApi.ts:15`, `A api-comercial de teste foi removida`). Nada novo nasce aqui.
 > O BFF do av-hub (`comercialApi.ts`) só fala com a `api-acos-vital`; rota ainda não migrada responde 503 `RECURSO_NAO_MIGRADO`. As primeiras rotas já existem na API do Hub (`/comercial/*`, 28 e 29/10; ver [[AV-Hub-API]]).
 
 ## Quem usa e para quê
@@ -48,7 +48,7 @@ fontes: [av-hub 758d5f0 (pasta api-comercial/, com LEIA-ME-LEGADO.md; README.md,
 
 ## Detalhe técnico
 
-> **Decisão do Nathan, 14/10/2026 📝:** a `api-comercial` é só uma API de teste do Pablo, não será publicada, e o que está descrito abaixo é o estado do código de teste (como estava em 14/10, HUB b55ac55), não um serviço de produção. Desde 27/10 ela está fora do BFF e desde 28/10 é só leitura.
+> **Decisão do Nathan, 14/10/2026 📝:** a `api-comercial` é só uma API de teste do Pablo, não será publicada, e o que está descrito abaixo é o estado do código de teste (como estava em 14/10, HUB b55ac55), não um serviço de produção. Desde 27/10 ela está fora do BFF, de 28/10 a 06/11 foi só leitura e em 06/11 saiu do repositório (PR #261).
 
 **Como a migração será feita:** [[Contratos-da-v2|LOG-52]] (proposta de 15/10/2026). Das 30 tabelas, 22 migram e 8 são descartadas (espelhos do Omie e do hub); a sincronização própria some e a pipeline é a fonte; o domínio de cálculo é portado como está. A auditoria de 15/10 achou defeitos **neste** código de teste (o filtro `?responsavel=` anula o escopo `proprios`, o escopo `vinculados` não restringe, CNPJ alfanumérico rejeitado, entre outros) que o LOG-52 lista como critérios de aceite para **não** serem herdados.
 
@@ -56,7 +56,7 @@ Backend (legado) do módulo **AV Comercial & Suprimentos**: propostas, ofertas d
 
 ### Onde mora e como roda
 
-- **Repositório:** pasta `api-comercial/` dentro do repositório `av-hub` ✅. **Fora da CI, do lint e do `tsc` do av-hub** e sem workflow próprio (o `api-comercial.yml` que existia em 14/10 saiu) ✅ `api-comercial/LEIA-ME-LEGADO.md`; só `.github/workflows/ci.yml` resta.
+- **Repositório:** era a pasta `api-comercial/` dentro do repositório `av-hub`; **não existe mais na `develop`** desde `dd9d729` (06/11/2026, PR #261) e continua na `main`. O resto desta linha descreve o commit `f7d8d7f`. **Fora da CI, do lint e do `tsc` do av-hub** e sem workflow próprio (o `api-comercial.yml` que existia em 14/10 saiu) ✅ `api-comercial/LEIA-ME-LEGADO.md`; só `.github/workflows/ci.yml` resta.
 - **Stack:** Node 22, Express 5, TypeScript (ESM), Prisma 7, PostgreSQL (schema **`core_comercial`**), zod 4 (mensagens em pt-BR), pino, decimal.js, Vitest + supertest ✅ `package.json`, `src/app.ts:20-22`.
 - **Banco:** schema `core_comercial` com 30 models e 13 migrations de `20261001000000_mvp_inicial` a `20261014...usuarios_comerciais_diretorio` ✅ `prisma/schema.prisma:13`, `prisma/migrations/`. O `Dump Avhub (Esqueleto).sql` de 14/10 não continha `core_comercial`; o dump de 29/10 contém, com 23 tabelas (o legado tinha 30 models) ✅. Ver [[Schemas-Postgres]].
 - **Porta e docs:** 3001; `/docs` (Scalar) e `/api-docs-json` quando `DOCS_ENABLED` não é `false` ✅ `src/app.ts:81-84`, `config/env.ts`.

@@ -78,7 +78,7 @@ Os nós (numeração 🟡: o desenho do Nathan fixou só o intervalo `B1` a `B4`
 
 ## Estados
 
-Valores reais do módulo do Pablo (`api-comercial/prisma/models/enums.prisma`, hoje só para leitura):
+Valores reais do módulo do Pablo (`api-comercial/prisma/models/enums.prisma`, removido em 06/11/2026; legível no `f7d8d7f`):
 
 | Campo | Valores | Fonte |
 |---|---|---|
@@ -109,7 +109,7 @@ Menu **Orçamento** desde 16/10/2026; enxugado em 27/10/2026 (N16-107 e N16-108,
 
 ## Endpoints e contratos
 
-Rotas do `api-comercial` (legado só para leitura, N16-117) que o Robert recria na `api-acos-vital` ([[Contratos-da-v2|LOG-52]]; nenhuma delas existe ainda na `api-acos-vital`, conferido em 29/10/2026):
+Rotas do `api-comercial` (removido em 06/11/2026; legível no `f7d8d7f`) que o Robert recria na `api-acos-vital` ([[Contratos-da-v2|LOG-52]]; nenhuma delas existe ainda na `api-acos-vital`, conferido em 29/10/2026):
 
 | Método e rota | Uso | Nó | Código |
 |---|---|---|---|
@@ -117,9 +117,9 @@ Rotas do `api-comercial` (legado só para leitura, N16-117) que o Robert recria 
 | `GET /produtos/:id/precos?dias=` | mínimo, máximo, último, média e por fornecedor com variação sobre a média | `B2` | 🔴 sem API e sem banco: o BFF aponta para a API do Hub, mas a `api-acos-vital` não tem a rota; existe só no módulo de teste (`suprimentos.routes.ts:823-875`) (exige `veCusto`) |
 | `GET /produtos/:id/score_fornecedores`, `/volatilidade` | score, ranking por categoria, coeficiente de variação, dado recente | `B2` | 🔴 🟡 nomes |
 | `GET /ofertas`, `POST /ofertas`, `POST /ofertas/:id/invalidar`, `GET /ofertas/importacoes`, `/exportar` | base com histórico | `B1`, `B4` | ✅ `:645`, `:687`, `:791`, `:561`, `:597` |
-| `GET /solicitacoes_custo`, `POST /solicitacoes_custo` | fila e criação do pedido de custo | `B3` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `custos.routes.ts:304`, `:367` |
-| `POST /solicitacoes_custo/:id/assumir`, `liberar`, `responder`, `cancelar` | comprador pega, devolve, responde, cancela | `B4` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `custos.routes.ts:494`, `:500`, `:406`, `:508` |
-| `POST /custos/sugerir` | sugestão de custo | `B2` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `custos.routes.ts:30` |
+| `GET /solicitacoes_custo`, `POST /solicitacoes_custo` | fila e criação do pedido de custo | `B3` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:304`, `:367` |
+| `POST /solicitacoes_custo/:id/assumir`, `liberar`, `responder`, `cancelar` | comprador pega, devolve, responde, cancela | `B4` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:494`, `:500`, `:406`, `:508` |
+| `POST /custos/sugerir` | sugestão de custo | `B2` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:30` |
 | Matriz de preços | 🟡 | `B1`, `B2` | 🔴 |
 
 Contratos: os do Orçamento foram removidos em 29/10/2026 e o Robert cria os novos. Dependências: [[Contratos-da-v2|LOG-52]] (fases 4 e 5).

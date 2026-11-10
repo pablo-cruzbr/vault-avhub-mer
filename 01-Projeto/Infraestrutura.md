@@ -19,7 +19,7 @@ Os servidores são próprios (self-hosted), não uma nuvem gerenciada. Essa topo
 
 | VPS | Para que serve | O que roda |
 |---|---|---|
-| **VPS1** | Aplicações | HUB, `api-acos-vital`, MES (`api-pcp`, `app-pcp`), pipeline Omie, Backlog Ágil e blog. Tudo em contêineres Docker, gerenciados pelo Coolify e atrás do Traefik 📝. A `api-comercial` não será publicada: é legado de leitura (N16-117) |
+| **VPS1** | Aplicações | HUB, `api-acos-vital`, MES (`api-pcp`, `app-pcp`), pipeline Omie, Backlog Ágil e blog. Tudo em contêineres Docker, gerenciados pelo Coolify e atrás do Traefik 📝. A `api-comercial` não foi publicada e foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`) |
 | **VPS2** | Bancos Postgres | O banco do av-hub (um cluster com um schema por domínio), o banco do MES (schema `public`) e outros. O backup por WAL já está configurado e cobre schema novo automaticamente |
 | **VPS3** | Arquivos (MinIO) | Laudos e certificados da Qualidade, fotos e imagens do blog |
 
@@ -44,7 +44,7 @@ O pipeline não é um app Next.js. São processos Node que precisam de **Redis**
 | Item | Situação |
 |---|---|
 | Backup e restauração testada dos bancos do MES e do av-hub (B2, B7) | 🟡 Adiado: "papo para outra hora" (Nathan, 14/10), sem data |
-| `api-comercial` | Legado de leitura no repositório do HUB (N16-117, 28/10): não roda, não tem ambiente nem cluster próprio. O módulo comercial nasce na `api-acos-vital`, conduzido pelo Robert 📝 |
+| `api-comercial` | Não existe mais: removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); legível em `git show f7d8d7f:api-comercial/<arquivo>`. Nunca teve ambiente nem cluster próprio. O módulo comercial nasce na `api-acos-vital`, conduzido pelo Robert 📝 |
 | Exposição de rede da `api-pcp` (item #13 do Registro do v1) | 🟡 Gustavo. A `api-pcp` já está no ar (Nathan); restringir a origem não foi discutido |
 | Retenção de `auth.logs` (item #53) | 🔴 Gustavo |
 
@@ -58,7 +58,7 @@ Pendências gerais em [[Pontas-Soltas]]; riscos em [[Riscos]].
 |---|---|---|
 | HUB | `node:20-alpine`, build multi-stage (`deps`, `builder`, `runner`), saída standalone do Next.js, usuário não-root | 3000 |
 | `api-acos-vital` | `node:20-alpine`, 2 estágios | 3000 |
-| `api-comercial` (legado, não publicada) | `node:22-slim`, 2 estágios | 3001 |
+| `api-comercial` (removida em 06/11/2026, nunca publicada) | `node:22-slim`, 2 estágios | 3001 |
 | `api-pcp` | `node:22-slim`, 2 estágios | 3000 |
 | `app-pcp` | `node:22-slim`, 3 estágios | 3000 |
 

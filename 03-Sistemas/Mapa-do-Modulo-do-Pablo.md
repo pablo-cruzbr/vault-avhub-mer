@@ -14,7 +14,7 @@ fontes: [av-hub 5aa5311 (branch feat/menu-orcamento-vendas-compras) api-comercia
 **Quando consultar esta nota:** antes de migrar, reaproveitar ou descartar qualquer parte do código do Pablo (`av-hub\api-comercial`).
 
 > [!warning] Leia os selos desta nota pelo F3 (05/11/2026)
-> Esta nota descreve o `api-comercial` de teste, que será removido inteiro. Aqui, ✅ quer dizer "visto no código de teste", e **não** pronto: pelo F3, o que só existe no `api-comercial` é 🔴 "sem API e sem banco". O estado do módulo na `develop` está no [[Onde-Estamos]] (linhas da proposta e do Orçamento), nas raias [[01-Proposta-de-Venda]], [[02-Orcamento-Base-de-Preco]] e [[06-Circuito-de-Compra]] e no [[Backlog-Frente-Comercial-e-Suprimentos]]. O envio do pedido ao Omie não é mais por fila: desde 03/11 a `api-acos-vital` chama o Omie direto ([[Mapa-IncluirPedido-Omie]]).
+> Esta nota descreve o `api-comercial` de teste, que foi removido do av-hub em 06/11/2026 (PR #261, `dd9d729`); o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>`. Aqui, ✅ quer dizer "visto no código de teste", e **não** pronto: pelo F3, o que só existe no `api-comercial` é 🔴 "sem API e sem banco". O estado do módulo na `develop` está no [[Onde-Estamos]] (linhas da proposta e do Orçamento), nas raias [[01-Proposta-de-Venda]], [[02-Orcamento-Base-de-Preco]] e [[06-Circuito-de-Compra]] e no [[Backlog-Frente-Comercial-e-Suprimentos]]. O envio do pedido ao Omie não é mais por fila: desde 03/11 a `api-acos-vital` chama o Omie direto ([[Mapa-IncluirPedido-Omie]]).
 
 Selos: ✅ visto no código · 📝 decidido (`N16-xx`) · 🟡 proposta nova · ❓ 🔴 não conferido ou falta. Decisões em [[Registro-de-Decisoes]].
 
@@ -81,7 +81,7 @@ A auditoria de 15/10 achou 24 itens. Exemplos: escopo por vendedor que não rest
 
 Tudo abaixo é o conteúdo completo da nota original, sem cortes.
 
-Este mapa descreve o código de teste `av-hub\api-comercial` (N14-15, N16-15) e o que as decisões N16 mudam nele. Cada fato do código traz arquivo e linha (✅). Decisão traz o ID `N16-xx` (📝). O que é proposta nova leva 🟡. O que não deu para conferir leva ❓ ou 🔴. Decisões: [[Registro-de-Decisoes]].
+Este mapa descreve o código de teste `av-hub\api-comercial` (N14-15, N16-15), removido em 06/11/2026 e legível no commit `f7d8d7f`, e o que as decisões N16 mudam nele. Cada fato do código traz arquivo e linha (✅). Decisão traz o ID `N16-xx` (📝). O que é proposta nova leva 🟡. O que não deu para conferir leva ❓ ou 🔴. Decisões: [[Registro-de-Decisoes]].
 
 Caminhos abaixo são relativos a `av-hub\api-comercial\` quando não dizem o contrário.
 

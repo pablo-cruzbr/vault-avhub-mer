@@ -78,7 +78,7 @@ As regras 10, 22, 23, 26 e 32 (pedido, liberação, cancelamento e telas de pedi
 
 ### Proposta (`status`) 🟡
 
-O enum antigo, no `api-comercial` do Pablo (legado só para leitura), era `StatusProposta`: `ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA` (`api-comercial/prisma/models/enums.prisma:69-76`). Na `api-acos-vital` (`develop`, 29/10) a rota aceita `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` (`propostas.route.js`, `STATUS`); o `CHECK` `ck_propostas_status` do dump de 29/10 tem só os quatro primeiros ❓ (`EXPIRADA`: a validade vencida passa de `ABERTA` a `EXPIRADA` por um agendador diário do banco, `fn_propostas_expirar`, e a API a expira na hora quando alguém esbarra nela; a validade não consta nas decisões N16 lidas: confirmar com o Nathan). Valores, como estão no banco e na API:
+O enum antigo, no `api-comercial` do Pablo (removido em 06/11/2026; legível no `f7d8d7f`), era `StatusProposta`: `ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA` (`api-comercial/prisma/models/enums.prisma:69-76`). Na `api-acos-vital` (`develop`, 29/10) a rota aceita `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` (`propostas.route.js`, `STATUS`); o `CHECK` `ck_propostas_status` do dump de 29/10 tem só os quatro primeiros ❓ (`EXPIRADA`: a validade vencida passa de `ABERTA` a `EXPIRADA` por um agendador diário do banco, `fn_propostas_expirar`, e a API a expira na hora quando alguém esbarra nela; a validade não consta nas decisões N16 lidas: confirmar com o Nathan). Valores, como estão no banco e na API:
 
 | Valor | De onde vem | Significado | Quem vê |
 |---|---|---|---|
@@ -123,7 +123,7 @@ O contrato do menu de Vendas, Orçamento e Compras foi removido em 29/10/2026; o
 
 ## Endpoints e contratos
 
-Em 29/10/2026 a `api-acos-vital` (`develop`, `cc30c85`) monta estas rotas sob `/comercial` (`propostas.route.js`); o `api-comercial` de teste (legado só para leitura) tinha as mesmas sem prefixo:
+Em 29/10/2026 a `api-acos-vital` (`develop`, `cc30c85`) monta estas rotas sob `/comercial` (`propostas.route.js`); o `api-comercial` de teste (removido em 06/11/2026) tinha as mesmas sem prefixo:
 
 | Método e rota | Uso | Nó | Estado |
 |---|---|---|---|
@@ -139,13 +139,13 @@ Em 29/10/2026 a `api-acos-vital` (`develop`, `cc30c85`) monta estas rotas sob `/
 | `GET /categorias?codigo_empresa=&tipo=receita` | categorias de receita lançáveis (sem totalizadoras e sem `nao_exibir`) da unidade, para o campo categoria | `V0.6` | ✅ `api-acos-vital` `categorias.route.js:47-57`, `develop` 1654f65 |
 | `POST /comercial/clientes`, `GET /comercial/parceiros` | cadastrar cliente no Omie da unidade; listar parceiros | `V0.1` | ✅ `api-acos-vital` (28 e 29/10) |
 
-Rotas do `api-comercial` de teste (legado) ainda sem equivalente na `api-acos-vital`, e rotas novas ainda por fazer:
+Rotas do `api-comercial` de teste (removido em 06/11/2026) ainda sem equivalente na `api-acos-vital`, e rotas novas ainda por fazer:
 
 | Método e rota | Uso | Nó | Estado |
 |---|---|---|---|
-| `GET /propostas/:id/versoes`, `/:id/versoes/:revisao` | listar versões | `V0.1` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `propostas.routes.ts` |
-| `POST /propostas/calcular`, `/itens/importar`, `GET /itens/modelo` | pré-visualizar, planilha de itens | `V0.1` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `:27`, `:55`, `:68` |
-| `POST /custos/sugerir` | sugestão de custo para o item | `V0.2` | 🔴 sem API e sem banco (só no módulo de teste `av-hub/api-comercial`, que será removido; o BFF responde 503): `custos.routes.ts:30` |
+| `GET /propostas/:id/versoes`, `/:id/versoes/:revisao` | listar versões | `V0.1` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `propostas.routes.ts` |
+| `POST /propostas/calcular`, `/itens/importar`, `GET /itens/modelo` | pré-visualizar, planilha de itens | `V0.1` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `:27`, `:55`, `:68` |
+| `POST /custos/sugerir` | sugestão de custo para o item | `V0.2` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:30` |
 | `GET /pedidos_venda_hub/fila-omie`, `PATCH /pedidos_venda_hub/:id/sincronizacao`, `POST /:id/reenviar` | fila e retorno da pipeline, espelho de `/compras/ordens/fila-omie` | `V0.7` | 🔴 (nome em aberto; o pedido já nasce `pendente` em `transformar`) |
 | `GET /propostas/:id/pedido_omie`, `PUT` (digitar o número à mão) | **substituídas**: o pedido deixa de ser digitado | `V0.7` | 🔴 só no módulo de teste (`propostas.routes.ts:146-164`), saem |
 

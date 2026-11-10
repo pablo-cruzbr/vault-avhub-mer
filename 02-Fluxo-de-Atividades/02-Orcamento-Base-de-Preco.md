@@ -66,10 +66,10 @@ Quem desenvolve: o Orçamento é do Pablo, com o Robert (N16-117, N16-119).
 ## O que já existe e o que falta
 
 - O front de Fornecedores, Produtos, Cotação e a análise da proposta lê a API do Hub desde 27/10 (`av-hub` `d6dc1a6`).
-- Desde 29/10/2026, a `api-comercial` de teste não roda mais. Fica no repositório só para leitura (N16-117).
+- A `api-comercial` de teste não roda desde 29/10/2026 e foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>`.
 - 🔴 Na `api-acos-vital` (`develop`), o router `/suprimentos` existe, mas ainda não tem rota: nasce fechado (`core_comercial/index.js`, "fase 4").
 - ✅ Telas no `av-hub` (`develop`, menu enxuto de 27/10, N16-107 e N16-108): Pedidos de custo (Painel do Comprador e Pedido de cotação, em abas), Produtos (Catálogo, Pesquisa de materiais e Ofertas, em abas), Fornecedores, Parâmetros (custo e Telha, em abas) e Custo por item.
-- 🔴 Sem API e sem banco: oferta imutável com histórico, média por período e pedido de custo existem só no `api-comercial` de teste (legado de consulta, N16-117), que será removido; falta portar para a `api-acos-vital`. No banco de teste de 04/11/2026 as tabelas `core_comercial.ofertas` e `solicitacoes_custo` também saíram ([[Dump-AvHub-Teste-2026-11-04]]). Na API do Hub já há a leitura de fornecedores, vínculos, categorias e cotações (✅ `api-acos-vital` `orcamento.route.js:140-312`).
+- 🔴 Sem API e sem banco: oferta imutável com histórico, média por período e pedido de custo existiam só no `api-comercial` de teste, removido do av-hub em 06/11/2026 (PR #261, `dd9d729`); falta portar para a `api-acos-vital`. No banco de teste de 04/11/2026 as tabelas `core_comercial.ofertas` e `solicitacoes_custo` também saíram ([[Dump-AvHub-Teste-2026-11-04]]). Na API do Hub já há a leitura de fornecedores, vínculos, categorias e cotações (✅ `api-acos-vital` `orcamento.route.js:140-312`).
 - 📝 As regras acima estão decididas.
 - 🟡 Valor correto da OC (`C7`) entrando no histórico de compras.
 - 🟡 Cadastro das telas em produção.
@@ -86,4 +86,4 @@ Quem desenvolve: o Orçamento é do Pablo, com o Robert (N16-117, N16-119).
 O detalhe técnico desta nota fica em 2 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
 
 - [[02-Orcamento-Base-de-Preco-Detalhe-Tecnico-1]]: Ligações · Objetivo · Quem atua (completo) · Regras decididas · Estados · Telas · Endpoints e contratos
-- [[02-Orcamento-Base-de-Preco-Detalhe-Tecnico-2]]: Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, que será removido) · Dados 🟡 · Quem vê o quê · Orçamento visto da proposta (B2 a B4) · O que falta desenvolver · Pendências · Diagrama do subfluxo · O que foi do antigo anexo `Orcamento.md`
+- [[02-Orcamento-Base-de-Preco-Detalhe-Tecnico-2]]: Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, removido em 06/11/2026) · Dados 🟡 · Quem vê o quê · Orçamento visto da proposta (B2 a B4) · O que falta desenvolver · Pendências · Diagrama do subfluxo · O que foi do antigo anexo `Orcamento.md`

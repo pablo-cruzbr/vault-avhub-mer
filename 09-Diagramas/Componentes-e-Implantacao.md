@@ -22,7 +22,7 @@ Topologia: [[Infraestrutura]]. Responsáveis: [[Sistemas-e-Responsabilidades]]. 
 
 ## 1. Componentes e integrações
 
-O HUB (o que o usuário vê) fala com uma API só, a do Hub (`api-acos-vital`), que também abriga o módulo comercial. A `api-comercial` do Pablo ficou só como legado de leitura e saiu do desenho. O MES (fábrica) conversa com a API do av-hub por rotas. A pipeline do Omie lê e grava no banco do av-hub e envia a OC ao Omie.
+O HUB (o que o usuário vê) fala com uma API só, a do Hub (`api-acos-vital`), que também abriga o módulo comercial. A `api-comercial` do Pablo foi removida do av-hub em 06/11/2026 e saiu do desenho. O MES (fábrica) conversa com a API do av-hub por rotas. A pipeline do Omie lê e grava no banco do av-hub e envia a OC ao Omie.
 
 ```mermaid
 flowchart LR
@@ -100,7 +100,7 @@ flowchart TB
 ```
 - ✅ Imagens e portas conferidas nos `Dockerfile`. 📝 Servidores (VPS) e Postgres são decisão.
 - ❓ MinIO (guarda de arquivos): nenhuma referência no código em 14/10, por isso as setas são tracejadas.
-- A `api-comercial` (node 22 slim, porta 3001) não tem ambiente e não será publicada: é legado de leitura (N16-117), por isso saiu do desenho.
+- A `api-comercial` (node 22 slim, porta 3001) nunca teve ambiente nem foi publicada e foi removida do av-hub em 06/11/2026 (PR #261), por isso saiu do desenho.
 
 ## 3. Pacotes: schemas por banco
 
@@ -184,7 +184,7 @@ Selo ✅ para as setas cheias (rotas conferidas em [[Integracao-AvHub-MES]] e no
 
 - Os jobs `itens_pedido_status.job.js`, `itens_pedido_custo.job.js` e `item_estado_projetado.job.js` (Torre) agora existem no hub; no v1 o hub "ainda não consumia" o status por item.
 - O MES lê **todos** os eventos do contrato 35, não só cancelada e reaberta.
-- A pipeline só escreve no Omie para enviar a OC (`omie-envio-oc-worker`) ✅ [[Pipeline-Omie]]. A `api-comercial`, que lia pedidos de compra do Omie, virou legado de leitura e saiu do desenho (N16-117).
+- A pipeline só escreve no Omie para enviar a OC (`omie-envio-oc-worker`) ✅ [[Pipeline-Omie]]. A `api-comercial`, que lia pedidos de compra do Omie, foi removida do av-hub em 06/11/2026 e saiu do desenho.
 - O HUB fala só com a `api-acos-vital` desde 27/10 (`3bccfce`).
 - A chave do MES para o PUT do contrato 34 só abre essa rota (`apiKeyAuth.js`); as leituras usam a `API_KEY` do MES ✅ [[Chaves-e-Autenticacao]].
 

@@ -25,12 +25,12 @@ O ERP acompanha **um pedido de venda de 0 a 100%**. O pedido nasce no Omie e ter
 
 O desenho de referência é o diagrama 0b, em [[00-Fluxo-Mestre-0b]]. Este vault é o manual para desenvolvê-lo.
 
-O ERP reúne quatro sistemas que se falam por contratos (mais a `api-comercial`, que ficou só como legado de leitura). Detalhe em [[Sistemas-e-Responsabilidades]].
+O ERP reúne quatro sistemas que se falam por contratos (a `api-comercial` de teste do Pablo foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`)). Detalhe em [[Sistemas-e-Responsabilidades]].
 
 | Sistema | Para que serve | Onde |
 |---|---|---|
 | **Omie** (externo) | ERP fiscal. Emite a nota fiscal e guarda pedidos, produtos e parceiros | SaaS (serviço na nuvem) |
-| **av-hub** | Portal comercial e de compras. Tem o HUB (as telas, em Next.js) e a `api-acos-vital` (API do Hub, que também abriga o módulo comercial). A `api-comercial` do Pablo é só legado de consulta (N16-117) | [[AV-Hub-Front]], [[AV-Hub-API]], [[API-Comercial]] |
+| **av-hub** | Portal comercial e de compras. Tem o HUB (as telas, em Next.js) e a `api-acos-vital` (API do Hub, que também abriga o módulo comercial). A `api-comercial` do Pablo foi removida em 06/11/2026 | [[AV-Hub-Front]], [[AV-Hub-API]], [[API-Comercial]] |
 | **MES** | O sistema do chão de fábrica, do Estoque, do Recebimento e da Qualidade. Tem o `api-pcp` (back) e o `app-pcp` (front) | [[MES-Backend]], [[MES-Front]] |
 | **Pipeline Omie** | Copia os dados do Omie para o banco do av-hub e envia a ordem de compra ao Omie | [[Pipeline-Omie]] |
 
