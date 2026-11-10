@@ -5,8 +5,8 @@ estado-em: 2026-11-10
 status: proposta
 dono: Nathan (fluxo) · Gustavo (banco e API) · Robert (custo no MES) · Michele (decisão da comissão)
 parte-de: "[[15-Custo-Real-e-Comissao]]"
-develop-conferida: [api-acos-vital d8de255, av-hub 6fcbba6, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
-fontes: [Registro-de-Decisoes (N16-09 a N16-11, N16-17 a N16-23, N16-34 a N16-51, N16-57, N16-71, N16-74), Proposta-Orcamento-Comissao/01-Decisoes/Respostas-da-Controladoria-2026-10-19 (fora do vault), Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, av-hub comissoes/simulador/page.tsx e lib/simulador/motor.ts, 03-Sistemas/Comissao/01-Motor-Atual-Como-Calcula, 00-Fluxo-Mestre-0b, 03-Estoque-Atendimento-e-Despacho, 04-Circuito-de-Compra, Modelo-Estoque-e-Custo-do-Lote, API-008, LOG-47, 10-Anexo-Fora-do-Fluxo/Comissoes, api-pcp (estoque.prisma, compras.service.ts), 09-Diagramas/artifact-proposta-pedido.html, api-pcp develop de 27/10/2026 (GET /itens/custo, custo da OC), N16-143, N16-144]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+fontes: [Registro-de-Decisoes (N16-09 a N16-11, N16-17 a N16-23, N16-34 a N16-51, N16-57, N16-71, N16-74), Proposta-Orcamento-Comissao/01-Decisoes/Respostas-da-Controladoria-2026-10-19 (fora do vault), Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, av-hub comissoes/simulador/page.tsx e lib/simulador/motor.ts, 03-Sistemas/Comissao/01-Motor-Atual-Como-Calcula, 00-Fluxo-Mestre-0b, 03-Estoque-Atendimento-e-Despacho, 04-Circuito-de-Compra, Modelo-Estoque-e-Custo-do-Lote, API-008, LOG-47, 10-Anexo-Fora-do-Fluxo/Comissoes, api-pcp (estoque.prisma, compras.service.ts), 09-Diagramas/artifact-proposta-pedido.html, api-pcp develop de 27/10/2026 (GET /itens/custo, custo da OC), N16-143, N16-144, BL-067, BL-088, OQ-51, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Custo real e comissão no fluxo (K1 a K6): detalhe técnico (2/2)
@@ -41,7 +41,7 @@ No fluxo novo (N16-51, OQ-28 em parte): o **percentual de Compras** deixa de ser
 | Item do menu na imagem | O que é hoje | Alinhamento 🟡 |
 |---|---|---|
 | Comissões › Simulador, Análise de Simuladores, Minhas Comissões, Visão Geral, Parâmetros, Bloqueio de Comissões | Módulo atual (`app/(protected)/comissoes/*`), **não muda** (N16-11) | O módulo novo fica em Operações |
-| Operações › "Custo real por item" | `app/(protected)/orcamento/custo-itens/page.tsx` (`CustoItens`; a rota antiga `custo-itens` foi para o menu Orçamento em 27/10): custo real por pedido, KPIs, lotes e simulador de margem **sem imposto**, sobre dados de teste (BL-023, `544ee0b`; [[Contratos-da-v2\|LOG-47]]) | Pode ser a entrada do drill-down por evento da Controladoria; precisa ligar ao custo por evento e ao imposto |
+| Operações › "Custo real por item" | `app/(protected)/orcamento/custo-itens/page.tsx` (`CustoItens`; a rota antiga `custo-itens` foi para o menu Orçamento em 27/10): custo real por pedido, KPIs, lotes e simulador de margem **sem imposto** (BL-023, `544ee0b`; [[Contratos-da-v2\|LOG-47]]). Lê o custo real de `GET /itens_pedido_custo`; os dados de exemplo só entram com `CUSTO_ITENS_FIXTURES=on` ou, fora de produção, quando a API falha (`av-hub` `lib/api/custoItensFixtures.ts:19`, `NODE_ENV === 'production' ? 'off' : 'fallback'`). O problema é acesso e filial (BL-088): a rota passa pelo escopo de vendedor (`api-acos-vital` `src/middlewares/escopoVendedor.js:89`, `itens_pedido_custo:`), e só o perfil com escopo `todos` escapa (`:182`); a API exige `codigo_empresa` em UUID (`src/schemas/core_vendas_faturamento/tables/itens_pedido_custo/itens_pedido_custo.route.js:91`, `codigo_empresa é obrigatório e deve ser um uuid`), mas a tela chama o campo de "Filial (opcional)" e pede o UUID digitado (`av-hub` `components/CustoItens/CustoItens.tsx:227`, `placeholder="Filial (opcional)"`). Na validação local em Docker de 10/11/2026, só o perfil de testes tinha a tela e até ele recebeu 403 `PEDIDO_FORA_DO_ESCOPO` no pedido de outro vendedor (dado do tst) | Pode ser a entrada do drill-down por evento da Controladoria; precisa ligar ao custo por evento e ao imposto, e resolver quem vê e com qual escopo (OQ-51) | Pode ser a entrada do drill-down por evento da Controladoria; precisa ligar ao custo por evento e ao imposto |
 | Dashboards › "Matriz de preços" | O BFF cita o slug `matriz-precos`; a tela ainda não existe | É a matriz de preços do Orçamento ([[02-Orcamento-Base-de-Preco]]) |
 
 Os contratos com o detalhe das telas e das regras foram removidos em 29/10/2026; o Robert cria os novos.
@@ -86,7 +86,7 @@ A decisão tem seis ações (`aprovar`, `desaprovar`, `bloquear`, `desbloquear`,
 | Dado | Vendedor | Gerência e Coordenação | Compras | Controladoria |
 |---|---|---|---|---|
 | Comissão estimada | a que ele pôs | 🟡 OQ-21 | não | sim |
-| Custo real e diferença cotado × real | **não** | 🟡 | custo da OC | sim |
+| Custo real e diferença cotado × real | **não** | 🟡 | custo da OC | sim (❓ OQ-51: hoje nenhum perfil de negócio do tst tem a tela, BL-088) |
 | Valor da compra de um produto dele, em aprovação (`C8`) | **sim** | não | sim | sim |
 | Comissão real e justificativa | só depois da decisão | decidem | não | sim |
 | Complementos, descontos e abatimentos | os dele, com o motivo, depois de decididos | decidem | não | sim |
@@ -98,7 +98,7 @@ A decisão tem seis ações (`aprovar`, `desaprovar`, `bloquear`, `desbloquear`,
 | Item | Estado | Selo |
 |---|---|---|
 | Motor atual (menor entre o percentual do vendedor e o de compras, regras fixas, bloqueios, blacklists) | existe em `core_comissionamento`, só leitura aqui ([[Comissoes]]) | ✅ (`api-acos-vital`) |
-| Módulo novo em `core_comissao`, em Operações | rascunhado e **testado num Postgres 18 em 19/10**; sem API nem tela | 🔴 Gustavo (banco), Nathan (telas) |
+| Módulo novo em `core_comissao`, em Operações | rascunhado e **testado num Postgres 18 em 19/10**; sem API nem tela; o schema não está no banco de teste (tst) de 10/11/2026, que só tem o `core_comissionamento` (validação local em Docker de 10/11/2026) | 🔴 Gustavo (banco), Nathan (telas) |
 | Comissão estimada na proposta (`K1`) | não existe; o simulador do Hub só pré-preenche o lado da compra | 🔴 |
 | Custo real por evento, com a NF de entrada como verdade (`K2`) | não existe | 🔴 Robert, Gustavo |
 | Recurso novo da pipeline: recebimento de NF-e (imposto real, data de recebimento) | não existe | 🔴 Nathan ([[Estudo-Omie-API]]) |
