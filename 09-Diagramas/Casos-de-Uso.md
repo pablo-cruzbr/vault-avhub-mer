@@ -115,7 +115,7 @@ flowchart LR
     FOR --> C5U
     CCP --> CLM
 ```
-**Em resumo:** ✅ requisição, cotação, OC, aprovação e leitura no MES funcionam. O MES já lê a OC das requisições criadas no Compras (K4, `develop`), mas ainda não a mostra ao PCP e ao Estoque 🔴; o perfil CCP no HUB falta 🔴.
+**Em resumo:** ✅ requisição, cotação, OC, aprovação e leitura no MES funcionam. O MES já lê a OC das requisições criadas no Compras (K4, `develop`), mas ainda não a mostra ao PCP e ao Estoque 🔴; o perfil CCP foi criado pelo Nathan em 30/10/2026 ❓ (cadastro, não conferido no ambiente; BL-017).
 
 ## 5. Recebimento e Qualidade de entrada (R0 a R6, Q1 a Q4)
 
@@ -224,7 +224,7 @@ As duas opções do nó `E4` (compra ou produção) são alternativas para o res
 | C0 | `POST /compras/requisicoes` no HUB; a requisição não chega ao MES, a OC dela deve chegar pela referência (N14-20) | ✅ MES lê a OC (K4, `develop`); uso na tela 🔴 |
 | C1, C4 | Requisições e Ordens no HUB; OC até R$ 30 mil sai livre | ✅ |
 | C3 | Aprovações: Gerente de Compras aprova a OC acima de R$ 30 mil | ✅ (N14-21) |
-| C5 | Follow-up no HUB | ✅ perfil CCP 🔴 |
+| C5 | Follow-up no HUB | ✅ perfil CCP ❓ (criado em 30/10) |
 | Ler no MES | Compras · CCP, só leitura | ✅ |
 
 ### 5. Recebimento e Qualidade de entrada (R0 a R6, Q1 a Q4)
