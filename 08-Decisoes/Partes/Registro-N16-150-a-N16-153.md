@@ -1,18 +1,18 @@
 ---
 tags: [decisoes, registro, n16, parte]
 criado: 2026-11-05
-estado-em: 2026-11-09
+estado-em: 2026-11-10
 status: vigente
 dono: Nathan
 parte-de: "[[Registro-de-Decisoes]]"
-fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido de venda", N16-05, N16-89, N16-130, N16-149, api-acos-vital develop 1654f65 (src/schemas/core_comercial/aggregates/propostas/propostas.route.js:579-618), dump do banco de teste de 04/11/2026 (core.categorias, core_comercial.pedidos_venda), PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4)]
+fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido de venda", N16-05, N16-89, N16-130, N16-149, api-acos-vital develop 1654f65 (src/schemas/core_comercial/aggregates/propostas/propostas.route.js:579-618), dump do banco de teste de 04/11/2026 (core.categorias, core_comercial.pedidos_venda), PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), conversa do Nathan de 10/11/2026 sobre o refaturamento, dump do banco de teste de 10/11/2026, prova-recalculo-refaturamento.sql (10/11/2026)]
 ---
 
-# Registro de decisões: decisões N16, N16-150 a N16-152
+# Registro de decisões: decisões N16, N16-150 a N16-153
 
-**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-152 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer e o refaturamento sem comissão.
+**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-153 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão e a regra do refaturamento por unidade.
 
-**Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-152**
+**Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-153**
 
 ## Decisões de 05/11/2026 (modal "Transformar em pedido de venda") (N16-150 a N16-152)
 
@@ -35,3 +35,14 @@ fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido 
 3. Pedido nascido no Hub só ganha linha na tabela depois de estar no Omie e de o cálculo rodar.
 
 Medição pendente: [[Pontas-Soltas]] (PS-040). Risco: [[Riscos]] (RS-022).
+
+> [!warning] A saída (b) foi superada pela N16-153 (10/11/2026)
+> A observação **continua** sendo porta do G6, porque é nela que está a referência ("PV nº …") que a tabela `refaturamentos` usa. A regra passa a ler o código de refaturamento da unidade do pedido.
+
+## Decisão de 10/11/2026 (refaturamento por unidade) (N16-153)
+
+| ID | Decisão | Data | Dono | Selo | Superada |
+|---|---|---|---|---|---|
+| N16-153 | **Refaturamento: o código depende da unidade, a observação continua valendo e só o Proibido e o Sem Referência saem do líquido.** Nathan, 10/11/2026. (1) **Quem é candidato:** a regra lê a unidade do pedido e compara com o código de refaturamento **daquela** unidade: Mogi (Aços Vital) `1.01.96`, Uberaba `1.01.99` e HRM `1.01.98`. Um código só vale junto com a unidade, porque os códigos colidem entre as contas (`1.01.98` é Venda de Sucata em Uberaba; `1.01.99` é Cobranças Jurídicas em Mogi). (2) **A observação continua sendo porta** (`refat` ou `reaft`): o vendedor pode errar o código, ou alguém trocar depois. (3) **Ser refaturamento não basta para sair do líquido.** Depois de virar candidato, o pedido passa pela regra que já existe (`fn_resolver_refaturamento`, dump de teste de 10/11, `:13259`): se a origem citada na observação está **no mesmo mês** e é uma venda genuína, o pedido fica **Permitido** e a nota dele **conta**, porque a nota de origem foi cancelada no mês. Se a origem foi faturada em mês anterior, já contou lá, e o pedido fica **Proibido**. Só o **Proibido** e o **Sem Referência** saem do líquido. (4) **Família:** se uma parcial é refaturamento, a família inteira é. Isso vale **só do lado de vendas** (`vw_vendas_base`, `vw_vendas_planilha`), não no faturamento nem na comissão, onde cada nota é julgada sozinha (é assim hoje). (5) **Liberar Pedidos:** o pedido de origem (o PV 100) aparece marcado como refaturado pelo novo (o PV 200, a cópia criada no mesmo mês), e a produção ou a compra do PV 100 passa a ser vinculada ao PV 200. Isso não existe hoje e mexe no MES (Robert) e no banco (Gustavo): vira contrato à parte. (6) **Formato da observação:** os vendedores já foram orientados; nada muda na tela. 🔴 Os pontos 1 e 5 não existem no código: o `1.01.96` está fixo em cerca de 15 pontos de views e funções. Os furos achados na prova de 10/11 (status que nunca é refeito e referência curta de Uberaba e da HRM) estão na PS-045 e entram no mesmo contrato | 10/11/2026 | Nathan | 📝; 🔴 sem código | N16-152 (supera em parte: substitui a saída (b) de 09/11) |
+
+Risco: [[Riscos]] (RS-022). Furos da regra atual: [[Pontas-Soltas]] (PS-045).

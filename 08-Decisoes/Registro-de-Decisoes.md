@@ -120,7 +120,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-73-a-N16-96]]: N16-73 a N16-96
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
-- [[Registro-N16-150-a-N16-152]]: N16-150 a N16-152 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026)
+- [[Registro-N16-150-a-N16-153]]: N16-150 a N16-153 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026)
 
 ## Onde está cada decisão
 
