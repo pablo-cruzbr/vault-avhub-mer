@@ -59,9 +59,9 @@ O plano pede mais trabalho do Robert do que ele consegue entregar no prazo. O Ci
 
 Nathan e Gustavo fazem em breve, sem bloquear o desenho 📝 N14-24:
 
-- o **perfil CCP** (BL-017);
-- o **vínculo de usuários à Gerência de Compras** (hoje sem usuários, dump de 07/10 ❓ conferir no de 29/10);
-- o vínculo de compradores a funcionários (BL-045);
+- ❓ o **perfil CCP** (BL-017): criado pelo Nathan em 30/10/2026;
+- ❓ o **vínculo de usuários à Gerência de Compras**: feito pelo Nathan em 30/10/2026 (RS-015);
+- ❓ o vínculo de compradores a funcionários (BL-045): feito pelo Nathan em 30/10/2026;
 - o perfil **orçamentista**, que também precisa existir (N16-59).
 
 Permissões por perfil: [[RBAC-e-Permissoes]]. Atores nos casos de uso: [[Casos-de-Uso|Diagrama-Casos-de-Uso]].
