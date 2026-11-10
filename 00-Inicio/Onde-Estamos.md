@@ -1,7 +1,7 @@
 ---
 tags: [inicio, status]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: vigente
 dono: Nathan
 develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
@@ -52,7 +52,7 @@ O estado é o da `develop` dos cinco sistemas lida em 05/11/2026 (commits no `de
 | Torre de Fluxo (painel de acompanhamento) | 🟡 API, rotinas e telas prontas no av-hub (telas sobre dados de exemplo, desde 15/10); o MES não envia os eventos; só o perfil Admin (os desenvolvedores) vê as telas, por enquanto (N16-148, BL-021) |
 | Custo por item | 🟡 O lote nasce com o custo da OC e o MES publica `GET /itens/custo` (27/10, na `develop`); falta o hub ler (a tela usa dados de exemplo). O Ciclo 1 segue sem imposto; o modelo com impostos foi desenhado em 29/10 (N16-144) |
 | Cadastros TESTE no Omie | 🟡 O Omie não tem ambiente de teste. Os cadastros TESTE do Nathan entram nos relatórios: filtre ao conferir |
-| Pendências de cadastro | O perfil CCP e o vínculo de usuários à Gerência de Compras saem em breve. É cadastro simples e não trava o desenho |
+| Pendências de cadastro | ❓ Feitas pelo Nathan em 30/10/2026: perfil CCP criado e usuários vinculados à Gerência de Compras (BL-017, RS-015). Cadastro no banco, não conferido no ambiente |
 
 ## Publicado na main (informação)
 
@@ -101,4 +101,4 @@ Transversais, na versão técnica:
 | Torre de Fluxo (LOG-46) | 🟡 API e jobs no av-hub; BFF `/api/fluxo/*` e 4 telas no HUB sobre dados de exemplo (15/10); o MES não publica `/fluxo/eventos`; a 046b só deu as telas ao perfil de testes do time de TI, e só o Admin as vê por enquanto (N16-148, BL-021) |
 | Custo por item (API-008, LOG-47) | 🟡 `lote_custo` nasce com o custo da OC (19/10) e `GET /itens/custo` está publicada na `develop` do MES (27/10); falta o hub ler (a tela usa `custoItensFixtures`, `av-hub` `lib/api/custoItensFixtures.ts`); publicado na `main`: ainda não (BL-035). O Ciclo 1 segue sem imposto; o modelo com impostos foi desenhado em 29/10 (N16-144); falta código; a fórmula do custo com imposto segue o motor do comissionamento, e cada setor confere as mudanças na implementação |
 | Cadastros TESTE no Omie | 🟡 O Omie não tem ambiente de teste; os cadastros TESTE do Nathan entram na pipeline e nos relatórios: filtrar ao conferir (BL-055) |
-| Pendências cadastrais | Perfil CCP e vínculo de usuários à Gerência de Compras: serão criados em breve, assunto cadastral simples (Nathan e Gustavo), sem bloqueio de desenho |
+| Pendências cadastrais | ❓ Perfil CCP e vínculo de usuários à Gerência de Compras: feitos pelo Nathan em 30/10/2026 (BL-017, RS-015); cadastro no banco, não conferido no ambiente |
