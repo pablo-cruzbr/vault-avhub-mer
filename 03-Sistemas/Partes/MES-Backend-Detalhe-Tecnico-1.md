@@ -1,7 +1,7 @@
 ---
 tags: [sistemas, mes, api-pcp, nestjs, backend, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-10
 status: vigente
 dono: Robert
 parte-de: "[[MES-Backend]]"
@@ -19,8 +19,8 @@ fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf
 | Item | Valor | Fonte |
 |---|---|---|
 | Entrada | `NestFactory.create(AppModule)`, `ValidationPipe({ whitelist: true, transform: true })` | ✅ `src/main.ts:96-97` |
-| Porta | `PORT` (padrão 3000) | ✅ `src/main.ts:170` |
-| Guards globais | `JwtAuthGuard` depois `PermissionsGuard` (APP_GUARD, negam por padrão; só `@Public()` escapa do JWT) | ✅ `src/app.module.ts:94-98` |
+| Porta | `PORT` (padrão 3000) | ✅ `src/main.ts:156` (`process.env.PORT ?? 3000`) |
+| Guards globais | `JwtAuthGuard` depois `PermissionsGuard` (APP_GUARD, negam por padrão; só `@Public()` escapa do JWT) | ✅ `src/app.module.ts:85-86` (`APP_GUARD`) |
 | Filtro global | `PrismaExceptionFilter` traduz P2002/P2003/P2039/P2025 em HTTP amigável | ✅ `src/app.module.ts:88` |
 | Saúde | `GET /health` público (`@Public()`) | ✅ `src/app.controller.ts:11-12` |
 | Docs | `/docs` (Scalar) e `/api-docs-json` com Basic Auth `DOCS_USER`/`DOCS_PASSWORD`; sem senha em produção responde 404 | ✅ `src/main.ts:56-83` |
@@ -58,7 +58,7 @@ fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf
 | `POST /auth/login` | público | ✅ `auth.controller.ts:21` |
 | `POST /auth/azure` | `x-api-key` = `MES_INTERNAL_API_KEY` (só o BFF do app-pcp) | ✅ `auth.controller.ts:31`, `guards/api-key.guard.ts:15` |
 | `GET /auth/me`, `/auth/menu`, `/auth/setores-permitidos` | só JWT | ✅ `auth.controller.ts:38-60` |
-| `GET /auth/dashboard-check` | `dashboard`, visualizar | ✅ `auth.controller.ts:70` |
+| `GET /auth/dashboard-check` | `dashboard`, visualizar | ✅ `auth.controller.ts:56-57` (`dashboard-check`) |
 | `GET /auditoria/login`, `/auditoria/acesso` | `usuarios`, visualizar | ✅ `auditoria.controller.ts:18,24` |
 
 ### Pedidos (Triagem e Destinação) — P1, P2
@@ -80,7 +80,7 @@ fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf
 
 ### Parciais (fila de setor) — E3, E4, F1, Q7, X1
 
-Todas com `movimentacoes`, que no guard vale "qualquer tela de fila de setor" (`atendimento`, `requisicoes`, `pedidos-compra`, `logistica-entrada`, `expedicao`, `inspecao-saida`) ✅ `common/constants/telas-fila-setor.constants.ts:7-19`, `auth/guards/permissions.guard.ts:56-58`. Além disso o service confere o `PerfilSetor.podeAtuar` do setor atual (`PerfisService.ensurePodeAtuar`).
+Todas com `movimentacoes`, que no guard vale "qualquer tela de fila de setor" (`atendimento`, `requisicoes`, `pedidos-compra`, `logistica-entrada`, `expedicao`, `inspecao-saida`) ✅ `common/constants/telas-fila-setor.constants.ts:7-15` (`TELAS_FILA_SETOR`), `auth/guards/permissions.guard.ts:56-58`. Além disso o service confere o `PerfilSetor.podeAtuar` do setor atual (`PerfisService.ensurePodeAtuar`).
 
 | Rota | Ação | Código |
 |---|---|---|
@@ -91,7 +91,7 @@ Todas com `movimentacoes`, que no guard vale "qualquer tela de fila de setor" (`
 | `PATCH /:id/cancelar` | `ordens-producao`, deletar | ✅ `:275` |
 | `/item-parcial-anexos`, `/item-parcial-observacoes` (CRUD) | `movimentacoes` editar/visualizar | ✅ controllers respectivos |
 | `/divergencias` (POST, GET, GET `:id`, PATCH `:id`, PATCH `:id/resolver`) | `movimentacoes` | ✅ `divergencias.controller.ts:32-56` |
-| `POST /entregas`, `GET /entregas`, `GET /entregas/:id` | `movimentacoes` editar/visualizar | ✅ `entregas.controller.ts:35-47` |
+| `POST /entregas`, `GET /entregas`, `GET /entregas/:id` | `movimentacoes` editar/visualizar | ✅ `entregas.controller.ts:26-42` (`movimentacoes`) |
 
 ### Compras (lado MES) e Recebimento — P3, C5, R0 a R6
 
@@ -127,8 +127,8 @@ A rota `PATCH /compras/requisicoes/:id/compra` ("Registrar compra" manual) **nã
 | `GET /estoque/movimentos` | `movimentacao`, visualizar | ✅ `:79` |
 | `POST /estoque/movimentos` (TRANSFERENCIA ou AJUSTE) | `movimentacao`, criar | ✅ `:85` |
 | `GET /estoque/reservas`; `PATCH /estoque/reservas/:id/liberar` | `reservas`, visualizar/editar | ✅ `:91,97` |
-| `/estoque/depositos` (POST, GET, GET `unidades`, GET/PATCH/DELETE `:id`), `/:id/localizacoes` (POST, PATCH, DELETE) | `depositos` criar/visualizar/editar/deletar | ✅ `estoque.controller.ts:34-90` |
-| `GET/PATCH /estoque/materiais`, `/:id` | `materiais` visualizar/editar | ✅ `materiais.controller.ts:32-44` |
+| `/estoque/depositos` (POST, GET, GET `unidades`, GET/PATCH/DELETE `:id`), `/:id/localizacoes` (POST, PATCH, DELETE) | `depositos` criar/visualizar/editar/deletar | ✅ `estoque.controller.ts:23-87` (`estoque/depositos`) |
+| `GET/PATCH /estoque/materiais`, `/:id` | `materiais` visualizar/editar | ✅ `materiais.controller.ts:21-41` (`estoque/materiais`) |
 | `GET /estoque/alertas/estoque-minimo`, `/rnc-pendentes` | `painel-estoque`, visualizar | ✅ `alertas.controller.ts:19,25` |
 
 Observação: o controller usa o slug `movimentacao` (singular, ações do Estoque) e `movimentacoes` (plural, fila de setor). São duas telas diferentes em `telas` ✅ `estoque-operacao.controller.ts:55-85` x `itens-parciais.controller.ts:57`. Conferir se as duas existem em produção ❓.
@@ -147,7 +147,7 @@ A Inspeção de saída (Q7) não tem controller próprio: é uma fila de setor t
 `/fabricas`, `/maquinas`, `/operadores`, `/roteiros`, `/setores`, `/usuarios`, `/perfis`, `/telas`, `/usuarios-perfis`, `/dashboard`, `/dashboard/tv`: CRUD por tela com o mesmo slug do recurso (`fabricas`, `maquinas`, `operadores`, `roteiros`, `setores`, `usuarios`, `perfis`, `telas`, `dashboard`). Exceções ✅:
 - `GET /setores`, `/setores/:id`, `/setores/:id/painel` sem `@RequirePermission` (só JWT) — `setores.controller.ts:42-53`.
 - `PATCH /usuarios/:id/senha` sem `@RequirePermission` (a service decide) — `usuarios.controller.ts:63`.
-- `POST /perfis/:id/permissoes/bulk`, `/setores/bulk`, `/depositos/bulk`, `/usuarios`: `perfis`, editar — `perfis.controller.ts:66-97`.
+- `POST /perfis/:id/permissoes/bulk`, `/setores/bulk`, `/depositos/bulk`, `/usuarios`: `perfis`, editar — `perfis.controller.ts:60-91` (`permissoes/bulk`).
 - `GET /usuarios-perfis`: `usuarios-perfis`, visualizar — `usuarios-perfis.controller.ts:17`.
 
 ### Rotas de serviço para o av-hub (sem JWT)
