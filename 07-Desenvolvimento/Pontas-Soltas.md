@@ -29,7 +29,7 @@ fontes: [Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, api-pcp 579a625, api-acos-vit
 - **Proposta, pedido e comissão.** Quem escreve o módulo na `api-acos-vital` (PS-031; desde 28/10 o Robert conduz a migração, veja o Backlog), o que é `vinculados` (PS-032, ✅ decidido na N16-147), ciclo da proposta (PS-035), Carteira do PCP (PS-036), cancelar pelo Omie (PS-037) e formato do número da proposta (PS-038, ✅ decidido na N16-147 e N16-148: só dígitos). As perguntas abertas estão em [[Perguntas-Proposta-Pedido-Comissao]] (PS-039).
 - **BFF do av-hub (Nathan).** Saíram da organização do código do av-hub (PRs #260 a #273): as rotas `menu` e `uploads` sem tela (PS-042), o erro próprio das rotas de compras (PS-043) e as 13 rotas antigas que escondem o erro da API (PS-044). As tarefas de código da mesma organização estão no [[Backlog-Frente-Nathan]] (BL-082 a BL-085).
 - **Imposto.** O desenho do imposto por item na OC foi decidido em 29/10 (N16-144); a fórmula do custo com imposto segue o motor do comissionamento, e cada setor confere as mudanças na implementação (PS-014).
-- **Validação local de 10/11.** Cadastro e dados do tst (PS-046 a PS-051); perguntas na OQ-49 a OQ-53.
+- **Validação local de 10/11.** Cadastro e dados do tst (PS-046 a PS-051); código fora da regra (PS-052, PS-053); perguntas na OQ-49 a OQ-53.
 - **Já fechadas.** PS-005 e PS-031 (28/10), PS-001, PS-024, PS-025 e PS-033 (29/10), PS-041 (09/11, pelo R11 do LOG-56) e as sete decididas em 14/10, abaixo.
 
 ## Lista completa
@@ -82,6 +82,8 @@ Dúvidas, lacunas de decisão e pontos sem dono que **não são tarefa de códig
 | PS-049 | **Custo real só para o Admin (Dev):** Gerência de Compras, Orçamentos e Controladoria sem a tela; Gerência de Compras sem usuário no tst (o RS-015 diz resolvido) | Nathan | C3, K2 | OQ-51 🟡 | BL-020, BL-088 |
 | PS-050 | **MES de teste com um perfil só** (Administrador), com todos os usuários; o perfil CCP (PS-007) não existe lá | Robert, Nathan | todos | Criar os perfis 🟡 | BL-017 |
 | PS-051 | **Dados do tst param em 09/10/2026** (pipeline do Omie parada?), e Hub e MES dessincronizados: 17 pedidos "importados" no Hub, 4 no MES | Gustavo, Robert | V1, P1 | Religar e recarregar 🟡 | — |
+| PS-052 | **Destinação sem rodada:** a regra 6 da raia 04 manda destinar por rodada, mas a develop exige o pedido inteiro (`pedidos.service.ts:482`, commit `fe11538`, 22/10) | Robert, Nathan | P2 | Código ou meio-termo 🔴 | — |
+| PS-053 | **Reprovação parcial na entrada:** a EC-07 manda a parte boa para quarentena; a develop a libera quando nenhuma parcial espera (`qualidade.service.ts:194`) | Robert, Nathan | Q3, Q4 | Código ou meio-termo 🔴 | — |
 
 ## Resolvidas em 14/10/2026
 
