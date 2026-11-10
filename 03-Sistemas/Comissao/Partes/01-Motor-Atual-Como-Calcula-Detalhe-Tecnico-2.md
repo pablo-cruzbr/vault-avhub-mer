@@ -1,7 +1,7 @@
 ---
 tags: [comissao, motor-atual, core_comissionamento, proposta, validacao, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-10
 status: proposta
 dono: Nathan
 parte-de: "[[01-Motor-Atual-Como-Calcula]]"
@@ -16,7 +16,7 @@ fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vi
 
 ## 3. Onde o custo líquido é calculado e a fórmula exata (N16-20)
 
-**Onde.** O custo líquido é calculado **só no navegador**, por uma função pura do front: `calcularSimulacao(entrada, parametros, regraFixa)` em `av-hub\lib\simulador\motor.ts:187-548` (custo líquido em `:277-312`). A tela a chama a cada edição (`simulador/page.tsx:1053`) e manda o resultado pronto à API. ✅ **Não existe função no banco nem rota na API que calcule**: a API só grava e valida (`api-acos-vital\...\simulacoes.route.js` guarda os campos como vieram; o BFF diz "A API ARMAZENA, NÃO CALCULA", `av-hub\app\api\comissoes\simulacoes\route.ts:11`). Do banco, só o `LEAST` e o teto em `vw_simulacao_resolvida` (`dump:1151-1198`). Consequência: o módulo novo precisa portar o motor para o servidor (nota 03, "Onde o cálculo roda").
+**Onde.** O custo líquido é calculado **só no navegador**, por uma função pura do front: `calcularSimulacao(entrada, parametros, regraFixa)` em `av-hub` `lib/simulador/motor.ts:176-512` (`calcularSimulacao`) (custo líquido em `:260-289`). A tela a chama a cada edição (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)) e manda o resultado pronto à API. ✅ **Não existe função no banco nem rota na API que calcule**: a API só grava e valida (`api-acos-vital\...\simulacoes.route.js` guarda os campos como vieram; o BFF diz "A API ARMAZENA, NÃO CALCULA", `av-hub` `app/api/comissoes/simulacoes/route.ts:11` (`A API ARMAZENA, NÃO CALCULA`)). Do banco, só o `LEAST` e o teto em `vw_simulacao_resolvida` (`dump:1151-1198`). Consequência: o módulo novo precisa portar o motor para o servidor (nota 03, "Onde o cálculo roda").
 
 **A fórmula, por item de revenda** (cada símbolo é uma entrada da tela; unidades e arredondamento como no código):
 
@@ -41,21 +41,21 @@ fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vi
 
 ## 4. O passo "Comissão: após a aprovação de Compras" e onde ele entra no fluxo novo
 
-**O que é hoje.** Na tela do vendedor a coluna de comissão em reais **não existe** e no lugar aparece o chip "Comissão: após a aprovação de Compras" (`simulador/page.tsx:1800-1803`; a coluna só aparece no modo Compras, `mostrarComissao = modoCompras`, `:536`). O texto da dica diz que o valor pago é o menor entre a versão do vendedor e a de Compras, calculado sobre o faturado. O passo existe de ponta a ponta no código:
+**O que é hoje.** Na tela do vendedor a coluna de comissão em reais **não existe** e no lugar aparece o chip "Comissão: após a aprovação de Compras" (`av-hub` `components/Comissoes/Simulador/GradeItens.tsx:62-65` (`após a aprovação de Compras`); a coluna só aparece no modo Compras, `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:152` (`mostrarComissao = modoCompras`)). O texto da dica diz que o valor pago é o menor entre a versão do vendedor e a de Compras, calculado sobre o faturado. O passo existe de ponta a ponta no código:
 
 | Etapa | O que acontece | Onde |
 |---|---|---|
-| 1. Vendedor envia | A simulação passa de `RASCUNHO` a `ENVIADO` | `simulador/page.tsx:1148-1190` |
+| 1. Vendedor envia | A simulação passa de `RASCUNHO` a `ENVIADO` | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:759-801` (`const salvar = async`) |
 | 2. Fila de Compras | A tela `Análise de Simuladores` lista as versões `ENVIADO` do vendedor (e as de Compras que ficaram sem aprovar). Botão "Analisar" abre o simulador em `?modo=compras&id_simulacao=…` | `analise-simuladores/page.tsx:20, 85-89`; `services/comissoes/simulador.ts:260-270` |
-| 3. Compras revisa | A mesma tela do simulador, com "Compra — Compras revisa", editável; a simulação carrega **os parâmetros congelados** da versão (`id_parametros`), não os vigentes de hoje | `simulador/page.tsx:767-843`, `:1788` |
-| 4a. Aprova como está | `PUT /simulacoes/:id {status: APROVADO}` | `simulador/page.tsx:1192-1234` |
-| 4b. Ajusta e aprova | `POST /simulacoes` com `origem = COMPRAS` e `id_simulacao_contestada`; no mesmo POST a versão do vendedor vira `CONTESTADO`; depois a versão de Compras vai a `APROVADO` (retomável se a segunda chamada falhar) | `simulacoes.route.js:233-259`; `simulador/page.tsx:1192-1234` |
+| 3. Compras revisa | A mesma tela do simulador, com "Compra — Compras revisa", editável; a simulação carrega **os parâmetros congelados** da versão (`id_parametros`), não os vigentes de hoje | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:378-454` (`carregarAnalise`), `av-hub` `components/Comissoes/Simulador/GradeItens.tsx:50` (`Compras revisa`) |
+| 4a. Aprova como está | `PUT /simulacoes/:id {status: APROVADO}` | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803-845` (`aprovarCompras`) |
+| 4b. Ajusta e aprova | `POST /simulacoes` com `origem = COMPRAS` e `id_simulacao_contestada`; no mesmo POST a versão do vendedor vira `CONTESTADO`; depois a versão de Compras vai a `APROVADO` (retomável se a segunda chamada falhar) | `simulacoes.route.js:233-259`; `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803-845` (`aprovarCompras`) |
 | 5. Menor percentual | Por item, `pct_final = LEAST(percentual do vendedor, percentual de Compras)`; sem Compras, vale o do vendedor | `vw_simulacao_resolvida`, `dump:1186-1190` |
 | 6. Vendedor vê | Só depois de alguma versão `APROVADO` o BFF libera percentual e valor em reais | `minhas-comissoes/route.ts:27-31, 229, 249-264` |
 
 Estados e transições: `RASCUNHO → ENVIADO → APROVADO | CONTESTADO | DEVOLVIDO`, os três últimos terminais (`simulacoes.route.js:30-36`). `DEVOLVIDO` exige motivo (`:328-335`).
 
-**Permissões de hoje.** A tela `Análise de Simuladores` e o `Simulador` são duas telas do cadastro (`slug` `analise-simuladores` e `simulador`). O BFF aceita qualquer uma das duas para ler, criar e editar (`api/comissoes/simulacoes/route.ts:30, 59`; `[id]/route.ts:50, 60`); **a ação de aprovar é um `PUT` de status com a permissão `pode_editar` de qualquer das duas**, ou seja, quem tem `pode_editar` no `Simulador` do vendedor consegue chamar a rota de aprovação. A tela esconde o botão, o BFF não barra 🔴 (ponto de atenção 13).
+**Permissões de hoje.** A tela `Análise de Simuladores` e o `Simulador` são duas telas do cadastro (`slug` `analise-simuladores` e `simulador`). O BFF aceita qualquer uma das duas para ler, criar e editar (`av-hub` `app/api/comissoes/simulacoes/route.ts:30` (`pode_visualizar`) e `:59`; `av-hub` `app/api/comissoes/simulacoes/[id]/route.ts:50` (`pode_visualizar`) e `:60`); **a ação de aprovar é um `PUT` de status com a permissão `pode_editar` de qualquer das duas**, ou seja, quem tem `pode_editar` no `Simulador` do vendedor consegue chamar a rota de aprovação. A tela esconde o botão, o BFF não barra 🔴 (ponto de atenção 13).
 
 **Onde ele se encaixa no fluxo novo (proposta 🟡, OQ-28).**
 
@@ -75,11 +75,11 @@ Em uma frase: **a aprovação de Compras sobre o percentual vira a conferência 
 | # | O que | Onde | Selo |
 |---|---|---|---|
 | 1 | O resumo mensal mostra "bloqueado" sempre zero | `dump:1522` | ✅ |
-| 2 | O teto da regra fixa só é aplicado pela view; o motor do front não recebe a regra | `simulador/page.tsx:1053`, `motor.ts:467-484` | ✅ |
+| 2 | O teto da regra fixa só é aplicado pela view; o motor do front não recebe a regra | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`), `av-hub` `lib/simulador/motor.ts:436-453` (`regraFixa`) | ✅ |
 | 3 | O bloqueio por NF casa pelo número com zeros; sem os zeros não casa e não avisa | `dump:447-450` | ✅ |
 | 4 | As listas de bloqueio e a regra fixa não têm data nem motivo obrigatório; bloqueio vale retroativo | `dump:333-381` | ✅ |
-| 5 | A simulação guarda `sequencial` sempre nulo, e a `vw_comissao_master` casa `COALESCE(sequencial, -1)` com o da NF (que é 0 ou maior em pedido de família). Pode não casar em NF de pedido com sequencial | `dump:1367`, `simulador/page.tsx:1117-1122` | ❓ conferir em produção |
-| 6 | O protótipo `experimental/simulador-comissao` calcula a letra pelo **pedido inteiro** e a documentação `av-hub/docs/comissao/processo-comissionamento.md` descreve esse protótipo. O motor de verdade é por **item** (`lib/simulador/motor.ts`) | `_lib/calculo.ts:268`, `motor.ts:391-401` | ✅ |
+| 5 | A simulação guarda `sequencial` sempre nulo, e a `vw_comissao_master` casa `COALESCE(sequencial, -1)` com o da NF (que é 0 ou maior em pedido de família). Pode não casar em NF de pedido com sequencial | `dump:1367`, `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:728-733` (`SEMPRE null`) | ❓ conferir em produção |
+| 6 | O protótipo `experimental/simulador-comissao` calcula a letra pelo **pedido inteiro** e a documentação `av-hub/docs/comissao/processo-comissionamento.md` descreve esse protótipo. O motor de verdade é por **item** (`lib/simulador/motor.ts`) | `_lib/calculo.ts:268`, `av-hub` `lib/simulador/motor.ts:366-376` (`faixaDaMargem`) | ✅ |
 | 7 | O dashboard de vendedores depende de um JSON gerado fora do repositório | `dump:158-214` | ✅ / ❓ gerador |
 | 8 | O coordenador não tem API de cadastro; valores mudam só por SQL | `core_comissionamento/index.js` (sem rota) | ✅ |
 | 9 | O comentário da `vw_comissao_master` no dump está truncado ("(texto atual)") | `dump:1386` | ✅ |
