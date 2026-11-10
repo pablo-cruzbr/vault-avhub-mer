@@ -1,7 +1,7 @@
 ---
 tags: [sistemas, mes, api-pcp, nestjs, backend, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-10
 status: vigente
 dono: Robert
 parte-de: "[[MES-Backend]]"
@@ -20,7 +20,7 @@ fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf
 |---|---|---|
 | `ItensParciaisService` (`itens-parciais/itens-parciais.service.ts`, 1775 linhas) | máquina de estados da parcial; `atenderEstoque` (`:607`) reserva lotes e divide a parcial; `receber` consome a reserva quando a Expedição recebe (`:279`) | ver [[Modelo-Estoque-e-Custo-do-Lote]] |
 | `PedidosService` (`pedidos/pedidos.service.ts`) | cria a Destinação, confirma importação no av-hub, reenvia `importado` a cada 10 min (`:63-83`) | exige `PEDIDO_NAO_LIBERADO` do av-hub (`:245-248`) |
-| `PedidosCarteiraService` + `omie-integracao.ts` | Triagem lê `GET /pedidos_liberados` do av-hub | `omie-integracao.ts:331-425` |
+| `PedidosCarteiraService` + `omie-integracao.ts` | Triagem lê `GET /pedidos_liberados` do av-hub | `omie-integracao.ts:277-337` (`listarCarteiraIntegracao`) |
 | `EstoqueOperacaoService` + `estoque-operacao.helpers.ts` | saldo, lote, movimento, reserva, `consumirReservasDaParcial` (`helpers:208`), `estornarConsumosDaParcial`, `copiarCustoParaFilho` (`:432`) | |
 | `ComprasService` (`compras/compras.service.ts`, 674 linhas) | `requisitar` (`:135`), `cancelar` (`:228`), `esperados` (`:305`), `registrarChegada` (`:356`), `liberarRecebimento` (`:404`), `registrarRecebimento` (`:472`, chamado pelo Recebimento) | |
 | `circuito-compra.ts` | setores fixos do circuito (`requisicoes-compra`, `compras`, `logistica-entrada`, `qualidade-entrada`, Estoque); `moverParcial`, `splitParaDestino`, `devolverAoEstoqueParciaisProntas` (`:166`), `devolverAComprasParteReprovada` (`:256`) | `circuito-compra.ts:19-25` |
@@ -34,9 +34,9 @@ fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf
 | `itens-custo.ts` | monta o `GET /itens/custo` | `integracao-avhub/itens-custo.ts` |
 | `PedidosRoteiroService`, `PedidosProdutosProducaoService`, `FilaOrdemService` | roteiro da OP, tela Produtos em Produção, ordem da fila | `pedidos/`, `setores/` |
 | `EventosAvhubService` + `requisicao-avhub.eventos.ts` | leitura dos marcos (LOG-35) e reação por tipo | ver Jobs |
-| `IntegracaoAvhubService` | responde `/requisicoes-compra`, `/itens/status` e `/itens/custo`; `etapaDoItem` gera as 11 etapas | `integracao-avhub.service.ts:167-192` |
+| `IntegracaoAvhubService` | responde `/requisicoes-compra`, `/itens/status` e `/itens/custo`; `etapaDoItem` gera as 11 etapas | `integracao-avhub.service.ts:158-183` (`etapaDoItem`) |
 | `AuthService` | login com `bcrypt`, rate limit de 5 falhas por usuário e 20 por IP em 15 min, token por `JWT_EXPIRES_IN` (padrão `8h`) | `auth.service.ts:8-15`, `auth.module.ts:19` |
-| `PerfisService` | permissão por tela (OR entre perfis), `ensurePodeAtuar` por setor, `ensurePodeAtuarDepositos`, `depositosVisiveis`, `temPermissao` | `perfis.service.ts:349-364` |
+| `PerfisService` | permissão por tela (OR entre perfis), `ensurePodeAtuar` por setor, `ensurePodeAtuarDepositos`, `depositosVisiveis`, `temPermissao` | `perfis.service.ts:260-345` (`ensurePodeAtuar`) |
 
 ## Jobs e timers (todos dentro do processo da API, sem `@nestjs/schedule`)
 
@@ -57,7 +57,7 @@ Reação por marco (`requisicao-avhub.eventos.ts:234-246`): `requisicao_recebida
 | Variável | Uso | Padrão | Código |
 |---|---|---|---|
 | `DATABASE_URL` | conexão Prisma (adaptador `pg`) | — | ✅ `prisma/prisma.service.ts:9` |
-| `PORT` | porta HTTP | 3000 | ✅ `main.ts:170` |
+| `PORT` | porta HTTP | 3000 | ✅ `main.ts:156` (`process.env.PORT ?? 3000`) |
 | `NODE_ENV` | produção esconde `/docs` sem senha | — | ✅ `main.ts:59` |
 | `JWT_SECRET` | assina e valida o JWT | — | ✅ `auth.module.ts:15`, `strategies/jwt.strategy.ts:15` |
 | `JWT_EXPIRES_IN` | validade do token | `8h` | ✅ `auth.module.ts:19` |
