@@ -37,7 +37,7 @@ fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML, v1 01-Fluxo-Operacional (F
 | Nota | O que mostra | Diagramas |
 |---|---|---|
 | [[00-Fluxo-Mestre-0b]] | Fluxo de ponta a ponta, com passos `V0.1` a `O2` e `K1` a `K6` | 1 |
-| `artifact-proposta-pedido.html` | Da proposta ao pedido, aprovado em 26/10/2026: proposta, compra, datas, faturamento em partes, custo real, comissão e cancelamento (página publicada "Fluxo da Proposta ao Pedido") | 1 página |
+| `artifact-proposta-pedido.html` | Da proposta ao pedido, aprovado em 26/10/2026, com as decisões até N16-152 e o estado da `develop` de 05/11/2026: proposta, compra, datas, faturamento em partes, custo real, comissão e cancelamento (página publicada "Fluxo da Proposta ao Pedido") | 1 página |
 | `Historia-da-Proposta-ao-Pedido.pdf` | A jornada do usuário de ponta a ponta, num caso só (Mogi: flanges, tubos, flanges cegas e flange sobre desenho) | 3 páginas |
 | [[01-Proposta-de-Venda]], [[02-Orcamento-Base-de-Preco]], [[15-Custo-Real-e-Comissao]] | Subfluxos da proposta ao pedido, do Orçamento e do custo real e da comissão | 3 |
 | [[Sequencia]] | Pedido ao PCP, atendimento do Estoque, requisição ida e volta, chegada com NF e Recebimento, inspeção de entrada, produção e Expedição, despacho | 8 |
