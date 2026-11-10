@@ -1,15 +1,15 @@
 ---
 tags: [fluxo, raia, compras, ccp, requisicao, oc, aprovacao, omie, fornecedor, p3, c0, c1, c2, c3, c4, c5, fn1]
 criado: 2026-10-14
-estado-em: 2026-11-09
+estado-em: 2026-11-10
 status: vigente
 ordem: 6
 nos: [P3, C0, C1, C2, C3, C4, C5, C6, C7, C8, FN1]
 anterior: "[[05-Estoque-Atendimento]]"
 proxima: "[[07-Recebimento]]"
-develop-conferida: [api-acos-vital 1654f65, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
-fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144]
+fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144, BL-086, OQ-52, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Circuito de compra (P3, C0 a C8, FN1)
@@ -32,7 +32,7 @@ Nós do [[00-Fluxo-Mestre-0b]] de que esta nota é dona: `P3`, `C0` a `C8` e `FN
 4. **O comprador cota e negocia.** As duas origens caem na mesma caixa. A cotação acontece fora do sistema, e o comprador marca a requisição como em cotação (`C1`).
 5. **Valor correto e aviso ao vendedor.** Compras segue o fornecedor do vendedor ou usa o valor correto. Se comprar acima do custo da proposta, o vendedor aprova ou reprova 📝 (`C7`, `C8`).
 6. **Acima de R$ 30 mil, o Gerente aprova.** Até esse valor a OC sai sozinha, sem aprovação. Acima, espera o Gerente de Compras (`C2`, `C3`).
-7. **O comprador emite a OC.** Ela leva fornecedor, frete CIF ou FOB, moeda e valor por item. A requisição passa a "atendida". A integração envia a OC ao Omie por fila (`C4`).
+7. **O comprador emite a OC.** Ela leva fornecedor, frete CIF ou FOB, moeda e valor por item. A integração envia a OC ao Omie por fila (`C4`). A requisição só passa a "atendida" quando a OC é aberta **pela requisição** (`/compras/nova/[requisicaoId]`). Pela "Nova ordem de compra" com pedido de venda, a OC não leva a requisição: ela fica `aberta` e a compra se desliga do pedido no MES (BL-086, em [[Backlog-por-Frente]]). A validação local em Docker de 10/11/2026 viu os dois caminhos.
 8. **O CCP acompanha o fornecedor.** Registra confirmação, previsão, despacho e ocorrências. O MES mostra esses marcos só para leitura (`C5`).
 9. **O fornecedor entrega.** Entrega no frete CIF ou libera para coleta no FOB. O sistema não envia a OC ao fornecedor: o comprador manda PDF ou e-mail por fora (`FN1`).
 10. **A OC aprovada entra nos esperados da doca.** Dali o trabalho passa ao [[07-Recebimento]] (`R0`).
@@ -68,6 +68,7 @@ O fluxo foi aprovado em 26/10. As decisões N16-120 a N16-143 são de 29/10/2026
 - O limite de R$ 30 mil é por unidade e provisório. Endurece depois da conversa com Compras.
 - O Gerente de Compras pode aprovar a OC que ele mesmo emitiu (N16-123).
 - Não há trava entre quem emite e quem aprova a OC. O limite de R$ 30 mil continua provisório (N16-123).
+- Na validação local em Docker de 10/11/2026, o comprador que emitiu uma OC acima de R$ 30 mil aprovou a própria OC: ele também tinha o perfil de testes com `pode_aprovar`. Isso é o que a N16-123 decidiu (sem trava), e a pergunta "quem emite pode aprovar?" foi reaberta na OQ-52 ([[Perguntas-Proposta-Pedido-Comissao]]).
 - Cancelar requisição exige motivo de 3 a 500 caracteres.
 - Requisição que já tem OC não se cancela pelo MES.
 - Compras · CCP no MES é só leitura.
@@ -91,7 +92,8 @@ O fluxo foi aprovado em 26/10. As decisões N16-120 a N16-143 são de 29/10/2026
 
 - ✅ (`av-hub`, `app-pcp`) Telas das duas origens, emissão da OC, lista de OCs, aprovações e follow-up do CCP.
 - ✅ Envio da OC ao Omie testado em 14/10. Produção ainda ❓.
-- 🟡 Regra de aprovação provisória: vai endurecer depois da conversa com Compras.
+- 🟡 Regra de aprovação provisória: vai endurecer depois da conversa com Compras. Sem segregação entre quem emite e quem aprova, como decidido na N16-123 (reaberta na OQ-52).
+- 🟡 (`av-hub`) A "Nova ordem de compra" com pedido de venda não liga a OC à requisição: a requisição fica `aberta` e o lote comprado não volta sozinho ao pedido no MES (BL-086). Pela requisição (`/compras/nova/[requisicaoId]`) funciona.
 - 📝 `C6` a `C8` decididos em 26/10; sem código na `api-acos-vital` nem no front 🔴 (conferido em 29/10: nenhuma rota `divergencias_compra`). Detalhe em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
 - ✅ O MES lê a OC do hub desde 15/10 (K4, `develop` do `api-pcp`) e as requisições do Compras com pedido de venda aparecem ao PCP na Triagem desde 23/10 (API-009). 🔴 Falta o PCP ver a OC do pedido na Triagem e na Destinação (BL-049) e o saldo futuro no Estoque (BL-050).
 - ✅ (`api-pcp` `src/compras/recebimento.service.ts:169` e `src/compras/recebimento.controller.ts:20`; leitura da OC em `src/integracao-avhub/oc-referencia-avhub.service.ts:97`) O recebimento e a leitura da OC pelo MES estão na `develop` do MES (15 a 26/10). A `main` do MES parou em 08/10.

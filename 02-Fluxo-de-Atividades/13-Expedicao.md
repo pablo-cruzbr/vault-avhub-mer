@@ -1,15 +1,15 @@
 ---
 tags: [fluxo, raia, expedicao, logistica-saida, paletes, entrega, x1, x2, x3, x4, mes]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: vigente
 ordem: 13
 nos: [X1, X2, X3, X4]
 anterior: "[[12-Estoque-Despacho]]"
 proxima: "[[14-Fiscal-Omie]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 dono: Robert (MES) · Expedição/Logística (regra) · Nathan (decisões)
-fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens, pedido-embalagem-pallets, estoque-operacao.helpers.ts), app-pcp 1fca8d3 (logistica/expedicao, movimentacoes, ordens-producao), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 10, T-06, api-pcp develop de 27/10/2026, N16-130 a N16-133]
+fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens, pedido-embalagem-pallets, estoque-operacao.helpers.ts), app-pcp 1fca8d3 (logistica/expedicao, movimentacoes, ordens-producao), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 10, T-06, api-pcp develop de 27/10/2026, N16-130 a N16-133, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Expedição e logística de saída (X1 a X4)
@@ -28,7 +28,7 @@ fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens
 4. O pedido sai por partes ou inteiro. Quem decide é o vendedor, pela marca "pode faturar em partes" (N16-130). Hoje não há campo no sistema: esperar o pedido inteiro é prática da Expedição. `X2`
 5. Pedido inteiro: reúne-se a carga. Ainda não existe tela. `X3`
 6. Define-se o transporte, com frota própria ou terceirizada. Ainda não existe tela. `X4`
-7. O operador da Logística confirma a entrega: informa a quantidade e anexa comprovante, canhoto ou nota. `X4`
+7. O operador da Logística confirma a entrega: informa a quantidade e, se quiser, a NF e um comprovante, canhoto ou nota. O comprovante é opcional na tela: a entrega se confirma sem ele. `X4`
 8. O sistema marca o pedido como entregue quando nada mais está pendente. `X4`
 9. A Expedição avisa o faturista por fora. O Omie emite a nota. Pela decisão, a Logística avisa o Fiscal ao fechar a carga (N16-132). `X4`
 
@@ -41,7 +41,7 @@ As 100 flanges do Cliente Exemplo S.A. chegam à Embalagem, que registra os pall
 | Quem | O que faz |
 |---|---|
 | Operador da Embalagem | Recebe a parcial e lança os pallets |
-| Operador da Logística | Confirma a entrega e anexa comprovante, canhoto ou nota |
+| Operador da Logística | Confirma a entrega; o comprovante, canhoto ou nota é opcional |
 | PCP | Acompanha pedido, embalagens e entregas |
 | Vendedor | Vê o status final no av-hub e decide parcial ou integral |
 | Cliente | Recebe a mercadoria |
@@ -70,7 +70,7 @@ Decisões de 29/10/2026 (bloco N16-120 a N16-143):
 
 ## O que já existe e o que falta
 
-- ✅ (`app-pcp`, `api-pcp`) Fila, pallets, confirmar entrega com comprovante e fechamento do pedido.
+- ✅ (`app-pcp`, `api-pcp`) Fila, pallets, confirmar entrega e fechamento do pedido. O comprovante é opcional e é um link (URL), sem envio de arquivo; a validação local em Docker de 10/11/2026 confirmou a entrega sem anexo.
 - 🟡 Escolha parcial ou integral: decidida, falta o campo na tela.
 - 🟡 NF da entrega é texto livre, sem ligação com o número do Omie.
 - 🔴 Documento de retirada e baixa na retirada (sem código).
@@ -126,7 +126,7 @@ Pedido: `StatusPedido` `AGUARDANDO`, `EM_PRODUCAO`, `BLOQUEADO`, `ENTREGUE`. Tod
 | Expedição | — | `/logistica/expedicao` | app-pcp | `expedicao` | ✅ `logistica/expedicao/page.tsx:1-16`: `ModuloSetores` com `tipos={['EXPEDICAO']}` (Embalagem e Logística) |
 | Fila do setor | Movimentações | `/movimentacoes/[setorId]` | app-pcp | `movimentacoes` | ✅ paletes e entrega pelo mesmo `FilaSetor` |
 | Editar pallets / Ver pallets | — | modal na fila | app-pcp | `movimentacoes` | ✅ `PalletsModal.tsx` (248 linhas) |
-| Confirmar entrega | — | modal na fila | app-pcp | `movimentacoes` | ✅ `ConfirmarEntregaModal.tsx` (195 linhas): quantidade, NF opcional, observação, anexo `COMPROVANTE_ENTREGA`, `CANHOTO` ou `NOTA` |
+| Confirmar entrega | — | modal na fila | app-pcp | `movimentacoes` | ✅ `app-pcp` `app/(protected)/movimentacoes/components/ConfirmarEntregaModal.tsx:34` (`NF e anexo de comprovante são opcionais`): quantidade, NF opcional, observação opcional, anexo opcional `COMPROVANTE_ENTREGA`, `CANHOTO` ou `NOTA` por URL, gravado só se preenchido (`:92`, `if (mostrarAnexo && urlAnexo.trim())`) |
 | Acompanhamento dos Pedidos, seção Embalagens | Ordens de Produção | `/ordens-producao/[id]` | app-pcp | `ordens-producao` | ✅ `EmbalagensSection.tsx` |
 | Consolidação de carga (`X3`) | — | — | — | — | 🔴 não existe |
 | Transporte e roteiro (`X4`) | — | — | — | — | 🔴 não existe |
@@ -171,7 +171,7 @@ Não há campo nem tela para a escolha. A entrega parcial é permitida por padr�
 
 #### X3 · consolidação de carga 🔴 e X4 · transporte 🔴
 
-Nenhuma entidade (carga, romaneio, veículo, transportadora de saída) existe em `api-pcp/prisma/models`. O levantamento do PCP legado (romaneios de carga: criar, conferir, fechar, imprimir) está em [[Backlog-por-Frente]]. O comprovante de entrega (`X4`) está feito ✅.
+Nenhuma entidade (carga, romaneio, veículo, transportadora de saída) existe em `api-pcp/prisma/models`. O levantamento do PCP legado (romaneios de carga: criar, conferir, fechar, imprimir) está em [[Backlog-por-Frente]]. O comprovante de entrega (`X4`) está feito ✅, opcional na tela.
 
 #### Fechamento do pedido
 

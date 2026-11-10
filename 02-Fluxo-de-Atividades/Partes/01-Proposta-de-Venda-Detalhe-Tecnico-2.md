@@ -1,12 +1,12 @@
 ---
 tags: [fluxo, raia, vendas, proposta, v0, simulador, tela, parte]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: proposta
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
 parte-de: "[[01-Proposta-de-Venda]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
-fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, em 2026-11-10; api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10, av-hub develop 44bb770 (PR #277, commit 20e6089), api-acos-vital develop cc3fbb3, Dump-AvHub-Teste-2026-11-10, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Proposta de venda: detalhe técnico (2/2)
@@ -75,7 +75,7 @@ A tela de criar e revisar a proposta segue a do **Simulador de Comissão atual**
 3. **Itens**: bloco Compra (fabricação, quantidade, unidade, preço, origem, % IPI, ST, frete e fornecedor: o vendedor preenche), bloco Venda (quantidade e preço) e bloco Resultado (custo líquido, sugerido, margem e letra: o sistema calcula).
 4. **Rodapé de totais**: custo, venda, total da NF, sugerido, mark-up real, mark-up sobre a compra, margem e letra.
 
-As colunas e as condições **vêm das mesmas entradas do motor atual** (`simulacoes`, `simulacao_itens`, `simulador_parametros` e a view `vw_simulacao_resolvida`, ver [[01-Motor-Atual-Como-Calcula]]); o `core_comercial` (itens da proposta) e o `core_comissao` casam com elas, sem colunas paralelas. Hoje o Simulador calcula no navegador (`calcularSimulacao`, `simulador/page.tsx:1020`) e a proposta não calcula comissão; o cálculo passa à API ([[03-Modelo-Novo-core_comissao]]).
+As colunas e as condições **vêm das mesmas entradas do motor atual** (`simulacoes`, `simulacao_itens`, `simulador_parametros` e a view `vw_simulacao_resolvida`, ver [[01-Motor-Atual-Como-Calcula]]); o `core_comercial` (itens da proposta) e o `core_comissao` casam com elas, sem colunas paralelas. Hoje o Simulador calcula no navegador (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664`, `calcularSimulacao(form, parametros)`) e a proposta não calcula comissão; o cálculo passa à API ([[03-Modelo-Novo-core_comissao]]).
 
 **Três visões da mesma tela** (detalhe e tabela por bloco em [[15-Custo-Real-e-Comissao]]): (a) o vendedor, na proposta, preenche o custo e vê margem, letra e a comissão estimada que ele colocou; (b) Compras vê o cotado do vendedor ao lado do valor da OC e usa o valor correto na OC, sem alterar a proposta; quando o valor é maior, o vendedor aprova em Meus Pedidos; (c) a Controladoria vê estimado e real lado a lado, com o drill-down por evento de custo (cada evento com as suas condições, N16-20), e decide com justificativa.
 
@@ -85,10 +85,10 @@ Os itens 7 e 12 (`C6`, `C7`, `C8`) estão em [[06-Circuito-de-Compra-Detalhe-Tec
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 1 | Migrar o módulo de propostas para a `api-acos-vital`: feito para criar, listar, revisar, aprovar, cancelar, copiar e transformar (29/10). Falta a numeração só de dígitos (hoje `CO-{AV\|AU\|HRM}{AAAA}-{NNNN}-R{RR}`, formato decidido: só dígitos, ano mais sequência, N16-148 e PS-038; diverge da N16-04 e da N16-26, e a mudança é do Gustavo), versões, importação de itens e o cálculo no servidor | Robert, Gustavo | `V0.1` | ✅ rotas; 🔴 numeração e o resto |
-| 2 | Estado `APROVADA`, trava de ajuste e aprovar com a revisão: rotas feitas (29/10). Falta ligar o BFF e a tela, e conferir no banco a regra "incompleta" | Robert, Nathan | `V0.4`, `V0.5` | ✅ (`api-acos-vital`) API; 🔴 tela |
-| 3 | Cancelar com motivo: rota feita (29/10). Falta o histórico da comissão estimada | Robert | `V0C` | ✅ (`api-acos-vital`) API; 🔴 histórico |
-| 4 | Botão "Transformar em pedido" e marcação da Qualidade obrigatória: rota `transformar` feita (grava o pedido do Hub `pendente`). Faltam a tela, a fila do pedido e o retorno da pipeline | Robert (API), Nathan (tela e pipeline), Gustavo (banco) | `V0.6`, `V0.7` | ✅ (`api-acos-vital`) API; 🔴 tela e envio |
+| 1 | Migrar o módulo de propostas para a `api-acos-vital`: feito para criar, listar, revisar, aprovar, cancelar, copiar e transformar (29/10). Falta a numeração só de dígitos (hoje `CO-{AV\|AU\|HRM}{AAAA}-{NNNN}-R{RR}`, formato decidido: só dígitos, ano mais sequência, N16-148 e PS-038; diverge da N16-04 e da N16-26, e a mudança é do Gustavo), versões, importação de itens e o cálculo no servidor | Robert, Gustavo | `V0.1` | ✅ rotas; 🔴 numeração e o resto (na validação local em Docker de 10/11/2026 o número saiu `CO-AV2026-0011-R00`) |
+| 2 | Estado `APROVADA`, trava de ajuste e aprovar com a revisão: rotas, BFF e botão "Cliente aprovou" feitos (`av-hub` `AndamentoProposta.tsx:231`, `Cliente aprovou`). Falta conferir no banco a regra "incompleta" e pedir confirmação antes de travar | Robert, Nathan | `V0.4`, `V0.5` | ✅ API e tela; 🟡 confirmação |
+| 3 | Cancelar com motivo: rota, BFF e botão feitos (`av-hub` `AndamentoProposta.tsx:241`, `Cancelar proposta`). Falta o histórico da comissão estimada | Robert | `V0C` | ✅ API e tela; 🔴 histórico |
+| 4 | Botão "Transformar em pedido" e marcação da Qualidade obrigatória: rota `transformar` feita, com a Qualidade e o faturamento em partes obrigatórios (LOG-56), e o modal envia as seis respostas (PR #277 do av-hub, `TransformarModal.tsx:295`, `qualidade_acompanha: qualidadeAcompanha === 'sim'`). O envio ao Omie é síncrono, sem fila (N16-149). Falta a data por item no faturamento em partes | Robert (API), Nathan (tela), Gustavo (banco) | `V0.6`, `V0.7` | ✅ API e tela; 🔴 data por item |
 | 5 | Pipeline: `IncluirPedido` por fila, espelho do `envioOrdensCompra.ts`, com `codigo_pedido_integracao` e `codigo_item_integracao`; gravar esses códigos no hub | Nathan | `V0.7` | 🔴 |
 | 8 | Trocar a AwesomeAPI pela PTAX do hub: o front já lê o câmbio do Hub (`GET /cambio` para `/cotacoes_moeda/atual`, 27/10) | Robert | `V0.1` | ✅ (`av-hub`) front; ❓ API |
 | 9 | Aprovar com perfil da Gerência no sistema | — | `V0.4` | próximo ciclo (N16-12) |
@@ -120,7 +120,7 @@ Lista completa em [[Perguntas-Proposta-Pedido-Comissao]].
 ```mermaid
 flowchart TD
     subgraph SEC_VENDAS["Vendas · av-hub"]
-        V01["V0.1 · Vendedor cria a proposta<br/>número automático, só numérico<br/>revisa até aprovar"]
+        V01["V0.1 · Vendedor cria a proposta<br/>número automático CO-AV2026-0011-R00<br/>revisa até aprovar"]
         V02["V0.2 · Vendedor preenche o custo<br/>com o que conseguiu<br/>não é o dono do dado"]
         V03["V0.3 · Comissão estimada nasce<br/>tela como a do Simulador de Comissão<br/>item sem custo e sem fornecedor = incompleta"]
         V04["V0.4 · Gerência aprova desconto e margem<br/>aprovação física neste ciclo"]

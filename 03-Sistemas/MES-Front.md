@@ -1,7 +1,7 @@
 ---
 tags: [sistemas, mes, app-pcp, nextjs, frontend]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-10
 status: vigente
 dono: Robert
 fontes: [app-pcp 93f96de (develop, 27/10; a main parou em 08/10), api-pcp befd973, v1 App-PCP-Visao-Geral, App-PCP-Modelo-Producao, App-PCP-Recebimento-Conferencia]
@@ -57,10 +57,10 @@ Front do MES. Next.js 16.3 (App Router) com React 19, MUI 9 e NextAuth 4 (✅ `a
 
 ### Como funciona
 
-- **Login:** NextAuth com Azure AD ou usuário e senha. O Azure chama `POST /auth/azure` do `api-pcp` com `x-api-key: MES_INTERNAL_API_KEY`; a senha chama `POST /auth/login` ✅ `app/api/auth/[...nextauth]/route.ts:54-60,112`. A sessão guarda `menu` (de `GET /auth/menu`) e `setoresPermitidos` (de `GET /auth/setores-permitidos`) ✅ `:21,37`.
-- **Rotas protegidas:** `proxy.ts` (middleware NextAuth) barra tudo menos `/login`, `/api/auth` e estáticos ✅ `proxy.ts:3-18`.
+- **Login:** NextAuth com Azure AD ou usuário e senha. O Azure chama `POST /auth/azure` do `api-pcp` com `x-api-key: MES_INTERNAL_API_KEY`; a senha chama `POST /auth/login` ✅ `app-pcp` `app/api/auth/[...nextauth]/route.ts:54-60` (`/auth/azure`), `:112` (`/auth/login`). A sessão guarda `menu` (de `GET /auth/menu`) e `setoresPermitidos` (de `GET /auth/setores-permitidos`) ✅ `:21,37`.
+- **Rotas protegidas:** `proxy.ts` (middleware NextAuth) barra tudo menos `/login`, `/api/auth` e estáticos ✅ `app-pcp` `proxy.ts:3-18` (`withAuth`).
 - **Variável do BFF:** `API_URL` aponta para o `api-pcp` (não para o av-hub) ✅ `app/api/**`; mais `MES_INTERNAL_API_KEY` e `AZURE_AD_*`.
-- **Permissão na tela:** `usePermission()` pega o último segmento da URL como slug da tela e consulta o menu da sessão ✅ `hooks/usePermission.ts:8-17`. Telas que abrem uma fila de setor passam `telaId` explícito. Ações: `pode_visualizar`, `pode_criar`, `pode_editar`, `pode_deletar` (o MES não tem `pode_aprovar`) ✅ `lib/permissions.ts:3`.
+- **Permissão na tela:** `usePermission()` pega o último segmento da URL como slug da tela e consulta o menu da sessão ✅ `app-pcp` `hooks/usePermission.ts:8-17` (`usePermission`). Telas que abrem uma fila de setor passam `telaId` explícito. Ações: `pode_visualizar`, `pode_criar`, `pode_editar`, `pode_deletar` (o MES não tem `pode_aprovar`) ✅ `app-pcp` `lib/permissions.ts:3` (`pode_deletar`).
 - **Telas "só de permissão":** `estoque-custo`, `compras-liberar` e `programar-fila` (26/10: muda a ordem de qualquer fila de fabricação, inclusive das travadas para o PCP) existem em `telas` para o perfil receber a flag, mas não têm página nem item de menu ✅ `lib/telasSoPermissao.ts:10`. Ver [[RBAC-e-Permissoes]].
 - **Nomes antigos no código:** a UI já mostra os nomes novos (Triagem dos Pedidos, Destinação do Pedido, Acompanhamento dos Pedidos); as rotas e os arquivos mantêm `carteira`, `ordens-producao`, `ordens-producao/novo` ✅ títulos em `app/(protected)/{carteira,ordens-producao,ordens-producao/novo}/page.tsx`.
 
@@ -78,7 +78,7 @@ A coluna "Slug" é o `telaId` que decide `pode_*` na tela. Nós do 0b: [[00-Flux
 | Produtos em Produção | `/produtos-em-producao` | `produtos-em-producao` | F1, X1 | `GET /pedidos/produtos-em-producao`: uma linha por split, onde o produto está no roteiro, com exportação em planilha | ✅ `produtos-em-producao/page.tsx:244-245` |
 | Acompanhamento dos Pedidos · lista de Ordens de Produção | `/ordens-producao` e `/ordens-producao/[id]` | `ordens-producao` | P2, X1 | `GET /pedidos`, `/pedidos/:id`, embalagens, anexos, itens | ✅ `ordens-producao/page.tsx`, `[id]/page.tsx` |
 | Atendimento (Estoque) | `/estoque-operacao/atendimento` | `atendimento` | E1 a E4 | fila de setor do tipo `ESTOQUE`; `PATCH /itens-parciais/:id/atender-estoque`, `POST /itens-parciais/atender-estoque/lote` (OP inteira); `GET /estoque/saldo/disponivel-parcial/:id`, `…/disponivel-setor/:id`, `…/materia-prima/:id`; no setor Estoque, `receber-fabricado` (LOG-53) | ✅ `estoque-operacao/atendimento/page.tsx` → `ModuloSetores` |
-| Requisições de compras | `/compras/requisicoes` | `requisicoes` | P3 | fila de setor tipo `REQUISICAO`; `POST /compras/requisicoes` (modal `RequisitarCompraModal`) | ✅ `compras/requisicoes/page.tsx:13` |
+| Requisições de compras | `/compras/requisicoes` | `requisicoes` | P3 | fila de setor tipo `REQUISICAO`; `POST /compras/requisicoes` (modal `RequisitarCompraModal`) | ✅ `app-pcp` `compras/requisicoes/page.tsx:13` (`telaId="requisicoes"`) |
 | Compras · CCP | `/compras/pedidos-compra` | `pedidos-compra` | C5 | fila de setor tipo `COMPRAS`, só leitura; `POST /compras/requisicoes/sincronizar`; `GET /compras/requisicoes/:id/eventos` (linha do tempo) | ✅ `compras/pedidos-compra/page.tsx:9-15`, `components/CompraCcpCard.tsx`, `EventosRequisicaoModal.tsx` |
 | Recebimento | `/logistica/logistica-entrada` | `logistica-entrada` | R0 a R4 | fila tipo `LOGISTICA_ENTRADA` com "Entregas esperadas": `GET /compras/requisicoes/esperados`, `POST …/:id/chegada` ("Receber com NF"), `POST /compras/recebimentos`, `…/:id/recontar`; botão de liberar sem OC só com `compras-liberar` editar. Redesenhada em 26/10: `GET /compras/recebimentos/oc-esperadas` e `POST /compras/recebimentos/nf` (recebe por NF, com várias OCs) | ✅ `logistica/logistica-entrada/page.tsx`, `movimentacoes/components/FilaRecebimento.tsx`, `RecebimentoFila.tsx`, `ReceberComNfModal.tsx`, `ConferirNfModal.tsx` |
 | Divergências de Recebimento | `/decisoes-pcp` | `decisoes-pcp` | R6 | `GET /compras/recebimentos/decisoes`, `POST …/:id/decidir` (aceitar ou reabrir) | ✅ `decisoes-pcp/page.tsx` |
@@ -94,7 +94,7 @@ Todas as telas "módulo" (Atendimento, Requisições, Compras · CCP, Recebiment
 | Tela | Rota | Slug | Observação |
 |---|---|---|---|
 | Saldo | `/estoque-operacao/saldo` | `saldo` | mostra custo do lote só com `estoque-custo` visualizar; modal de entrada (carga inicial) com custo opcional só com `estoque-custo` editar ✅ `saldo/page.tsx:35`, `EntradaLoteModal.tsx:36` |
-| Lote | `/estoque-operacao/lotes/[id]` | `saldo` | bloco `custo` só com `estoque-custo` visualizar ✅ `lotes/[id]/page.tsx:140`, `types.ts:40` |
+| Lote | `/estoque-operacao/lotes/[id]` | `saldo` | bloco `custo` só com `estoque-custo` visualizar ✅ `app-pcp` `estoque-operacao/lotes/[id]/page.tsx:181` (`lote.custo !== undefined`), `app-pcp` `estoque-operacao/lotes/[id]/types.ts:24-26` (`custo?: LoteCusto | null`) |
 | Reservas | `/estoque-operacao/reservas` | `reservas` | liberar reserva ✅ |
 | Movimentação e Ajuste | `/estoque-operacao/movimentacao` | `movimentacao` | transferência e ajuste ✅ |
 | Mapa do Depósito | `/estoque-operacao/mapa-deposito` | ❓ | não conferido |
@@ -127,8 +127,8 @@ Todas as telas "módulo" (Atendimento, Requisições, Compras · CCP, Recebiment
 | Onde | Regra | Código |
 |---|---|---|
 | Entrada de lote (Saldo) | campo de custo só com `estoque-custo` editar | ✅ `saldo/EntradaLoteModal.tsx:36` |
-| Saldo e Lote | coluna/bloco de custo só com `estoque-custo` visualizar | ✅ `saldo/page.tsx:35`, `lotes/[id]/page.tsx:140` |
-| Fila de Recebimento | botão "Liberar sem OC" só com `compras-liberar` editar | ✅ `components/FilaSetor.tsx:304` |
+| Saldo e Lote | coluna/bloco de custo só com `estoque-custo` visualizar | ✅ `saldo/page.tsx:35`, `lotes/[id]/page.tsx:181` (`lote.custo !== undefined`) |
+| Fila de Recebimento | botão "Liberar sem OC" só com `compras-liberar` editar | ✅ `app-pcp` `movimentacoes/components/fila/useFilaSetor.ts:55` (`TELA_LIBERAR_RECEBIMENTO`) |
 | Botões das filas | `PermissionButton` + `setoresPermitidos` da sessão (a garantia é o `PerfilSetor` no `api-pcp`) | ✅ `components/Ui/PermissionButton` |
 | Rotas de ação (BFF) | `requirePermission(session, 'movimentacoes', 'pode_editar')` e equivalentes | ✅ `app/api/requisicoes-compra/[id]/chegada/route.ts:12` |
 

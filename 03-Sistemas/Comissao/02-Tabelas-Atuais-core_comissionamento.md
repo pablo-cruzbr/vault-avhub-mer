@@ -1,7 +1,7 @@
 ---
 tags: [comissao, banco, core_comissionamento, tabelas, dba]
 criado: 2026-10-16
-atualizado: 2026-10-29
+estado-em: 2026-11-10
 status: proposta
 dono: Gustavo (DBA)
 fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, N16-11]
@@ -126,7 +126,7 @@ Uma linha por **versão** de simulação de um pedido (substitui planilhas .xlsx
 - **Dois conceitos numa tabela:** a simulação do vendedor (preço e custo digitados) e a de Compras (custo corrigido). No módulo novo são **dois cálculos** do mesmo dossiê (`COTADO` e `REAL`), e o de custo real vem do evento, não de digitação.
 - Amarrada ao **número do pedido do Omie**; o módulo novo amarra ao **id da proposta** (N16-02, N16-04) e ao id do pedido do hub.
 - `sequencial` nulo + `COALESCE(-1)` em dois UNIQUE e em joins: frágil (ponto 5 de [[01-Motor-Atual-Como-Calcula]]). → sem sequencial; uma proposta = um pedido.
-- `status` varchar com 5 valores; `DEVOLVIDO` é terminal e "legado" na tela (`simulador/page.tsx:98`). → máquina de estados explícita ([[04-Regras-e-Estados-da-Comissao-Nova]]).
+- `status` varchar com 5 valores; `DEVOLVIDO` é terminal e "legado" na tela (`av-hub` `lib/domain/comissoes-simulador-tela.ts:34` (`Devolvido (legado)`)). → máquina de estados explícita ([[04-Regras-e-Estados-da-Comissao-Nova]]).
 - Resultado todo anulável e sem unidade de medida explícita (`qtd` double). → colunas `NOT NULL` no cálculo gravado; só entra linha de cálculo completa.
 - Sem histórico de recálculo: cada mudança de custo exige digitar nova versão. → cada recálculo automático é uma linha nova e imutável.
 - Sem coluna da versão do motor: não se sabe com que código o número saiu. → `versao_motor`.
@@ -149,7 +149,7 @@ Itens de uma simulação. A comissão é decidida **aqui, item a item**.
 - `origem_compra` em **texto livre** (casa com o JSON de parâmetros). → código controlado (`SP`, `SP_REDUZIDA`, `OUTRA_UF`, `IMPORTACAO_SP`, `IMPORTACAO_OUTRA_UF`, `SIMPLES`), igual ao `OrigemIcmsCompra` do Comercial.
 - Não guarda as **contas intermediárias** (compra bruta, ICMS recuperável, IPI em valor, frete, lucro): quem audita precisa refazer (`dump:715-718`). → todas gravadas.
 - Não guarda o **teto** da regra fixa nem o percentual da letra antes do teto (a view recalcula). → `comissao_letra_pct`, `teto_regra_pct`, `comissao_pct`.
-- Não guarda **de onde veio o custo** ("a fonte some ao recarregar", `simulador/page.tsx:117-124`). → novo modelo guarda custo cotado, custo real e cobertura.
+- Não guarda **de onde veio o custo** ("a fonte some ao recarregar", `av-hub` `lib/domain/comissoes-simulador-tela.ts:53-60` (`a fonte some`)). → novo modelo guarda custo cotado, custo real e cobertura.
 - Sem `id_item_proposta`/`id_item_pedido`: amarra pelo `codigo_item_omie`, que só existe depois de o pedido estar no Omie.
 
 #### 4. `regras_comissoes_fixas` (`dump:589-603`)
@@ -266,7 +266,7 @@ Gravada por trigger (`fn_comissao_coordenadores_historico`, `dump:35-54`) e **im
 
 | Função | O que faz | Linhas | Problema / melhoria |
 |---|---|---|---|
-| `fn_dashboard_comissoes(p_ano_mes, p_is_track_record, p_aplicar_bloqueio, p_incluir_pedidos)` → jsonb | Dashboard do mês: vendedores (do relatório provisório) + coordenadores; ranking; cartões | `dump:111-287` | Monta JSON de 5 estruturas dentro de uma função; depende de `comissoes_provisoria` (JSON externo) e de `fn_dashboard_mensal_faturamento`; `p_aplicar_bloqueio` sempre `false` pela rota (`route.js:50`). → apuração mensal em tabela (`coordenadores_apuracoes`), vendedores vêm das NFs decididas |
+| `fn_dashboard_comissoes(p_ano_mes, p_is_track_record, p_aplicar_bloqueio, p_incluir_pedidos)` → jsonb | Dashboard do mês: vendedores (do relatório provisório) + coordenadores; ranking; cartões | `dump:111-287` | Monta JSON de 5 estruturas dentro de uma função; depende de `comissoes_provisoria` (JSON externo) e de `fn_dashboard_mensal_faturamento`; `p_aplicar_bloqueio` sempre `false` pela rota (`api-acos-vital` `src/schemas/core_comissionamento/functions/fn_dashboard_comissoes/fn_dashboard_comissoes.route.js:50` (`tr.isTrackRecord, false`)). → apuração mensal em tabela (`coordenadores_apuracoes`), vendedores vêm das NFs decididas |
 | `fn_comissao_coordenadores_mes(p_ini, p_fim)` | Parâmetro de coordenador vigente no período (mais recente se houver duas) | `dump:85-95` | Chave por nome. → `fn_coordenadores_vigentes` por id |
 | `fn_jsonb_numero(jsonb)` | Converte campo do JSON do relatório provisório em número (ausente = 0) | `dump:303-313` | Existe só por causa do JSON. Não migra |
 | `fn_comissao_coordenadores_historico()` | Trigger: grava INSERT/UPDATE/DELETE no histórico | `dump:35-54` | → `fn_auditar()` genérica |

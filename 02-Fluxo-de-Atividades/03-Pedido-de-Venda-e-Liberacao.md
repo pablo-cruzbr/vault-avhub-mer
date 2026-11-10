@@ -1,15 +1,15 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: vigente
 ordem: 3
 nos: [V1, V2, V3]
 anterior: "[[02-Orcamento-Base-de-Preco]]"
 proxima: "[[04-PCP-Triagem-e-Destinacao]]"
-develop-conferida: [api-acos-vital 1654f65, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, em 2026-11-10; app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan
-fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10]
+fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10, api-acos-vital develop cc3fbb3 (pedidos_liberacao.route.js, pedidoOmie.js), av-hub develop 44bb770 (EtapaDosItens.tsx, LiberarPedidosLista.tsx, AndamentoProposta.tsx), api-pcp develop 2e564e6 (omie-integracao.ts), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Raia Vendas: liberação do pedido (V1 a V3)
@@ -29,9 +29,9 @@ fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005,
 5. Até o PCP importar o pedido, o vendedor ainda pode corrigir a resposta.
 6. O MES (sistema de chão de fábrica) consulta a lista de liberados. Ninguém empurra o pedido para ele. `P1`
 7. Quando o PCP grava as ordens, o MES avisa o av-hub. O pedido vira "No PCP" e a resposta trava, com um cadeado. `P2`
-8. Depois disso, o vendedor só acompanha. O cartão "Etapa dos itens" mostra em que etapa está cada item.
+8. Depois disso, o vendedor só acompanha. O cartão "Andamento na produção", no detalhe do pedido, mostra em que etapa está cada item.
 
-Os passos acima descrevem a liberação que **existe hoje** ✅ (`av-hub` `app/(protected)/vendas/liberar-pedidos/page.tsx` e `app/(protected)/liberacao-equipe/page.tsx`; `api-acos-vital` `src/schemas/core_vendas_faturamento/aggregates/pedidos_liberacao/pedidos_liberacao.route.js:89` e `:165`; `api-pcp` `src/pedidos/omie-integracao.ts:339-349`, a confirmação de importação).
+Os passos acima descrevem a liberação que **existe hoje** ✅ (`av-hub` `app/(protected)/vendas/liberar-pedidos/page.tsx` e `app/(protected)/liberacao-equipe/page.tsx`; `api-acos-vital` `src/schemas/core_vendas_faturamento/aggregates/pedidos_liberacao/pedidos_liberacao.route.js:97` (`router.get("/"`) e `:173` (`router.put("/:codigo_empresa/:numero_pedido"`); `api-pcp` `src/pedidos/omie-integracao.ts:343` (`marcarPedidoImportadoIntegracao`), a confirmação de importação). A validação local em Docker de 10/11/2026 percorreu esses passos com o pedido 28189: liberou com "Sim" na mesma ação, corrigiu para "Não" antes da importação, e depois da importação pelo MES a resposta travou (409 `PEDIDO_IMPORTADO_MES`).
 
 ### O pedido pode vir de dois lugares (desenho decidido)
 
@@ -61,7 +61,7 @@ O Cliente Exemplo S.A. pede 100 flanges, e o pedido é digitado no Omie. Ele che
 - Só pedido liberado vai ao MES. Sem liberação, o PCP não vê o pedido.
 - A resposta e a liberação são uma ação só.
 - A regra vale por pedido. As parciais criadas depois herdam a resposta.
-- Só pedido incluído a partir da data de corte precisa de liberação. A carteira anterior não trava.
+- Só pedido incluído a partir da data de corte precisa de liberação. A carteira anterior não trava. A data de corte é um dado do banco (`parametros_vendas.data_inicio_liberacao`), não do código: no banco de teste é **01/09/2026**, e a tela Liberar Pedidos mostra essa data no rodapé (validação local em Docker de 10/11/2026, com os dados do tst).
 - O vendedor corrige a resposta até o MES importar. Depois, ela trava.
 - O MES busca a lista. Ninguém empurra pedido para ele.
 - O gerente só visualiza. Vendedor e auxiliar liberam.
@@ -73,15 +73,15 @@ O Cliente Exemplo S.A. pede 100 flanges, e o pedido é digitado no Omie. Ele che
 
 - ✅ (`av-hub`, `api-acos-vital`) Telas Liberar Pedidos e Liberação da Equipe, e as rotas da API.
 - ✅ (`api-pcp`) O MES lê os liberados, recusa pedido não liberado e confirma a importação, com reenvio automático.
-- ✅ (`av-hub`) Cartão "Etapa dos itens" no detalhe do pedido.
+- ✅ (`av-hub`) Cartão "Andamento na produção" no detalhe do pedido (`av-hub` `components/Pedidos/EtapaDosItens.tsx:61`, `<h2>Andamento na produção</h2>`; o arquivo guarda o nome antigo "Etapa dos itens").
 - 🟡 Os 9 estados macro do vendedor não existem no código. Hoje ele vê a situação da liberação e 11 etapas por item.
 - 🔴 Chave própria do MES, mapa de rotas por tela e teste do escopo do vendedor.
 - 🔴 Renovar o token expirado, reabrir marcação depois da importação e alertar pedido parado.
-- 🔴 Fila de inspeção de processo da Qualidade e refinos do cartão Etapa dos itens.
+- 🔴 Fila de inspeção de processo da Qualidade e refinos do cartão "Andamento na produção".
 - 🔴 Pedido manual: o desenho só prevê pedido que chega do Omie.
 - A `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub.
-- 🟡 O envio do pedido da proposta ao Omie existe no código da API (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:151`, `develop` 1654f65), mas o banco dessa função está fora do repositório ❓ e a tela não a chama; detalhe em [[01-Proposta-de-Venda]]. 🔴 A resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe.
-- ❓ Valor da data de corte em produção e migration `api005`.
+- 🟡 O envio do pedido da proposta ao Omie existe no código da API (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:239`, `call: "IncluirPedido"`) e a tela da proposta já o chama, mas o banco dessa função está fora do repositório ❓; detalhe em [[01-Proposta-de-Venda]]. 🔴 A resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe.
+- ❓ Valor da data de corte em produção (no banco de teste é 01/09/2026) e migration `api005`.
 
 Raia seguinte: [[04-PCP-Triagem-e-Destinacao]].
 
@@ -89,7 +89,7 @@ Raia seguinte: [[04-PCP-Triagem-e-Destinacao]].
 
 Nós do [[00-Fluxo-Mestre-0b]]: `V1` pedido chega do Omie travado, `V2` vendedor marca se a Qualidade acompanha, `V3` vendedor libera. Selos e convenções em [[Regras-do-Vault]].
 
-Depois da liberação, esta raia continua como leitura: o vendedor acompanha o item pelo cartão **Etapa dos itens** (status por item que o MES informa, [[Contratos-da-v2|API-005]] e [[Contratos-da-v2|API-006]]).
+Depois da liberação, esta raia continua como leitura: o vendedor acompanha o item pelo cartão **Andamento na produção** (no código, `EtapaDosItens.tsx`; status por item que o MES informa, [[Contratos-da-v2|API-005]] e [[Contratos-da-v2|API-006]]).
 
 O detalhe técnico desta nota fica em 2 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
 

@@ -1,7 +1,7 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-10
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
@@ -105,11 +105,11 @@ Fora do schema, ligadas por chave: `core_comercial.propostas` e `proposta_item`,
 
 ## Entradas do motor e a tela do simulador (N16-19)
 
-A tela da proposta e a tela da Controladoria usam o **mesmo motor e as mesmas regras** do simulador atual, em **tabelas novas e isoladas** (N16-21: nada do `core_comissionamento` é tocado) (`tela-simulador-comissao.png`, `av-hub\app\(protected)\comissoes\simulador\page.tsx`). Toda caixa e toda coluna da tela existe como coluna. A coluna **"FAB."** da imagem é uma caixa de seleção (`simulador/page.tsx:2009-2014`): marca o item de **fabricação interna** (`tipo_item = FABRICACAO_INTERNA`), não é o nome do fabricante.
+A tela da proposta e a tela da Controladoria usam o **mesmo motor e as mesmas regras** do simulador atual, em **tabelas novas e isoladas** (N16-21: nada do `core_comissionamento` é tocado) (`tela-simulador-comissao.png`, `av-hub\app\(protected)\comissoes\simulador\page.tsx`). Toda caixa e toda coluna da tela existe como coluna. A coluna **"FAB."** da imagem é uma caixa de seleção (`av-hub` `components/Comissoes/Simulador/LinhaItem.tsx:89-91` (`checked={fabricacao}`)): marca o item de **fabricação interna** (`tipo_item = FABRICACAO_INTERNA`), não é o nome do fabricante.
 
 | Na tela | Entrada ou saída | Onde mora no módulo novo | Origem no simulador atual |
 |---|---|---|---|
-| Parâmetros: Maio/23 | parâmetros do mês | `parametros.descricao`, `vigencia_inicio` (sempre dia 1, `ck_parametros_mes`), `comissao_calculos.id_parametros` | `simulador_parametros` (`dump:909-952`), `simulador/page.tsx:1648` |
+| Parâmetros: Maio/23 | parâmetros do mês | `parametros.descricao`, `vigencia_inicio` (sempre dia 1, `ck_parametros_mes`), `comissao_calculos.id_parametros` | `simulador_parametros` (`dump:909-952`), `av-hub` `components/Comissoes/Simulador/CondicoesComerciais.tsx:38` (`Parâmetros:`) |
 | Unidade | entrada | `comissoes.codigo_empresa` | `simulacoes.codigo_empresa` |
 | Número do pedido, Cliente, Vendedor, Itens | contexto | `comissoes.numero_pedido`, `codigo_cliente`, `codigo_vendedor_omie`; `comissao_calculos.qtd_itens` | `simulacoes.numero_pedido` etc. |
 | Estado de destino, ICMS 18% | entrada e snapshot | `comissao_calculos.estado_destino` (código de `parametros_icms_saida.destino`), `icms_destino_pct` | `simulacoes.estado_destino` (texto) |
@@ -135,7 +135,7 @@ A tela da proposta e a tela da Controladoria usam o **mesmo motor e as mesmas re
 | Rodapé: VENDA | total | `valor_liquido` | `valor_liquido` |
 | Rodapé: TOTAL DA NF | total | `total_nf` | `total_nf` |
 | Rodapé: SUGERIDO | total | `venda_sugerida` | `venda_sugerida` |
-| Rodapé: MARK-UP REAL | total | `markup_real` (revenda sobre custo, `motor.ts:535`) | `markup_real` |
+| Rodapé: MARK-UP REAL | total | `markup_real` (revenda sobre custo, `av-hub` `lib/simulador/motor.ts:499` (`markup_real`)) | `markup_real` |
 | Rodapé: MARK-UP S/ COMPRA | total | `markup_bruto_pct` (o "AC8", `motor.ts:464-465`) | `markup_bruto` |
 | Rodapé: MARGEM e letra do pedido | total | `margem_liquida_pct`, `letra_equivalente` | `margem_liquida`, `letra_equivalente` |
 

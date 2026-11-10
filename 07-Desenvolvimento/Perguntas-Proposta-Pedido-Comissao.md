@@ -1,13 +1,13 @@
 ---
 tags: [decisoes, perguntas, oq, consulta, proposta, orcamento, comissao, staging]
 criado: 2026-10-16
-atualizado: 2026-10-29
+estado-em: 2026-11-10
 status: proposta
 dono: Nathan
-fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora do vault), Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault) (perguntas das seções 4 e 5), Modelo-de-Consulta, api-comercial 5aa5311, Dump Avhub 14/10, Registro-de-Decisoes]
+fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora do vault), Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault) (perguntas das seções 4 e 5), Modelo-de-Consulta, api-comercial 5aa5311, Dump Avhub 14/10, Registro-de-Decisoes, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault) (OQ-49 a OQ-53)]
 ---
 
-# Perguntas em aberto: OQ-02 a OQ-48
+# Perguntas em aberto: OQ-02 a OQ-53
 
 **Em uma frase:** esta nota reúne as perguntas de negócio e de sistema sobre proposta, pedido, orçamento e comissão, com quem responde e o que cada uma trava.
 
@@ -24,7 +24,7 @@ fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora d
 ## Resumo por tema
 
 - **Já respondidas.** A maioria: prazo e setor do Orçamento (OQ-02), alçada (OQ-04), relatórios (OQ-05), bloqueios (OQ-06), mão de obra (OQ-08), matriz de preços (OQ-10), cancelada, aprovada e numeração (OQ-14, OQ-26, OQ-27), PTAX (OQ-22), unidade de medida (OQ-23) e score de fornecedor (OQ-46).
-- **Aguardam o Nathan.** Gravar a liberação na criação do pedido (OQ-15) e etapa e campos do pedido no Omie (OQ-16), ambas em estudo. Criar sequencial e testar cancelar pelo Omie num pedido não faturado (OQ-48 e OQ-17; cancelar existe por API, N16-84; PS-037). Como o vínculo é guardado (OQ-34, com Gustavo).
+- **Aguardam o Nathan.** Gravar a liberação na criação do pedido (OQ-15) e etapa e campos do pedido no Omie (OQ-16), ambas em estudo. Criar sequencial e testar cancelar pelo Omie num pedido não faturado (OQ-48 e OQ-17; cancelar existe por API, N16-84; PS-037). Como o vínculo é guardado (OQ-34, com Gustavo). Da validação local em Docker de 10/11/2026: fabricação sem matéria-prima só vai para compra (OQ-49), Gerência Geral sem "Visualizar" em 12 telas (OQ-50), quem vê o custo real (OQ-51), quem emite a OC pode aprová-la (OQ-52) e as contas genéricas `admin` em produção (OQ-53).
 - **Aguardam Compras, PCP e Recebimento.** Sobra de chapa e seu custo (OQ-32), estoque e sobras (OQ-38), passo de Compras sobre o percentual (OQ-28) e validações de custo (OQ-45).
 - **Aguardam a Controladoria e a Gerência.** Quem decide quando o custo real passa do cotado (OQ-03, João Vitor), devolução de compra (OQ-42, Nathan, Michele e Fiscal) e classificação Projeto e recompra (OQ-44, Michele).
 - **Aguardam o Robert.** Custo obrigatório na carga inicial de 13/11 (OQ-07).
