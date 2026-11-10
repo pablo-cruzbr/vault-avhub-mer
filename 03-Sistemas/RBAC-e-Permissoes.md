@@ -42,7 +42,7 @@ fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 16
 - ✅ Regras do MES e do av-hub, com checagem na tela, no BFF e na API.
 - ✅ Aprovação da OC com uma permissão só, sem segunda alçada nem Diretoria. 🟡 Endurece depois da conversa com Compras.
 - 🟡 A Gerência de Compras ainda não tem usuários vinculados (tarefa de cadastro, Nathan e Gustavo).
-- 🟡 Perfil CCP no MES (N14-24): hoje é só leitura, sem perfil próprio. Criar é tarefa de cadastro.
+- ❓ Perfil CCP no MES (N14-24): criado pelo Nathan em 30/10/2026 (cadastro, não conferido no ambiente; BL-017). As rotas de Compras · CCP do `api-pcp` continuam exigindo só a permissão `movimentacoes`, e o CCP agora também registra chegada.
 - 🟡 Alinhar os perfis das duas permissões de custo: `estoque-custo` (MES) e `custo-itens` (av-hub).
 - 🔴 Permissão do documento de retirada (`E6`): a tela e a rota também não existem.
 - ✅ Chaves de serviço do banco podem ser presas às rotas que usam (migration 051, `modo_rotas` `livre`, `registrar` ou `exigir`, tabelas `auth.chaves_servico_rotas` e `chaves_servico_uso`). O modo de cada chave em produção ❓ Gustavo.
@@ -173,7 +173,7 @@ As 21 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`,
 | Item | Estado |
 |---|---|
 | Aprovação da OC (N14-21, 14/10): acima de R$ 30 mil, Gerente de Compras; até R$ 30 mil, compradores livres; sem Diretoria | ✅ Uma permissão (`compras.pode_aprovar`); até o limite o banco aprova sozinho e acima dele só a Gerência decide ([[AV-Hub-API]]). Não há segunda alçada nem papel Diretoria. 🟡 A regra endurece depois da conversa com Compras. A Gerência de Compras ainda não tem usuários vinculados (tarefa cadastral, Nathan e Gustavo) |
-| Perfil CCP no MES (C5) | "Compras · CCP" é só leitura, sem perfil próprio; hoje usa `pedidos-compra` + setor `COMPRAS`. Criar o perfil é tarefa cadastral simples, em breve (Nathan, Gustavo; N14-24) |
+| Perfil CCP no MES (C5) | ❓ Perfil criado pelo Nathan em 30/10/2026 (BL-017; cadastro, não conferido no ambiente). As rotas de Compras · CCP exigem só `movimentacoes`, então quem edita depende das permissões dadas ao perfil (N14-24) |
 | Permissão do documento de retirada (E6) | 🔴 não existe (a tela e a rota também não) |
 | Quem vê custo no MES e no av-hub | duas permissões distintas: `estoque-custo` (MES, custo do lote) e `custo-itens` (av-hub, custo do pedido) 🟡 alinhar perfis |
 | Chave própria do MES com escopo mínimo para ler o av-hub (hoje `API_KEY` de leitura e escrita) | 🔴 Gustavo ([[Chaves-e-Autenticacao]]) |
