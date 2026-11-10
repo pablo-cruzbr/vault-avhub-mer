@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, vendas, proposta, v0, simulador, tela]
 criado: 2026-10-16
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: proposta
 ordem: 1
 nos: [V0.1, V0.2, V0.3, V0.4, V0.5, V0.6, V0.7, V0C]
@@ -72,7 +72,7 @@ Quem desenvolve (N16-117 a N16-119):
 - Sem a resposta "a Qualidade acompanha?", o pedido não é criado. O vendedor pode corrigir até o MES (sistema de chão de fábrica) importar o pedido.
 - Sem os campos obrigatórios do modal (Qualidade, previsão de faturamento, `SPOT` ou `CONTRATO`, faturamento em partes ou não e categoria), o pedido não é criado. O tipo da venda (`SPOT` ou `CONTRATO`) é só informativo. Em faturamento em partes, a data por item é obrigatória (N16-150) 📝.
 - Qualidade "Sim": o PCP é obrigado a pôr a Qualidade em todo o roteiro e em todas as etapas da fábrica. É mudança do lado do MES, em contrato à parte (N16-151) 📝.
-- Refaturamento: se a categoria escolhida é de refaturamento, a comissão do vendedor nesse pedido é desconsiderada. Quais categorias são refaturamento ainda será definido (N16-152, PS-040) 📝.
+- Refaturamento: a categoria de refaturamento depende da unidade (Mogi `1.01.96`, Uberaba `1.01.99`, HRM `1.01.98`), e a observação com a referência também conta. Ser refaturamento não basta para sair do líquido: só sai o Proibido ou Sem Referência; o refaturamento do mesmo mês com referência válida (Permitido) conta (N16-153, que supera em parte a N16-152) 📝.
 - O pedido nasce liberado; o cancelamento do pedido (antes e depois de faturar) está em [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 - O vendedor não é dono do dado de custo. Ele decide o valor que põe e responde por ele.
 - Regras de Compras sobre a proposta (não altera a proposta, compra acima do valor, reprovação, aviso favorável): [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
