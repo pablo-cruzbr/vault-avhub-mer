@@ -94,7 +94,7 @@
 </style>
 
 <div class="wrap">
-  <div class="meta">FLUXO MESTRE 0b · ATUALIZADO EM 26/10/2026 · DECISÕES N16-01 A N16-106 · FLUXO APROVADO EM 26/10/2026</div>
+  <div class="meta">FLUXO MESTRE 0b · VAULT V3 · DECISÕES N16-01 A N16-152 · DEVELOP CONFERIDA EM 05/11/2026 · FLUXO APROVADO EM 26/10/2026</div>
   <h1>Fluxo da Proposta ao Pedido</h1>
 
   <div class="legend" aria-label="Legenda">
@@ -110,7 +110,7 @@
     <p>O vendedor monta a proposta e preenche as partes de vendas e de orçamento e compra, mas não é o dono do dado de custo. A proposta vive só no Hub. Só a aprovada vira pedido, e só aí vai ao Omie.</p>
     <div class="board">
       <div class="flow">
-        <div class="card novo"><b><span class="id">V0.1</span>Vendedor cria a proposta</b><small>A unidade é a emissora: logo, cores e CRC saem no PDF. Cliente, itens, condição de pagamento (a lista da conta Omie da unidade) e, por item, CFOP e cenário de impostos. O vendedor digita os impostos de cada item, e eles seguem até o pedido sem serem trocados pelos do Omie. Ajustável até ser aprovada.</small></div>
+        <div class="card novo"><b><span class="id">V0.1</span>Vendedor cria a proposta</b><small>A unidade é a emissora: logo, cores e CRC saem no PDF. Cliente, itens, condição de pagamento (a lista da conta Omie da unidade) e, por item, CFOP e cenário de impostos. O vendedor digita os impostos de cada item, e eles seguem até o pedido sem serem trocados pelos do Omie. Ajustável até ser aprovada. O número é só dígitos no banco (o ano mais a sequência da unidade); o prefixo aparece só na tela e no PDF.</small></div>
         <div class="seta">↓</div>
         <div class="duo">
           <div class="card novo"><b><span class="id">V0.2</span>Vendedor preenche o custo</b><small>Com o que conseguiu por telefone ou e-mail. Consulta a página do produto: preços que Compras pagou nas OCs, top fornecedores com score, flutuação e volatilidade (como bolsa de valores) e valor médio. Ele decide o valor que põe.</small></div>
@@ -131,14 +131,15 @@
         </div>
         <div class="ramo">
           <div class="rotulo">Sim</div>
-          <div class="card novo"><b><span class="id">V0.6</span>Transformar em pedido de venda</b><small>Três respostas obrigatórias: a data de previsão de faturamento; se a Qualidade acompanha todo o processo, desde o zero; e se o pedido pode faturar em partes ou somente inteiro. Produto sem cadastro no Omie bloqueia o botão.</small></div>
+          <div class="card novo"><b><span class="id">V0.6</span>Transformar em pedido de venda</b><small>O botão só aparece na proposta aprovada e abre um modal de seis campos: se a Qualidade acompanha o pedido por todos os processos; a previsão de faturamento; o tipo da venda (SPOT ou CONTRATO, só informativo); se o pedido pode faturar em partes ou só inteiro; o número do pedido do cliente (opcional); e a categoria, da lista da unidade. Produto sem cadastro no Omie bloqueia o botão.</small></div>
           <div class="seta">↓</div>
-          <div class="card novo"><b><span class="id">V0.7</span>Cria o pedido por API no Omie</b><small>Fila e pipeline, como a OC. O Omie aceita o nosso número de pedido. Se recusar, o vendedor vê o motivo e usa "Tentar novamente". As respostas e datas que o Omie não tem ficam só no Hub; nada vai para as observações do Omie.</small></div>
+          <div class="card novo"><b><span class="id">V0.7</span>Cria o pedido por API no Omie</b><small>Direto pela API, na hora, sem fila. O Omie aceita o nosso número de pedido. Vai sempre na etapa 10, com a categoria escolhida e a conta corrente padrão da conta Omie, que o vendedor não vê; os impostos o Omie calcula. Se recusar, o vendedor vê o motivo e usa "Tentar novamente". As respostas e datas que o Omie não tem ficam só no Hub; nada vai para as observações do Omie.</small></div>
           <div class="seta">↓</div>
-          <div class="card novo"><b><span class="id">V1</span>Pedido de venda liberado</b><small>Segue direto ao PCP, com a resposta da Qualidade. O preço fechado com o cliente não muda.</small></div>
+          <div class="card novo"><b><span class="id">V1</span>Pedido de venda liberado</b><small>Segue direto ao PCP, com a resposta da Qualidade. Com Qualidade "Sim", o PCP é obrigado a pôr a Qualidade em todo o roteiro. O preço fechado com o cliente não muda.</small></div>
         </div>
       </div>
       <p class="nota">O pedido digitado direto no Omie entra no mesmo fluxo e na mesma tela. Ele já chega com a parte de vendas pronta (cliente, itens, valores, impostos e previsão), que só se altera no Omie, assim como o cancelamento. No Hub, o vendedor preenche a parte de compras, que é a simulação da comissão, e responde se a Qualidade acompanha e se o pedido fatura em partes. Nada trava: PCP e Compras seguem, Compras confere e avisa se comprar mais caro. Só a comissão espera: se a nota sair antes da parte de compras, a Controladoria já vê a margem real e, com as duas, a comissão fecha pelo menor.</p>
+      <p class="nota"><b>Onde está o código (develop de 05/11/2026):</b> a API da proposta já cria, revisa, aprova, cancela, copia e transforma em pedido na <code>api-acos-vital</code>, e o envio ao Omie existe na API. O banco de teste já tem o "Transformar em pedido" de 4 argumentos (dump de 09/11), mas as migrations ainda estão fora do repositório e não foram aplicadas em produção. Faltam ligar a tela ao modal e ao "Tentar novamente", e o teste do pedido mínimo no Omie.</p>
     </div>
   </section>
 
@@ -219,7 +220,7 @@
         </div>
         <div class="ramo">
           <div class="rotulo">Em partes</div>
-          <div class="card novo"><b>Cada item tem a sua</b><small>A entrega da OC daquele item, mais 1 dia útil. A do pedido mostra a maior.</small></div>
+          <div class="card novo"><b>Cada item tem a sua</b><small>No modal, o vendedor informa uma data para cada item, obrigatória e anterior ou igual à do pedido, que passa a ser a data final. Depois, vale a entrega da OC daquele item, mais 1 dia útil. A do pedido mostra a maior.</small></div>
         </div>
       </div>
       <p class="nota">O vendedor (em Meus Pedidos) e o PCP (na Carteira) veem todas as datas e a vigente. Isso vale também para o pedido digitado no Omie, cuja data inicial é a do Omie. A previsão vigente não volta ao Omie: o Omie guarda a inicial.</p>
@@ -282,6 +283,7 @@
         <div class="seta">↓</div>
         <div class="card novo"><b><span class="id">K6</span>NF cancelada, devolvida ou recusada</b><small>A comissão é abatida na mesma proporção. Se não foi paga, reduz o valor a pagar; se já foi, o desconto entra na próxima apuração. A devolução total vem do Omie; na parcial, o Fiscal ou a Controladoria informam o que voltou.</small></div>
       </div>
+      <p class="nota">A comissão nova fica num schema próprio, <code>core_comissao</code>, já modelado e testado no banco, ainda sem API e sem tela. Pedido com categoria de refaturamento não conta comissão; quais categorias são refaturamento em cada unidade ainda será definido.</p>
     </div>
   </section>
 
@@ -314,14 +316,15 @@
 
   <section class="etapa" id="aberto">
     <h2>O que ainda está em aberto</h2>
-    <p>Pontos que ainda mudam o desenho. No vault, estão nas Pontas Soltas PS-035 a PS-039 e nas perguntas da proposta (OQ-xx).</p>
+    <p>Pontos que ainda mudam o desenho ou travam a entrega. No vault, estão nas Pontas Soltas PS-035 a PS-039, no Backlog (BL-024, BL-081) e nas perguntas da proposta (OQ-xx). O formato do número da proposta já foi decidido: só dígitos (N16-148).</p>
     <div class="board">
       <ol class="pend">
-        <li><b>Módulo comercial do Pablo.</b> As tabelas da proposta já existem no banco, com fechamento parcial, "perdida" e "reabrir", e as telas do av-hub usam esse ciclo. O desenho novo substitui esse ciclo. <span class="quem">PABLO · GUSTAVO · NATHAN</span></li>
-        <li><b>Carteira do PCP lendo a previsão vigente do Hub.</b> Decidido: o PCP vê todas as datas. Falta a Carteira passar a ler a vigente, e a Qualidade respondida na proposta chegar à liberação que o MES lê. <span class="quem">GUSTAVO · NATHAN</span></li>
-        <li><b>Formato do número da proposta.</b> Só dígitos (ano e sequência) ou o atual com prefixo. <span class="quem">NATHAN</span></li>
-        <li><b>Pipeline.</b> Carregar condições de pagamento, cenários de impostos e a ligação dos sequenciais das três contas. <span class="quem">NATHAN (PIPELINE) · GUSTAVO (TABELAS)</span></li>
-        <li><b>Testes no Omie.</b> Só depois das telas: cancelar e excluir, criar sequencial, o número do Hub no pedido. <span class="quem">NATHAN</span></li>
+        <li><b>Migrations da proposta.</b> O "Transformar em pedido" de 4 argumentos e o envio ao Omie já estão no banco de teste, mas as migrations de 05/11 e 06/11 estão fora do repositório e não foram aplicadas em produção (BL-024). <span class="quem">ROBERT · GUSTAVO</span></li>
+        <li><b>Ciclo do módulo comercial do Pablo.</b> A API do comercial fica toda na <code>api-acos-vital</code>, em <code>core_vendas_faturamento</code>; as telas do Pablo ficam e o Robert troca o backend delas. Falta trocar o ciclo antigo (fechamento parcial, "perdida", "reabrir") pelo desenho aprovado (PS-035). <span class="quem">ROBERT · PABLO ACOMPANHA</span></li>
+        <li><b>Carteira do PCP lendo a previsão vigente do Hub.</b> Decidido: o PCP vê todas as datas. Falta a Carteira ler a vigente, e a Qualidade respondida no modal chegar à liberação que o MES lê; o que a Qualidade "Sim" obriga no roteiro vira contrato à parte do MES (PS-036, N16-151). <span class="quem">GUSTAVO · NATHAN · ROBERT</span></li>
+        <li><b>Pipeline.</b> Carregar cenários de impostos e a ligação dos sequenciais das três contas; as condições de pagamento vêm da tabela de compras (N16-149). <span class="quem">NATHAN (PIPELINE) · GUSTAVO (TABELAS)</span></li>
+        <li><b>Testes no Omie.</b> O pedido mínimo (BL-081), depois cancelar e excluir, e como criar o sequencial (PS-037). <span class="quem">NATHAN · ROBERT</span></li>
+        <li><b>Refaturamento por unidade.</b> Quais categorias tiram a comissão do pedido em cada unidade, e se a comissão estimada na proposta também zera (N16-152). <span class="quem">NATHAN</span></li>
       </ol>
     </div>
   </section>

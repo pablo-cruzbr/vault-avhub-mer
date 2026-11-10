@@ -99,7 +99,7 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <div id="vp"><div id="world"></div></div>
 <div class="hud" id="info">
   <h1>Fluxo 0b: Atividades</h1>
-  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Estado no código em 14/10/2026; a proposta ao pedido foi aprovada em 26/10/2026 e ainda não tem código. Clique num nó para ver os detalhes.</p>
+  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> dos sistemas conferido em 05/11/2026, com o envio ao Omie e o banco de teste de 09/11. Clique num nó para ver os detalhes.</p>
   <div class="chips" id="sum"></div>
   <div id="dica">Arraste para mover · roda do mouse ou pinça para zoom · duplo clique preenche a tela</div>
 </div>
@@ -115,69 +115,558 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <script>
 var LANES=[["proposta","Vendas · proposta"],["orc","Orçamento · av-hub"],["vendas","Vendas · pedido"],["pcp","PCP · MES"],["estoque","Estoque · MES"],["compras","Compras · CCP"],["forn","Fornecedor"],["rec","Recebimento · MES"],["qe","Qualidade de entrada"],["prod","Produção · MES"],["qs","Qualidade de saída"],["exp","Expedição · MES"],["fis","Fiscal · Omie"],["comis","Comissão · av-hub"]];
 var N={
-"V0.1":{l:"proposta",t:"Vendedor cria a proposta",s:"fa",r:"Unidade emissora (logo, cores e CRC no PDF), cliente cadastrado no Omie da conta, itens com CFOP, cenário e impostos digitados pelo vendedor, condição de pagamento da lista da conta. Vive só no Hub até virar pedido.",tela:"Propostas · /vendas/propostas (HUB)",ep:"/comercial/propostas",c:"API-019, SQL-016, SQL-019, LOG-56",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026). A proposta existe no api-comercial de teste.",p:"Tela da proposta (Nathan); rotas (Gustavo, Pablo)."},
-"V0.2":{l:"proposta",t:"Vendedor preenche o custo",s:"fa",r:"Com o que conseguiu por telefone ou e-mail, consultando a página do produto; sem o dado, pede ao Orçamento e segue, sem ficar bloqueado.",tela:"Proposta · bloco Custo de compra",ep:"/comercial/propostas/:id/itens",c:"API-019, API-020",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-"V0.3":{l:"proposta",t:"Comissão estimada nasce",s:"fa",r:"Mesmo motor do simulador atual. Item sem custo ou sem fornecedor deixa a proposta incompleta, e incompleta não aprova.",tela:"Proposta · bloco Resultado",ep:"motor na API",c:"API-022, SQL-018",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-"V0.4":{l:"proposta",t:"Gerência aprova desconto e margem",s:"pa",r:"Aprovação física neste ciclo; no sistema, só no próximo.",tela:"Fora do sistema",ep:"—",c:"N16-75",cod:"Fora do sistema neste ciclo.",p:"—"},
-"V0.5":{l:"proposta",t:"Proposta aprovada?",s:"fa",d:1,r:"O vendedor marca aprovada (quem, quando, qual revisão). Depois disso a proposta trava.",tela:"Proposta",ep:"trg_propostas_travar",c:"SQL-016",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-V0C:{l:"proposta",t:"Proposta cancelada",s:"fa",r:"Não reabre: o vendedor duplica. A comissão estimada vira histórico, com motivo, quem e quando.",tela:"Proposta",ep:"status CANCELADA",c:"SQL-016, SQL-018",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-"V0.6":{l:"proposta",t:"Transformar em pedido",s:"fa",r:"Três respostas obrigatórias: previsão de faturamento, se a Qualidade acompanha todo o processo, e se pode faturar em partes. Produto sem cadastro no Omie bloqueia.",tela:"Proposta · botão Transformar em pedido",ep:"fn_propostas_transformar_em_pedido",c:"SQL-016, LOG-58",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-"V0.7":{l:"proposta",t:"Cria o pedido no Omie por API",s:"fa",r:"Fila e pipeline, como a OC, com o nosso número. Recusa mostra o motivo e Tentar novamente. Nada vai para as observações do Omie.",tela:"Proposta e Meus Pedidos",ep:"IncluirPedido (Omie)",c:"API-019, LOG-56",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"Testes no Omie depois das telas."},
-B1:{l:"orc",t:"Base de preço com histórico",s:"fa",r:"OCs do Hub e do Omie viram ofertas; base e estatística por produto (média, mínimo, máximo, volatilidade).",tela:"—",ep:"fn_ofertas_gerar_de_ocs",c:"SQL-017, API-020",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"Job de 15 minutos (Gustavo)."},
-B2:{l:"orc",t:"Página do produto",s:"fa",r:"Histórico, top fornecedores com score, flutuação como bolsa de valores, volatilidade e valor médio. Só leitura.",tela:"Página do produto (nova)",ep:"vw_produtos_serie_preco, vw_matriz_precos",c:"API-020, LOG-60",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-B3:{l:"orc",t:"Pedido de custo",s:"fa",r:"O vendedor sem o dado pede a cotação. Sem prazo fixo, com o tempo cronometrado.",tela:"Orçamento · Pedidos de custo",ep:"solicitacoes_custo",c:"API-020",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026). Existe no api-comercial de teste, com prazo.",p:"—"},
-B4:{l:"orc",t:"Orçamentista cota e responde",s:"fa",r:"O setor de Orçamento (o Moisés é uma das pessoas) cota, grava a oferta na base e responde; o vendedor é avisado.",tela:"Orçamento · Pedidos de custo",ep:"ofertas",c:"API-020",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-V1:{l:"vendas",t:"Pedido de venda no av-hub",s:"pa",r:"Duas origens no mesmo fluxo e na mesma tela. Da proposta: nasce liberado. Digitado no Omie: chega travado, com a parte de vendas pronta, que só se altera no Omie.",tela:"Meus Pedidos",ep:"pipeline ListarPedidos → pedidos_vendas; fn_pedidos_omie_sincronizar",c:"LOG-26, SQL-016, LOG-58",cod:"Pipeline no código; o pedido no Hub (core_comercial.pedidos) não.",p:"Pedido no Hub com origem PROPOSTA ou OMIE."},
-V2:{l:"vendas",t:"Pedido do Omie: Qualidade e faturamento em partes",s:"ok",r:"O vendedor marca “Qualidade acompanha desde o início?” e se o pedido pode faturar em partes. A resposta passa para a tela do pedido.",tela:"Liberar Pedidos · /liberar-pedidos (HUB); depois Meus Pedidos",ep:"PUT /pedidos_liberacao/:empresa/:numero",c:"LOG-26, LOG-58",cod:"Qualidade no código; faturamento em partes não.",p:"Resposta na tela do pedido (Nathan)."},
-V3:{l:"vendas",t:"Pedido do Omie: libera e preenche a compra",s:"ok",r:"Marcação e liberação numa ação só. O vendedor preenche a parte de compras, que é a simulação da comissão, sem travar o fluxo.",tela:"Liberar Pedidos; depois Meus Pedidos",ep:"idem; histórico em pedidos_vendas_liberacao_historico",c:"LOG-26, SQL-016",cod:"Liberação no código; parte de compras do pedido não.",p:"Parte de compras no pedido (Nathan)."},
-P1:{l:"pcp",t:"Triagem do Pedido",s:"ok",r:"Lista os pedidos liberados.",tela:"Triagem dos Pedidos · antiga “Carteira” · /carteira (app-pcp)",ep:"GET /pedidos/carteira → GET /pedidos_liberados",c:"LOG-26",cod:"No código; nomes técnicos ainda são os antigos.",p:"Renomear rotas e slugs antigos."},
-P2:{l:"pcp",t:"Destinação do Pedido",s:"ok",r:"Define destino (FABRICACAO ou REVENDA) e quantidade ≤ restante por item e rodada; insere Estoque como etapa 1; confirma a importação ao av-hub.",tela:"Destinação do Pedido · antiga “Nova Ordem de Produção” · /ordens-producao/novo",ep:"POST /pedidos/completo/lote; POST /pedidos_liberados/:n/importado",c:"LOG-26",cod:"No código.",p:"—"},
-P3:{l:"pcp",t:"Requisição de compra (origem PCP)",s:"ok",r:"Requisição do material do pedido, criada no MES.",tela:"Requisições de compras · /compras/requisicoes",ep:"POST /compras/requisicoes; envio PUT /compras/requisicoes/origem/:id_origem",c:"LOG-34",cod:"No código: fila integracao_avhub_envios, retry com backoff de 1 a 60 min.",p:"—"},
-P6:{l:"pcp",t:"Novo norte: retrabalho ou reabre compra",s:"pa",r:"Decide entre retrabalho e reabertura da compra.",tela:"Sem tela (decidido).",ep:"—",c:"EC-03",cod:"RoteiroItem tem CRUD, mas nenhuma movimentação o lê.",p:"Implementar o novo norte (Robert)."},
-E1:{l:"estoque",t:"Saldo disponível na filial",s:"ok",r:"Saldo = lotes LIBERADO − reservas ATIVA na filial do pedido.",tela:"Atendimento · /estoque-operacao/atendimento",ep:"GET /estoque/saldo/disponivel-parcial/:idItemParcial",c:"—",cod:"No código.",p:"—"},
-E2:{l:"estoque",t:"Saldo cobre o item?",s:"ok",d:1,r:"Decide se o saldo cobre. Saldo zero exige clique (#31b).",tela:"Atendimento",ep:"—",c:"#31b",cod:"No código.",p:"—"},
-E3:{l:"estoque",t:"Atende pelo saldo",s:"ok",r:"Split e reserva. Custo do item = média dos lotes.",tela:"Atendimento",ep:"PATCH /itens-parciais/:id/atender-estoque",c:"API-008",cod:"Split e reserva no código; custo do item não (sem GET /itens/custo).",p:"Criar GET /itens/custo."},
-E4:{l:"estoque",t:"O que fazer com o restante?",s:"ok",d:1,r:"Solicitar compra ou enviar à produção.",tela:"Atendimento",ep:"PATCH /itens-parciais/:id/atender-estoque (destinoRestante)",c:"—",cod:"Compra no código. “Enviar à produção” só move a parcial; não reserva nem baixa matéria-prima.",p:"Consumo de matéria-prima."},
-E5:{l:"estoque",t:"Entrada no Estoque",s:"pa",r:"Compra aprovada ou fabricado aprovado vira lote e saldo.",tela:"Atendimento · Saldo",ep:"devolverAoEstoqueParciaisProntas",c:"—",cod:"Comprado: no código. Fabricado não vira lote (OrigemLote só tem RECEBIMENTO e CARGA_INICIAL).",p:"Entrada de produção do fabricado (Robert)."},
-E6:{l:"estoque",t:"Despacho: documento de retirada",s:"fa",r:"Quem precisa da mercadoria (Expedição ou Produção) gera um documento de retirada. A baixa do saldo acontece na retirada, no Estoque.",tela:"Não existe.",ep:"Hoje: consumirReservasDaParcial em receber() e em EntregasService.create",c:"—",cod:"Sem código. Hoje a baixa roda em receber() (itens-parciais.service.ts:278-285) e de novo na entrega.",p:"Criar documento de retirada e mover a baixa para a retirada (Robert)."},
-C0:{l:"compras",t:"Requisição (origem Compras)",s:"pa",r:"Necessidade própria do Compras, sem pedido de venda. Criada por engano, duplicada ou de teste, pode ser excluída pelo comprador enquanto não tiver OC; a do MES só se cancela com motivo.",tela:"Nova requisição · /compras/requisicoes (HUB)",ep:"POST /compras/requisicoes (av-hub), permissão compras.pode_criar; DELETE /compras/requisicoes/:id (exclusão lógica, compras.pode_deletar)",c:"LOG-34, LOG-55",cod:"No av-hub sim. Não chega ao MES: id_origem é obrigatório no evento. Decidido em 14/10: se Compras vincula a requisição a um pedido, o PCP vê a OC; se a OC é para estoque, o Estoque mostra o saldo futuro.",p:"O MES ler a referência da OC e mostrar OC do pedido e saldo futuro (Robert). Excluir requisição (LOG-55): entregue, em produção desde 23/10."},
-C1:{l:"compras",t:"Cotação e negociação",s:"ok",r:"Cotação e negociação, fora do sistema.",tela:"Requisições · Ordens · /compras/* (HUB)",ep:"marcos requisicao_recebida, em_cotacao",c:"LOG-35",cod:"No código.",p:"—"},
-C2:{l:"compras",t:"Acima de R$ 30 mil?",s:"ok",d:1,r:"Define o nível de aprovação.",tela:"Aprovações · /compras/aprovacoes (HUB)",ep:"parametros_compras.limite_aprovacao",c:"—",cod:"No código.",p:"—"},
-C3:{l:"compras",t:"Gerente de Compras aprova acima de R$ 30 mil",s:"ok",r:"Decidido: até R$ 30 mil o comprador libera a OC sem aprovação; acima de R$ 30 mil o Gerente de Compras aprova. A regra deve ficar mais rígida depois da conversa com Compras.",tela:"Aprovações · /compras/aprovacoes (HUB)",ep:"oc_enviada_aprovacao, oc_aprovada",c:"N14-21",cod:"No código: a trigger fn_ordens_compra_recalcular libera até o limite (padrão R$ 30 mil); acima exige compras.pode_aprovar (Gerência).",p:"Detalhar a regra com o setor de Compras. Vincular usuários à Gerência de Compras (cadastro)."},
-C4:{l:"compras",t:"Emite a Ordem de Compra",s:"ok",r:"CIF ou FOB; valor, desconto, moeda e cotação PTAX; flag acabado/não-acabado.",tela:"Ordens · /compras/ordens (HUB)",ep:"POST /compras/ordens; fila GET /compras/ordens/fila-omie (pipeline)",c:"LOG-23, LOG-36",cod:"No código.",p:"—"},
-C5:{l:"compras",t:"Follow-up do CCP",s:"ok",r:"Confirmação, previsão, despacho, ocorrência. O CCP registra a nova data do fornecedor com o motivo e vincula a NF de entrada à OC. No MES, Compras · CCP é só leitura.",tela:"Follow-up · /compras/followup (HUB); Compras · CCP · /compras/pedidos-compra (MES)",ep:"GET /compras/requisicoes/eventos; fn_pedidos_registrar_previsao",c:"LOG-35, LOG-32, SQL-016",cod:"Follow-up no código; perfil CCP e as datas do pedido não.",p:"Perfil CCP; ligar a nova data à previsão de faturamento."},
-FN1:{l:"forn",t:"Recebe a OC e entrega",s:"ok",r:"CIF direto ou coleta FOB. Fora do sistema.",tela:"—",ep:"—",c:"—",cod:"Fora do sistema.",p:"—"},
-R0:{l:"rec",t:"Esperados: OC aprovada, chegada com NF",s:"ok",r:"A OC aprovada entra nos esperados. A doca registra a chegada com a NF.",tela:"Recebimento · /logistica/logistica-entrada",ep:"GET /compras/requisicoes/esperados; POST /compras/requisicoes/:id/chegada; POST …/liberar-recebimento",c:"LOG-35",cod:"No código.",p:"—"},
-R1:{l:"rec",t:"Confere contra a NF",s:"ok",r:"Confere a NF (chave de 44 dígitos).",tela:"Recebimento",ep:"POST /compras/recebimentos",c:"—",cod:"No código.",p:"Cruzar com a OC quando existir o job do contrato 004."},
-R2:{l:"rec",t:"Pesagem",s:"ok",r:"Peso real obrigatório se há peso teórico; tolerância de 5%.",tela:"Recebimento",ep:"POST /compras/recebimentos",c:"—",cod:"No código.",p:"—"},
-R3:{l:"rec",t:"Bate com o esperado?",s:"ok",d:1,r:"Compara o conferido com o esperado.",tela:"Recebimento",ep:"POST /compras/recebimentos/:id/recontar e /decidir",c:"—",cod:"No código.",p:"—"},
-R4:{l:"rec",t:"Cria o lote em quarentena",s:"ok",r:"Lote PENDENTE com ENTRADA no saldo; split se chegou parte.",tela:"Recebimento",ep:"POST /compras/recebimentos",c:"API-007, API-008",cod:"Lote no código. O custo da OC não é gravado em lote_custo.",p:"Gravar custo da OC (Robert)."},
-R6:{l:"rec",t:"Divergência",s:"ok",r:"QUANTIDADE, DESCRICAO, PESO ou AVARIA.",tela:"Divergências de Recebimento · /decisoes-pcp",ep:"POST /compras/recebimentos/:id/decidir",c:"—",cod:"No código; reabertura de divergência de produção não.",p:"Tela de divergência de produção."},
-Q1:{l:"qe",t:"Inspeção de entrada por lote",s:"ok",r:"Laudo obrigatório.",tela:"Inspeção de entrada · /qualidade/inspecao-entrada",ep:"POST /qualidade/lotes/:id/aprovar e /reprovar",c:"—",cod:"No código.",p:"—"},
-Q2:{l:"qe",t:"Aprova o lote?",s:"ok",d:1,r:"Aprova ou reprova, total ou parcial.",tela:"Inspeção de entrada",ep:"idem",c:"—",cod:"No código.",p:"—"},
-Q3:{l:"qe",t:"RNC: a parte reprovada volta a Compras",s:"ok",r:"Devolução e substituição.",tela:"Inspeção de entrada",ep:"RNC; nota_devolucao_pendente",c:"—",cod:"No código; recompra por RNC sem contrato.",p:"Contrato da recompra por RNC."},
-Q4:{l:"qe",t:"Parte aprovada em quarentena",s:"ok",r:"Fica em QUARENTENA até a substituição (EC-07).",tela:"Inspeção de entrada",ep:"cisão do lote (idLotePai)",c:"EC-07",cod:"No código.",p:"—"},
-F1:{l:"prod",t:"Setores produtivos do roteiro",s:"ok",r:"Setores produtivos do roteiro de cada fábrica.",tela:"Filas de Produção · /movimentacoes",ep:"/itens-parciais/:id/*",c:"—",cod:"Filas no código. Consumo de matéria-prima não. EM_PRODUCAO e BLOQUEADO nunca são gravados.",p:"Consumo de matéria-prima (Robert)."},
-Q7:{l:"qs",t:"Inspeção de saída",s:"ok",r:"Setor QUALIDADE obrigatório no roteiro de fabricação.",tela:"Inspeção de saída · /qualidade/inspecao-saida",ep:"PATCH /itens-parciais/:id/reprovar",c:"—",cod:"No código; ninguém conferiu em produção ❓.",p:"—"},
-Q8:{l:"qs",t:"Aprova?",s:"pa",d:1,r:"Sim → Estoque (E5). Não → PCP (P6).",tela:"Inspeção de saída",ep:"idem",c:"—",cod:"Não existe ação “aprovar”: o inspetor usa mover e a parcial cai na etapa seguinte do roteiro, a Expedição, não o Estoque.",p:"Aprovado deve voltar ao Estoque (Robert)."},
-X1:{l:"exp",t:"Embalagem e paletização",s:"ok",r:"Embalagem e paletes (10.1).",tela:"Expedição · /logistica/expedicao",ep:"/entregas",c:"—",cod:"No código.",p:"—"},
-X2:{l:"exp",t:"Parcial ou integral?",s:"pa",d:1,r:"Parcial ou integral.",tela:"Expedição",ep:"—",c:"—",cod:"Integral fica travado por item que não chega (T-06).",p:"Destravar o integral."},
-X3:{l:"exp",t:"Consolida a carga",s:"fa",r:"Consolidação de carga (10.2).",tela:"Não existe.",ep:"—",c:"—",cod:"Sem código. Não há entidade de carga ou romaneio.",p:"Desenvolver 10.2."},
-X4:{l:"exp",t:"Logística de saída",s:"pa",r:"Transporte (10.3) e comprovante (10.4).",tela:"Expedição",ep:"POST /entregas",c:"—",cod:"Comprovante no código; transporte não.",p:"Desenvolver 10.3."},
-O1:{l:"fis",t:"Emite a nota fiscal",s:"pa",r:"O Omie emite a nota; o sistema nunca emite. Inteira ou por sequencial: o Fiscal separa o pedido por item e quantidade; sequencial não é outro pedido nem parcela.",tela:"—",ep:"pipeline ListarNF; pedidos_vendas_sequenciais_itens",c:"SQL-016",cod:"Lado Omie no código. Sinalização do MES ao Omie (11.1) e o faturamento em partes pelo Hub sem código.",p:"Testar no Omie como criar o sequencial."},
-O2:{l:"fis",t:"Baixa o item no pedido",s:"ok",r:"O Omie baixa o item no pedido.",tela:"—",ep:"pipeline",c:"—",cod:"Lado Omie no código.",p:"—"},
-C6:{l:"compras",t:"Compras confere a parte de compras",s:"fa",r:"O sistema puxa da proposta (ou do pedido do Omie) o fornecedor, os impostos e o frete; Compras confere e pode alterar os impostos da OC.",tela:"Emitir OC · /compras/ordens (HUB)",ep:"POST /compras/ordens",c:"API-021, LOG-56",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-C7:{l:"compras",t:"Segue ou usa o valor correto",s:"fa",r:"Segue o fornecedor do vendedor ou busca valor e condição melhores. A proposta não muda.",tela:"Emitir OC",ep:"—",c:"LOG-56",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-C8:{l:"compras",t:"Acima do custo do vendedor?",s:"fa",d:1,r:"Por produto e sem tolerância. Aviso em Meus Pedidos: o vendedor aprova ou reprova. Reprovado, Compras leva à Gerência fisicamente, registra a solução e avisa o vendedor. Mais barato só informa.",tela:"Meus Pedidos; Compras · Reprovados",ep:"divergencias_compra",c:"SQL-016, API-019",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-K1:{l:"comis",t:"Comissão estimada",s:"fa",r:"Da proposta, ou da parte de compras do pedido do Omie. O vendedor só vê esta.",tela:"Comissões novas · estimada",ep:"comissao_calculos (COTADO)",c:"SQL-018, API-022",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-K2:{l:"comis",t:"Recalcula com o custo real",s:"fa",r:"Por evento: OC com o valor da NF de entrada, lote do Estoque, matéria-prima. Cada evento com as suas condições.",tela:"—",ep:"custos_eventos",c:"SQL-016, API-021",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"MES publicar GET /itens/custo (Robert)."},
-K3:{l:"comis",t:"Fecha por nota fiscal",s:"fa",r:"Só as peças com custo real, pelo menor percentual entre o do vendedor e o do real. A nota do pedido do Omie sem simulação espera; a Controladoria já vê a margem real.",tela:"Fila da Controladoria",ep:"fn_comissao_nf_fechar",c:"SQL-018",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-K4:{l:"comis",t:"Controladoria decide",s:"fa",d:1,r:"Controladoria, Gerência ou Coordenação: aprovar, desaprovar, bloquear, cortar ou alterar, com justificativa. Ninguém decide a própria comissão.",tela:"Comissões novas · decisão",ep:"fn_comissao_decidir",c:"SQL-018, LOG-59",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-K5:{l:"comis",t:"Vendedor vê a comissão real",s:"fa",r:"Só depois da decisão, com a justificativa. Desaprovada aparece com R$ 0 e o motivo.",tela:"Minhas Comissões",ep:"vw_comissao_nf_vendedor",c:"SQL-018",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"},
-K6:{l:"comis",t:"NF cancelada, devolvida ou recusada",s:"fa",r:"Abate na mesma proporção. A devolução parcial é informada pelo Fiscal ou pela Controladoria.",tela:"Fila do Fiscal",ep:"fn_comissao_nf_abater",c:"SQL-018",cod:"Sem código na api-acos-vital (desenho aprovado em 26/10/2026).",p:"—"}
+"V0.1": {
+"l": "proposta",
+"t": "Vendedor cria a proposta",
+"s": "pa",
+"r": "Vendedor cria a proposta: unidade emissora (logo, cores, CRC no PDF), cliente com cadastro no Omie da conta, itens com CFOP, cenário e impostos digitados, condição de pagamento da lista da conta",
+"tela": "Propostas · /vendas/propostas (HUB)",
+"ep": "· 01-Proposta-de-Venda",
+"cod": "🟡 API ✅ (api-acos-vital develop, 29/10) e telas de criar, listar e abrir ✅; revisar sem tela; numeração diverge da N16-04 🔴"
+},
+"V0.2": {
+"l": "proposta",
+"t": "Vendedor preenche o custo",
+"s": "fa",
+"r": "Vendedor preenche o custo com o que conseguiu, consultando a página do produto, ou pede ao Orçamento (B3) e segue",
+"tela": "Propostas · /vendas/propostas (HUB)",
+"ep": "—",
+"cod": "🔴"
+},
+"V0.3": {
+"l": "proposta",
+"t": "Comissão estimada nasce",
+"s": "fa",
+"r": "Comissão estimada nasce (motor atual); proposta com item sem custo ou sem fornecedor é incompleta e não aprova",
+"tela": "Propostas · /vendas/propostas (HUB)",
+"ep": "—",
+"cod": "🟡 análise de margem gravada com a proposta (29/10); 🔴 comissão estimada"
+},
+"V0.4": {
+"l": "proposta",
+"t": "Gerência aprova desconto e margem",
+"s": "fa",
+"r": "Aprova desconto e margem fisicamente (neste ciclo)",
+"tela": "— (fora do sistema)",
+"ep": "N16-75",
+"cod": "—"
+},
+"V0.5": {
+"l": "proposta",
+"t": "Proposta aprovada?",
+"s": "pa",
+"r": "Vendedor marca a proposta aprovada (quem, quando, revisão); depois disso ela trava",
+"tela": "Propostas · /vendas/propostas (HUB)",
+"ep": "trg_propostas_travar",
+"cod": "🟡 API aprovar ✅ (develop, 29/10); 🔴 tela",
+"d": 1
+},
+"V0C": {
+"l": "proposta",
+"t": "Proposta cancelada",
+"s": "pa",
+"r": "Proposta cancelada: não reabre (o vendedor duplica); a comissão estimada vira histórico",
+"tela": "Propostas · /vendas/propostas (HUB)",
+"ep": "—",
+"cod": "🟡 API cancelar ✅ (develop, 29/10); 🔴 tela e histórico da comissão estimada"
+},
+"V0.6": {
+"l": "proposta",
+"t": "Transformar em pedido",
+"s": "pa",
+"r": "Transformar em pedido: previsão de faturamento, Qualidade e faturamento em partes obrigatórios; produto pendente bloqueia",
+"tela": "Propostas · /vendas/propostas (HUB)",
+"ep": "fn_propostas_transformar_em_pedido",
+"cod": "🟡 API transformar ✅ (grava o pedido do Hub pendente, 29/10); 🔴 tela"
+},
+"V0.7": {
+"l": "proposta",
+"t": "Cria o pedido no Omie por API",
+"s": "pa",
+"r": "Cria o pedido no Omie por API (direto pela API, síncrono, sem fila, N16-149), com o nosso número; recusa mostra o motivo e \"Tentar novamente\"",
+"tela": "Propostas · /vendas/propostas (HUB)",
+"ep": "IncluirPedido · Mapa-IncluirPedido-Omie",
+"cod": "🟡 ✅ API envia ao Omie (api-acos-vital pedidoOmie.js:151, develop 1654f65); ❓ banco fora do repositório; 🔴 tela"
+},
+"B1": {
+"l": "orc",
+"t": "Base de preço com histórico",
+"s": "fa",
+"r": "Base de preço de compra com histórico: OCs do Hub e do Omie viram ofertas; estatística por produto",
+"tela": "—",
+"ep": "fn_ofertas_gerar_de_ocs · · 02-Orcamento-Base-de-Preco",
+"cod": "🔴"
+},
+"B2": {
+"l": "orc",
+"t": "Página do produto",
+"s": "fa",
+"r": "Página do produto: histórico, top fornecedores com score, volatilidade, média",
+"tela": "Página do produto (nova)",
+"ep": "—",
+"cod": "🔴"
+},
+"B3": {
+"l": "orc",
+"t": "Pedido de custo",
+"s": "fa",
+"r": "Pedido de custo do vendedor, sem prazo fixo, com o tempo cronometrado",
+"tela": "Orçamento · Pedidos de custo",
+"ep": "—",
+"cod": "🔴 (api-comercial de teste ✅ com prazo)"
+},
+"B4": {
+"l": "orc",
+"t": "Orçamentista cota",
+"s": "fa",
+"r": "O setor de Orçamento (o Moisés é uma das pessoas) cota, grava a oferta e responde",
+"tela": "Orçamento · Pedidos de custo",
+"ep": "—",
+"cod": "🔴"
+},
+"V1": {
+"l": "vendas",
+"t": "Pedido de venda no av-hub",
+"s": "pa",
+"r": "Pedido de venda no av-hub, com duas origens no mesmo fluxo: o da proposta nasce liberado; o digitado no Omie chega travado e o job o traz para core_comercial.pedidos com a parte de vendas pronta (só se altera no Omie)",
+"tela": "Meus Pedidos",
+"ep": "pipeline ListarPedidos → pedidos_vendas; fn_pedidos_omie_sincronizar",
+"cod": "✅ pipeline; 🟡 o pedido do Hub nasce em transformar (29/10), sem envio ao Omie"
+},
+"V2": {
+"l": "vendas",
+"t": "Pedido do Omie: vendedor marca a Qualidade",
+"s": "ok",
+"r": "Pedido do Omie: vendedor marca \"Qualidade acompanha desde o início?\" e se fatura em partes; a resposta passa para a tela do pedido (N16-106)",
+"tela": "Liberar Pedidos · /vendas/liberar-pedidos (HUB); depois Meus Pedidos 🟡",
+"ep": "PUT /pedidos_liberacao/:empresa/:numero · LOG-26",
+"cod": "✅ Qualidade; 🔴 faturamento em partes"
+},
+"V3": {
+"l": "vendas",
+"t": "Pedido do Omie: vendedor libera",
+"s": "ok",
+"r": "Vendedor libera (marcação e liberação numa ação só) e preenche a parte de compras do pedido do Omie (a simulação da comissão), sem travar o fluxo",
+"tela": "Liberar Pedidos · /vendas/liberar-pedidos (HUB); depois Meus Pedidos 🟡",
+"ep": "PUT /pedidos_liberacao/:empresa/:numero · LOG-26; histórico em pedidos_vendas_liberacao_historico",
+"cod": "✅ liberação; 🔴 parte de compras"
+},
+"P1": {
+"l": "pcp",
+"t": "Triagem do Pedido",
+"s": "ok",
+"r": "Lista os pedidos liberados",
+"tela": "Triagem dos Pedidos · \"Carteira\" · /carteira (app-pcp)",
+"ep": "GET /pedidos/carteira → GET /pedidos_liberados · LOG-26",
+"cod": "✅ nomes técnicos antigos 🔴"
+},
+"P2": {
+"l": "pcp",
+"t": "Destinação do Pedido",
+"s": "ok",
+"r": "Define destino (FABRICACAO ou REVENDA) e quantidade ≤ restante por item e rodada; insere Estoque como etapa 1; confirma importação; o roteiro dos demais setores é montado depois, na Montagem do Roteiro, que libera a OP (develop, 22/10)",
+"tela": "Destinação do Pedido · \"Nova Ordem de Produção\" · /ordens-producao/novo",
+"ep": "POST /pedidos/completo/lote; POST /pedidos_liberados/:n/importado · LOG-26",
+"cod": "✅"
+},
+"P3": {
+"l": "pcp",
+"t": "Requisição de compra",
+"s": "ok",
+"r": "Requisição de compra do material do pedido (origem PCP)",
+"tela": "Requisições de compras · /compras/requisicoes",
+"ep": "POST /compras/requisicoes; envio PUT /compras/requisicoes/origem/:id_origem · LOG-34",
+"cod": "✅"
+},
+"C0": {
+"l": "compras",
+"t": "Requisição de compra",
+"s": "pa",
+"r": "Requisição de necessidade própria do Compras (origem av-hub), sem pedido de venda",
+"tela": "Nova requisição · /compras/requisicoes (HUB)",
+"ep": "POST /compras/requisicoes (av-hub); DELETE /compras/requisicoes/:id 🔴 (exclusão lógica da requisição criada no Hub e sem OC; a do MES se cancela com motivo; LOG-55)",
+"cod": "✅ no av-hub; a requisição não chega ao MES, mas a OC dela deve chegar (o MES lê GET /ordens-compra/referencia): PCP vê a OC do pedido e o Estoque vê o saldo futuro 📝 (N14-20), 🔴 MES não lê"
+},
+"E1": {
+"l": "estoque",
+"t": "Saldo disponível",
+"s": "ok",
+"r": "Saldo disponível = lotes LIBERADO − reservas ATIVA na filial do pedido",
+"tela": "Atendimento · /estoque-operacao/atendimento",
+"ep": "GET /estoque/saldo/disponivel-parcial/:idItemParcial",
+"cod": "✅"
+},
+"E2": {
+"l": "estoque",
+"t": "Saldo cobre o item?",
+"s": "ok",
+"r": "Decide se o saldo cobre (saldo zero exige clique, #31b)",
+"tela": "Atendimento · /estoque-operacao/atendimento",
+"ep": "—",
+"cod": "✅",
+"d": 1
+},
+"E3": {
+"l": "estoque",
+"t": "Atende pelo saldo",
+"s": "ok",
+"r": "Atende pelo saldo: split + reserva; custo do item = média dos lotes",
+"tela": "Atendimento · /estoque-operacao/atendimento",
+"ep": "PATCH /itens-parciais/:id/atender-estoque",
+"cod": "✅ custo do item também: GET /itens/custo na develop do MES (27/10)"
+},
+"E4": {
+"l": "estoque",
+"t": "O que fazer com o restante?",
+"s": "pa",
+"r": "Para o restante: solicitar compra ou enviar à produção",
+"tela": "Atendimento · /estoque-operacao/atendimento",
+"ep": "PATCH /itens-parciais/:id/atender-estoque (destinoRestante)",
+"cod": "✅ compra; 🟡 enviar à produção com baixa imediata de matéria-prima no Atender pelo estoque (develop, 19/10); a decisão é baixar na retirada (N16-140) 🔴",
+"d": 1
+},
+"C1": {
+"l": "compras",
+"t": "Cotação e negociação",
+"s": "ok",
+"r": "Cotação e negociação (fora do sistema)",
+"tela": "Requisições · Ordens · /compras/* (HUB)",
+"ep": "marcos requisicao_recebida, em_cotacao · LOG-35",
+"cod": "✅"
+},
+"C2": {
+"l": "compras",
+"t": "Acima de R$ 30 mil?",
+"s": "ok",
+"r": "Aprovação: OC acima de R$ 30 mil, o Gerente de Compras aprova; até R$ 30 mil, compradores livres (sem aprovação)",
+"tela": "Aprovações · /compras/aprovacoes (HUB)",
+"ep": "parametros_compras; oc_enviada_aprovacao, oc_aprovada",
+"cod": "✅ 📝 N14-21: a trigger fn_ordens_compra_recalcular aprova sozinha a OC até parametros_compras.limite_aprovacao (padrão R$ 30 mil, por unidade); acima disso a OC fica aguardando_aprovacao e só quem tem pode_aprovar na tela compras (Gerência) aprova (ordens_compra.route.js:1230-1240, FecharCompra.tsx:604-605). Regra mais rígida depois, com Compras 🟡",
+"d": 1
+},
+"C3": {
+"l": "compras",
+"t": "Gerente de Compras aprova",
+"s": "ok",
+"r": "Aprovação: OC acima de R$ 30 mil, o Gerente de Compras aprova; até R$ 30 mil, compradores livres (sem aprovação)",
+"tela": "Aprovações · /compras/aprovacoes (HUB)",
+"ep": "parametros_compras; oc_enviada_aprovacao, oc_aprovada",
+"cod": "✅ 📝 N14-21: a trigger fn_ordens_compra_recalcular aprova sozinha a OC até parametros_compras.limite_aprovacao (padrão R$ 30 mil, por unidade); acima disso a OC fica aguardando_aprovacao e só quem tem pode_aprovar na tela compras (Gerência) aprova (ordens_compra.route.js:1230-1240, FecharCompra.tsx:604-605). Regra mais rígida depois, com Compras 🟡"
+},
+"C4": {
+"l": "compras",
+"t": "Emite a Ordem de Compra",
+"s": "ok",
+"r": "Emite a OC (CIF/FOB; valor, desconto, moeda, cotação PTAX por item; flag acabado/não-acabado)",
+"tela": "Ordens · /compras/ordens (HUB)",
+"ep": "POST /compras/ordens; envio ao Omie GET /compras/ordens/fila-omie (pipeline) · LOG-23, LOG-36",
+"cod": "✅"
+},
+"C5": {
+"l": "compras",
+"t": "Follow-up do CCP",
+"s": "ok",
+"r": "Follow-up (confirmação, previsão, despacho, ocorrência)",
+"tela": "Follow-up · /compras/followup (HUB); Compras · CCP · /compras/pedidos-compra (MES, só leitura)",
+"ep": "GET /compras/requisicoes/eventos · LOG-35, LOG-32",
+"cod": "✅ perfil CCP 🔴"
+},
+"C6": {
+"l": "compras",
+"t": "Compras confere a parte de compras",
+"s": "fa",
+"r": "Confere a parte de compras que o vendedor preencheu (fornecedor, impostos, frete), puxada para a OC; pode alterar os impostos da OC",
+"tela": "Emitir OC · /compras/ordens",
+"ep": "· 06-Circuito-de-Compra",
+"cod": "🔴"
+},
+"C7": {
+"l": "compras",
+"t": "Segue o fornecedor do vendedor",
+"s": "fa",
+"r": "Segue o fornecedor do vendedor ou usa o valor correto; a proposta não muda",
+"tela": "Emitir OC · /compras/ordens",
+"ep": "—",
+"cod": "🔴"
+},
+"C8": {
+"l": "compras",
+"t": "Acima do custo do vendedor?",
+"s": "fa",
+"r": "Compra acima do custo do vendedor (por produto, sem tolerância): aviso em Meus Pedidos, o vendedor aprova ou reprova; reprovado, Compras leva à Gerência fisicamente, registra a solução e o vendedor é avisado. Vale para os dois tipos de pedido",
+"tela": "Meus Pedidos; Compras · Reprovados",
+"ep": "divergencias_compra",
+"cod": "🔴",
+"d": 1
+},
+"FN1": {
+"l": "forn",
+"t": "Recebe a OC e entrega",
+"s": "ok",
+"r": "Recebe a OC; entrega (CIF direto ou coleta FOB)",
+"tela": "— (fora do sistema)",
+"ep": "—",
+"cod": "—"
+},
+"R0": {
+"l": "rec",
+"t": "Esperados: OC aprovada",
+"s": "ok",
+"r": "OC aprovada entra nos esperados; a doca registra a chegada com a NF",
+"tela": "Recebimento · /logistica/logistica-entrada",
+"ep": "GET /compras/requisicoes/esperados; POST /compras/requisicoes/:id/chegada; POST …/liberar-recebimento (rede de segurança)",
+"cod": "✅"
+},
+"R1": {
+"l": "rec",
+"t": "Confere contra a NF",
+"s": "ok",
+"r": "Confere contra a NF (chave de 44 dígitos)",
+"tela": "Recebimento · /logistica/logistica-entrada",
+"ep": "POST /compras/recebimentos",
+"cod": "✅"
+},
+"R2": {
+"l": "rec",
+"t": "Pesagem",
+"s": "ok",
+"r": "Pesagem; peso real obrigatório se há peso teórico; tolerância 5%",
+"tela": "Recebimento · /logistica/logistica-entrada",
+"ep": "POST /compras/recebimentos",
+"cod": "✅"
+},
+"R3": {
+"l": "rec",
+"t": "Bate com o esperado?",
+"s": "ok",
+"r": "Bate com o esperado?",
+"tela": "Recebimento · /logistica/logistica-entrada",
+"ep": "POST /compras/recebimentos/:id/recontar, /decidir",
+"cod": "✅",
+"d": 1
+},
+"R4": {
+"l": "rec",
+"t": "Cria o lote em quarentena",
+"s": "ok",
+"r": "Cria o lote PENDENTE (quarentena) com ENTRADA no saldo; split se chegou parte; custo da OC opcional",
+"tela": "Recebimento · /logistica/logistica-entrada",
+"ep": "POST /compras/recebimentos/:id/recontar, /decidir",
+"cod": "✅ lote e custo da OC (develop do MES, 19/10, 97b9adc); 🔴 custo obrigatório em todo lote (N16-09)"
+},
+"R6": {
+"l": "rec",
+"t": "Divergência",
+"s": "ok",
+"r": "Divergência (QUANTIDADE, DESCRICAO, PESO, AVARIA)",
+"tela": "Divergências de Recebimento · /decisoes-pcp",
+"ep": "POST /compras/recebimentos/:id/decidir",
+"cod": "✅ reabertura de divergência de produção 🔴"
+},
+"P6": {
+"l": "pcp",
+"t": "Novo norte",
+"s": "pa",
+"r": "Novo norte: retrabalho ou reabre compra",
+"tela": "— (decidido, sem tela)",
+"ep": "—",
+"cod": "🔴 RoteiroItem C8, EC-03"
+},
+"Q1": {
+"l": "qe",
+"t": "Inspeção de entrada por lote",
+"s": "ok",
+"r": "Inspeção de entrada por lote (laudo obrigatório)",
+"tela": "Inspeção de entrada · /qualidade/inspecao-entrada",
+"ep": "POST /qualidade/lotes/:id/aprovar, /reprovar",
+"cod": "✅"
+},
+"Q2": {
+"l": "qe",
+"t": "Aprova o lote?",
+"s": "ok",
+"r": "Aprova o lote?",
+"tela": "Inspeção de entrada · /qualidade/inspecao-entrada",
+"ep": "POST /qualidade/lotes/:id/aprovar, /reprovar",
+"cod": "✅",
+"d": 1
+},
+"Q3": {
+"l": "qe",
+"t": "RNC: a parte reprovada",
+"s": "ok",
+"r": "RNC; a parte reprovada volta a Compras (devolução e substituição)",
+"tela": "Inspeção de entrada · /qualidade/inspecao-entrada",
+"ep": "RNC; nota_devolucao_pendente",
+"cod": "✅ recompra por RNC sem contrato 🔴"
+},
+"Q4": {
+"l": "qe",
+"t": "Parte aprovada em quarentena",
+"s": "ok",
+"r": "Parte aprovada fica em QUARENTENA até a substituição (EC-07)",
+"tela": "Inspeção de entrada · /qualidade/inspecao-entrada",
+"ep": "cisão do lote (idLotePai)",
+"cod": "✅"
+},
+"E5": {
+"l": "estoque",
+"t": "Entrada no Estoque",
+"s": "ok",
+"r": "Entrada no Estoque: lote comprado aprovado ou fabricado aprovado vira lote e saldo",
+"tela": "Atendimento · Saldo",
+"ep": "compra: devolverAoEstoqueParciaisProntas",
+"cod": "✅ comprado; ✅ fabricado vira lote PRODUCAO na develop (27/10, ab3318d); main do MES não"
+},
+"F1": {
+"l": "prod",
+"t": "Setores produtivos do roteiro",
+"s": "ok",
+"r": "Setores produtivos do roteiro de cada fábrica",
+"tela": "Filas de Produção · /movimentacoes",
+"ep": "/itens-parciais/:id/*",
+"cod": "✅ filas e ações (inclui finalizar na develop); baixa de matéria-prima 🟡 (ver E4)"
+},
+"Q7": {
+"l": "qs",
+"t": "Inspeção de saída",
+"s": "ok",
+"r": "Inspeção de saída (setor QUALIDADE obrigatório em roteiro de fabricação)",
+"tela": "Inspeção de saída · /qualidade/inspecao-saida",
+"ep": "PATCH /itens-parciais/:id/reprovar",
+"cod": "✅ ❓ ninguém conferiu"
+},
+"Q8": {
+"l": "qs",
+"t": "Aprova?",
+"s": "pa",
+"r": "Aprova? Sim → Estoque (E5); não → PCP (P6)",
+"tela": "Inspeção de saída · /qualidade/inspecao-saida",
+"ep": "PATCH /itens-parciais/:id/reprovar",
+"cod": "✅ na develop (27/10): ação aprovar-saida leva ao Estoque, com quantidade; na main do MES o inspetor usava mover e a parcial ia à Expedição. 🔴 reprovar só uma parte (N16-128)",
+"d": 1
+},
+"E6": {
+"l": "estoque",
+"t": "Despacho: documento de retirada",
+"s": "fa",
+"r": "Despacho: documento de retirada; baixa do saldo na retirada, no Estoque",
+"tela": "— (não existe)",
+"ep": "hoje: consumirReservasDaParcial em receber() (itens-parciais.service.ts:278-285) e de novo em EntregasService.create (entregas.service.ts:87-94)",
+"cod": "🔴"
+},
+"X1": {
+"l": "exp",
+"t": "Embalagem e paletização",
+"s": "ok",
+"r": "Embalagem e paletização",
+"tela": "Expedição · /logistica/expedicao",
+"ep": "/entregas",
+"cod": "✅ (paletes)"
+},
+"X2": {
+"l": "exp",
+"t": "Parcial ou integral?",
+"s": "pa",
+"r": "Parcial ou integral?",
+"tela": "Expedição · /logistica/expedicao",
+"ep": "—",
+"cod": "🟡 integral travado por item que não chega: T-06",
+"d": 1
+},
+"X3": {
+"l": "exp",
+"t": "Consolida a carga",
+"s": "pa",
+"r": "Consolida a carga",
+"tela": "—",
+"ep": "—",
+"cod": "🔴"
+},
+"X4": {
+"l": "exp",
+"t": "Logística de saída: transporte",
+"s": "pa",
+"r": "Logística de saída: transporte e comprovante",
+"tela": "Expedição · /logistica/expedicao",
+"ep": "POST /entregas",
+"cod": "🟡 transporte 🔴, comprovante ✅"
+},
+"O1": {
+"l": "fis",
+"t": "Emite a nota fiscal",
+"s": "pa",
+"r": "Omie emite a nota (o sistema nunca emite), inteira ou por sequencial: o Fiscal separa o pedido por item e quantidade (sequencial não é outro pedido nem parcela)",
+"tela": "—",
+"ep": "pipeline ListarNF; pedidos_vendas_sequenciais_itens",
+"cod": "✅ lado Omie; sinalização do MES ao Omie (ligação do O1) 🔴; criar sequencial pelo Hub 🔴 (teste no Omie)"
+},
+"O2": {
+"l": "fis",
+"t": "Baixa o item no pedido",
+"s": "ok",
+"r": "Baixa o item no pedido",
+"tela": "—",
+"ep": "pipeline",
+"cod": "✅ lado Omie"
+},
+"K1": {
+"l": "comis",
+"t": "Comissão estimada",
+"s": "fa",
+"r": "Comissão estimada: na proposta (V0.3) ou na parte de compras do pedido do Omie; o vendedor só vê esta",
+"tela": "Comissões (novas) · estimada",
+"ep": "· 15-Custo-Real-e-Comissao",
+"cod": "🔴"
+},
+"K2": {
+"l": "comis",
+"t": "Recalcula com o custo real",
+"s": "fa",
+"r": "Recalcula com o custo real, por evento (OC com o valor da NF de entrada, lote do Estoque, matéria-prima), cada um com as suas condições",
+"tela": "— (automático)",
+"ep": "custos_eventos",
+"cod": "🔴"
+},
+"K3": {
+"l": "comis",
+"t": "Fecha por nota fiscal",
+"s": "fa",
+"r": "Fecha por nota fiscal, só as peças com custo real e pelo menor percentual; a nota do pedido do Omie sem simulação espera, e a Controladoria já vê a margem real",
+"tela": "Fila da Controladoria",
+"ep": "fn_comissao_nf_fechar",
+"cod": "🔴"
+},
+"K4": {
+"l": "comis",
+"t": "Controladoria, Gerência ou Coordenação decidem",
+"s": "fa",
+"r": "Controladoria, Gerência ou Coordenação decidem, com justificativa; ninguém decide a própria comissão",
+"tela": "Fila da Controladoria",
+"ep": "fn_comissao_decidir",
+"cod": "🔴",
+"d": 1
+},
+"K5": {
+"l": "comis",
+"t": "Vendedor vê a comissão real",
+"s": "fa",
+"r": "O vendedor vê a comissão real só depois da decisão, com a justificativa",
+"tela": "Minhas Comissões",
+"ep": "vw_comissao_nf_vendedor",
+"cod": "🔴"
+},
+"K6": {
+"l": "comis",
+"t": "NF cancelada, devolvida ou recusada",
+"s": "fa",
+"r": "Nota cancelada, devolvida ou recusada abate na mesma proporção; a devolução parcial é informada pelo Fiscal ou pela Controladoria",
+"tela": "Fila do Fiscal",
+"ep": "fn_comissao_nf_abater",
+"cod": "🔴"
+}
 };
-var ED=[["V0.1","V0.2"],["V0.2","V0.3"],["V0.3","V0.4"],["V0.4","V0.5"],["V0.5","V0C","não"],["V0.5","V0.6","sim"],["V0.6","V0.7"],["V0.7","V1"],["V0.2","B3","sem o dado"],["B3","B4"],["B4","B1"],["B1","B2"],["B4","V0.2","custo respondido",1],["B2","V0.2","consulta",1],["V1","V2","digitado no Omie"],["V1","P1","da proposta: já liberado"],["V2","V3"],["V3","P1"],["P1","P2"],["P2","E1"],["E1","E2"],["E2","E3","sim, tudo ou parte"],["E2","E4","não, ou o restante"],["E3","E6"],["E4","P3","solicitar compra"],["E4","E6","enviar à produção"],["P3","C6"],["C6","C1"],["C0","C1"],["C1","C7"],["C7","C8"],["C8","C2","não, mais barato ou aprovado"],["C8","C1","reprovado: Gerência",1],["C2","C3","sim"],["C2","C4","não"],["C3","C4"],["C4","C5"],["C5","FN1"],["FN1","R0"],["R0","R1"],["R1","R2"],["R2","R3"],["R3","R6","não"],["R3","R4","sim"],["R6","P6"],["R4","Q1"],["Q1","Q2"],["Q2","Q3","não"],["Q3","Q4"],["Q2","E5","sim"],["Q4","E5","substituição aprovada"],["E6","X1","produto pronto"],["E6","F1","matéria-prima ou beneficiamento"],["F1","Q7"],["Q7","Q8"],["Q8","E5","sim"],["Q8","P6","não"],["X1","X2"],["X2","X3","integral"],["X3","X4"],["X2","X4","parcial"],["X4","O1"],["O1","O2"],["V0.3","K1"],["V3","K1","parte de compras"],["K1","K2"],["C4","K2","evento de custo"],["E3","K2","lote"],["F1","K2","matéria-prima"],["K2","K3"],["O1","K3"],["K3","K4"],["K4","K5"],["O1","K6","nota cancelada ou devolvida"],
-["E5","E3","entra no saldo",1],["Q3","C1","recompra",1],["P6","F1","retrabalho",1],["P6","P3","reabre compra",1]];
+var ED=[["V0.1", "V0.2", ""], ["V0.2", "V0.3", ""], ["V0.3", "V0.4", ""], ["V0.4", "V0.5", ""], ["V0.5", "V0C", "não"], ["V0.5", "V0.6", "sim"], ["V0.6", "V0.7", ""], ["B1", "B2", ""], ["B3", "B4", ""], ["B4", "B1", ""], ["V1", "V2", "digitado no Omie"], ["V2", "V3", ""], ["P1", "P2", ""], ["E1", "E2", ""], ["E2", "E3", "sim, tudo ou parte"], ["E2", "E4", "não, ou o restante"], ["E5", "E3", "", 1], ["E3", "E6", ""], ["C6", "C1", ""], ["C1", "C7", ""], ["C7", "C8", ""], ["C8", "C2", "não, mais barato, ou aprovado"], ["C8", "C1", "reprovado: Gerência fisicamente, Compras resolve", 1], ["C2", "C3", "sim"], ["C3", "C4", ""], ["C2", "C4", "não: compradores livres"], ["C4", "C5", ""], ["R0", "R1", ""], ["R1", "R2", ""], ["R2", "R3", ""], ["R3", "R6", "não"], ["R3", "R4", "sim"], ["Q1", "Q2", ""], ["Q2", "Q3", "não, total ou parcial"], ["Q3", "Q4", ""], ["Q7", "Q8", ""], ["X1", "X2", ""], ["X2", "X3", "integral"], ["X3", "X4", ""], ["X2", "X4", "parcial"], ["O1", "O2", ""], ["K1", "K2", ""], ["K2", "K3", ""], ["K3", "K4", ""], ["K4", "K5", ""], ["V0.7", "V1", ""], ["V1", "P1", "da proposta: já liberado"], ["V3", "P1", ""], ["P2", "E1", ""], ["E4", "P3", "solicitar compra"], ["E4", "E6", "enviar à produção"], ["P3", "C6", ""], ["C0", "C1", ""], ["C5", "FN1", ""], ["FN1", "R0", ""], ["R6", "P6", ""], ["R4", "Q1", ""], ["Q2", "E5", "sim"], ["Q4", "E5", "substituição aprovada"], ["Q3", "C1", "recompra", 1], ["E6", "X1", "produto pronto"], ["E6", "F1", "matéria-prima ou beneficiamento"], ["F1", "Q7", ""], ["Q8", "E5", "sim"], ["Q8", "P6", "não"], ["P6", "F1", "retrabalho", 1], ["P6", "P3", "reabre compra", 1], ["X4", "O1", ""], ["O1", "K3", ""]];
 var W=170,H=84,CW=212,LH=116,LW=112,PAD=26;
 var pos={},paths=[],TW=0,TH=0;
 var ids=Object.keys(N);
@@ -211,7 +700,7 @@ ED.forEach(function(e){var a=pos[e[0]],b=pos[e[1]],back=!!e[3]||col[e[1]]<=col[e
  paths.push({p:p,t:t,e:e})});
 }
 var sum={ok:0,pa:0,fa:0};ids.forEach(function(i){sum[N[i].s]++});
-document.getElementById("sum").innerHTML='<span><b>'+ids.length+'</b> nós</span><span><i class="sw ok"></i><b>'+sum.ok+'</b> no código</span><span><i class="sw pa"></i><b>'+sum.pa+'</b> parciais</span><span><i class="sw fa"></i><b>'+sum.fa+'</b> sem código</span><span>losango = decisão · tracejado = volta</span>';
+document.getElementById("sum").innerHTML='<span><b>'+ids.length+'</b> nós</span><span><i class="sw ok"></i><b>'+sum.ok+'</b> na develop</span><span><i class="sw pa"></i><b>'+sum.pa+'</b> parciais</span><span><i class="sw fa"></i><b>'+sum.fa+'</b> sem código</span><span>losango = decisão · tracejado = volta</span>';
 
 /* ---------- câmera: translate + scale, tudo pelo mouse ---------- */
 var cam={x:0,y:0,s:1},MINS=0.08,MAXS=3,fitted=true;
@@ -253,13 +742,13 @@ var D=document.getElementById("detail");
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
 function clearSel(){if(!sel)return;sel=null;D.hidden=true;ids.forEach(function(j){var el=document.getElementById("n-"+j);el.classList.remove("sel","dim")});paths.forEach(function(q){q.p.classList.remove("hi","dimmed");q.p.setAttribute("marker-end","url(#ar)");if(q.t)q.t.style.opacity=1});try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
 function pick(i,noFocus){
- sel=i;var n=N[i],lab={ok:"✅ no código",pa:"🟡 parcial",fa:"🔴 sem código"}[n.s],ln=LANES[laneIdx[n.l]][1];
+ sel=i;var n=N[i],lab={ok:"✅ na develop",pa:"🟡 parcial",fa:"🔴 sem código"}[n.s],ln=LANES[laneIdx[n.l]][1];
  ids.forEach(function(j){var el=document.getElementById("n-"+j);el.classList.toggle("sel",j===i);var rel=paths.some(function(q){return (q.e[0]===i&&q.e[1]===j)||(q.e[1]===i&&q.e[0]===j)});el.classList.toggle("dim",j!==i&&!rel)});
  paths.forEach(function(q){var on=q.e[0]===i||q.e[1]===i;q.p.classList.toggle("hi",on);q.p.classList.toggle("dimmed",!on);q.p.setAttribute("marker-end",on?"url(#arh)":"url(#ar)");if(q.t)q.t.style.opacity=on?1:.2});
  var ins=paths.filter(function(q){return q.e[1]===i}).map(function(q){return q.e[0]}),outs=paths.filter(function(q){return q.e[0]===i}).map(function(q){return q.e[1]});
  var chips=function(a){return a.length?'<div class="flow">'+a.map(function(x){return '<button type="button" data-n="'+x+'">'+x+'</button>'}).join("")+'</div>':"—"};
  D.hidden=false;
- D.innerHTML='<button type="button" id="close" aria-label="Fechar detalhes">×</button><h2>'+i+' · '+esc(n.t)+'</h2><div class="lane-n">'+ln+'<span class="badge '+n.s+'">'+lab+'</span></div><dl><dt>Regra</dt><dd>'+esc(n.r)+'</dd><dt>Tela</dt><dd>'+esc(n.tela)+'</dd><dt>Endpoint</dt><dd><code>'+esc(n.ep)+'</code></dd><dt>Contrato</dt><dd>'+esc(n.c)+'</dd><dt>No código</dt><dd>'+esc(n.cod)+'</dd><dt>Pendência</dt><dd>'+esc(n.p)+'</dd><dt>Vem de</dt><dd>'+chips(ins)+'</dd><dt>Segue para</dt><dd>'+chips(outs)+'</dd></dl>';
+ D.innerHTML='<button type="button" id="close" aria-label="Fechar detalhes">×</button><h2>'+i+' · '+esc(n.t)+'</h2><div class="lane-n">'+ln+'<span class="badge '+n.s+'">'+lab+'</span></div><dl><dt>Regra</dt><dd>'+esc(n.r)+'</dd><dt>Tela</dt><dd>'+esc(n.tela)+'</dd><dt>Endpoint e contrato</dt><dd><code>'+esc(n.ep)+'</code></dd><dt>Na develop</dt><dd>'+esc(n.cod)+'</dd><dt>Vem de</dt><dd>'+chips(ins)+'</dd><dt>Segue para</dt><dd>'+chips(outs)+'</dd></dl>';
  D.querySelector("#close").addEventListener("click",clearSel);
  D.querySelectorAll("button[data-n]").forEach(function(b){b.addEventListener("click",function(){pick(b.dataset.n)})});
  D.scrollTop=0;
