@@ -1,10 +1,11 @@
 ---
 tags: [sistemas, rbac, permissoes, mes, av-hub, seguranca]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-10
 status: vigente
 dono: Gustavo (DBA)
-fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 1654f65 (develop, 05/11), api-acos-vital 0384e89 (develop, 29/10), av-hub 758d5f0 (develop), Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, v1 AV-Hub-RBAC, Achado-Duplicacao-RBAC]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 1654f65 (develop, 05/11), api-acos-vital 0384e89 (develop, 29/10), av-hub 758d5f0 (develop), Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, v1 AV-Hub-RBAC, Achado-Duplicacao-RBAC, PS-048, OQ-50, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # RBAC e permissões
@@ -42,7 +43,9 @@ fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 16
 - ✅ Regras do MES e do av-hub, com checagem na tela, no BFF e na API.
 - ✅ Aprovação da OC com uma permissão só, sem segunda alçada nem Diretoria. 🟡 Endurece depois da conversa com Compras.
 - 🟡 A Gerência de Compras ainda não tem usuários vinculados (tarefa de cadastro, Nathan e Gustavo).
-- ❓ Perfil CCP no MES (N14-24): criado pelo Nathan em 30/10/2026 (cadastro, não conferido no ambiente; BL-017). As rotas de Compras · CCP do `api-pcp` continuam exigindo só a permissão `movimentacoes`, e o CCP agora também registra chegada.
+- ❓ Perfil CCP no MES (N14-24): criado pelo Nathan em 30/10/2026 (cadastro, não conferido no ambiente real; BL-017). Não existe no MES de teste: na validação local em Docker de 10/11/2026 o banco de teste do MES (dado do tst) tinha um perfil só, Administrador, com todos os usuários. A `develop` do `api-pcp` não cria o perfil (é cadastro). As rotas de Compras · CCP do `api-pcp` continuam exigindo só a permissão `movimentacoes`, e o CCP agora também registra chegada.
+- 🟡 No av-hub de teste (dado do tst, validação local em Docker de 10/11/2026), o perfil Gerência Geral e Diretoria tem 12 de 22 telas sem "Visualizar", entre elas `liberacao-equipe` (o gerente recebe 403 na Liberação da Equipe), `simulador`, `comissoes`, `minhas-comissoes`, `parametros` e `visao-geral` (PS-048, em [[Pontas-Soltas]]). Se é de propósito é a OQ-50 ([[Perguntas-Proposta-Pedido-Comissao]]). A mudança de permissão na tela vale na hora, sem novo login.
+- No mesmo banco de teste, as 10 permissões que o perfil de testes `Admin (Dev)` tem a mais que as telas visíveis são de telas inativas (`sem-cadastro`, `vinculos`, `notas-fiscais-saida`, `pedidos-de-venda`, `categorias`, `historico-produtos`, `comercial`, `suprimentos`, `sincronizacao-omie`, `api-docs`): não é acesso escondido.
 - 🟡 Alinhar os perfis das duas permissões de custo: `estoque-custo` (MES) e `custo-itens` (av-hub).
 - 🔴 Permissão do documento de retirada (`E6`): a tela e a rota também não existem.
 - ✅ Chaves de serviço do banco podem ser presas às rotas que usam (migration 051, `modo_rotas` `livre`, `registrar` ou `exigir`, tabelas `auth.chaves_servico_rotas` e `chaves_servico_uso`). O modo de cada chave em produção ❓ Gustavo.
@@ -71,9 +74,9 @@ Dump MES `:1046-1113`, `:1396-1440` ✅.
 
 #### Regras no código
 
-- **Guard global.** `JwtAuthGuard` e depois `PermissionsGuard` são `APP_GUARD`. Rota sem `@Public()` exige Bearer; rota com `@RequirePermission(slug, ação)` confere a permissão ✅ `api-pcp/src/app.module.ts:94-98`, `auth/guards/permissions.guard.ts:33-80`. Rota **sem** `@RequirePermission` só exige JWT (ex.: `GET /setores`, `PATCH /usuarios/:id/senha`).
-- **OR entre perfis.** Basta **um** perfil do usuário permitir ✅ `permissions.guard.ts:56-70`; mesma regra em `PerfisService.temPermissao` ✅ `rbac/perfis/perfis.service.ts:349-364`.
-- **`movimentacoes` é virtual.** Vale "qualquer tela de fila de setor": `movimentacoes`, `atendimento`, `requisicoes`, `pedidos-compra`, `logistica-entrada`, `expedicao`, `inspecao-saida` ✅ `common/constants/telas-fila-setor.constants.ts:7-19`. É o `@RequirePermission('movimentacoes', …)` das rotas de parcial, compras, entregas e divergências.
+- **Guard global.** `JwtAuthGuard` e depois `PermissionsGuard` são `APP_GUARD`. Rota sem `@Public()` exige Bearer; rota com `@RequirePermission(slug, ação)` confere a permissão ✅ `api-pcp/src/app.module.ts:85-86` (`APP_GUARD`), `auth/guards/permissions.guard.ts:33-80`. Rota **sem** `@RequirePermission` só exige JWT (ex.: `GET /setores`, `PATCH /usuarios/:id/senha`).
+- **OR entre perfis.** Basta **um** perfil do usuário permitir ✅ `permissions.guard.ts:56-70`; mesma regra em `PerfisService.temPermissao` ✅ `rbac/perfis/perfis.service.ts:332-345` (`async temPermissao(`).
+- **`movimentacoes` é virtual.** Vale "qualquer tela de fila de setor": `movimentacoes`, `atendimento`, `requisicoes`, `pedidos-compra`, `logistica-entrada`, `expedicao`, `inspecao-saida` ✅ `common/constants/telas-fila-setor.constants.ts:7-15` (`TELAS_FILA_SETOR`). É o `@RequirePermission('movimentacoes', …)` das rotas de parcial, compras, entregas e divergências.
 - **Limite real por setor.** Mesmo com a tela, o service chama `PerfisService.ensurePodeAtuar(userId, idSetor)`: só age quem tem `perfil_setores.pode_atuar` no setor atual da parcial ✅ `perfis.service.ts:278`; `compras.service.ts:356-401` exige `pode_atuar` no **Recebimento** para registrar a chegada.
 - **Limite real por depósito.** `ensurePodeAtuarDepositos` (carga inicial, movimento, reserva) e `depositosVisiveis` (Saldo só mostra os depósitos que o perfil vê) ✅ `estoque-operacao.service.ts:61-65,401`.
 - **Permissão que muda o conteúdo.** `temPermissao(userId, slug, campo)` decide o que vai na resposta, não a rota: `estoque-custo` e `compras-liberar` ✅ abaixo.
@@ -85,11 +88,11 @@ Dump MES `:1046-1113`, `:1396-1440` ✅.
 |---|---|---|---|
 | `estoque-custo` | `pode_visualizar` | `GET /estoque/saldo` e `GET /estoque/lotes/:id` incluem o custo do lote (`custoUnitario`, bloco `custo`) | ✅ `estoque-operacao.service.ts:66,546`; `app-pcp/…/saldo/page.tsx:35` |
 | `estoque-custo` | `pode_editar` | `POST /estoque/lotes/carga-inicial` aceita `custoUnitario` (sem a flag, 403 "Sem permissão para informar o custo do lote") | ✅ `estoque-operacao.service.ts:406-411`; `EntradaLoteModal.tsx:36` |
-| `compras-liberar` | `pode_editar` | `POST /compras/requisicoes/:id/liberar-recebimento` (rede de segurança: esperados do Recebimento sem OC aprovada, com motivo obrigatório) | ✅ `compras.service.ts:404-409`; `FilaSetor.tsx:304` |
+| `compras-liberar` | `pode_editar` | `POST /compras/requisicoes/:id/liberar-recebimento` (rede de segurança: esperados do Recebimento sem OC aprovada, com motivo obrigatório) | ✅ `compras.service.ts:404-409`; `fila/CartaoItemParcial.tsx:227` (`liberarModal`) |
 
 Terceira tela só de permissão, desde 26/10: `programar-fila` (`editar` muda a ordem de qualquer fila de fabricação, inclusive nos setores travados para o PCP; o líder com "pode atuar" só muda onde o setor não é travado; vale só para setor produtivo) ✅ `api-pcp/src/setores/fila-ordem.service.ts:13,84`.
 
-Seeds: `estoque-custo` nasce "default-deny, só o Administrador" ✅ `common/constants/estoque-custo.constants.ts:1-5`; `compras-liberar` entra por `01-base.sql`, que **não está nos repositórios** ❓ Robert. A lista de telas só de permissão: `app-pcp/lib/telasSoPermissao.ts:10`.
+Seeds: `estoque-custo` nasce "default-deny, só o Administrador" ✅ `common/constants/estoque-custo.constants.ts:1-5` ❓ "não achado na develop de 10/11"; `compras-liberar` entra por `01-base.sql`, que **não está nos repositórios** ❓ Robert. A lista de telas só de permissão: `app-pcp/lib/telasSoPermissao.ts:10`.
 
 #### Slugs do MES (extraídos dos controllers) ✅
 
@@ -173,7 +176,8 @@ As 21 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`,
 | Item | Estado |
 |---|---|
 | Aprovação da OC (N14-21, 14/10): acima de R$ 30 mil, Gerente de Compras; até R$ 30 mil, compradores livres; sem Diretoria | ✅ Uma permissão (`compras.pode_aprovar`); até o limite o banco aprova sozinho e acima dele só a Gerência decide ([[AV-Hub-API]]). Não há segunda alçada nem papel Diretoria. 🟡 A regra endurece depois da conversa com Compras. A Gerência de Compras ainda não tem usuários vinculados (tarefa cadastral, Nathan e Gustavo) |
-| Perfil CCP no MES (C5) | ❓ Perfil criado pelo Nathan em 30/10/2026 (BL-017; cadastro, não conferido no ambiente). As rotas de Compras · CCP exigem só `movimentacoes`, então quem edita depende das permissões dadas ao perfil (N14-24) |
+| Perfil CCP no MES (C5) | ❓ Perfil criado pelo Nathan em 30/10/2026 (BL-017; cadastro, não conferido no ambiente real). Não existe no MES de teste de 10/11/2026, que só tem o perfil Administrador (dado do tst). As rotas de Compras · CCP exigem só `movimentacoes`, então quem edita depende das permissões dadas ao perfil (N14-24) |
+| Gerência Geral e Diretoria sem "Visualizar" em 12 de 22 telas no tst (inclui `liberacao-equipe` e `simulador`) | 🟡 PS-048; ❓ OQ-50: é de propósito? |
 | Permissão do documento de retirada (E6) | 🔴 não existe (a tela e a rota também não) |
 | Quem vê custo no MES e no av-hub | duas permissões distintas: `estoque-custo` (MES, custo do lote) e `custo-itens` (av-hub, custo do pedido) 🟡 alinhar perfis |
 | Chave própria do MES com escopo mínimo para ler o av-hub (hoje `API_KEY` de leitura e escrita) | 🔴 Gustavo ([[Chaves-e-Autenticacao]]) |
