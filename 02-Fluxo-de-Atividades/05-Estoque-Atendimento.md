@@ -26,7 +26,7 @@ fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2
 2. O almoxarife vê o saldo livre na filial do pedido: lotes liberados menos reservas. `E1`
 3. Ele informa quanto atende, de zero até a quantidade da parcial, e de quais lotes. Atender zero é um clique. `E2`
 4. O sistema reserva o lote e separa a parte atendida, que segue para a Expedição. `E3`
-5. O restante vai para compra. Na fabricação, só segue para a produção a parte que a matéria-prima do estoque cobre; sem matéria-prima no estoque, tudo o que sobra vai para compra (não segue o roteiro). `E4`
+5. Para o restante, o almoxarife escolhe: solicitar compra ou enviar à produção (🔴 na `develop`, sem matéria-prima no estoque só a compra; veja a regra 7). `E4`
 
 Depois:
 
@@ -55,7 +55,7 @@ As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do 
 - O saldo é lido e a reserva criada no mesmo passo, para evitar corrida entre pedidos.
 - A reserva não expira. Termina por liberação explícita ou quando a ordem é excluída.
 - Na Revenda, o restante sempre vai para compra.
-- Na fabricação, sem matéria-prima no estoque, o restante só vai para compra: não segue o roteiro. ✅ É o que a `develop` faz (`api-pcp` `src/itens-parciais/itens-parciais.service.ts:932`, `destinoRestante === 'ROTEIRO'`); ❓ regra a confirmar com o Nathan (OQ-49, em [[Perguntas-Proposta-Pedido-Comissao]]). A validação local em Docker de 10/11/2026 confirmou na tela.
+- Na fabricação, o restante pode comprar matéria-prima ou seguir o roteiro (regra 7). 🔴 A `develop` só manda o restante para compra e recusa o roteiro sem matéria-prima (`api-pcp` `src/itens-parciais/itens-parciais.service.ts:932`, `destinoRestante === 'ROTEIRO'`); a #100 aceitou isso só até o levantamento físico de 26 a 30/10. ❓ Manter a regra e ajustar o código, ou mudar a regra (OQ-49). Visto na validação local em Docker de 10/11/2026.
 - Ajuste de saldo não usa o que está reservado e exige motivo.
 - O custo do lote é opcional e nunca bloqueia nada.
 - A matéria-prima baixa do saldo na retirada, não no atendimento (N16-140).
@@ -102,7 +102,7 @@ As regras 9 e 11 (entrada do lote) estão em [[09-Estoque-Entrada-do-Lote]]; a r
 | 4 | **Saldo zero exige clique**: a parcial nunca passa sozinha; atender 0 é uma ação explícita | 📝 ✅ `itens-parciais.service.ts:588-590`, `:657-659` (#31b) |
 | 5 | Reserva nasce `ATIVA`, **sem expiração**; libera por ação explícita (`LIBERADA`) ou quando a ordem é excluída | 📝 ✅ `estoque.prisma:45-52`, `pedidos.service.ts:695-699` |
 | 6 | Na **Revenda** o restante **sempre** vai para compra (não há o que produzir) | 📝 ✅ `itens-parciais.service.ts:721-727` |
-| 7 | Na **Fabricação** só segue para a produção a parte coberta pela matéria-prima do estoque; o restante vai à compra (`COMPRA`). `destinoRestante = ROTEIRO` é recusado com 400 ("Não há mais 'segue o roteiro' sem matéria-prima") | ✅ `api-pcp` `src/itens-parciais/itens-parciais.service.ts:932` (`destinoRestante === 'ROTEIRO'`); `app-pcp` `app/(protected)/movimentacoes/components/AtenderEstoqueModal.tsx:53` (`não há mais "segue o roteiro" sem MP`) e `:311` (`destinoRestante: 'COMPRA'`); ❓ regra a confirmar com o Nathan (OQ-49) |
+| 7 | Na **Fabricação** o restante pode seguir o roteiro (`ROTEIRO`) ou ir à compra (`COMPRA`, matéria-prima) | 📝 🔴 a `develop` recusa `ROTEIRO` sem matéria-prima com 400 (`api-pcp` `src/itens-parciais/itens-parciais.service.ts:932`, `destinoRestante === 'ROTEIRO'`); a #100 aceitou isso só até o levantamento físico; ❓ OQ-49 |
 | 8 | A parte atendida vai para a **primeira etapa `EXPEDICAO`** depois do Estoque; sem ela no roteiro, 409 | ✅ `itens-parciais.service.ts:701-714` |
 | 12 | **Custo do item = média ponderada dos lotes** das reservas (Regra A: faturamento parcial usa o custo médio do item no pedido) | 📝 ✅ `GET /itens/custo` na `develop` (27/10, `6c11147`, `integracao-avhub.controller.ts`, regra em `itens-custo.ts`); fabricado fora até o custo da matéria-prima ([[Contratos-da-v2\|API-008]]) |
 | 13 | O custo do lote é **opcional hoje** e não bloqueia carga inicial, recebimento, reserva nem despacho. A N16-09 decide que **todo lote tem custo** (obrigatório, inclusive na carga inicial) | ✅ opcional no código (`estoque-operacao.service.ts:404-409`, `estoque.prisma:385-393`); 📝 N16-09, 🔴 obrigatório (BL-066) |
@@ -241,7 +241,7 @@ flowchart TD
     E2 -->|"sim, tudo ou parte"| E3["E3 · Atende pelo saldo<br/>split e reserva ATIVA<br/>custo do item = média dos lotes, GET itens custo"]
     E2 -->|"não, ou o restante"| E4{"E4 · O que fazer com o restante?"}
     E4 -->|"solicitar compra"| P3["P3 · Requisição de compra<br/>setor Requisições"]
-    E4 -->|"enviar à produção, só com MP do estoque"| E6
+    E4 -->|"enviar à produção"| E6
     P3 -.->|"circuito de compra"| R4["R4 · Lote em quarentena"]
     R4 --> Q1["Q1 · Inspeção de entrada"]
     Q1 -->|"aprova"| E5["E5 · Entrada no Estoque<br/>comprado vira lote e saldo<br/>fabricado vira lote PRODUCAO na develop"]
