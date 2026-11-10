@@ -408,7 +408,7 @@ Selo ✅ valores da view `vw_pedidos_liberacao` e travas: [[03-Pedido-de-Venda-e
 
 ### 12. Do setor e do status para a etapa do item (contrato 005)
 
-Não é um diagrama de transição: o MES calcula a etapa por regra (`etapaDoItem`). As 11 etapas e a tradução no HUB estão em [[Estados-e-Status]]. Selo ✅ `integracao-avhub.service.ts:160-192`. 🟡 `compras.fechamento` ainda é "Em compra", sem cotação, aprovação e trânsito (BL-009).
+Não é um diagrama de transição: o MES calcula a etapa por regra (`etapaDoItem`). As 11 etapas e a tradução no HUB estão em [[Estados-e-Status]]. Selo ✅ `integracao-avhub.service.ts:158-183` (`etapaDoItem`). 🟡 `compras.fechamento` ainda é "Em compra", sem cotação, aprovação e trânsito (BL-009).
 
 ### 13. Proposta (`core_comercial.propostas.status`, 🟡)
 
