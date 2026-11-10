@@ -28,7 +28,7 @@ Nós `Q1` a `Q4` do [[00-Fluxo-Mestre-0b]]. A inspeção de saída da produção
 2. O inspetor da Qualidade abre o lote na tela de inspeção e decide: aprova ou reprova. `Q2`
 3. Para aprovar, ele anexa o laudo. Para reprovar, anexa laudo, motivo e evidência e informa a quantidade reprovada. `Q2`
 4. Aprovado: o lote fica `LIBERADO`. A parcial que esperava junta-se às outras do mesmo item e volta ao Estoque ([[09-Estoque-Entrada-do-Lote]]). `E5`
-5. Reprovado em parte: a quantidade reprovada vira um lote filho separado e o sistema abre a RNC (registro de não conformidade). Na mesma ação, a parte boa fica `LIBERADO`; não há "aprovar" depois. A exceção é o passo 7. `Q3`
+5. Reprovado em parte: a quantidade reprovada vira um lote filho separado e o sistema abre a RNC (registro de não conformidade). Pela EC-07, a parte aprovada fica em quarentena até a substituição ser aprovada; 🔴 a `develop` libera a parte boa na mesma ação quando nenhuma parcial espera pelo lote (PS-053). `Q3`
 6. A parte reprovada volta para Compras ([[06-Circuito-de-Compra]]), que combina com o fornecedor a devolução e a substituição. `Q3`
 7. Se ainda há parcial esperando, a parte aprovada fica em quarentena até a substituição chegar. `Q4`
 8. A substituição chega como nova entrega com nota, passa de novo pela inspeção e, aprovada, une-se à parte em quarentena. `Q4` → `E5`
@@ -50,7 +50,7 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 
 - A inspeção vale para o lote, nunca para a parcial (decisão EC-01).
 - Aprovar exige laudo. Reprovar exige laudo, motivo e evidência. No recebimento e na entrada de lote no estoque o laudo é opcional ✅ (`api-pcp` `src/qualidade/dto/aprovar-lote.dto.ts:8` e `reprovar-lote.dto.ts:9` obrigatórios; `src/compras/dto/registrar-recebimento.dto.ts:53`, `conferir-recebimento.dto.ts:106,268` e `src/estoque/operacao/dto/entrada-lote.dto.ts:25` opcionais).
-- Na reprovação parcial, a parte aprovada é liberada na mesma ação. Se ainda há parcial esperando o lote, ela fica em quarentena até a substituição ser aprovada (EC-07).
+- Na reprovação parcial, a parte aprovada fica em quarentena até a substituição ser aprovada (EC-07). 🔴 A `develop` só segue isso quando ainda há parcial esperando o lote; sem parcial, libera a parte boa na mesma ação (PS-053): ajustar o código ou combinar um meio-termo.
 - Material aprovado vai ao Estoque. Nunca segue direto à Expedição.
 - O sistema nunca emite a nota de devolução. Ele só sinaliza e o Omie emite.
 - Lote da carga inicial já nasce liberado, porque a dupla conferência faz o papel do laudo.
@@ -128,7 +128,7 @@ stateDiagram-v2
     REPROVADO --> [*] : RNC aberta, devolucao ao fornecedor
 ```
 
-Em toda reprovação parcial nasce um **lote filho** `REPROVADO` (`idLotePai` apontando o pai) com a quantidade reprovada. O pai fica `LIBERADO` na mesma ação quando nenhuma parcial espera por ele, ou `QUARENTENA` quando ainda há parcial aguardando ✅ (`api-pcp` `src/qualidade/qualidade.service.ts:194`, `statusQualidade: 'LIBERADO'`, e `:229`, `aindaEsperando > 0`). A validação local em Docker de 10/11/2026 viu o primeiro caso: reprovado 1 de 2 peças, o filho nasceu `REPROVADO` com RNC e o pai ficou `LIBERADO` com disponível 1.
+Em toda reprovação parcial nasce um **lote filho** `REPROVADO` (`idLotePai` apontando o pai) com a quantidade reprovada. O pai fica `LIBERADO` na mesma ação quando nenhuma parcial espera por ele, ou `QUARENTENA` quando ainda há parcial aguardando ✅ (`api-pcp` `src/qualidade/qualidade.service.ts:194`, `statusQualidade: 'LIBERADO'`, e `:229`, `aindaEsperando > 0`). A validação local em Docker de 10/11/2026 viu o primeiro caso: reprovado 1 de 2 peças, o filho nasceu `REPROVADO` com RNC e o pai ficou `LIBERADO` com disponível 1, o que diverge da EC-07 (PS-053).
 
 #### Estado da parcial na raia
 
