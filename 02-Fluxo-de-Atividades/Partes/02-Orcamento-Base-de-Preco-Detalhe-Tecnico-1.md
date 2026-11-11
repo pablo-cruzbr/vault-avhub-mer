@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4, parte]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-11
 status: proposta
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 parte-de: "[[02-Orcamento-Base-de-Preco]]"
@@ -78,7 +78,7 @@ Os nós (numeração 🟡: o desenho do Nathan fixou só o intervalo `B1` a `B4`
 
 ## Estados
 
-Valores reais do módulo do Pablo (`api-comercial/prisma/models/enums.prisma`, removido em 06/11/2026; legível no `f7d8d7f`):
+Valores do módulo de teste do Pablo (histórico: `f7d8d7f:api-comercial/prisma/models/enums.prisma`; removido em 06/11/2026). Não são regra: vale o desenho desta raia e as decisões.
 
 | Campo | Valores | Fonte |
 |---|---|---|
@@ -109,14 +109,14 @@ Menu **Orçamento** desde 16/10/2026; enxugado em 27/10/2026 (N16-107 e N16-108,
 
 ## Endpoints e contratos
 
-Rotas do `api-comercial` (removido em 06/11/2026; legível no `f7d8d7f`) que o Robert recria na `api-acos-vital` ([[Contratos-da-v2|LOG-52]]; nenhuma delas existe ainda na `api-acos-vital`, conferido em 29/10/2026):
+Rotas que o desenho pede ([[Contratos-da-v2|LOG-52]]). Existiam no `api-comercial` de teste, removido em 06/11/2026; as linhas citadas são históricas (`f7d8d7f:api-comercial/src/modules/...`). Na `api-acos-vital` (`develop` `cc3fbb3`, 11/11/2026) entre as rotas abaixo só a leitura de produtos existe; o resto é 🔴 "sem API e sem banco":
 
 | Método e rota | Uso | Nó | Código |
 |---|---|---|---|
 | `GET /produtos`, `/produtos/:id`, `POST /produtos` | catálogo | `B2` | 🟡 `GET /produtos` e `/produtos/:id` vão à API do Hub (✅ `api-acos-vital` `src/schemas/core/tables/produtos/produtos.route.js`); `POST /produtos` 🔴 só no módulo de teste (`suprimentos.routes.ts:29`, `:72`, `:106`) |
 | `GET /produtos/:id/precos?dias=` | mínimo, máximo, último, média e por fornecedor com variação sobre a média | `B2` | 🔴 sem API e sem banco: o BFF aponta para a API do Hub, mas a `api-acos-vital` não tem a rota; existe só no módulo de teste (`suprimentos.routes.ts:823-875`) (exige `veCusto`) |
 | `GET /produtos/:id/score_fornecedores`, `/volatilidade` | score, ranking por categoria, coeficiente de variação, dado recente | `B2` | 🔴 🟡 nomes |
-| `GET /ofertas`, `POST /ofertas`, `POST /ofertas/:id/invalidar`, `GET /ofertas/importacoes`, `/exportar` | base com histórico | `B1`, `B4` | ✅ `:645`, `:687`, `:791`, `:561`, `:597` |
+| `GET /ofertas`, `POST /ofertas`, `POST /ofertas/:id/invalidar`, `GET /ofertas/importacoes`, `/exportar` | base com histórico | `B1`, `B4` | 🔴 sem API e sem banco (existia só no módulo de teste, removido em 06/11/2026): `suprimentos.routes.ts:645`, `:687`, `:791`, `:561`, `:597` (histórico) |
 | `GET /solicitacoes_custo`, `POST /solicitacoes_custo` | fila e criação do pedido de custo | `B3` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:304`, `:367` |
 | `POST /solicitacoes_custo/:id/assumir`, `liberar`, `responder`, `cancelar` | comprador pega, devolve, responde, cancela | `B4` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:494`, `:500`, `:406`, `:508` |
 | `POST /custos/sugerir` | sugestão de custo | `B2` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:30` |
