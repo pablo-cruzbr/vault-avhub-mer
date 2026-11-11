@@ -8,11 +8,11 @@ parte-de: "[[Registro-de-Decisoes]]"
 fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido de venda", N16-05, N16-89, N16-130, N16-149, api-acos-vital develop 1654f65 (src/schemas/core_comercial/aggregates/propostas/propostas.route.js:579-618), dump do banco de teste de 04/11/2026 (core.categorias, core_comercial.pedidos_venda), PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), conversa do Nathan de 10/11/2026 sobre o refaturamento, dump do banco de teste de 10/11/2026, prova-recalculo-refaturamento.sql (10/11/2026), api-acos-vital develop cc3fbb3 (src/schemas/core_comercial/aggregates/cadastros/cadastros.route.js:66-108; src/schemas/core/tables/unidades/unidades.model.js:167-170), dump do banco de teste de 10/11/2026 às 07:36 (ainda com core_comercial.unidades_emissoras, linha 17220)]
 ---
 
-# Registro de decisões: decisões N16, N16-150 a N16-154
+# Registro de decisões: decisões N16, N16-150 a N16-155
 
-**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-154 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade e a empresa emissora que vira a própria unidade.
+**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-155 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade e a empresa emissora que vira a própria unidade.
 
-**Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-154**
+**Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-155**
 
 ## Decisões de 05/11/2026 (modal "Transformar em pedido de venda") (N16-150 a N16-152)
 
@@ -54,3 +54,9 @@ Risco: [[Riscos]] (RS-022). Furos da regra atual: [[Pontas-Soltas]] (PS-045).
 | N16-154 | **A empresa emissora é a própria unidade, e cada unidade usa a própria conta Omie.** Pedido do Robert, registrado pelo Nathan em 11/11/2026. (1) A tabela `core_comercial.unidades_emissoras` sai (migration `2026-11-10_comercial_emissora_vira_unidade`). Os campos do cabeçalho do documento passam para `core.unidades` (`sigla` gerada do nome fantasia, `nome_documento`, `telefone_documento`, `email_documento`, `site_documento`, `logo_url`), editados por `PUT /unidades/{id}`. (2) `GET /comercial/empresas_emissoras` **continua existindo na API do Hub**, com o mesmo formato, e lê `core.vw_unidades_cabecalho`: `id_unidade_conta_omie` passa a ser o próprio `id_unidade`, e `conta_omie` o nome fantasia. ✅ `api-acos-vital` `src/schemas/core_comercial/aggregates/cadastros/cadastros.route.js:103` (`id_unidade_conta_omie: e.id,`). (3) **Acaba a pendência de dado da N16-98:** sem a tabela, não existe mais a linha que apontava a HRM para a conta de Mogi. (4) O CRC fica de fora (sempre `null`) e os textos padrão seguem para outro lugar (N16-81). ❓ A migration não está no repositório da API e o dump de teste de 10/11 (tirado às 07:36, antes do commit `cc3fbb3`) ainda tem a tabela: conferir no próximo dump que ela saiu e que as funções do `core_comercial` que a liam (dump de 10/11, `:3415` e `:3482`) foram refeitas | 10/11/2026 | Nathan (pedido do Robert) | ✅ na develop; ❓ migration não conferida no dump | N16-98 (supera em parte: o ajuste de `id_unidade_conta_omie`); N16-80 (completa) |
 
 Contrato afetado: LOG-56, Transformar proposta em pedido (§4.2, §6.3, §8 e passos 2 e 9 da §14).
+
+## Decisão de 11/11/2026 (migrations fora do repositório da API) (N16-155)
+
+| ID | Decisão | Data | Dono | Selo | Superada |
+|---|---|---|---|---|---|
+| N16-155 | **A API do av-hub não guarda migrations nem SQL do banco no repositório.** Nathan, 11/11/2026, por segurança e boas práticas. (1) O DDL do banco do av-hub fica com o DBA (Gustavo), fora do `api-acos-vital`; nenhum `.sql` volta para o repositório (hoje não há nenhum na `develop`, `cc3fbb3`). (2) **A referência do esquema é o dump do vault** (`04-Dados/Dumps/`, com a ficha de cada um). Quando o dump estiver velho ou não tiver o que é preciso, pede-se um novo ao Nathan (skill `banco-de-dados`). (3) Deixa de existir a cobrança de "versionar as migrations": o BL-024, a P7 do Q&A de 09/11 com o Gustavo e o RS-012 ficam encerrados. Continua valendo conferir **o que está aplicado na produção** (RS-016). | 11/11/2026 | Nathan | 📝; ✅ (nenhum `.sql` na `develop`) | BL-024 e a pergunta P7 do Q&A de 09/11 (encerra) |

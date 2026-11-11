@@ -1,7 +1,7 @@
 ---
 tags: [inicio, manual, manutencao, ia]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 fontes: [instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, seções 1, 3, 6 e 9), Regras-do-Vault, Guia-de-Leitura-do-Vault-e-dos-Sistemas, scripts/validar.mjs, scripts/fatos.mjs, scripts/dividir.mjs, 09-Diagramas/mapa/build.mjs]
@@ -86,8 +86,8 @@ fontes: [repositório arquivo:linha, IDs de decisão, notas]
 
 ## 5. Registrar uma decisão
 
-1. Veja o próximo ID em [[Tipos-de-ID]] (hoje, `N16-155`).
-2. Escreva a linha na tabela da nota de decisões mais nova (hoje [[Registro-N16-150-a-N16-154]]), com as colunas ID | Decisão | Data | Dono | Selo | Superada. Comece o texto com um título em **negrito**.
+1. Veja o próximo ID em [[Tipos-de-ID]] (hoje, `N16-156`).
+2. Escreva a linha na tabela da nota de decisões mais nova (hoje [[Registro-N16-150-a-N16-155]]), com as colunas ID | Decisão | Data | Dono | Selo | Superada. Comece o texto com um título em **negrito**.
 3. **Supera e completa:** se a decisão troca outra, escreva na coluna *Superada* "N16-xx (supera)" ou "(supera em parte)"; se só acrescenta, "(completa)". A decisão antiga **não** é editada nem apagada.
 4. Quando a nota de decisões passar de ~25 KB, crie a próxima (`Registro-N16-150-a-N16-nnn`, com o mesmo cabeçalho de tabela), ligue-a no [[Registro-de-Decisoes]] e renomeie a anterior só se o nome dela ficar errado (com `git mv` e reescrevendo os links).
 5. Atualize o "próximo livre" em [[Tipos-de-ID]] e, se a decisão mudar uma regra, a nota de raia afetada (com o ID ao lado da regra).
