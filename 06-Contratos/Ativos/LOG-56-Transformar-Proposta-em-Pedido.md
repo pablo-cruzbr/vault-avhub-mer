@@ -3,8 +3,8 @@ id: LOG-56
 titulo: "Transformar proposta em pedido: as respostas que faltam e as pontas soltas da tela"
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento]
 criado: 2026-11-09
-estado-em: 2026-11-09
-status: para-implementar
+estado-em: 2026-11-11
+status: parcial
 dono: Nathan
 autor: Robert
 data: 2026-11-09
@@ -15,8 +15,8 @@ nos_0b: [V0.6, V0.7, V1, V2]
 notas_afetadas: [01-Proposta-de-Venda, 03-Pedido-de-Venda-e-Liberacao, Mapa-IncluirPedido-Omie, Roteiro-da-Proposta-em-Diante, AV-Hub-Front, AV-Hub-API, MES-Backend, Backlog-Frente-Robert, Backlog-Frente-Comercial-e-Suprimentos, Riscos, Pontas-Soltas, Onde-Estamos, Banco-AvHub]
 depende_de: [BL-071, BL-062]
 decisoes: [N16-150, N16-152, N16-89, N16-05, N16-29, N16-90, N16-149, N16-79, N16-98]
-develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09]
-fontes: ["PDF de Robert de 09/11/2026 (contrato v8, 20 páginas, substitui a v7 de 09/11)", "PDF de Robert de 09/11/2026 (adendo v4, refaturamento da HRM 1.01.98)", "Q&A de 09/11/2026 Nathan → Robert, rodada 1, consolidado pelo Nathan (fora do vault: ../Perguntas-e-Respostas/QA-2026-11-09_Nathan-para-Robert_contrato-transformar-v7.md)", "Dump do Avhub de 04/11/2026 (04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql)"]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11]
+fontes: ["PDF de Robert de 09/11/2026 (contrato v8, 20 páginas, substitui a v7 de 09/11)", "PDF de Robert de 09/11/2026 (adendo v4, refaturamento da HRM 1.01.98)", "Q&A de 09/11/2026 Nathan → Robert, rodada 1, consolidado pelo Nathan (fora do vault: ../Perguntas-e-Respostas/QA-2026-11-09_Nathan-para-Robert_contrato-transformar-v7.md)", "Dump do Avhub de 04/11/2026 (04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
 ---
 
 # LOG-56 · Transformar proposta em pedido: as respostas que faltam e as pontas soltas da tela
@@ -25,10 +25,10 @@ fontes: ["PDF de Robert de 09/11/2026 (contrato v8, 20 páginas, substitui a v7 
 
 ## Situação em 09/11
 
-- **Status:** `para-implementar`. Todas as decisões foram tomadas em 09/11; não há passo de decisão na §14.
+- **Status:** `parcial` (10/11). A parte do Gustavo (passos 1 a 10 da §14) está na `develop` (api-acos-vital `e9878b7` e `c353135`) e no banco de teste; falta a do Robert (7d, 11 a 14) e a produção (migration log56, o INSERT da conta padrão e a API, nessa ordem). Conta padrão no teste: "01 - Boleto/Pix/TED" nas três unidades (Robert, 10/11).
 - **Versão registrada:** a v8 do Robert, que aplica o Q&A de 09/11 (rodada 1, consolidada pelo Nathan). Conferida pelo Nathan contra a `develop` (api-acos-vital `655896a`, av-hub `6fcbba6`) e o dump de 04/11: sem divergência.
 - **Continuam abertas, sem bloquear o começo:**
-  - **Gustavo:** o join do valor inicial (§7.6, item 1); view ou SELECT da rota (§7.6, item 2), que precisa de resposta **antes** do passo 7a; de qual coluna `fn_pedido_venda_payload_omie` tira o `obs_venda` (§7.7, item 3), o maior risco aberto; e onde estão as duas migrations da §9.
+  - **Gustavo:** ✅ respondidas no Q&A de 09/11: o join é por `codigo_empresa_omie` + `codigo_pedido_omie`, na view; o `obs_venda` vem de `pedidos_venda.observacoes`, cópia da proposta (o risco da §7.7 está confirmado); as migrations ficam na pasta local de migrations, fora do repositório (BL-024).
   - **Qualidade (o Nathan leva):** refaturamento passa por processo de qualidade? Escolhe entre a saída 1 e a 3 da §7.7.
   - **Medição do alcance do G6** nas três unidades (§7.7, PS-040): SQL pronto, só leitura, fora do vault em `../Perguntas-e-Respostas/medicao-V3_refaturamento-liberacao.sql`. ✅ Rodada pelo Nathan em 09/11/2026, no banco de teste: o G6 tira 142 de 2.028 pedidos, 98 deles pela porta da observação (números em [[Pontas-Soltas]], PS-040).
 
@@ -97,14 +97,14 @@ Base: av-hub `6fcbba6` e api-acos-vital `655896a`. Cada âncora usa o trecho que
 
 | Camada | O quê | Âncora / evidência |
 |---|---|---|
-| Omie | 🔴 **O bloqueio de hoje.** O Omie recusa o pedido: "O preenchimento da tag [codigo_conta_corrente] é obrigatório". O campo não existe em lugar nenhum do caminho de escrita (§7.4) | Teste de 09/11, pedido `PV-000002`. `conta_corrente`: zero ocorrências em `pedidoOmie.js` e `propostas.route.js` (no repositório inteiro são 17, todas de Compras) |
-| Front + API | 🔴 R1 e R2: não há campo de Qualidade nem de faturamento em partes, e o `esquemaEnvioOmie` não os aceita | `TransformarModal.tsx:141-147`; `propostas.route.js:581-601` (`esquemaEnvioOmie`) |
+| Omie | 🟡 O pedido leva `informacoes_adicionais.codigo_conta_corrente` com a conta padrão da conta Omie (`parametros_pedido_venda_omie`); falta provar no Omie de teste (BL-081) | Teste de 09/11, pedido `PV-000002` (o Omie recusou sem a conta). Hoje: `pedidoOmie.js:73,152` (`e9878b7`); migration log56 `:408` |
+| Front + API | 🟡 API ✅ o `esquemaEnvioOmie` aceita R1 e R2 (obrigatórios no `/transformar`); Front 🔴 o modal ainda não pergunta (passo 11, Robert) | `TransformarModal.tsx:141-147`; `propostas.route.js:604` (`qualidade_acompanha: previsaoObrigatoria`), `:607` (`e9878b7`) |
 | Front (BFF) | 🔴 Novo na v8: o BFF da liberação monta o corpo do PUT à mão e valida só a Qualidade; campo novo que a API venha a aceitar morre aqui, sem erro | `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:27-29` (`typeof acompanha !== 'boolean'`), `:51` (`body: JSON.stringify({ acompanhamento_qualidade: acompanha, updated_by: idUsuario })`) |
-| API | 🔴 Não existe `GET /comercial/propostas/{id}/prontidao-omie`; o front já trata a ausência | `propostas.route.js:603` é a última rota; `propostas.ts:377` (`getProntidaoPedido`), que devolve `null` em 404 |
-| API | ❓ `GET /comercial/empresas_emissoras` devolve `id_unidade` e o nome da conta, não o `id_unidade_conta_omie`. O modal usa o `id_unidade`: certo em AV e AU, errado na HRM | `cadastros.route.js:93` (`conta_omie: e.conta_omie`) |
-| Dado | ❓ N16-98: `unidades_emissoras.id_unidade_conta_omie` aponta a HRM para a conta de Mogi. Já afeta pedido real | N16-98 |
-| Permissão | ❓ A lista de condições precisa de `auth.rotas_telas` (§10) | `app/api/comercial/condicoes-pagamento/route.ts` |
-| SQL | ❓ A migration que o código nomeia e ninguém acha (§9) | §9 |
+| API | ✅ `GET /comercial/propostas/{id}/prontidao-omie` existe, com os 5 códigos; o BFF ainda falta (passo 12, Robert) | `propostas.route.js:646` (`e9878b7`); migration log56 `:635`; `propostas.ts:377` (`getProntidaoPedido`), que devolve `null` em 404 |
+| API | ✅ `GET /comercial/empresas_emissoras` devolve também o `id_unidade_conta_omie`; o modal precisa passar a usá-lo | `cadastros.route.js:103` (`id_unidade_conta_omie: e.id`, `cc3fbb3`: desde 10/11 a emissora é a própria unidade, e o campo é o `id_unidade`) |
+| Dado | 🟡 N16-98 resolvida no teste: a migration do LOG-56 fez a HRM apontar para a própria conta, e desde 10/11 (`cc3fbb3`, migration `2026-11-10_comercial_emissora_vira_unidade`) a emissora é a própria unidade, sem `unidades_emissoras`; na produção, pendente | N16-98; migration log56 `:152`; `cadastros.route.js:75-76` |
+| Permissão | ✅ `GET /compras/condicoes-pagamento` tem linha para a tela `propostas` desde a migration de 05/11 (teste; produção pendente) | `app/api/comercial/condicoes-pagamento/route.ts`; migration `2026-11-05_condicoes_pagamento_encargos.sql:84` |
+| SQL | 📝 Achadas: estão na pasta local de migrations do Gustavo, fora do repositório (BL-024); aplicadas no teste | §9; Q&A de 09/11 (P4) |
 
 ## 5. Regras de negócio
 
