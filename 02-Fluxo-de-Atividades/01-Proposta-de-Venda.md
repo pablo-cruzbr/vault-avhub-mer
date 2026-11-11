@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, vendas, proposta, v0, simulador, tela]
 criado: 2026-10-16
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: proposta
 ordem: 1
 nos: [V0.1, V0.2, V0.3, V0.4, V0.5, V0.6, V0.7, V0C]
@@ -9,7 +9,7 @@ anterior: "[[00-Fluxo-Mestre-0b]]"
 proxima: "[[02-Orcamento-Base-de-Preco]]"
 develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, em 2026-11-10; api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
-fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10, Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-10 (fn_proposta_criar), av-hub develop 44bb770 (PR #277, commit 20e6089: TransformarModal.tsx, AndamentoProposta.tsx, app/api/comercial/[...rota]/route.ts), api-acos-vital develop cc3fbb3 (propostas.route.js, pedidoOmie.js, pedidos.route.js), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
+fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10, Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-10 (fn_proposta_criar), av-hub develop 44bb770 (PR #277, commit 20e6089: TransformarModal.tsx, AndamentoProposta.tsx, app/api/comercial/[...rota]/route.ts), api-acos-vital develop cc3fbb3 (propostas.route.js, pedidoOmie.js, pedidos.route.js), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault), PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)]
 ---
 
 # Proposta de venda
@@ -113,7 +113,7 @@ Quem desenvolve (N16-117 a N16-119):
 
 - 📝 Todas as regras acima estão decididas.
 - O contrato do menu e os 15 contratos de proposta, orçamento, custo real e comissão nova foram removidos em 29/10/2026. O Robert cria os novos.
-- `LOG-56` (`06-Contratos/Ativos/LOG-56-Transformar-Proposta-em-Pedido`) (`para-implementar`, 09/11/2026): as respostas da Qualidade e do faturamento em partes no modal de transformar (já na `develop`, na API e na tela, PR #277 do av-hub), a conta corrente padrão por conta Omie e o valor inicial na Liberar Pedidos. Nós `V0.6` e `V0.7`.
+- `LOG-56` (`06-Contratos/Ativos/LOG-56-Transformar-Proposta-em-Pedido`) (`parcial`, 10/11/2026: banco e API na `develop`, falta o front do Robert e a produção): as respostas da Qualidade e do faturamento em partes no modal de transformar (já na `develop`, na API e na tela, PR #277 do av-hub), a conta corrente padrão por conta Omie e o valor inicial na Liberar Pedidos. Nós `V0.6` e `V0.7`.
 - Liberação e cancelamento do pedido: ver [[03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2#Pedido que nasce da proposta: liberação e cancelamento]].
 - ❓ Testes no Omie: número próprio do pedido, pedido bloqueado e `ExcluirPedido`. O primeiro teste (item 4 do pedido do Robert de 03/11) sai com etapa `"10"`, `bloqueado = "S"`, sem CFOP e sem impostos no payload, e categoria de uma lista da unidade; ver [[Mapa-IncluirPedido-Omie]].
 
