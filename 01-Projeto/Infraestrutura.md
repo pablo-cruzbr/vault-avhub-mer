@@ -1,7 +1,7 @@
 ---
 tags: [projeto, infraestrutura, deploy, vps]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 fontes: [v1 04-Arquitetura-Transversal/Infraestrutura-Self-Hosted, v1 Registro-de-Decisoes #4, Dockerfiles dos cinco repositórios (reconferidos em 29/10/2026), omie-elt-pipeline/docker-compose.yml e ecosystem.config.cjs, omie-elt-pipeline/src/db/pool.ts]
@@ -62,7 +62,7 @@ Pendências gerais em [[Pontas-Soltas]]; riscos em [[Riscos]].
 | `api-pcp` | `node:22-slim`, 2 estágios | 3000 |
 | `app-pcp` | `node:22-slim`, 3 estágios | 3000 |
 
-Evidência: `FROM` e `EXPOSE` em `00 - HUB\Dockerfile` (linhas 2, 8, 15, 27), `av-hub\api-comercial\Dockerfile` (2, 23, 50), `api-pcp\Dockerfile` (2, 29, 49), `api-acos-vital\Dockerfile` (1, 6, 14), `app-pcp\Dockerfile` (2, 11, 26, 45). Não há Nginx: o Traefik faz esse papel.
+Evidência: `FROM` e `EXPOSE` em `00 - HUB\Dockerfile` (linhas 2, 8, 15, 27), `api-comercial/Dockerfile` (2, 23, 50; histórico, só no commit `f7d8d7f` do av-hub, pois a pasta foi removida em 06/11/2026), `api-pcp\Dockerfile` (2, 29, 49), `api-acos-vital\Dockerfile` (1, 6, 14), `app-pcp\Dockerfile` (2, 11, 26, 45). Não há Nginx: o Traefik faz esse papel.
 
 ### Pipeline Omie
 
