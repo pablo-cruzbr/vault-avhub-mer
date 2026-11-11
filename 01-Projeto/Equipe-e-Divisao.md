@@ -1,43 +1,67 @@
 ---
 tags: [projeto, equipe, divisao]
 criado: 2026-10-14
-atualizado: 2026-10-29
+atualizado: 2026-11-11
 status: vigente
 dono: Nathan
-fontes: [v1 05-Pessoas-e-Equipe/Equipe-Projeto, v1 Cronograma-2-Meses §3.2 e §3.4, v1 Registro-de-Decisoes #32 #33 #33b, git log dos repositórios em 14/10/2026 e em 29/10/2026, Registro-de-Decisoes N16-09, N16-15, N16-117, N16-118 e N16-119]
+fontes: [v1 05-Pessoas-e-Equipe/Equipe-Projeto, v1 Cronograma-2-Meses §3.2 e §3.4, v1 Registro-de-Decisoes #32 #33 #33b, git log dos repositórios em 14/10/2026 e em 29/10/2026, Registro-de-Decisoes N16-09, N16-15, N16-117, N16-118, N16-119 e N16-157]
 ---
 
 # Equipe e divisão
 
-**Em uma frase:** são quatro pessoas de TI, cada uma dona de uma parte do sistema: Nathan (telas do Hub), Gustavo (banco e API do Hub), Robert (MES e, desde 28/10, o módulo comercial na API do Hub) e Pablo (acompanha o comercial e cuida do Orçamento).
+**Em uma frase:** são quatro pessoas de TI: Nathan coordena e gerencia a equipe, é dono do Circuito de Compra e ajuda o Robert em cada processo; Robert é dono de 13 das 15 raias do fluxo 0b; Pablo, desenvolvedor júnior, é dono do Orçamento com o acompanhamento do Robert; e Gustavo é o DBA e a API de todo o sistema (N16-157).
 
 **Quando consultar esta nota:** quando você precisar saber quem decide, quem constrói e a quem perguntar sobre cada parte.
 
 Os nomes completos vêm do `git log`.
 
+## Dono de cada raia do fluxo 0b
+
+Decisão do Nathan de 11/11/2026 (N16-157). Ser dono não quer dizer fazer sozinho: o Nathan coordena, gerencia a equipe e ajuda o Robert em cada processo, porque não é válido nem justo deixar as raias só com ele. O Pablo é desenvolvedor júnior, e por isso não fica como dono sozinho: o Orçamento tem o acompanhamento do Robert. O banco e a API são do Gustavo em todas as raias.
+
+| Raia | Nota | Dono |
+|---|---|---|
+| 01 Proposta de Venda | [[01-Proposta-de-Venda]] | Robert |
+| 02 Orçamento (base de preço) | [[02-Orcamento-Base-de-Preco]] | Pablo, com acompanhamento do Robert |
+| 03 Pedido de Venda e Liberação | [[03-Pedido-de-Venda-e-Liberacao]] | Robert |
+| 04 PCP (triagem e destinação) | [[04-PCP-Triagem-e-Destinacao]] | Robert |
+| 05 Estoque · atendimento | [[05-Estoque-Atendimento]] | Robert |
+| 06 Circuito de Compra | [[06-Circuito-de-Compra]] | Nathan |
+| 07 Recebimento | [[07-Recebimento]] | Robert |
+| 08 Qualidade de entrada | [[08-Qualidade-Entrada]] | Robert |
+| 09 Estoque · entrada do lote | [[09-Estoque-Entrada-do-Lote]] | Robert |
+| 10 Produção e Roteiro | [[10-Producao-e-Roteiro]] | Robert |
+| 11 Qualidade de saída | [[11-Qualidade-Saida]] | Robert |
+| 12 Estoque · despacho | [[12-Estoque-Despacho]] | Robert |
+| 13 Expedição | [[13-Expedicao]] | Robert |
+| 14 Fiscal · Omie | [[14-Fiscal-Omie]] | Robert |
+| 15 Custo Real e Comissão | [[15-Custo-Real-e-Comissao]] | Robert |
+
+❓ Falta o Nathan confirmar se "API de todo o sistema" inclui a API do MES (`api-pcp`), que até aqui era do Robert.
+
 ## Quem faz o quê
 
 | Pessoa | Papel | O que toca |
 |---|---|---|
-| **Nathan** | Coordenador de TI e arquiteto do ERP. É o dono deste vault, das decisões e do pipeline Omie 📝 | Telas do av-hub (o front e o BFF, a camada que liga o front à API), o `omie-elt-pipeline`, os contratos e a coordenação. Faz as telas de Compras, da Comissão nova e do restante do HUB, e o pipeline do pedido de venda (N16-15). **As telas de proposta são do Robert e as de Orçamento são do Pablo com o Robert** (conferido no git em 29/10) |
-| **Gustavo M. de Farias** | Colega, DBA (administrador de banco de dados) | Banco e API do av-hub (`api-acos-vital`): migrations, `auth.*`, funções, envio fixo da OC, chaves de serviço do MES e da pipeline (L6) e `exclusionSync`. Revisa e aplica no banco o módulo comercial e o Orçamento e a comissão nova (`core_comissao`, N16-143) (N16-15) |
-| **Robert Wilson** | Colega, fullstack sênior | O MES inteiro (`api-pcp` e `app-pcp`): Recebimento, carga inicial em lote (G1), baixa no despacho, D11 (leitor 2D e posto de recebimento) e I1/J2/J5. Também o custo obrigatório em todo lote e o `GET /itens/custo` (N16-09, feito na `develop` em 27/10). **Desde 28/10 conduz o módulo comercial na `api-acos-vital`** (N16-117) e troca o backend das telas de proposta (N16-118, N16-119); já criou as rotas `/comercial/*` de cadastros, clientes, parceiros e propostas |
-| **Pablo Cruz** | Colega, fullstack | Criou o módulo Comercial & Suprimentos (a `api-comercial`, removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); legível em `git show f7d8d7f:api-comercial/<arquivo>`). **Desde 28/10 acompanha** o módulo comercial, que o Robert conduz, e cuida do Orçamento, com a supervisão do Robert. Ele saiu do MES em 07/10 |
+| **Nathan** | Coordenador de TI e arquiteto do ERP. Coordena e gerencia a equipe e ajuda o Robert em cada processo (N16-157). É o dono deste vault, das decisões e do pipeline Omie 📝 | Dono da raia 06 Circuito de Compra (N16-157). Telas do av-hub (o front e o BFF, a camada que liga o front à API), o `omie-elt-pipeline`, os contratos e a coordenação. Faz as telas de Compras e a organização do código do HUB. **Desde 11/11 o pipeline do pedido de venda e as telas da Comissão nova passam ao Robert** (N16-157, supera em parte a N16-15) |
+| **Gustavo M. de Farias** | Colega, DBA (administrador de banco de dados) | **DBA e API de todo o sistema** (N16-157). Banco e API do av-hub (`api-acos-vital`): migrations, `auth.*`, funções, envio fixo da OC, chaves de serviço do MES e da pipeline (L6) e `exclusionSync`. Revisa e aplica no banco o módulo comercial e o Orçamento e a comissão nova (`core_comissao`, N16-143) (N16-15). ❓ Se a API do MES (`api-pcp`) também passa a ele, falta confirmar |
+| **Robert Wilson** | Colega, fullstack sênior | **Dono de 13 das 15 raias do fluxo 0b** (todas menos 02 e 06; N16-157), com o Nathan ajudando em cada processo. O MES inteiro (`api-pcp` e `app-pcp`): Recebimento, carga inicial em lote (G1), baixa no despacho, D11 (leitor 2D e posto de recebimento) e I1/J2/J5. Também o custo obrigatório em todo lote e o `GET /itens/custo` (N16-09, feito na `develop` em 27/10). **Desde 28/10 conduz o módulo comercial na `api-acos-vital`** (N16-117) e troca o backend das telas de proposta (N16-118, N16-119); já criou as rotas `/comercial/*` de cadastros, clientes, parceiros e propostas. **Desde 11/11 também o Fiscal · Omie (pipeline do pedido de venda) e o Custo Real e Comissão** (N16-157). Acompanha o Pablo no Orçamento |
+| **Pablo Cruz** | Colega, desenvolvedor júnior (N16-157) | Dono da raia 02 Orçamento, com acompanhamento do Robert (N16-157). Criou o módulo Comercial & Suprimentos (a `api-comercial`, removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); legível em `git show f7d8d7f:api-comercial/<arquivo>`). **Desde 28/10 acompanha** o módulo comercial, que o Robert conduz, e cuida do Orçamento, com a supervisão do Robert. Ele saiu do MES em 07/10 |
 
-Atribuições decididas: Pablo no Comercial & Suprimentos e Robert no MES 📝 (decisões #32 e #33 do Registro do v1), reafirmadas em 14/10. Em 28/10 o Nathan passou a condução do módulo comercial para o Robert, com o Pablo acompanhando (N16-117) ([[Registro-de-Decisoes]]). O detalhe de repositórios está em [[Sistemas-e-Responsabilidades]].
+Atribuições decididas: Pablo no Comercial & Suprimentos e Robert no MES 📝 (decisões #32 e #33 do Registro do v1), reafirmadas em 14/10. Em 28/10 o Nathan passou a condução do módulo comercial para o Robert, com o Pablo acompanhando (N16-117) ([[Registro-de-Decisoes]]). Em 11/11 o Nathan definiu o dono de cada raia do fluxo 0b (N16-157, tabela acima). O detalhe de repositórios está em [[Sistemas-e-Responsabilidades]].
 
 ## O que cada pessoa decide e entrega
 
 | Quem | Decide | Entrega neste vault |
 |---|---|---|
-| Nathan | Regras de negócio e fluxo; nomes de tela; escopo; prioridade | Telas do HUB, BFF, [[Backlog-por-Frente]] da frente front, aprovação dos contratos |
-| Gustavo | Modelo de banco, funções e rotas da API do av-hub; chaves de serviço | Migrations (`047b`, `046b`, `035b`), mapa de `auth.rotas_telas`, SQL dos contratos |
-| Robert | Modelo e regras do MES; telas do `app-pcp`; rotas do módulo comercial na `api-acos-vital` e telas de proposta | Documento de retirada, `lote_custo`, feed `/fluxo/eventos`, job do contrato 004 (feito, K4), rotas e telas da proposta |
-| Pablo | Acompanha o módulo comercial; Orçamento (com o Robert) | Regras do legado a portar ([[Mapa-do-Modulo-do-Pablo]]) e as telas de Orçamento |
+| Nathan | Regras de negócio e fluxo; nomes de tela; escopo; prioridade; coordenação da equipe | Raia 06 Circuito de Compra, telas de Compras, BFF, [[Backlog-por-Frente]] da frente front, aprovação dos contratos; apoio ao Robert em cada processo |
+| Gustavo | Modelo de banco, funções e rotas da API; chaves de serviço | Migrations (`047b`, `046b`, `035b`), mapa de `auth.rotas_telas`, SQL dos contratos |
+| Robert | Modelo e regras do MES; telas do `app-pcp`; rotas do módulo comercial na `api-acos-vital`; as raias de que é dono (N16-157) | Documento de retirada, `lote_custo`, feed `/fluxo/eventos`, job do contrato 004 (feito, K4), rotas e telas da proposta, pipeline do pedido de venda no Omie e motor e telas da comissão |
+| Pablo | Orçamento, com o acompanhamento do Robert | Regras do legado a portar ([[Mapa-do-Modulo-do-Pablo]]) e as telas de Orçamento |
 
 ## Risco: capacidade do Robert
 
-O plano pede mais trabalho do Robert do que ele consegue entregar no prazo. O Ciclo 1 só fecha em 18/02/2027 por causa disso. Ele chegou a ser 21/01/2027, e o Ciclo 2 começa em 19/02/2027 (N14-30 e N14-32; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida). Conta em [[Cronograma]]; risco em [[Riscos]].
+O plano pede mais trabalho do Robert do que ele consegue entregar no prazo. O Ciclo 1 só fecha em 18/02/2027 por causa disso. Ele chegou a ser 21/01/2027, e o Ciclo 2 começa em 19/02/2027 (N14-30 e N14-32; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida). **Desde 11/11 o Robert também é dono da Proposta, do Pedido, do Fiscal · Omie e da Comissão (N16-157)**, e essa carga não está na conta: ela precisa ser refeita, contando o apoio do Nathan (40% de foco no plano). Conta em [[Cronograma]]; risco em [[Riscos]] (RS-004).
 
 ## Quem usa o sistema (perfis de uso, não de desenvolvimento)
 

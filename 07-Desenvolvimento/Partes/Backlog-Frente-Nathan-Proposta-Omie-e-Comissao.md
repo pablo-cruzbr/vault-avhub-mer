@@ -1,11 +1,11 @@
 ---
 tags: [desenvolvimento, backlog, pendencias, parte]
 criado: 2026-11-05
-estado-em: 2026-11-09
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 parte-de: "[[Backlog-por-Frente]]"
-fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55, Dump Avhub e Dump MES de 14/10, Registro-de-Decisoes (N16 de 16 a 26/10)]
+fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55, Dump Avhub e Dump MES de 14/10, Registro-de-Decisoes (N16 de 16 a 26/10, N16-157)]
 ---
 
 # Backlog por frente: Nathan, proposta ao pedido no Omie e comissão
@@ -13,6 +13,9 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca
 **Em uma frase:** itens BL-075 a BL-081 da frente Nathan (proposta, pedido no Omie, motor e telas da comissão), separados de [[Backlog-Frente-Nathan]] quando a conferência na `develop` (05/11/2026) fez a nota passar de 25 KB. As linhas foram movidas sem mudança.
 
 **Onde estamos:** ← [[Backlog-por-Frente]] (resumo e índice) · [[Backlog-Frente-Nathan]] (o resto da frente)
+
+> [!important] Desde 11/11/2026 estes itens são do Robert, com o apoio do Nathan (N16-157)
+> O Robert é dono das raias 01 Proposta, 03 Pedido, 14 Fiscal · Omie e 15 Custo Real e Comissão. Por isso BL-075, BL-076, BL-077, BL-078, BL-080 (a parte da tela) e BL-081 passam à frente Robert; a BL-079 continua com o Gustavo, e a parte de API da BL-080 também. O Nathan coordena e ajuda em cada um. As linhas abaixo ficam aqui sem mudança até a próxima divisão das notas.
 
 ## Frente Nathan: proposta, pedido no Omie e comissão
 
