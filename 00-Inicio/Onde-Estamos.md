@@ -4,13 +4,16 @@ criado: 2026-10-14
 estado-em: 2026-11-10
 status: vigente
 dono: Nathan
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
-fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas de raia 01 a 15 (conferidas na develop em 05/11/2026, Bloco 3 da v3), Backlog-por-Frente, Registro-de-Decisoes (N16-01 a N16-149), Contratos-da-v2, api-pcp src/common/constants/item-parcial-status.constants.ts:33 (EM_PRODUCAO nunca gravado), av-hub lib/api/custoItensFixtures.ts (custo por item ainda com dados de exemplo), Dump-AvHub-Teste-2026-11-09 (09/11/2026)]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas de raia 01 a 15 (conferidas na develop em 05/11/2026, Bloco 3 da v3), Backlog-por-Frente, Registro-de-Decisoes (N16-01 a N16-149), Contratos-da-v2, api-pcp src/common/constants/item-parcial-status.constants.ts:33 (EM_PRODUCAO nunca gravado), av-hub lib/api/custoItensFixtures.ts (custo por item ainda com dados de exemplo), Dump-AvHub-Teste-2026-11-09 (09/11/2026), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
-# Onde estamos (estado conferido na develop em 05/11/2026)
+# Onde estamos (estado conferido na develop em 10/11/2026)
 
 **Em uma frase:** o fluxo do pedido já funciona da liberação ao recebimento, e a OP, o lote do fabricado e o custo por item já estão na `develop` do MES; o que falta é, sobretudo, o pedido da proposta no Omie, a API e o banco do Orçamento, a comissão nova e o documento de retirada. Publicar o MES na `main` (BL-035) é informação de publicação, não critério de pronto.
+
+> [!info] Validação ponta a ponta de 10/11/2026
+> O fluxo físico foi testado de ponta a ponta num ambiente Docker local, com a `develop` e os dados do tst: o pedido 28189 foi liberado, triado, destinado (uma OP de fabricação e uma de revenda), comprou, recebeu, passou pelas duas qualidades, foi produzido, embalado e entregue, com o Hub acompanhando cada etapa. Os problemas ficaram nas pontas e estão no backlog e nas pontas soltas: OC aberta pela "Nova ordem de compra" desliga a compra do pedido (BL-086), ICMS do item que não acompanha o destino (BL-087), custo real inacessível (BL-088), fabricado sem custo (BL-067), Torre de Fluxo vazia (BL-003), cadastros do tst (PS-046 a PS-051), dois pontos em que a `develop` não segue a regra do vault (Destinação sem rodada, PS-052; reprovação parcial na entrada, PS-053), conta `admin` genérica (RS-023) e cinco perguntas ao Nathan (OQ-49 a OQ-53). O "transformar proposta em pedido", que no teste dava 400, já foi corrigido na `develop` depois dele (av-hub PR #277).
 
 **Quando consultar esta nota:** quando você precisar saber o que está pronto, o que falta e quem toca cada setor.
 
@@ -20,7 +23,7 @@ fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas 
 > **O critério de pronto é a `develop` dos sistemas**: se está na `develop`, o selo é ✅. A `develop` está congelada e é a versão mais atualizada; o software ainda não foi lançado. A `main` (a última versão publicada e testada) não é critério de pronto e só aparece como informação ("publicado na `main`: sim/não").
 > **Em uso real hoje, só os dashboards, a tela de aprovação de vagas e as telas da gerência** (Nathan, 30/10/2026). O resto (Compras, ordem de compra, requisição, proposta, pedido manual, Torre, custo e as demais telas) ainda não tem uso real: nenhuma OC criada no av-hub existe no banco de produção. Onde uma nota antiga ainda disser "produção ❓" ou "não conferido em produção", leia "não conferido na `develop`" e confira. Mudanças de formato, como a numeração só com dígitos (N16-148), não têm dado real para migrar.
 
-O estado é o da `develop` dos cinco sistemas lida em 05/11/2026 (commits no `develop-conferida` acima e em [[Ultima-Atualizacao-do-Vault]]). Cada linha resume a seção "O que já existe e o que falta" da raia, que cita repositório e arquivo:linha. Publicado na `main`: a `main` do MES parou em 08/10, então a OP, o lote do fabricado e o custo por item (26 e 27/10) ainda não foram publicados (BL-035). A API da proposta e as telas já existem; o Orçamento, a conferência de Compras (`C6` a `C8`) e a comissão nova ainda não têm código. A fila de trabalho está em [[Backlog-por-Frente]].
+O estado é o da `develop` dos cinco sistemas lida em 05/11/2026 e, nas raias tocadas pela validação, em 10/11/2026 (commits no `develop-conferida` acima e em [[Ultima-Atualizacao-do-Vault]]). Cada linha resume a seção "O que já existe e o que falta" da raia, que cita repositório e arquivo:linha. Publicado na `main`: a `main` do MES parou em 08/10, então a OP, o lote do fabricado e o custo por item (26 e 27/10) ainda não foram publicados (BL-035). A API da proposta e as telas já existem; o Orçamento, a conferência de Compras (`C6` a `C8`) e a comissão nova ainda não têm código. A fila de trabalho está em [[Backlog-por-Frente]].
 
 **Decisões de 30/10/2026 (N16-145 a N16-148):** o Ciclo 1 passa a incluir o documento de retirada (BL-007), BL-049 e BL-050 (déficit do Robert de 36,1 pd e fim em 03/03/2027 a 75% de foco; o Robert valida a conta); os modelos dos documentos de retirada e de devolução da sobra ao Estoque foram aprovados; o número da proposta e da ordem de compra é só dígitos no banco, com o prefixo só na tela e no PDF; só o perfil Admin vê a Torre de Fluxo por enquanto.
 
@@ -28,7 +31,7 @@ O estado é o da `develop` dos cinco sistemas lida em 05/11/2026 (commits no `de
 
 | Setor | Como está | Quem toca | O que falta |
 |---|---|---|---|
-| [[01-Proposta-de-Venda]] | 🟡 API e telas da proposta existem na `develop`; o envio ao Omie existe na API (`1654f65`), falta o banco e a tela | Robert (rotas e telas), Gustavo, Pablo acompanha | Versionar e aplicar em produção as migrations do "Transformar em pedido" e do envio ao Omie: a função de 4 argumentos já está no banco de teste ([[Dump-AvHub-Teste-2026-11-09]]), mas as migrations de 05/11 e 06/11 estão fora do repositório (BL-024); ligar o BFF e a tela ao `transformar` com o corpo do modal (N16-150) e ao "Tentar novamente"; fazer o teste do pedido mínimo no Omie (BL-081); motor da comissão na API; decidir o schema (`core_comercial` ou `core_vendas_faturamento`, N16-116) |
+| [[01-Proposta-de-Venda]] | 🟡 API e telas da proposta existem na `develop`; o envio ao Omie existe na API (`1654f65`), falta o banco e a tela | Robert (rotas e telas), Gustavo, Pablo acompanha | Versionar e aplicar em produção as migrations do "Transformar em pedido" e do envio ao Omie: a função de 4 argumentos já está no banco de teste ([[Dump-AvHub-Teste-2026-11-09]]), mas as migrations de 05/11 e 06/11 estão fora do repositório (BL-024); o BFF e a tela já chamam o `transformar` com as seis respostas do modal, inclusive Qualidade e faturar em partes (av-hub PR #277, 10/11), e o "Tentar novamente"; falta a data por item (N16-150) e liberar a tela Propostas ao perfil Vendedor (PS-046); fazer o teste do pedido mínimo no Omie (BL-081); motor da comissão na API; decidir o schema (`core_comercial` ou `core_vendas_faturamento`, N16-116) |
 | [[02-Orcamento-Base-de-Preco]] | 🟡 Telas no front (`develop`) · 🔴 sem API e sem banco (existia só no `api-comercial` de teste, removido do av-hub em 06/11/2026 (PR #261, `dd9d729`), F3) | Pablo, Robert, Gustavo | Portar oferta, histórico e pedido de custo para a `api-acos-vital`; base de preço gerada das compras; página do produto com score e volatilidade; pedido de custo ao Orçamento |
 | [[03-Pedido-de-Venda-e-Liberacao]] | ✅ Liberação funciona · 🔴 pedido no Hub | Nathan, Gustavo | Pedido do Omie no mesmo fluxo do pedido da proposta; compras e faturamento em partes na tela do pedido |
 | [[04-PCP-Triagem-e-Destinacao]] | ✅ Triagem e Destinação · 🔴 volta de reprovado | Robert | Caminho para o item reprovado (retrabalho ou nova compra); mostrar a OC do pedido ao PCP. A Ordem de Produção já é emitida e impressa e a Triagem mostra as requisições do hub (`develop`, 23 e 27/10) |
@@ -49,10 +52,10 @@ O estado é o da `develop` dos cinco sistemas lida em 05/11/2026 (commits no `de
 |---|---|
 | Requisição MES ↔ av-hub | ✅ Funciona nos dois sentidos, por pedido imediato e por consulta a cada 5 minutos |
 | Status por item | ✅ Pronto |
-| Torre de Fluxo (painel de acompanhamento) | 🟡 API, rotinas e telas prontas no av-hub (telas sobre dados de exemplo, desde 15/10); o MES não envia os eventos; só o perfil Admin (os desenvolvedores) vê as telas, por enquanto (N16-148, BL-021) |
-| Custo por item | 🟡 O lote nasce com o custo da OC e o MES publica `GET /itens/custo` (27/10, na `develop`); falta o hub ler (a tela usa dados de exemplo). O Ciclo 1 segue sem imposto; o modelo com impostos foi desenhado em 29/10 (N16-144) |
+| Torre de Fluxo (painel de acompanhamento) | 🟡 API, rotinas e telas prontas no av-hub (telas sobre dados de exemplo, desde 15/10); o MES não envia os eventos e a Torre fica vazia com dados reais (BL-003, confirmado em 10/11); só o perfil Admin (os desenvolvedores) vê as telas, por enquanto (N16-148, BL-021) |
+| Custo por item | 🟡 O lote nasce com o custo da OC e o MES publica `GET /itens/custo` (27/10, na `develop`); a tela do hub lê os dados reais (os de exemplo só entram se a API falhar fora de produção), mas o acesso e a filial travam o uso (BL-088), e o fabricado chega com custo 0 (BL-067). O Ciclo 1 segue sem imposto; o modelo com impostos foi desenhado em 29/10 (N16-144) |
 | Cadastros TESTE no Omie | 🟡 O Omie não tem ambiente de teste. Os cadastros TESTE do Nathan entram nos relatórios: filtre ao conferir |
-| Pendências de cadastro | ❓ Feitas pelo Nathan em 30/10/2026: perfil CCP criado e usuários vinculados à Gerência de Compras (BL-017, RS-015). Cadastro no banco, não conferido no ambiente |
+| Pendências de cadastro | ❓ Feitas pelo Nathan em 30/10/2026: perfil CCP criado e usuários vinculados à Gerência de Compras (BL-017, RS-015). No banco de teste de 10/11 elas não aparecem: nenhum Comprador vinculado, Gerência de Compras sem usuário, MES com um perfil só (PS-047, PS-049, PS-050) |
 
 ## Publicado na main (informação)
 

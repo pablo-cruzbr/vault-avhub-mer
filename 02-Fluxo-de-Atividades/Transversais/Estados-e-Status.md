@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, estados, status, enums, referencia]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-10
 status: vigente
 dono: Nathan
 fontes: [api-pcp 579a625 prisma/models/*.prisma, integracao-avhub.service.ts, requisicao-avhub.eventos.ts, Dump MES 14/10 (CREATE TYPE, linhas 128-424), Dump Avhub 14/10 (CHECK constraints), app-pcp 1fca8d3 movimentacoes/labels.ts e acoes.ts, HUB b55ac55 lib/domain/etapas-item.ts, 00-Fluxo-Mestre-0b, api-pcp develop de 27/10/2026 (FINALIZADO, PRODUCAO), api-acos-vital develop (propostas)]
@@ -164,7 +164,7 @@ Linhas do dump entre parênteses: `Dump MES (Esqueleto).sql`.
 | `Prioridade` | `BAIXA`, `NORMAL`, `ALTA`, `URGENTE` | `producao.prisma:3-8` (168) ✅ |
 | `SistemaOrigem` | `OMIE`, `MANUAL` | `producao.prisma:23-26` (183) ✅ |
 
-Uso: `ENTREGUE` é gravado por `EntregasService.create` quando zera o pendente e não resta parcial ativa (`entregas.service.ts:104-130`). `BLOQUEADO` e `EM_PRODUCAO` nunca são gravados por código: todo pedido nasce `AGUARDANDO` e a única transição automática é para `ENTREGUE` (`item-parcial-status.constants.ts:44-50`) ✅. O dashboard conta produção pela atividade das parciais, não por este campo.
+Uso: `ENTREGUE` é gravado por `EntregasService.create` quando zera o pendente e não resta parcial ativa (`entregas.service.ts:104-130`). `BLOQUEADO` e `EM_PRODUCAO` nunca são gravados por código: todo pedido nasce `AGUARDANDO` e a única transição automática é para `ENTREGUE` (`api-pcp` `src/common/constants/item-parcial-status.constants.ts:31-33` (`o pedido só passa de AGUARDANDO a ENTREGUE`)) ✅. O dashboard conta produção pela atividade das parciais, não por este campo.
 
 #### Parcial do item (`ItemParcial.status`)
 
@@ -263,7 +263,7 @@ Saldo disponível conta só lote `LIBERADO` menos reservas `ATIVA` (`estoque-ope
 
 ### 2. Status por item: as 11 etapas (contrato 005)
 
-Emitidas por `GET /itens/status` do MES (`etapaDoItem`, `integracao-avhub.service.ts:167-192`) ✅ e gravadas em `core_vendas_faturamento.itens_pedido_status.etapa` (`varchar(60)`, Dump Avhub linha 16990). A etapa deriva do **tipo do setor atual** mais o status; o vocabulário é provisório ([[Contratos-da-v2|API-005]], [[Contratos-da-v2|API-006]]).
+Emitidas por `GET /itens/status` do MES (`api-pcp` `src/integracao-avhub/integracao-avhub.service.ts:158-183` (`etapaDoItem`)) ✅ e gravadas em `core_vendas_faturamento.itens_pedido_status.etapa` (`varchar(60)`, Dump Avhub linha 16990). A etapa deriva do **tipo do setor atual** mais o status; o vocabulário é provisório ([[Contratos-da-v2|API-005]], [[Contratos-da-v2|API-006]]).
 
 | # | `etapa` | Regra (código) | Rótulo no HUB (`lib/domain/etapas-item.ts:34-46`) |
 |---|---|---|---|

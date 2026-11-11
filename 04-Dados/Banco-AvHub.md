@@ -1,10 +1,10 @@
 ---
 tags: [dados, banco, av-hub, postgres]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: vigente
 dono: Gustavo (DBA)
-fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-10 (10/11/2026)]
+fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-10 (10/11/2026), PDF de Gustavo de 10/11/2026 (entrega N16-147 itens 1 e 2)]
 ---
 
 # Banco do av-hub
@@ -65,13 +65,13 @@ Convenções ✅: chave `uuid` com `DEFAULT uuidv7()`; colunas de auditoria (`cr
 - **`vw_vendas_planilha`** (CREATE na linha 25250; base da `vw_pedidos_liberacao` e, por ela, da tela Liberar Pedidos). Linha 25386: `obs_venda ~* 'refat|reaft'` **ou** `codigo_categoria = '1.01.96'` dá G6. Linha 25390, a porta da família: `bool_or` da mesma condição sobre as parciais (`sequencial > 0`, sem `deleted_at`, `etapa <> 0`) leva o pedido-pai a G6. Não consulta a tabela `refaturamentos` para decidir, embora exponha `status_refaturamento` (linha 25363).
 - **`vw_faturamento_planilha`** (CREATE na linha 17848; base da comissão). Linha 18042: `obs_venda ~* 'refat|reaft'` **e** (`status_refaturamento` nulo, `Proibido` ou `Sem Referência`) dá G6. Linha 18043: observação sem `refat` **e** categoria `'1.01.96'` dá G6.
 - As duas não são equivalentes. Na Liberar Pedidos some todo pedido com `refat`/`reaft` na observação, em qualquer unidade, e todo pedido `1.01.96`; os refaturamentos de Uberaba (`1.01.99`) e da HRM (`1.01.98`) não caem em G6 pela categoria.
-- Tabela `core_vendas_faturamento.refaturamentos` (linha 17487): chave `codigo_pedido_omie`, `status_refaturamento` em `Permitido`, `Proibido` ou `Sem Referência`, calculada (`computed_at`, `periodo`), por `codigo_empresa`. A N16-152 (b), de 09/11/2026, faz dela a fonte do refaturamento e tira a observação da porta do G6 ([[Registro-N16-150-a-N16-153]]); 🔴 sem código. Risco: [[Riscos]] (RS-022).
+- Tabela `core_vendas_faturamento.refaturamentos` (linha 17487): chave `codigo_pedido_omie`, `status_refaturamento` em `Permitido`, `Proibido` ou `Sem Referência`, calculada (`computed_at`, `periodo`), por `codigo_empresa`. A N16-152 (b), de 09/11/2026, faz dela a fonte do refaturamento e tira a observação da porta do G6 ([[Registro-N16-150-a-N16-154]]); 🔴 sem código. Risco: [[Riscos]] (RS-022).
 
 ### Requisição de compra (P3, C0, C1)
 
 | Tabela | Colunas e regras | Dump |
 |---|---|---|
-| **`requisicoes_compra`** | `numero_requisicao` (gerado pelo banco, único por unidade), `codigo_empresa`, `material` (60), `descricao`, **`quantidade numeric(15,4) > 0`**, `unidade_medida` (10), `prazo_necessidade date`, `acabado_sugerido`, `solicitante`, `status` (`aberta`, `em_cotacao`, `atendida`, `cancelada`), `id_ordem_compra`, **`id_origem uuid`** (id do item da requisição do MES), `numero_requisicao_mes`, `codigo_pedido_omie bigint`, `numero_pedido_venda`, `motivo_cancelamento`, `cancelada_por_origem` (`compras` ou `mes`). CHECK `atendida ⇔ id_ordem_compra IS NOT NULL` | `:18541` |
+| **`requisicoes_compra`** | `numero_requisicao` (gerado pelo banco, único por unidade), `codigo_empresa`, `material` (60), `descricao`, **`quantidade numeric(15,4) > 0`**, `unidade_medida` (10), `prazo_necessidade date`, `acabado_sugerido`, `solicitante`, **`id_setor`** (só `uso_interno`; FK `core.setores`, mesma unidade, N16-147; migration api010b, teste), `status` (`aberta`, `em_cotacao`, `atendida`, `cancelada`), `id_ordem_compra`, **`id_origem uuid`** (id do item da requisição do MES), `numero_requisicao_mes`, `codigo_pedido_omie bigint`, `numero_pedido_venda`, `motivo_cancelamento`, `cancelada_por_origem` (`compras` ou `mes`). CHECK `atendida ⇔ id_ordem_compra IS NOT NULL` | `:18541` |
 | **`requisicoes_compra_eventos`** | só inserção (`trg_req_eventos_imutavel`); `id_requisicao`, `id_origem`, `codigo_empresa`, `tipo` (14 valores), `ocorrido_em`, `registrado_em DEFAULT clock_timestamp()`, `status_requisicao`, `id_ordem_compra`, `dados jsonb`, `criado_por`; índice do cursor `(registrado_em, id)` | `:18680` |
 | view `vw_requisicoes_compra_eventos` | acrescenta `autor` (usuário e funcionário) e `comprador` (migration 035b) | dump |
 | `contadores_documento` | contador atômico por unidade e tipo (`requisicao`, `ordem_compra`) | `:16555` |

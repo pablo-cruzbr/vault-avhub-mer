@@ -1,12 +1,12 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3, parte]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: vigente
 dono: Nathan
 parte-de: "[[03-Pedido-de-Venda-e-Liberacao]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
-fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, em 2026-11-10; api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10, api-acos-vital develop cc3fbb3 (pedidos_liberacao.route.js), av-hub develop 44bb770 (LiberarPedidosLista.tsx, EtapaDosItens.tsx), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Raia Vendas: liberação do pedido (V1 a V3): detalhe técnico (2/2)
@@ -31,7 +31,7 @@ Modelo do banco do av-hub em [[Banco-AvHub]]; do MES em [[Banco-MES]].
 ### Data de corte
 
 - Regra: `data_inclusao >= parametros_vendas.data_inicio_liberacao`. Pedido anterior não trava, **e também não aparece na Triagem**: os itens dele respondem 404 e o MES mostra "não encontrado" (observação do Robert, 30/09). Os pedidos anteriores à data de corte ficam fora do MES e terminam no sistema antigo 📝 (N16-142, 29/10/2026); falta uma mensagem clara no lugar do erro 404 🔴.
-- Valor vigente no **banco de teste**: **`2026-09-01`** 📝 (Nathan, 09/11/2026: `SELECT data_inicio_liberacao FROM core_vendas_faturamento.parametros_vendas`, no mesmo banco em que rodou a medição do G6 para o contrato LOG-56). Bate com o `2026-09-01` do banco local; o `2026-07-28` que o contrato registrava na `api-test` (conferido em 01/10) não vale mais. **Produção:** a Liberação ainda não foi publicada; em produção só estão os dashboards da gerência (Nathan, 09/11/2026). O valor de produção será definido ao publicar, e o "01/09/2026 em produção" do vault anterior não se confirma. O Dump Avhub é de esqueleto e não traz o dado.
+- Valor vigente no **banco de teste**: **`2026-09-01`** 📝 (Nathan, 09/11/2026: `SELECT data_inicio_liberacao FROM core_vendas_faturamento.parametros_vendas`, no mesmo banco em que rodou a medição do G6 para o contrato LOG-56). Bate com o `2026-09-01` do banco local; o `2026-07-28` que o contrato registrava na `api-test` (conferido em 01/10) não vale mais. **Produção:** a Liberação ainda não foi publicada; em produção só estão os dashboards da gerência (Nathan, 09/11/2026). O valor de produção será definido ao publicar, e o "01/09/2026 em produção" do vault anterior não se confirma. O Dump Avhub é de esqueleto e não traz o dado. A validação local em Docker de 10/11/2026, com os dados do tst, viu o mesmo 01/09/2026 no rodapé da Liberar Pedidos. O valor é **dado do banco, não do código**: a API só lê a linha `id = 1` de `parametros_vendas` (`api-acos-vital` `src/schemas/core_vendas_faturamento/aggregates/pedidos_liberacao/pedidos_liberacao.route.js:154`, `SELECT data_inicio_liberacao FROM core_vendas_faturamento.parametros_vendas`) e a tela mostra o que vier (`av-hub` `components/LiberarPedidos/LiberarPedidosLista.tsx:354`, `Entram aqui os pedidos incluídos no Omie a partir de`).
 
 ## Quem vê o quê
 
@@ -122,7 +122,7 @@ O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Ped
 | 6 | **Pedido parado.** Pedido que o vendedor nunca libera é invisível ao PCP. A tela do gerente mostra quem segura; falta alerta depois de N horas e definir quem recebe (decisão T-07 do v1) | Nathan | V3 | 🔴 |
 | 7 | **Fila de inspeção de processo** que consome `Pedidos.acompanhamentoQualidade`: o dado chega e é gravado, mas nenhuma tela do MES o usa além da coluna da Triagem | Robert | V2 e raia de [[11-Qualidade-Saida]] | 🔴 |
 | 8 | **Estados macro do vendedor** (os 8 do desenho): decidir se entram ou se o vendedor fica com `status_liberacao` mais 11 etapas; se entrarem, depende do feed do MES (`estado_macro`) | Nathan decide, Robert (feed) | V1 a O2 | 🔴 |
-| 9 | **Cartão Etapa dos itens:** teste ponta a ponta com a migration `api005` aplicada; `quantidade_na_etapa` tipado como número e a API pode mandar `null`; sem linha do tempo, SLA nem filtro por etapa; `compras.fechamento` ainda aparece como "Em compra" (sem cotação, aprovação ou trânsito) | Nathan (front), Gustavo (migration), Robert (etapa de compra mais fina) | V1 | 🔴 |
+| 9 | **Cartão "Andamento na produção"** (antigo "Etapa dos itens"): teste ponta a ponta com a migration `api005` aplicada; `quantidade_na_etapa` tipado como número e a API pode mandar `null`; sem linha do tempo, SLA nem filtro por etapa; `compras.fechamento` ainda aparece como "Em compra" (sem cotação, aprovação ou trânsito) | Nathan (front), Gustavo (migration), Robert (etapa de compra mais fina) | V1 | 🔴 |
 | 10 | **Migration `api005`** (função, tabela e mapa de rotas do status por item) não verificada no banco; DDL não versionado | Gustavo | V1 | ❓ |
 | 11 | ✅ Marcas `GAMBIARRA(` de escopo removidas do front (`lib/api/pedidosVenda.ts`, `lib/api/portalPcp.ts`; `484dea6`, 15/10): contrato [[Contratos-da-v2\|LOG-50]] | Nathan | V2 | ✅ |
 | 12 | **Valor da data de corte em produção** e documentar | Nathan e Gustavo | V1 | ❓ |

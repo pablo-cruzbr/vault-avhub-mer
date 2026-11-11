@@ -44,6 +44,7 @@ svg.edges{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
 .node.pa{background:var(--pa-bg);border-color:var(--pa-bd);color:var(--pa-fg);border-style:dashed}
 .node.fa{background:var(--fa-bg);border-color:var(--fa-bd);color:var(--fa-fg);border-style:dotted}
 .node.dec{border-radius:22px}
+.vf{font-style:normal;color:var(--sel);font-size:10px;vertical-align:1px}
 .node:focus-visible{outline:3px solid var(--sel);outline-offset:2px}
 .node.sel{box-shadow:0 0 0 4px var(--sel)}
 .node.dim{opacity:.3}
@@ -99,7 +100,7 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <div id="vp"><div id="world"></div></div>
 <div class="hud" id="info">
   <h1>Fluxo 0b: Atividades</h1>
-  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> dos sistemas conferido em 05/11/2026, com o envio ao Omie e o banco de teste de 09/11. Clique num nó para ver os detalhes.</p>
+  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> de 05/11/2026 e, nas raias tocadas pela validação ponta a ponta de 10/11 (pedido 28189, em Docker com os dados do tst), de 10/11/2026. Clique num nó para ver os detalhes.</p>
   <div class="chips" id="sum"></div>
   <div id="dica">Arraste para mover · roda do mouse ou pinça para zoom · duplo clique preenche a tela</div>
 </div>
@@ -122,7 +123,8 @@ var N={
 "r": "Vendedor cria a proposta: unidade emissora (logo, cores, CRC no PDF), cliente com cadastro no Omie da conta, itens com CFOP, cenário e impostos digitados, condição de pagamento da lista da conta",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "· 01-Proposta-de-Venda",
-"cod": "🟡 API ✅ (api-acos-vital develop, 29/10) e telas de criar, listar e abrir ✅; revisar sem tela; numeração diverge da N16-04 🔴"
+"cod": "🟡 API ✅ (api-acos-vital develop, 29/10) e telas de criar, listar e abrir ✅; revisar sem tela; numeração diverge da N16-04 🔴",
+"v": "O número ainda sai no formato antigo, como CO-AV2026-0011-R00. Guardar só dígitos no banco (N16-148) não foi aplicado."
 },
 "V0.2": {
 "l": "proposta",
@@ -177,7 +179,8 @@ var N={
 "r": "Transformar em pedido: previsão de faturamento, Qualidade e faturamento em partes obrigatórios; produto pendente bloqueia",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "fn_propostas_transformar_em_pedido",
-"cod": "🟡 API transformar ✅ (grava o pedido do Hub pendente, 29/10); 🔴 tela"
+"cod": "🟡 API transformar ✅ (grava o pedido do Hub pendente, 29/10); 🔴 tela",
+"v": "O modal pergunta e envia as seis respostas, inclusive Qualidade e faturar em partes (av-hub PR #277). Falta a data por item no faturamento em partes (N16-150); na API, categoria e tipo da venda seguem opcionais."
 },
 "V0.7": {
 "l": "proposta",
@@ -186,7 +189,8 @@ var N={
 "r": "Cria o pedido no Omie por API (direto pela API, síncrono, sem fila, N16-149), com o nosso número; recusa mostra o motivo e \"Tentar novamente\"",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "IncluirPedido · Mapa-IncluirPedido-Omie",
-"cod": "🟡 ✅ API envia ao Omie (api-acos-vital pedidoOmie.js:151, develop 1654f65); ❓ banco fora do repositório; 🔴 tela"
+"cod": "🟡 ✅ API envia ao Omie (api-acos-vital pedidoOmie.js:151, develop 1654f65); ❓ banco fora do repositório; 🔴 tela",
+"v": "O transformar cria o pedido do Hub e, na mesma requisição, chama ConsultarPedido e IncluirPedido, com uma tentativa só. A função de 4 argumentos está no banco de teste, mas a migration segue fora do repositório (BL-024)."
 },
 "B1": {
 "l": "orc",
@@ -231,7 +235,8 @@ var N={
 "r": "Pedido de venda no av-hub, com duas origens no mesmo fluxo: o da proposta nasce liberado; o digitado no Omie chega travado e o job o traz para core_comercial.pedidos com a parte de vendas pronta (só se altera no Omie)",
 "tela": "Meus Pedidos",
 "ep": "pipeline ListarPedidos → pedidos_vendas; fn_pedidos_omie_sincronizar",
-"cod": "✅ pipeline; 🟡 o pedido do Hub nasce em transformar (29/10), sem envio ao Omie"
+"cod": "✅ pipeline; 🟡 o pedido do Hub nasce em transformar (29/10), sem envio ao Omie",
+"v": "Só pedido incluído a partir da data de corte precisa de liberação; no banco de teste a data é 01/09/2026. O vendedor acompanha pelo cartão \"Andamento na produção\"."
 },
 "V2": {
 "l": "vendas",
@@ -249,7 +254,8 @@ var N={
 "r": "Vendedor libera (marcação e liberação numa ação só) e preenche a parte de compras do pedido do Omie (a simulação da comissão), sem travar o fluxo",
 "tela": "Liberar Pedidos · /vendas/liberar-pedidos (HUB); depois Meus Pedidos 🟡",
 "ep": "PUT /pedidos_liberacao/:empresa/:numero · LOG-26; histórico em pedidos_vendas_liberacao_historico",
-"cod": "✅ liberação; 🔴 parte de compras"
+"cod": "✅ liberação; 🔴 parte de compras",
+"v": "Na validação, o pedido 28189 foi liberado e seguiu para a Triagem. A resposta de V2/V3 na tela do pedido do Omie ainda não existe."
 },
 "P1": {
 "l": "pcp",
@@ -267,7 +273,8 @@ var N={
 "r": "Define destino (FABRICACAO ou REVENDA) e quantidade ≤ restante por item e rodada; insere Estoque como etapa 1; confirma importação; o roteiro dos demais setores é montado depois, na Montagem do Roteiro, que libera a OP (develop, 22/10)",
 "tela": "Destinação do Pedido · \"Nova Ordem de Produção\" · /ordens-producao/novo",
 "ep": "POST /pedidos/completo/lote; POST /pedidos_liberados/:n/importado · LOG-26",
-"cod": "✅"
+"cod": "✅",
+"v": "A develop só salva a Destinação com o pedido inteiro, cada item pelo que resta e com um destino só, o que impede a rodada parcial e a divisão de emergência (PS-052). Falta decidir se o código volta à rodada ou se a regra muda."
 },
 "P3": {
 "l": "pcp",
@@ -323,7 +330,8 @@ var N={
 "tela": "Atendimento · /estoque-operacao/atendimento",
 "ep": "PATCH /itens-parciais/:id/atender-estoque (destinoRestante)",
 "cod": "✅ compra; 🟡 enviar à produção com baixa imediata de matéria-prima no Atender pelo estoque (develop, 19/10); a decisão é baixar na retirada (N16-140) 🔴",
-"d": 1
+"d": 1,
+"v": "Enviar à produção só existe com matéria-prima do estoque: o restante sem matéria-prima vai para a compra, e a develop recusa seguir o roteiro (OQ-49)."
 },
 "C1": {
 "l": "compras",
@@ -351,7 +359,8 @@ var N={
 "r": "Aprovação: OC acima de R$ 30 mil, o Gerente de Compras aprova; até R$ 30 mil, compradores livres (sem aprovação)",
 "tela": "Aprovações · /compras/aprovacoes (HUB)",
 "ep": "parametros_compras; oc_enviada_aprovacao, oc_aprovada",
-"cod": "✅ 📝 N14-21: a trigger fn_ordens_compra_recalcular aprova sozinha a OC até parametros_compras.limite_aprovacao (padrão R$ 30 mil, por unidade); acima disso a OC fica aguardando_aprovacao e só quem tem pode_aprovar na tela compras (Gerência) aprova (ordens_compra.route.js:1230-1240, FecharCompra.tsx:604-605). Regra mais rígida depois, com Compras 🟡"
+"cod": "✅ 📝 N14-21: a trigger fn_ordens_compra_recalcular aprova sozinha a OC até parametros_compras.limite_aprovacao (padrão R$ 30 mil, por unidade); acima disso a OC fica aguardando_aprovacao e só quem tem pode_aprovar na tela compras (Gerência) aprova (ordens_compra.route.js:1230-1240, FecharCompra.tsx:604-605). Regra mais rígida depois, com Compras 🟡",
+"v": "Na validação, o comprador que emitiu uma OC acima de R$ 30 mil aprovou a própria OC. É o que a N16-123 decidiu (sem trava); a pergunta foi reaberta na OQ-52."
 },
 "C4": {
 "l": "compras",
@@ -360,7 +369,8 @@ var N={
 "r": "Emite a OC (CIF/FOB; valor, desconto, moeda, cotação PTAX por item; flag acabado/não-acabado)",
 "tela": "Ordens · /compras/ordens (HUB)",
 "ep": "POST /compras/ordens; envio ao Omie GET /compras/ordens/fila-omie (pipeline) · LOG-23, LOG-36",
-"cod": "✅"
+"cod": "✅",
+"v": "Pela \"Nova ordem de compra\" com pedido de venda, a OC não leva a requisição: ela fica aberta e a compra se desliga do pedido no MES (BL-086). Aberta pela requisição, funciona."
 },
 "C5": {
 "l": "compras",
@@ -479,7 +489,8 @@ var N={
 "r": "Inspeção de entrada por lote (laudo obrigatório)",
 "tela": "Inspeção de entrada · /qualidade/inspecao-entrada",
 "ep": "POST /qualidade/lotes/:id/aprovar, /reprovar",
-"cod": "✅"
+"cod": "✅",
+"v": "O lote em quarentena (PENDENTE) já tem saldo desde o recebimento, mas o disponível é 0: só lote LIBERADO pode ser reservado."
 },
 "Q2": {
 "l": "qe",
@@ -507,7 +518,8 @@ var N={
 "r": "Parte aprovada fica em QUARENTENA até a substituição (EC-07)",
 "tela": "Inspeção de entrada · /qualidade/inspecao-entrada",
 "ep": "cisão do lote (idLotePai)",
-"cod": "✅"
+"cod": "✅",
+"v": "A develop só mantém a parte aprovada em quarentena quando ainda há parcial esperando o lote; sem parcial, libera a parte boa na mesma ação (PS-053), contra a EC-07."
 },
 "E5": {
 "l": "estoque",
@@ -544,7 +556,8 @@ var N={
 "tela": "Inspeção de saída · /qualidade/inspecao-saida",
 "ep": "PATCH /itens-parciais/:id/reprovar",
 "cod": "✅ na develop (27/10): ação aprovar-saida leva ao Estoque, com quantidade; na main do MES o inspetor usava mover e a parcial ia à Expedição. 🔴 reprovar só uma parte (N16-128)",
-"d": 1
+"d": 1,
+"v": "Na fila do reprovado, o botão \"Aprovar\" é o falso alarme (resolver): desfaz a reprovação e devolve à inspeção. O \"sim\" é \"Aprovar na inspeção de saída\"."
 },
 "E6": {
 "l": "estoque",
@@ -590,7 +603,8 @@ var N={
 "r": "Logística de saída: transporte e comprovante",
 "tela": "Expedição · /logistica/expedicao",
 "ep": "POST /entregas",
-"cod": "🟡 transporte 🔴, comprovante ✅"
+"cod": "🟡 transporte 🔴, comprovante ✅",
+"v": "O comprovante é opcional e é um link (URL), sem envio de arquivo; a validação confirmou a entrega sem anexo."
 },
 "O1": {
 "l": "fis",
@@ -617,7 +631,8 @@ var N={
 "r": "Comissão estimada: na proposta (V0.3) ou na parte de compras do pedido do Omie; o vendedor só vê esta",
 "tela": "Comissões (novas) · estimada",
 "ep": "· 15-Custo-Real-e-Comissao",
-"cod": "🔴"
+"cod": "🔴",
+"v": "O schema core_comissao não está no banco de teste de 10/11 e a api-acos-vital não o usa; ali só existe o core_comissionamento do motor atual."
 },
 "K2": {
 "l": "comis",
@@ -626,7 +641,8 @@ var N={
 "r": "Recalcula com o custo real, por evento (OC com o valor da NF de entrada, lote do Estoque, matéria-prima), cada um com as suas condições",
 "tela": "— (automático)",
 "ep": "custos_eventos",
-"cod": "🔴"
+"cod": "🔴",
+"v": "A tela \"Custo real por item\" lê o custo real do MES, mas o acesso e a filial travam o uso (BL-088). O fabricado chega ao Hub com custo 0 (BL-067); o de revenda chegou completo."
 },
 "K3": {
 "l": "comis",
@@ -635,7 +651,8 @@ var N={
 "r": "Fecha por nota fiscal, só as peças com custo real e pelo menor percentual; a nota do pedido do Omie sem simulação espera, e a Controladoria já vê a margem real",
 "tela": "Fila da Controladoria",
 "ep": "fn_comissao_nf_fechar",
-"cod": "🔴"
+"cod": "🔴",
+"v": "Refaturamento: a categoria depende da unidade (Mogi 1.01.96, Uberaba 1.01.99, HRM 1.01.98) e a observação com a referência também conta. Só sai do líquido o Proibido ou Sem Referência (N16-153, que supera em parte a N16-152)."
 },
 "K4": {
 "l": "comis",
@@ -689,7 +706,7 @@ svg.innerHTML='<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" marke
 world.appendChild(svg);
 ids.forEach(function(i){var x=LW+PAD+col[i]*CW,y=laneIdx[N[i].l]*LH+(LH-H)/2;pos[i]={x:x,y:y};
  var b=document.createElement("button");b.type="button";b.className="node "+N[i].s+(N[i].d?" dec":"");b.id="n-"+i;b.style.left=x+"px";b.style.top=y+"px";b.style.width=W+"px";b.style.height=H+"px";
- var g={ok:"✅",pa:"🟡",fa:"🔴"}[N[i].s];b.innerHTML="<b><span>"+i+"</span><span>"+g+"</span></b><span>"+N[i].t+"</span>";
+ var g={ok:"✅",pa:"🟡",fa:"🔴"}[N[i].s];b.innerHTML="<b><span>"+i+"</span><span>"+(N[i].v?"<i class=\"vf\" title=\"Achado na validação de 10/11\">●</i> ":"")+g+"</span></b><span>"+N[i].t+"</span>";
  b.title=N[i].t;b.addEventListener("click",function(){if(moved)return;pick(i)});world.appendChild(b)});
 ED.forEach(function(e){var a=pos[e[0]],b=pos[e[1]],back=!!e[3]||col[e[1]]<=col[e[0]],d,lx,ly;
  var p=document.createElementNS(NS,"path");
@@ -700,7 +717,7 @@ ED.forEach(function(e){var a=pos[e[0]],b=pos[e[1]],back=!!e[3]||col[e[1]]<=col[e
  paths.push({p:p,t:t,e:e})});
 }
 var sum={ok:0,pa:0,fa:0};ids.forEach(function(i){sum[N[i].s]++});
-document.getElementById("sum").innerHTML='<span><b>'+ids.length+'</b> nós</span><span><i class="sw ok"></i><b>'+sum.ok+'</b> na develop</span><span><i class="sw pa"></i><b>'+sum.pa+'</b> parciais</span><span><i class="sw fa"></i><b>'+sum.fa+'</b> sem código</span><span>losango = decisão · tracejado = volta</span>';
+document.getElementById("sum").innerHTML='<span><b>'+ids.length+'</b> nós</span><span><i class="sw ok"></i><b>'+sum.ok+'</b> na develop</span><span><i class="sw pa"></i><b>'+sum.pa+'</b> parciais</span><span><i class="sw fa"></i><b>'+sum.fa+'</b> sem código</span><span><i class="vf">●</i> achado na validação de 10/11</span><span>losango = decisão · tracejado = volta</span>';
 
 /* ---------- câmera: translate + scale, tudo pelo mouse ---------- */
 var cam={x:0,y:0,s:1},MINS=0.08,MAXS=3,fitted=true;
@@ -748,7 +765,7 @@ function pick(i,noFocus){
  var ins=paths.filter(function(q){return q.e[1]===i}).map(function(q){return q.e[0]}),outs=paths.filter(function(q){return q.e[0]===i}).map(function(q){return q.e[1]});
  var chips=function(a){return a.length?'<div class="flow">'+a.map(function(x){return '<button type="button" data-n="'+x+'">'+x+'</button>'}).join("")+'</div>':"—"};
  D.hidden=false;
- D.innerHTML='<button type="button" id="close" aria-label="Fechar detalhes">×</button><h2>'+i+' · '+esc(n.t)+'</h2><div class="lane-n">'+ln+'<span class="badge '+n.s+'">'+lab+'</span></div><dl><dt>Regra</dt><dd>'+esc(n.r)+'</dd><dt>Tela</dt><dd>'+esc(n.tela)+'</dd><dt>Endpoint e contrato</dt><dd><code>'+esc(n.ep)+'</code></dd><dt>Na develop</dt><dd>'+esc(n.cod)+'</dd><dt>Vem de</dt><dd>'+chips(ins)+'</dd><dt>Segue para</dt><dd>'+chips(outs)+'</dd></dl>';
+ D.innerHTML='<button type="button" id="close" aria-label="Fechar detalhes">×</button><h2>'+i+' · '+esc(n.t)+'</h2><div class="lane-n">'+ln+'<span class="badge '+n.s+'">'+lab+'</span></div><dl><dt>Regra</dt><dd>'+esc(n.r)+'</dd><dt>Tela</dt><dd>'+esc(n.tela)+'</dd><dt>Endpoint e contrato</dt><dd><code>'+esc(n.ep)+'</code></dd><dt>Na develop</dt><dd>'+esc(n.cod)+'</dd>'+(n.v?'<dt>Validação 10/11</dt><dd>'+esc(n.v)+'</dd>':'')+'<dt>Vem de</dt><dd>'+chips(ins)+'</dd><dt>Segue para</dt><dd>'+chips(outs)+'</dd></dl>';
  D.querySelector("#close").addEventListener("click",clearSel);
  D.querySelectorAll("button[data-n]").forEach(function(b){b.addEventListener("click",function(){pick(b.dataset.n)})});
  D.scrollTop=0;

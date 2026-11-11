@@ -1,10 +1,11 @@
 ---
 tags: [fluxo, telas, rotas, raias, referencia]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-10
 status: vigente
 dono: Nathan
-fontes: [app-pcp 1fca8d3 (app/(protected)/**/page.tsx, títulos dos PageHeader), HUB b55ac55 em disco (app/(protected), components), v1 Fluxograma-Telas-por-Bloco, 00-Fluxo-Mestre-0b, Regras-do-Vault, app-pcp develop 93f96de e av-hub develop 758d5f0 de 29/10/2026]
+fontes: [app-pcp 1fca8d3 (app/(protected)/**/page.tsx, títulos dos PageHeader), HUB b55ac55 em disco (app/(protected), components), v1 Fluxograma-Telas-por-Bloco, 00-Fluxo-Mestre-0b, Regras-do-Vault, app-pcp develop 93f96de e av-hub develop 758d5f0 de 29/10/2026, av-hub 44bb770 e app-pcp 4c11886 de 10/11/2026, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
+develop-conferida: [av-hub 44bb770, app-pcp 4c11886, em 2026-11-10]
 ---
 
 # Telas por raia
@@ -28,7 +29,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 
 | Setor (nós) | O que as telas fazem | Situação |
 |---|---|---|
-| Vendas · V1 a V3 | Liberar e acompanhar pedido e etapa dos itens; clientes e relatório gerencial | ✅ 🟡 |
+| Vendas · V1 a V3 | Liberar e acompanhar pedido e o andamento na produção; clientes e relatório gerencial | ✅ 🟡 |
 | PCP · P1, P2, P6 | Triar, destinar, montar o roteiro, ver os produtos em produção e imprimir a Ordem de Produção (develop). Faltam Novo norte e OC do pedido | ✅ 🔴 |
 | Estoque · E1 a E6 | Atender, consultar, movimentar. Faltam retirada e saldo futuro | ✅ 🟡 🔴 |
 | Compras · P3, C0 a C5 | Da requisição à OC | ✅ |
@@ -38,7 +39,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Qualidade de saída · Q7, Q8 | Aprovar o fabricado (develop) | ✅ |
 | Expedição · X1 a X4 | Pallets e entrega. Faltam carga e transporte | ✅ 🔴 |
 | Fiscal · O1, O2 | Ver notas depois do fato. Falta a sinalização | ✅ 🔴 |
-| Proposta, Orçamento, comissão | Telas novas de 26/10/2026: proposta e Orçamento em andamento; comissão nova sem tela | 🟡 🔴 |
+| Proposta, Orçamento, comissão | Telas novas de 26/10/2026: proposta com criar, aprovar, cancelar, copiar e transformar em tela; Orçamento em andamento; comissão nova sem tela | ✅ 🟡 🔴 |
 | Todos | Login, Acessos, Inicial. Torre de Fluxo existe sobre dados de exemplo | ✅ 🟡 |
 
 ## Vendas (V1 a V3) · [[03-Pedido-de-Venda-e-Liberacao]]
@@ -47,10 +48,10 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 |---|---|---|---|
 | Liberar Pedidos (V2, V3) | O vendedor libera os pedidos. Menu "Portal do Vendedor" | Vendedor | ✅ |
 | Liberação da Equipe (V2, leitura) | Só leitura. Menu "Portal do Gerente" | Gerente | ✅ |
-| Meus Pedidos, detalhe (V1 a O2) | Cartão Etapa dos itens. 🟡 Falta linha do tempo, SLA e filtro | Vendedor | ✅ |
+| Meus Pedidos, detalhe (V1 a O2) | Cartão "Andamento na produção". 🟡 Falta linha do tempo, SLA e filtro | Vendedor | ✅ |
 | Pedidos da Equipe, detalhe | Mesmo cartão de etapa, para a equipe | Gerente | ✅ |
 | Pedidos do PCP | Acompanhamento comercial por diligenciador. **Não é o `app-pcp`** | Diligenciador | ✅ |
-| Propostas, lista, nova e detalhe (V0.1 a V0.7) | Ver [[01-Proposta-de-Venda]] | Vendedor | 🟡 |
+| Propostas, lista, nova e detalhe (V0.1 a V0.7) | Criar, aprovar, cancelar, copiar e transformar em pedido. Ver [[01-Proposta-de-Venda]] | Vendedor | ✅ |
 | Acompanhamento de Clientes | Clientes e grupos de empresa (a antiga tela Clientes, N16-112) | Vendedor | ✅ |
 | Relatório Gerencial | Resumo por responsável, empresa e unidade | Gerência | ✅ |
 | Pedidos de Venda e Notas Fiscais de Saída | Páginas existem, inativas no menu (N16-33) | — | ✅ |
@@ -77,7 +78,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Atendimento (E1 a E4) | Fila do setor, com a janela de atender | Estoque | ✅ |
 | Saldo (E5, consulta) | Consulta de saldo | Estoque | ✅ |
 | Reservas (E3) | Consulta das reservas | Estoque | ✅ |
-| Movimentação e Ajuste (E6, parcial) | Entrada, saída, transferência e ajuste | Estoque | ✅ |
+| Movimentação e Ajuste (E6, parcial) | Histórico de entradas, saídas, transferências e ajustes. À mão, só transferência e ajuste, com motivo; não há entrada nem saída manual | Estoque | ✅ |
 | Detalhe do lote (E5) | Movimentos do lote e etiqueta de código de barras | Estoque | ✅ |
 | Painel do Estoque | Protótipo com dados de exemplo. Os alertas são reais | Estoque | 🟡 |
 | Mapa do Depósito | Roda sobre dados de exemplo | Estoque | 🟡 |
@@ -153,11 +154,11 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 
 ## Proposta, Orçamento e comissão nova (`V0`, `B1` a `B4`, `C6` a `C8`, `K1` a `K6`) · [[01-Proposta-de-Venda]] · [[02-Orcamento-Base-de-Preco]] · [[06-Circuito-de-Compra]] · [[15-Custo-Real-e-Comissao]]
 
-Desenho aprovado em 26/10/2026. Em 29/10/2026 a proposta já tem API na `api-acos-vital` e telas em andamento no `av-hub`; o resto segue sem código 🔴. As telas de proposta são do Robert e o Orçamento é do Pablo, com o Robert. Auditoria, conexões e menu: [[Telas-e-Experiencia-do-Usuario]].
+Desenho aprovado em 26/10/2026. Em 10/11/2026 a proposta tem API na `api-acos-vital` e tela e BFF no `av-hub` para criar, aprovar, cancelar, copiar e transformar em pedido; o resto segue sem código 🔴. As telas de proposta são do Robert e o Orçamento é do Pablo, com o Robert. Auditoria, conexões e menu: [[Telas-e-Experiencia-do-Usuario]].
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
-| Proposta (`V0.1` a `V0.7`, `V0C`) | Cinco blocos e um botão principal por estado | Vendedor | 🟡 criar, listar e abrir ✅; aprovar, cancelar e transformar têm API mas não têm tela; `V0.7` 🔴 |
+| Proposta (`V0.1` a `V0.7`, `V0C`) | Cinco blocos e um botão principal por estado | Vendedor | ✅ criar, aprovar, cancelar, copiar e transformar, com botão e BFF (`av-hub` `components/Propostas/PropostaForm/AndamentoProposta.tsx:236`, `Transformar em pedido`); o modal envia as seis respostas, com Qualidade e faturamento em partes (PR #277); `V0.7` ✅ com "Tentar novamente no Omie". Detalhe em [[01-Proposta-de-Venda]] |
 | Meus Pedidos (`V1` a `V3`, `C8`, datas) | Pedido das duas origens, parte de compras, respostas, pendências de compra acima do valor, histórico de datas | Vendedor | 🔴 |
 | Página do produto (`B2`) | Consulta de preço e fornecedores | Vendedor, Orçamento, Compras | 🔴 |
 | Orçamento · Pedidos de custo (`B3`, `B4`) | Fila de pedidos de custo | Setor de Orçamento | 🟡 tela ✅ (aba da página Pedidos de custo); API na `api-acos-vital` 🔴 |
@@ -188,9 +189,9 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 
 | Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
 |---|---|---|---|---|---|---|
-| V2, V3 | Liberar Pedidos | Caixa de entrada do vendedor (1.1) | HUB | `/vendas/liberar-pedidos` | `liberar-pedidos` | `app/(protected)/liberar-pedidos/page.tsx`; menu em "Portal do Vendedor" (`groupMap.ts:23`) |
-| V2 (leitura) | Liberação da Equipe | Visão do gerente da 1.1 | HUB | `/liberacao-equipe` | `liberacao-equipe` | "Portal do Gerente" (`groupMap.ts:27`) |
-| V1 a O2 | Meus Pedidos, detalhe com cartão Etapa dos itens | Meus Pedidos por etapa (1.2) | HUB | `/meus-pedidos`, `/meus-pedidos/pedido/[codigoEmpresa]/[pedidoVenda]` | `meus-pedidos` | Cartão `components/Pedidos/EtapaDosItens.tsx`, usado em `PedidoDetalhe.tsx:812` |
+| V2, V3 | Liberar Pedidos | Caixa de entrada do vendedor (1.1) | HUB | `/vendas/liberar-pedidos` | `liberar-pedidos` | `av-hub` `app/(protected)/vendas/liberar-pedidos/page.tsx:6` (`Portal do Vendedor`) |
+| V2 (leitura) | Liberação da Equipe | Visão do gerente da 1.1 | HUB | `/liberacao-equipe` | `liberacao-equipe` | `av-hub` `components/Layout/AppLayout/Menu/MenuItem/groupMap.ts:25` (`'liberacao-equipe': 'Portal do Gerente'`) |
+| V1 a O2 | Meus Pedidos, detalhe com o cartão "Andamento na produção" | Meus Pedidos por etapa (1.2) | HUB | `/meus-pedidos`, `/meus-pedidos/pedido/[codigoEmpresa]/[pedidoVenda]` | `meus-pedidos` | Cartão `components/Pedidos/EtapaDosItens.tsx:61` (`<h2>Andamento na produção</h2>`; o arquivo guarda o nome antigo "Etapa dos itens"), usado em `components/Pedidos/PedidoDetalhe.tsx:93` (`<EtapaDosItens`) |
 | idem | Pedidos da Equipe, detalhe | idem | HUB | `/pedidos-equipe`, `/pedidos-equipe/pedido/...` | `pedidos-equipe` | Mesmo cartão |
 | — | Pedidos do PCP | Portal PCP | HUB | `/pcp-pedidos`, `/pcp-pedidos/pedido/...` | `pcp-pedidos` | Não é o `app-pcp` |
 | V0.1 a V0.7 | Propostas (lista, nova, detalhe) | — | HUB | `/vendas/propostas`, `/vendas/propostas/nova`, `/vendas/propostas/[id]` | `propostas` | BFF `app/api/comercial/[...rota]/route.ts`; lê e grava na `api-acos-vital` (`/comercial/propostas`) |
@@ -219,7 +220,7 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 | E1 a E4 | Atendimento | Atendimento / Baixa (8.12) | app-pcp | `/estoque-operacao/atendimento` | `atendimento` | `AtenderEstoqueModal` (título `atendimento/page.tsx:10`) |
 | E5 (consulta) | Saldo | Consulta de Saldo (8.4) | app-pcp | `/estoque-operacao/saldo` | ❓ | Título `saldo/page.tsx:73` |
 | E3 | Reservas | Reservas (8.5) | app-pcp | `/estoque-operacao/reservas` | ❓ |  |
-| E6 (parcial) | Movimentação e Ajuste | Movimentação (8.6) | app-pcp | `/estoque-operacao/movimentacao` | ❓ | `ENTRADA`, `SAIDA`, `TRANSFERENCIA`, `AJUSTE` |
+| E6 (parcial) | Movimentação e Ajuste | Movimentação (8.6) | app-pcp | `/estoque-operacao/movimentacao` | ❓ | O histórico mostra `ENTRADA`, `SAIDA`, `TRANSFERENCIA` e `AJUSTE`; à mão, só `TRANSFERENCIA` e `AJUSTE` (`app-pcp` `app/(protected)/estoque-operacao/movimentacao/page.tsx:229` `Transferência entre localizações`, `:230` `Ajuste de saldo`) |
 | E5 | Detalhe do lote | Detalhe do lote (8.7) | app-pcp | `/estoque-operacao/lotes/[id]` | ❓ | Movimentos, etiqueta Code128 |
 | — | Painel do Estoque | Dashboard do Estoque | app-pcp | `/estoque-operacao/painel-estoque` | `painel-estoque` | Protótipo com dados de exemplo; alertas reais |
 | — | Mapa do Depósito | — | app-pcp | `/estoque-operacao/mapa-deposito` | ❓ | Sobre `MOCK_DEPOSITOS` |
@@ -290,7 +291,7 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 | Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
 |---|---|---|---|---|---|---|
 | O1 | Fila de sinalização de faturamento | — | app-pcp | — | — | 🔴 |
-| O2 | Notas Fiscais de Saída | — | HUB | `/vendas/notas-fiscais-saida` | ❓ | Título `page.tsx:98` |
+| O2 | Notas Fiscais de Saída | — | HUB | `/vendas/notas-fiscais-saida` | ❓ | Título `app/(protected)/vendas/notas-fiscais-saida/page.tsx:98` (`PageHeader`) |
 | O2 | Minhas Notas, Notas da Equipe, Notas do PCP | — | HUB | `/vendas/minhas-notas`, `/notas-equipe`, `/pcp-notas` | ❓ | Pós-fato |
 
 ### Telas que servem a todos

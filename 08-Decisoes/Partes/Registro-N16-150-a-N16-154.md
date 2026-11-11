@@ -1,18 +1,18 @@
 ---
 tags: [decisoes, registro, n16, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 parte-de: "[[Registro-de-Decisoes]]"
-fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido de venda", N16-05, N16-89, N16-130, N16-149, api-acos-vital develop 1654f65 (src/schemas/core_comercial/aggregates/propostas/propostas.route.js:579-618), dump do banco de teste de 04/11/2026 (core.categorias, core_comercial.pedidos_venda), PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), conversa do Nathan de 10/11/2026 sobre o refaturamento, dump do banco de teste de 10/11/2026, prova-recalculo-refaturamento.sql (10/11/2026)]
+fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido de venda", N16-05, N16-89, N16-130, N16-149, api-acos-vital develop 1654f65 (src/schemas/core_comercial/aggregates/propostas/propostas.route.js:579-618), dump do banco de teste de 04/11/2026 (core.categorias, core_comercial.pedidos_venda), PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), conversa do Nathan de 10/11/2026 sobre o refaturamento, dump do banco de teste de 10/11/2026, prova-recalculo-refaturamento.sql (10/11/2026), api-acos-vital develop cc3fbb3 (src/schemas/core_comercial/aggregates/cadastros/cadastros.route.js:66-108; src/schemas/core/tables/unidades/unidades.model.js:167-170), dump do banco de teste de 10/11/2026 às 07:36 (ainda com core_comercial.unidades_emissoras, linha 17220)]
 ---
 
-# Registro de decisões: decisões N16, N16-150 a N16-153
+# Registro de decisões: decisões N16, N16-150 a N16-154
 
-**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-153 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão e a regra do refaturamento por unidade.
+**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-154 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade e a empresa emissora que vira a própria unidade.
 
-**Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-153**
+**Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-154**
 
 ## Decisões de 05/11/2026 (modal "Transformar em pedido de venda") (N16-150 a N16-152)
 
@@ -46,3 +46,11 @@ Medição pendente: [[Pontas-Soltas]] (PS-040). Risco: [[Riscos]] (RS-022).
 | N16-153 | **Refaturamento: o código depende da unidade, a observação continua valendo e só o Proibido e o Sem Referência saem do líquido.** Nathan, 10/11/2026. (1) **Quem é candidato:** a regra lê a unidade do pedido e compara com o código de refaturamento **daquela** unidade: Mogi (Aços Vital) `1.01.96`, Uberaba `1.01.99` e HRM `1.01.98`. Um código só vale junto com a unidade, porque os códigos colidem entre as contas (`1.01.98` é Venda de Sucata em Uberaba; `1.01.99` é Cobranças Jurídicas em Mogi). (2) **A observação continua sendo porta** (`refat` ou `reaft`): o vendedor pode errar o código, ou alguém trocar depois. (3) **Ser refaturamento não basta para sair do líquido.** Depois de virar candidato, o pedido passa pela regra que já existe (`fn_resolver_refaturamento`, dump de teste de 10/11, `:13259`): se a origem citada na observação está **no mesmo mês** e é uma venda genuína, o pedido fica **Permitido** e a nota dele **conta**, porque a nota de origem foi cancelada no mês. Se a origem foi faturada em mês anterior, já contou lá, e o pedido fica **Proibido**. Só o **Proibido** e o **Sem Referência** saem do líquido. (4) **Família:** se uma parcial é refaturamento, a família inteira é. Isso vale **só do lado de vendas** (`vw_vendas_base`, `vw_vendas_planilha`), não no faturamento nem na comissão, onde cada nota é julgada sozinha (é assim hoje). (5) **Liberar Pedidos:** o pedido de origem (o PV 100) aparece marcado como refaturado pelo novo (o PV 200, a cópia criada no mesmo mês), e a produção ou a compra do PV 100 passa a ser vinculada ao PV 200. Isso não existe hoje e mexe no MES (Robert) e no banco (Gustavo): vira contrato à parte. (6) **Formato da observação:** os vendedores já foram orientados; nada muda na tela. 🔴 Os pontos 1 e 5 não existem no código: o `1.01.96` está fixo em cerca de 15 pontos de views e funções. Os furos achados na prova de 10/11 (status que nunca é refeito e referência curta de Uberaba e da HRM) estão na PS-045 e entram no mesmo contrato | 10/11/2026 | Nathan | 📝; 🔴 sem código | N16-152 (supera em parte: substitui a saída (b) de 09/11) |
 
 Risco: [[Riscos]] (RS-022). Furos da regra atual: [[Pontas-Soltas]] (PS-045).
+
+## Decisão de 10/11/2026 (a empresa emissora é a própria unidade) (N16-154)
+
+| ID | Decisão | Data | Dono | Selo | Superada |
+|---|---|---|---|---|---|
+| N16-154 | **A empresa emissora é a própria unidade, e cada unidade usa a própria conta Omie.** Pedido do Robert, registrado pelo Nathan em 11/11/2026. (1) A tabela `core_comercial.unidades_emissoras` sai (migration `2026-11-10_comercial_emissora_vira_unidade`). Os campos do cabeçalho do documento passam para `core.unidades` (`sigla` gerada do nome fantasia, `nome_documento`, `telefone_documento`, `email_documento`, `site_documento`, `logo_url`), editados por `PUT /unidades/{id}`. (2) `GET /comercial/empresas_emissoras` **continua existindo na API do Hub**, com o mesmo formato, e lê `core.vw_unidades_cabecalho`: `id_unidade_conta_omie` passa a ser o próprio `id_unidade`, e `conta_omie` o nome fantasia. ✅ `api-acos-vital` `src/schemas/core_comercial/aggregates/cadastros/cadastros.route.js:103` (`id_unidade_conta_omie: e.id,`). (3) **Acaba a pendência de dado da N16-98:** sem a tabela, não existe mais a linha que apontava a HRM para a conta de Mogi. (4) O CRC fica de fora (sempre `null`) e os textos padrão seguem para outro lugar (N16-81). ❓ A migration não está no repositório da API e o dump de teste de 10/11 (tirado às 07:36, antes do commit `cc3fbb3`) ainda tem a tabela: conferir no próximo dump que ela saiu e que as funções do `core_comercial` que a liam (dump de 10/11, `:3415` e `:3482`) foram refeitas | 10/11/2026 | Nathan (pedido do Robert) | ✅ na develop; ❓ migration não conferida no dump | N16-98 (supera em parte: o ajuste de `id_unidade_conta_omie`); N16-80 (completa) |
+
+Contrato afetado: LOG-56, Transformar proposta em pedido (§4.2, §6.3, §8 e passos 2 e 9 da §14).

@@ -1,15 +1,15 @@
 ---
 tags: [fluxo, raia, estoque, atendimento, reserva, lote, custo, mes, e1, e2, e3, e4]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: vigente
 ordem: 5
 nos: [E1, E2, E3, E4]
 anterior: "[[04-PCP-Triagem-e-Destinacao]]"
 proxima: "[[06-Circuito-de-Compra]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 dono: Robert (MES) · Nathan (decisões)
-fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026 (E5 foi para 09-Estoque-Entrada-do-Lote e E6 para 12-Estoque-Despacho), v1 02-PRD-Estoque/Fluxo-Estoque-Completo, v1 Estoque-Custo-do-Lote, v1 Rota-Estoque, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, decisões do Nathan de 14/10, API-008, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.*, estoque.prisma, circuito-compra.ts), app-pcp 1fca8d3 (AtenderEstoqueModal), api-pcp develop befd973 de 27/10/2026 (aprovar-saida, receber-fabricado, itens-custo.ts, ConsumoMateriaPrima), LOG-53, N16-09, N16-140]
+fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026 (E5 foi para 09-Estoque-Entrada-do-Lote e E6 para 12-Estoque-Despacho), v1 02-PRD-Estoque/Fluxo-Estoque-Completo, v1 Estoque-Custo-do-Lote, v1 Rota-Estoque, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, decisões do Nathan de 14/10, API-008, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.*, estoque.prisma, circuito-compra.ts), app-pcp 1fca8d3 (AtenderEstoqueModal), api-pcp develop befd973 de 27/10/2026 (aprovar-saida, receber-fabricado, itens-custo.ts, ConsumoMateriaPrima), LOG-53, N16-09, N16-140, OQ-49, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Raia Estoque: atendimento (E1 a E4)
@@ -26,7 +26,7 @@ fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2
 2. O almoxarife vê o saldo livre na filial do pedido: lotes liberados menos reservas. `E1`
 3. Ele informa quanto atende, de zero até a quantidade da parcial, e de quais lotes. Atender zero é um clique. `E2`
 4. O sistema reserva o lote e separa a parte atendida, que segue para a Expedição. `E3`
-5. Para o restante, o almoxarife escolhe: solicitar compra ou enviar à produção. `E4`
+5. Para o restante, o almoxarife escolhe: solicitar compra ou enviar à produção (🔴 na `develop`, sem matéria-prima no estoque só a compra; veja a regra 7). `E4`
 
 Depois:
 
@@ -35,7 +35,7 @@ Depois:
 
 ## Exemplo
 
-O pedido tem 100 flanges. O almoxarife encontra 40 em lotes liberados e informa 40. Elas viram uma parcial própria, com reserva, a caminho da Expedição. As 60 restantes seguem na parcial original. Se o destino for a Revenda, as 60 vão para a compra. Se for fabricação, ele escolhe entre comprar matéria-prima e seguir o roteiro. Quando a Expedição pede a retirada, o almoxarife confirma e o saldo baixa com o custo daquele lote. É o desenho decidido (N16-120 a N16-122); hoje a baixa é na Embalagem.
+O pedido tem 100 flanges. O almoxarife encontra 40 em lotes liberados e informa 40. Elas viram uma parcial própria, com reserva, a caminho da Expedição. As 60 restantes seguem na parcial original. Se o destino for a Revenda, as 60 vão para a compra. Se for fabricação, ele informa a matéria-prima do estoque que vai consumir, e só as flanges cobertas por ela seguem para a produção; o que sobrar vai para compra. Quando a Expedição pede a retirada, o almoxarife confirma e o saldo baixa com o custo daquele lote. É o desenho decidido (N16-120 a N16-122); hoje a baixa é na Embalagem.
 
 ## Quem atua
 
@@ -55,7 +55,7 @@ As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do 
 - O saldo é lido e a reserva criada no mesmo passo, para evitar corrida entre pedidos.
 - A reserva não expira. Termina por liberação explícita ou quando a ordem é excluída.
 - Na Revenda, o restante sempre vai para compra.
-- Na fabricação, o restante pode comprar matéria-prima ou seguir o roteiro.
+- Na fabricação, o restante pode comprar matéria-prima ou seguir o roteiro (regra 7). 🔴 A `develop` só manda o restante para compra e recusa o roteiro sem matéria-prima (`api-pcp` `src/itens-parciais/itens-parciais.service.ts:932`, `destinoRestante === 'ROTEIRO'`); a #100 aceitou isso só até o levantamento físico de 26 a 30/10. ❓ Manter a regra e ajustar o código, ou mudar a regra (OQ-49). Visto na validação local em Docker de 10/11/2026.
 - Ajuste de saldo não usa o que está reservado e exige motivo.
 - O custo do lote é opcional e nunca bloqueia nada.
 - A matéria-prima baixa do saldo na retirada, não no atendimento (N16-140).
@@ -102,7 +102,7 @@ As regras 9 e 11 (entrada do lote) estão em [[09-Estoque-Entrada-do-Lote]]; a r
 | 4 | **Saldo zero exige clique**: a parcial nunca passa sozinha; atender 0 é uma ação explícita | 📝 ✅ `itens-parciais.service.ts:588-590`, `:657-659` (#31b) |
 | 5 | Reserva nasce `ATIVA`, **sem expiração**; libera por ação explícita (`LIBERADA`) ou quando a ordem é excluída | 📝 ✅ `estoque.prisma:45-52`, `pedidos.service.ts:695-699` |
 | 6 | Na **Revenda** o restante **sempre** vai para compra (não há o que produzir) | 📝 ✅ `itens-parciais.service.ts:721-727` |
-| 7 | Na **Fabricação** o restante pode seguir o roteiro (`ROTEIRO`) ou ir à compra (`COMPRA`, matéria-prima) | 📝 ✅ `:607-613`, `AtenderEstoqueModal.tsx:332-345` |
+| 7 | Na **Fabricação** o restante pode seguir o roteiro (`ROTEIRO`) ou ir à compra (`COMPRA`, matéria-prima) | 📝 🔴 a `develop` recusa `ROTEIRO` sem matéria-prima com 400 (`api-pcp` `src/itens-parciais/itens-parciais.service.ts:932`, `destinoRestante === 'ROTEIRO'`); a #100 aceitou isso só até o levantamento físico; ❓ OQ-49 |
 | 8 | A parte atendida vai para a **primeira etapa `EXPEDICAO`** depois do Estoque; sem ela no roteiro, 409 | ✅ `itens-parciais.service.ts:701-714` |
 | 12 | **Custo do item = média ponderada dos lotes** das reservas (Regra A: faturamento parcial usa o custo médio do item no pedido) | 📝 ✅ `GET /itens/custo` na `develop` (27/10, `6c11147`, `integracao-avhub.controller.ts`, regra em `itens-custo.ts`); fabricado fora até o custo da matéria-prima ([[Contratos-da-v2\|API-008]]) |
 | 13 | O custo do lote é **opcional hoje** e não bloqueia carga inicial, recebimento, reserva nem despacho. A N16-09 decide que **todo lote tem custo** (obrigatório, inclusive na carga inicial) | ✅ opcional no código (`estoque-operacao.service.ts:404-409`, `estoque.prisma:385-393`); 📝 N16-09, 🔴 obrigatório (BL-066) |
@@ -157,7 +157,7 @@ Aceita agir em `CRIADO`, `EM_TRANSITO`, `RECEBIDO`, `EM_ANDAMENTO` (`itens-parci
 | Método e rota | Permissão | Efeito | Código |
 |---|---|---|---|
 | `GET /estoque/saldo/disponivel-parcial/:idItemParcial` | `movimentacoes:visualizar` | Lotes `LIBERADO` com disponível, mais `outrasFiliais` | `estoque-operacao.controller.ts:45-49`, `estoque-operacao.service.ts:112-147` ✅ |
-| `PATCH /itens-parciais/:id/atender-estoque` | `movimentacoes:editar` | `quantidadeEstoque`, `alocacoes[]` (lote e quantidade), `destinoRestante` `ROTEIRO` ou `COMPRA`, observação | `itens-parciais.controller.ts:163-180`, `itens-parciais.service.ts:796` ✅ |
+| `PATCH /itens-parciais/:id/atender-estoque` | `movimentacoes:editar` | `quantidadeEstoque`, `alocacoes[]` (lote e quantidade), `materiaPrima` (consumos e unidades cobertas), `destinoRestante` `COMPRA` (`ROTEIRO` ainda está no tipo, mas é recusado), observação | `itens-parciais.controller.ts:163-180`, `itens-parciais.service.ts:796` ✅ |
 | `GET /estoque/saldo` | `saldo:visualizar` | Saldo por lote e localização; custo só para quem tem `estoque-custo` | `estoque-operacao.controller.ts:39-43` ✅ |
 | `POST /estoque/lotes/carga-inicial` | `movimentacao:criar` | Lote `LIBERADO`, custo opcional (`estoque-custo:editar`) | `estoque-operacao.controller.ts:66-70`, `estoque-operacao.service.ts:398-445` ✅ |
 | `GET /estoque/movimentos`, `POST /estoque/movimentos` | `movimentacao` | Transferência e ajuste | `estoque-operacao.controller.ts:78-88` ✅ |
@@ -188,7 +188,7 @@ A reserva valida lote `LIBERADO`, mesmo produto (`codigoProdutoOmie`) e mesma fi
 
 ✅ `destinoRestante = COMPRA` (ou Revenda, sempre) move a parcial para o setor `REQUISICAO` (`setorDoCircuito`, `itens-parciais.service.ts:1056-1059`); o PCP abre a requisição lá ([[06-Circuito-de-Compra]], nó `P3`). A observação de histórico diz "Sem saldo no estoque: N vão para compra (Requisições)" (`:808-811`).
 
-✅ (`api-pcp`) **Enviar à produção** (`ROTEIRO`) move a parcial para a próxima etapa do roteiro. Na `develop`, o item de fabricação pode ser atendido com matéria-prima do estoque: lote(s) de qualquer produto, com a quantidade baixada e as unidades do item cobertas (`ConsumoMateriaPrima`, 19/10, `8d07917`; a baixa é imediata e devolver a parcial ao Estoque estorna). 🔴 Diverge da N16-140: a decisão é baixar na retirada, pelo documento, e não na hora do atendimento. A genealogia (J4) segue sem código.
+✅ (`api-pcp`) **Enviar à produção** só existe com matéria-prima do estoque: as unidades cobertas seguem para a próxima etapa do roteiro e o restante vai para compra. Não há mais "segue o roteiro" sem matéria-prima (`itens-parciais.service.ts:932`, `destinoRestante === 'ROTEIRO'`; ❓ regra a confirmar com o Nathan, OQ-49). O item de fabricação é atendido com matéria-prima do estoque: lote(s) de qualquer produto, com a quantidade baixada e as unidades do item cobertas (`ConsumoMateriaPrima`, 19/10, `8d07917`; a baixa é imediata e devolver a parcial ao Estoque estorna). 🔴 Diverge da N16-140: a decisão é baixar na retirada, pelo documento, e não na hora do atendimento. A genealogia (J4) segue sem código.
 
 A entrada no Estoque (`E5`) está em [[09-Estoque-Entrada-do-Lote]]; o despacho (`E6`) em [[12-Estoque-Despacho]].
 

@@ -1,11 +1,11 @@
 ---
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento, parte]
 criado: 2026-11-09
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
-develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09]
+develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09; api-acos-vital cc3fbb3, em 2026-11-11, só a N16-154]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Dump do Avhub de 04/11/2026 (04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql)"]
 ---
 
@@ -37,7 +37,7 @@ Testar `codigo === '1.01.96'` afirmava que esse código é refaturamento em qual
 
 ### 6.3 A unidade das listas por conta Omie
 
-❓ `core.categorias` e `core.contas_correntes` são por unidade (Contrato 22), com FK para `core.unidades(id)`. A chave certa é a da conta Omie do pedido, e `unidades_emissoras` separa `id_unidade` (quem emite) de `id_unidade_conta_omie` (de qual conta). Hoje o modal usa o primeiro (veja a §4.2).
+✅ `core.categorias` e `core.contas_correntes` são por unidade (Contrato 22), com FK para `core.unidades(id)`. A chave certa é a da conta Omie do pedido. Até 10/11, `unidades_emissoras` separava `id_unidade` (quem emite) de `id_unidade_conta_omie` (de qual conta), e o modal usava o primeiro, o que errava na HRM. **Resolvido pela N16-154 (10/11):** a emissora passou a ser a própria unidade, cada unidade com a própria conta Omie, e `GET /comercial/empresas_emissoras` devolve `id_unidade_conta_omie` igual ao `id_unidade` (`api-acos-vital` `cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`). O modal pode continuar usando o `id_unidade`.
 
 ### 6.4 A ordem das entradas do BFF é armadilha estrutural
 
@@ -117,7 +117,7 @@ Decisão do Nathan, 09/11. Na proposta o vendedor não escolhe e o campo nem apa
 
 **Onde mora a configuração padrão.** Não existe ainda, e é o que o [[Mapa-IncluirPedido-Omie]] (parte 2, linha 161) já listava como faltando: "Configuração por conta Omie: `codigo_categoria`, `codigo_conta_corrente`, `codigo_cenario_impostos`, etapa inicial e local de estoque. Hoje não existe lugar."
 
-Proposta: uma tabela irmã da `parametros_compras`, chaveada pela unidade da conta Omie (`id_unidade_conta_omie`, não a emissora), nascendo com o campo desta decisão e com espaço para os outros quatro.
+Proposta: uma tabela irmã da `parametros_compras`, chaveada pela unidade da conta Omie (desde a N16-154 é a própria unidade do pedido, `core.unidades.id`), nascendo com o campo desta decisão e com espaço para os outros quatro.
 
 Diferença em relação à `parametros_compras`: lá, unidade sem linha cai num default de 30.000 e a operação segue. Aqui não pode haver default (não existe conta bancária razoável para adivinhar). Sem configuração, o pedido não é enviado: a prontidão devolve `UNIDADE_SEM_CONFIG` (§8.1), código que já existe no front para este caso.
 
@@ -180,7 +180,7 @@ mais a porta da família (linha 25390): se alguma parcial (`sequencial > 0`, nã
 
 ❓ **Pergunta ao Gustavo, item 3: de onde vem o `obs_venda` do payload.** É o que decide se o parágrafo acima é alívio ou o pior caso. O envio ao Omie manda `observacoes.obs_venda` (`propostas.swagger.json:2552`), e o payload sai de `fn_pedido_venda_payload_omie` (`pedidoOmie.js:37`), que não está no repositório nem no dump de 04/11: é da migration `2026-11-05` que falta (§9). Se vier das `observacoes` da proposta (`propostas.route.js:174`, até 10000 caracteres), basta o vendedor escrever "refat" na proposta para o pedido sumir da Liberar Pedidos, em qualquer unidade. Vai junto com as migrations, no mesmo pedido.
 
-**O que a N16-152 decide.** Decisão do Nathan, 09/11: a saída (b). O refaturamento passa a ser decidido pela tabela `core_vendas_faturamento.refaturamentos`, e a observação deixa de ser porta. Não se acrescenta código à regra global: `1.01.98` é Venda de Sucata em Uberaba e `1.01.99` é Cobranças Jurídicas em Mogi, então "consertar" a regra por código quebra outra unidade. **Superada em parte pela N16-153 (10/11/2026):** o código de refaturamento passa a ser lido pela unidade do pedido, e a observação continua sendo porta ([[Registro-N16-150-a-N16-153]]).
+**O que a N16-152 decide.** Decisão do Nathan, 09/11: a saída (b). O refaturamento passa a ser decidido pela tabela `core_vendas_faturamento.refaturamentos`, e a observação deixa de ser porta. Não se acrescenta código à regra global: `1.01.98` é Venda de Sucata em Uberaba e `1.01.99` é Cobranças Jurídicas em Mogi, então "consertar" a regra por código quebra outra unidade. **Superada em parte pela N16-153 (10/11/2026):** o código de refaturamento passa a ser lido pela unidade do pedido, e a observação continua sendo porta ([[Registro-N16-150-a-N16-154]]).
 
 | Quando | O que some da Liberar Pedidos |
 |---|---|

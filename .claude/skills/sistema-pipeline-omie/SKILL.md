@@ -17,20 +17,22 @@ Fica ao lado do vault: `../omie-elt-pipeline`. **Só leitura.** **A base é a `o
 ## 1. Onde fica cada coisa
 | O que procuro | Onde |
 |---|---|
-| Visão geral e decisões | `ARCHITECTURE.md` (camadas de sync, multi-filial, rate limit, colunas protegidas, exclusões) |
+| Mapa do repositório para IA | `CLAUDE.md` (caminho de um dado, agendamento, tabelas, exclusões, limites do Omie, o que está velho no `ARCHITECTURE.md`). Enquanto o PR #5 não entrar na `master`: `git -C ../omie-elt-pipeline show origin/docs/guia-para-ia:CLAUDE.md` |
+| Visão geral e decisões | `ARCHITECTURE.md` (camadas de sync, multi-filial, rate limit, colunas protegidas, exclusões). **Partes estão velhas** (destino `omie_raw`, 5 recursos, 3 processos, chave do `produto_vendas`): confira no código |
 | Cliente e chamadas do Omie | `src/omie/` |
+| Recurso do Omie → tabela de destino | `src/omie/resources/<nome>.ts`, campo `table:` (por exemplo `core.produtos`, `core_vendas_faturamento.pedidos_vendas`) |
 | Jobs e camadas de sincronização | `src/jobs/` (hoje, mês, últimos meses, full sync, exclusões, PTAX, geocodificação, envio de OC) |
 | Workers da fila | `src/workers/` (extração, carga, envio de OC) |
 | Fila | `src/queue/` (BullMQ, Redis) |
 | Envio ao av-hub | `src/avhub/` |
 | Scraping de relatórios do Omie | `src/scraping/` (Playwright) |
-| Banco: schemas e tabelas de controle | `sql/001_schemas.sql`, `sql/002_staging_tables.sql`, `sql/003_control_tables.sql` |
+| Banco: schemas e tabelas de controle | `sql/001_schemas.sql`, `sql/003_control_tables.sql` (controle em `omie_ctl.*`, por exemplo `omie_ctl.run_log`). O `sql/002_staging_tables.sql` cria o staging `omie_raw`, que **não** é o destino da carga |
 | Migrations e contratos do DBA | `sql/dba_migrations/` |
 
 ## 2. Receita: de onde vem um dado
-1. Ache a tabela de destino (`omie_*`) no `sql/` ou no dump (skill `banco-de-dados`).
-2. Ache quem grava nela: `git -C ../omie-elt-pipeline grep -n "<tabela>" origin/master -- src`.
-3. Siga até a chamada do Omie em `src/omie/` e o job que agenda em `src/jobs/`.
+1. A carga grava direto nas tabelas do av-hub, nos schemas `core.*` e `core_vendas_faturamento.*` (não em tabelas `omie_*`). Confira a tabela no dump (skill `banco-de-dados`).
+2. Ache o recurso que grava nela: `git -C ../omie-elt-pipeline grep -n "table: '<schema>.<tabela>'" origin/master -- src/omie/resources`. Filhos (itens, vínculos) são gravados no `afterUpsert` de outro recurso: se não achar pelo `table:`, busque só o nome da tabela em `src`.
+3. No recurso, o `mapRow` diz de qual campo do Omie vem cada coluna. Se a coluna não está no `mapRow`, ela é protegida, vem do `afterUpsert` de outro recurso, de um job ou de um trigger do banco. Siga até a chamada do Omie em `src/omie/` e o job que agenda em `src/jobs/`.
 4. Confira as colunas protegidas (que o pipeline nunca escreve) em `ARCHITECTURE.md` e na nota `05-Integracoes/Colunas-Protegidas`.
 
 ## 3. Notas do vault deste sistema

@@ -1,7 +1,7 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-10
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
@@ -297,8 +297,8 @@ Cada execução do motor sobre uma comissão. COTADO = com o custo que o vendedo
 | `venda_sugerida` | numeric(15,2) | não |  |  |
 | `valor_liquido` | numeric(15,2) | não |  |  |
 | `total_nf` | numeric(15,2) | não |  |  |
-| `markup_projetado` | numeric(10,4) | sim |  | Preço sugerido total / custo total (motor.ts:532). |
-| `markup_real` | numeric(10,4) | sim |  | MARK-UP REAL da tela: arredondarParaCima(venda de revenda / custo total, 2) (motor.ts:535). |
+| `markup_projetado` | numeric(10,4) | sim |  | Preço sugerido total / custo total (`av-hub` `lib/simulador/motor.ts:496` (`markup_projetado`)). |
+| `markup_real` | numeric(10,4) | sim |  | MARK-UP REAL da tela: arredondarParaCima(venda de revenda / custo total, 2) (`av-hub` `lib/simulador/motor.ts:499` (`markup_real`)). |
 | `markup_bruto_pct` | numeric(10,4) | não |  | O "AC8": (total NF de revenda - compra bruta) / compra bruta. Gatilho da regra fixa. Não é a margem líquida que decide a letra. |
 | `margem_liquida_pct` | numeric(10,4) | não |  |  |
 | `lucro` | numeric(15,2) | não |  |  |

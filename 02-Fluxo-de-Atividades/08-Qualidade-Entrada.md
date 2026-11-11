@@ -1,15 +1,15 @@
 ---
 tags: [fluxo, raia, qualidade, qualidade-entrada, lote, rnc, quarentena, mes]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: vigente
 ordem: 8
 nos: [Q1, Q2, Q3, Q4]
 anterior: "[[07-Recebimento]]"
 proxima: "[[09-Estoque-Entrada-do-Lote]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 dono: Robert (MES) · Qualidade (regra de negócio) · Nathan (decisões)
-fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Encaixe-Estoque-Revenda-no-PCP (EC-01, EC-07), api-pcp 579a625 (qualidade.service.ts, circuito-compra.ts, estoque.prisma), app-pcp 1fca8d3 (qualidade/inspecao-entrada), Registro-de-Decisoes #25 #26]
+fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Encaixe-Estoque-Revenda-no-PCP (EC-01, EC-07), api-pcp 579a625 (qualidade.service.ts, circuito-compra.ts, estoque.prisma), app-pcp 1fca8d3 (qualidade/inspecao-entrada), Registro-de-Decisoes #25 #26, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Qualidade de entrada (Q1 a Q4)
@@ -24,11 +24,11 @@ Nós `Q1` a `Q4` do [[00-Fluxo-Mestre-0b]]. A inspeção de saída da produção
 
 ## Como funciona, passo a passo
 
-1. O [[07-Recebimento]] entrega o lote em quarentena (status `PENDENTE`). Ele aparece na fila da Qualidade, do mais antigo ao mais novo, e ainda não conta no saldo. `Q1`
+1. O [[07-Recebimento]] entrega o lote em quarentena (status `PENDENTE`). Ele aparece na fila da Qualidade, do mais antigo ao mais novo. O lote já tem saldo desde o recebimento, mas o disponível é 0: só lote `LIBERADO` pode ser reservado. `Q1`
 2. O inspetor da Qualidade abre o lote na tela de inspeção e decide: aprova ou reprova. `Q2`
 3. Para aprovar, ele anexa o laudo. Para reprovar, anexa laudo, motivo e evidência e informa a quantidade reprovada. `Q2`
 4. Aprovado: o lote fica `LIBERADO`. A parcial que esperava junta-se às outras do mesmo item e volta ao Estoque ([[09-Estoque-Entrada-do-Lote]]). `E5`
-5. Reprovado em parte: a quantidade reprovada vira um lote filho separado e o sistema abre a RNC (registro de não conformidade). `Q3`
+5. Reprovado em parte: a quantidade reprovada vira um lote filho separado e o sistema abre a RNC (registro de não conformidade). Pela EC-07, a parte aprovada fica em quarentena até a substituição ser aprovada; 🔴 a `develop` libera a parte boa na mesma ação quando nenhuma parcial espera pelo lote (PS-053). `Q3`
 6. A parte reprovada volta para Compras ([[06-Circuito-de-Compra]]), que combina com o fornecedor a devolução e a substituição. `Q3`
 7. Se ainda há parcial esperando, a parte aprovada fica em quarentena até a substituição chegar. `Q4`
 8. A substituição chega como nova entrega com nota, passa de novo pela inspeção e, aprovada, une-se à parte em quarentena. `Q4` → `E5`
@@ -50,7 +50,7 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 
 - A inspeção vale para o lote, nunca para a parcial (decisão EC-01).
 - Aprovar exige laudo. Reprovar exige laudo, motivo e evidência. No recebimento e na entrada de lote no estoque o laudo é opcional ✅ (`api-pcp` `src/qualidade/dto/aprovar-lote.dto.ts:8` e `reprovar-lote.dto.ts:9` obrigatórios; `src/compras/dto/registrar-recebimento.dto.ts:53`, `conferir-recebimento.dto.ts:106,268` e `src/estoque/operacao/dto/entrada-lote.dto.ts:25` opcionais).
-- Na reprovação parcial, a parte aprovada fica em quarentena até a substituição ser aprovada (EC-07).
+- Na reprovação parcial, a parte aprovada fica em quarentena até a substituição ser aprovada (EC-07). 🔴 A `develop` só segue isso quando ainda há parcial esperando o lote; sem parcial, libera a parte boa na mesma ação (PS-053): ajustar o código ou combinar um meio-termo.
 - Material aprovado vai ao Estoque. Nunca segue direto à Expedição.
 - O sistema nunca emite a nota de devolução. Ele só sinaliza e o Omie emite.
 - Lote da carga inicial já nasce liberado, porque a dupla conferência faz o papel do laudo.
@@ -106,7 +106,7 @@ CCP = acompanhamento de compras. Os perfis são dados do banco (`perfis`, `permi
 
 | Valor | Significado | Entra no saldo disponível? |
 |---|---|---|
-| `PENDENTE` | Recém-recebido, aguardando inspeção. Quarentena de recebimento. | Não |
+| `PENDENTE` | Recém-recebido, aguardando inspeção. Quarentena de recebimento. Já tem linha de saldo desde o recebimento (`api-pcp` `src/compras/recebimento.service.ts:1139` e `src/compras/compras.service.ts:1047`, `aplicarDeltaSaldo(tx`), com disponível 0 | Não (`api-pcp` `src/estoque/operacao/estoque-operacao.helpers.ts:10`, `Disponível do lote = saldo total (só se LIBERADO)`) |
 | `LIBERADO` | Aprovado (ou carga inicial). Só lote `LIBERADO` conta no disponível e pode ser reservado | Sim (`estoque-operacao.helpers.ts:165`) |
 | `REPROVADO` | Lote inteiro reprovado, ou o **lote filho** da cisão com a quantidade reprovada | Não |
 | `QUARENTENA` | Parte aprovada de uma reprovação parcial, bloqueada até a substituição ser aprovada | Não |
@@ -128,7 +128,7 @@ stateDiagram-v2
     REPROVADO --> [*] : RNC aberta, devolucao ao fornecedor
 ```
 
-Em toda reprovação parcial nasce um **lote filho** `REPROVADO` (`idLotePai` apontando o pai) com a quantidade reprovada. O pai fica `LIBERADO` quando nenhuma parcial espera por ele, ou `QUARENTENA` quando ainda há parcial aguardando (`qualidade.service.ts:199-207` e `235-246`).
+Em toda reprovação parcial nasce um **lote filho** `REPROVADO` (`idLotePai` apontando o pai) com a quantidade reprovada. O pai fica `LIBERADO` na mesma ação quando nenhuma parcial espera por ele, ou `QUARENTENA` quando ainda há parcial aguardando ✅ (`api-pcp` `src/qualidade/qualidade.service.ts:194`, `statusQualidade: 'LIBERADO'`, e `:229`, `aindaEsperando > 0`). A validação local em Docker de 10/11/2026 viu o primeiro caso: reprovado 1 de 2 peças, o filho nasceu `REPROVADO` com RNC e o pai ficou `LIBERADO` com disponível 1, o que diverge da EC-07 (PS-053).
 
 #### Estado da parcial na raia
 

@@ -1,11 +1,11 @@
 ---
 tags: [anexo, clientes, grupos-de-empresa, av-hub, fora-do-fluxo]
 criado: 2026-10-14
-estado-em: 2026-11-09
+estado-em: 2026-11-11
 status: vigente
 dono: Gustavo (DBA)
-develop-conferida: [api-acos-vital d160d17, av-hub 6fcbba6, em 2026-11-09]
-fontes: [api-acos-vital f322dcd src/schemas/core_vendas_faturamento, HUB b55ac55 app/(protected)/acompanhamento-clientes e lib/domain/acompanhamentoClientes.ts, conferência de 29/10/2026 em api-acos-vital develop 0384e89 e av-hub develop 758d5f0, LOG-48, API-014, PDF de Gustavo de 09/11/2026 (entrega LOG-48)]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11]
+fontes: [api-acos-vital f322dcd src/schemas/core_vendas_faturamento, HUB b55ac55 app/(protected)/acompanhamento-clientes e lib/domain/acompanhamentoClientes.ts, conferência de 29/10/2026 em api-acos-vital develop 0384e89 e av-hub develop 758d5f0, LOG-48, API-014, PDF de Gustavo de 09/11/2026 (entrega LOG-48), PDF de Gustavo de 10/11/2026 (entrega N16-147 itens 1 e 2)]
 ---
 
 # Acompanhamento de Clientes e grupos de empresa
@@ -34,7 +34,7 @@ fontes: [api-acos-vital f322dcd src/schemas/core_vendas_faturamento, HUB b55ac55
 
 ## O que falta
 
-- A permissão de exportar (`pode_exportar`, N16-147 item 2) entrou na API em 09/11 (`d160d17`), mas a migration `2026-11-09_log48b_pode_exportar.sql` não está no repositório e o botão "Exportar Excel" da tela ainda não olha a permissão 🟡 Gustavo e Nathan.
+- A permissão de exportar (`pode_exportar`, N16-147 item 2) está na API (`d160d17`) e no banco de teste (migration `2026-11-09_log48b_pode_exportar.sql`, que fica na pasta de migrations, fora do repositório, como as outras: BL-024); produção pendente. Falta o botão "Exportar Excel" olhar a permissão 🟡 Nathan.
 - Endpoint de exportação no backend (§13.2): opcional, não feito 🔴.
 
 ## Detalhe técnico
@@ -59,4 +59,4 @@ Regra de negócio completa: vários CNPJs formam um **grupo**. Se um CNPJ não v
 - Venda e faturamento com deduções (§10): colunas `venda_bruta_mes`, `venda_deducoes_mes`, `venda_liquida_mes`, `faturamento_*` e `composicao_mes` ✅ `api-acos-vital` `fn_acompanhamento_clientes.route.js:224` (`venda_deducoes_mes: "venda_deducoes_mes"`); função no dump 04/11 `:5191`.
 - Base de clientes (§12): cadastro tipo Cliente + quem tem pedido ou NF + membros de grupo ✅ dump 04/11 `:5557` (COMMENT da função) e `:5518` (`'sem_compra'`). O "1.265 de 3.842" era de antes da 048b.
 - Perfil Gerência `todos` (§6): 📝 dado de produção informado pelo Gustavo (dump de produção de 04/11, `auth.perfis.escopo_vendedores`), não conferido aqui.
-- `pode_exportar` 🟡: `api-acos-vital` `src/schemas/auth/tables/permissoes/permissoes.model.js:54` (`pode_exportar: {`); falta a migration no repositório e ligar o botão da tela, que hoje não olha a permissão: `av-hub` `components/AcompanhamentoClientes/AcompanhamentoClientes.tsx:484` (`onClick={exportarExcel}`).
+- `pode_exportar` 🟡: `api-acos-vital` `src/schemas/auth/tables/permissoes/permissoes.model.js:54` (`pode_exportar: {`); banco: migration `2026-11-09_log48b_pode_exportar.sql`, aplicada no teste (fora do repositório, BL-024); falta ligar o botão da tela, que hoje não olha a permissão: `av-hub` `components/AcompanhamentoClientes/AcompanhamentoClientes.tsx:484` (`onClick={exportarExcel}`).

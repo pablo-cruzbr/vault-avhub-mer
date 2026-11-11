@@ -1,7 +1,7 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-10
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
@@ -55,7 +55,7 @@ O cálculo de **margem, letra, prejuízo, fabricação interna, teto da regra fi
 | **B. Motor na API** (função pura TypeScript) + gravação no banco | Porta `lib/simulador/motor.ts` para a `api-acos-vital` quase sem mudar; `fn_calculo_gravar` grava; job recalcula | **Mesmo código que hoje** (garante "motor igual"); testável com fixtures; versão gravada; Pablo migra o Comercial para a mesma API (N16-15) | Precisa de job e de evento; duas camadas (API calcula, banco grava e fecha) |
 | **C. Híbrido** | Motor na API para margem e letra; **fechamento por NF, menor percentual, arredondamento e decisão no banco** | Divide como hoje (motor no código, `LEAST` no banco); o dinheiro é sempre fechado por função com `CHECK` | Igual à B |
 
-**Sugestão 🟡 (Claude): opção C.** O motor continua sendo o **mesmo código** (porta de `motor.ts`, testes de ouro), rodando na API; tudo que fecha dinheiro (`fn_comissao_nf_fechar`, `fn_comissao_decidir`) roda no banco, com restrições que impedem valor errado. Motivos: (1) a regra do projeto é lógica no backend, e hoje o motor está no navegador (`simulador/page.tsx:1053`); (2) mantém a fórmula idêntica por reaproveitar o código; (3) as funções do banco são pequenas e testáveis (validadas em banco descartável); (4) o DBA (Gustavo) revisa o que grava dinheiro. Decisão do Nathan e do Gustavo; estimativa de esforço é do Claude, por complexidade.
+**Sugestão 🟡 (Claude): opção C.** O motor continua sendo o **mesmo código** (porta de `motor.ts`, testes de ouro), rodando na API; tudo que fecha dinheiro (`fn_comissao_nf_fechar`, `fn_comissao_decidir`) roda no banco, com restrições que impedem valor errado. Motivos: (1) a regra do projeto é lógica no backend, e hoje o motor está no navegador (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)); (2) mantém a fórmula idêntica por reaproveitar o código; (3) as funções do banco são pequenas e testáveis (validadas em banco descartável); (4) o DBA (Gustavo) revisa o que grava dinheiro. Decisão do Nathan e do Gustavo; estimativa de esforço é do Claude, por complexidade.
 
 ### Custo parcial (regra do cálculo `REAL`) 🟡
 

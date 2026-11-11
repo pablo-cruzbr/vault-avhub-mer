@@ -1,15 +1,15 @@
 ---
 tags: [fluxo, raia, pcp, triagem, destinacao, mes, p1, p2, p6]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-10
 status: vigente
 ordem: 4
 nos: [P1, P2, P6]
 anterior: "[[03-Pedido-de-Venda-e-Liberacao]]"
 proxima: "[[05-Estoque-Atendimento]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-pcp 2e564e6, app-pcp 4c11886, em 2026-11-10; api-acos-vital b97981c, av-hub 2e5456d, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
-fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, v1 Fluxo-Estoque-Completo, api-pcp 579a625 (pedidos.service.ts, pedidos-carteira.service.ts, pedidos.controller.ts, fabricas.prisma), app-pcp 1fca8d3 (carteira, ordens-producao/novo), Registro-de-Decisoes #31b #50b, api-pcp e app-pcp develop de 27/10/2026 (OP, Montagem do Roteiro), N16-138 a N16-142]
+fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, v1 Fluxo-Estoque-Completo, api-pcp 579a625 (pedidos.service.ts, pedidos-carteira.service.ts, pedidos.controller.ts, fabricas.prisma), app-pcp 1fca8d3 (carteira, ordens-producao/novo), Registro-de-Decisoes #31b #50b, api-pcp e app-pcp develop de 27/10/2026 (OP, Montagem do Roteiro), N16-138 a N16-142, api-pcp develop 2e564e6 e app-pcp develop 4c11886 de 10/11/2026 (pedido inteiro destinado: pedidos.service.ts, ordens-producao/novo/page.tsx e ItensSection.tsx), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Raia PCP: Triagem e Destinação do Pedido (P1, P2, P6)
@@ -68,6 +68,7 @@ As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do 
 O que aparece como "develop" nesta nota não está na `main` do MES, parada em 08/10 (merge BL-035).
 
 - ✅ Triagem, Destinação, gravação da rodada em lote e confirmação ao av-hub com reenvio.
+- 🔴 A develop não segue a regra da rodada (PS-052): desde 22/10 o MES só salva a Destinação com o pedido inteiro, cada item pela quantidade que resta e com um destino só, o que também impede a divisão de emergência da regra 1. A validação local em Docker de 10/11/2026 confirmou na tela. Falta decidir se o código volta à rodada ou se a regra muda (meio-termo).
 - 🟡 Nomes técnicos antigos no código: `/carteira`, `ordemProducao`, prefixo `OP-`. Os rótulos novos já estão na tela.
 - 🟡 Pedido manual fica fora da espinha.
 - ✅ (`api-pcp`, `app-pcp`) Na `develop` (27/10): Ordem de Produção como documento impresso, com 2ª via (BL-052). [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`, `app-pcp` `b9e8cb1`).
@@ -97,14 +98,14 @@ Nós do [[00-Fluxo-Mestre-0b]]: `P1` Triagem do Pedido, `P2` Destinação do Ped
 
 | # | Regra | Selo |
 |---|---|---|
-| 1 | A natureza do item (fabricação ou revenda) **não é do produto**: é o `Fabrica.tipo` do destino escolhido na rodada. Emergência: poucas unidades de um produto fabricado podem ir à Revenda, o resto à fabricação, em ordens diferentes (24/09) | 📝 ✅ `fabricas.prisma:1-8` |
+| 1 | A natureza do item (fabricação ou revenda) **não é do produto**: é o `Fabrica.tipo` do destino escolhido na Destinação. Emergência: poucas unidades de um produto fabricado podem ir à Revenda, o resto à fabricação, em ordens diferentes (24/09); 🔴 a tela de hoje dá um destino só por item (`app-pcp` `app/(protected)/ordens-producao/novo/page.tsx:147`, `const itensSemDestino`), então essa divisão não é possível | 📝 ✅ `fabricas.prisma:1-8` |
 | 2 | Só pedido **liberado** vira ordem: a Destinação consulta `GET /pedidos_liberados/:numero/itens` e recusa com 409 se o vendedor não liberou | 📝 ✅ `pedidos.service.ts:240-249` |
 | 3 | O setor Estoque (código `estoque`) é **sempre a etapa 0/1** do roteiro, inserido pelo backend; o PCP monta só o restante e **não** pode incluí-lo | 📝 ✅ `pedidos.service.ts:226-232`, `:459-463` |
 | 4 | Circuito de compra (`REQUISICAO`, `COMPRAS`, `LOGISTICA_ENTRADA`) e o Estoque ficam **fora** do roteiro; tentar pô-los no roteiro dá 409 | 📝 ✅ `pedidos.service.ts:500-506` |
 | 5 | Roteiro de **fabricação** exige um setor tipo `QUALIDADE` (inspeção de saída, EC-06) antes da primeira etapa `EXPEDICAO` | 📝 ✅ `pedidos.service.ts:512-525` |
-| 6 | Quantidade da rodada: até o **restante** do produto no pedido de venda; a soma de todas as ordens do produto não passa do total (409 se ultrapassa) | ✅ `pedidos.service.ts:315-334` |
+| 6 | Quantidade da rodada: até o **restante** do produto no pedido de venda; a soma de todas as ordens do produto não passa do total (409 se ultrapassa) | 📝 🔴 **a develop diverge** (PS-052): exige o pedido inteiro destinado, sem rodada parcial (`api-pcp` `src/pedidos/pedidos.service.ts:482`, `exigirPedidoInteiroDestinado`; `app-pcp` `app/(protected)/ordens-producao/novo/page.tsx:551`, `destine todos para salvar`), desde o commit `fe11538` do Robert (22/10/2026), sem decisão no vault. Ajustar o código à regra ou combinar um meio-termo |
 | 7 | Grão do item no MES = **produto**: linhas repetidas do mesmo produto somam num item só (09/10) | 📝 ✅ `pedidos.service.ts:41-61` |
-| 8 | A rodada é **atômica**: todas as ordens (uma por destino) gravam numa transação só; erro em qualquer uma desfaz tudo | ✅ `pedidos.service.ts:262-421` |
+| 8 | A rodada é **atômica**: todas as ordens (uma por destino) gravam numa transação só; erro em qualquer uma desfaz tudo | ✅ `api-pcp` `src/pedidos/pedidos.service.ts:227` (`criarCompletoLote`), `:322` (`this.prisma.$transaction(`) |
 | 9 | Numeração: ordem = `pedidoVenda/N` (N = contagem de ordens do pedido + 1); colisão (P2002) refaz a transação até 3 vezes | ✅ `pedidos.service.ts:30`, `:272-278`, `:408-420` |
 | 10 | Toda parcial nasce `CRIADO` no setor Estoque com 100% da quantidade | ✅ `pedidos.service.ts:361-373` |
 | 11 | **Saldo zero exige clique**: nenhuma parcial passa sozinha pelo Estoque (#31b, 08/10) | 📝 ✅ `itens-parciais.service.ts:588-590` |
