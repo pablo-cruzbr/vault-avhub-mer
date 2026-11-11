@@ -30,7 +30,7 @@ Para ir direto a um assunto (Vendas, Compras, Estoque, Qualidade, Produção, Ex
 | Robert (MES, o sistema de chão de fábrica, e o módulo comercial na API do Hub desde 28/10) | [[Backlog-Frente-Robert]], [[MES-Backend]], [[MES-Front]], [[Estados-e-Status]], [[Contratos-da-v2\|LOG-52]], [[Mapa-do-Modulo-do-Pablo]] |
 | Gustavo (DBA, cuida do banco e da API do av-hub) | [[Backlog-Frente-Gustavo]], [[AV-Hub-API]], [[Banco-AvHub]], [[Diferencas-Codigo-x-Banco]] |
 | Nathan (front do av-hub) | [[Backlog-Frente-Nathan]], [[AV-Hub-Front]], [[Telas-por-Raia]], [[Mapa-Rotas-BFF-Bearer]] |
-| Pablo (acompanha o módulo comercial e cuida do Orçamento) | [[Backlog-Frente-Comercial-e-Suprimentos]], [[Mapa-do-Modulo-do-Pablo]], [[02-Orcamento-Base-de-Preco]], [[API-Comercial]] (módulo de teste, será removido), [[Comercial-Suprimentos]] |
+| Pablo (acompanha o módulo comercial e cuida do Orçamento) | [[Backlog-Frente-Comercial-e-Suprimentos]], [[Mapa-do-Modulo-do-Pablo]], [[02-Orcamento-Base-de-Preco]], [[API-Comercial]] (módulo de teste, removido do av-hub em 06/11/2026), [[Comercial-Suprimentos]] |
 | Controladoria (Michele) | [[15-Custo-Real-e-Comissao]], [[04-Regras-e-Estados-da-Comissao-Nova]] |
 | Compras e Orçamento | [[06-Circuito-de-Compra]] (com os nós `C6` a `C8`), [[02-Orcamento-Base-de-Preco]] |
 
