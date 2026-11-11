@@ -135,11 +135,11 @@ Custo do lote (09/10) somou ao Robert K3 1,0 + K4 3,0 + K5 1,5 + K6 0,5 pd; ao G
 
 | ID | Entrega | Estado |
 |---|---|---|
-| CS1 | `api-comercial` e Propostas (CRUD, fechar, perder, reabrir, versões, PDF) | ✅ feito no legado (hoje só leitura, N16-117); fechar parcial, perder e reabrir saíram do desenho |
+| CS1 | `api-comercial` e Propostas (CRUD, fechar, perder, reabrir, versões, PDF) | ✅ feito no legado (removida do av-hub em 06/11/2026 (PR #261, `dd9d729`)); fechar parcial, perder e reabrir saíram do desenho |
 | CS2 | Suprimentos: catálogo, fornecedores, ofertas, mapa de cotação, solicitações de custo | ✅ feito no legado; telas de catálogo, fornecedores, painel do comprador e parâmetros de custo seguem em `orcamento/` |
 | CS3 | Painel do Comprador, histórico de compras, produtos pendentes | ✅ feito no legado; a tela Histórico de compras saiu (N16-108) |
 | CS4 | E2E Playwright e CI | ✅ feito no legado; o Playwright saiu do HUB em 29/10 |
-| CS5 | **Migrar o módulo para a `api-acos-vital`** (no lugar de publicar o `api-comercial`; LOG-52 fases 1 a 5; o `api-comercial` virou legado de leitura, N16-117), cadastrar telas em `auth.telas`, claim `perfis` no token | 🟡 **Robert conduz desde 28/10** (Pablo acompanha). Na `api-acos-vital`, `develop` de 29/10: cadastros, `POST /clientes`, `/parceiros` e `/propostas` (criar, listar, resumo, eventos, `PUT`, aprovar, cancelar, copiar, transformar); `/suprimentos` sem rota. Pd e datas dos blocos P1 a P7 estão superados ❓. Ver [[Comercial-Suprimentos]] e [[Contratos-da-v2\|LOG-52]] |
+| CS5 | **Migrar o módulo para a `api-acos-vital`** (no lugar de publicar o `api-comercial`; LOG-52 fases 1 a 5; o `api-comercial` foi removido do av-hub em 06/11/2026 (PR #261, `dd9d729`)), cadastrar telas em `auth.telas`, claim `perfis` no token | 🟡 **Robert conduz desde 28/10** (Pablo acompanha). Na `api-acos-vital`, `develop` de 29/10: cadastros, `POST /clientes`, `/parceiros` e `/propostas` (criar, listar, resumo, eventos, `PUT`, aprovar, cancelar, copiar, transformar); `/suprimentos` sem rota. Pd e datas dos blocos P1 a P7 estão superados ❓. Ver [[Comercial-Suprimentos]] e [[Contratos-da-v2\|LOG-52]] |
 
 ### Novas frentes de 16/10: proposta, Orçamento, custo real e comissão nova (🟡 a validar; histórico)
 

@@ -60,7 +60,7 @@ Os termos estão em ordem alfabética. Os nomes de tela seguem a regra de [[Regr
 - **Fábrica (tipo)** — ver Destino.
 - **Fabricado** — item produzido em linha própria. Pela decisão, volta ao Estoque como lote e saldo 📝. Na `develop` do MES o fabricado aprovado na inspeção de saída vira lote de origem `PRODUCAO` (LOG-53, 27/10) ✅; na `main` ainda não vira 🔴.
 - **Grupo de dedução** — a classe que tira uma venda do total líquido: G1 Cancelado, G2 Devolvido, G2P Devolvido Parcial, G3 Recusado ou Denegado, G4 blacklist de destinatário, G5 blacklist de vendedor, G6 Refaturamento. O que sobra é LÍQUIDO ([[Dashboards]]).
-- **HUB** — o front do av-hub (Next.js). O BFF fica junto dele, assim como a pasta `api-comercial/`, que é só legado de leitura (N16-117).
+- **HUB** — o front do av-hub (Next.js). O BFF fica junto dele. A pasta `api-comercial/`, que ficou nele como legado de leitura (N16-117), foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>`.
 - **Ida e volta (da requisição)** — na ida, o MES empurra a requisição ao hub (contrato 34, `PUT`). Na volta, o MES lê os marcos do hub (contrato 35, por consulta periódica e sob demanda).
 - **`id_origem`** — o id do `RequisicaoCompraItem` do MES, chave do PUT e dos eventos. A requisição criada só no hub não tem `id_origem` e não chega ao MES. O MES lê a OC dela pela referência (N14-20; job K4 na `develop` desde 15/10) ✅.
 - **Inspeção de entrada e de saída** — ver a tabela de telas.

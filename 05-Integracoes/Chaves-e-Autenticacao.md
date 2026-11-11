@@ -23,7 +23,7 @@ Cada chave serve a uma ligação específica. Todas viajam no cabeçalho `x-api-
 - **Chave D: av-hub para MES.** Serve para ler etapa e custo dos itens e a Torre de Fluxo.
 - **Chave E: tela do MES para a API do MES.** É interna ao MES.
 - **Chave F: página de documentação** `/docs` da API. Só vai pré-preenchida se for chave de leitura do banco; além dela, a página sai com o token de 15 minutos do próprio usuário logado no Azure ✅.
-- **Chave G: HUB para a API comercial.** Não é mais usada: o código do Hub não lê a `COMERCIAL_API_KEY` (conferido em 29/10/2026) e a `api-comercial` ficou só para leitura (N16-117). Os dados do comercial vêm da API do Hub; sobre o legado, veja [[API-Comercial]]. ✅
+- **Chave G: HUB para a API comercial.** Não é mais usada: o código do Hub não lê a `COMERCIAL_API_KEY` (conferido em 29/10/2026) e a `api-comercial` foi removida do av-hub em 06/11/2026 (PR #261). Os dados do comercial vêm da API do Hub; sobre o legado, veja [[API-Comercial]]. ✅
 
 ## O que ainda não está bom
 
@@ -52,7 +52,7 @@ A tabela de regras que já viraram fixas, o mapa completo das chaves e as rotas 
 | D, av-hub lê o MES | av-hub para MES | `api-acos-vital`: `MES_API_URL`, `MES_API_KEY` ✅ `app.js`, `utils/mesFluxo.js` | `api-pcp`: `MES_API_KEY` (guard fail-closed, 401 sem a variável) ✅ `avhub-api-key.guard.ts:11-23` | `GET /itens/status` (005), `GET /requisicoes-compra` (003, legado), `GET /itens/custo` (008; rota feita só na `develop` do MES, `6c11147` de 27/10), `GET /fluxo/*` (46; o MES ainda não tem o módulo 🔴) | ✅ |
 | E, BFF do MES | app-pcp para api-pcp | `app-pcp`: `MES_INTERNAL_API_KEY` ✅ `app/api/auth/[...nextauth]/route.ts:58` | `api-pcp`: `MES_INTERNAL_API_KEY` ✅ `auth/guards/api-key.guard.ts:15-20` | `/auth/azure` e rotas do BFF | ✅ |
 | F, documentação | navegador | `api-acos-vital`: `DOCS_API_KEY` (pré-preenche a chave no `/docs` só se for chave de leitura do banco) ✅ `docs/rotas.js`, `docs/pagina.js` | | só a página `/docs` | ✅ |
-| G, Comercial | HUB para `api-comercial` | `COMERCIAL_API_KEY` | `api-comercial` | **aposentada**: o código do Hub não lê mais esta chave nem `COMERCIAL_API_URL` (conferido em 29/10/2026; o BFF do comercial chama a API do Hub, `lib/api/comercialApi.ts`, `3bccfce`) e a `api-comercial` é só leitura (N16-117), ver [[API-Comercial]] | ✅ |
+| G, Comercial | HUB para `api-comercial` | `COMERCIAL_API_KEY` | `api-comercial` | **aposentada**: o código do Hub não lê mais esta chave nem `COMERCIAL_API_URL` (conferido em 29/10/2026; o BFF do comercial chama a API do Hub, `lib/api/comercialApi.ts`, `3bccfce`) e a `api-comercial` foi removida do av-hub em 06/11/2026, ver [[API-Comercial]] | ✅ |
 
 O nome do lado do MES na chave A é `AVHUB_MES_INTEGRACAO_KEY` (singular), e o valor é **um** dos valores da lista `MES_INTEGRACAO_KEYS` do hub ✅ (#11). Qualquer nota que diga `...KEYS` no lado do MES está errada.
 

@@ -122,4 +122,4 @@ Quem desenvolve (N16-117 a N16-119):
 O detalhe técnico desta nota fica em 2 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
 
 - [[01-Proposta-de-Venda-Detalhe-Tecnico-1]]: Nota de raia · Objetivo · Quem atua (completo) · Regras decididas · Estados · Telas · Endpoints e contratos
-- [[01-Proposta-de-Venda-Detalhe-Tecnico-2]]: Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, que será removido) · O Omie nesta raia ([[Estudo-Omie-API]]) · Dados 🟡 · Quem vê o quê · A tela da proposta (N16-19) · O que falta desenvolver · Pendências · Diagrama do subfluxo
+- [[01-Proposta-de-Venda-Detalhe-Tecnico-2]]: Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, removido em 06/11/2026) · O Omie nesta raia ([[Estudo-Omie-API]]) · Dados 🟡 · Quem vê o quê · A tela da proposta (N16-19) · O que falta desenvolver · Pendências · Diagrama do subfluxo

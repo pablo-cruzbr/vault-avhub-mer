@@ -80,7 +80,7 @@ Tudo abaixo é o conteúdo completo da nota original, sem cortes.
 >
 > Legenda: ✅ existe · 🟡 existe em parte · 🔴 não existe.
 >
-> **N16-117 (28/10/2026): o Robert conduz as rotas do módulo na `api-acos-vital` e o Pablo só acompanha.** As linhas abaixo já trazem o **Robert** como quem faz a API. A `api-comercial` fica no av-hub só para leitura.
+> **N16-117 (28/10/2026): o Robert conduz as rotas do módulo na `api-acos-vital` e o Pablo só acompanha.** As linhas abaixo já trazem o **Robert** como quem faz a API. A `api-comercial` ficou no av-hub só para leitura até 06/11/2026, quando foi removida (PR #261); legível em `git show f7d8d7f:api-comercial/<arquivo>`.
 >
 > **Nathan cuida da criação da proposta e do começo da comissão** (N16-115, 27/10/2026); fora isso, **Quem faz** segue os donos dos contratos: **Robert** faz as rotas do módulo na `api-acos-vital` (LOG-52) e o lote do MES, com o Pablo acompanhando; Gustavo o banco e a revisão; Nathan as telas e a pipeline.
 
@@ -126,7 +126,7 @@ Tudo abaixo é o conteúdo completo da nota original, sem cortes.
 
 - **PR da branch** `refactor/menu-enxuto-vendas-orcamento-compras` do av-hub, que o Nathan ainda vai revisar (Nathan).
 - **Telas que hoje mostram "ainda não existe na API do Hub":** propostas, relatórios, Dashboard Comercial, ofertas, pedidos de custo, telha e o sino. Decidir se ficam no menu até existirem (Nathan).
-- ✅ **`api-comercial` fora de produção e do BFF** (27/10, N16-111) e só leitura no repositório (28/10, N16-117).
+- ✅ **`api-comercial` fora de produção e do BFF** (27/10, N16-111), só leitura no repositório (28/10, N16-117) e removida do av-hub (06/11, PR #261, `dd9d729`).
 - **Família do produto aparece como código:** o Hub nega `/familias_produtos` ao perfil Admin (Dev), por permissão no Hub (Gustavo).
 
 ### 5. Primeiro do Robert: a proposta (N16-118)

@@ -71,7 +71,7 @@ Resumo das decisões vigentes que mais pesam, agrupadas por assunto. O ID entre 
 - O Hub é um sistema só: cada conceito tem uma tabela, uma rota e uma tela (N16-112).
 - Não existirá `core_comercial`: a proposta fica em `core_vendas_faturamento` (N16-116).
 - E-mail e notificações do Hub ficam para o futuro (N16-113).
-- A pasta `api-comercial` do Pablo fica no repositório só para leitura (N16-117).
+- A pasta `api-comercial` do Pablo ficou no repositório só para leitura (N16-117) até 06/11/2026, quando saiu do av-hub (PR #261); o código fica legível no commit `f7d8d7f`.
 
 **Quem faz o quê**
 

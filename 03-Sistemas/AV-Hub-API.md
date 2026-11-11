@@ -16,7 +16,7 @@ fontes: [api-acos-vital 1654f65 (develop, 05/11), api-acos-vital 0384e89 (develo
 - **HUB (as telas):** lê e grava pedidos, requisições, ordens de compra e permissões.
 - **MES:** lê os pedidos liberados, avisa que importou, envia a requisição de compra e lê o andamento dela ([[MES-Backend]]).
 - **Pipeline do Omie:** pega a fila de OCs (ordens de compra) a enviar e devolve o resultado ([[Pipeline-Omie]]).
-- **Módulo comercial (`/comercial/*`):** desde 28/10 a API do Hub guarda as rotas de proposta, cadastros e cliente, no lugar da `api-comercial` do Pablo (N16-111, LOG-52). A `api-comercial` virou legado só de leitura ([[API-Comercial]]).
+- **Módulo comercial (`/comercial/*`):** desde 28/10 a API do Hub guarda as rotas de proposta, cadastros e cliente, no lugar da `api-comercial` do Pablo (N16-111, LOG-52). A `api-comercial` virou legado só de leitura e foi removida do av-hub em 06/11/2026 ([[API-Comercial]]).
 
 ## Como se encaixa no fluxo
 

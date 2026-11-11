@@ -11,13 +11,13 @@ fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6�
 
 # Proposta de venda: detalhe técnico (2/2)
 
-**Em uma frase:** detalhe técnico da nota [[01-Proposta-de-Venda]] (parte 2 de 2): Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, que será removido); O Omie nesta raia ([[Estudo-Omie-API]]); Dados 🟡; Quem vê o quê; A tela da proposta (N16-19); O que falta desenvolver; Pendências; Diagrama do subfluxo.
+**Em uma frase:** detalhe técnico da nota [[01-Proposta-de-Venda]] (parte 2 de 2): Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, removido em 06/11/2026); O Omie nesta raia ([[Estudo-Omie-API]]); Dados 🟡; Quem vê o quê; A tela da proposta (N16-19); O que falta desenvolver; Pendências; Diagrama do subfluxo.
 
 **Onde estamos:** ← [[01-Proposta-de-Venda]] (resumo e índice) · partes: [[01-Proposta-de-Venda-Detalhe-Tecnico-1]] · **01-Proposta-de-Venda-Detalhe-Tecnico-2**
 
-## Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, que será removido)
+## Como estava no módulo de teste do Pablo (🔴 `av-hub/api-comercial`, removido em 06/11/2026)
 
-Tudo abaixo é do `api-comercial` (pasta `av-hub/api-comercial`), serviço **só de teste** (N14-15), hoje **legado só para leitura** (N16-117). **O Nathan confirmou em 05/11/2026 que o `api-comercial` será removido integralmente:** pelo F3, o que só existe nele é 🔴 "sem API e sem banco". No `av-hub` `develop` (2e5456d) o BFF já não fala com ele: as rotas que ainda não existem na API do Hub respondem 503 `RECURSO_NAO_MIGRADO` (`lib/api/comercialApi.ts`, N16-111). Parte disto já foi refeita na `api-acos-vital` (rotas da proposta, `develop`, 29/10; ver o quadro de endpoints); o que não foi segue 🔴 lá. As regras antigas de fechamento parcial, perda, reabrir e pedido digitado no Omie saíram do front em 28/10 (`av-hub` `2008344`).
+Tudo abaixo é do `api-comercial` (pasta `av-hub/api-comercial`), serviço **só de teste** (N14-15), depois legado só para leitura (N16-117) e **removido do av-hub em 06/11/2026 (PR #261, `dd9d729`)**; o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>`. pelo F3, o que só existe nele é 🔴 "sem API e sem banco". No `av-hub` `develop` (2e5456d) o BFF já não fala com ele: as rotas que ainda não existem na API do Hub respondem 503 `RECURSO_NAO_MIGRADO` (`lib/api/comercialApi.ts`, N16-111). Parte disto já foi refeita na `api-acos-vital` (rotas da proposta, `develop`, 29/10; ver o quadro de endpoints); o que não foi segue 🔴 lá. As regras antigas de fechamento parcial, perda, reabrir e pedido digitado no Omie saíram do front em 28/10 (`av-hub` `2008344`).
 
 - 🔴 (só no módulo de teste) **Proposta completa:** modelo `Proposta` (`prisma/models/vendas.prisma:45-109`) com cliente, empresa emissora, itens, moeda, incoterm, frete, condição, totais, `valorFechado`, `acompanhamentoQualidade`, `numeroPedidoOmie`; itens com snapshot de custo (`PropostaItem`, `:111-166`: `custo`, `margemPct`, `origemCusto`, `idOferta`, `fornecedor`, `custoLiquidoUnit`, `margemRealPct`).
 - 🔴 (só no módulo de teste) **Revisão:** `atualizar` só roda em `ABERTA` (`propostas.service.ts:478-481`); se o conteúdo comercial muda, `revisao + 1` e uma linha em `propostas_versoes` com o snapshot (`:483-515`); evento `REVISADA`.

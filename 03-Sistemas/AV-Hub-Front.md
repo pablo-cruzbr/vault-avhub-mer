@@ -51,7 +51,7 @@ fontes: [av-hub 758d5f0 (develop, 29/10; repositório `av-hub`, antes `00 - HUB`
 
 ## Detalhe técnico
 
-Front do av-hub: Portal do Vendedor, Portal do Gerente, Compras, Comercial & Suprimentos, PCP (portal de leitura), Comissões, RH. Dono: Nathan. Next.js 16 (App Router), React, MUI 9, NextAuth 4, `@react-pdf/renderer`, S3 ✅ `av-hub/package.json`. Repositório: `av-hub` (develop, 758d5f0). A pasta `api-comercial/` continua nele, mas como legado só de leitura, com `LEIA-ME-LEGADO.md` (28/10, `a90d306`; [[API-Comercial]]). Esta nota cobre o que o fluxo de Atividades usa; o resto vai em [[Comissoes]], [[Dashboards]] e afins (anexo fora do fluxo).
+Front do av-hub: Portal do Vendedor, Portal do Gerente, Compras, Comercial & Suprimentos, PCP (portal de leitura), Comissões, RH. Dono: Nathan. Next.js 16 (App Router), React, MUI 9, NextAuth 4, `@react-pdf/renderer`, S3 ✅ `av-hub/package.json`. Repositório: `av-hub` (develop, 758d5f0). A pasta `api-comercial/` ficou nele como legado só de leitura (28/10, `a90d306`) e foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>` ([[API-Comercial]]). Esta nota cobre o que o fluxo de Atividades usa; o resto vai em [[Comissoes]], [[Dashboards]] e afins (anexo fora do fluxo).
 
 ### Como funciona
 
@@ -113,7 +113,7 @@ Resumo; a tabela completa está em [[RBAC-e-Permissoes]].
 
 - ✅ O módulo antigo de Orçamento (JSON local em `lib/orcamento/`, `app/api/orcamento/*`) foi removido em 16/10 (`c851cda`). O Orçamento de hoje são as telas em `app/(protected)/orcamento/` sobre `/api/comercial/*` ([[02-Orcamento-Base-de-Preco]]).
 - ✅ A aprovação lê `limite_aprovacao` de `GET /compras/parametros` apenas para avisar na tela de OC ("Acima de R$… ela nasce Aguardando aprovação") ✅ `components/Compras/FecharCompra.tsx:604-605,1652`.
-- 🟡 `api-comercial` continua dentro do mesmo repositório (pasta `api-comercial/`), agora como legado só de leitura, fora do BFF ([[API-Comercial]]).
+- ✅ `api-comercial` removida do av-hub em 06/11/2026 (PR #261, `dd9d729`): av-hub `lib/api/comercialApi.ts:15` (`A api-comercial de teste foi removida`); legível em `git show f7d8d7f:api-comercial/<arquivo>` ([[API-Comercial]]).
 
 ### O que o Nathan precisa construir para o fluxo
 
