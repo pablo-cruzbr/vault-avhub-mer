@@ -35,7 +35,7 @@ Das 51 perguntas (OQ-02 a OQ-53, sem a OQ-18): **33 respondidas**, **5 adiadas**
   - OQ-52: mantém a N16-123 (quem emite a OC pode aprová-la) ou exige outra pessoa? (depois da conversa com Compras; `C3`.)
   - OQ-53: as contas genéricas `admin` do MES e "Admin" do Hub existem na produção, e podem ser desativadas? (RS-023; segurança.)
   - OQ-47, com Compras: o aviso na tela "Meus Pedidos" substitui o e-mail usado hoje para a compra acima do valor? (não trava o sistema.)
-- **Robert:** OQ-07 (com o Nathan): na carga do marco zero de 13/11, lote sem custo é recusado ou entra com custo `MANUAL` e motivo? (trava BL-066 e BL-031.) OQ-38 (com o PCP): o levantamento físico de 26 a 30/10 deixou o saldo confiável para o marco zero?
+- **Robert:** OQ-07 e OQ-38 fecharam em 11/11 (N16-156): não há carga em 13/11, e na carga futura o lote sem custo entra com custo `MANUAL` e motivo.
 - **Gustavo:** OQ-39: o banco guarda o vínculo da NF de entrada com a OC pela quantidade coberta de cada item ou pelo valor total da NF? (trava o custo real pela NF, `K2`.)
 - **Michele e Fiscal,** na [[Contratos-da-v2\|CON-03]] (já escrita, aguardando resposta): OQ-44: como se classifica Projeto e o que é "recompra no mesmo pedido"? OQ-42: como a devolução de compra aparece no Omie e o que muda no custo real?
 - **Fiscal:** OQ-36: quem cadastra no Omie o produto novo da proposta, e em quanto tempo? (a proposta com produto pendente não vira pedido, N16-28.)

@@ -121,7 +121,7 @@ O plano antigo desta seção (CON-03 para a Gerência, CON-04 para a Controlador
 | Consulta ao Fiscal (sem ID) | Fiscal (❓ pessoa) | OQ-36 (cadastro de produto novo no Omie) | Não escrita |
 | Conversa de dezembro | PCP, Engenharia e Recebimento | OQ-32 (custo da sobra de chapa), com as Q7 a Q13 do [[Contratos-da-v2\|LOG-54]] | Marcada pelo Nathan para dezembro de 2026 (N16-146) |
 
-Perguntas técnicas não viram Consulta: ficam em [[Pontas-Soltas]]. Abertas: OQ-07 e OQ-38 (Robert), OQ-39 (Gustavo), OQ-48 (Nathan, PS-037) e OQ-49 a OQ-53 (Nathan; PS-048, PS-049, RS-023). A OQ-21 está adiada (N16-85). A OQ-15 e a OQ-16, que estavam nesta lista, foram fechadas (LOG-56, N16-149).
+Perguntas técnicas não viram Consulta: ficam em [[Pontas-Soltas]]. Abertas: OQ-39 (Gustavo), OQ-48 (Nathan, PS-037) e OQ-49 a OQ-53 (Nathan; PS-048, PS-049, RS-023). A OQ-21 está adiada (N16-85). A OQ-15 e a OQ-16, que estavam nesta lista, foram fechadas (LOG-56, N16-149).
 
 ## 5. Perguntas do documento de 16/10 já respondidas por decisão
 
