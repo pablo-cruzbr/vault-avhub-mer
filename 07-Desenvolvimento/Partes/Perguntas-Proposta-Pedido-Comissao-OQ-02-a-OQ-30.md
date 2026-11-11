@@ -1,140 +1,127 @@
 ---
 tags: [decisoes, perguntas, oq, consulta, proposta, orcamento, comissao, staging, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: proposta
 dono: Nathan
 parte-de: "[[Perguntas-Proposta-Pedido-Comissao]]"
-fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora do vault), Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault) (perguntas das seções 4 e 5), Modelo-de-Consulta, api-comercial 5aa5311, Dump Avhub 14/10, Registro-de-Decisoes]
+fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora do vault), Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault) (perguntas das seções 4 e 5), Modelo-de-Consulta, protótipo api-comercial (commit 5aa5311; removido do av-hub em 06/11/2026, PR #261, dd9d729; legível em f7d8d7f), Dump Avhub 14/10, Registro-de-Decisoes (até N16-155), LOG-56 (R7 e R11), CON-03 da v2 (Contratos-da-v2), develop de 11/11/2026 (api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, omie-elt-pipeline master 0593c9f)]
 ---
 
-# Perguntas em aberto: OQ-02 a OQ-48: OQ 02 a OQ 30
+# Perguntas: detalhe da OQ-02 à OQ-30, consultas e perguntas do documento de 16/10
 
-**Em uma frase:** parte da nota [[Perguntas-Proposta-Pedido-Comissao]] com "2. OQ-02 a OQ-12 (do briefing)", "3. OQ-13 a OQ-30 (descobertas ao documentar)", "4. Consultas que saem daqui", "5. Perguntas do documento de 16/10 já respondidas por decisão". O texto foi movido sem mudança.
+**Em uma frase:** parte da nota [[Perguntas-Proposta-Pedido-Comissao]] com o contexto e as opções de cada pergunta da OQ-02 à OQ-30, a resposta que cada uma recebeu, as consultas que saem daqui e as perguntas do documento de 16/10.
 
 **Onde estamos:** ← [[Perguntas-Proposta-Pedido-Comissao]] (resumo e índice) · partes: [[Perguntas-Proposta-Pedido-Comissao-Quadro-Geral]] · **Perguntas-Proposta-Pedido-Comissao-OQ-02-a-OQ-30**
+
+**Como ler:** cada pergunta abre com a **Situação** (conferida em 11/11/2026). O contexto e as opções ficam como estavam quando a pergunta foi feita: são o histórico de por que a decisão foi tomada. As citações ao `api-comercial` são do protótipo do Pablo, que foi removido do av-hub em 06/11/2026 (PR #261, commit `dd9d729`) e não é fonte de estado; o texto antigo fica legível no commit `f7d8d7f`. Das 28 perguntas desta parte (a OQ-18 nunca foi usada), 25 estão respondidas, 1 está aberta (OQ-07) e 2 estão adiadas (OQ-21 e OQ-28).
 
 ## 2. OQ-02 a OQ-12 (do briefing)
 
 ### OQ-02 · Prazo de resposta do pedido de custo e o que fazer se vencer
 
-**Contexto.** N16-06 manda ter prazo, sem valor. O código já tem: `SolicitacaoCusto.prazoResposta` é obrigatório e o prazo padrão é de **2 dias úteis** ("SLA padrão", `api-comercial/src/modules/custos/custos.routes.ts:378`); a fila mostra `ATRASADA`, `VENCE_HOJE` ou `NO_PRAZO` (`:338`). Não há regra para o vencimento além do rótulo.
+**Situação.** ✅ Respondida (N16-58, N16-59): sem prazo fixo; o sistema cronometra o tempo e o vendedor nunca fica bloqueado. O setor orçamentário é novo; o Moisés é uma das pessoas (N16-104).
 
-**Opções para o vencimento.** (a) só destacar na fila do Orçamento; (b) avisar o gerente do Orçamento; (c) liberar o vendedor para cotar sozinho (a rota `POST /solicitacoes_custo/:id/liberar` existe, `custos.routes.ts:500`); (d) cancelar a solicitação. **Opções para o prazo:** fixo (2 dias úteis), escolhido pelo vendedor, ou por tipo de produto.
+**Contexto (histórico).** N16-06 mandava ter prazo, sem valor. O protótipo `api-comercial` tinha `SolicitacaoCusto.prazoResposta` obrigatório e prazo padrão de 2 dias úteis ("SLA padrão", `api-comercial/src/modules/custos/custos.routes.ts:378`), com a fila mostrando `ATRASADA`, `VENCE_HOJE` ou `NO_PRAZO` (`:338`) e a rota `POST /solicitacoes_custo/:id/liberar` (`custos.routes.ts:500`). O protótipo saiu do av-hub; não conta como pronto.
 
-**Quem responde.** João Vitor. **Default 🟡:** 2 dias úteis, rótulo `ATRASADA`, aviso ao gerente do Orçamento, e o vendedor **nunca fica bloqueado** (N16-06): ele pode seguir sozinho. **Vira:** CON-03.
+**Opções que estavam na mesa.** Para o vencimento: (a) só destacar na fila do Orçamento; (b) avisar o gerente do Orçamento; (c) liberar o vendedor para cotar sozinho; (d) cancelar a solicitação. Para o prazo: fixo, escolhido pelo vendedor, ou por tipo de produto. O default era 2 dias úteis com aviso ao gerente; a decisão foi não ter prazo fixo.
 
 ### OQ-03 · Quem decide o que fazer com o cliente quando o custo real passa do cotado?
 
-**Contexto.** O sistema não avisa o vendedor (N16-18); a Controladoria vê a diferença. Renegociar o preço, absorver a perda ou cancelar é decisão de pessoas.
+**Situação.** ✅ Respondida pelas N16-61 e N16-69, fora do sistema: compra acima da proposta pede a aprovação do vendedor; reprovada, a Gerência decide em conversa física; sem acordo, o pedido pode ser cancelado e o vendedor renegocia com o cliente. A diferença que aparece depois, pela NF de entrada (N16-40), reduz a comissão, e a Controladoria a vê (N16-18). O João Vitor pode contestar.
 
-**Opções.** O vendedor com a Gerência; só a Gerência; o vendedor sozinho dentro de um limite.
-
-**Quem responde.** João Vitor. **Default 🟡:** a decisão fica **fora do sistema** neste ciclo; a Gerência decide com o vendedor. **Vira:** CON-03.
+**Contexto (histórico).** Renegociar o preço, absorver a perda ou cancelar é decisão de pessoas. Opções: o vendedor com a Gerência; só a Gerência; o vendedor sozinho dentro de um limite. O default (decisão fora do sistema, a Gerência com o vendedor) é o que as decisões confirmaram.
 
 ### OQ-04 · Quem aprova desconto e margem, e até quanto cada um aprova?
 
-**Contexto.** A aprovação é física neste ciclo (N16-12) e entra no sistema no próximo. A resposta define a regra desse ciclo.
+**Situação.** ✅ Respondida (N16-75): tudo fisicamente; não há alçada no sistema. Reforça a N16-12.
 
-**Opções.** Alçadas por faixa de desconto, por faixa de margem, por valor total da proposta ou por cliente; um aprovador por faixa.
-
-**Quem responde.** João Vitor. **Default 🟡:** nada a construir neste ciclo; a pergunta fica aberta para o próximo contrato. **Vira:** CON-03.
+**Contexto (histórico).** Opções: alçadas por faixa de desconto, de margem, por valor total ou por cliente; um aprovador por faixa.
 
 ### OQ-05 · Relatórios da visão geral da Controladoria
 
-**Contexto.** A Controladoria vê tudo até chegar a ela e tem a visão geral de todas as comissões (N16-10). Falta saber quais relatórios entram **no primeiro momento**.
+**Situação.** ✅ Respondida pela Michele (N16-50): lista por mês, vendedor, unidade e status, com exportação para Excel; markup real por vendedor; Faturamento × Compras por pedido, separando Revenda, Industrializado e Projeto, com sinal de recompra.
 
-**Candidatos 🟡.** Comissão por vendedor e por mês; estimada × real × final; pendentes de decisão; decididas por ação (aprovada, desaprovada, bloqueada, cortada, alterada); diferença entre custo cotado e custo real por proposta; comissões de propostas canceladas (histórico).
-
-**Quem responde.** Michele. **Default 🟡:** lista filtrável por mês, vendedor, unidade e status, com totais e exportação em planilha. **Vira:** CON-04.
+**Contexto (histórico).** A Controladoria vê tudo e tem a visão geral das comissões (N16-10). Candidatos: comissão por vendedor e mês; estimada × real × final; pendentes de decisão; decididas por ação; cotado × real por proposta; comissões de propostas canceladas.
 
 ### OQ-06 · Bloqueio, blacklists e coordenadores no módulo novo
 
-**Contexto.** N16-11 traz o motor atual para a proposta: percentual final = menor entre o do vendedor e o de compras, regras fixas, bloqueios e blacklists. Falta confirmar com a Michele se **todos** valem no módulo novo e como ficam os coordenadores (hoje `comissao_coordenadores`, ainda lidos de JSON no front, LOG-42).
+**Situação.** ✅ Respondida (N16-34, N16-43): bloqueio por NF, listas de clientes e de vendedores, regras fixas e coordenadores valem todos no módulo novo, em tabelas novas; a Michele confirmou os detalhes.
 
-**Opções.** (a) Copiar tudo (bloqueio por NF, blacklist de clientes, blacklist de vendedores, regras fixas) e manter as listas separadas do módulo atual; (b) as listas passam a ser uma só, compartilhada; (c) coordenadores ficam no módulo atual até uma decisão própria.
+**Contexto (histórico).** N16-11 traz o motor atual para a proposta. Os coordenadores eram `comissao_coordenadores`, lidos de JSON no front ([[Contratos-da-v2\|LOG-42]]). Opções: copiar tudo com listas separadas; listas compartilhadas; coordenadores no módulo atual.
 
-**Quem responde.** Michele. **Default 🟡:** (a) e (c). **Vira:** CON-04.
+### OQ-07 · Custo obrigatório em todo lote, inclusive na carga inicial de 13/11
 
-### OQ-07 · Custo obrigatório em todo lote, inclusive carga inicial de 13/11
+**Situação.** **Aberta.** Pergunta: na carga inicial do marco zero (13/11/2026), o lote sem custo é recusado ou entra com custo `MANUAL` e motivo? Quem responde: Robert, com o Nathan. Trava: BL-066 e BL-031 e o marco zero (M5).
 
-**Contexto.** N16-09 torna o custo obrigatório em todo lote e supera o #93. A carga inicial em lote (G1, BL-031) está em desenvolvimento pelo Robert para 23/10, com custo **opcional**, antes do levantamento físico de 26 a 30/10 e do marco zero de 13/11. Exigir custo de todo o saldo inicial é trabalho de Compras e Controladoria, não só de código.
+**Contexto.** N16-09 torna o custo obrigatório em todo lote e supera o #93. A `develop` ainda aceita custo opcional na carga inicial (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:617` (`dto.custoUnitario && dto.custoUnitario > 0`)), a carga é de um lote por chamada e a carga em lote (G1) não existe. A origem `MANUAL` já existe no MES (`api-pcp` `prisma/models/estoque.prisma:375` (`MANUAL`)). Exigir custo de todo o saldo inicial é trabalho de Compras e Controladoria, não só de código.
 
-**Opções.** (a) Obrigatório já na G1: sem custo, a linha não entra; (b) obrigatório no Recebimento (`R4`) e, na carga inicial, custo informado ou custo estimado com origem `MANUAL`, motivo obrigatório e auditoria (a origem `MANUAL` já existe, `estoque.prisma:378-382`); (c) obrigatório só depois do marco zero.
-
-**Quem responde.** Robert (escopo e data), com o Nathan. **Default 🟡:** (b). **Impacto:** muda a G1 e o K5 do Robert; ver a proposta de cronograma (`Proposta-Orcamento-Comissao/07-Cronograma/Proposta-de-Cronograma.md`, fora do vault, a validar). **Vira:** ponta solta técnica.
+**Opções.** (a) Obrigatório já na G1: sem custo, a linha não entra; (b) obrigatório no Recebimento (`R4`) e, na carga inicial, custo informado ou custo `MANUAL` com motivo obrigatório e auditoria; (c) obrigatório só depois do marco zero. **Default 🟡:** (b). A estimativa está em `Proposta-Orcamento-Comissao/07-Cronograma/Proposta-de-Cronograma.md` (fora do vault, a validar). Ligada à OQ-38 (o saldo está confiável?).
 
 ### OQ-08 · OC de serviço (mão de obra) existe no Compras?
 
-**Contexto.** N16-09 diz que a mão de obra também é gerada na OC e entra no custo. No exemplo do Nathan, o item B é "1 Mão de obra". No código do av-hub, o item da OC exige produto do cadastro (LOG-36) e só tem `tipo_material` `acabado` ou `nao_acabado` ([[Estados-e-Status]]); não conferi se há produto do tipo serviço em `core.produtos` ❓.
+**Situação.** ✅ Respondida por Compras (19/10): mão de obra se reconhece pela categoria "Despesas com Industrialização", ou "Serviços Tomados – PJ/PF" com o campo "Nº do Pedido do Fornecedor" apontando um PV.
 
-**O que precisa responder.** Como Compras emite hoje a OC de mão de obra (produto de serviço no Omie, texto livre, outra rotina)? Que campos o item de serviço precisa (quantidade, valor, descrição, vínculo ao pedido) para gerar uma linha de custo por item e parcial?
-
-**Quem responde.** Gustavo (cadastro) e Compras (processo). **Default 🟡:** item de serviço como produto do cadastro, vinculado ao pedido (`ordens_compra_itens_vinculos`), igual a qualquer item. **Vira:** CON-05.
+**Contexto (histórico).** N16-09 diz que a mão de obra é gerada na OC e entra no custo. O item da OC exige produto do cadastro ([[Contratos-da-v2\|LOG-36]]) e só tem `tipo_material` `acabado` ou `nao_acabado` ([[Estados-e-Status]]). O default era tratar o serviço como produto do cadastro, vinculado ao pedido (`ordens_compra_itens_vinculos`).
 
 ### OQ-09 · Se o Omie recusar o pedido criado no hub
 
-**Contexto.** O pedido segue o padrão da OC: a API grava numa fila e a pipeline envia. Na OC, o retorno do Omie vai por `PATCH /compras/ordens/:id/sincronizacao`; OC com erro **sai** da fila e só volta por "Reenviar" (`omie-elt-pipeline` `envioOrdensCompra.ts:18-40`; [[06-Circuito-de-Compra]]).
+**Situação.** ✅ Respondida (N16-36): o pedido fica com `status_sincronizacao_omie = erro` e o motivo, o vendedor vê o erro e tem o botão "Tentar novamente"; a proposta segue `APROVADA` e a marcação da Qualidade não se perde. ✅ Na `develop`: `av-hub` `components/Propostas/PropostaForm/AndamentoProposta.tsx:87` (`status_sincronizacao_omie === 'erro'`).
 
-**Proposta 🟡.** O pedido do hub guarda `status_sincronizacao_omie` com `pendente`, `sincronizado` e `erro` (mesmo vocabulário da OC) e o texto do erro. O vendedor vê "Pedido não criado no Omie: <motivo>" e o botão "Tentar de novo". A proposta continua `APROVADA`; a marcação da Qualidade não se perde.
-
-**Quem responde.** Nathan e Gustavo. **Vira:** ponta solta técnica.
+**Contexto (histórico).** A pergunta supunha que o pedido seguiria o padrão da OC, por fila na pipeline (`omie-elt-pipeline` `src/jobs/envioOrdensCompra.ts`, em que a OC com erro sai da fila e só volta por "Reenviar"; [[06-Circuito-de-Compra]]). Não foi assim: o pedido de venda é enviado de forma síncrona pela API, na mesma requisição do `/transformar`, sem fila (N16-149; `LOG-56` (`06-Contratos/Ativos/LOG-56-Transformar-Proposta-em-Pedido`)).
 
 ### OQ-10 · Matriz de preços: dimensões
 
-**Contexto.** N16-07 diz que a matriz será criada. Hoje existe só a oferta por produto e fornecedor, com histórico e média (`Oferta`, `suprimentos.prisma:138-183`).
+**Situação.** ✅ Respondida (N16-32), confirmada por Compras (19/10): produto × fornecedor × unidade × vigência. Quantidade, moeda e condição de compra ficam para depois.
 
-**Candidatos 🟡.** Por unidade (Mogi, Uberaba, Aruja); por período de vigência; por condição de compra (CIF ou FOB, mínimo, prazo, origem do ICMS); por quantidade (faixas de escala); por moeda.
-
-**Quem responde.** Nathan e Compras (o setor que vai usar). **Default 🟡:** produto × fornecedor × unidade × vigência até a resposta. **Vira:** CON-05.
+**Contexto (histórico).** N16-07 diz que a matriz será criada. O protótipo `api-comercial` tinha só a oferta por produto e fornecedor, com histórico e média (`Oferta`, `suprimentos.prisma:138-183`).
 
 ### OQ-11 · De onde vêm o IPI, o ICMS, a ST e o DIFAL reais de cada evento de custo
 
-**Contexto.** N16-20: cada evento de custo carrega as suas condições (condição de pagamento, encargo, impostos, frete, fornecedor) e o custo líquido do evento sai da fórmula do motor. A OC do hub **não guarda** IPI, ICMS, ST nem DIFAL por item (só preço, desconto e, no cabeçalho, frete, seguro, moeda e condição de pagamento; N14-23 deixou o Ciclo 1 sem imposto). O desenho do imposto por item já era a PS-014 e o BL-053.
+**Situação.** ✅ Respondida (N16-38) e completada pela N16-144: o vendedor preenche o imposto na parte de compras da proposta; a OC de pedido traz esse imposto por item, e a OC para estoque ou uso interno tem o imposto digitado pelo Comprador, que pode editar antes de aprovar. O Omie guarda o imposto da OC e o hub o traz (N16-53). 🔴 Sem código; o contrato será escrito quando o desenvolvimento começar.
 
-**Opções.** (a) campos novos na OC e no item da OC, preenchidos por Compras; (b) a nota fiscal de entrada (chave de 44 dígitos que o Recebimento já confere; `ListarNF` da pipeline); (c) as duas, com a NF como verdade.
-
-**Quem responde.** Nathan, Gustavo e Compras. **Default 🟡:** (c). **Impacto:** sem a resposta, o custo real por evento sai **sem imposto** (como o Ciclo 1), e o cenário com imposto do motor não fecha; ver a proposta de cronograma (`Proposta-Orcamento-Comissao/07-Cronograma/Proposta-de-Cronograma.md`, fora do vault, a validar) (dependência 🔴). **Vira:** ponta solta técnica ligada à PS-014 e ao BL-053.
+**Contexto (histórico).** N16-20: cada evento de custo carrega as suas condições. A OC do hub não guarda IPI, ICMS, ST nem DIFAL por item (N14-23 deixou o Ciclo 1 sem imposto); o desenho era a PS-014 e o BL-053. Opções: campos novos na OC; a NF de entrada; as duas.
 
 ### OQ-12 · Encargo financeiro do evento
 
-**Contexto.** O encargo do evento vem da condição de pagamento da OC (código e parcelas). Hoje a OC não guarda o percentual de encargo; o Simulador usa o encargo cadastrado por condição (ex.: 28/45, 1,5%).
+**Situação.** ✅ Respondida (N16-22): o encargo da condição de pagamento entra no **preço sugerido**, como no motor atual, e não no custo do evento; o percentual é cadastrado por condição.
 
-**Opções.** (a) calcular das parcelas (vencimento e valor) da OC; (b) cadastrar o percentual por condição de pagamento.
-
-**Quem responde.** Gustavo e Compras. **Default 🟡:** (b), reaproveitando o cadastro de condições do motor. **Vira:** ponta solta técnica.
+**Contexto (histórico).** Opções: calcular das parcelas da OC; cadastrar o percentual por condição de pagamento (ex.: 28/45, 1,5%).
 
 ## 3. OQ-13 a OQ-30 (descobertas ao documentar)
 
-| ID | Contexto e origem | Opções | Default 🟡 |
+| ID | Contexto e origem (histórico) | Opções | Situação |
 |---|---|---|---|
-| **OQ-26** Quem marca "aprovada" | A aprovação da Gerência é física (N16-12), mas o sistema precisa de um estado "aprovada" que libere o botão `V0.6` (N16-02) e trave a edição (N16-03). Origem: leitura do `StatusProposta` (`ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA`, `enums.prisma:69-76`), que não tem esse papel | (a) o vendedor marca "Aprovada pela Gerência" e confirma que tem a aprovação física, o sistema grava quem, quando e **qual revisão**; (b) só perfil da Gerência marca; (c) o vendedor marca e a Gerência confirma depois no sistema (próximo ciclo) | (a), com o número da revisão e os totais na tela de confirmação |
-| **OQ-27** "Cancelada" é "perdida"? | O briefing fala em proposta **cancelada**; o código tem `PERDIDA` com motivo obrigatório e `reabrir` (`propostas.service.ts:555-606`) | (a) um só estado `CANCELADA` com o motivo da perda; (b) dois estados: `PERDIDA` (cliente não fechou) e `CANCELADA` (vendedor desistiu); reabertura: (i) nunca, o vendedor duplica (`POST /:id/duplicar` existe, `propostas.routes.ts:125`), (ii) só antes de aprovar | (a) e reabertura (i): cancelada não volta; duplica |
-| **OQ-13** Evento do custo real | N16-09 diz "por evento" e "vem da ordem de compra". Não diz em que momento a linha nasce. Origem: exemplo do Nathan (dias 01 a 05) | OC: (a) emitida, (b) aprovada, (c) recebida. Lote do Estoque: (a) reserva (`E3`), (b) saída (`E6`) | OC **aprovada** (valor firme; OC cancelada estorna a linha); lote na **reserva** (`E3`), confirmada na saída (`E6`) |
-| **OQ-14** Dois números do pedido | N16-04 diz "só números" e "sincroniza com o Omie". O Omie atribui o próprio número (`numero_pedido`), que é a chave em `pedidos_vendas`, na liberação e no MES; o número próprio iria em `cCodIntPed` (limite de 20 caracteres). A OC usa `OC-000001` por unidade (`fn_proximo_numero_documento`, Dump Avhub 8110-8140) | Sequência: por unidade (como a OC) ou por empresa emissora e ano (como a proposta hoje) | Por **unidade e tipo** (`contadores_documento`, com `CHECK` ampliado para `proposta` e `pedido_venda`); o número do Omie continua a chave no MES |
-| **OQ-15** Liberação gravada na criação | `pedidos_vendas_liberacao` tem chave `(codigo_empresa, numero_pedido)` com o número do Omie, `acompanhamento_qualidade` e `liberado_por` obrigatórios (Dump Avhub 18285-18296). O número do Omie só existe depois da resposta da API | (a) a pipeline, ao trazer o pedido (casa por `cCodIntPed`), grava a liberação com o que a proposta guardou; (b) a pipeline grava a liberação na resposta do `IncluirPedido`; (c) trigger no banco | (b): é o momento em que o número do Omie nasce; sem janela em que o pedido existe sem liberação |
-| **OQ-16** Etapa e campos do pedido no Omie | A view da liberação só aceita pedido com `etapa <> 0` ([[03-Pedido-de-Venda-e-Liberacao]] regra 10); etapa 0 é orçamento no Omie. Os nomes das etapas 10, 15 e 20 estão pendentes (#52) | Etapa inicial: a de "Pedido de venda" da conta; campos: vendedor, condição, parcelas, projeto, frete | Etapa de pedido de venda; Gustavo e Nathan conferem no Omie |
-| **OQ-17** Pedido mexido no Omie depois | Se alguém altera item ou cancela o pedido direto no Omie, a proposta aprovada e a comissão estimada divergem. Origem: LOG-45 e #15 (o Omie é o sistema fiscal) | (a) só aviso e a pipeline traz o que mudou; (b) pedido cancelado cancela a proposta e a comissão vira histórico | (a); decisão de negócio com João Vitor |
-| **OQ-19** Pedido sem proposta | Para o pedido que chega do Omie sem proposta não há `V0.3`, logo não há `K1`. O `V2` e o `V3` seguem como hoje (N16-05) | (a) `K2` e `K3` calculam só na NF com o custo real, sem estimativa; (b) o vendedor preenche uma estimativa no pedido | (a): a comissão nasce na NF; o motor é o mesmo |
-| **OQ-20** "Parte de compras vazia" | N16-03 impede aprovar proposta incompleta. O código aceita item sem custo (`origemCusto = SEM_CUSTO`, `vendas.prisma:144`) | (a) qualquer item sem custo e sem fornecedor deixa a proposta incompleta; (b) só quando **todos** os itens estão vazios; (c) item de serviço fica fora | (a), com (c) a confirmar |
-| **OQ-21** Perfis e permissões | N16-13: "cada perfil recebe o seu módulo". A capacidade hoje deriva de telas (`propostas`, `propostas-valores`, `custo-item`, `painel-comprador`, `simulador`, `capacidades.ts:47-56`) e o SQL de 16/10 cria `solicitacoes-custo`. Faltam as telas da comissão e da decisão da Controladoria | Lista de perfis por módulo; quem vê custo, margem e comissão estimada | Matriz 🟡 da seção "Permissões"; Gustavo cadastra |
-| **OQ-22** PTAX de que dia | N16-13: a PTAX do hub. A proposta em USD ou EUR guarda `cotacaoMoeda` (`vendas.prisma:62`); o `api-comercial` usa AwesomeAPI (`cambio.ts:1-2`) | Dia da criação da revisão, da aprovação ou da criação do pedido | Dia da **aprovação** (congela com o preço fechado); a OC usa a PTAX da OC ([[Contratos-da-v2\|LOG-11]]) |
-| **OQ-23** Unidade de medida diferente | Proposta em `PC`, `KG`, `M`, `TN`...; OC e lote em outra unidade. Já era a PS-006 e o D2 do 008, que o N16-09 supera | (a) fator de conversão por produto; (b) bloquear até alguém converter à mão; (c) custo parcial marcado "unidade diferente" | (c) no Ciclo 1; (a) depois. **Pergunta a Compras** |
-| **OQ-24** Produto pendente vira pedido? | Produto novo na proposta nasce `PEND-xxxx` sem cadastro no Omie (`produtos_pendentes`, [[Contratos-da-v2\|LOG-52]] seção 3.3); o Omie recusa item sem cadastro | (a) a proposta com produto pendente não vira pedido até o cadastro; (b) `V0.7` cria o produto no Omie | (a) |
-| **OQ-25** Comissão enquanto o custo é parcial | No exemplo do Nathan o item A passa dias com 10, 30 e depois 50 de 50 flanges cobertas. N16-09 diz que o custo é parcial; não diz como `K2` recalcula nesse intervalo ([[15-Custo-Real-e-Comissao]]) | (a) custo real do coberto mais cotado do restante; (b) só recalcula quando o item está completo; (c) usa o custo médio já comprado para todo o item | (a). Pergunta à Michele (CON-04) e ao Gustavo |
-| **OQ-28** Aprovação de Compras sobre o percentual | **Respondida em parte: o passo de Compras sai do fluxo, mas Compras ainda valida o valor estimado.** O Simulador atual tem um passo de Compras: abre a simulação do vendedor, cria uma versão com os custos corrigidos (origem `COMPRAS`) e aprova; o percentual final é o menor entre o do vendedor e o de Compras (`simulacoes.route.js:30-36`, `:233-259`; `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803-845` (`aprovarCompras`); chip "Comissão: após a aprovação de Compras" na imagem do Simulador). N16-08 diz que Compras **não altera a proposta**; N16-19 manda usar o mesmo motor | (a) o passo some: o cálculo `REAL` gerado pelos eventos de custo (`C7`, OC, lote) faz o papel da versão de Compras; (b) Compras ainda aprova a comissão estimada antes de a proposta ser aprovada; (c) Compras confere só (`C6`), sem aprovar percentual | (a). Pergunta a Michele e ao Nathan (CON-04) |
-| **OQ-29** Pedidos de Venda e NF de Saída | O Nathan inativou as duas telas na api-test (16/10). O SQL de produção não as toca. As páginas seguem no código em `app/(protected)/vendas/pedidos-de-venda` e `.../notas-fiscais-saida` | (a) inativar também em produção, no mesmo SQL; (b) manter só em produção até decidir | (a) se o Nathan confirmar; o Gustavo inclui o passo no SQL |
-| **OQ-30** Correção da marcação no pedido da proposta | Hoje o vendedor corrige a marcação até o MES importar (regra 5 de [[03-Pedido-de-Venda-e-Liberacao]]). A proposta aprovada não muda (N16-03), mas a marcação do pedido sim | (a) manter a correção, com histórico `alterado`; (b) bloquear para o pedido de origem proposta | (a) |
+| **OQ-26** Quem marca "aprovada" | A aprovação da Gerência é física (N16-12), mas o sistema precisa de um estado "aprovada" que libere o `V0.6` (N16-02) e trave a edição (N16-03). O protótipo `api-comercial` tinha `StatusProposta` sem esse papel (`ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA`, `enums.prisma:69-76`) | (a) o vendedor marca e confirma a aprovação física; (b) só a Gerência marca; (c) o vendedor marca e a Gerência confirma depois | ✅ N16-25: (a), gravando quem, quando e qual revisão. O João Vitor pode contestar |
+| **OQ-27** "Cancelada" é "perdida"? | O briefing fala em proposta cancelada; o protótipo tinha `PERDIDA` com motivo e `reabrir` (`propostas.service.ts:555-606`) e `POST /:id/duplicar` (`propostas.routes.ts:125`) | (a) um estado só, `CANCELADA`; (b) `PERDIDA` e `CANCELADA`; reabertura nunca ou só antes de aprovar | ✅ N16-24: um estado só, `CANCELADA`, que não reabre. O ciclo antigo segue na PS-035 |
+| **OQ-13** Evento do custo real | N16-09 diz "por evento" e "vem da ordem de compra", sem dizer quando a linha nasce. Origem: exemplo do Nathan (dias 01 a 05) | OC emitida, aprovada ou recebida; lote na reserva (`E3`) ou na saída (`E6`) | ✅ N16-23 e N16-37: o custo vem da OC aprovada; o lote só identifica a OC de origem. N16-40: no recebimento vale o valor da NF de entrada |
+| **OQ-14** Dois números do pedido | N16-04 diz "só números" e "sincroniza com o Omie". O Omie atribui o próprio número, que é a chave no MES. A OC usava `OC-000001` por unidade (`fn_proximo_numero_documento`, Dump Avhub 8110-8140) | Sequência por unidade ou por empresa emissora e ano | ✅ N16-26: por unidade e tipo; o número do Omie segue a chave no MES. N16-148: o banco guarda só dígitos e o prefixo aparece só na tela e no PDF. A emissora é a própria unidade (N16-154) |
+| **OQ-15** Liberação gravada na criação | `pedidos_vendas_liberacao` tem chave com o número do Omie e `acompanhamento_qualidade` obrigatório (Dump Avhub 18285-18296); o número do Omie só existe depois da resposta | (a) a pipeline grava ao trazer o pedido; (b) gravar na resposta do `IncluirPedido`; (c) trigger | ✅ **Fechada, superada pelo R7 do LOG-56 (Nathan, 09/11/2026):** o `/transformar` grava a Qualidade só em `core_comercial.pedidos_venda` e não cria a liberação; a Liberar Pedidos mostra a resposta como valor inicial e a liberação segue sendo ato do vendedor (`LOG-56` (`06-Contratos/Ativos/Partes/LOG-56-Transformar-Proposta-em-Pedido-Detalhe-1`), §7.3). Criar a linha faria o pedido nascer importável pelo MES sem ninguém liberar |
+| **OQ-16** Etapa e campos do pedido no Omie | A view da liberação só aceita pedido com `etapa <> 0` ([[03-Pedido-de-Venda-e-Liberacao]] regra 10); etapa 0 é orçamento no Omie | Etapa de "Pedido de venda" da conta; campos: vendedor, condição, parcelas, projeto, frete | ✅ Etapa sempre `"10"` e primeiro teste com `bloqueado = "S"` (N16-149); CFOP e cenário (N16-83); o Omie aceita o nosso número (N16-82); conta corrente padrão por conta Omie (R11 do LOG-56; PS-041 fechada). Resta o teste com a conta corrente no Omie (BL-081) |
+| **OQ-17** Pedido mexido no Omie depois | Se alguém altera ou cancela o pedido no Omie, a proposta e a comissão estimada divergem. Origem: [[Contratos-da-v2\|LOG-45]] e #15 | (a) só aviso; (b) pedido cancelado cancela a proposta | ✅ N16-30: (a), a pipeline traz a mudança. N16-84: quem cancela é o vendedor, por API. O teste segue na OQ-48 |
+| **OQ-19** Pedido sem proposta | Para o pedido que chega do Omie sem proposta não há `V0.3`, logo não há `K1` (N16-05) | (a) a comissão nasce na NF sem estimativa; (b) o vendedor preenche uma estimativa | ✅ N16-35 dizia (a); a **N16-104 corrigiu para (b)**: o vendedor preenche como faz hoje no Simulador, e o percentual final é o menor entre o dele e o do custo real |
+| **OQ-20** "Parte de compras vazia" | N16-03 impede aprovar proposta incompleta; o protótipo aceitava item sem custo (`origemCusto = SEM_CUSTO`, `vendas.prisma:144`) | (a) qualquer item sem custo e sem fornecedor; (b) só quando todos estão vazios; (c) serviço fora | ✅ N16-31: (a) |
+| **OQ-21** Perfis e permissões | N16-13: "cada perfil recebe o seu módulo". O protótipo derivava a capacidade de telas (`propostas`, `custo-item`, `simulador`, `capacidades.ts:47-56`) | Lista de perfis por módulo; quem vê custo, margem e comissão estimada | ⏸ N16-85: os perfis novos são cadastrados depois das telas. Responde o Nathan; o Gustavo cadastra |
+| **OQ-22** PTAX de que dia | N16-13: a PTAX do hub. O protótipo guardava `cotacaoMoeda` (`vendas.prisma:62`) e usava a AwesomeAPI (`cambio.ts:1-2`) | Dia da criação da revisão, da aprovação ou do pedido | ✅ N16-27: dia da aprovação; a OC usa a PTAX da OC ([[Contratos-da-v2\|LOG-11]]) |
+| **OQ-23** Unidade de medida diferente | Proposta em `PC`, `KG`, `M`, `TN`; OC e lote em outra unidade. Era a PS-006 e o D2 do 008, que a N16-09 supera | (a) fator por produto; (b) bloquear; (c) custo parcial marcado | ✅ Compras (19/10): não há conversão no sistema; a OC segue a unidade do faturamento do fornecedor |
+| **OQ-24** Produto pendente vira pedido? | Produto novo nasce `PEND-xxxx` sem cadastro no Omie ([[Contratos-da-v2\|LOG-52]] seção 3.3) | (a) não vira pedido até o cadastro; (b) `V0.7` cria o produto | ✅ N16-28: (a). Quem cadastra e em quanto tempo é a OQ-36 (Fiscal) |
+| **OQ-25** Comissão enquanto o custo é parcial | No exemplo do Nathan o item A passa dias com 10, 30 e 50 de 50 flanges cobertas ([[15-Custo-Real-e-Comissao]]) | (a) real do coberto mais cotado do resto; (b) só com o item completo; (c) custo médio | ✅ N16-48 (Michele): comissão só sobre as peças com custo real; a diferença vem na apuração seguinte. Diverge do default (a) |
+| **OQ-28** Aprovação de Compras sobre o percentual | O Simulador atual tem um passo de Compras: cria uma versão com origem `COMPRAS` e o percentual final é o menor entre o do vendedor e o de Compras (`api-acos-vital` `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:233` (`cabecalho.origem === "COMPRAS"`); `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803` (`aprovarCompras`)). N16-08: Compras não altera a proposta | (a) o passo some e o cálculo `REAL` faz o papel; (b) Compras aprova antes; (c) Compras só confere | ⏸ N16-51 (provisório): (a), o passo fica desligado e o valor estimado por Compras vem do Omie. Falta Compras validar (A20, a mesma da OQ-45); a N16-77 manda seguir sem travar o banco |
+| **OQ-29** Pedidos de Venda e NF de Saída | O Nathan inativou as duas telas na api-test (16/10); o SQL de produção não as tocava. As páginas seguem no código em `app/(protected)/vendas/pedidos-de-venda` e `.../notas-fiscais-saida` | (a) inativar também em produção; (b) manter | ✅ N16-33: (a) |
+| **OQ-30** Correção da marcação no pedido da proposta | O vendedor corrige a marcação até o MES importar (regra 5 de [[03-Pedido-de-Venda-e-Liberacao]]) | (a) manter, com histórico `alterado`; (b) bloquear | ✅ N16-29: (a) |
 
 ## 4. Consultas que saem daqui
 
-| Consulta | Para quem | Perguntas que entram | Observação |
-|---|---|---|---|
-| **CON-03** Gerência | João Vitor | OQ-02, OQ-03, OQ-04 | OQ-04 respondida por N16-75 e o fluxo da compra acima do valor confirmado por N16-76: nada mais a perguntar ao João Vitor. OQ-17, 20, 26 e 27 já respondidas pelo Nathan (N16-30, N16-31, N16-25, N16-24); o João Vitor pode contestar |
-| **CON-04** Controladoria | Michele | OQ-05, OQ-25, OQ-28 (OQ-06 e OQ-19 já respondidas, N16-34 e N16-35; a Michele confirma), mais as duas perguntas do documento de 16/10 que não viraram OQ: "o que a Controladoria ajusta (percentual, valor ou os dois) e com qual justificativa" (já decidido em N16-10: aprova, desaprova, bloqueia, corta, altera, sempre justifica) e "a estimada da proposta cancelada, guardada como histórico, atende a auditoria?" | Se a Michele confirmar N16-10, essas duas somem |
-| **CON-05** Compras e Orçamento | Compras (Gerente de Compras, compradores) e quem vai operar o Orçamento | OQ-32 (parte aberta), OQ-34 (OQ-08, 10, 22, 23 e 33 respondidas) | O setor orçamentário ainda não tem nome de pessoa no vault ❓ |
+O plano antigo desta seção (CON-03 para a Gerência, CON-04 para a Controladoria, CON-05 para Compras e CON-06 para o Fiscal) foi superado: as perguntas da Gerência e quase todas as da Controladoria foram respondidas por decisão, e o ID `CON-03` foi usado em 30/10/2026 para outra consulta. O que vale hoje:
 
-Perguntas que **não** viram Consulta e vão para [[Pontas-Soltas]] (em 26/10/2026 entraram lá como PS-035 a PS-039; as que seguem abertas estão nesta lista): OQ-07, OQ-15, OQ-16, OQ-21 e os campos novos da OC (N16-38; a fonte do imposto por item da OC foi decidida em 29/10, N16-144, e o contrato só será escrito quando o desenvolvimento começar). As OQ-12, 14, 24 e 30 foram respondidas e só viram requisito do contrato.
+| Consulta | Para quem | Perguntas | Situação |
+|---|---|---|---|
+| [[Contratos-da-v2\|CON-03]] Devolução de compra e classificação do pedido | Michele (Controladoria) e Fiscal | OQ-44 (perguntas 1 e 2: Projeto e recompra) e OQ-42 (pergunta 3: devolução de compra) | Escrita, `aguardando-resposta` (N16-147, item 10) |
+| Consulta a Compras (sem ID) | Gerente de Compras | OQ-28 e OQ-45 (o padrão provisório da N16-51) e OQ-47 (o e-mail de hoje) | Não escrita. O próximo ID livre é `CON-04`; quem dá o ID é o Nathan |
+| Consulta ao Fiscal (sem ID) | Fiscal (❓ pessoa) | OQ-36 (cadastro de produto novo no Omie) | Não escrita |
+| Conversa de dezembro | PCP, Engenharia e Recebimento | OQ-32 (custo da sobra de chapa), com as Q7 a Q13 do [[Contratos-da-v2\|LOG-54]] | Marcada pelo Nathan para dezembro de 2026 (N16-146) |
+
+Perguntas técnicas não viram Consulta: ficam em [[Pontas-Soltas]]. Abertas: OQ-07 e OQ-38 (Robert), OQ-39 (Gustavo), OQ-48 (Nathan, PS-037) e OQ-49 a OQ-53 (Nathan; PS-048, PS-049, RS-023). A OQ-21 está adiada (N16-85). A OQ-15 e a OQ-16, que estavam nesta lista, foram fechadas (LOG-56, N16-149).
 
 ## 5. Perguntas do documento de 16/10 já respondidas por decisão
 
@@ -142,5 +129,7 @@ Perguntas que **não** viram Consulta e vão para [[Pontas-Soltas]] (em 26/10/20
 |---|---|
 | "Uma proposta marcada como incompleta pode ser aprovada?" (João Vitor) | Não: N16-03 |
 | "Até quando uma proposta aprovada pode ser revisada?" (João Vitor) | Não pode: N16-03 (ajuste só até aprovar) |
-| "O bloqueio de comissões e as listas de bloqueio valem também no módulo novo?" (Michele) | N16-11 traz bloqueios e blacklists; resta confirmar (OQ-06) |
-| "A Controladoria quer ser avisada ou só ver a diferença?" (Michele) | A Controladoria vê o custo real e a diferença (N16-18); o vendedor não recebe aviso |
+| "O bloqueio de comissões e as listas de bloqueio valem também no módulo novo?" (Michele) | Sim: N16-11, N16-34 e N16-43 (OQ-06) |
+| "A Controladoria quer ser avisada ou só ver a diferença?" (Michele) | A Controladoria vê o custo real e a diferença (N16-18); o aviso ao vendedor existe só para a compra acima do valor da proposta (N16-60) |
+| "O que a Controladoria ajusta (percentual, valor ou os dois) e com qual justificativa?" (Michele) | N16-10: aprova, desaprova, bloqueia, corta ou altera, sempre com justificativa; o vendedor vê a justificativa (N16-46) |
+| "A estimada da proposta cancelada, guardada como histórico, atende a auditoria?" (Michele) | ❓ Não achei resposta própria; a N16-43 garante que a comissão excluída nunca some (aparece com valor zero e o motivo) |
