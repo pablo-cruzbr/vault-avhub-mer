@@ -1,7 +1,7 @@
 ---
 tags: [pesquisa, comercial, suprimentos, api-comercial, proposta, orcamento, mapa, staging, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-11
 status: proposta
 dono: Pablo
 parte-de: "[[Mapa-do-Modulo-do-Pablo]]"
@@ -56,7 +56,7 @@ O BFF tem 84 entradas na allowlist, cada uma com tela e ação ✅ `app/api/come
 | `/dashboards/dash-comercial` | página | `dash-comercial` | ✅ |
 | Faixa "fluxo do custo" nas telas de Orçamento | `FluxoDoCusto.tsx` e `lib/domain/fluxo-suprimentos.ts:19-56` (5 passos: vendedor pede custo, comprador assume, pedir cotação, registrar preço, custo volta à proposta) | — | ✅ |
 
-Tipos de tela ainda dizem "api-comercial" e `PARCIAL`/`FECHADA` (`lib/domain/comercial-propostas.ts:5`): precisam acompanhar a nova API.
+Os tipos de tela já seguem a API do Hub: `StatusProposta` é `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`, `EXPIRADA` (✅ `av-hub` `44bb770` `lib/domain/comercial-propostas.ts:9` (`StatusProposta`), conferido em 11/11/2026).
 
 ## 7. Integrações com o Omie
 
