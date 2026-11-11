@@ -33,7 +33,7 @@ As novas frentes de 16/10 (proposta, Orçamento, custo real e comissão nova) ai
 
 ## Gargalos
 
-- **Robert:** o plano pede mais do que ele entrega. O déficit é de **29,6 pd** no Ciclo 1 (era 16,1 pd; 32,6 antes do crédito do K4) 🔴. A cobertura decidida é dobrar o esforço e fazer horas extras, se preciso 📝 (Nathan, 14/10). Desde então o Robert também entregou, na `develop`, o custo da OC no lote (K5, 19/10) e o `GET /itens/custo` (27/10) e assumiu o módulo comercial (28/10); o déficit **não foi recalculado** ❓ (com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida).
+- **Robert:** o plano pede mais do que ele entrega. O déficit é de **29,6 pd** no Ciclo 1 (era 16,1 pd; 32,6 antes do crédito do K4) 🔴. A cobertura decidida é dobrar o esforço e fazer horas extras, se preciso 📝 (Nathan, 14/10). Desde então o Robert também entregou, na `develop`, o custo da OC no lote (K5, 19/10) e o `GET /itens/custo` (27/10) e assumiu o módulo comercial (28/10); o déficit **não foi recalculado** ❓ (com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida). **Desde 11/11 (N16-157):** +62 pd das raias 01, 03, 14 e 15; o fim do plano vai a 28/03/2028 com ele sozinho ou a 20/10/2027 com o Nathan desenvolvendo junto 🟡 ([[Capacidade-do-Robert]]).
 - **Nathan:** na proposta de 16/10 as telas dele terminavam só em 06/07/2027, e ele era o gargalo 🟡. Em 28/10 as telas de proposta passaram ao Robert e as de Orçamento ao Pablo com o Robert, o que tira trabalho do Nathan; a conta não foi refeita ❓. As alternativas A, B e C ficam no Detalhe técnico como histórico.
 - **Gustavo:** tem folga (11,9 pd na S1–FC e 9,8 pd na S5) e pode receber parte do backend do MES 🟡.
 

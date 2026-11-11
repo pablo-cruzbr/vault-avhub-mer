@@ -10,7 +10,7 @@ fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido 
 
 # Registro de decisões: decisões N16, N16-150 a N16-155
 
-**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-157 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade, a empresa emissora que vira a própria unidade e o dono de cada raia do fluxo 0b.
+**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-158 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade, a empresa emissora que vira a própria unidade e o dono de cada raia do fluxo 0b.
 
 **Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-155**
 
@@ -72,3 +72,9 @@ Contrato afetado: LOG-56, Transformar proposta em pedido (§4.2, §6.3, §8 e pa
 | ID | Decisão | Data | Dono | Selo | Superada |
 |---|---|---|---|---|---|
 | N16-157 | **Cada raia do fluxo 0b tem um dono: o Robert fica com 13 das 15, o Nathan com o Circuito de Compra e o Pablo com o Orçamento, acompanhado pelo Robert.** Nathan, 11/11/2026. (1) **Donos por raia** ([[00-Fluxo-Mestre-0b]], "Mapa para as notas de raia"): **Robert** em 01 Proposta de Venda, 03 Pedido de Venda e Liberação, 04 PCP, 05 Estoque · atendimento, 07 Recebimento, 08 Qualidade de entrada, 09 Estoque · entrada do lote, 10 Produção, 11 Qualidade de saída, 12 Estoque · despacho, 13 Expedição, 14 Fiscal · Omie e 15 Custo Real e Comissão; **Nathan** em 06 Circuito de Compra; **Pablo** em 02 Orçamento, **com acompanhamento do Robert**. (2) **Nathan coordena e gerencia a equipe e ajuda o Robert em cada processo:** ser dono não quer dizer fazer sozinho, e não é válido nem justo deixar as raias só com o Robert. (3) **O Pablo é desenvolvedor júnior:** é arriscado deixá-lo como dono sozinho, por isso o Orçamento fica sob acompanhamento do Robert. (4) **O Gustavo é o DBA e a API de todo o sistema** (palavras do Nathan). ❓ Falta confirmar se isso inclui a API do MES (`api-pcp`), hoje com o Robert. (5) **Consequência no backlog:** o pipeline do pedido de venda no Omie e o motor e as telas da comissão e do custo real deixam a frente Nathan e vão para o Robert (BL-023, BL-053, BL-076, BL-077, BL-078, BL-080 na parte da tela, BL-081, BL-087 e BL-088 na parte da tela), com o Nathan apoiando ([[Backlog-por-Frente]]). (6) A carga do Robert, que já estava em déficit (RS-004), cresce com as raias 01, 03, 14 e 15: a conta do [[Cronograma]] precisa ser refeita | 11/11/2026 | Nathan | 📝 | N16-15 (supera em parte: o pipeline do pedido e as telas da Comissão nova saem do Nathan); N16-117, N16-118, #32 e #33 (completa) |
+
+## Decisão de 11/11/2026 (a API do MES fica com o Robert) (N16-158)
+
+| ID | Decisão | Data | Dono | Selo | Superada |
+|---|---|---|---|---|---|
+| N16-158 | **A API do MES (`api-pcp`) fica com o Robert, acompanhado pelo Gustavo.** Nathan, 11/11/2026. Responde o ❓ da N16-157, item 4: "o Gustavo é o DBA e a API de todo o sistema" quer dizer que ele é o DBA de todos os bancos e o dono da API do Hub (`api-acos-vital`), e **acompanha** a API do MES, que continua do Robert. A capacidade do Robert foi refeita com as raias da N16-157 e o apoio do Nathan como coordenador e desenvolvedor em todo o processo ([[Capacidade-do-Robert]], 🟡 o Robert valida) | 11/11/2026 | Nathan | 📝 | N16-157 (completa: fecha o ❓ do item 4) |

@@ -20,14 +20,14 @@ fontes: [git dos cinco repositórios em 14/10/2026 e em 29/10/2026 (somente leit
 | HUB (`av-hub`) | As telas do portal comercial e de compras | Nathan |
 | `api-acos-vital` | A API do Hub, que fala com o banco do av-hub. Desde 28/10 o módulo comercial (`/comercial/*`) nasce aqui, conduzido pelo Robert | Gustavo (DBA); módulo comercial: Robert |
 | `api-comercial` | API de teste do Pablo, **removida do av-hub em 06/11/2026 (PR #261, `dd9d729`)**. Antes disso foi legado só de leitura (N16-117). O código fica legível em `git show f7d8d7f:api-comercial/<arquivo>` | Ninguém. Não é fonte de regra nem de estado: vale o desenho do vault e as decisões; o módulo vive na `api-acos-vital` |
-| MES: `api-pcp` (back) e `app-pcp` (front) | Chão de fábrica, Estoque, Recebimento e Qualidade | Robert |
+| MES: `api-pcp` (back) e `app-pcp` (front) | Chão de fábrica, Estoque, Recebimento e Qualidade | Robert; o Gustavo acompanha a `api-pcp` (N16-158) |
 | `omie-elt-pipeline` | Copia o Omie para o banco do av-hub e envia a OC ao Omie | Nathan 📝 |
 
 ## Quem faz o quê
 
 | Pessoa | Frente | Onde trabalha | Entregas principais |
 |---|---|---|---|
-| **Gustavo M. de Farias** (DBA) | DBA e API de todo o sistema (N16-157; ❓ se inclui a `api-pcp`, falta confirmar) | `api-acos-vital`, migrations, `auth.*`, `core_*` | Aplicar migrations no banco; L3 de `auth.rotas_telas`; cadastrar as listas de rotas das chaves do MES e da pipeline (L6; o recurso já está no código); permissões `torre-fluxo` e `custo-itens`; versionar o SQL do contrato 34; exposição de rede da `api-pcp` |
+| **Gustavo M. de Farias** (DBA) | DBA de todo o sistema e API do Hub; acompanha a API do MES, que é do Robert (N16-157, N16-158) | `api-acos-vital`, migrations, `auth.*`, `core_*` | Aplicar migrations no banco; L3 de `auth.rotas_telas`; cadastrar as listas de rotas das chaves do MES e da pipeline (L6; o recurso já está no código); permissões `torre-fluxo` e `custo-itens`; versionar o SQL do contrato 34; exposição de rede da `api-pcp` |
 | **Nathan** | Coordenação e gestão da equipe, dono da raia 06 Circuito de Compra e apoio ao Robert em cada processo (N16-157); telas do av-hub (front e BFF) | HUB | Telas de Compras, Torre de Fluxo, indicador de origem da requisição; perfil CCP; decisões e contratos; este vault. As telas de proposta, do custo por item e da comissão são do Robert, e as de Orçamento, do Pablo com o Robert (N16-157) |
 | **Robert Wilson** | Dono de 13 das 15 raias do fluxo 0b (N16-157): MES inteiro e, desde 28/10, o módulo comercial na API do Hub; desde 11/11 também Fiscal · Omie e Custo Real e Comissão | `api-pcp`, `app-pcp`, rotas `/comercial/*` da `api-acos-vital` e telas de proposta do HUB | Documento de retirada e baixa na retirada, fabricado virar lote (feito na `develop`), `/fluxo/eventos`, G1 (carga em lote), D11, I1/J2/J5; rotas e telas da proposta. Já feitos na `develop`: `GET /itens/custo` (27/10) e o job da OC do contrato 004 (K4, 15/10) |
 | **Pablo Cruz** | Desenvolvedor júnior, dono da raia 02 Orçamento com o acompanhamento do Robert (N16-157) | Telas de `orcamento/*` do HUB (a `api-comercial` dele foi removida em 06/11/2026) | Acompanhar o módulo na `api-acos-vital` pelo desenho das raias ([[Mapa-do-Modulo-do-Pablo]] é só histórico); telas e perfis do Orçamento |

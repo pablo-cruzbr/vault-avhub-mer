@@ -4,7 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-11-11
 status: vigente
 dono: Nathan
-fontes: [v1 05-Pessoas-e-Equipe/Equipe-Projeto, v1 Cronograma-2-Meses §3.2 e §3.4, v1 Registro-de-Decisoes #32 #33 #33b, git log dos repositórios em 14/10/2026 e em 29/10/2026, Registro-de-Decisoes N16-09, N16-15, N16-117, N16-118, N16-119 e N16-157]
+fontes: [v1 05-Pessoas-e-Equipe/Equipe-Projeto, v1 Cronograma-2-Meses §3.2 e §3.4, v1 Registro-de-Decisoes #32 #33 #33b, git log dos repositórios em 14/10/2026 e em 29/10/2026, Registro-de-Decisoes N16-09, N16-15, N16-117, N16-118, N16-119, N16-157 e N16-158]
 ---
 
 # Equipe e divisão
@@ -37,14 +37,14 @@ Decisão do Nathan de 11/11/2026 (N16-157). Ser dono não quer dizer fazer sozin
 | 14 Fiscal · Omie | [[14-Fiscal-Omie]] | Robert |
 | 15 Custo Real e Comissão | [[15-Custo-Real-e-Comissao]] | Robert |
 
-❓ Falta o Nathan confirmar se "API de todo o sistema" inclui a API do MES (`api-pcp`), que até aqui era do Robert.
+A API do MES (`api-pcp`) continua com o Robert, acompanhado pelo Gustavo (N16-158).
 
 ## Quem faz o quê
 
 | Pessoa | Papel | O que toca |
 |---|---|---|
 | **Nathan** | Coordenador de TI e arquiteto do ERP. Coordena e gerencia a equipe e ajuda o Robert em cada processo (N16-157). É o dono deste vault, das decisões e do pipeline Omie 📝 | Dono da raia 06 Circuito de Compra (N16-157). Telas do av-hub (o front e o BFF, a camada que liga o front à API), o `omie-elt-pipeline`, os contratos e a coordenação. Faz as telas de Compras e a organização do código do HUB. **Desde 11/11 o pipeline do pedido de venda e as telas da Comissão nova passam ao Robert** (N16-157, supera em parte a N16-15) |
-| **Gustavo M. de Farias** | Colega, DBA (administrador de banco de dados) | **DBA e API de todo o sistema** (N16-157). Banco e API do av-hub (`api-acos-vital`): migrations, `auth.*`, funções, envio fixo da OC, chaves de serviço do MES e da pipeline (L6) e `exclusionSync`. Revisa e aplica no banco o módulo comercial e o Orçamento e a comissão nova (`core_comissao`, N16-143) (N16-15). ❓ Se a API do MES (`api-pcp`) também passa a ele, falta confirmar |
+| **Gustavo M. de Farias** | Colega, DBA (administrador de banco de dados) | **DBA e API de todo o sistema** (N16-157). Banco e API do av-hub (`api-acos-vital`): migrations, `auth.*`, funções, envio fixo da OC, chaves de serviço do MES e da pipeline (L6) e `exclusionSync`. Revisa e aplica no banco o módulo comercial e o Orçamento e a comissão nova (`core_comissao`, N16-143) (N16-15). Acompanha a API do MES (`api-pcp`), que é do Robert (N16-158) |
 | **Robert Wilson** | Colega, fullstack sênior | **Dono de 13 das 15 raias do fluxo 0b** (todas menos 02 e 06; N16-157), com o Nathan ajudando em cada processo. O MES inteiro (`api-pcp` e `app-pcp`): Recebimento, carga inicial em lote (G1), baixa no despacho, D11 (leitor 2D e posto de recebimento) e I1/J2/J5. Também o custo obrigatório em todo lote e o `GET /itens/custo` (N16-09, feito na `develop` em 27/10). **Desde 28/10 conduz o módulo comercial na `api-acos-vital`** (N16-117) e troca o backend das telas de proposta (N16-118, N16-119); já criou as rotas `/comercial/*` de cadastros, clientes, parceiros e propostas. **Desde 11/11 também o Fiscal · Omie (pipeline do pedido de venda) e o Custo Real e Comissão** (N16-157). Acompanha o Pablo no Orçamento |
 | **Pablo Cruz** | Colega, desenvolvedor júnior (N16-157) | Dono da raia 02 Orçamento, com acompanhamento do Robert (N16-157). Criou o módulo Comercial & Suprimentos (a `api-comercial`, removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); legível em `git show f7d8d7f:api-comercial/<arquivo>`). **Desde 28/10 acompanha** o módulo comercial, que o Robert conduz, e cuida do Orçamento, com a supervisão do Robert. Ele saiu do MES em 07/10 |
 
@@ -61,7 +61,7 @@ Atribuições decididas: Pablo no Comercial & Suprimentos e Robert no MES 📝 (
 
 ## Risco: capacidade do Robert
 
-O plano pede mais trabalho do Robert do que ele consegue entregar no prazo. O Ciclo 1 só fecha em 18/02/2027 por causa disso. Ele chegou a ser 21/01/2027, e o Ciclo 2 começa em 19/02/2027 (N14-30 e N14-32; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida). **Desde 11/11 o Robert também é dono da Proposta, do Pedido, do Fiscal · Omie e da Comissão (N16-157)**, e essa carga não está na conta: ela precisa ser refeita, contando o apoio do Nathan (40% de foco no plano). Conta em [[Cronograma]]; risco em [[Riscos]] (RS-004).
+O plano pede mais trabalho do Robert do que ele consegue entregar no prazo. O Ciclo 1 só fecha em 18/02/2027 por causa disso. Ele chegou a ser 21/01/2027, e o Ciclo 2 começa em 19/02/2027 (N14-30 e N14-32; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida). **Desde 11/11 o Robert também é dono da Proposta, do Pedido, do Fiscal · Omie e da Comissão (N16-157)**, cerca de 62 pd a mais (43 a 81). Sozinho, o fim do plano vai a 28/03/2028; com o Nathan desenvolvendo junto em todo o processo (40% de foco), a 20/10/2027 🟡 (o Robert valida). Conta em [[Capacidade-do-Robert]]; marcos em [[Cronograma]]; risco em [[Riscos]] (RS-004).
 
 ## Quem usa o sistema (perfis de uso, não de desenvolvimento)
 
