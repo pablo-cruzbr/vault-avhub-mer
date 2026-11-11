@@ -3,7 +3,7 @@ id: LOG-56
 titulo: "Transformar proposta em pedido: as respostas que faltam e as pontas soltas da tela"
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento]
 criado: 2026-11-09
-estado-em: 2026-11-09
+estado-em: 2026-11-11
 status: para-implementar
 dono: Nathan
 autor: Robert
@@ -14,8 +14,8 @@ donos: {frontend: Robert, backend: Gustavo, api: Gustavo, sql: Gustavo}
 nos_0b: [V0.6, V0.7, V1, V2]
 notas_afetadas: [01-Proposta-de-Venda, 03-Pedido-de-Venda-e-Liberacao, Mapa-IncluirPedido-Omie, Roteiro-da-Proposta-em-Diante, AV-Hub-Front, AV-Hub-API, MES-Backend, Backlog-Frente-Robert, Backlog-Frente-Comercial-e-Suprimentos, Riscos, Pontas-Soltas, Onde-Estamos, Banco-AvHub]
 depende_de: [BL-071, BL-062]
-decisoes: [N16-150, N16-152, N16-89, N16-05, N16-29, N16-90, N16-149, N16-79, N16-98]
-develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09]
+decisoes: [N16-150, N16-152, N16-89, N16-05, N16-29, N16-90, N16-149, N16-79, N16-98, N16-154]
+develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09; api-acos-vital cc3fbb3, em 2026-11-11, só a N16-154]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8, 20 páginas, substitui a v7 de 09/11)", "PDF de Robert de 09/11/2026 (adendo v4, refaturamento da HRM 1.01.98)", "Q&A de 09/11/2026 Nathan → Robert, rodada 1, consolidado pelo Nathan (fora do vault: ../Perguntas-e-Respostas/QA-2026-11-09_Nathan-para-Robert_contrato-transformar-v7.md)", "Dump do Avhub de 04/11/2026 (04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql)"]
 ---
 
@@ -101,10 +101,10 @@ Base: av-hub `6fcbba6` e api-acos-vital `655896a`. Cada âncora usa o trecho que
 | Front + API | 🔴 R1 e R2: não há campo de Qualidade nem de faturamento em partes, e o `esquemaEnvioOmie` não os aceita | `TransformarModal.tsx:141-147`; `propostas.route.js:581-601` (`esquemaEnvioOmie`) |
 | Front (BFF) | 🔴 Novo na v8: o BFF da liberação monta o corpo do PUT à mão e valida só a Qualidade; campo novo que a API venha a aceitar morre aqui, sem erro | `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:27-29` (`typeof acompanha !== 'boolean'`), `:51` (`body: JSON.stringify({ acompanhamento_qualidade: acompanha, updated_by: idUsuario })`) |
 | API | 🔴 Não existe `GET /comercial/propostas/{id}/prontidao-omie`; o front já trata a ausência | `propostas.route.js:603` é a última rota; `propostas.ts:377` (`getProntidaoPedido`), que devolve `null` em 404 |
-| API | ❓ `GET /comercial/empresas_emissoras` devolve `id_unidade` e o nome da conta, não o `id_unidade_conta_omie`. O modal usa o `id_unidade`: certo em AV e AU, errado na HRM | `cadastros.route.js:93` (`conta_omie: e.conta_omie`) |
-| Dado | ❓ N16-98: `unidades_emissoras.id_unidade_conta_omie` aponta a HRM para a conta de Mogi. Já afeta pedido real | N16-98 |
 | Permissão | ❓ A lista de condições precisa de `auth.rotas_telas` (§10) | `app/api/comercial/condicoes-pagamento/route.ts` |
 | SQL | ❓ A migration que o código nomeia e ninguém acha (§9) | §9 |
+
+✅ **Saíram desta lista em 11/11 (N16-154):** a empresa emissora passou a ser a própria unidade e `core_comercial.unidades_emissoras` saiu (migration `2026-11-10_comercial_emissora_vira_unidade`). `GET /comercial/empresas_emissoras` continua na API do Hub e já devolve `id_unidade_conta_omie`, igual ao `id_unidade` (`api-acos-vital` `cc3fbb3`, `cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`). Com isso o modal, que usa o `id_unidade`, fica certo também na HRM, e a pendência de dado da N16-98 (HRM na conta de Mogi) deixa de existir. ❓ Falta ver a migration aplicada num dump novo.
 
 ## 5. Regras de negócio
 

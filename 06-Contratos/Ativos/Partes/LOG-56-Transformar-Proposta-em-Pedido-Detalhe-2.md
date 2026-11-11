@@ -1,11 +1,11 @@
 ---
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento, parte]
 criado: 2026-11-09
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
-develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09]
+develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09; api-acos-vital cc3fbb3, em 2026-11-11, só a N16-154]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Catálogo da API da Omie consultado em 09/11/2026 pelo conector do Omie (produtos/pedido:AlterarPedidoVenda, só a descrição; a operação não foi executada)"]
 ---
 
@@ -22,7 +22,6 @@ Volta para [[LOG-56-Transformar-Proposta-em-Pedido]]. A parte anterior é [[LOG-
 | POST | `/comercial/propostas/{id}/transformar` | + `qualidade_acompanha`, `faturar_em_partes` e a conta corrente (§7.4) |
 | GET | `/comercial/propostas/{id}/prontidao-omie` | nova (§8.1) |
 | POST | `/comercial/pedidos/{id}/enviar-omie` | aceita os novos (§7.1) |
-| GET | `/comercial/empresas_emissoras` | + `id_unidade_conta_omie` |
 | GET | `/pedidos_liberacao` (a rota da tela) | + os dois campos sugeridos da §7.6, na view **e** no `COLUNAS` (`pedidos_liberacao.route.js:39-47`) |
 | PUT | `/pedidos_liberacao/:codigo_empresa/:numero_pedido` | + `faturar_em_partes` no corpo (§7.6), ao lado do `acompanhamento_qualidade`, com a mesma validação de `:174-176` e o mesmo `ON CONFLICT` de `:204-206` |
 | GET | `/pedidos_liberados` e `/:numero/itens` (as rotas do MES) | + `faturar_em_partes` no corpo, para o Fluxo 4 ler (§6.7, perna 2b). Só leitura: não há PUT nesta rota, e ela não devolve pedido pendente |
@@ -72,7 +71,7 @@ A pergunta ao Gustavo é a mesma de 05/11, sem resposta: onde estão as duas mig
 | `core_comercial.pedidos_venda` | `codigo_conta_corrente` | ❓ nova, `bigint` nulável; decidido: campo do pedido, no molde de Compras (§7.4) |
 | `core_vendas_faturamento.pedidos_vendas_liberacao` | `faturar_em_partes` | ❓ nova, nulável (R10) |
 | `core_vendas_faturamento.vw_pedidos_liberacao` | `qualidade_acompanha_sugerida`, `faturar_em_partes_sugerido` | ❓ campos novos na view, por join em `codigo_pedido_omie` (§7.6), ou no SELECT da rota, conforme a pergunta 2 ao Gustavo |
-| tabela nova da configuração padrão | uma linha por conta Omie | 📝 decidida (§7.4 e §7.8): irmã de `parametros_compras`, chaveada por `id_unidade_conta_omie`, sem default |
+| tabela nova da configuração padrão | uma linha por conta Omie | 📝 decidida (§7.4 e §7.8): irmã de `parametros_compras`, chaveada pela unidade (`core.unidades.id`, que desde a N16-154 é a conta Omie), sem default |
 
 As quatro primeiras linhas dependem da migration desta seção.
 
@@ -138,9 +137,9 @@ As decisões de 09/11 estão todas tomadas; não há passo de decisão. Restam a
 | # | O quê | Quem | Depende de |
 |---|---|---|---|
 | 1 | Achar as duas migrations da §9 e dizer de onde sai o `obs_venda` (§7.7) | Gustavo | — |
-| 2 | Corrigir `id_unidade_conta_omie` da HRM (N16-98). Antes do passo 4: a configuração é chaveada por esse campo, e com ele errado a HRM nasceria com a conta corrente de Mogi | Gustavo | — |
+| 2 | ~~Corrigir `id_unidade_conta_omie` da HRM (N16-98)~~ ✅ **Não é mais preciso (N16-154, 10/11):** `unidades_emissoras` saiu e cada unidade usa a própria conta Omie (`cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`) | Gustavo | — |
 | 3 | Migration: `qualidade_acompanha`, `faturar_em_partes` e `codigo_conta_corrente` em `pedidos_venda`; `faturar_em_partes` na liberação | Gustavo | 1 |
-| 4 | Tabela da configuração padrão por conta Omie (§7.4 e §7.8) | Gustavo | 1, 2 |
+| 4 | Tabela da configuração padrão por conta Omie (§7.4 e §7.8) | Gustavo | 1 |
 | 5 | `esquemaEnvioOmie` + payload: a conta corrente lida da configuração; regra do §7.1 | Gustavo | 3, 4 |
 | 6 | `PUT /comercial/pedidos/{id}/conta-corrente` (§8.2), com a permissão do financeiro | Gustavo | 3 |
 | 7a | Os dois campos sugeridos na `vw_pedidos_liberacao`, pelo join em `codigo_pedido_omie` (§7.6) | Gustavo | 3 e a pergunta 2 |
@@ -148,7 +147,7 @@ As decisões de 09/11 estão todas tomadas; não há passo de decisão. Restam a
 | 7c | `faturar_em_partes` no corpo do `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido` e legível em `GET /pedidos_liberados` (perna 2b) | Gustavo | 3 |
 | 7d | Deixar o campo passar no BFF da liberação (`app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:27-29` e `:51`) | Robert | 7c |
 | 8 | `GET /prontidao-omie`, com `UNIDADE_SEM_CONFIG` quando faltar a conta padrão | Gustavo | 4 |
-| 9 | `id_unidade_conta_omie` no corpo de `/empresas_emissoras` | Gustavo | — |
+| 9 | ~~`id_unidade_conta_omie` no corpo de `/empresas_emissoras`~~ ✅ **Feito na develop (N16-154):** o campo já vem, igual ao `id_unidade` (`cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`) | Gustavo | — |
 | 10 | Linhas de `auth.rotas_telas` (§10), incluindo a rota do passo 6 | Gustavo | 6 |
 | 11 | Modal: Qualidade e faturar em partes | Robert | 5 |
 | 12 | BFF da prontidão | Robert | 8 (para ter efeito) |
@@ -164,13 +163,13 @@ A coluna "Depende de" foi remontada a partir do PDF, cuja tabela saiu desalinhad
 - ✅ Decidido: a conta corrente é padrão por conta Omie, invisível para o vendedor (§7.4), com a troca pelo financeiro (§7.5). Continua bloqueando até a coluna, a configuração e o payload existirem.
 - ✅ Decidido: o R7 grava só no pedido do Hub; a liberação continua sendo um ato do vendedor (§7.3).
 - ✅ Decidido: a configuração padrão é SQL, sem tela (§7.8), com a mensagem da prontidão nomeando a unidade.
-- ✅ Decidido: a N16-152 é a saída (b), refaturamento pela tabela `refaturamentos`; a observação deixa de contar (§7.7). **Superada em parte pela N16-153 (10/11/2026):** o código de refaturamento passa a ser lido pela unidade do pedido, e a observação continua sendo porta ([[Registro-N16-150-a-N16-153]]).
+- ✅ Decidido: a N16-152 é a saída (b), refaturamento pela tabela `refaturamentos`; a observação deixa de contar (§7.7). **Superada em parte pela N16-153 (10/11/2026):** o código de refaturamento passa a ser lido pela unidade do pedido, e a observação continua sendo porta ([[Registro-N16-150-a-N16-154]]).
 - ⚠️ Corrigido na v8, e era risco escondido: a v7 mandava criar o campo na rota do MES; o campo nasceria onde a tela não lê.
 - ⚠️ Criado pela decisão da §7.5: depois de o pedido ir ao Omie, Hub e Omie precisam continuar iguais. Só gravar no Hub depois que o Omie aceitar.
 - ❓ As duas migrations da §9, com o segundo item: de onde vem o `obs_venda` do payload (§7.7). É o maior risco aberto: se vier das observações da proposta, o vendedor derruba o próprio pedido da Liberar Pedidos escrevendo "refat" num campo de texto livre, nas três unidades.
 - ❓ `auth.rotas_telas` para a lista de condições (§10).
 - ❓ O join do valor inicial e a escolha entre view e SELECT da rota (§7.6).
-- ❓ Pendência de dado da HRM (N16-98): já afeta pedido real.
+- ✅ Encerrado: a pendência de dado da HRM (N16-98) deixou de existir com a N16-154 (10/11). A emissora é a própria unidade e cada uma usa a própria conta Omie. ❓ Falta ver num dump novo que a migration `2026-11-10_comercial_emissora_vira_unidade` foi aplicada.
 - ❓ Refaturamento, com o alcance corrigido (§7.7): enquanto a regra do G6 tiver a porta da observação, pedido de qualquer unidade some da Liberar Pedidos por causa de texto livre; pela porta da categoria, o `1.01.96` de Mogi some sempre, enquanto o de Uberaba e o da HRM continuam entrando na base de comissão. O aviso da tela alerta nas três; a regra, não. A N16-152 (b) resolve os dois lados ([[LOG-56-Transformar-Proposta-em-Pedido-Adendo-v4]]).
 - ✅ Encerrado: o tipo da venda continua em `numero_contrato` (confirmação do Nathan, 09/11).
 
