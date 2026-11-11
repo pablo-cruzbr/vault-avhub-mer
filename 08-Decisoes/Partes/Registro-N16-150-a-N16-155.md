@@ -10,7 +10,7 @@ fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido 
 
 # Registro de decisões: decisões N16, N16-150 a N16-155
 
-**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-155 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade e a empresa emissora que vira a própria unidade.
+**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-156 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade e a empresa emissora que vira a própria unidade.
 
 **Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-155**
 
@@ -60,3 +60,9 @@ Contrato afetado: LOG-56, Transformar proposta em pedido (§4.2, §6.3, §8 e pa
 | ID | Decisão | Data | Dono | Selo | Superada |
 |---|---|---|---|---|---|
 | N16-155 | **A API do av-hub não guarda migrations nem SQL do banco no repositório.** Nathan, 11/11/2026, por segurança e boas práticas. (1) O DDL do banco do av-hub fica com o DBA (Gustavo), fora do `api-acos-vital`; nenhum `.sql` volta para o repositório (hoje não há nenhum na `develop`, `cc3fbb3`). (2) **A referência do esquema é o dump do vault** (`04-Dados/Dumps/`, com a ficha de cada um). Quando o dump estiver velho ou não tiver o que é preciso, pede-se um novo ao Nathan (skill `banco-de-dados`). (3) Deixa de existir a cobrança de "versionar as migrations": o BL-024, a P7 do Q&A de 09/11 com o Gustavo e o RS-012 ficam encerrados. Continua valendo conferir **o que está aplicado na produção** (RS-016). | 11/11/2026 | Nathan | 📝; ✅ (nenhum `.sql` na `develop`) | BL-024 e a pergunta P7 do Q&A de 09/11 (encerra) |
+
+## Decisão de 11/11/2026 (sem carga do marco zero em 13/11) (N16-156)
+
+| ID | Decisão | Data | Dono | Selo | Superada |
+|---|---|---|---|---|---|
+| N16-156 | **Não há carga inicial do estoque em 13/11: o MES começa com o que entrar pelo sistema.** Nathan, 11/11/2026, a partir da resposta do Robert (P3 do Q&A de 11/11/2026 com o Robert). (1) O levantamento físico de 26 a 30/10 não foi feito, por atraso do setor responsável. (2) O merge `develop` → `main` do `api-pcp` e do `app-pcp` continua antes de 13/11, porque a produção entra em uso (P1). (3) A carga inicial será pedida ao setor responsável, e **o próprio setor sobe a carga no sistema** quando o levantamento ficar pronto, sem data. (4) Nessa carga, lote sem custo entra com custo `MANUAL` e motivo obrigatório (P2; fecha a OQ-07), e a regra tem de estar no código antes de o setor começar. (5) Enquanto não houver carga, o que está no estoque físico não aparece no sistema (RS-024). | 11/11/2026 | Nathan | 📝; 🔴 regra do custo `MANUAL` (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:617`, `dto.custoUnitario && dto.custoUnitario > 0`, custo ainda opcional na `develop` `2e564e6`) | M5 de 13/11 (muda); OQ-07 e OQ-38 (encerra) |
