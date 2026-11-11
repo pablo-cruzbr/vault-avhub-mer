@@ -1,7 +1,7 @@
 ---
 tags: [contrato, adendo, refaturamento, omie, categoria, parte]
 criado: 2026-11-09
-estado-em: 2026-11-09
+estado-em: 2026-11-11
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
@@ -69,7 +69,7 @@ O que continua valendo (todos registrados no vault em 09/11, junto com este cont
 - a linha do `1.01.98` na §5.3.1 do [[Mapa-IncluirPedido-Omie]] e o RS-022 dizendo "três unidades" ([[Riscos]]);
 - nas linhas 98-99 da mesma nota, dizer de qual view é a cascata descrita;
 - na medição do PS-040 ([[Pontas-Soltas]]): as três unidades, sobre a `vw_vendas_planilha`, com as portas contadas em separado. O Robert não conecta no banco (skill `banco-de-dados`): o SQL está pronto e falta rodar;
-- o registro da N16-152 como saída (b), com a colisão da §3 como justificativa ([[Registro-N16-150-a-N16-154]]).
+- o registro da N16-152 como saída (b), com a colisão da §3 como justificativa ([[Registro-N16-150-a-N16-155]]).
 
 ## 6. O que isso mudou no front
 

@@ -1,7 +1,7 @@
 ---
 tags: [inicio, status]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
@@ -80,7 +80,7 @@ Versão completa da tabela por setor, com os nós do [[00-Fluxo-Mestre-0b]] e o 
 
 | Raia | Nós | Estado | O que falta | Dono |
 |---|---|---|---|---|
-| [[01-Proposta-de-Venda]] | V0.1–V0.7, V0C | 🟡 API e telas da proposta na `develop` | A rota de proposta (criar, revisar, aprovar, cancelar, copiar, transformar) existe na `api-acos-vital` e as telas, no av-hub, com o Robert; o banco de teste já tem o "Transformar em pedido" de 4 argumentos e o envio ao Omie (dump de 09/11/2026), mas as migrations de 05/11 e 06/11 estão fora do repositório e não foram aplicadas em produção (BL-024); ligar a tela ao `transformar` com o corpo do modal e ao envio ao Omie, que já existe na API (direto, sem fila), e decidir o schema (N16-116 diz `core_vendas_faturamento`, o código usa `core_comercial`); estados `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` (validade sem decisão N16) | Robert, Gustavo, Pablo acompanha |
+| [[01-Proposta-de-Venda]] | V0.1–V0.7, V0C | 🟡 API e telas da proposta na `develop` | A rota de proposta (criar, revisar, aprovar, cancelar, copiar, transformar) existe na `api-acos-vital` e as telas, no av-hub, com o Robert; o banco de teste já tem o "Transformar em pedido" de 4 argumentos e o envio ao Omie (dump de 09/11/2026), mas as migrations de 05/11 e 06/11 ainda não foram aplicadas em produção; ligar a tela ao `transformar` com o corpo do modal e ao envio ao Omie, que já existe na API (direto, sem fila), e decidir o schema (N16-116 diz `core_vendas_faturamento`, o código usa `core_comercial`); estados `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` (validade sem decisão N16) | Robert, Gustavo, Pablo acompanha |
 | [[02-Orcamento-Base-de-Preco]] | B1–B4 | 🟡 menu e abas no front | Base de preço gerada das OCs; página do produto com score e volatilidade; pedido de custo sem prazo, com o tempo cronometrado | Pablo, Robert, Gustavo |
 | [[03-Pedido-de-Venda-e-Liberacao]] | V1–V3 | ✅ liberação · 🔴 pedido no Hub | Pedido do Omie no mesmo fluxo do pedido da proposta (N16-106); parte de compras e faturamento em partes na tela do pedido | Nathan, Gustavo |
 | [[04-PCP-Triagem-e-Destinacao]] | P1, P2, P6 | ✅ P1/P2 · 🔴 P6 | Novo norte (retrabalho ou reabre compra): o motor passou a ler o `RoteiroItem`, mas a volta de reprovado segue sem tela; renomear rotas antigas; **OC do pedido** visível ao PCP. ✅ **Ordem de Produção** emitida na criação e imprimível (27/10, `develop`); ✅ requisições do hub na Triagem (23/10) | Robert |

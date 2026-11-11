@@ -163,7 +163,7 @@ A coluna "Depende de" foi remontada a partir do PDF, cuja tabela saiu desalinhad
 - ✅ Decidido: a conta corrente é padrão por conta Omie, invisível para o vendedor (§7.4), com a troca pelo financeiro (§7.5). Continua bloqueando até a coluna, a configuração e o payload existirem.
 - ✅ Decidido: o R7 grava só no pedido do Hub; a liberação continua sendo um ato do vendedor (§7.3).
 - ✅ Decidido: a configuração padrão é SQL, sem tela (§7.8), com a mensagem da prontidão nomeando a unidade.
-- ✅ Decidido: a N16-152 é a saída (b), refaturamento pela tabela `refaturamentos`; a observação deixa de contar (§7.7). **Superada em parte pela N16-153 (10/11/2026):** o código de refaturamento passa a ser lido pela unidade do pedido, e a observação continua sendo porta ([[Registro-N16-150-a-N16-154]]).
+- ✅ Decidido: a N16-152 é a saída (b), refaturamento pela tabela `refaturamentos`; a observação deixa de contar (§7.7). **Superada em parte pela N16-153 (10/11/2026):** o código de refaturamento passa a ser lido pela unidade do pedido, e a observação continua sendo porta ([[Registro-N16-150-a-N16-155]]).
 - ⚠️ Corrigido na v8, e era risco escondido: a v7 mandava criar o campo na rota do MES; o campo nasceria onde a tela não lê.
 - ⚠️ Criado pela decisão da §7.5: depois de o pedido ir ao Omie, Hub e Omie precisam continuar iguais. Só gravar no Hub depois que o Omie aceitar.
 - ❓ As duas migrations da §9, com o segundo item: de onde vem o `obs_venda` do payload (§7.7). É o maior risco aberto: se vier das observações da proposta, o vendedor derruba o próprio pedido da Liberar Pedidos escrevendo "refat" num campo de texto livre, nas três unidades.

@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: vigente
 ordem: 3
 nos: [V1, V2, V3]
@@ -80,7 +80,7 @@ O Cliente Exemplo S.A. pede 100 flanges, e o pedido é digitado no Omie. Ele che
 - 🔴 Fila de inspeção de processo da Qualidade e refinos do cartão "Andamento na produção".
 - 🔴 Pedido manual: o desenho só prevê pedido que chega do Omie.
 - A `api-acos-vital` (`develop`, 29/10/2026) já cria, aprova, cancela e transforma a proposta em pedido do Hub.
-- 🟡 O envio do pedido da proposta ao Omie existe no código da API (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:239`, `call: "IncluirPedido"`) e a tela da proposta já o chama, mas o banco dessa função está fora do repositório ❓; detalhe em [[01-Proposta-de-Venda]]. 🔴 A resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe.
+- 🟡 O envio do pedido da proposta ao Omie existe no código da API (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:239`, `call: "IncluirPedido"`) e a tela da proposta já o chama, e o banco dessa função está no banco de teste (dump de 10/11; o DDL fica com o DBA, N16-155); detalhe em [[01-Proposta-de-Venda]]. 🔴 A resposta de `V2`/`V3` na tela do pedido do Omie ainda não existe.
 - ❓ Valor da data de corte em produção (no banco de teste é 01/09/2026) e migration `api005`.
 
 Raia seguinte: [[04-PCP-Triagem-e-Destinacao]].
