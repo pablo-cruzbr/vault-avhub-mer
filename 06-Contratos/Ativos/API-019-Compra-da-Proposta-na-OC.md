@@ -45,8 +45,8 @@ Nós `C6` e `C7` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]] (dona
 
 - **R1.** Os dados da proposta são **só leitura** na OC. O comprador não altera a proposta, e o preço fechado com o cliente não muda (N16-17, regra 15).
 - **R2.** A tela mostra, para cada item da OC ligado a um item de PV que nasceu de proposta: fornecedor cotado, origem, quantidade e unidade de compra, preço unitário de compra, IPI %, ST, frete do item e custo líquido unitário (N16-08, regra 14).
-- **R3.** **Comparação:** se a unidade de medida da OC é a mesma da unidade de compra cotada, a tela compara o valor unitário da OC (já com desconto) com o `preco_unit_compra`. Unidades diferentes não se comparam; a tela diz isso.
-- **R4.** **Usar o valor da proposta:** um botão preenche o valor unitário do item da OC com o `preco_unit_compra`. O fornecedor cotado é texto livre; a tela o mostra e oferece buscar pelo nome no cadastro da unidade da OC, sem escolher sozinha (N16-08: o comprador pode usar o fornecedor do vendedor ou outro).
+- **R3.** **Comparação:** se a OC é em reais e a unidade de medida da OC é a mesma da unidade de compra cotada, a tela compara o valor unitário da OC (já com desconto) com o `preco_unit_compra`. Unidades diferentes não se comparam, e a tela diz isso. OC em moeda estrangeira não se compara.
+- **R4.** **Usar o valor da proposta:** um botão preenche o valor unitário do item da OC com o `preco_unit_compra`. O fornecedor cotado é texto livre; a tela só o mostra, e o comprador escolhe o fornecedor da OC na busca de sempre (N16-08: pode usar o fornecedor do vendedor ou outro).
 - **R5.** **Acima do cotado:** quando o valor da OC passa do cotado, a tela avisa quanto passou (em R$ e %) e que, com o `C8`, o vendedor terá de aprovar (N16-60 a N16-64). Até o `C8` existir, o aviso só informa e não bloqueia. Abaixo ou igual, nada a avisar (N16-65).
 - **R6.** **Impostos:** IPI e ST da proposta são só exibidos. Gravar imposto por item na OC é o BL-053 (desenho na N16-144), fora deste contrato.
 - **R7.** **Frete:** a seção de frete da OC mostra o frete de compra do cabeçalho da proposta (`frete_compra_tipo` e `frete_compra_valor`), só para leitura.
@@ -59,7 +59,7 @@ Nós `C6` e `C7` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]] (dona
 - **O que muda:**
   - Em cada item ligado a um PV com cotação (`compra_proposta` não nulo), um bloco **"Cotado na proposta CO-…"** abaixo do destino, com: fornecedor e origem; quantidade e unidade de compra; preço unitário; IPI %; ST; frete do item; custo líquido unitário.
   - Ao lado do valor unitário: "OC R$ X × proposta R$ Y" e a diferença (R3). Acima do cotado: aviso em âmbar com o texto **"Acima do cotado na proposta em R$ D (P%). Com o C8, o vendedor vai aprovar esta diferença."** (R5).
-  - Botão **"Usar o preço da proposta"** (R4) e link **"Buscar <fornecedor> no cadastro"**, que põe o nome na busca de fornecedor.
+  - Botão **"Usar o preço da proposta"** (R4), que some quando o valor já é o cotado.
   - Na seção Frete, a linha **"Frete de compra na proposta: <tipo> · R$ V"** (R7).
 - **Estados:** sem `proposta` no retorno, o bloco não aparece (R8). Erro ao carregar o PV continua como hoje.
 - **Validações:** nenhuma nova; tudo é exibição, menos o botão do R4, que só preenche o campo.
