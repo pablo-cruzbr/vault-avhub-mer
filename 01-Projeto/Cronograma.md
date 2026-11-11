@@ -25,7 +25,7 @@ fontes: [v1 07-Cronograma/Cronograma-2-Meses seções 1, 3.2, 3.3, 3.4, 6, 9, v1
 | 13/11/2026 | **Marco zero do saldo**: carga inicial conferida em dupla; saldo, movimento e reserva em homologação (M5) | 🟡 Saldo e reserva no código ✅; existe `POST /estoque/lotes/carga-inicial` (um lote por chamada); a carga em lote (G1) não foi encontrada na `develop` de 29/10 🔴 |
 | 15/11/2026 | Protótipo | 📝 |
 | 18/11/2026 | Decisão de seguir ou não com o piloto de recebimento (M6) | 🟡 |
-| 18/12/2026 | Rastreabilidade completa: Torre de Fluxo e log de eventos (M7) | 🔴 O MES ainda não envia os eventos |
+| ~~18/12/2026~~ 03/03/2027 | Rastreabilidade completa: Torre de Fluxo e log de eventos (M7) | 🔴 O MES ainda não envia os eventos |
 | 18/02/2027 | **Fim do Ciclo 1**: o déficit do Robert zerado. Começa o Ciclo 2 em 19/02/2027 | 🟡 Deslocado de 21/01 pelo N14-30; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida |
 | 11/05/2027 a 18/11/2027 | PCP antigo migrado para o MES, em quatro marcos: Flange alta (M8), Flange completa (M9), Caldeiraria (M10) e Análise e gestão (M11) | 🟡 |
 
@@ -86,7 +86,7 @@ Equipe em [[Equipe-e-Divisao]]. Itens do levantamento em [[Backlog-por-Frente]].
 | **M4** Fases A + B em homologação | 30/10 | Requisição, OC, referência no MES, recebimento com pesagem, quarentena, inspeção e RNC; levantamento físico (26 a 30/10) | 🟡 recebimento e inspeção no código; referência da OC no MES ✅ (job K4 na `develop` desde 15/10, `114ba89`; fornecedor da OC desde 26/10); recebimento por item da OC e custo da OC no lote na `develop` (BL-051, BL-005) |
 | **M5** Fase 0 fechada + Fase C | 13/11 | ~~Marco zero carregado e conferido em dupla~~ (sem carga em 13/11, N16-156: o estoque começa com o que entrar pelo sistema; a carga inicial fica com o setor responsável, sem data); saldo, movimento e reserva em homologação; status por item no HUB | 🟡 saldo e reserva no código ✅; carga em lote (G1) 🔴 Robert (prazo era 23/10; só há a carga de um lote por chamada) |
 | **M6** Go/no-go do piloto de recebimento | 18/11 | Piloto de 11/11 a 18/11 em 1 posto, em paralelo ao processo manual | 🟡 |
-| **M7** Rastreabilidade completa | ~~18/12~~ depois do Ciclo 1, data nova pendente (P5 e P13 do Q&A de 11/11 com o Robert) | Log de eventos e Torre de Fluxo (mapa, trilha, tempo por etapa) em homologação | 🔴 o MES não publica `/fluxo/eventos` (LOG-46) |
+| **M7** Rastreabilidade completa | ~~18/12~~ 03/03/2027, com o fim do plano (BL-003 depois do Ciclo 1; Q&A de 11/11 com o Robert) | Log de eventos e Torre de Fluxo (mapa, trilha, tempo por etapa) em homologação | 🔴 o MES não publica `/fluxo/eventos` (LOG-46) |
 | **Fim do Ciclo 1** | 18/02/2027 (era 21/01/2027; 24/02 antes do crédito do K4) | Déficit do Robert (Onda 0, agora 29,6 pd) zerado | 🟡 deslocado pelo N14-30, abatido em 3,0 pd pelo K4 na `develop` (N14-32); K5 e `GET /itens/custo` também já na `develop`, conta não refeita ❓ Em 30/10 o Nathan incluiu BL-007, BL-049 e BL-050 no Ciclo 1 (N16-145): a conta do vault dá 03/03/2027 a 75% de foco, e o Robert valida 🟡 |
 | **M8** Flange alta no MES | 11/05/2027 (era 14/04) | Itens 1, 2, 4, 5, 6, 7 e 11 do levantamento do PCP legado | 🟡 |
 | **M9** Flange completa no MES | 30/06/2027 (era 04/06) | Itens 3, 8, 9, 10, 12, 13 e 14; só depois dele se desliga a linha Flange do PCP legado | 🟡 |
@@ -126,7 +126,7 @@ Com 100% de foco as ondas terminam em 02/02 (W0), 06/04, 13/05, 26/07 e 25/08/20
 |---|---|---|---|
 | Nathan | 40% | 16,8 pd | S5: 11 pd contra 9,2 pd. A tela de ranking de gargalos (T.5b, uma das 4 telas da Torre de Fluxo) é a candidata a ir ao Ciclo 2 se faltar capacidade; o Nathan ainda não decidiu 🟡 |
 | Gustavo | 60% | 25,2 pd | folga de 11,9 pd na S1–FC e 9,8 pd na S5; pode receber parte do backend do MES 🟡 |
-| Robert | 75% | 31,5 pd | S1–FC + S5: capacidade 48,75 pd contra 78,35 planejados (64,85 + 16,5 do N14-29 − 3,0 do K4), **déficit de 29,6 pd** 🔴 (era 16,1 pd; 32,6 antes do crédito do K4; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida) |
+| Robert | 75% | 31,5 pd | S1–FC + S5: capacidade 48,75 pd contra 78,35 planejados (64,85 + 16,5 do N14-29 − 3,0 do K4), **déficit de 29,6 pd** 🔴 (era 16,1 pd; 32,6 antes do crédito do K4; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert validou em 11/11; a G1 sai do Ciclo 1 até o levantamento ter data, o que abre folga) |
 | Pablo | 75% | fora da conta | Comercial & Suprimentos |
 
 Custo do lote (09/10) somou ao Robert K3 1,0 + K4 3,0 + K5 1,5 + K6 0,5 pd; ao Gustavo K1, K2 e K7 (1,5 pd); K8 (`GET /itens/custo`) e K9 a K11 iam ao Ciclo 2; com a N16-09 (custo obrigatório e custo real por evento) a proposta de 16/10 os traz de volta como R3 e R5 (seção "Novas frentes de 16/10") 🟡. Detalhe em [[Modelo-Estoque-e-Custo-do-Lote]] e [[Contratos-da-v2|API-008]].
@@ -209,7 +209,7 @@ gantt
     M4 Fases A e B em homologacao :milestone, m4, 2026-10-30, 0d
     M5 Marco zero e Fase C :milestone, m5, 2026-11-13, 0d
     M6 Go ou no-go do piloto :milestone, m6, 2026-11-18, 0d
-    M7 Rastreabilidade completa :milestone, m7, 2026-12-18, 0d
+    M7 Rastreabilidade completa :milestone, m7, 2027-03-03, 0d
     Fim do Ciclo 1 :milestone, mc1, 2027-02-18, 0d
     Inicio do Ciclo 2 :milestone, mc2, 2027-02-19, 0d
     M8 Flange alta no MES :milestone, m8, 2027-05-11, 0d
