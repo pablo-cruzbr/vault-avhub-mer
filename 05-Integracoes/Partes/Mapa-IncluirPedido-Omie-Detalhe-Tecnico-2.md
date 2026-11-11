@@ -1,11 +1,11 @@
 ---
 tags: [omie, pedido-de-venda, incluir-pedido, api, mapa-de-campos, pesquisa, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: proposta
 dono: Nathan
 parte-de: "[[Mapa-IncluirPedido-Omie]]"
-fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api/v1/produtos/pedido/ (serviço PedidoVendaProduto, método IncluirPedido e tipos complexos)", "Exemplo de IncluirPedido enviado pelo Nathan em 23/10/2026", "05-Integracoes/Estudo-Omie-API (estudo de 21/10)", "av-hub components/Propostas/PropostaForm (PedidoOmieModal.tsx, ItemProposta.tsx, PropostaForm.tsx)", "Pedido do Robert ao Nathan de 03/11/2026 e errata de 05/11/2026", "Consultas só de leitura ao Omie nas três contas em 04/11/2026 (ListarCategorias, ListarFormasPagCompras, ListarFormasPagVendas, ListarContasCorrentes)", "Dump do Avhub de 29/10/2026 (vw_faturamento_planilha, vw_comissao_master)", "PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4)"]
+fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api/v1/produtos/pedido/ (serviço PedidoVendaProduto, método IncluirPedido e tipos complexos)", "Exemplo de IncluirPedido enviado pelo Nathan em 23/10/2026", "05-Integracoes/Estudo-Omie-API (estudo de 21/10)", "av-hub components/Propostas/PropostaForm (PedidoOmieModal.tsx, ItemProposta.tsx, PropostaForm.tsx)", "Pedido do Robert ao Nathan de 03/11/2026 e errata de 05/11/2026", "Consultas só de leitura ao Omie nas três contas em 04/11/2026 (ListarCategorias, ListarFormasPagCompras, ListarFormasPagVendas, ListarContasCorrentes)", "Dump do Avhub de 29/10/2026 (vw_faturamento_planilha, vw_comissao_master)", "PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
 ---
 
 # Mapa do `IncluirPedido` do Omie: o que o hub manda, de onde vem cada campo e o que ainda não sabemos: detalhe técnico (2/2)
@@ -72,7 +72,7 @@ O que isso resolve e o que não resolve:
 | Campo | O que mandar | Origem | Situação |
 |---|---|---|---|
 | `codigo_categoria` | categoria de receita (ex. `1.01.01`) | **o vendedor escolhe**, de uma lista filtrada pela unidade emissora | 📝 lista por unidade (Nathan, 04/11). ✅ `core.categorias` tem `codigo_empresa` e `GET /categorias?codigo_empresa=` filtra por unidade. ✅ `GET /categorias?codigo_empresa=&tipo=receita` devolve as de receita lançáveis, ativas, sem totalizadoras e sem `nao_exibir` (`api-acos-vital` `categorias.route.js:47-57`, `develop` `1654f65`), e o `transformar` recebe `codigo_categoria`, opcional hoje (`propostas.route.js:587`). 🔴 Falta a tela escolher a categoria e a API torná-la obrigatória (N16-150) |
-| `codigo_conta_corrente` | conta corrente de recebimento | ⚠️ **em aberto:** omitir (Robert, 05/11) ou lista por unidade (Nathan, 04/11) | 🟡 O vendedor não preenche conta no Omie, e ela define onde nasce o título a receber. O teste cria o pedido **sem** `codigo_conta_corrente` e vê o que o Omie grava. ✅ `core.contas_correntes` já sincroniza por unidade (`ListarContasCorrentes`); a HRM tem 18, uma inativa |
+| `codigo_conta_corrente` | conta corrente de recebimento | ✅ **obrigatório** (o Omie recusa sem ele, teste de 09/11): o Hub manda a conta padrão da conta Omie (LOG-56 R11, `parametros_pedido_venda_omie`); o financeiro troca por `PUT /comercial/pedidos/{id}/conta-corrente`. 🟡 Falta provar no Omie de teste (BL-081) | 🟡 O vendedor não preenche conta no Omie, e ela define onde nasce o título a receber. O teste cria o pedido **sem** `codigo_conta_corrente` e vê o que o Omie grava. ✅ `core.contas_correntes` já sincroniza por unidade (`ListarContasCorrentes`); a HRM tem 18, uma inativa |
 | `consumidor_final` | `"S"`/`"N"` | `finalidade = CONSUMO_FINAL` | 🟡 |
 | `enviar_email` | `"N"` | fixo | ✅ exemplo (não mandar boleto por e-mail no pedido) |
 | `codVend` | ID do vendedor no Omie | `pedido_venda.codigo_vendedor_omie` | ✅ já existe no desenho; **necessário para a comissão e para o relatório por vendedor**. 📝 **Bloqueante:** `pedidosVendas.ts` pula o registro sem `codigo_vendedor_omie`, então o pedido existiria no Omie e sumiria do Hub, de `produto_vendas` e da comissão, sem erro. O vendedor resolvido na unidade é condição para transformar a proposta em pedido (Robert, 03/11) |
