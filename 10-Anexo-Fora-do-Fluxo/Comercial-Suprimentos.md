@@ -13,7 +13,7 @@ fontes: [HUB b55ac55 api-comercial/ (prisma, src/modules, Dockerfile, env.ts), a
 
 **Quando consultar:** quando a dúvida é "o que o módulo do Pablo fazia e o que já existe na API do Hub?". A `api-comercial` não é fonte de regra nem de estado: vale o desenho das raias e as decisões. O módulo fica fora do fluxo 0b e do MES. O orçamento está em [[02-Orcamento-Base-de-Preco]] (o anexo antigo [[Orcamento]] está arquivado). Mapa do módulo: [[Mapa-do-Modulo-do-Pablo]]. Modelo de classes: [[Classes]], diagrama 4.
 
-Quem cuida hoje: o Robert conduz a migração das rotas para a `api-acos-vital`; o Pablo acompanha e cuida do Orçamento (com supervisão do Robert); o Gustavo revisa o banco; o Nathan faz as telas (N16-117).
+Quem cuida hoje: o Robert conduz a migração das rotas para a `api-acos-vital`; o Pablo acompanha e cuida do Orçamento (com supervisão do Robert); o Gustavo revisa o banco; o Nathan faz as telas (N16-117). Desde 11/11 o Robert é dono da Proposta e do Pedido, e o Pablo, júnior, do Orçamento com o acompanhamento do Robert; o Nathan coordena e apoia (N16-157).
 
 > [!info] Migração para a API do hub (15/10/2026)
 > O serviço `api-comercial` era de teste (N14-15) e foi removido em 06/11/2026. O plano de migração para a `api-acos-vital` está em [[Contratos-da-v2|LOG-52]]; o que vale hoje é o desenho das raias e as decisões.

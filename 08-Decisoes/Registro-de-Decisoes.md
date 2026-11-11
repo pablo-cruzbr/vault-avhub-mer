@@ -97,7 +97,7 @@ Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (C
 - **Unidades e contas Omie:** N16-79, N16-80, N16-81, N16-83, N16-85, N14-31, DEC-1, EN-07, #31c.
 - **Menu e telas:** N16-14, N16-19, N16-33, N16-107, N16-108, N16-119, N14-33, #54, #74.
 - **Banco e API (onde cada coisa mora):** N16-15, N16-98, N16-154, N16-155, N16-109, N16-111, N16-112, N16-113, N16-116, N16-117, N16-143, N14-07, N14-15, N14-26, #3, #6, #82.
-- **Quem faz o quê e cronograma:** N14-09, N14-10, N14-11, N14-13, N14-32, N16-115, N16-117, N16-118, #32, #33, #33b, #34, #35, #36, #37, #73, #75, #96, #27.
+- **Quem faz o quê e cronograma:** N16-157, N14-09, N14-10, N14-11, N14-13, N14-32, N16-115, N16-117, N16-118, #32, #33, #33b, #34, #35, #36, #37, #73, #75, #96, #27.
 - **Estoque, retirada e baixa:** N14-05, N14-06, N16-87, N16-120, N16-121, N16-122, N16-139, N16-140, EN-01, EN-03, EN-04, EC-02, EC-05, DEC-4, #31b, #24, #25, #28, #29, #78, #100.
 - **Recebimento e Qualidade:** N14-04, N16-124, N16-125, N16-126, N16-127, N16-128, N16-129, N16-134, N16-135, N16-136, N16-137, DEC-5, DEC-6, EC-01, EC-06, EC-07, #26.
 - **PCP, Triagem e Produção:** N14-22, N16-93, N16-138, N16-141, EN-02, EN-05, EN-06, EC-03, #74, #78, #104, #105, #106.
@@ -120,7 +120,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-73-a-N16-96]]: N16-73 a N16-96
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
-- [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026)
+- [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, 11/11/2026)
 
 ## Onde está cada decisão
 
