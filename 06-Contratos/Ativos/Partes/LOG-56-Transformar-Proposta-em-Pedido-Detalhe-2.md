@@ -1,12 +1,12 @@
 ---
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento, parte]
 criado: 2026-11-09
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
-develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09]
-fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Catálogo da API da Omie consultado em 09/11/2026 pelo conector do Omie (produtos/pedido:AlterarPedidoVenda, só a descrição; a operação não foi executada)"]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11]
+fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Catálogo da API da Omie consultado em 09/11/2026 pelo conector do Omie (produtos/pedido:AlterarPedidoVenda, só a descrição; a operação não foi executada)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
 ---
 
 # LOG-56 · Transformar proposta em pedido: §8 API a §17 (2/2)
@@ -68,11 +68,11 @@ A pergunta ao Gustavo é a mesma de 05/11, sem resposta: onde estão as duas mig
 
 | Tabela | Coluna | Estado |
 |---|---|---|
-| `core_comercial.pedidos_venda` | `qualidade_acompanha`, `faturar_em_partes` | ❓ novas, nuláveis (nulo = pedido anterior à regra) |
-| `core_comercial.pedidos_venda` | `codigo_conta_corrente` | ❓ nova, `bigint` nulável; decidido: campo do pedido, no molde de Compras (§7.4) |
-| `core_vendas_faturamento.pedidos_vendas_liberacao` | `faturar_em_partes` | ❓ nova, nulável (R10) |
-| `core_vendas_faturamento.vw_pedidos_liberacao` | `qualidade_acompanha_sugerida`, `faturar_em_partes_sugerido` | ❓ campos novos na view, por join em `codigo_pedido_omie` (§7.6), ou no SELECT da rota, conforme a pergunta 2 ao Gustavo |
-| tabela nova da configuração padrão | uma linha por conta Omie | 📝 decidida (§7.4 e §7.8): irmã de `parametros_compras`, chaveada por `id_unidade_conta_omie`, sem default |
+| `core_comercial.pedidos_venda` | `qualidade_acompanha`, `faturar_em_partes` | ✅ criadas pela `2026-11-09_log56_transformar_proposta_pedido.sql` (teste), nuláveis (nulo = pedido anterior à regra) |
+| `core_comercial.pedidos_venda` | `codigo_conta_corrente` | ✅ criada pela log56 (teste), `bigint` nulável; campo do pedido, no molde de Compras (§7.4) |
+| `core_vendas_faturamento.pedidos_vendas_liberacao` | `faturar_em_partes` | ✅ criada pela log56 (teste), nulável (R10) |
+| `core_vendas_faturamento.vw_pedidos_liberacao` | `qualidade_acompanha_sugerida`, `faturar_em_partes_sugerido` | ✅ na view (log56, teste), por `LEFT JOIN LATERAL` em `codigo_empresa_omie` + `codigo_pedido_omie` |
+| tabela nova da configuração padrão | uma linha por conta Omie | ✅ `core_comercial.parametros_pedido_venda_omie` (chave = unidade dona da conta Omie, sem default, trigger de conta ativa). Teste: "01 - Boleto/Pix/TED" nas três unidades (Robert, 10/11) |
 
 As quatro primeiras linhas dependem da migration desta seção.
 
@@ -83,9 +83,9 @@ Sem perfil novo. `Admin (Dev)` não é ator. As entradas do BFF precisam da linh
 | Rota | Estado | Quem |
 |---|---|---|
 | `/produtos-da-proposta`, `/categorias-da-proposta`, `/contas-correntes`, `/pedidos/:id/enviar-omie` | no BFF; falta a linha | Gustavo |
-| `/compras/condicoes-pagamento` para a tela `propostas` | ⚠️ a lista de condições passa pelo BFF novo, mas o Hub confere `auth.rotas_telas` com o Bearer do usuário. Sem o mapeamento, o vendedor leva 403; o teste de 09/11 pode ter passado só porque o usuário do Robert tem a tela `compras` | Gustavo |
+| `/compras/condicoes-pagamento` para a tela `propostas` | ✅ mapeada para `propostas` desde 05/11 (`2026-11-05_condicoes_pagamento_encargos.sql:84`; teste, produção pendente) | Gustavo |
 | `/propostas/:id/prontidao-omie` | falta no BFF e a linha | Robert + Gustavo |
-| `/comercial/pedidos/{id}/conta-corrente` (§8.2) | nova: tela do financeiro com `pode_editar`, não `propostas` | Gustavo |
+| `/comercial/pedidos/{id}/conta-corrente` (§8.2) | ✅ tela `pedidos-venda-financeiro` (inativa, sem perfil) com `PUT /comercial/pedidos/*/conta-corrente` (`pode_editar`) e `GET /contas_correntes` (`pode_visualizar`); falta decidir os perfis | Gustavo |
 
 ## 11. Integrações afetadas
 
