@@ -1,7 +1,7 @@
 ---
 tags: [dados, banco, dump, av-hub, teste]
 criado: 2026-11-10
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: vigente
 dono: Gustavo (DBA)
 fontes: ["Dump do Avhub para referência tst (esqueleto) (2).sql, gerado em 10/11/2026 07:36 e enviado pelo Nathan em 10/11/2026", "Dump-AvHub-Teste-2026-11-09 (comparação)"]
@@ -18,7 +18,7 @@ fontes: ["Dump do Avhub para referência tst (esqueleto) (2).sql, gerado em 10/1
 - **Arquivo:** `04-Dados/Dumps/avhub-tst-esqueleto-2026-11-10.sql`, cópia sem mudança do arquivo enviado pelo Nathan em 10/11/2026 (`Dump do Avhub para referência tst (esqueleto) (2).sql`). Veio com fim de linha CRLF, como o anterior.
 - **Ambiente:** teste (`tst`). Gerado em 10/11/2026 às 07:36, PostgreSQL 18.6, dump do cluster (papéis e esquema).
 - **Só esquema:** nenhum `COPY` nem `INSERT` de dados, e os papéis não trazem senha. Não há dado de cliente, de pedido nem de usuário.
-- **Lugar na precedência:** fonte 2 (dumps), depois do código na `develop` (F5). Ele mostra o que está **aplicado no banco de teste**, não o que está versionado (BL-024).
+- **Lugar na precedência:** fonte 2 (dumps), depois do código na `develop` (F5). Ele mostra o que está **aplicado no banco de teste**, e é a referência do esquema: as migrations ficam com o DBA, fora do repositório (N16-155).
 
 ## O que mudou desde o dump de 09/11
 
@@ -47,4 +47,4 @@ fontes: ["Dump do Avhub para referência tst (esqueleto) (2).sql, gerado em 10/1
 ## O que isso muda no vault
 
 - [[Banco-AvHub]]: o aviso do dump mais novo passa a ser este.
-- LOG-56: parte do banco do passo 3 da §14 está aplicada no teste. Falta o índice único e versionar as migrations (BL-024).
+- LOG-56: parte do banco do passo 3 da §14 está aplicada no teste. Falta o índice único e aplicar na produção.
