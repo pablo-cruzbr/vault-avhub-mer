@@ -1,7 +1,7 @@
 ---
 tags: [projeto, cronograma, marcos, gantt]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 fontes: [v1 07-Cronograma/Cronograma-2-Meses seções 1, 3.2, 3.3, 3.4, 6, 9, v1 Registro-de-Decisoes #27 #33b #34 #36 #75 #77 #96, código de 14/10 (api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, HUB b55ac55) e de 29/10 (api-pcp befd973, app-pcp 93f96de, api-acos-vital f2fa237, av-hub 758d5f0), proposta de cronograma de 16/10 (Proposta-Orcamento-Comissao, fora do vault), Registro-de-Decisoes N16-09, N16-15, N16-117, N16-118 e N16-119]
@@ -135,7 +135,7 @@ Custo do lote (09/10) somou ao Robert K3 1,0 + K4 3,0 + K5 1,5 + K6 0,5 pd; ao G
 
 | ID | Entrega | Estado |
 |---|---|---|
-| CS1 | `api-comercial` e Propostas (CRUD, fechar, perder, reabrir, versões, PDF) | ✅ feito no legado (removida do av-hub em 06/11/2026 (PR #261, `dd9d729`)); fechar parcial, perder e reabrir saíram do desenho |
+| CS1 | `api-comercial` e Propostas (CRUD, fechar, perder, reabrir, versões, PDF) | 🔴 feito só na `api-comercial` de teste, removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); não conta como pronto. O que vale é a proposta na `api-acos-vital` (CS5); fechar parcial, perder e reabrir saíram do desenho |
 | CS2 | Suprimentos: catálogo, fornecedores, ofertas, mapa de cotação, solicitações de custo | ✅ feito no legado; telas de catálogo, fornecedores, painel do comprador e parâmetros de custo seguem em `orcamento/` |
 | CS3 | Painel do Comprador, histórico de compras, produtos pendentes | ✅ feito no legado; a tela Histórico de compras saiu (N16-108) |
 | CS4 | E2E Playwright e CI | ✅ feito no legado; o Playwright saiu do HUB em 29/10 |

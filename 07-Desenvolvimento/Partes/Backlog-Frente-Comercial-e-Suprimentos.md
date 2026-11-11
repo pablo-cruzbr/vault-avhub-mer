@@ -1,7 +1,7 @@
 ---
 tags: [desenvolvimento, backlog, pendencias, parte]
 criado: 2026-11-05
-estado-em: 2026-11-09
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 parte-de: "[[Backlog-por-Frente]]"
@@ -16,7 +16,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca
 
 ## Frente Comercial & Suprimentos (Robert conduz; Pablo acompanha)
 
-O módulo `api-comercial` (Express 5, Prisma, schema `core_comercial`, BFF `app/api/comercial/[...rota]/route.ts`) é independente do fluxo 0b e está no [[Comercial-Suprimentos]]. **Desde 28/10 (N16-117, N16-118, N16-119) o Robert conduz a migração para a `api-acos-vital`, começando pela proposta; o Pablo só acompanha; a `api-comercial/` ficou no repositório só para leitura (legado) até ser removida do av-hub em 06/11/2026 (PR #261, `dd9d729`), e fica legível em `git show f7d8d7f:api-comercial/<arquivo>`; o Robert troca o backend das telas já criadas, sem refazê-las; o Nathan segue com a tela da proposta e o começo da comissão (N16-115); a proposta fica em `core_vendas_faturamento`, sem `core_comercial` (N16-116). Onde os itens abaixo dizem "Pablo" como quem faz as rotas, leia Robert.** Pendências ligadas ao fluxo:
+O módulo comercial e de suprimentos (BFF `app/api/comercial/[...rota]/route.ts`, API `/comercial/*` na `api-acos-vital`) é independente do fluxo 0b e está no [[Comercial-Suprimentos]]; a `api-comercial` de teste (Express 5, Prisma) não existe mais e não é fonte de regra. **Desde 28/10 (N16-117, N16-118, N16-119) o Robert conduz a migração para a `api-acos-vital`, começando pela proposta; o Pablo só acompanha; a `api-comercial/` ficou no repositório só para leitura (legado) até ser removida do av-hub em 06/11/2026 (PR #261, `dd9d729`), e fica legível em `git show f7d8d7f:api-comercial/<arquivo>`; o Robert troca o backend das telas já criadas, sem refazê-las; o Nathan segue com a tela da proposta e o começo da comissão (N16-115); a proposta fica em `core_vendas_faturamento`, sem `core_comercial` (N16-116). Onde os itens abaixo dizem "Pablo" como quem faz as rotas, leia Robert.** Pendências ligadas ao fluxo:
 
 | ID | Nó | O que falta | Selo | Evidência |
 |---|---|---|---|---|

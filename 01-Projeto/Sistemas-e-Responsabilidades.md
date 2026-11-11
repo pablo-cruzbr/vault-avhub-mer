@@ -1,7 +1,7 @@
 ---
 tags: [projeto, sistemas, repositorios, responsabilidades]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 fontes: [git dos cinco repositórios em 14/10/2026 e em 29/10/2026 (somente leitura), decisões do Nathan de 14/10 e N16-111, N16-117, v1 Equipe-Projeto, v1 Registro-de-Decisoes #32 #33, Dockerfiles]
@@ -19,7 +19,7 @@ fontes: [git dos cinco repositórios em 14/10/2026 e em 29/10/2026 (somente leit
 |---|---|---|
 | HUB (`av-hub`) | As telas do portal comercial e de compras | Nathan |
 | `api-acos-vital` | A API do Hub, que fala com o banco do av-hub. Desde 28/10 o módulo comercial (`/comercial/*`) nasce aqui, conduzido pelo Robert | Gustavo (DBA); módulo comercial: Robert |
-| `api-comercial` | API de teste do Pablo, **removida do av-hub em 06/11/2026 (PR #261, `dd9d729`)**. Antes disso foi legado só de leitura (N16-117). O código fica legível em `git show f7d8d7f:api-comercial/<arquivo>` | Ninguém; o Robert lê o commit `f7d8d7f` para portar |
+| `api-comercial` | API de teste do Pablo, **removida do av-hub em 06/11/2026 (PR #261, `dd9d729`)**. Antes disso foi legado só de leitura (N16-117). O código fica legível em `git show f7d8d7f:api-comercial/<arquivo>` | Ninguém. Não é fonte de regra nem de estado: vale o desenho do vault e as decisões; o módulo vive na `api-acos-vital` |
 | MES: `api-pcp` (back) e `app-pcp` (front) | Chão de fábrica, Estoque, Recebimento e Qualidade | Robert |
 | `omie-elt-pipeline` | Copia o Omie para o banco do av-hub e envia a OC ao Omie | Nathan 📝 |
 
@@ -30,7 +30,7 @@ fontes: [git dos cinco repositórios em 14/10/2026 e em 29/10/2026 (somente leit
 | **Gustavo M. de Farias** (DBA) | Banco e API do av-hub | `api-acos-vital`, migrations, `auth.*`, `core_*` | Aplicar migrations no banco; L3 de `auth.rotas_telas`; cadastrar as listas de rotas das chaves do MES e da pipeline (L6; o recurso já está no código); permissões `torre-fluxo` e `custo-itens`; versionar o SQL do contrato 34; exposição de rede da `api-pcp` |
 | **Nathan** | Telas do av-hub (front e BFF) e coordenação | HUB | Telas de Compras, Torre de Fluxo, custo por item, indicador de origem da requisição; perfil CCP; decisões e contratos; este vault. As telas de proposta são do Robert e as de Orçamento, do Pablo com o Robert |
 | **Robert Wilson** | MES inteiro e, desde 28/10, o módulo comercial na API do Hub | `api-pcp`, `app-pcp`, rotas `/comercial/*` da `api-acos-vital` e telas de proposta do HUB | Documento de retirada e baixa na retirada, fabricado virar lote (feito na `develop`), `/fluxo/eventos`, G1 (carga em lote), D11, I1/J2/J5; rotas e telas da proposta. Já feitos na `develop`: `GET /itens/custo` (27/10) e o job da OC do contrato 004 (K4, 15/10) |
-| **Pablo Cruz** | Acompanha o módulo comercial e cuida do Orçamento (com supervisão do Robert) | Telas de `orcamento/*` do HUB (a `api-comercial` dele foi removida em 06/11/2026) | Regras do legado a portar ([[Mapa-do-Modulo-do-Pablo]]); telas e perfis do Orçamento |
+| **Pablo Cruz** | Acompanha o módulo comercial e cuida do Orçamento (com supervisão do Robert) | Telas de `orcamento/*` do HUB (a `api-comercial` dele foi removida em 06/11/2026) | Acompanhar o módulo na `api-acos-vital` pelo desenho das raias ([[Mapa-do-Modulo-do-Pablo]] é só histórico); telas e perfis do Orçamento |
 
 As atribuições foram decididas em 07/10/2026 (itens 32 e 33 do Registro do v1) e reafirmadas em 14/10: MES com o Robert, Comercial & Suprimentos com o Pablo 📝. Em 28/10 o Robert passou a conduzir o módulo comercial, com o Pablo acompanhando (N16-117) 📝. Nota completa em [[Equipe-e-Divisao]]. Backlog por dono em [[Backlog-por-Frente]].
 
@@ -85,7 +85,7 @@ O branch de trabalho é `develop` (no pipeline, `master`). Os repositórios fora
 | MES front (`app-pcp`) | `app-pcp` | `<pasta-mãe>\app-pcp` | 14/10: `df4a258` (PR #45). **29/10: `93f96de`** (PR #63, 27/10) | 14/10: `3b0f463` (08/10), `develop` 10 à frente. **29/10: igual, `develop` 51 à frente** | Robert |
 | API do av-hub (`api-acos-vital`) | `api-acos-vital` | `<pasta-mãe>\api-acos-vital` | 14/10: `276dab8`. **29/10: `f2fa237`** (rotas de parceiros; o clone local tem mais 1 commit, `0384e89`, ainda não enviado) | 14/10: `49596ca` (09/10), `develop` 11 à frente. **29/10: `4151467` (PR #305), `develop` 0 à frente** | Gustavo (DBA); módulo comercial: Robert |
 | HUB (front do av-hub) | `av-hub` | `TI\NATHAN\00 - HUB` (14/10); `<pasta-mãe>\av-hub` (29/10) | 14/10: `b55ac55` (PR #194). **29/10: `758d5f0`** (PR #251, abas da proposta) | 14/10: `cfed113` (06/10), `develop` 284 à frente. **29/10: `b977529` (23/10), `develop` 29 à frente** | Nathan |
-| `api-comercial` | `av-hub` (pasta `api-comercial/` dentro do HUB) | `av-hub\api-comercial` | legado de leitura de `a90d306` (28/10) a `dd9d729` (06/11, PR #261), quando saiu da `develop`; legível em `git show f7d8d7f:api-comercial/<arquivo>` | ainda existe na `main` (a remoção não chegou lá) | Ninguém; o Robert lê o `f7d8d7f` para portar |
+| `api-comercial` | `av-hub` (pasta `api-comercial/` dentro do HUB) | não existe mais (histórico em `f7d8d7f`) | legado de leitura de `a90d306` (28/10) a `dd9d729` (06/11, PR #261), quando saiu da `develop`; legível em `git show f7d8d7f:api-comercial/<arquivo>` | publicado na `main`: a pasta ainda está lá (a remoção não chegou) | Ninguém; não é fonte de regra |
 | Pipeline Omie | `omie-elt-pipeline` | `<pasta-mãe>\omie-elt-pipeline` | `master` `0f739f0` (PR #3, envio da OC fixo, 08/10) | — | Nathan 📝 |
 
 Evidência: `git log -1`, `git branch --show-current` e `git rev-list --count origin/main..origin/develop` em cada repositório, 14/10/2026 ✅.

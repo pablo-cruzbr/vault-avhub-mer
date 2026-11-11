@@ -1,7 +1,7 @@
 ---
 tags: [diagramas, classes, uml, mes, estoque, comercial]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-11
 status: vigente
 dono: Robert
 fontes: [v1 Diagramas-UML (1, 2, 3, 23, 25), api-pcp 579a625 prisma/models/*.prisma (LoteCusto e OrigemLote reconferidos na develop befd973 em 29/10/2026), HUB b55ac55 api-comercial/prisma/models/*.prisma]
@@ -395,7 +395,7 @@ O diagrama 3 do v1 (RBAC e comercial do av-hub: `Usuario`, `Perfil`, `Tela`, `Fu
 
 ## Detalhe técnico
 
-Redesenhados a partir do Prisma do `api-pcp` (`prisma/models/`) e do Prisma do `api-comercial` (HUB `b55ac55`), ambos de 14/10/2026. Nem todos os campos aparecem. As linhas de arquivo citadas abaixo são de 14/10 e podem ter se deslocado na `develop` de 29/10.
+Redesenhados a partir do Prisma do `api-pcp` (`prisma/models/`) e do Prisma do `api-comercial` (HUB `b55ac55`), ambos de 14/10/2026. Nem todos os campos aparecem. As linhas de arquivo citadas abaixo são de 14/10 e podem ter se deslocado na `develop` de 29/10. As do `api-comercial` são históricas: a pasta foi removida do av-hub em 06/11/2026 e só se lê no commit `f7d8d7f`.
 
 ### Diagrama 1: Estoque e compras no MES
 
@@ -427,4 +427,4 @@ Selo ✅ `compras.prisma:51-262`, `integracao.prisma:33-120`. Enums: `StatusRequ
 
 ### Diagrama 4: api-comercial
 
-Selo ✅ `api-comercial/prisma/models/*.prisma` (HUB `b55ac55`). Mudança: `PerfilComercial` (v1) virou `UsuarioComercial`, mapeada para a tabela `perfis_comerciais`, sem coluna de cargo (migration `20261013140000_usuarios_comerciais_diretorio`) ✅ `empresas.prisma:61-78`. `StatusProposta` (`ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA`), `StatusSolicitacao` (`ABERTA`, `RESPONDIDA`, `SEM_FORNECEDOR`, `CANCELADA`), `StatusOferta` (`VIGENTE`, `VENCIDA`, `INVALIDADA`, `HISTORICA`), `FonteOferta` (`MANUAL`, `MAPA_COTACAO`, `PEDIDO_OMIE`, `MIGRACAO`). O enum `CargoComercial` do v1 não existe mais.
+Selo ✅ histórico ("visto no código antigo", não pronto): `api-comercial/prisma/models/*.prisma` (HUB `b55ac55`; hoje só em `f7d8d7f`). Mudança: `PerfilComercial` (v1) virou `UsuarioComercial`, mapeada para a tabela `perfis_comerciais`, sem coluna de cargo (migration `20261013140000_usuarios_comerciais_diretorio`) ✅ `empresas.prisma:61-78`. `StatusProposta` (`ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA`), `StatusSolicitacao` (`ABERTA`, `RESPONDIDA`, `SEM_FORNECEDOR`, `CANCELADA`), `StatusOferta` (`VIGENTE`, `VENCIDA`, `INVALIDADA`, `HISTORICA`), `FonteOferta` (`MANUAL`, `MAPA_COTACAO`, `PEDIDO_OMIE`, `MIGRACAO`). O enum `CargoComercial` do v1 não existe mais.

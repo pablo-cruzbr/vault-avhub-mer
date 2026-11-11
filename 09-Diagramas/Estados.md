@@ -1,7 +1,7 @@
 ---
 tags: [diagramas, estados, uml, mes, av-hub]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 fontes: [v1 Diagramas-UML (5, 6, 7, 8, 20, 24), api-pcp 579a625 prisma/models, api-acos-vital f322dcd, 00-Fluxo-Mestre-0b, api-comercial 5aa5311 enums.prisma, migrações de 26/10/2026, Dump Avhub de 29/10/2026 e rotas `/comercial/propostas` da api-acos-vital develop (29/10), Registro-de-Decisoes N16]
@@ -412,7 +412,7 @@ Não é um diagrama de transição: o MES calcula a etapa por regra (`etapaDoIte
 
 ### 13. Proposta (`core_comercial.propostas.status`, 🟡)
 
-O enum de hoje, no módulo do Pablo, é `ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA` (`api-comercial/prisma/models/enums.prisma:69-76` ✅). O desenho é o da migração (`ck_propostas_status`), pelas N16-02 e N16-03: sem fechamento parcial, ajuste só até aprovar, proposta incompleta não aprova, cancelada não reabre.
+O enum antigo, no `api-comercial` de teste do Pablo (removido em 06/11/2026), era `ABERTA`, `PARCIAL`, `FECHADA`, `PERDIDA` (histórico: `f7d8d7f:api-comercial/prisma/models/enums.prisma:69-76`). Na `develop`, a `api-acos-vital` e o front usam `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` e `EXPIRADA` ([[01-Proposta-de-Venda]]). O desenho é o da migração (`ck_propostas_status`), pelas N16-02 e N16-03: sem fechamento parcial, ajuste só até aprovar, proposta incompleta não aprova, cancelada não reabre.
 
 Selo ✅ no código de 29/10: a `ck_propostas_status` do dump de 29/10 tem `ABERTA`, `APROVADA`, `TRANSFORMADA` e `CANCELADA`, e a `api-acos-vital` já tem `PUT /comercial/propostas/:id`, `aprovar`, `cancelar`, `copiar` e `transformar` (Robert, 28 e 29/10); produção ❓. Nós do Mestre: `V0.1` a `V0.7`, `V0C`. No legado (✅ no teste) `atualizar` só roda em `ABERTA` (`propostas.service.ts:478-481`), `perder` leva a `PERDIDA` (`:555-575`), `reabrir` e `fechar` parcial existem (`:578-649`) e saem. Regras: [[01-Proposta-de-Venda]].
 

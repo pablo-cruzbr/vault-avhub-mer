@@ -1,7 +1,7 @@
 ---
 tags: [sistemas, rbac, permissoes, mes, av-hub, seguranca]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: vigente
 dono: Gustavo (DBA)
 develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
@@ -24,7 +24,7 @@ fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 16
 - **MES:** permissão por tela e por setor. O Estoque ainda separa por depósito. Telas só de permissão: custo do lote, liberar recebimento sem OC e programar a fila.
 - **av-hub:** permissão por tela e por rota. A liberação, a Torre de Fluxo e o custo por item têm a sua.
 - **Compras:** a aprovação da OC acima de R$ 30 mil depende da permissão "aprovar" do av-hub (N14-21).
-- **Comercial:** as rotas `/comercial/*` da API do Hub usam as permissões do av-hub e sempre exigem o token do usuário. A `api-comercial` antiga virou legado ([[API-Comercial]]).
+- **Comercial:** as rotas `/comercial/*` da API do Hub usam as permissões do av-hub e sempre exigem o token do usuário. A `api-comercial` de teste foi removida do av-hub em 06/11/2026 ([[API-Comercial]], histórico).
 - Um perfil do MES não existe no av-hub e vice-versa. O usuário tem um cadastro em cada um ([[Schemas-Postgres]]).
 
 ## Regras que valem
@@ -169,7 +169,7 @@ Dados em `auth.rotas_telas` e `auth.telas`: **o dump é só esqueleto** (sem `CO
 
 #### Slugs do Comercial
 
-As 21 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`, `custo-item` (singular, ≠ `custo-itens`), `relatorio-gerencial`, `painel-comprador`, `clientes`, `solicitacoes-custo`, `ofertas-fornecedor`, `pedido-cotacao`, `catalogo-produtos`, `fornecedores`, `historico-compras`, `parametros-custo`, `tabela-telha`, `sincronizacao-omie`, `matriz-precos`, `pesquisa-materiais`, `relatorio-cotacoes`, `dash-comercial`, `empresas-emissoras`) ✅ `api-acos-vital/src/schemas/core_comercial/capacidades.js:20-26`. As capacidades (`escopo` por `escopo_vendedores` do perfil, `ve_valores`, `ve_custo`, `pode_delegar`, `comprador`…) saem das telas do usuário em `auth.fn_me_permissoes`, não do cargo comercial; `GET /comercial/me` devolve esse mapa. A antiga `api-comercial` lia `GET /me/permissoes` do av-hub; ela virou legado ([[API-Comercial]]). Toda rota `/comercial/*` e `/suprimentos/*` exige o token do usuário (401 `TOKEN_USUARIO_AUSENTE` mesmo com `x-api-key` válida) ✅ `middlewares/exigirTokenUsuario.js`. No BFF do av-hub cada rota da lista tem tela e ação ✅ `app/api/comercial/[...rota]/route.ts`. Em 05/11 entraram `POST /comercial/propostas/:id/transformar` e `POST /comercial/pedidos/:id/enviar-omie`, ambas declaradas com `propostas:pode_editar`, e `GET /comercial/produtos`, com `propostas:pode_visualizar` (`api-acos-vital` `pedidos.route.js:14`, `produtos.route.js`, `develop` `1654f65`). ❓ Não conferi se `auth.rotas_telas` tem linha para as rotas novas: com Bearer, rota sem linha dá 403 `ROTA_SEM_PERMISSAO_MAPEADA` ([[Chaves-e-Autenticacao]]), e o BFF ainda não as lista.
+As 21 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`, `custo-item` (singular, ≠ `custo-itens`), `relatorio-gerencial`, `painel-comprador`, `clientes`, `solicitacoes-custo`, `ofertas-fornecedor`, `pedido-cotacao`, `catalogo-produtos`, `fornecedores`, `historico-compras`, `parametros-custo`, `tabela-telha`, `sincronizacao-omie`, `matriz-precos`, `pesquisa-materiais`, `relatorio-cotacoes`, `dash-comercial`, `empresas-emissoras`) ✅ `api-acos-vital/src/schemas/core_comercial/capacidades.js:20-26`. As capacidades (`escopo` por `escopo_vendedores` do perfil, `ve_valores`, `ve_custo`, `pode_delegar`, `comprador`…) saem das telas do usuário em `auth.fn_me_permissoes`, não do cargo comercial; `GET /comercial/me` devolve esse mapa. A `api-comercial` de teste lia `GET /me/permissoes` do av-hub; ela foi removida em 06/11/2026 ([[API-Comercial]], histórico). Toda rota `/comercial/*` e `/suprimentos/*` exige o token do usuário (401 `TOKEN_USUARIO_AUSENTE` mesmo com `x-api-key` válida) ✅ `middlewares/exigirTokenUsuario.js`. No BFF do av-hub cada rota da lista tem tela e ação ✅ `app/api/comercial/[...rota]/route.ts`. Em 05/11 entraram `POST /comercial/propostas/:id/transformar` e `POST /comercial/pedidos/:id/enviar-omie`, ambas declaradas com `propostas:pode_editar`, e `GET /comercial/produtos`, com `propostas:pode_visualizar` (`api-acos-vital` `pedidos.route.js:14`, `produtos.route.js`, `develop` `1654f65`). ❓ Não conferi se `auth.rotas_telas` tem linha para as rotas novas: com Bearer, rota sem linha dá 403 `ROTA_SEM_PERMISSAO_MAPEADA` ([[Chaves-e-Autenticacao]]), e o BFF ainda não as lista.
 
 ### 3. Lacunas e decisões abertas
 

@@ -1,7 +1,7 @@
 ---
 tags: [comercial, suprimentos, api-acos-vital, analise, rascunho, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-11
 status: proposta
 dono: Nathan
 parte-de: "[[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]]"
@@ -51,7 +51,7 @@ Contagem de linhas por tabela no dump completo de `avhub_prd_db`. Muda dois pont
 
 | O que | Linhas | O que isso diz |
 |---|---|---|
-| `core_comercial` (schema do Pablo) | 23 tabelas | **Está em produção, vazio.** Só têm dado `categorias_suprimento` (17), `parametros_custo` (1) e `unidades_emissoras` (3). Propostas, clientes, ofertas, notificações, solicitações de custo, telha, perfis: **0**. Tirar a `api-comercial` de produção inclui decidir o que fazer com esse schema (Gustavo) |
+| `core_comercial` (schema do Pablo) | 23 tabelas | **Está em produção, vazio.** Só têm dado `categorias_suprimento` (17), `parametros_custo` (1) e `unidades_emissoras` (3). Propostas, clientes, ofertas, notificações, solicitações de custo, telha, perfis: **0**. A `api-comercial` saiu de produção (N16-111) e foi removida do av-hub em 06/11/2026; falta decidir o que fazer com esse schema (Gustavo, N16-116) |
 | ⚠️ `core.parceiros_produtos` (cotação por produto) | **0** | A tabela existe, mas **não tem cotação nenhuma**. `/parceiros_produtos` e a parte "cotação" de `/produtos/:id/fornecedores` voltam vazias |
 | `core_compras.orc_cotacoes` / `orc_fornecedores` / `orc_produtos` / `orc_categorias` / `orc_vinculos` | 2.697 / 10.524 / 400 / 16 / 234 | **É aqui que estão as cotações** (carga do Orçamento antigo, contrato 07). Categorias de fornecimento: 16 no Hub contra 17 em `core_comercial.categorias_suprimento` (lista repetida) |
 | `pedidos_compras` / `pedidos_compras_itens` (Omie) | 24.171 / 47.125 | Histórico real de **preço de compra** por produto e fornecedor: a melhor fonte para "Sugerir custo" e para a página do produto |

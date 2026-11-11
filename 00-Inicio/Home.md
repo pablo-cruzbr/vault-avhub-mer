@@ -1,7 +1,7 @@
 ---
 tags: [home, moc]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 fontes: [plano de 14/10/2026, estrutura da v3 (05/11/2026)]
@@ -65,7 +65,7 @@ Em resumo: Proposta → Orçamento → Pedido → PCP → Estoque → Compra →
 | `00-Inicio` | Porta de entrada: [[Comece-Aqui]] · [[Onde-Estamos]] · [[Regras-do-Vault]] · [[Guia-de-Leitura-do-Vault-e-dos-Sistemas]] · [[Manual-de-Manutencao-do-Vault]] · [[Mapa-v1-para-v2]] · [[Mapa-v2-para-v3]] |
 | `01-Projeto` | O projeto em si: [[Visao-do-Projeto]] · [[Sistemas-e-Responsabilidades]] · [[Equipe-e-Divisao]] · [[Cronograma]] · [[Infraestrutura]] · [[Glossario]] · [[Tipos-de-ID]] |
 | `02-Fluxo-de-Atividades` | **O coração do manual.** [[00-Fluxo-Mestre-0b]] e uma nota por etapa (lista acima); em `Transversais/`: [[Telas-e-Experiencia-do-Usuario]], [[Estados-e-Status]] e [[Telas-por-Raia]] |
-| `03-Sistemas` | Como cada sistema é feito: [[AV-Hub-Front]] · [[AV-Hub-API]] · [[API-Comercial]] · [[Mapa-do-Modulo-do-Pablo]] · [[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]] · [[Roteiro-da-Proposta-em-Diante]] · [[MES-Backend]] · [[MES-Front]] · [[Pipeline-Omie]] · [[RBAC-e-Permissoes]] · [[Bugs-Conhecidos]] · [[Proposta-Score-e-Volatilidade-OQ-46]] |
+| `03-Sistemas` | Como cada sistema é feito: [[AV-Hub-Front]] · [[AV-Hub-API]] · [[API-Comercial]] (histórico: removida em 06/11/2026) · [[Mapa-do-Modulo-do-Pablo]] · [[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]] · [[Roteiro-da-Proposta-em-Diante]] · [[MES-Backend]] · [[MES-Front]] · [[Pipeline-Omie]] · [[RBAC-e-Permissoes]] · [[Bugs-Conhecidos]] · [[Proposta-Score-e-Volatilidade-OQ-46]] |
 | `03-Sistemas/Comissao` | A comissão atual e a nova: [[01-Motor-Atual-Como-Calcula]] · [[02-Tabelas-Atuais-core_comissionamento]] · [[03-Modelo-Novo-core_comissao]] · [[04-Regras-e-Estados-da-Comissao-Nova]] |
 | `04-Dados` | Os bancos de dados: [[Banco-AvHub]] · [[Banco-MES]] · [[Modelo-Estoque-e-Custo-do-Lote]] · [[Schemas-Postgres]] · [[Diferencas-Codigo-x-Banco]] |
 | `05-Integracoes` | Como os sistemas conversam: [[Integracao-AvHub-MES]] · [[Chaves-e-Autenticacao]] · [[Omie-Integracao-Estado]] · [[Estudo-Omie-API]] · [[Mapa-IncluirPedido-Omie]] · [[Colunas-Protegidas]] · [[Rastreabilidade-e-Torre-de-Fluxo]] · dicionários do Omie em `05-Integracoes/Omie-Dicionarios` |
