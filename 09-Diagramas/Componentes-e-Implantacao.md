@@ -190,7 +190,7 @@ Selo ✅ para as setas cheias (rotas conferidas em [[Integracao-AvHub-MES]] e no
 
 ### 2. Implantação
 
-Topologia decidida pelo Nathan (📝, 07/10); estado real dos containers ❓ não conferido. Selo ✅ para imagens e portas (`Dockerfile` de cada repositório, linhas citadas em [[Infraestrutura]]); 📝 para VPS e Postgres; MinIO ❓: nenhuma referência a MinIO foi encontrada no código de `api-pcp` e `api-acos-vital` em 14/10, por isso as setas são tracejadas. `api-comercial` sem ambiente: legado de leitura na pasta `api-comercial/` do HUB (N16-117).
+Topologia decidida pelo Nathan (📝, 07/10); estado real dos containers ❓ não conferido. Selo ✅ para imagens e portas (`Dockerfile` de cada repositório, linhas citadas em [[Infraestrutura]]); 📝 para VPS e Postgres; MinIO ❓: nenhuma referência a MinIO foi encontrada no código de `api-pcp` e `api-acos-vital` em 14/10, por isso as setas são tracejadas. `api-comercial` sem ambiente: foi legado de leitura na pasta `api-comercial/` do HUB (N16-117) até ser removida em 06/11/2026 (PR #261).
 
 ### 3. Pacotes: schemas por banco
 
