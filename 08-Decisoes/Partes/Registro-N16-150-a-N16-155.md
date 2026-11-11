@@ -10,7 +10,7 @@ fontes: [conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido 
 
 # Registro de decisões: decisões N16, N16-150 a N16-155
 
-**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-158 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade, a empresa emissora que vira a própria unidade e o dono de cada raia do fluxo 0b.
+**Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-159 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade, a empresa emissora que vira a própria unidade e o dono de cada raia do fluxo 0b.
 
 **Onde estamos:** ← [[Registro-de-Decisoes]] (resumo e índice) · partes: [[Registro-N16-01-a-N16-43]] · [[Registro-N16-44-a-N16-72]] · [[Registro-N16-73-a-N16-96]] · [[Registro-N16-97-a-N16-116]] · [[Registro-N16-117-a-N16-149]] · **Registro-N16-150-a-N16-155**
 
@@ -78,3 +78,9 @@ Contrato afetado: LOG-56, Transformar proposta em pedido (§4.2, §6.3, §8 e pa
 | ID | Decisão | Data | Dono | Selo | Superada |
 |---|---|---|---|---|---|
 | N16-158 | **A API do MES (`api-pcp`) fica com o Robert, acompanhado pelo Gustavo.** Nathan, 11/11/2026. Responde o ❓ da N16-157, item 4: "o Gustavo é o DBA e a API de todo o sistema" quer dizer que ele é o DBA de todos os bancos e o dono da API do Hub (`api-acos-vital`), e **acompanha** a API do MES, que continua do Robert. A capacidade do Robert foi refeita com as raias da N16-157 e o apoio do Nathan como coordenador e desenvolvedor em todo o processo ([[Capacidade-do-Robert]], 🟡 o Robert valida) | 11/11/2026 | Nathan | 📝 | N16-157 (completa: fecha o ❓ do item 4) |
+
+## Decisão de 11/11/2026 (compra acima do cotado, primeira etapa) (N16-159)
+
+| ID | Decisão | Data | Dono | Selo | Superada |
+|---|---|---|---|---|---|
+| N16-159 | **Compra acima do cotado (`C8`), primeira etapa: a OC espera o vendedor, só o pedido de proposta entra e a margem considerada vem depois.** Nathan, 11/11/2026, ao desenhar o contrato LOG-57. (1) **A OC espera:** com divergência pendente ou reprovada, a OC fica em `aguardando_aprovacao`, não é aprovada e não vai ao Omie até o vendedor aprovar ou Compras resolver; sem status novo no banco. (2) **Só o PV que nasceu de proposta** entra nesta etapa, com o valor cotado lido pelo API-019; o PV digitado no Omie, com o valor de referência informado por Compras (N16-102), fica para uma segunda etapa. (3) **O aviso mostra a margem da proposta e a diferença de custo**; a margem considerada (N16-62) entra quando o motor da comissão estiver na API (BL-078) | 11/11/2026 | Nathan | 📝; 🔴 sem código | N16-61 (completa: como a compra espera); N16-102 (adia em parte: o PV do Omie); N16-62 (adia em parte: a margem considerada) |
