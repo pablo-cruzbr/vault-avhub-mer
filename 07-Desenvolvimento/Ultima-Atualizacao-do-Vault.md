@@ -1,7 +1,7 @@
 ---
 tags: [desenvolvimento, atualizacao, develop, manutencao]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-11
 status: vigente
 dono: Nathan
 fontes: [git log -1 origin/develop de cada sistema em 2026-11-10 (origin/master no omie-elt-pipeline), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
@@ -27,7 +27,7 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-10 (origin/master 
 
 São os commits do `develop-conferida` das notas **conferidas** nesta atualização; as raias não tocadas ainda dizem os commits de 05/11.
 
-**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 10/11/2026 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-10.sql`). As migrations de 05/11 que o código cita continuam fora do repositório. Do MES, o mais novo é o de 14/10.
+**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 10/11/2026 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-10.sql`). As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
 
 ## Como usar na próxima atualização
 
