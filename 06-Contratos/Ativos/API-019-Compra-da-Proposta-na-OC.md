@@ -38,8 +38,8 @@ Nós `C6` e `C7` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]] (dona
 ## 4. Como está hoje
 
 - **Banco.** 🟡 A proposta já guarda a cotação de compra por item: `core_comercial.propostas_itens` tem `fornecedor` (texto livre), `origem_compra`, `qtd_compra`, `unidade_compra`, `preco_unit_compra`, `ipi_compra_pct`, `st_compra_valor`, `frete_compra_valor`, `custo_liquido_unit` e `custo_liquido_total`; o cabeçalho `core_comercial.propostas` tem `frete_compra_tipo` e `frete_compra_valor` (banco do Docker local, dados do tst, 11/11). O pedido do Hub liga as duas pontas: `core_comercial.pedidos_venda` (`id_proposta`, `numero_proposta`, `numero_pedido_omie`, `codigo_empresa`) e `core_comercial.pedidos_venda_itens` (`id_proposta_item`, `codigo_produto_omie`).
-- **API.** 🔴 Nenhuma rota de Compras lê esses campos. A tela da OC lê o pedido por `GET /compras/pedidos-venda/{numero}` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:92` (`router.get("/:numero"`), que devolve só o cabeçalho do Omie e os itens de `vw_pedido_venda_itens_compra`.
-- **Front.** 🔴 A tela `/compras/nova` mostra, por item, o destino no PV e mais nada da venda: `av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:240` (`<DestinoItem item={item} indice={indice} />`). O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
+- **API.** 🔴 Nenhuma rota de Compras lê esses campos. A tela da OC lê o pedido por `GET /compras/pedidos-venda/{numero}` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:175` (`router.get("/:numero"`), que devolve só o cabeçalho do Omie e os itens de `vw_pedido_venda_itens_compra`.
+- **Front.** 🔴 A tela `/compras/nova` mostra, por item, o destino no PV e mais nada da venda: `av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:245` (`<DestinoItem item={item} indice={indice} />`). O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
 
 ## 5. Regras de negócio
 
