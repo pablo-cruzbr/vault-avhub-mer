@@ -5,7 +5,7 @@ estado-em: 2026-11-12
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Catálogo da API da Omie consultado em 09/11/2026 pelo conector do Omie (produtos/pedido:AlterarPedidoVenda, só a descrição; a operação não foi executada)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
 ---
 
@@ -82,7 +82,7 @@ Sem perfil novo. `Admin (Dev)` não é ator. As entradas do BFF precisam da linh
 | Rota | Estado | Quem |
 |---|---|---|
 | `/produtos-da-proposta`, `/categorias-da-proposta`, `/contas-correntes`, `/pedidos/:id/enviar-omie` | no BFF; falta a linha | Gustavo |
-| `/compras/condicoes-pagamento` para a tela `propostas` | ✅ mapeada para `propostas` desde 05/11 (`2026-11-05_condicoes_pagamento_encargos.sql:84`; teste, produção pendente) | Gustavo |
+| `/compras/condicoes-pagamento` para a tela `propostas` | ✅ mapeada para `propostas` desde 05/11 (migration `2026-11-05_condicoes_pagamento_encargos`, com o DBA e fora do repositório, N16-155; teste, produção pendente) | Gustavo |
 | `/propostas/:id/prontidao-omie` | falta no BFF e a linha | Robert + Gustavo |
 | `/comercial/pedidos/{id}/conta-corrente` (§8.2) | ✅ tela `pedidos-venda-financeiro` (inativa, sem perfil) com `PUT /comercial/pedidos/*/conta-corrente` (`pode_editar`) e `GET /contas_correntes` (`pode_visualizar`); falta decidir os perfis | Gustavo |
 
