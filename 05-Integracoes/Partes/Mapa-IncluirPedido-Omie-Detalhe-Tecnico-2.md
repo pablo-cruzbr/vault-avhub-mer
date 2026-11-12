@@ -1,7 +1,7 @@
 ---
 tags: [omie, pedido-de-venda, incluir-pedido, api, mapa-de-campos, pesquisa, parte]
 criado: 2026-11-05
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: proposta
 dono: Nathan
 parte-de: "[[Mapa-IncluirPedido-Omie]]"
@@ -163,7 +163,7 @@ Em Uberaba todo pedido com `1.01.99` é refaturamento por definição; `sem_refa
 
 - **Pedido no Hub:** `pedidos` precisa guardar `valor_total_omie` (conferência), `status_etapa_omie`, a resposta de `ConsultarPedido` em JSON para auditoria, o câmbio usado e o `valor_frete`/`modalidade_frete` já mapeados. 🟡
 - **Conferência na pipeline:** a pipeline lê o pedido de volta (`ConsultarPedido`) depois de incluir e compara total, itens e `codigo_item_omie`; divergência marca o pedido com aviso e **não libera**.
-- **Condições de pagamento de venda por conta:** 📝 decidido (Nathan, 04/11): fica só `condicoes_pagamento_compras`, sem recurso novo (ver o início da seção 5.1). Falta o de-para com a chave da tabela de encargos do motor, e a coluna `encargos` (Gustavo). 🟡
+- **Condições de pagamento de venda por conta:** 📝 decidido (Nathan, 04/11): fica só `condicoes_pagamento_compras`, sem recurso novo (ver o início da seção 5.1). A coluna `encargos` existe (migration `2026-11-05_condicoes_pagamento_encargos`), e desde 12/11 o encargo escolhido e o código da condição ficam gravados na proposta (`propostas.encargo_pagamento`) e na simulação (`simulacoes.encargo_pagamento`, `codigo_condicao_pagamento`), pedido do Robert ([[Dump-AvHub-Teste-2026-11-12]]). Falta exigir que o encargo gravado seja o do cadastro (quando a coluna `encargos` estiver completa). 🟡
 - **Categoria, conta corrente, projeto e etapa já são sincronizados** pela pipeline (`categorias`, `contasCorrentes`, `projetos`, `etapasFaturamento`, `vendedores`). ✅ Não é preciso digitar códigos: a configuração por conta **escolhe** da lista sincronizada. 🟡 O que falta é guardar **qual** categoria, conta corrente e cenário o pedido de venda usa em cada conta.
 - **Configuração por conta Omie** (nova tabela ou parâmetros): `codigo_categoria`, `codigo_conta_corrente`, `codigo_cenario_impostos`, etapa inicial e local de estoque, **por conta** (Mogi e Uberaba). 🔴 hoje não existe lugar.
 - **Proposta:** ver [[Telas-e-Experiencia-do-Usuario]] para o que isso muda na tela (condição de pagamento escolhida de uma lista, imposto vindo do Omie, destino derivado do cliente).
