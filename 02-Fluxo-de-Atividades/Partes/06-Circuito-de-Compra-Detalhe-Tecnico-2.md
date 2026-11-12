@@ -5,7 +5,7 @@ estado-em: 2026-11-12
 status: vigente
 dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
 parte-de: "[[06-Circuito-de-Compra]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10, api-acos-vital bebca52 (LOG-57, LOG-58, API-019), av-hub a43befe (front de C6 a C8 e LOG-58), api-pcp 2e564e6, em 2026-11-12]
+develop-conferida: [av-hub d82d58b, em 2026-11-12, só o follow-up (PR #284); api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10, api-acos-vital bebca52 (LOG-57, LOG-58, API-019), av-hub a43befe (front de C6 a C8 e LOG-58), api-pcp 2e564e6, em 2026-11-12]
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144, BL-086, OQ-52, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -46,7 +46,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-
 
 ### C5: follow-up do CCP
 
-✅ (`av-hub`, `api-acos-vital`) HUB `/compras/followup` e tabelas `ordens_compra_acompanhamento`, `_contatos`, `_ocorrencias`. Marcos `fornecedor_confirmou`, `previsao_alterada`, `despachada` (data, NF do fornecedor, transportadora), `ocorrencia` (aberta ou resolvida) chegam ao MES. 🔴 Perfil exclusivo do CCP (só ele edita): hoje vale a permissão da tela, conforme [[Contratos-da-v2|LOG-32]].
+✅ (`av-hub`, `api-acos-vital`) HUB `/compras/followup` e tabelas `ordens_compra_acompanhamento`, `_contatos`, `_ocorrencias`. Marcos `fornecedor_confirmou`, `previsao_alterada`, `despachada` (data, NF do fornecedor, transportadora), `ocorrencia` (aberta ou resolvida) chegam ao MES. A ocorrência aberta espera a decisão do CCP: a rota de decidir exige `pode_aprovar` na tela `followup`, e a tela diz "aguardando decisão do CCP" (PR #284) ✅ `av-hub` `components/Compras/Followup/FollowupLista.tsx:100` (`hint="aguardando decisão do CCP"`). 🟡 Perfil exclusivo do CCP (só ele edita): o código trava pela tela `followup` ([[Contratos-da-v2|LOG-32]]); o cadastro do perfil está no item 4 de "O que falta desenvolver".
 
 ### Volta (LOG-35) e Compras · CCP
 
