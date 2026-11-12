@@ -126,7 +126,7 @@ Estados propostos (N16-66, N16-73): `PENDENTE` (na lista do vendedor, sem tempo 
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 7 | `C6` e `C7` na tela de emissão da OC: mostrar a parte de compras da proposta, puxar fornecedor e impostos, editar, gravar o valor correto sem tocar a proposta | Nathan, Gustavo | `C6`, `C7` | 🔴 |
+| 7 | `C6` e `C7` na tela de emissão da OC: mostrar a parte de compras da proposta, puxar fornecedor e impostos, editar, gravar o valor correto sem tocar a proposta. Contrato API-019 (`06-Contratos/Ativos`) (11/11); o imposto gravado na OC segue no BL-053 | Nathan, Gustavo | `C6`, `C7` | 🔴 📝 |
 | 12 | **`C8`:** aviso e aprovação em Meus Pedidos, tabela `divergencias_compra`, lista de Compras dos reprovados e registro da solução | Nathan, Robert, Gustavo | `C8` | 🔴 |
 
 ### Pendências (numeração da nota de proposta)

@@ -56,10 +56,11 @@ Estas seções ficam em notas à parte, para cada arquivo ficar abaixo de 25 KB 
 
 ## Contratos novos (v3)
 
-A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-019`, `CON-04`, `LOG-57`, `SQL-022`.
+A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`, `CON-04`, `LOG-57`, `SQL-022`.
 
 | ID | Título | Status | Autor | Data |
 |---|---|---|---|---|
 | [[LOG-56-Transformar-Proposta-em-Pedido\|LOG-56]] | Transformar proposta em pedido: as respostas que faltam e as pontas soltas da tela (v8) | `parcial` | Robert | 2026-11-10 |
+| [[API-019-Compra-da-Proposta-na-OC\|API-019]] | A emissão da OC mostra a parte de compras da proposta (`C6` e `C7`) | `para-implementar` | Nathan | 2026-11-11 |
 
 O modelo de consulta está em [[Modelo-de-Consulta]].
