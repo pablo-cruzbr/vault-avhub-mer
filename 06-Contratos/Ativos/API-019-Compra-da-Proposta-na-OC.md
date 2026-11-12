@@ -13,7 +13,7 @@ decisoes: [N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, N16-157]
 develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11]
 tags: [contrato, compras, proposta, oc, c6, c7]
 criado: 2026-11-11
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 dono: Nathan
 fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 14, 15 e 30; item 7 de "O que falta"), Registro-de-Decisoes N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, api-acos-vital develop 637f183, av-hub develop d0e8f8f, banco do ambiente Docker local (dados do tst) em 11/11/2026]
 ---
@@ -121,6 +121,8 @@ Não se aplica: a mudança é só de leitura, dentro da rota da seção 8; nenhu
 ## 9. Banco (SQL)
 
 Não se aplica: as colunas já existem (seção 4). Se o Gustavo preferir, a junção pode virar uma view (`core_comercial.vw_pedido_venda_compra_proposta`), sem mudar o contrato da rota.
+
+✅ **Foi o caminho escolhido, aplicado no teste em 12/11:** a view `core_comercial.vw_pedido_venda_compra_proposta` (`:19381`) e o índice `ix_pedidos_venda_numero_omie_sem_zeros` (`:32100`), para casar o PV do Omie pelo número sem zeros à esquerda ([[Dump-AvHub-Teste-2026-11-12]]). A rota da `api-acos-vital` lê a view: `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:72` (`vw_pedido_venda_compra_proposta`). Falta a produção.
 
 ## 10. Permissões e perfis
 
