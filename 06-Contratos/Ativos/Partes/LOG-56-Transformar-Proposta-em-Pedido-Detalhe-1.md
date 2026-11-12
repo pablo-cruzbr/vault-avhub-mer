@@ -1,11 +1,11 @@
 ---
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento, parte]
 criado: 2026-11-09
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
-develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09; api-acos-vital cc3fbb3, em 2026-11-11, só a N16-154]
+develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09; api-acos-vital cc3fbb3, em 2026-11-11, só a N16-154; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Dump do Avhub de 04/11/2026 (04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql)"]
 ---
 
@@ -63,7 +63,7 @@ O caminho que a Qualidade já percorre (Contrato 26 / Fluxo 4) é o modelo. A pe
 |---|---|---|---|
 | 1 | Coluna na liberação | `pedidos_vendas_liberacao` | este contrato |
 | 2a | Escrita: campo no corpo do PUT da tela | `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido` (`pedidos_liberacao.route.js:165`), mais o BFF (§6.1) | este contrato |
-| 2b | Leitura pelo MES: campo no corpo das rotas do Fluxo 4, como o `acompanhamento_qualidade` já aparece lá | `GET /pedidos_liberados` e `/:numero/itens`: `COLUNAS` em `pedidos_liberados.route.js:25-32` (`v.status_liberacao, v.acompanhamento_qualidade`) | este contrato |
+| 2b | Leitura pelo MES: campo no corpo das rotas do Fluxo 4, como o `acompanhamento_qualidade` já aparece lá | `GET /pedidos_liberados` e `/:numero/itens`: `COLUNAS` em `pedidos_liberados.route.js:36` (`v.status_liberacao, v.acompanhamento_qualidade, v.faturar_em_partes`) | este contrato; ✅ na `develop` de 12/11 (`faturar_em_partes` já sai nas duas rotas) |
 | 3 | Leitura pelo MES | `api-pcp` `omie-integracao.ts:141` | frente do MES |
 | 4 | Coluna em `pedidos` | migration `20260929150000_pedido_acompanhamento_qualidade` | frente do MES |
 | 5 | Uso na geração da OP | `pedidos.service.ts:306` | frente do MES |
