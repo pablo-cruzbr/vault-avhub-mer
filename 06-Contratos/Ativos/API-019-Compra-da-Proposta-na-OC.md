@@ -13,7 +13,7 @@ decisoes: [N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, N16-157]
 develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11]
 tags: [contrato, compras, proposta, oc, c6, c7]
 criado: 2026-11-11
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 dono: Nathan
 fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 14, 15 e 30; item 7 de "O que falta"), Registro-de-Decisoes N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, api-acos-vital develop 637f183, av-hub develop d0e8f8f, banco do ambiente Docker local (dados do tst) em 11/11/2026]
 ---
@@ -38,8 +38,8 @@ Nós `C6` e `C7` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]] (dona
 ## 4. Como está hoje
 
 - **Banco.** 🟡 A proposta já guarda a cotação de compra por item: `core_comercial.propostas_itens` tem `fornecedor` (texto livre), `origem_compra`, `qtd_compra`, `unidade_compra`, `preco_unit_compra`, `ipi_compra_pct`, `st_compra_valor`, `frete_compra_valor`, `custo_liquido_unit` e `custo_liquido_total`; o cabeçalho `core_comercial.propostas` tem `frete_compra_tipo` e `frete_compra_valor` (banco do Docker local, dados do tst, 11/11). O pedido do Hub liga as duas pontas: `core_comercial.pedidos_venda` (`id_proposta`, `numero_proposta`, `numero_pedido_omie`, `codigo_empresa`) e `core_comercial.pedidos_venda_itens` (`id_proposta_item`, `codigo_produto_omie`).
-- **API.** 🔴 Nenhuma rota de Compras lê esses campos. A tela da OC lê o pedido por `GET /compras/pedidos-venda/{numero}` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:92` (`router.get("/:numero"`), que devolve só o cabeçalho do Omie e os itens de `vw_pedido_venda_itens_compra`.
-- **Front.** 🔴 A tela `/compras/nova` mostra, por item, o destino no PV e mais nada da venda: `av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:240` (`<DestinoItem item={item} indice={indice} />`). O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
+- **API.** 🔴 Nenhuma rota de Compras lê esses campos. A tela da OC lê o pedido por `GET /compras/pedidos-venda/{numero}` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:175` (`router.get("/:numero"`), que devolve só o cabeçalho do Omie e os itens de `vw_pedido_venda_itens_compra`.
+- **Front.** 🔴 A tela `/compras/nova` mostra, por item, o destino no PV e mais nada da venda: `av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:245` (`<DestinoItem item={item} indice={indice} />`). O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
 
 ## 5. Regras de negócio
 
@@ -121,6 +121,8 @@ Não se aplica: a mudança é só de leitura, dentro da rota da seção 8; nenhu
 ## 9. Banco (SQL)
 
 Não se aplica: as colunas já existem (seção 4). Se o Gustavo preferir, a junção pode virar uma view (`core_comercial.vw_pedido_venda_compra_proposta`), sem mudar o contrato da rota.
+
+✅ **Foi o caminho escolhido, aplicado no teste em 12/11:** a view `core_comercial.vw_pedido_venda_compra_proposta` (`:19381`) e o índice `ix_pedidos_venda_numero_omie_sem_zeros` (`:32100`), para casar o PV do Omie pelo número sem zeros à esquerda ([[Dump-AvHub-Teste-2026-11-12]]). A rota da `api-acos-vital` lê a view: `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:72` (`vw_pedido_venda_compra_proposta`). Falta a produção.
 
 ## 10. Permissões e perfis
 

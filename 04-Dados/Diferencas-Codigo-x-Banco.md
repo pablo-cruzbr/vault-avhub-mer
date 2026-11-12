@@ -1,10 +1,10 @@
 ---
 tags: [dados, auditoria, codigo-x-banco, mes, av-hub]
 criado: 2026-10-14
-atualizado: 2026-10-29
+atualizado: 2026-11-12
 status: vigente
 dono: Nathan
-fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 0384e89 (develop), av-hub 758d5f0 (develop), omie-elt-pipeline 0f739f0, Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, conferência por script em 14/10 e 29/10, Dump-AvHub-Teste-2026-11-09 (09/11/2026)]
+fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 0384e89 (develop), av-hub 758d5f0 (develop), omie-elt-pipeline 0f739f0, Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, conferência por script em 14/10 e 29/10, Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-12 (12/11/2026) com api-acos-vital bebca52 e av-hub 16891f9 (develop)]
 ---
 
 # Diferenças entre código e banco
@@ -22,6 +22,7 @@ O que existe no banco sem código (ou o código usa só em parte) e o que o cód
 | av-hub: objetos de banco citados no SQL das rotas x dump | ✅ todos existem, exceto os já listados abaixo |
 | av-hub: migrations dos contratos 46/47 x dump | ✅ a **047b** está aplicada no dump de 29/10 (estava 🔴 em 14/10) |
 | av-hub: `core_comercial` | ✅ existe no dump de 29/10 (23 tabelas, 3 views, 12 funções) e o código de `/comercial/*` o usa; a decisão N16-116 diz que `core_comercial` não existirá 📝 |
+| av-hub: objetos novos do dump de 12/11 x `develop` de 12/11 | ✅ a `api-acos-vital` (`bebca52`) já usa os objetos novos (cabeçalho da unidade, LOG-57, LOG-58, API-019, carteira de clientes) e não usa mais `unidades_emissoras`; no `av-hub` (`16891f9`) sobram 3 comentários que citam a tabela antiga 🟡 ([[Dump-AvHub-Teste-2026-11-12]]) |
 
 ## MES: banco sem código (ou com pouco)
 
@@ -77,6 +78,12 @@ Resolvidos desde 14/10 (só na `develop`): `GET /itens/custo` com `alterado_desd
 | API-009 (`requisicoes_compra_referencia_mes` e a view) | ✅ existem no dump de 29/10 | ✅ | `vw_requisicoes_compra_referencia_mes.route.js:59` |
 | rotas `/comercial/*` (funções `core_comercial.fn_proposta_*`, `fn_cliente_omie_registrar`, `fn_parametros_custo_salvar`, `vw_propostas_lista`) | ✅ existem no dump de 29/10 só a criação e o cálculo do item (`fn_proposta_criar`, `fn_proposta_item_calcular`); as de revisar, aprovar, cancelar, copiar, transformar e expirar, e as tabelas `core_comercial.pedidos_venda` e `pedidos_venda_itens`, aparecem no dump do banco de teste de 04/11/2026; o envio ao Omie (`fn_pedido_venda_*`) e a `fn_proposta_transformar` de 4 argumentos, no de 09/11/2026 ([[Dump-AvHub-Teste-2026-11-09]]), com as migrations fora do repositório (BL-024) | ✅ | `core_comercial/aggregates/*` |
 | views `vw_ritmo_*_hora`, `vw_volume_pedidos_diario*` | não existem; **só aparecem em comentários** (as rotas foram reconstruídas) | ✅ sem problema | `ritmo_faturamento_hora.route.js:8` |
+| `core.vw_unidades_cabecalho` no lugar de `core_comercial.unidades_emissoras` (a emissora virou a unidade, 10/11) | ✅ no dump de 12/11 a view existe e a tabela saiu (`:17658`) | ✅ | `api-acos-vital` `src/schemas/core_comercial/aggregates/cadastros/cadastros.route.js:83` (`FROM core.vw_unidades_cabecalho e`) |
+| LOG-57: `core_comercial.vw_divergencias_compra` e `fn_divergencia_compra_decidir` | ✅ existem no dump de 12/11 (`:19278`, `:2541`) | ✅ | `api-acos-vital` `src/schemas/core_comercial/tables/divergencias_compra/divergencias_compra.route.js:11` (`vw_divergencias_compra`) |
+| LOG-58: `core_vendas_faturamento.vw_avisos_mes_compra` e `fn_aviso_mes_compra_registrar` | ✅ existem no dump de 12/11 (`:26232`, `:7295`) | ✅ | `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:36` (`vw_avisos_mes_compra`) |
+| API-019: `core_comercial.vw_pedido_venda_compra_proposta` | ✅ existe no dump de 12/11 (`:19381`) | ✅ | `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:72` (`vw_pedido_venda_compra_proposta`) |
+| Carteira de clientes e responsável da proposta: `fn_carteira_clientes`, `fn_emissao_opcoes` | ✅ existem no dump de 12/11 (`:7470`, `:2962`) | ✅ | `api-acos-vital` `src/schemas/core_comercial/aggregates/parceiros/parceiros.route.js:124` (`fn_carteira_clientes(`) e `cadastros.route.js:155` (`fn_emissao_opcoes`) |
+| Comentários do `av-hub` que ainda citam `unidades_emissoras` e `vw_unidades_emissoras` | a tabela e a view saíram no dump de 12/11 | 🟡 só comentário, sem efeito no código | `av-hub` `app/api/comercial/[...rota]/route.ts:46` (`unidades_emissoras ainda diz`), `components/Propostas/PropostaForm/TransformarModal.tsx:169` (`unidades_emissoras.id_unidade_conta_omie`), `components/Propostas/PropostaForm/useEmpresasEmissoras.ts:15` (`vw_unidades_emissoras`) |
 | `auth.rotas_telas` com `/fluxo/*`, `/itens_pedido_custo`, `/compras/requisicoes/eventos`, `/comercial/*` | tabela existe; linhas ❓ | ❓ | [[RBAC-e-Permissoes]] |
 
 ## Entre os sistemas (contrato x código)

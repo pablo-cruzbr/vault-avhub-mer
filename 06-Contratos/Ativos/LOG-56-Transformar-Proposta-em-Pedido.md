@@ -3,7 +3,7 @@ id: LOG-56
 titulo: "Transformar proposta em pedido: as respostas que faltam e as pontas soltas da tela"
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento]
 criado: 2026-11-09
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: parcial
 dono: Nathan
 autor: Robert
@@ -15,7 +15,7 @@ nos_0b: [V0.6, V0.7, V1, V2]
 notas_afetadas: [01-Proposta-de-Venda, 03-Pedido-de-Venda-e-Liberacao, Mapa-IncluirPedido-Omie, Roteiro-da-Proposta-em-Diante, AV-Hub-Front, AV-Hub-API, MES-Backend, Backlog-Frente-Robert, Backlog-Frente-Comercial-e-Suprimentos, Riscos, Pontas-Soltas, Onde-Estamos, Banco-AvHub]
 depende_de: [BL-071, BL-062]
 decisoes: [N16-150, N16-152, N16-89, N16-05, N16-29, N16-90, N16-149, N16-79, N16-98, N16-154]
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8, 20 páginas, substitui a v7 de 09/11)", "PDF de Robert de 09/11/2026 (adendo v4, refaturamento da HRM 1.01.98)", "Q&A de 09/11/2026 Nathan → Robert, rodada 1, consolidado pelo Nathan (fora do vault: ../Perguntas-e-Respostas/QA-2026-11-09_Nathan-para-Robert_contrato-transformar-v7.md)", "Dump do Avhub de 04/11/2026 (04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
 ---
 
@@ -79,32 +79,32 @@ Base: av-hub `6fcbba6` e api-acos-vital `655896a`. Cada âncora usa o trecho que
 
 | Camada | O quê | Âncora |
 |---|---|---|
-| API | ✅ `POST /comercial/propostas/{id}/transformar` valida, chama `fn_proposta_transformar` e envia ao Omie na mesma requisição | `api-acos-vital` `propostas.route.js:603` (`"/propostas/:id/transformar"`), `:611` (`fn_proposta_transformar`) |
-| API + Front | ✅ R5 completo e provado no Omie de teste: a observação da nota chega ao Omie | `propostas.route.js:598` (`z.string().trim().max(5000)`); `av-hub` `TransformarModal.tsx:276` (`dados_adicionais_nf: paraPipe(observacao)`) |
+| API | ✅ `POST /comercial/propostas/{id}/transformar` valida, chama `fn_proposta_transformar` e envia ao Omie na mesma requisição | `api-acos-vital` `propostas.route.js:645` (`"/propostas/:id/transformar"`), `:611` (`fn_proposta_transformar`) |
+| API + Front | ✅ R5 completo e provado no Omie de teste: a observação da nota chega ao Omie | `propostas.route.js:631` (`z.string().trim().max(5000)`); `av-hub` `TransformarModal.tsx:291` (`dados_adicionais_nf: paraPipe(observacao)`) |
 | Front | ✅ R9 corrigido: o front manda `bloqueado`, o nome que a API declara | `TransformarModal.tsx:141` (`const [bloqueado, setBloqueado]`), `:277` (`bloqueado,`) |
 | Front | ✅ R4: tipo da venda obrigatório | `TransformarModal.tsx:143` (`const [tipoVenda, setTipoVenda]`), `:278` (`numero_contrato: tipoVenda`) |
-| Front | ✅ R3: categoria obrigatória, sem pré-seleção | `TransformarModal.tsx:147` (`const [codigoCategoria, setCodigoCategoria]`), `:251` (`SEM pré-seleção (Nathan, 09/11)`), `:279` (`codigo_categoria: codigoCategoria`) |
-| Front | ✅ Aviso de refaturamento só pela descrição; alcança as três contas, que usam três códigos diferentes | `TransformarModal.tsx:88` (`/refat\|reaft/i.test(c.descricao)`) |
-| Front | ✅ A condição do Omie, causa da primeira recusa: campo próprio na aba de condições, lista por unidade | `AbaCondicoes.tsx:118` (`proposta-condicao-omie`), `comercial-propostas.ts:254` (`codigo_condicao_pagamento: string`), `propostas.ts:738` (`buscarCondicoesOmie`) |
+| Front | ✅ R3: categoria obrigatória, sem pré-seleção | `TransformarModal.tsx:152` (`const [codigoCategoria, setCodigoCategoria]`), `:251` (`SEM pré-seleção (Nathan, 09/11)`), `:279` (`codigo_categoria: codigoCategoria`) |
+| Front | ✅ Aviso de refaturamento só pela descrição; alcança as três contas, que usam três códigos diferentes | `TransformarModal.tsx:88` (`const ehRefaturamento = (c: CategoriaUnidadeProps)`, que testa `refat` ou `reaft` na descrição) |
+| Front | ✅ A condição do Omie, causa da primeira recusa: campo próprio na aba de condições, lista por unidade | `AbaCondicoes.tsx:118` (`proposta-condicao-omie`), `comercial-propostas.ts:254` (`codigo_condicao_pagamento: string`), `propostas.ts:745` (`buscarCondicoesOmie`) |
 | Front | ✅ "Tentar novamente" no card, para o pedido que ficou em erro | `AndamentoProposta.tsx:87` (`status_sincronizacao_omie === 'erro'`), `propostas.ts:357` (`reenviarPedidoAoOmie`) |
-| Front | ✅ Busca de produto por unidade, por rota própria; a genérica continua servindo Catálogo, OC e Suprimentos | `route.ts:105` (`'/produtos-da-proposta'`), `propostas.ts:677` (`buscarProdutosDaProposta`), `:652` (`buscarProdutos(q: string, signal?: AbortSignal)`) |
+| Front | ✅ Busca de produto por unidade, por rota própria; a genérica continua servindo Catálogo, OC e Suprimentos | `route.ts:105` (`'/produtos-da-proposta'`), `propostas.ts:654` (`buscarProdutosDaProposta`), `:652` (`buscarProdutos(q: string, signal?: AbortSignal)`) |
 | Front | ✅ Categoria por rota própria, sem roubar o `/categorias` de Suprimentos (§6.4) | `route.ts:51` (`'/categorias-da-proposta'`), `:135` (`destino: '/orcamento/categorias'`) |
-| Backend | ✅ Trava do envio e saída única: erro que não é do Omie vira 500 `ENVIO_FALHOU_NA_API`, com o pedido em erro e a trava solta | `pedidoOmie.js:128` (`fn_pedido_venda_envio_iniciar`), `:234` (`ENVIO_FALHOU_NA_API`); `TransformarModal.tsx:44` |
+| Backend | ✅ Trava do envio e saída única: erro que não é do Omie vira 500 `ENVIO_FALHOU_NA_API`, com o pedido em erro e a trava solta | `pedidoOmie.js:165` (`fn_pedido_venda_envio_iniciar(:id`), `:271` (`ENVIO_FALHOU_NA_API`); `TransformarModal.tsx:44` |
 | SQL | ✅ A liberação existe inteira (Contrato 26): coluna, trava depois do `importado_mes_em` e histórico completo (`liberado` / `alterado` / `importado_mes`) | dump de 04/11: `fn_pedidos_vendas_liberacao_regras`, `fn_pedidos_vendas_liberacao_historico` |
-| API | ✅ Novo na v8: as duas rotas da liberação existem lado a lado e fazem coisas diferentes. `/pedidos_liberacao` é a da tela (`GET /` e `PUT /:codigo_empresa/:numero_pedido`); `/pedidos_liberados` é a do MES (`GET /`, `GET /:numero/itens`, `POST /:numero/importado`) | `core_vendas_faturamento/index.js:193-194` (`{ path: "/pedidos_liberacao" }`, `{ path: "/pedidos_liberados" }`); `pedidos_liberacao.route.js:89` (`router.get("/"`), `:165` (`router.put("/:codigo_empresa/:numero_pedido"`); `pedidos_liberados.route.js:57, 115, 143` |
+| API | ✅ Novo na v8: as duas rotas da liberação existem lado a lado e fazem coisas diferentes. `/pedidos_liberacao` é a da tela (`GET /` e `PUT /:codigo_empresa/:numero_pedido`); `/pedidos_liberados` é a do MES (`GET /`, `GET /:numero/itens`, `POST /:numero/importado`) | `core_vendas_faturamento/index.js:193-194` (`{ path: "/pedidos_liberacao" }`, `{ path: "/pedidos_liberados" }`); `pedidos_liberacao.route.js:97` (`router.get("/"`), `:165` (`router.put("/:codigo_empresa/:numero_pedido"`); `pedidos_liberados.route.js:57, 115, 143` |
 
 ### 4.2 O que ainda falta
 
 | Camada | O quê | Âncora / evidência |
 |---|---|---|
 | Omie | 🟡 O pedido leva `informacoes_adicionais.codigo_conta_corrente` com a conta padrão da conta Omie (`parametros_pedido_venda_omie`); falta provar no Omie de teste (BL-081) | Teste de 09/11, pedido `PV-000002` (o Omie recusou sem a conta). Hoje: `pedidoOmie.js:73,152` (`e9878b7`); migration log56 `:408` |
-| Front + API | 🟡 API ✅ o `esquemaEnvioOmie` aceita R1 e R2 (obrigatórios no `/transformar`); Front 🔴 o modal ainda não pergunta (passo 11, Robert) | `TransformarModal.tsx:141-147`; `propostas.route.js:604` (`qualidade_acompanha: previsaoObrigatoria`), `:607` (`e9878b7`) |
+| Front + API | 🟡 API ✅ o `esquemaEnvioOmie` aceita R1 e R2 (obrigatórios no `/transformar`); Front 🔴 o modal ainda não pergunta (passo 11, Robert) | `TransformarModal.tsx:141-147`; `propostas.route.js:635` (`qualidade_acompanha: previsaoObrigatoria`), `:607` (`e9878b7`) |
 | Front (BFF) | 🔴 Novo na v8: o BFF da liberação monta o corpo do PUT à mão e valida só a Qualidade; campo novo que a API venha a aceitar morre aqui, sem erro | `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:27-29` (`typeof acompanha !== 'boolean'`), `:51` (`body: JSON.stringify({ acompanhamento_qualidade: acompanha, updated_by: idUsuario })`) |
-| API | ✅ `GET /comercial/propostas/{id}/prontidao-omie` existe, com os 5 códigos; o BFF ainda falta (passo 12, Robert) | `propostas.route.js:646` (`e9878b7`); migration log56 `:635`; `propostas.ts:377` (`getProntidaoPedido`), que devolve `null` em 404 |
-| Permissão | ✅ `GET /compras/condicoes-pagamento` tem linha para a tela `propostas` desde a migration de 05/11 (teste; produção pendente) | `app/api/comercial/condicoes-pagamento/route.ts`; migration `2026-11-05_condicoes_pagamento_encargos.sql:84` |
-| SQL | ✅ Aplicadas no teste (dump de 10/11); ficam com o DBA, fora do repositório (N16-155); produção pendente | §9; Q&A de 09/11 (P4) |
+| API | ✅ `GET /comercial/propostas/{id}/prontidao-omie` existe, com os 5 códigos; o BFF ainda falta (passo 12, Robert) | `propostas.route.js:677` (`"/propostas/:id/prontidao-omie"`); migration log56 `:635`; `propostas.ts:377` (`getProntidaoPedido`), que devolve `null` em 404 |
+| Permissão | ✅ `GET /compras/condicoes-pagamento` tem linha para a tela `propostas` desde a migration de 05/11 (teste; produção pendente) | `app/api/comercial/condicoes-pagamento/route.ts`; migration `2026-11-05_condicoes_pagamento_encargos` (fica com o DBA, fora do repositório, N16-155; a linha de `auth.rotas_telas` é dado e não aparece no dump de esquema ❓) |
+| SQL | ✅ Aplicadas no teste (dump de 10/11; o índice único `uq_pedidos_venda_omie`, em `(codigo_empresa_omie, codigo_pedido_omie)`, no dump de 12/11, que tirou o `ix_pedidos_venda_omie` parcial, [[Dump-AvHub-Teste-2026-11-12]]); ficam com o DBA, fora do repositório (N16-155); produção pendente | §9; Q&A de 09/11 (P4) |
 
-✅ **Saíram desta lista em 11/11 (N16-154):** a empresa emissora passou a ser a própria unidade e `core_comercial.unidades_emissoras` saiu (migration `2026-11-10_comercial_emissora_vira_unidade`). `GET /comercial/empresas_emissoras` continua na API do Hub e já devolve `id_unidade_conta_omie`, igual ao `id_unidade` (`api-acos-vital` `cc3fbb3`, `cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`). Com isso o modal, que usa o `id_unidade`, fica certo também na HRM, e a pendência de dado da N16-98 (HRM na conta de Mogi) deixa de existir. ❓ Falta ver a migration aplicada num dump novo, e aplicá-la na produção.
+✅ **Saíram desta lista em 11/11 (N16-154):** a empresa emissora passou a ser a própria unidade e `core_comercial.unidades_emissoras` saiu (migration `2026-11-10_comercial_emissora_vira_unidade`). `GET /comercial/empresas_emissoras` continua na API do Hub e já devolve `id_unidade_conta_omie`, igual ao `id_unidade` (`api-acos-vital` `cc3fbb3`, `cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`). Com isso o modal, que usa o `id_unidade`, fica certo também na HRM, e a pendência de dado da N16-98 (HRM na conta de Mogi) deixa de existir. ✅ A migration está aplicada no teste: no dump de 12/11 a tabela e a coluna `id_unidade_emissora` saíram, e o cabeçalho do documento vem de `core.vw_unidades_cabecalho` ([[Dump-AvHub-Teste-2026-11-12]]). Falta aplicá-la na produção.
 
 ## 5. Regras de negócio
 

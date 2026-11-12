@@ -1,11 +1,11 @@
 ---
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento, parte]
 criado: 2026-11-09
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Catálogo da API da Omie consultado em 09/11/2026 pelo conector do Omie (produtos/pedido:AlterarPedidoVenda, só a descrição; a operação não foi executada)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
 ---
 
@@ -82,7 +82,7 @@ Sem perfil novo. `Admin (Dev)` não é ator. As entradas do BFF precisam da linh
 | Rota | Estado | Quem |
 |---|---|---|
 | `/produtos-da-proposta`, `/categorias-da-proposta`, `/contas-correntes`, `/pedidos/:id/enviar-omie` | no BFF; falta a linha | Gustavo |
-| `/compras/condicoes-pagamento` para a tela `propostas` | ✅ mapeada para `propostas` desde 05/11 (`2026-11-05_condicoes_pagamento_encargos.sql:84`; teste, produção pendente) | Gustavo |
+| `/compras/condicoes-pagamento` para a tela `propostas` | ✅ mapeada para `propostas` desde 05/11 (migration `2026-11-05_condicoes_pagamento_encargos`, com o DBA e fora do repositório, N16-155; teste, produção pendente) | Gustavo |
 | `/propostas/:id/prontidao-omie` | falta no BFF e a linha | Robert + Gustavo |
 | `/comercial/pedidos/{id}/conta-corrente` (§8.2) | ✅ tela `pedidos-venda-financeiro` (inativa, sem perfil) com `PUT /comercial/pedidos/*/conta-corrente` (`pode_editar`) e `GET /contas_correntes` (`pode_visualizar`); falta decidir os perfis | Gustavo |
 
@@ -169,7 +169,7 @@ A coluna "Depende de" foi remontada a partir do PDF, cuja tabela saiu desalinhad
 - ❓ As duas migrations da §9, com o segundo item: de onde vem o `obs_venda` do payload (§7.7). É o maior risco aberto: se vier das observações da proposta, o vendedor derruba o próprio pedido da Liberar Pedidos escrevendo "refat" num campo de texto livre, nas três unidades.
 - ❓ `auth.rotas_telas` para a lista de condições (§10).
 - ❓ O join do valor inicial e a escolha entre view e SELECT da rota (§7.6).
-- ✅ Encerrado: a pendência de dado da HRM (N16-98) deixou de existir com a N16-154 (10/11). A emissora é a própria unidade e cada uma usa a própria conta Omie. ❓ Falta ver num dump novo que a migration `2026-11-10_comercial_emissora_vira_unidade` foi aplicada.
+- ✅ Encerrado: a pendência de dado da HRM (N16-98) deixou de existir com a N16-154 (10/11). A emissora é a própria unidade e cada uma usa a própria conta Omie. ✅ A migration `2026-11-10_comercial_emissora_vira_unidade` está aplicada no teste (dump de 12/11, [[Dump-AvHub-Teste-2026-11-12]]); falta a produção.
 - ❓ Refaturamento, com o alcance corrigido (§7.7): enquanto a regra do G6 tiver a porta da observação, pedido de qualquer unidade some da Liberar Pedidos por causa de texto livre; pela porta da categoria, o `1.01.96` de Mogi some sempre, enquanto o de Uberaba e o da HRM continuam entrando na base de comissão. O aviso da tela alerta nas três; a regra, não. A N16-152 (b) resolve os dois lados ([[LOG-56-Transformar-Proposta-em-Pedido-Adendo-v4]]).
 - ✅ Encerrado: o tipo da venda continua em `numero_contrato` (confirmação do Nathan, 09/11).
 

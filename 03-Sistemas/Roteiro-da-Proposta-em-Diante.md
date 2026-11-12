@@ -2,7 +2,7 @@
 id: roteiro-proposta-em-diante
 tags: [roteiro, proposta, pedido-de-venda, compras, custo-real, comissao, api-acos-vital]
 criado: 2026-10-27
-atualizado: 2026-11-05
+atualizado: 2026-11-12
 status: proposta
 dono: Nathan
 fontes: ["LOG-52 (status em 27/10/2026)", "Registro-de-Decisoes N16-110 a N16-112", "Perguntas-Proposta-Pedido-Comissao (OQ-16, OQ-21, OQ-48)", "Dump do Avhub para referência (completo), 26/10/2026", "av-hub branch refactor/menu-enxuto-vendas-orcamento-compras (11844de)", "api-acos-vital 0384e89 src/schemas/core_comercial (28 e 29/10)", "av-hub 758d5f0 app/api/comercial (29/10)", "[[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]]"]
@@ -89,7 +89,7 @@ Tudo abaixo é o conteúdo completo da nota original, sem cortes.
 - **Os contratos SQL e de API desta parte foram removidos em 29/10/2026.** O Robert cria os novos já sobre `core_vendas_faturamento` e a API do Hub (N16-111, N16-112, N16-116), com o Gustavo revisando o banco.
   - Mapa do que reusar: [[Contratos-da-v2|LOG-52]] §0 e a tabela de unificação em [[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]].
 - **Não existirá `core_comercial` (N16-116, 27/10/2026): a proposta fica em `core_vendas_faturamento`.** Os contratos novos nomeiam esse schema, e as rotas `/comercial/*` da fase 1 mudam de prefixo.
-- **O `core_comercial` está em produção, vazio** (dump de 26/10: só `categorias_suprimento` 17, `parametros_custo` 1 e `unidades_emissoras` 3; o dump de 29/10 tem as mesmas 23 tabelas). Quem faz: Gustavo e **Robert**. Pela N16-116 ele **sai**: o que for útil (parâmetros de custo, emissoras) migra para o lugar certo. ⚠️ O código de 28 e 29/10 (propostas, transformar em pedido) ainda grava em `core_comercial.*`; isso contradiz a N16-116 e está como dúvida no relatório de 29/10.
+- **O `core_comercial` está em produção, vazio** (dump de 26/10: só `categorias_suprimento` 17, `parametros_custo` 1 e `unidades_emissoras` 3; o dump de 29/10 tem as mesmas 23 tabelas). Quem faz: Gustavo e **Robert**. Pela N16-116 ele **sai**: o que for útil (parâmetros de custo, emissoras) migra para o lugar certo. ⚠️ O código de 28 e 29/10 (propostas, transformar em pedido) ainda grava em `core_comercial.*`; isso contradiz a N16-116 e está como dúvida no relatório de 29/10. No banco de teste de 12/11 as emissoras já migraram: `unidades_emissoras` saiu e a emissora é a própria unidade ([[Dump-AvHub-Teste-2026-11-12]]).
 
 ### 2. O fluxo, etapa por etapa
 

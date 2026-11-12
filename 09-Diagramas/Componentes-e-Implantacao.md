@@ -1,7 +1,7 @@
 ---
 tags: [diagramas, componentes, implantacao, infraestrutura, integracao]
 criado: 2026-10-14
-atualizado: 2026-10-29
+atualizado: 2026-11-12
 status: vigente
 dono: Nathan
 fontes: [v1 Diagramas-UML (9, 10, 11, 21, 22), 01-Projeto/Infraestrutura, Integracao-AvHub-MES, Dockerfiles dos repositórios, api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55, conferência de 29/10/2026 (api-pcp befd973, api-acos-vital f2fa237, av-hub 758d5f0, Dump Avhub de 29/10)]
@@ -136,7 +136,7 @@ flowchart TB
     S_COMERCIAL -.->|"cadastros usados pelo comercial"| S_CORE
 ```
 - ✅ A lista de schemas confere com o Dump Avhub de 29/10.
-- 🔴 `core_comercial` aparece no dump de 29/10 com 23 tabelas (`propostas`, `clientes`, `ofertas`, `unidades_emissoras` e outras), e as rotas `/comercial/*` da API o usam. No dump do banco de teste de 04/11/2026 o `core_comercial` tem 12 tabelas: saíram `ofertas`, `clientes` e as outras do módulo de teste, e entraram `pedidos_venda` e `pedidos_venda_itens`. A N16-116 (27/10) disse que ele não existiria e que a proposta ficaria em `core_vendas_faturamento`; a divergência está em decisão (Nathan e Robert).
+- 🔴 `core_comercial` aparece no dump de 29/10 com 23 tabelas (`propostas`, `clientes`, `ofertas`, `unidades_emissoras` e outras), e as rotas `/comercial/*` da API o usam. No dump do banco de teste de 04/11/2026 o `core_comercial` tem 12 tabelas: saíram `ofertas`, `clientes` e as outras do módulo de teste, e entraram `pedidos_venda` e `pedidos_venda_itens`. A N16-116 (27/10) disse que ele não existiria e que a proposta ficaria em `core_vendas_faturamento`; a divergência está em decisão (Nathan e Robert). No dump de teste de 12/11 o `core_comercial` tem 16 tabelas: saiu `unidades_emissoras` (a emissora é a unidade) e entraram `divergencias_compra`, `divergencias_compra_eventos` e `parametros_carteira_clientes`, entre outras ([[Dump-AvHub-Teste-2026-11-12]]).
 - 🟡 As ligações entre schemas vieram do v1 e não foram relidas no dump.
 - `core_estoque` não tem tabela: o Estoque é do MES.
 

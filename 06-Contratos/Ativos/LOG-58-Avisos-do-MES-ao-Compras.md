@@ -96,6 +96,9 @@ Nasce em `Q3` ([[08-Qualidade-Entrada]]) e em `R5` ([[07-Recebimento]]) e chega 
 
 ## 9. Banco (SQL)
 
+> [!info] Aplicado no banco de teste (dump de 12/11)
+> Está no [[Dump-AvHub-Teste-2026-11-12]] com as colunas abaixo: `avisos_mes_compra` (`:23757`), `ordens_compra.id_aviso_mes` (`:18986`, única quando preenchida, `uq_ordens_compra_id_aviso_mes`), `vw_avisos_mes_compra` (`:26232`), `fn_aviso_mes_compra_registrar` (`:7295`) e `fn_aviso_mes_compra_tratar` (`:7371`). Além do índice `(status, id_ordem_compra)`, o banco tem `(id_ordem_compra, created_at DESC)`. A rota da `api-acos-vital` já está na `develop` (`bebca52`). Falta a produção e o lado do MES.
+
 - **`core_vendas_faturamento.avisos_mes_compra`** (nova): `id uuid PK`, `id_aviso_mes uuid NOT NULL UNIQUE`, `tipo varchar(25) NOT NULL CHECK (tipo IN ('RECOMPRA_RNC','RECEBIMENTO_REABERTO'))`, `status varchar(12) NOT NULL DEFAULT 'ABERTO' CHECK (status IN ('ABERTO','RESOLVIDO'))`, `id_ordem_compra uuid NOT NULL` (FK), `id_ordem_compra_item uuid` (FK), `quantidade numeric(15,4) NOT NULL`, `unidade_medida varchar(20)`, `motivo text NOT NULL`, `codigo_documento varchar(30)`, `codigo_lote varchar(30)`, `numero_pedido_venda varchar(30)`, `decidido_por varchar(100)`, `decidido_em timestamptz`, `acao_tratamento varchar(15) CHECK (acao_tratamento IN ('RECOMPRA','SUBSTITUICAO','SEM_RECOMPRA'))`, `id_ordem_compra_recompra uuid` (FK), `motivo_tratamento text`, `tratado_por uuid`, `tratado_em timestamptz`, `created_at`, `updated_at`.
 - Índices: `(status, id_ordem_compra)`.
 - **`ordens_compra.id_aviso_mes uuid`** (nova, nula, FK): a OC de recompra aponta o aviso que resolveu.
