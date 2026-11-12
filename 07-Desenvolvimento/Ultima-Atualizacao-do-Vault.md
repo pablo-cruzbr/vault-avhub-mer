@@ -4,7 +4,7 @@ criado: 2026-11-05
 estado-em: 2026-11-12
 status: vigente
 dono: Nathan
-fontes: [git log -1 origin/develop de cada sistema em 2026-11-10 (origin/master no omie-elt-pipeline), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
+fontes: [git log -1 origin/develop de cada sistema em 2026-11-12, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Última atualização do vault
@@ -15,19 +15,19 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-10 (origin/master 
 
 ## Base atual
 
-**Data:** 10/11/2026. **Motivo:** atualização pelo comando "atualizar o vault" com o resultado da validação ponta a ponta feita em Docker local em 10/11/2026 (o fluxo físico, do pedido 28189 liberado até a entrega, rodou na `develop`). O teste rodou no av-hub `6fcbba6` e na api-acos-vital `d8de255`; depois dele a `develop` andou e o vault registra a de hoje: o av-hub PR #277 pôs no modal do transformar as duas respostas que faltavam (Qualidade e faturar em partes), e a api-acos-vital `cc3fbb3` acrescentou campos de cabeçalho de documento em `core.unidades` (ainda não descritos no vault). **Conferidas nesta atualização:** as raias [[01-Proposta-de-Venda]], [[03-Pedido-de-Venda-e-Liberacao]], [[04-PCP-Triagem-e-Destinacao]], [[05-Estoque-Atendimento]], [[06-Circuito-de-Compra]], [[08-Qualidade-Entrada]], [[11-Qualidade-Saida]], [[13-Expedicao]] e [[15-Custo-Real-e-Comissao]] (com as partes), [[Telas-por-Raia]], [[RBAC-e-Permissoes]], [[Onde-Estamos]], o backlog (BL-086 a BL-088; evidência no BL-003 e no BL-067), [[Pontas-Soltas]] (PS-046 a PS-053), [[Riscos]] (RS-023) e as perguntas OQ-49 a OQ-53. Antes, no mesmo dia, as citações de 16 notas de comissão, MES, estados e custo foram conferidas na `develop` de 10/11. **Ainda sem conferir:** as raias 02, 07, 09, 10, 12 e 14 continuam com o `develop-conferida` antigo; os campos novos de `core.unidades` (`cc3fbb3`).
+**Data:** 12/11/2026. **Motivo:** comando "atualizar o vault" depois dos merges de 12/11. Antes, no mesmo dia, o vault já tinha registrado a entrega do Gustavo (API e banco do API-019, do LOG-57 e do LOG-58, `bebca52`) e o front do C6 a C8 e dos avisos do MES (av-hub #282, #283 e #287). **Conferidas nesta atualização:** a tela da proposta (av-hub #278, #279, #286, #288 e #291) em [[01-Proposta-de-Venda]] e na parte técnica 1; o encargo da condição em [[15-Custo-Real-e-Comissao]] e no [[01-Motor-Atual-Como-Calcula]]; o follow-up do CCP (#284) na parte técnica 2 de [[06-Circuito-de-Compra]]; a chave do MES com a rota dos avisos em [[Chaves-e-Autenticacao]] e [[Integracao-AvHub-MES]]; a pipeline (a `develop` nova, o histórico de situação e previsão do pedido e a proposta da `tipos_frete`) em [[Pipeline-Omie]], [[03-Pedido-de-Venda-e-Liberacao]] e no dicionário [[Pedidos-de-Venda]]; as regras e as skills que diziam que a pipeline não tinha `develop`; [[Onde-Estamos]] e [[Pontas-Soltas]] (PS-054). **Ainda sem conferir:** o MES não mudou desde 10/11, e as raias 02, 07, 09, 10, 12 e 14 continuam com o `develop-conferida` antigo; os campos novos de `core.unidades` (`cc3fbb3`); as citações quebradas fora das notas tocadas (o `conferir-citacoes` acusava 73 antes desta atualização, a maior parte do `api-comercial` removido e de caminhos ambíguos).
 
 | Sistema | Ramo lido | Commit | Data do commit | Último merge |
 |---|---|---|---|---|
-| `api-acos-vital` | `origin/develop` | `cc3fbb3` | 10/11/2026 | commit direto na `develop`: campos de cabeçalho de documento em `unidades` |
-| `av-hub` | `origin/develop` | `44bb770` | 10/11/2026 | PR #277 (`feat/log-56-passo-11-qualidade-faturar-partes`) |
+| `api-acos-vital` | `origin/develop` | `bebca52` | 12/11/2026 | commit direto na `develop`: avisos do MES ao Compras (LOG-58) |
+| `av-hub` | `origin/develop` | `d82d58b` | 12/11/2026 | PR #291 (`feat/encargo-condicao-omie`) |
 | `api-pcp` | `origin/develop` | `2e564e6` | 10/11/2026 | PR #79 (`docs/guia-para-ia`) |
 | `app-pcp` | `origin/develop` | `4c11886` | 10/11/2026 | PR #64 (`docs/guia-para-ia`) |
-| `omie-elt-pipeline` | `origin/master` (não tem `develop`) | `0593c9f` | 10/11/2026 | PR #5 (`docs/guia-para-ia`) |
+| `omie-elt-pipeline` | `origin/develop` (existe desde 12/11; a `master`, de produção, está em `8f79d12` com o mesmo conteúdo) | `d8fddca` | 12/11/2026 | PR #7 (`feat/tipos-frete`) |
 
-São os commits do `develop-conferida` das notas **conferidas** nesta atualização; as raias não tocadas ainda dizem os commits de 05/11.
+São os commits do `develop-conferida` das notas conferidas nesta atualização; as raias não tocadas ainda dizem commits anteriores.
 
-**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 12/11/2026 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-12.sql`, [[Dump-AvHub-Teste-2026-11-12]]). Ele entrou em 12/11 sem a releitura da `develop`: a tabela "Base atual" continua com os commits de 10/11, e as raias que dizem "sem código" para o LOG-57, o LOG-58 e o API-019 (por exemplo, [[06-Circuito-de-Compra]]) foram conferidas no mesmo dia contra a `develop` de 12/11 (`api-acos-vital` `bebca52`, `av-hub` `16891f9`): a raia 06 (com as partes) passou a dizer que a API e o banco do LOG-57, do LOG-58 e do API-019 estão prontos e o front não, e as citações do LOG-56 foram corrigidas. As outras notas não foram relidas. As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
+**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 12/11/2026 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-12.sql`, [[Dump-AvHub-Teste-2026-11-12]]). Ele é anterior à migration do encargo da condição (PS-054). As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
 
 ## Como usar na próxima atualização
 
