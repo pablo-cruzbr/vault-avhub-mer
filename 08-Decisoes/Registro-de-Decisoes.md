@@ -90,7 +90,7 @@ Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (C
 - **Faturamento em partes e pedido sequencial:** N16-89, N16-91, N16-92, N16-93, N16-94, N16-97, N16-99, N16-100, N16-101, N16-130.
 - **Orçamento e base de preço (produto, fornecedor, score):** N16-06, N16-07, N16-16, N16-32, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72, N16-104, N16-107, N16-108, N16-114, N14-02, #39.
 - **Compras e OC (emissão, aprovação, requisição):** N14-03, N14-08, N14-14, N14-21, N14-23, N14-24, N14-25, N14-28, N14-29, N14-30, N14-33, DEC-3, N16-08, N16-123, N16-144, #50, #50b, #51, EC-04.
-- **Compra acima do valor da proposta:** N16-17, N16-18, N16-60, N16-61, N16-62, N16-63, N16-64, N16-65, N16-66, N16-67, N16-73, N16-76, N16-102.
+- **Compra acima do valor da proposta:** N16-159, N16-17, N16-18, N16-60, N16-61, N16-62, N16-63, N16-64, N16-65, N16-66, N16-67, N16-73, N16-76, N16-102.
 - **Custo real (por evento, NF de entrada, imposto da OC):** N16-09, N16-20, N16-22, N16-23, N16-37, N16-38, N16-40, N16-48, N16-53, N16-57, N16-86, N16-102, N16-144.
 - **Custo do lote e custo no Estoque:** #93, #94, #95, #97, #98, #99, N16-37, DEC-12.
 - **Comissão (cálculo, Controladoria, relatórios):** N16-10, N16-11, N16-12, N16-21, N16-34, N16-35, N16-39, N16-42, N16-43, N16-44, N16-45, N16-46, N16-47, N16-48, N16-49, N16-50, N16-51, N16-74, N16-77, N16-78, N16-103, N16-104, N16-105, N16-143, #90.
@@ -120,7 +120,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-73-a-N16-96]]: N16-73 a N16-96
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
-- [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026)
+- [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026)
 
 ## Onde está cada decisão
 
