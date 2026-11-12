@@ -59,6 +59,7 @@ O vendedor só vê o valor em reais depois que Compras aprova. Hoje quem valida 
 - **Bloqueio por NF:** o número da nota é digitado com zeros à esquerda. Sem os zeros, o bloqueio não casa e ninguém é avisado.
 - **Coordenadores:** total = ajuda de custo mais percentual sobre o faturamento do mês. O bloqueio por NF não vale para eles.
 - **Parâmetros:** faixas, impostos e despesas ficam em tabela com vigência. Hoje é "Maio/23", nas três unidades.
+- **Encargo da condição de pagamento:** desde 12/11/2026 a proposta e a simulação levam o encargo da condição do Omie (`encargo_pagamento`). O motor usa esse valor; sem ele (simulação antiga), procura a condição na tabela da vigência, como antes. ✅ `av-hub` `lib/simulador/motor.ts:189` (`const encargoInformado = entrada.encargo_pagamento ?? null;`) e `:230` (`const encargo = encargoInformado ??`), commit `d82d58b` (PR #291). Fora de 0 a 100%, o motor recusa (`:191`, `O encargo da condição de pagamento deve ficar entre 0% e 100%.`).
 
 ## O que muda no módulo novo
 
