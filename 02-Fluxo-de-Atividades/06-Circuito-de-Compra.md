@@ -97,9 +97,9 @@ O fluxo foi aprovado em 26/10. As decisões N16-120 a N16-143 são de 29/10/2026
 - 📝 `C6` a `C8` decididos em 26/10; sem código na `api-acos-vital` nem no front 🔴 (conferido em 29/10 e em 11/11: nenhuma rota `divergencias_compra`). `C6` e `C7` têm contrato: API-019 (`06-Contratos/Ativos`) (11/11, `para-implementar`); o `C8`, LOG-57 (11/11, `para-implementar`). Detalhe em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
 - ✅ O MES lê a OC do hub desde 15/10 (K4, `develop` do `api-pcp`) e as requisições do Compras com pedido de venda aparecem ao PCP na Triagem desde 23/10 (API-009). 🔴 Falta o PCP ver a OC do pedido na Triagem e na Destinação (BL-049) e o saldo futuro no Estoque (BL-050).
 - ✅ (`api-pcp` `src/compras/recebimento.service.ts:169` e `src/compras/recebimento.controller.ts:20`; leitura da OC em `src/integracao-avhub/oc-referencia-avhub.service.ts:97`) O recebimento e a leitura da OC pelo MES estão na `develop` do MES (15 a 26/10). A `main` do MES parou em 08/10.
-- ❓ Perfil do CCP criado pelo Nathan em 30/10/2026 (cadastro no banco, não conferido no ambiente; BL-017). No MES as rotas de Compras · CCP continuam exigindo só a permissão `movimentacoes`, então quem edita depende das permissões dadas ao perfil.
-- 🔴 Contrato de recompra por RNC e aviso de atraso ao PCP e ao vendedor.
-- 🔴 Contrato novo entre MES e hub para `C6` a `C8` e para os avisos da recompra por RNC (N16-127) e da reabertura do recebimento (N16-137).
+- 🟡 Perfil do CCP criado pelo Nathan em 30/10/2026 na produção (BL-017). No tst ele não existe, e Comprador e Gerência de Compras ainda editam o follow-up. O SQL que cria o perfil e deixa Compras só lendo está pronto (`../Perguntas-e-Respostas/perfil-CCP-followup.sql`, fora do vault), testado no Docker em 12/11; falta o Gustavo aplicar no tst e na produção. No MES as rotas de Compras · CCP continuam exigindo só a permissão `movimentacoes`, então quem edita depende das permissões dadas ao perfil.
+- 🔴 📝 Recompra por RNC e reabertura do recebimento: contrato LOG-58 (12/11, `para-implementar`). Aviso de atraso ao PCP e ao vendedor: sem contrato.
+- 📝 Contratos novos: `C6` e `C7` no API-019, `C8` no LOG-57, os avisos da recompra por RNC (N16-127) e da reabertura do recebimento (N16-137) no LOG-58.
 - ❓ Teste ponta a ponta com as chaves reais; versionar `fn_requisicao_mes_aplicar`.
 
 ## Detalhe técnico

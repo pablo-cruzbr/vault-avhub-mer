@@ -143,10 +143,10 @@ Estados propostos (N16-66, N16-73): `PENDENTE` (na lista do vendedor, sem tempo 
 | 1 | **Endurecer a regra de aprovação** depois da conversa com Compras (a regra atual já funciona); sem desenho nem data. Pendência cadastral: vincular usuários à Gerência de Compras (PS-008) | Nathan, com Compras | C2, C3 | 🟡 |
 | 2 | **MES ler as OCs do hub:** a leitura e a entrada da mercadoria no Recebimento estão na `develop` (K4, BL-051). Falta a OC do pedido para o PCP (BL-049) e o saldo futuro no Estoque (BL-050); BL-028 no hub | Robert (MES), Gustavo (API) | C0, R0 | ✅ (`api-pcp`) leitura e recebimento; 🔴 BL-049 e BL-050 |
 | 3 | Job do contrato 004/007 no MES (projeção da OC com fornecedor e valores, custo do lote): feito na `develop` (15 e 19/10, `6914fe9`, `97b9adc`). Falta o merge do MES para a `main` (BL-035) | Robert | C4, R4 | ✅ (`api-pcp`) `develop` |
-| 4 | **Perfil CCP:** edição só pelo CCP | Gustavo, Nathan | C5 | 🔴 |
+| 4 | **Perfil CCP:** edição só pelo CCP. O código já trava pela tela `followup`; falta o cadastro: SQL pronto e testado no Docker em 12/11 (`../Perguntas-e-Respostas/perfil-CCP-followup.sql`, fora do vault), para o Gustavo aplicar no tst e na produção | Gustavo, Nathan | C5 | 🟡 |
 | 5 | Remover ou arquivar `GET /requisicoes-compra` (contrato 003) e o comentário velho | Gustavo, Robert | — | 🟡 |
 | 6 | **Versionar** `fn_requisicao_mes_aplicar` (migration 034) | Gustavo | P3 | ❓ |
-| 7 | Contrato de **recompra por RNC** (decidido: o Compras é avisado no av-hub, N16-127) e da **reabertura do recebimento** (N16-137) | Nathan, Gustavo, Robert | Q3, C1 | 🔴 sem contrato |
+| 7 | Contrato de **recompra por RNC** (decidido: o Compras é avisado no av-hub, N16-127) e da **reabertura do recebimento** (N16-137): LOG-58 (12/11) | Nathan, Gustavo, Robert | Q3, C1 | 🔴 📝 |
 | 8 | Aviso ao PCP e ao vendedor quando a previsão de chegada atrasa o pedido de venda | Nathan | C5 | 📝 decidido: a mudança de data do CCP só avisa o vendedor, em Meus Pedidos (N16-64, N16-91); a previsão de faturamento é derivada (N16-88, N16-97); o PCP vê a vigente e todas as datas (N16-104); e-mail e notificações ficam para o futuro (N16-113) |
 | 9 | Dois formulários ou um para origem PCP e origem Compras (T-03): o MES exige pedido e prazo; o HUB aceita sem pedido | Nathan | P3, C0 | 🟡 |
 | 10 | Teste ponta a ponta do circuito com `AVHUB_MES_INTEGRACAO_KEY` e `API_KEY` reais | Robert, Gustavo | P3, C5 | ❓ |

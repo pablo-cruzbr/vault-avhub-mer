@@ -34,7 +34,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 | `RS-nn` | Risco | [[Riscos]] | 24 (até `RS-024`) | `RS-025` |
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |
 | `INT-nn` | Troca de dados entre o av-hub e o MES | [[Integracao-AvHub-MES]] | 9 (até `INT-09`) | `INT-10` |
-| `LOG-nn` | Contrato de lógica (regra de negócio, fluxo) | [[Contratos-da-v2]] (v2) e `06-Contratos/` (v3) | 55 na v2 e 2 na v3 (`LOG-56`, `LOG-57`) | `LOG-58` |
+| `LOG-nn` | Contrato de lógica (regra de negócio, fluxo) | [[Contratos-da-v2]] (v2) e `06-Contratos/` (v3) | 55 na v2 e 3 na v3 (`LOG-56` a `LOG-58`) | `LOG-59` |
 | `SQL-nnn` | Contrato de banco (tabela, migration, view) | idem | 17 na v2 | `SQL-022` |
 | `API-nnn` | Contrato de rota de API | idem | 17 na v2; `API-019` na v3 | `API-020` |
 | `CON-nn` | Consulta: pergunta formal a alguém, com resposta registrada | idem; modelo em [[Modelo-de-Consulta]] | 3 na v2 | `CON-04` |
