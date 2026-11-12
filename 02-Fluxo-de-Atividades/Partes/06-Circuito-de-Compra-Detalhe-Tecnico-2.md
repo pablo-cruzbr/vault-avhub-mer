@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, raia, compras, ccp, requisicao, oc, aprovacao, omie, fornecedor, p3, c0, c1, c2, c3, c4, c5, fn1, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-12
 status: vigente
 dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
 parte-de: "[[06-Circuito-de-Compra]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10, api-acos-vital bebca52 (LOG-57, LOG-58, API-019), av-hub 16891f9, api-pcp 2e564e6, em 2026-11-12]
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144, BL-086, OQ-52, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -34,7 +34,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-
 ### C2 e C3: aprovação (✅ (`api-acos-vital`) código igual à decisão)
 
 - ✅ (`api-acos-vital`) 📝 **Regra (N14-21):** OC que **excede R$ 30 mil** é aprovada pelo Gerente de Compras; OC **até R$ 30 mil** sai livre para os compradores. A Diretoria não participa.
-- ✅ **Como o código faz:** a OC nasce `aguardando_aprovacao`; a trigger de recálculo **aprova automaticamente** a OC cujo total em BRL é **menor ou igual** ao limite da unidade (`parametros_compras.limite_aprovacao`, 30.000,00 por padrão) e deixa `aguardando_aprovacao` a que passa do limite; OC já aprovada que sobe acima do limite volta a `aguardando_aprovacao` (Dump, linhas 6779-6794; texto da função em `docs/ENVIAR - contrato-compras-backend.md:649-694` do HUB). O HUB avisa "Acima de {limite}, ela nasce Aguardando aprovação" (`FecharCompra/useFecharCompra.ts:379-380` (`precisaAprovacao`), `FecharCompra/ResumoCompra.tsx:118` (`Acima de {toBRL`)). Quem aprova ou cancela uma OC aguardando é um usuário com `pode_aprovar` na tela `compras` (Gerência de Compras): `ordens_compra.route.js:1227-1237`. `condicoes_pagamento_compras.route.js:17` devolve o limite padrão 30.000,00 quando a unidade não tem linha.
+- ✅ **Como o código faz:** a OC nasce `aguardando_aprovacao`; a trigger de recálculo **aprova automaticamente** a OC cujo total em BRL é **menor ou igual** ao limite da unidade (`parametros_compras.limite_aprovacao`, 30.000,00 por padrão) e deixa `aguardando_aprovacao` a que passa do limite; OC já aprovada que sobe acima do limite volta a `aguardando_aprovacao` (Dump, linhas 6779-6794; texto da função em `docs/ENVIAR - contrato-compras-backend.md:649-694` do HUB). O HUB avisa "Acima de {limite}, ela nasce Aguardando aprovação" (`FecharCompra/useFecharCompra.ts:449-450` (`precisaAprovacao`), `FecharCompra/ResumoCompra.tsx:118` (`Acima de {toBRL`)). Quem aprova ou cancela uma OC aguardando é um usuário com `pode_aprovar` na tela `compras` (Gerência de Compras): `ordens_compra.route.js:1227-1237`. `condicoes_pagamento_compras.route.js:17` devolve o limite padrão 30.000,00 quando a unidade não tem linha.
 - 🟡 **Regra provisória:** o Nathan precisa de algo funcional agora; a regra vai ficar mais rígida quando conversarem com o setor de Compras (por exemplo, finalidade, tipo de item ou aprovação do Gerente também abaixo do limite). Não há desenho nem data.
 - 🟡 Segregação comprador ≠ aprovador: o `aprovado_por` vem do BFF (sessão), e a API só exige `pode_aprovar` na tela `compras`; **não** compara com `created_by` (`api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:1236`, `if (EXIGIR_PODE_APROVAR)`, e `:1241`, `usuarioTemPermissao(quem, "compras", "pode_aprovar")`). É o que a N16-123 decidiu. Na validação local em Docker de 10/11/2026, quem emitiu uma OC de R$ 35 mil aprovou a própria OC, como a N16-123 permite; a pergunta "quem emite pode aprovar?" foi reaberta na OQ-52. ❓ trava no banco não conferida. Evento `oc_enviada_aprovacao` só marca a mudança para `aguardando_aprovacao` (Dump, linha 6929).
 
@@ -56,7 +56,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-
 
 0. 📝 **N14-28 (15/10/2026): a requisição do Compras com vínculo a pedido de venda também deve aparecer no MES, antes da OC**, e a OC vinculada vai ao MES pela referência. Proposta: leitura nova `GET /compras/requisicoes/referencia` (BL-064, Gustavo; só leitura, sem `id_origem` e sem mexer no contrato 35), lida pelo mesmo job (BL-065, Robert), com aviso de compra duplicada ao requisitar. A tela "Nova requisição" precisa do campo de pedido de venda (BL-041). O que é de estoque, uso interno ou compra por fora não entra na Torre. O trecho de N14-20 abaixo, "a requisição em si não chega ao MES", vale só para requisição sem pedido de venda. Perguntas em [[Pontas-Soltas]] PS-034.
 1. 🔴 **A OC de uma requisição criada só no av-hub (C0) precisa ser lida pelo MES** (requisito de integração, N14-20). A requisição em si não chega ao MES (`id_origem` é `NOT NULL` em `requisicoes_compra_eventos`, Dump, linha 18683, então não gera marco), e isso fica assim: o MES lê a **OC**. Regra: (a) se o Compras vincula a requisição ou a OC a um pedido de venda, o PCP vê no MES que já existe OC para aquele pedido; (b) se a OC é para itens de **estoque** (sem pedido), o Estoque do MES mostra o **saldo futuro** ([[Glossario]]): saldo atual mais as OCs em andamento e a parte delas que preenche o estoque.
-   - ✅ **O que o av-hub já tem:** `ordens_compra.finalidade` (`pedidos_venda`, `recompra`, `estoque`, `uso_interno`; só as duas primeiras ligam a pedido de venda, `ordens_compra.route.js:91-93`, `:571-577`; sem finalidade a OC nasce `estoque`, `:981`); a tabela `ordens_compra_itens_vinculos` (item da OC para pedido de venda, `src/schemas/core_vendas_faturamento/index.js:40` (`ordens_compra_itens_vinculos`)); a view `vw_pedido_venda_itens_compra` (vendido, pendente, em OC, saldo, `vw_pedido_venda_compras.route.js:12`, `:144`); `GET /compras/pedidos-venda/:numero` e `GET /compras/pedidos-venda/:numero/compras` (`src/schemas/core_vendas_faturamento/index.js:213` (`/compras/pedidos-venda`), `vw_pedido_venda_compras.route.js:52`); e `GET /ordens-compra/referencia`, cujo item traz `destino[]` com `pedido_venda` (com `numero_pedido_venda`) e `estoque`, somando a quantidade do item (`vw_ordens_compra_referencia_mes.swagger.json:61-88`), mais `finalidade` e `situacao` da OC (`vw_ordens_compra_referencia_mes.route.js:44-47`). Os eventos do contrato 35 não são o caminho (só existem para requisição com `id_origem`).
+   - ✅ **O que o av-hub já tem:** `ordens_compra.finalidade` (`pedidos_venda`, `recompra`, `estoque`, `uso_interno`; só as duas primeiras ligam a pedido de venda, `ordens_compra.route.js:91-93`, `:571-577`; sem finalidade a OC nasce `estoque`, `:981`); a tabela `ordens_compra_itens_vinculos` (item da OC para pedido de venda, `src/schemas/core_vendas_faturamento/index.js:40` (`ordens_compra_itens_vinculos`)); a view `vw_pedido_venda_itens_compra` (vendido, pendente, em OC, saldo, `vw_pedido_venda_compras.route.js:12`, `:144`); `GET /compras/pedidos-venda/:numero` e `GET /compras/pedidos-venda/:numero/compras` (`src/schemas/core_vendas_faturamento/index.js:221` (`/compras/pedidos-venda`), `vw_pedido_venda_compras.route.js:52`); e `GET /ordens-compra/referencia`, cujo item traz `destino[]` com `pedido_venda` (com `numero_pedido_venda`) e `estoque`, somando a quantidade do item (`vw_ordens_compra_referencia_mes.swagger.json:61-88`), mais `finalidade` e `situacao` da OC (`vw_ordens_compra_referencia_mes.route.js:44-47`). Os eventos do contrato 35 não são o caminho (só existem para requisição com `id_origem`).
    - ✅ **Já feito no MES (`develop` do `api-pcp`):** o job que consome a referência (K4, `6914fe9`, 15/10; [[Contratos-da-v2|API-004]], [[Contratos-da-v2|API-007]]); o aviso de compra em andamento e o vínculo da parcial à OC ao requisitar (20/10, `c269aa7`); a entrada da mercadoria dessa OC no Recebimento, por OC e por NF (BL-051, ver [[07-Recebimento]]).
    - 🔴 **O que falta no MES:** mostrar a OC do pedido na Triagem, na Destinação e no Atendimento (BL-049); calcular e mostrar o saldo futuro no Atendimento e no Saldo (BL-050) ([[Contratos-da-v2|API-011]]). No hub, BL-028 (Gustavo) confere se a referência e uma consulta por produto e por pedido bastam.
 2. 🔴 `GET /requisicoes-compra` do MES ([[Contratos-da-v2|API-003]], `integracao-avhub.controller.ts:20-24`) ficou **sem consumidor** (a ida é por PUT).
@@ -65,7 +65,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-
 5. 🟡 A regra de aprovação é provisória: endurece depois da conversa com Compras (item C2/C3 acima).
 6. ❓ O SQL de `fn_requisicao_mes_aplicar` (migration 034) está em produção mas não versionado (Gustavo).
 7. ✅ **Travas da requisição do Compras, fixas desde 05/11/2026 (`1654f65`):** o `POST /compras/requisicoes` exige `finalidade` (400 `FINALIDADE_INVALIDA`), `material` que seja produto ativo do cadastro da unidade (400 `PRODUTO_INEXISTENTE`) e, se vier pedido de venda, que ele exista na unidade (400 `PEDIDO_VENDA_INEXISTENTE`) (`api-acos-vital` `requisicoes_compra.route.js:493-514`); o `PATCH` confere o pedido novo; e o `POST /compras/ordens` liga a trava "o pedido do vínculo é da unidade da OC" (`ordens_compra.route.js:1137-1140`). Antes dependiam da chave `COMPRAS_REQUISICAO_EXIGIR_CADASTRO`, padrão desligada, que o código não lê mais (contrato [[Contratos-da-v2|API-010]], N14-30, N14-31, N14-33).
-7. 🟡 Recompra por RNC não tem contrato: a OC antiga segue `atendida` (ver [[08-Qualidade-Entrada]], pendência 2).
+7. 🟡 Recompra por RNC: contrato LOG-58; a API do av-hub já recebe o aviso do MES (`POST /integracao/mes/avisos-compra`) e a OC de recompra aponta o aviso, mas o MES ainda não envia e a OC antiga segue `atendida` (ver [[08-Qualidade-Entrada]], pendência 2).
 8. 🟡 Um item cancelado pelo Compras volta a Requisições com motivo, e o PCP decide: abrir outra requisição ou devolver ao Estoque (`compras.service.ts:222-227`).
 
 ## C6, C7 e C8: a parte de compras do pedido da proposta
@@ -99,7 +99,7 @@ Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-ant
 
 ### Pedido de aprovação do vendedor (`C8`) 🟡
 
-Estados propostos (N16-66, N16-73): `PENDENTE` (na lista do vendedor, sem tempo limite), `APROVADO` (a compra segue), `REPROVADO` (em tratativa: entra na **lista de Compras**) e `RESOLVIDO` (Compras registrou a solução: novo valor, novo fornecedor, mantido ou pedido cancelado; o vendedor foi notificado). O tempo em cada estado é cronometrado.
+Estados (N16-66, N16-73; no banco de teste desde 12/11, com `INFORMATIVA` para a compra abaixo do cotado): `PENDENTE` (na lista do vendedor, sem tempo limite), `APROVADO` (a compra segue), `REPROVADO` (em tratativa: entra na **lista de Compras**) e `RESOLVIDO` (Compras registrou a solução: novo valor, novo fornecedor, mantido ou pedido cancelado; o vendedor foi notificado). O tempo em cada estado é cronometrado.
 
 ### Telas
 
@@ -114,20 +114,22 @@ Estados propostos (N16-66, N16-73): `PENDENTE` (na lista do vendedor, sem tempo 
 
 | Método e rota | Uso | Nó | Estado |
 |---|---|---|---|
-| `GET /divergencias_compra`, `POST /:id/aprovar`, `/:id/reprovar`, `/:id/resolver` | aviso ao vendedor, decisão dele e solução de Compras | `C8` | 🔴 🟡 nomes |
+| `GET /meus-pedidos/divergencias`, `POST /meus-pedidos/divergencias/:id/aprovar` e `/:id/reprovar` | aviso ao vendedor e decisão dele | `C8` | ✅ `api-acos-vital` `src/schemas/core_comercial/tables/divergencias_compra/divergencias_compra.route.js:235` (`meusPedidosDivergencias.post("/:id/aprovar"`) |
+| `GET /compras/divergencias`, `POST /compras/divergencias/:id/solucao` | lista de Compras e solução | `C8` | ✅ `api-acos-vital` `src/schemas/core_comercial/tables/divergencias_compra/divergencias_compra.route.js:167` (`comprasDivergencias.post("/:id/solucao"`) |
+| `GET /compras/avisos-mes`, `/:id`, `PATCH /:id`; `POST /integracao/mes/avisos-compra` (só o MES) | avisos de recompra por RNC e de recebimento reaberto | `C1` | ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:192` (`comprasAvisosMes.patch("/:id"`) |
 
 ### Dados
 
 | Dado | Regra |
 |---|---|
-| `divergencias_compra` (pedido, produto, valor da proposta, valor da compra, motivo, estado, quem decidiu e quando, solução, tempos) | uma linha por produto (N16-63); estados `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` 🟡 |
+| `divergencias_compra` (pedido, produto, valor da proposta, valor da compra, motivo, estado, quem decidiu e quando, solução, tempos) | uma linha por item da OC e PV (N16-63); estados `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` e `INFORMATIVA` ✅ no banco de teste ([[Dump-AvHub-Teste-2026-11-12]]) |
 
 ### O que falta (numeração da nota de proposta)
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 7 | `C6` e `C7` na tela de emissão da OC: mostrar a parte de compras da proposta, puxar fornecedor e impostos, editar, gravar o valor correto sem tocar a proposta. Contrato API-019 (`06-Contratos/Ativos`) (11/11); o imposto gravado na OC segue no BL-053 | Nathan, Gustavo | `C6`, `C7` | 🔴 📝 |
-| 12 | **`C8`:** aviso e aprovação em Meus Pedidos, tabela `divergencias_compra`, lista de Compras dos reprovados e registro da solução. Contrato LOG-57 (11/11): a OC espera o vendedor; nesta etapa só o PV de proposta; a margem considerada vem com o BL-078 | Nathan, Gustavo; Robert na margem | `C8` | 🔴 📝 |
+| 7 | `C6` e `C7` na tela de emissão da OC: mostrar a parte de compras da proposta, puxar fornecedor e impostos, editar, gravar o valor correto sem tocar a proposta. Contrato API-019 (`06-Contratos/Ativos`) (11/11); o imposto gravado na OC segue no BL-053. **API pronta em 12/11** (a consulta do PV traz `proposta` e `compra_proposta` por item); falta a tela | Nathan, Gustavo | `C6`, `C7` | 🟡 |
+| 12 | **`C8`:** aviso e aprovação em Meus Pedidos, tabela `divergencias_compra`, lista de Compras dos reprovados e registro da solução. Contrato LOG-57 (11/11): a OC espera o vendedor; nesta etapa só o PV de proposta; a margem considerada vem com o BL-078. **API e banco prontos em 12/11**; faltam as telas e a margem | Nathan, Gustavo; Robert na margem | `C8` | 🟡 |
 
 ### Pendências (numeração da nota de proposta)
 
@@ -146,7 +148,7 @@ Estados propostos (N16-66, N16-73): `PENDENTE` (na lista do vendedor, sem tempo 
 | 4 | **Perfil CCP:** edição só pelo CCP. O código já trava pela tela `followup`; falta o cadastro: SQL pronto e testado no Docker em 12/11 (`../Perguntas-e-Respostas/perfil-CCP-followup.sql`, fora do vault), para o Gustavo aplicar no tst e na produção | Gustavo, Nathan | C5 | 🟡 |
 | 5 | Remover ou arquivar `GET /requisicoes-compra` (contrato 003) e o comentário velho | Gustavo, Robert | — | 🟡 |
 | 6 | **Versionar** `fn_requisicao_mes_aplicar` (migration 034) | Gustavo | P3 | ❓ |
-| 7 | Contrato de **recompra por RNC** (decidido: o Compras é avisado no av-hub, N16-127) e da **reabertura do recebimento** (N16-137): LOG-58 (12/11) | Nathan, Gustavo, Robert | Q3, C1 | 🔴 📝 |
+| 7 | Contrato de **recompra por RNC** (decidido: o Compras é avisado no av-hub, N16-127) e da **reabertura do recebimento** (N16-137): LOG-58 (12/11). **API e banco do av-hub prontos em 12/11**; faltam o envio do MES e a tela | Nathan, Gustavo, Robert | Q3, C1 | 🟡 |
 | 8 | Aviso ao PCP e ao vendedor quando a previsão de chegada atrasa o pedido de venda | Nathan | C5 | 📝 decidido: a mudança de data do CCP só avisa o vendedor, em Meus Pedidos (N16-64, N16-91); a previsão de faturamento é derivada (N16-88, N16-97); o PCP vê a vigente e todas as datas (N16-104); e-mail e notificações ficam para o futuro (N16-113) |
 | 9 | Dois formulários ou um para origem PCP e origem Compras (T-03): o MES exige pedido e prazo; o HUB aceita sem pedido | Nathan | P3, C0 | 🟡 |
 | 10 | Teste ponta a ponta do circuito com `AVHUB_MES_INTEGRACAO_KEY` e `API_KEY` reais | Robert, Gustavo | P3, C5 | ❓ |
