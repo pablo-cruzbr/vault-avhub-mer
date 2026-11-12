@@ -1,7 +1,7 @@
 ---
 id: API-019
 titulo: A emissão da OC mostra a parte de compras da proposta (C6 e C7)
-status: parcial
+status: implementado-na-develop
 autor: Nathan
 data: 2026-11-11
 camadas: [frontend, api]
@@ -10,7 +10,7 @@ nos_0b: [C6, C7]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, 01-Proposta-de-Venda, Backlog-por-Frente]
 depende_de: [LOG-56]
 decisoes: [N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, N16-157]
-develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo]
+develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #282)]
 tags: [contrato, compras, proposta, oc, c6, c7]
 criado: 2026-11-11
 estado-em: 2026-11-12
@@ -39,7 +39,7 @@ Nós `C6` e `C7` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]] (dona
 
 - **Banco.** 🟡 A proposta já guarda a cotação de compra por item: `core_comercial.propostas_itens` tem `fornecedor` (texto livre), `origem_compra`, `qtd_compra`, `unidade_compra`, `preco_unit_compra`, `ipi_compra_pct`, `st_compra_valor`, `frete_compra_valor`, `custo_liquido_unit` e `custo_liquido_total`; o cabeçalho `core_comercial.propostas` tem `frete_compra_tipo` e `frete_compra_valor` (banco do Docker local, dados do tst, 11/11). O pedido do Hub liga as duas pontas: `core_comercial.pedidos_venda` (`id_proposta`, `numero_proposta`, `numero_pedido_omie`, `codigo_empresa`) e `core_comercial.pedidos_venda_itens` (`id_proposta_item`, `codigo_produto_omie`).
 - **API.** ✅ Entregue pelo Gustavo em 12/11. `GET /compras/pedidos-venda/{numero}` (`api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:175`, `router.get("/:numero"`) devolve, além do cabeçalho do Omie e dos itens de `vw_pedido_venda_itens_compra`, a `proposta` no cabeçalho (`:241`, `proposta: compra.proposta,`) e a `compra_proposta` em cada item (`:244`, `compra_proposta: compra.compraPorProduto.get(`), lidas da view da seção 9. Até 11/11 nenhuma rota de Compras lia esses campos.
-- **Front.** 🔴 A tela `/compras/nova` mostra, por item, o destino no PV e mais nada da venda: `av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:245` (`<DestinoItem item={item} indice={indice} />`). O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
+- **Front.** ✅ Entregue pelo Nathan em 12/11 (`av-hub` PR #282). Na `/compras/nova`, o item ligado a PV de proposta mostra o bloco "Cotado na proposta" (`av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:248`, `<CotacaoDaProposta`; `components/Compras/FecharCompra/CotacaoDaProposta.tsx:45`, `Cotado na proposta {proposta.numero_proposta}`), a comparação (`lib/domain/compras-fechamento-tela.ts:140`, `export function compararComProposta(`) e o botão "Usar o preço da proposta" (`CotacaoDaProposta.tsx:56`, `Usar o preço da proposta`). Até 11/11 a tela mostrava só o destino no PV. O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
 
 ## 5. Regras de negócio
 
@@ -136,9 +136,9 @@ Nenhuma. Omie e MES não mudam.
 
 - [x] API: `GET /compras/pedidos-venda/{numero}` devolve `proposta` e `compra_proposta` como na seção 8 para um PV nascido de proposta, e `null` nos dois para um PV digitado no Omie.
 - [x] API: o número do Omie com zeros à esquerda casa com o número sem zeros.
-- [ ] Frontend: na Nova OC com esse PV, o item mostra o bloco "Cotado na proposta", a comparação e o aviso quando o valor passa do cotado.
-- [ ] Frontend: "Usar o preço da proposta" preenche o valor unitário; a proposta não muda no banco.
-- [ ] Frontend: PV sem proposta mostra a tela como hoje.
+- [x] Frontend: na Nova OC com esse PV, o item mostra o bloco "Cotado na proposta", a comparação e o aviso quando o valor passa do cotado.
+- [x] Frontend: "Usar o preço da proposta" preenche o valor unitário; a proposta não muda no banco.
+- [x] Frontend: PV sem proposta mostra a tela como hoje.
 
 ## 13. Como testar
 
@@ -150,7 +150,7 @@ Nenhuma. Omie e MES não mudam.
 ## 14. Ordem de implementação e responsáveis
 
 1. **API (Gustavo):** ✅ os dois campos na rota (12/11, `bebca52`; 36 verificações no relatório de entrega).
-2. **Front (Nathan):** tipos, função pura, bloco no item e linha do frete. Pode começar antes, contra este contrato; só vai para a `develop` depois da API.
+2. **Front (Nathan):** ✅ tipos, função pura, bloco no item e linha do frete (12/11, `av-hub` PR #282). Conferido contra o código da API, ainda não contra a API rodando.
 
 ## 15. Riscos, rollback e perguntas em aberto
 
