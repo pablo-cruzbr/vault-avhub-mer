@@ -10,7 +10,7 @@ nos_0b: [C8]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, Estados-e-Status, 15-Custo-Real-e-Comissao, Backlog-por-Frente]
 depende_de: [API-019, BL-078]
 decisoes: [N16-159, N16-17, N16-60, N16-61, N16-62, N16-63, N16-64, N16-65, N16-66, N16-67, N16-73, N16-76, N16-102, N16-157]
-develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo]
+develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #283)]
 tags: [contrato, compras, c8, divergencia, vendedor, meus-pedidos]
 criado: 2026-11-11
 estado-em: 2026-11-12
@@ -40,7 +40,7 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 
 - **Banco.** ✅ **Aplicado no teste em 12/11** ([[Dump-AvHub-Teste-2026-11-12]]): as duas tabelas, a coluna, a view `vw_divergencias_compra` e as funções da seção 9. Até o dump de 10/11 não existia `core_comercial.divergencias_compra` ([[Banco-AvHub]]). Os estados `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` e os tipos de solução estão só no desenho ([[Estados-e-Status]]). O cotado por item existe em `core_comercial.propostas_itens.preco_unit_compra`.
 - **API.** ✅ Entregue pelo Gustavo em 12/11 (`bebca52`). As cinco rotas da seção 8 exigem token de usuário: `GET /compras/divergencias` e `POST /compras/divergencias/{id}/solucao` (`api-acos-vital` `src/schemas/core_comercial/tables/divergencias_compra/divergencias_compra.route.js:147`, `comprasDivergencias.get("/"`; `:167`, `comprasDivergencias.post("/:id/solucao"`), `GET /meus-pedidos/divergencias` (`:200`, `meusPedidosDivergencias.get("/"`) e as decisões do vendedor (`:235`, `meusPedidosDivergencias.post("/:id/aprovar"`; `:237`, `meusPedidosDivergencias.post("/:id/reprovar"`). A OC é emitida em `POST /compras/ordens` (`src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:935`, `router.post("/"`), que gera as divergências (`:1206`, `fn_divergencias_compra_gerar(:id)`); o `PATCH /compras/ordens/{id}` (`:1227`, `router.patch("/:id"`) dá `409 DIVERGENCIA_PENDENTE` com divergência aberta (`:1305`, `codigo: "DIVERGENCIA_PENDENTE"`). Estados da OC: `rascunho`, `aguardando_aprovacao`, `aprovado` e `cancelado` (`:94`, `const STATUS`).
-- **Front.** 🔴 Meus Pedidos (`av-hub` `app/(protected)/vendas/meus-pedidos/page.tsx`) não tem área de pendências. Compras não tem lista de divergências. A tela da OC ganha a comparação com o cotado no API-019 (rascunho, `av-hub` PR #282).
+- **Front.** ✅ Entregue pelo Nathan em 12/11 (`av-hub` PR #283). A emissão pede o motivo do item acima do cotado (`av-hub` `components/Compras/FecharCompra/CotacaoDaProposta.tsx:85`, `value={item.motivo_divergencia ?? ''}`) e avisa que a OC vai esperar; Meus Pedidos tem "Para você responder" e os avisos (`app/(protected)/vendas/meus-pedidos/page.tsx:9`, `topo={<DivergenciasDoVendedor />}`); Compras · Divergências lista e registra a solução (`app/(protected)/compras/divergencias/page.tsx:8`, `<DivergenciasLista />`); o detalhe da OC mostra por que ela não aprova (`components/Compras/OrdemDetalhe.tsx:203`, `<DivergenciasDaOrdem`).
 
 ## 5. Regras de negócio
 
@@ -158,7 +158,7 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 - [x] API: o vendedor do PV aprova e a OC abaixo do limite fica `aprovado`; outro usuário recebe `403 NAO_E_O_VENDEDOR`.
 - [x] API: reprovar leva à lista de Compras; `MANTIDO` libera a OC; cancelar a OC resolve as abertas com `OC_CANCELADA`.
 - [x] API: item abaixo do cotado gera `INFORMATIVA` e não segura a OC.
-- [ ] Frontend: Meus Pedidos mostra "Para você responder" e "Avisos"; Compras · Divergências lista e registra a solução; o detalhe da OC mostra por que não aprova.
+- [x] Frontend: Meus Pedidos mostra "Para você responder" e "Avisos"; Compras · Divergências lista e registra a solução; o detalhe da OC mostra por que não aprova.
 
 ## 13. Como testar
 
@@ -171,7 +171,7 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 
 1. **Banco (Gustavo):** ✅ tabelas e coluna (aplicadas no teste em 12/11, [[Dump-AvHub-Teste-2026-11-12]]; produção pendente).
 2. **API (Gustavo):** ✅ emissão, `PATCH`, as cinco rotas (12/11, `bebca52`; 83 verificações no relatório de entrega).
-3. **Front (Nathan):** motivo na OC, detalhe da OC, Meus Pedidos e a lista de Compras. Pode começar contra este contrato.
+3. **Front (Nathan):** ✅ motivo na OC, detalhe da OC, Meus Pedidos e a lista de Compras (12/11, `av-hub` PR #283). Conferido contra o código da API, ainda não contra a API rodando.
 4. **Comissão (Robert, BL-078):** a margem considerada, depois.
 
 ## 15. Riscos, rollback e perguntas em aberto
