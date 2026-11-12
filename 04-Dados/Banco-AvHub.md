@@ -1,16 +1,18 @@
 ---
 tags: [dados, banco, av-hub, postgres]
 criado: 2026-10-14
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: vigente
 dono: Gustavo (DBA)
-fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-10 (10/11/2026), PDF de Gustavo de 10/11/2026 (entrega N16-147 itens 1 e 2)]
+fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-10 (10/11/2026), PDF de Gustavo de 10/11/2026 (entrega N16-147 itens 1 e 2), Dump-AvHub-Teste-2026-11-12 (12/11/2026)]
 ---
 
 # Banco do av-hub
 
-> [!info] Dump mais novo: banco de teste, 10/11/2026
-> O esqueleto do banco de **teste** de 10/11/2026 07:36 ([[Dump-AvHub-Teste-2026-11-10]]) tem **148 tabelas, 259 funções e 195 triggers**, com as mesmas 51 views. Entrou a primeira parte do LOG-56: a conta corrente do pedido com a conta padrão por unidade (`parametros_pedido_venda_omie`), as respostas da Qualidade e do faturamento em partes no pedido, os valores sugeridos na `vw_pedidos_liberacao` e a `fn_proposta_prontidao_omie`. O índice único do LOG-56 ainda não foi aplicado. A regra do refaturamento não mudou.
+> [!info] Dump mais novo: banco de teste, 12/11/2026
+> O esqueleto do banco de **teste** de 12/11/2026 15:01 ([[Dump-AvHub-Teste-2026-11-12]]) tem **151 tabelas, 55 views, 283 funções e 204 triggers**. A tabela `core_comercial.unidades_emissoras` **saiu**: a empresa emissora agora é a própria unidade (`core.unidades` ganhou `sigla` e os campos do cabeçalho dos documentos, lidos pela `core.vw_unidades_cabecalho`), e `id_unidade_emissora` saiu de `propostas` e `pedidos_venda` (em `sequencias_proposta` virou `codigo_empresa`). Entraram o índice único do LOG-56 (`uq_pedidos_venda_omie`), o banco do LOG-57 (`core_comercial.divergencias_compra` e `_eventos`), do LOG-58 (`core_vendas_faturamento.avisos_mes_compra`) e do API-019 (`vw_pedido_venda_compra_proposta`), a carteira de clientes na proposta (`parametros_carteira_clientes`, `fn_carteira_clientes`) e o `encargo_pagamento` da proposta e da simulação. A regra do refaturamento não mudou. As listas de tabelas abaixo são de dumps anteriores e ainda citam `unidades_emissoras`.
+>
+> Antes dele, o esqueleto do banco de **teste** de 10/11/2026 07:36 ([[Dump-AvHub-Teste-2026-11-10]]) tem **148 tabelas, 259 funções e 195 triggers**, com as mesmas 51 views. Entrou a primeira parte do LOG-56: a conta corrente do pedido com a conta padrão por unidade (`parametros_pedido_venda_omie`), as respostas da Qualidade e do faturamento em partes no pedido, os valores sugeridos na `vw_pedidos_liberacao` e a `fn_proposta_prontidao_omie`. O índice único do LOG-56 ainda não foi aplicado. A regra do refaturamento não mudou.
 >
 > Antes dele, o esqueleto do banco de **teste** de 09/11/2026 15:51 ([[Dump-AvHub-Teste-2026-11-09]]) tem **250 funções e 192 triggers**, com as mesmas 146 tabelas e 51 views. Entraram as três migrations do pedido do Hub de 05/11 e 06/11, que continuam fora do repositório (BL-024): o envio ao Omie (`fn_pedido_venda_envio_iniciar`, `_omie_registrar`, `_omie_erro` e `_payload_omie`), a `fn_proposta_transformar` de 4 argumentos e as colunas novas de `core_comercial.pedidos_venda`. Também entraram `auth.permissoes.pode_exportar` (LOG-48) e o setor da requisição de uso interno. O quadro abaixo, de 04/11, continua valendo para o resto.
 >
