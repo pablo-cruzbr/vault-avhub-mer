@@ -110,7 +110,7 @@ Decisão do Nathan, 09/11. Na proposta o vendedor não escolhe e o campo nem apa
 |---|---|
 | A coluna, no próprio pedido | `pedidos_compras.model.js:31` (`codigo_conta_corrente: { type: DataTypes.BIGINT, allowNull: true }`) |
 | A descrição, por subselect na unidade | `pedidos_compras.route.js:148-153` (`descricao_conta_corrente`), casando `cc.codigo_empresa` e `cc.codigo_conta_omie` em `core.contas_correntes` |
-| O mesmo na OC | `ordens_compra.route.js:114` (`"codigo_conta_corrente"`) e `:195-198` (o mesmo subselect) |
+| O mesmo na OC | `ordens_compra.route.js:116` (`"codigo_conta_corrente"`) e `:195-198` (o mesmo subselect) |
 | O padrão "configurado uma vez, por unidade" | `core_vendas_faturamento.parametros_compras` (`codigo_empresa uuid` + o parâmetro), `parametros_compras.model.js` |
 
 ⚠️ `codigo_conta_omie` é `bigint`: trafega como string até a tela, pela mesma razão da correção do `codigosDaResposta`.
