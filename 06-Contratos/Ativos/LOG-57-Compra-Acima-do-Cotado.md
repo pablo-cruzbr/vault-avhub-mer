@@ -39,7 +39,7 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 ## 4. Como está hoje
 
 - **Banco.** ✅ **Aplicado no teste em 12/11** ([[Dump-AvHub-Teste-2026-11-12]]): as duas tabelas, a coluna, a view `vw_divergencias_compra` e as funções da seção 9. Até o dump de 10/11 não existia `core_comercial.divergencias_compra` ([[Banco-AvHub]]). Os estados `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` e os tipos de solução estão só no desenho ([[Estados-e-Status]]). O cotado por item existe em `core_comercial.propostas_itens.preco_unit_compra`.
-- **API.** 🔴 Nenhuma rota de divergência. A OC é emitida em `POST /compras/ordens` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:924` (`router.post("/"`) e aprovada ou cancelada em `PATCH /compras/ordens/{id}` (`:1183`, `router.patch("/:id"`), com os estados `rascunho`, `aguardando_aprovacao`, `aprovado` e `cancelado` (`:92`, `const STATUS`).
+- **API.** 🔴 Nenhuma rota de divergência. A OC é emitida em `POST /compras/ordens` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:935` (`router.post("/"`) e aprovada ou cancelada em `PATCH /compras/ordens/{id}` (`:1183`, `router.patch("/:id"`), com os estados `rascunho`, `aguardando_aprovacao`, `aprovado` e `cancelado` (`:92`, `const STATUS`).
 - **Front.** 🔴 Meus Pedidos (`av-hub` `app/(protected)/vendas/meus-pedidos/page.tsx`) não tem área de pendências. Compras não tem lista de divergências. A tela da OC ganha a comparação com o cotado no API-019 (rascunho, `av-hub` PR #282).
 
 ## 5. Regras de negócio
