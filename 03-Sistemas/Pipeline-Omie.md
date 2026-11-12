@@ -1,10 +1,10 @@
 ---
 tags: [sistemas, pipeline, omie, elt, bullmq, redis]
 criado: 2026-10-14
-atualizado: 2026-11-05
+atualizado: 2026-11-12
 status: vigente
 dono: Gustavo (DBA)
-fontes: [omie-elt-pipeline 0f739f0 (master), README.md, ARCHITECTURE.md, src/config/index.ts, src/jobs/*, src/omie/resources/*, src/workers/*, ecosystem.config.cjs, v1 Omie-ELT-Pipeline]
+fontes: [omie-elt-pipeline develop d8fddca e master 8f79d12 (12/11; PRs #6 e #7), omie-elt-pipeline 0f739f0 (master), README.md, ARCHITECTURE.md, src/config/index.ts, src/jobs/*, src/omie/resources/*, src/workers/*, ecosystem.config.cjs, v1 Omie-ELT-Pipeline]
 ---
 
 # Pipeline Omie (`omie-elt-pipeline`)
@@ -39,6 +39,8 @@ fontes: [omie-elt-pipeline 0f739f0 (master), README.md, ARCHITECTURE.md, src/con
 
 - ✅ Extração de pedidos, notas, produtos, parceiros, vendedores, compras e catálogos.
 - ✅ Envio da OC testado pelo Nathan em 14/10. Em produção ❓ (checklist PS-009).
+- ✅ O histórico de situação e de previsão do pedido de venda volta a ser gravado (`pedidos_vendas_status_historico`). Ele tinha parado na reescrita da pipeline em TypeScript; a view `vw_vendas_base` (`esteve_atrasado`) depende dele.
+- 📝 Tabela `tipos_frete` com os códigos de frete do Omie (0, 1, 2, 3, 4 e 9) para texto: proposta para o Gustavo revisar, ainda não aplicada.
 - 🔴 Ao subir o worker, a pipeline escreve no Omie de verdade. Antes de publicar: contrato 36 na API e compradores vinculados.
 - 🔴 Apagar as 5 tabelas e o schema `omie_raw`, obsoletos desde N14-27 (BL-054). É do Gustavo.
 - 🟡 Filtrar os cadastros TESTE em relatórios e conferências (BL-055).
@@ -48,7 +50,7 @@ fontes: [omie-elt-pipeline 0f739f0 (master), README.md, ARCHITECTURE.md, src/con
 
 ## Detalhe técnico
 
-Serviço que traz os dados do Omie para o banco do av-hub e, só para a OC, escreve de volta no Omie. Node + TypeScript, BullMQ sobre Redis, `pg` direto no PostgreSQL do av-hub, PM2 em produção ✅ `package.json`, `ecosystem.config.cjs`. Branch de produção: `master` (0f739f0). Dono: Gustavo (DBA). Não há webhook do Omie: tudo é polling por janela de calendário ✅ `src/config/index.ts:81-86`, `ARCHITECTURE.md:60`. Estado da integração Omie como um todo: [[Omie-Integracao-Estado]]. Colunas que o sync nunca escreve: [[Colunas-Protegidas]]. Selos: [[Regras-do-Vault]].
+Serviço que traz os dados do Omie para o banco do av-hub e, só para a OC, escreve de volta no Omie. Node + TypeScript, BullMQ sobre Redis, `pg` direto no PostgreSQL do av-hub, PM2 em produção ✅ `package.json`, `ecosystem.config.cjs`. Desde 12/11/2026 os PRs entram pela `develop`, e a produção é a `master` ✅ `CLAUDE.md:8` (`Branch de produção`); em 12/11 as duas tinham o mesmo conteúdo (`develop` `d8fddca`, `master` `8f79d12`). Dono: Gustavo (DBA). Não há webhook do Omie: tudo é polling por janela de calendário ✅ `src/config/index.ts:81-86`, `ARCHITECTURE.md:60`. Estado da integração Omie como um todo: [[Omie-Integracao-Estado]]. Colunas que o sync nunca escreve: [[Colunas-Protegidas]]. Selos: [[Regras-do-Vault]].
 
 ### Processos (PM2, `ecosystem.config.cjs`)
 
@@ -103,6 +105,8 @@ Os catálogos de Compras (condições, projetos, contas, categorias, compradores
 
 🟡 **Na branch `feat/produto-vendas-codigo-item-integracao` (sem PR, 05/11/2026):** o pedido de venda passa a mapear `det[].ide.codigo_item_integracao` para `produto_vendas.codigo_item_integracao` ([[Contratos-da-v2|SQL-021]]) e filtra as colunas pelo que a tabela tem de fato (`src/db/colunasExistentes.ts`, o mesmo filtro que o `pedidosCompras.ts` já usava), para a coluna ausente não derrubar o pedido inteiro; a coluna `encargos` de `condicoes_pagamento_compras` entra em `PROTECTED_COLUMNS`. Typecheck passa; não foi testado contra banco nem Omie. README `:118-120`. `core.estoque_saldo` fica vazia: **o saldo do Estoque da fábrica vive no MES**, não no Omie ([[Modelo-Estoque-e-Custo-do-Lote]]).
 
+**Histórico do pedido de venda:** a cada sincronização, a pipeline compara a `situacao` e a `data_previsao` do pedido com o último valor gravado em `core_vendas_faturamento.pedidos_vendas_status_historico` e grava uma linha só quando mudou; a primeira linha de cada pedido e campo sai com `valor_anterior` nulo. Roda num `SAVEPOINT` próprio: uma falha fica no log e não impede o pedido de sincronizar ✅ `src/omie/resources/pedidosVendas.ts:30` (`const SQL_HISTORICO_PEDIDO = `) e `:53` (`async function registrarHistoricoPedido(`), `develop` `d8fddca` (PR #6). É a fonte das mudanças de previsão de faturamento ([[03-Pedido-de-Venda-e-Liberacao]]).
+
 O pedido de venda entra no av-hub **travado** (sem marcação de liberação); a liberação é do vendedor ([[03-Pedido-de-Venda-e-Liberacao]]). O pipeline nunca escreve em `pedidos_vendas.manual` nem nas outras colunas protegidas ✅ `src/db/protectedColumns.ts:50-58`.
 
 ### Envio da OC ao Omie (única escrita da pipeline)
@@ -112,8 +116,9 @@ O pedido de venda entra no av-hub **travado** (sem marcação de liberação); a
 3. Resultado em `PATCH {AVHUB_API_URL}/compras/ordens/{id}/sincronizacao` (`nCodPed`, `cNumero` ou erro) ✅ `envioOrdensCompra.ts:27-33`.
 4. Recusa do Omie marca `erro` e a OC sai da fila até alguém clicar em "Reenviar" no HUB; rede, 429/425 e "aguarde N segundos" deixam pendente. Depois de 3 recusas seguidas (`MAX_RECUSAS_SEGUIDAS`) a rodada da unidade para ✅ `:41-47`.
 5. Só vai a condição de pagamento (`cCodParc`), nunca as parcelas; todo item precisa de produto do cadastro da unidade (`nCodProd`) ✅ README `:153-158`. O bloco `[AV-HUB]` do `cObsInt` leva o "Destino:" por PV (campos separados por ` ; `, porque o `|` é quebra de linha no Omie).
-6. Modo de teste: `npm run envio-oc -- --dry-run` (monta o payload e não envia) ✅ README `:143-145`.
-7. ✅ **Testado pelo Nathan em 14/10: o envio real funciona em teste;** produção ❓ (checklist de subida: PS-009). O Omie **não tem ambiente de teste**, então o Nathan criou cadastros **TESTE** (fornecedor, cliente e transportadora) no Omie de verdade. A pipeline lê esses cadastros como quaisquer outros e eles chegam ao av-hub, às listas e aos relatórios (por exemplo o CON-01). 🟡 Filtrar ou ignorar os cadastros TESTE em relatórios e conferências (BL-055); a pipeline não os distingue.
+6. Frete da OC: CIF vai como `0` e FOB como `1`, os códigos da NF-e que o Omie documenta no campo `modalidade` do pedido de venda ✅ `src/omie/ordemCompraOmie.ts:215` (`FOB: '1'`). 📝 A lista completa dos códigos fica na tabela `core_vendas_faturamento.tipos_frete`, proposta em `sql/dba_migrations/012_tipos_frete.sql:25` (`CREATE TABLE IF NOT EXISTS core_vendas_faturamento.tipos_frete`), ainda não aplicada (o Gustavo revisa).
+7. Modo de teste: `npm run envio-oc -- --dry-run` (monta o payload e não envia) ✅ README `:143-145`.
+8. ✅ **Testado pelo Nathan em 14/10: o envio real funciona em teste;** produção ❓ (checklist de subida: PS-009). O Omie **não tem ambiente de teste**, então o Nathan criou cadastros **TESTE** (fornecedor, cliente e transportadora) no Omie de verdade. A pipeline lê esses cadastros como quaisquer outros e eles chegam ao av-hub, às listas e aos relatórios (por exemplo o CON-01). 🟡 Filtrar ou ignorar os cadastros TESTE em relatórios e conferências (BL-055); a pipeline não os distingue.
 
 ### `sql/002` e `omie_raw` (obsoletos)
 
