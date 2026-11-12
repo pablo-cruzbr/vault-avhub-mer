@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, estados, status, enums, referencia]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-12
 status: vigente
 dono: Nathan
 fontes: [api-pcp 579a625 prisma/models/*.prisma, integracao-avhub.service.ts, requisicao-avhub.eventos.ts, Dump MES 14/10 (CREATE TYPE, linhas 128-424), Dump Avhub 14/10 (CHECK constraints), app-pcp 1fca8d3 movimentacoes/labels.ts e acoes.ts, HUB b55ac55 lib/domain/etapas-item.ts, 00-Fluxo-Mestre-0b, api-pcp develop de 27/10/2026 (FINALIZADO, PRODUCAO), api-acos-vital develop (propostas)]
@@ -343,7 +343,7 @@ Valores dos `CHECK` das migrações propostas em 26/10/2026. Ainda não estão n
 | `core_comercial.calendario_excecoes.tipo` | `FERIADO`, `DIA_UTIL` | N16-104 |
 | `core_comercial.ofertas.fonte` | `MANUAL`, `MAPA_COTACAO`, `MIGRACAO`, `OC_HUB`, `OC_OMIE` | |
 | `core_comercial.custos_eventos.origem` | `OC_MATERIAL`, `LOTE_ESTOQUE`, `MATERIA_PRIMA_FABRICACAO`, `MAO_DE_OBRA_OC_SERVICO`; `status` `VALIDO`, `DESCARTADO`; `sentido` `1` ou `-1` (estorno) | N16-09, N16-20 |
-| `core_comercial.divergencias_compra.estado` | `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO`; `solucao_tipo` `NOVO_VALOR`, `NOVO_FORNECEDOR`, `MANTIDO`, `PEDIDO_CANCELADO` | N16-60 a N16-73 |
+| `core_comercial.divergencias_compra.estado` | `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` e `INFORMATIVA` (compra abaixo do cotado, só aviso); `solucao_tipo` `NOVO_VALOR`, `NOVO_FORNECEDOR`, `MANTIDO`, `PEDIDO_CANCELADO` e `OC_CANCELADA` (a OC foi cancelada). ✅ no banco de teste ([[Dump-AvHub-Teste-2026-11-12]]) e nas telas (LOG-57, 12/11) | N16-60 a N16-73, N16-159 |
 | `core_comissao.comissoes.estado` | `ESTIMADA`, `CONGELADA`, `EM_ACOMPANHAMENTO`, `ENCERRADA`, `CANCELADA`; `origem` `PROPOSTA`, `PEDIDO_OMIE` | N16-10, N16-103 |
 | `core_comissao.comissao_calculos.tipo` | `COTADO` (estimada ou simulação do vendedor), `REAL` (custo real) | N16-10 |
 | `core_comissao.comissoes_nf.estado` | `AGUARDANDO_DECISAO`, `APROVADA`, `DESAPROVADA`, `BLOQUEADA`, `CORTADA`, `ALTERADA`, `NF_CANCELADA` | N16-43 a N16-46 |
