@@ -155,7 +155,7 @@ Estados propostos (N16-66, N16-73): `PENDENTE` (na lista do vendedor, sem tempo 
 
 - Nathan e Compras (🟡, futuro): como endurecer a regra de aprovação (só valor, finalidade, tipo de item, aprovação abaixo do limite). O limite é por unidade (o código já tem assim).
 - Nathan: segregação comprador ≠ aprovador vale se o Gerente também compra? **Decidido em 29/10/2026 (N16-123): não há trava; o Gerente de Compras pode aprovar a OC que ele mesmo emitiu.** Reaberta na OQ-52 depois da autoaprovação vista na validação local em Docker de 10/11/2026.
-- Nathan e Gustavo: a "Nova ordem de compra" com pedido de venda não fecha a requisição do MES que compra o mesmo item; a requisição fica `aberta` e a compra se desliga do pedido (BL-086).
+- ✅ Resolvido em 12/11 (BL-086, av-hub PR #281): a "Nova ordem de compra" oferece a requisição na fila e a OC ligada a fecha. Falta o Gustavo filtrar `GET /compras/requisicoes` por `numero_pedido_venda` para tirar o filtro da tela.
 - Compras: prazo máximo de OC sem confirmação do fornecedor até destacar na fila do CCP.
 - Compras: quem avisa quando uma OC é cancelada depois de aprovada e a parcial já estava esperada no Recebimento (o MES tira da lista, mas ninguém avisa a doca).
 - Robert e Gustavo: o MES vê a OC de requisição do Compras só pela referência; `requisicoes_compra_eventos.id_origem` continua `NOT NULL` e não precisa mudar.

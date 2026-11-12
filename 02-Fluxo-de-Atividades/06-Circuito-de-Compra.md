@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, compras, ccp, requisicao, oc, aprovacao, omie, fornecedor, p3, c0, c1, c2, c3, c4, c5, fn1]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-12
 status: vigente
 ordem: 6
 nos: [P3, C0, C1, C2, C3, C4, C5, C6, C7, C8, FN1]
 anterior: "[[05-Estoque-Atendimento]]"
 proxima: "[[07-Recebimento]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10, av-hub bc85670 (BL-086), em 2026-11-12]
 dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144, BL-086, OQ-52, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -93,7 +93,7 @@ O fluxo foi aprovado em 26/10. As decisões N16-120 a N16-143 são de 29/10/2026
 - ✅ (`av-hub`, `app-pcp`) Telas das duas origens, emissão da OC, lista de OCs, aprovações e follow-up do CCP.
 - ✅ Envio da OC ao Omie testado em 14/10. Produção ainda ❓.
 - 🟡 Regra de aprovação provisória: vai endurecer depois da conversa com Compras. Sem segregação entre quem emite e quem aprova, como decidido na N16-123 (reaberta na OQ-52).
-- 🟡 (`av-hub`) A "Nova ordem de compra" com pedido de venda não liga a OC à requisição: a requisição fica `aberta` e o lote comprado não volta sozinho ao pedido no MES (BL-086). Pela requisição (`/compras/nova/[requisicaoId]`) funciona.
+- ✅ (`av-hub` `lib/domain/compras-fechamento-tela.ts:89` (`export function requisicoesQueOItemAtende(`)) A "Nova ordem de compra" com pedido de venda oferece a requisição na fila do mesmo produto e PV, e a OC ligada a fecha (BL-086, 12/11). Provisório: o filtro por PV é feito na tela até a API filtrar.
 - 📝 `C6` a `C8` decididos em 26/10; sem código na `api-acos-vital` nem no front 🔴 (conferido em 29/10 e em 11/11: nenhuma rota `divergencias_compra`). `C6` e `C7` têm contrato: API-019 (`06-Contratos/Ativos`) (11/11, `para-implementar`); o `C8`, LOG-57 (11/11, `para-implementar`). Detalhe em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
 - ✅ O MES lê a OC do hub desde 15/10 (K4, `develop` do `api-pcp`) e as requisições do Compras com pedido de venda aparecem ao PCP na Triagem desde 23/10 (API-009). 🔴 Falta o PCP ver a OC do pedido na Triagem e na Destinação (BL-049) e o saldo futuro no Estoque (BL-050).
 - ✅ (`api-pcp` `src/compras/recebimento.service.ts:169` e `src/compras/recebimento.controller.ts:20`; leitura da OC em `src/integracao-avhub/oc-referencia-avhub.service.ts:97`) O recebimento e a leitura da OC pelo MES estão na `develop` do MES (15 a 26/10). A `main` do MES parou em 08/10.
