@@ -1,7 +1,7 @@
 ---
 tags: [desenvolvimento, atualizacao, develop, manutencao]
 criado: 2026-11-05
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: vigente
 dono: Nathan
 fontes: [git log -1 origin/develop de cada sistema em 2026-11-10 (origin/master no omie-elt-pipeline), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
@@ -27,7 +27,7 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-10 (origin/master 
 
 São os commits do `develop-conferida` das notas **conferidas** nesta atualização; as raias não tocadas ainda dizem os commits de 05/11.
 
-**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 10/11/2026 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-10.sql`). As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
+**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 12/11/2026 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-12.sql`, [[Dump-AvHub-Teste-2026-11-12]]). Ele entrou em 12/11 sem a releitura da `develop`: a tabela "Base atual" continua com os commits de 10/11, e as raias que dizem "sem código" para o LOG-57, o LOG-58 e o API-019 (por exemplo, [[06-Circuito-de-Compra]]) ainda não foram conferidas contra a `develop` de 12/11 (`api-acos-vital` `bebca52`, que já tem as rotas). As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
 
 ## Como usar na próxima atualização
 
