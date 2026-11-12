@@ -5,7 +5,7 @@ estado-em: 2026-11-12
 status: vigente
 dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
 parte-de: "[[06-Circuito-de-Compra]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10, api-acos-vital bebca52 (LOG-57, LOG-58, API-019), av-hub 16891f9, api-pcp 2e564e6, em 2026-11-12]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10, api-acos-vital bebca52 (LOG-57, LOG-58, API-019), av-hub a43befe (front de C6 a C8 e LOG-58), api-pcp 2e564e6, em 2026-11-12]
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144, BL-086, OQ-52, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -34,7 +34,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-
 ### C2 e C3: aprovação (✅ (`api-acos-vital`) código igual à decisão)
 
 - ✅ (`api-acos-vital`) 📝 **Regra (N14-21):** OC que **excede R$ 30 mil** é aprovada pelo Gerente de Compras; OC **até R$ 30 mil** sai livre para os compradores. A Diretoria não participa.
-- ✅ **Como o código faz:** a OC nasce `aguardando_aprovacao`; a trigger de recálculo **aprova automaticamente** a OC cujo total em BRL é **menor ou igual** ao limite da unidade (`parametros_compras.limite_aprovacao`, 30.000,00 por padrão) e deixa `aguardando_aprovacao` a que passa do limite; OC já aprovada que sobe acima do limite volta a `aguardando_aprovacao` (Dump, linhas 6779-6794; texto da função em `docs/ENVIAR - contrato-compras-backend.md:649-694` do HUB). O HUB avisa "Acima de {limite}, ela nasce Aguardando aprovação" (`FecharCompra/useFecharCompra.ts:449-450` (`precisaAprovacao`), `FecharCompra/ResumoCompra.tsx:118` (`Acima de {toBRL`)). Quem aprova ou cancela uma OC aguardando é um usuário com `pode_aprovar` na tela `compras` (Gerência de Compras): `ordens_compra.route.js:1227-1237`. `condicoes_pagamento_compras.route.js:17` devolve o limite padrão 30.000,00 quando a unidade não tem linha.
+- ✅ **Como o código faz:** a OC nasce `aguardando_aprovacao`; a trigger de recálculo **aprova automaticamente** a OC cujo total em BRL é **menor ou igual** ao limite da unidade (`parametros_compras.limite_aprovacao`, 30.000,00 por padrão) e deixa `aguardando_aprovacao` a que passa do limite; OC já aprovada que sobe acima do limite volta a `aguardando_aprovacao` (Dump, linhas 6779-6794; texto da função em `docs/ENVIAR - contrato-compras-backend.md:649-694` do HUB). O HUB avisa "Acima de {limite}, ela nasce Aguardando aprovação" (`FecharCompra/useFecharCompra.ts:485` (`precisaAprovacao(valorTotalBRL, limiteAprovacao)`), `FecharCompra/ResumoCompra.tsx:118` (`Acima de {toBRL`)). Quem aprova ou cancela uma OC aguardando é um usuário com `pode_aprovar` na tela `compras` (Gerência de Compras): `ordens_compra.route.js:1227-1237`. `condicoes_pagamento_compras.route.js:17` devolve o limite padrão 30.000,00 quando a unidade não tem linha.
 - 🟡 **Regra provisória:** o Nathan precisa de algo funcional agora; a regra vai ficar mais rígida quando conversarem com o setor de Compras (por exemplo, finalidade, tipo de item ou aprovação do Gerente também abaixo do limite). Não há desenho nem data.
 - 🟡 Segregação comprador ≠ aprovador: o `aprovado_por` vem do BFF (sessão), e a API só exige `pode_aprovar` na tela `compras`; **não** compara com `created_by` (`api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:1236`, `if (EXIGIR_PODE_APROVAR)`, e `:1241`, `usuarioTemPermissao(quem, "compras", "pode_aprovar")`). É o que a N16-123 decidiu. Na validação local em Docker de 10/11/2026, quem emitiu uma OC de R$ 35 mil aprovou a própria OC, como a N16-123 permite; a pergunta "quem emite pode aprovar?" foi reaberta na OQ-52. ❓ trava no banco não conferida. Evento `oc_enviada_aprovacao` só marca a mudança para `aguardando_aprovacao` (Dump, linha 6929).
 
@@ -65,7 +65,7 @@ fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-
 5. 🟡 A regra de aprovação é provisória: endurece depois da conversa com Compras (item C2/C3 acima).
 6. ❓ O SQL de `fn_requisicao_mes_aplicar` (migration 034) está em produção mas não versionado (Gustavo).
 7. ✅ **Travas da requisição do Compras, fixas desde 05/11/2026 (`1654f65`):** o `POST /compras/requisicoes` exige `finalidade` (400 `FINALIDADE_INVALIDA`), `material` que seja produto ativo do cadastro da unidade (400 `PRODUTO_INEXISTENTE`) e, se vier pedido de venda, que ele exista na unidade (400 `PEDIDO_VENDA_INEXISTENTE`) (`api-acos-vital` `requisicoes_compra.route.js:493-514`); o `PATCH` confere o pedido novo; e o `POST /compras/ordens` liga a trava "o pedido do vínculo é da unidade da OC" (`ordens_compra.route.js:1137-1140`). Antes dependiam da chave `COMPRAS_REQUISICAO_EXIGIR_CADASTRO`, padrão desligada, que o código não lê mais (contrato [[Contratos-da-v2|API-010]], N14-30, N14-31, N14-33).
-7. 🟡 Recompra por RNC: contrato LOG-58; a API do av-hub já recebe o aviso do MES (`POST /integracao/mes/avisos-compra`) e a OC de recompra aponta o aviso, mas o MES ainda não envia e a OC antiga segue `atendida` (ver [[08-Qualidade-Entrada]], pendência 2).
+7. 🟡 Recompra por RNC: contrato LOG-58; a API do av-hub já recebe o aviso do MES (`POST /integracao/mes/avisos-compra`) e a OC de recompra aponta o aviso; a tela do Compras trata o aviso (front, 12/11), mas o MES ainda não envia e a OC antiga segue `atendida` (ver [[08-Qualidade-Entrada]], pendência 2).
 8. 🟡 Um item cancelado pelo Compras volta a Requisições com motivo, e o PCP decide: abrir outra requisição ou devolver ao Estoque (`compras.service.ts:222-227`).
 
 ## C6, C7 e C8: a parte de compras do pedido da proposta
@@ -97,7 +97,7 @@ Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-ant
 | 20 | Compras tem uma **lista dos casos reprovados ainda sem solução** e um mecanismo para registrar a solução | 📝 N16-73; 🟡 o desenho |
 | 30 | Compras vê a mesma tela em **leitura** (cotado do vendedor ao lado do valor da OC, em `C6`); o valor correto entra na **OC** (`C7`), não na proposta | 📝 N16-08, N16-19 |
 
-### Pedido de aprovação do vendedor (`C8`) 🟡
+### Pedido de aprovação do vendedor (`C8`) ✅ (`av-hub` `components/Pedidos/DivergenciasDoVendedor.tsx:76` (`Para você responder`))
 
 Estados (N16-66, N16-73; no banco de teste desde 12/11, com `INFORMATIVA` para a compra abaixo do cotado): `PENDENTE` (na lista do vendedor, sem tempo limite), `APROVADO` (a compra segue), `REPROVADO` (em tratativa: entra na **lista de Compras**) e `RESOLVIDO` (Compras registrou a solução: novo valor, novo fornecedor, mantido ou pedido cancelado; o vendedor foi notificado). O tempo em cada estado é cronometrado.
 
@@ -105,10 +105,9 @@ Estados (N16-66, N16-73; no banco de teste desde 12/11, com `INFORMATIVA` para a
 
 | Nome atual | Rota | App | Quem | Nó | Estado |
 |---|---|---|---|---|---|
-| **Meus Pedidos**, com o andamento da venda e **o que está aberto para o vendedor** (aprovar ou reprovar compra acima do valor) | `/meus-pedidos` 🟡 | HUB | Vendedor | `C8` | 🔴 a tela existe e outra frente a evolui (encerramento por saldo zerado, SQL-014); a área de pendências é nova |
-| **Lista de casos reprovados pelo vendedor** (sem solução) | `/compras/...` 🟡 | HUB | Comprador | `C8` | 🔴 |
-| Visão de Compras da mesma tela (leitura) | dentro de `/compras/nova/[requisicaoId]` 🟡 | HUB | Comprador | `C6`, `C7` | 🔴 |
-| Conferência de Compras (parte de compras da proposta) | dentro de `/compras/nova/[requisicaoId]` 🟡 | HUB | Comprador | `C6`, `C7` | 🔴 |
+| **Meus Pedidos**, com o andamento da venda e **o que está aberto para o vendedor** (aprovar ou reprovar compra acima do valor) | `/meus-pedidos` | HUB | Vendedor | `C8` | ✅ `av-hub` `app/(protected)/vendas/meus-pedidos/page.tsx:9` (`topo={<DivergenciasDoVendedor />}`) |
+| **Lista de casos reprovados pelo vendedor** (sem solução) | `/compras/divergencias` | HUB | Comprador | `C8` | ✅ `av-hub` `app/(protected)/compras/divergencias/page.tsx:8` (`<DivergenciasLista />`) |
+| Cotado na proposta, ao lado do valor da OC (leitura, com "Usar o preço da proposta") | dentro de `/compras/nova` | HUB | Comprador | `C6`, `C7` | ✅ `av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:248` (`<CotacaoDaProposta`) |
 
 ### Endpoints
 
@@ -128,8 +127,7 @@ Estados (N16-66, N16-73; no banco de teste desde 12/11, com `INFORMATIVA` para a
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 7 | `C6` e `C7` na tela de emissão da OC: mostrar a parte de compras da proposta, puxar fornecedor e impostos, editar, gravar o valor correto sem tocar a proposta. Contrato API-019 (`06-Contratos/Ativos`) (11/11); o imposto gravado na OC segue no BL-053. **API pronta em 12/11** (a consulta do PV traz `proposta` e `compra_proposta` por item); falta a tela | Nathan, Gustavo | `C6`, `C7` | 🟡 |
-| 12 | **`C8`:** aviso e aprovação em Meus Pedidos, tabela `divergencias_compra`, lista de Compras dos reprovados e registro da solução. Contrato LOG-57 (11/11): a OC espera o vendedor; nesta etapa só o PV de proposta; a margem considerada vem com o BL-078. **API e banco prontos em 12/11**; faltam as telas e a margem | Nathan, Gustavo; Robert na margem | `C8` | 🟡 |
+| 12 | **`C8`:** a margem considerada no aviso (BL-078) e o PV digitado no Omie (N16-102, segunda etapa). O resto do LOG-57 está na `develop` desde 12/11; o item 7 (`C6` e `C7`, API-019) saiu, entregue em 12/11; o imposto gravado na OC segue no BL-053 | Robert na margem; Nathan | `C8` | 🟡 |
 
 ### Pendências (numeração da nota de proposta)
 
@@ -148,7 +146,7 @@ Estados (N16-66, N16-73; no banco de teste desde 12/11, com `INFORMATIVA` para a
 | 4 | **Perfil CCP:** edição só pelo CCP. O código já trava pela tela `followup`; falta o cadastro: SQL pronto e testado no Docker em 12/11 (`../Perguntas-e-Respostas/perfil-CCP-followup.sql`, fora do vault), para o Gustavo aplicar no tst e na produção | Gustavo, Nathan | C5 | 🟡 |
 | 5 | Remover ou arquivar `GET /requisicoes-compra` (contrato 003) e o comentário velho | Gustavo, Robert | — | 🟡 |
 | 6 | **Versionar** `fn_requisicao_mes_aplicar` (migration 034) | Gustavo | P3 | ❓ |
-| 7 | Contrato de **recompra por RNC** (decidido: o Compras é avisado no av-hub, N16-127) e da **reabertura do recebimento** (N16-137): LOG-58 (12/11). **API e banco do av-hub prontos em 12/11**; faltam o envio do MES e a tela | Nathan, Gustavo, Robert | Q3, C1 | 🟡 |
+| 7 | Contrato de **recompra por RNC** (decidido: o Compras é avisado no av-hub, N16-127) e da **reabertura do recebimento** (N16-137): LOG-58 (12/11). **API, banco e tela do av-hub prontos em 12/11**; falta o envio do MES | Nathan, Gustavo, Robert | Q3, C1 | 🟡 |
 | 8 | Aviso ao PCP e ao vendedor quando a previsão de chegada atrasa o pedido de venda | Nathan | C5 | 📝 decidido: a mudança de data do CCP só avisa o vendedor, em Meus Pedidos (N16-64, N16-91); a previsão de faturamento é derivada (N16-88, N16-97); o PCP vê a vigente e todas as datas (N16-104); e-mail e notificações ficam para o futuro (N16-113) |
 | 9 | Dois formulários ou um para origem PCP e origem Compras (T-03): o MES exige pedido e prazo; o HUB aceita sem pedido | Nathan | P3, C0 | 🟡 |
 | 10 | Teste ponta a ponta do circuito com `AVHUB_MES_INTEGRACAO_KEY` e `API_KEY` reais | Robert, Gustavo | P3, C5 | ❓ |
