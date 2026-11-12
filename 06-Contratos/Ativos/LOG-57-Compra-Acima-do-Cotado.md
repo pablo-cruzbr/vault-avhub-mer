@@ -13,7 +13,7 @@ decisoes: [N16-159, N16-17, N16-60, N16-61, N16-62, N16-63, N16-64, N16-65, N16-
 develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11]
 tags: [contrato, compras, c8, divergencia, vendedor, meus-pedidos]
 criado: 2026-11-11
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 dono: Nathan
 fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 16 a 20 e item 12 de "O que falta"), Registro-de-Decisoes N16-60 a N16-67, N16-73, N16-76 e N16-102, Estados-e-Status (divergencias_compra), escolhas do Nathan de 11/11/2026 (OC espera; só PV de proposta nesta etapa; diferença de custo agora e margem considerada com o BL-078), api-acos-vital develop 637f183, av-hub develop d0e8f8f]
 ---
@@ -38,7 +38,7 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 
 ## 4. Como está hoje
 
-- **Banco.** 🔴 Não existe `core_comercial.divergencias_compra` (dumps de 04 e 09/11; [[Banco-AvHub]]). Os estados `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` e os tipos de solução estão só no desenho ([[Estados-e-Status]]). O cotado por item existe em `core_comercial.propostas_itens.preco_unit_compra`.
+- **Banco.** ✅ **Aplicado no teste em 12/11** ([[Dump-AvHub-Teste-2026-11-12]]): as duas tabelas, a coluna, a view `vw_divergencias_compra` e as funções da seção 9. Até o dump de 10/11 não existia `core_comercial.divergencias_compra` ([[Banco-AvHub]]). Os estados `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` e os tipos de solução estão só no desenho ([[Estados-e-Status]]). O cotado por item existe em `core_comercial.propostas_itens.preco_unit_compra`.
 - **API.** 🔴 Nenhuma rota de divergência. A OC é emitida em `POST /compras/ordens` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:924` (`router.post("/"`) e aprovada ou cancelada em `PATCH /compras/ordens/{id}` (`:1183`, `router.patch("/:id"`), com os estados `rascunho`, `aguardando_aprovacao`, `aprovado` e `cancelado` (`:92`, `const STATUS`).
 - **Front.** 🔴 Meus Pedidos (`av-hub` `app/(protected)/vendas/meus-pedidos/page.tsx`) não tem área de pendências. Compras não tem lista de divergências. A tela da OC ganha a comparação com o cotado no API-019 (rascunho, `av-hub` PR #282).
 
@@ -126,6 +126,9 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 - **Idempotência:** aprovar ou reprovar de novo responde `409 DIVERGENCIA_ESTADO`, sem efeito.
 
 ## 9. Banco (SQL)
+
+> [!info] Aplicado no banco de teste (dump de 12/11)
+> Está no [[Dump-AvHub-Teste-2026-11-12]]: `divergencias_compra` (`:17909`), `divergencias_compra_eventos` (`:18039`), `ordens_compra_itens.motivo_divergencia` (`:19223`), `vw_divergencias_compra` (`:19278`), `fn_divergencias_compra_gerar` (`:2748`), `fn_divergencia_compra_decidir` (`:2541`) e `fn_oc_liberar_apos_divergencia` (`:3139`), com os três índices pedidos. Difere do texto abaixo: o banco tem `codigo_empresa_pv` (a unidade do PV do vínculo), e a unicidade é `uq_divergencias_compra_item_pv` em `(id_ordem_compra_item, codigo_empresa_pv, numero_pedido_venda, codigo_produto_pv)` (`:32181`), não `UNIQUE` só no item da OC: um item de OC que atende vários PVs tem uma divergência por PV. Falta a produção.
 
 - **`core_comercial.divergencias_compra`** (nova): `id uuid PK`, `codigo_empresa uuid NOT NULL`, `numero_pedido_venda varchar(30) NOT NULL`, `codigo_produto_pv varchar(30) NOT NULL`, `id_pedido_hub uuid` (FK `pedidos_venda`), `id_proposta_item uuid` (FK `propostas_itens`), `id_ordem_compra uuid NOT NULL` (FK), `id_ordem_compra_item uuid NOT NULL` (FK, `UNIQUE`), `tipo varchar(12) NOT NULL CHECK (tipo IN ('ACIMA','ABAIXO'))`, `estado varchar(12) NOT NULL CHECK (estado IN ('PENDENTE','APROVADO','REPROVADO','RESOLVIDO','INFORMATIVA'))`, `valor_cotado numeric(15,4) NOT NULL`, `valor_compra numeric(15,4) NOT NULL`, `unidade_medida varchar(10)`, `quantidade numeric(15,4)`, `margem_proposta_pct numeric(9,4)`, `margem_considerada_pct numeric(9,4)` (nula até o BL-078), `motivo_compras text`, `id_vendedor uuid NOT NULL`, `decidido_por uuid`, `decidido_em timestamptz`, `comentario_vendedor text`, `solucao_tipo varchar(20) CHECK (solucao_tipo IN ('MANTIDO','NOVO_VALOR','NOVO_FORNECEDOR','PEDIDO_CANCELADO','OC_CANCELADA'))`, `solucao_motivo text`, `resolvido_por uuid`, `resolvido_em timestamptz`, `created_at`, `updated_at`.
 - Índices: `(id_vendedor, estado)`, `(estado, codigo_empresa)`, `(id_ordem_compra)`.
