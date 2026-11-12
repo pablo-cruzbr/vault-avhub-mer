@@ -4,7 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-10-29
 status: vigente
 dono: Gustavo (DBA)
-fontes: [api-acos-vital develop 0384e89 em 29/10 (apiKeyAuth.js, acessoConfig.js, docs/rotas.js; antes f322dcd), api-pcp develop befd973, app-pcp 1fca8d3, omie-elt-pipeline 0f739f0, av-hub develop 758d5f0 em 29/10 (antes b55ac55), v1 Chaves-de-Integracao-AvHub-MES-Pipeline, Registro-de-Decisoes #8 #9 #10 #11 #12 #87 #88]
+fontes: [api-acos-vital develop bebca52 em 12/11 (apiKeyAuth.js, rota dos avisos do MES), api-acos-vital develop 0384e89 em 29/10 (apiKeyAuth.js, acessoConfig.js, docs/rotas.js; antes f322dcd), api-pcp develop befd973, app-pcp 1fca8d3, omie-elt-pipeline 0f739f0, av-hub develop 758d5f0 em 29/10 (antes b55ac55), v1 Chaves-de-Integracao-AvHub-MES-Pipeline, Registro-de-Decisoes #8 #9 #10 #11 #12 #87 #88]
 ---
 
 # Chaves e autenticação
@@ -46,7 +46,7 @@ A tabela de regras que já viraram fixas, o mapa completo das chaves e as rotas 
 
 | Chave | Direção | Variável no emissor | Variável no receptor | Vale para | Selo |
 |---|---|---|---|---|---|
-| A, requisição | MES para av-hub | `api-pcp`: `AVHUB_MES_INTEGRACAO_KEY` (singular) ✅ `envio-avhub.service.ts:98` | `api-acos-vital`: `MES_INTEGRACAO_KEYS` (lista, plural) ✅ `apiKeyAuth.js` | **só** `PUT /compras/requisicoes/origem/:id`; qualquer outra rota ou método dá 403 `CHAVE_MES_ROTA_NAO_PERMITIDA`. Mínimo de 32 caracteres; as curtas são ignoradas com aviso | ✅ |
+| A, requisição e avisos de compra | MES para av-hub | `api-pcp`: `AVHUB_MES_INTEGRACAO_KEY` (singular) ✅ `envio-avhub.service.ts:98` | `api-acos-vital`: `MES_INTEGRACAO_KEYS` (lista, plural) ✅ `apiKeyAuth.js` | **só** `PUT /compras/requisicoes/origem/:id` e, desde 12/11/2026, `POST /integracao/mes/avisos-compra` (LOG-58) ✅ `apiKeyAuth.js:110` (`(metodo === "PUT" && ROTA_MES.test(caminho)) || (metodo === "POST" && ROTA_MES_AVISOS.test(caminho))`), `api-acos-vital` `bebca52`; qualquer outra rota ou método dá 403 `CHAVE_MES_ROTA_NAO_PERMITIDA`. 🔴 O MES ainda não manda os avisos (Robert, LOG-58). Mínimo de 32 caracteres; as curtas são ignoradas com aviso | ✅ |
 | B, leitura e confirmação do MES | MES para av-hub | `api-pcp`: `API_KEY` e `API_URL` ✅ `omie-integracao.ts:149`, `eventos-avhub.service.ts:192`, `produtos-avhub.client.ts:60` | `api-acos-vital`: `API_KEYS` (admin) ou `auth.chaves_servico` | pedidos liberados, `importado`, eventos de requisição (35), referência da OC (004/007) e das requisições (API-009), produtos, unidades. **Acesso total se for chave `API_KEYS`**; com chave do banco em modo `exigir`, só as rotas da lista | ✅ código; modo em produção ❓ (BL-018) |
 | C, pipeline | pipeline para av-hub | `omie-elt-pipeline`: `AVHUB_API_URL`, `AVHUB_API_KEY` ✅ `src/config/index.ts:164-165` | `API_KEYS` ou `auth.chaves_servico` | `GET /compras/ordens/fila-omie`, `PATCH /compras/ordens/:id/sincronizacao`, `POST :id/reenviar` | ✅ código; modo em produção ❓ (BL-018) |
 | D, av-hub lê o MES | av-hub para MES | `api-acos-vital`: `MES_API_URL`, `MES_API_KEY` ✅ `app.js`, `utils/mesFluxo.js` | `api-pcp`: `MES_API_KEY` (guard fail-closed, 401 sem a variável) ✅ `avhub-api-key.guard.ts:11-23` | `GET /itens/status` (005), `GET /requisicoes-compra` (003, legado), `GET /itens/custo` (008; rota feita só na `develop` do MES, `6c11147` de 27/10), `GET /fluxo/*` (46; o MES ainda não tem o módulo 🔴) | ✅ |
@@ -62,7 +62,7 @@ O nome do lado do MES na chave A é `AVHUB_MES_INTEGRACAO_KEY` (singular), e o v
 
 1. **`API_KEYS` (ambiente)**: admin. Vale como `acesso: "admin"`; `exigeUsuario` depende de `IDENTIDADE_EXIGIR_TOKEN`. Guardada como hash SHA-256 e comparada em tempo constante (S14).
 2. **`auth.chaves_servico` (banco)**: nível `leitura` (só GET, HEAD, OPTIONS; escrita dá 403 `CHAVE_SOMENTE_LEITURA`), `escrita` ou `admin`. Rota administrativa (`auth.fn_rota_administrativa`) só com chave admin ou token de usuário (403 `CHAVE_SEM_ACESSO_ADMINISTRATIVO`). Cache de 30 s por hash, aceita chave de 16 a 200 caracteres. **Restrição por rota ✅ desde a migration 051 (15/10):** `modo_rotas` `livre` (padrão de toda chave), `registrar` (deixa passar e anota o uso em `auth.chaves_servico_uso`) ou `exigir` (rota fora de `auth.chaves_servico_rotas` dá 403 `CHAVE_ROTA_NAO_PERMITIDA`). Não vale para `API_KEYS` nem para a chave do MES.
-3. **`MES_INTEGRACAO_KEYS`**: a chave A. Conferida antes de `API_KEYS`; descarta `Authorization`, `id_usuario_sessao` e os campos de autoria do corpo (ninguém forja autoria).
+3. **`MES_INTEGRACAO_KEYS`**: a chave A. Conferida antes de `API_KEYS`; descarta `Authorization`, `id_usuario_sessao` e os campos de autoria do corpo (ninguém forja autoria). Exceção na rota dos avisos (LOG-58): o `decidido_por` fica, porque é o login de quem decidiu no MES, gravado como texto no aviso, e não um usuário do av-hub.
 
 Falha de validação no banco responde 503. Mais de 30 falhas de chave por IP em 60 s dão 429 `MUITAS_FALHAS_DE_CHAVE` (S5). Rotas públicas: `/health`, `/docs`, `/favicon.ico`, `/auth` (`/blog` saiu, S20; `middlewares/_comum.js`).
 
