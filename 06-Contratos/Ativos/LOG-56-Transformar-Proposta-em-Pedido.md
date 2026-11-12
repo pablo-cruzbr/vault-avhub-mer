@@ -3,7 +3,7 @@ id: LOG-56
 titulo: "Transformar proposta em pedido: as respostas que faltam e as pontas soltas da tela"
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento]
 criado: 2026-11-09
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: parcial
 dono: Nathan
 autor: Robert
@@ -102,9 +102,9 @@ Base: av-hub `6fcbba6` e api-acos-vital `655896a`. Cada âncora usa o trecho que
 | Front (BFF) | 🔴 Novo na v8: o BFF da liberação monta o corpo do PUT à mão e valida só a Qualidade; campo novo que a API venha a aceitar morre aqui, sem erro | `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:27-29` (`typeof acompanha !== 'boolean'`), `:51` (`body: JSON.stringify({ acompanhamento_qualidade: acompanha, updated_by: idUsuario })`) |
 | API | ✅ `GET /comercial/propostas/{id}/prontidao-omie` existe, com os 5 códigos; o BFF ainda falta (passo 12, Robert) | `propostas.route.js:646` (`e9878b7`); migration log56 `:635`; `propostas.ts:377` (`getProntidaoPedido`), que devolve `null` em 404 |
 | Permissão | ✅ `GET /compras/condicoes-pagamento` tem linha para a tela `propostas` desde a migration de 05/11 (teste; produção pendente) | `app/api/comercial/condicoes-pagamento/route.ts`; migration `2026-11-05_condicoes_pagamento_encargos.sql:84` |
-| SQL | ✅ Aplicadas no teste (dump de 10/11); ficam com o DBA, fora do repositório (N16-155); produção pendente | §9; Q&A de 09/11 (P4) |
+| SQL | ✅ Aplicadas no teste (dump de 10/11; o índice único `uq_pedidos_venda_omie`, em `(codigo_empresa_omie, codigo_pedido_omie)`, no dump de 12/11, que tirou o `ix_pedidos_venda_omie` parcial, [[Dump-AvHub-Teste-2026-11-12]]); ficam com o DBA, fora do repositório (N16-155); produção pendente | §9; Q&A de 09/11 (P4) |
 
-✅ **Saíram desta lista em 11/11 (N16-154):** a empresa emissora passou a ser a própria unidade e `core_comercial.unidades_emissoras` saiu (migration `2026-11-10_comercial_emissora_vira_unidade`). `GET /comercial/empresas_emissoras` continua na API do Hub e já devolve `id_unidade_conta_omie`, igual ao `id_unidade` (`api-acos-vital` `cc3fbb3`, `cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`). Com isso o modal, que usa o `id_unidade`, fica certo também na HRM, e a pendência de dado da N16-98 (HRM na conta de Mogi) deixa de existir. ❓ Falta ver a migration aplicada num dump novo, e aplicá-la na produção.
+✅ **Saíram desta lista em 11/11 (N16-154):** a empresa emissora passou a ser a própria unidade e `core_comercial.unidades_emissoras` saiu (migration `2026-11-10_comercial_emissora_vira_unidade`). `GET /comercial/empresas_emissoras` continua na API do Hub e já devolve `id_unidade_conta_omie`, igual ao `id_unidade` (`api-acos-vital` `cc3fbb3`, `cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`). Com isso o modal, que usa o `id_unidade`, fica certo também na HRM, e a pendência de dado da N16-98 (HRM na conta de Mogi) deixa de existir. ✅ A migration está aplicada no teste: no dump de 12/11 a tabela e a coluna `id_unidade_emissora` saíram, e o cabeçalho do documento vem de `core.vw_unidades_cabecalho` ([[Dump-AvHub-Teste-2026-11-12]]). Falta aplicá-la na produção.
 
 ## 5. Regras de negócio
 
