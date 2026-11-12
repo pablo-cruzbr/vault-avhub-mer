@@ -61,8 +61,8 @@ A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`
 | ID | Título | Status | Autor | Data |
 |---|---|---|---|---|
 | [[LOG-56-Transformar-Proposta-em-Pedido\|LOG-56]] | Transformar proposta em pedido: as respostas que faltam e as pontas soltas da tela (v8) | `parcial` | Robert | 2026-11-10 |
-| [[API-019-Compra-da-Proposta-na-OC\|API-019]] | A emissão da OC mostra a parte de compras da proposta (`C6` e `C7`) | `para-implementar` | Nathan | 2026-11-11 |
-| [[LOG-57-Compra-Acima-do-Cotado\|LOG-57]] | Compra acima do cotado na proposta, aprovação do vendedor e lista de Compras (`C8`) | `para-implementar` | Nathan | 2026-11-11 |
-| [[LOG-58-Avisos-do-MES-ao-Compras\|LOG-58]] | O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento | `para-implementar` | Nathan | 2026-11-12 |
+| [[API-019-Compra-da-Proposta-na-OC\|API-019]] | A emissão da OC mostra a parte de compras da proposta (`C6` e `C7`) | `parcial` | Nathan | 2026-11-11 |
+| [[LOG-57-Compra-Acima-do-Cotado\|LOG-57]] | Compra acima do cotado na proposta, aprovação do vendedor e lista de Compras (`C8`) | `parcial` | Nathan | 2026-11-11 |
+| [[LOG-58-Avisos-do-MES-ao-Compras\|LOG-58]] | O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento | `parcial` | Nathan | 2026-11-12 |
 
 O modelo de consulta está em [[Modelo-de-Consulta]].

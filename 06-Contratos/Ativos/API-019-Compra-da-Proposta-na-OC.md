@@ -1,7 +1,7 @@
 ---
 id: API-019
 titulo: A emissão da OC mostra a parte de compras da proposta (C6 e C7)
-status: para-implementar
+status: parcial
 autor: Nathan
 data: 2026-11-11
 camadas: [frontend, api]
@@ -10,12 +10,12 @@ nos_0b: [C6, C7]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, 01-Proposta-de-Venda, Backlog-por-Frente]
 depende_de: [LOG-56]
 decisoes: [N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, N16-157]
-develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11]
+develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo]
 tags: [contrato, compras, proposta, oc, c6, c7]
 criado: 2026-11-11
 estado-em: 2026-11-12
 dono: Nathan
-fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 14, 15 e 30; item 7 de "O que falta"), Registro-de-Decisoes N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, api-acos-vital develop 637f183, av-hub develop d0e8f8f, banco do ambiente Docker local (dados do tst) em 11/11/2026]
+fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 14, 15 e 30; item 7 de "O que falta"), Registro-de-Decisoes N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, api-acos-vital develop 637f183, av-hub develop d0e8f8f, banco do ambiente Docker local (dados do tst) em 11/11/2026, "Relatório de entrega de Gustavo de 12/11/2026 (API-019), conferido na develop bebca52 e no dump de teste de 12/11"]
 ---
 
 # API-019 · A emissão da OC mostra a parte de compras da proposta (C6 e C7)
@@ -38,7 +38,7 @@ Nós `C6` e `C7` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]] (dona
 ## 4. Como está hoje
 
 - **Banco.** 🟡 A proposta já guarda a cotação de compra por item: `core_comercial.propostas_itens` tem `fornecedor` (texto livre), `origem_compra`, `qtd_compra`, `unidade_compra`, `preco_unit_compra`, `ipi_compra_pct`, `st_compra_valor`, `frete_compra_valor`, `custo_liquido_unit` e `custo_liquido_total`; o cabeçalho `core_comercial.propostas` tem `frete_compra_tipo` e `frete_compra_valor` (banco do Docker local, dados do tst, 11/11). O pedido do Hub liga as duas pontas: `core_comercial.pedidos_venda` (`id_proposta`, `numero_proposta`, `numero_pedido_omie`, `codigo_empresa`) e `core_comercial.pedidos_venda_itens` (`id_proposta_item`, `codigo_produto_omie`).
-- **API.** 🔴 Nenhuma rota de Compras lê esses campos. A tela da OC lê o pedido por `GET /compras/pedidos-venda/{numero}` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:175` (`router.get("/:numero"`), que devolve só o cabeçalho do Omie e os itens de `vw_pedido_venda_itens_compra`.
+- **API.** ✅ Entregue pelo Gustavo em 12/11. `GET /compras/pedidos-venda/{numero}` (`api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:175`, `router.get("/:numero"`) devolve, além do cabeçalho do Omie e dos itens de `vw_pedido_venda_itens_compra`, a `proposta` no cabeçalho (`:241`, `proposta: compra.proposta,`) e a `compra_proposta` em cada item (`:244`, `compra_proposta: compra.compraPorProduto.get(`), lidas da view da seção 9. Até 11/11 nenhuma rota de Compras lia esses campos.
 - **Front.** 🔴 A tela `/compras/nova` mostra, por item, o destino no PV e mais nada da venda: `av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:245` (`<DestinoItem item={item} indice={indice} />`). O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
 
 ## 5. Regras de negócio
@@ -134,8 +134,8 @@ Nenhuma. Omie e MES não mudam.
 
 ## 12. Critérios de aceite
 
-- [ ] API: `GET /compras/pedidos-venda/{numero}` devolve `proposta` e `compra_proposta` como na seção 8 para um PV nascido de proposta, e `null` nos dois para um PV digitado no Omie.
-- [ ] API: o número do Omie com zeros à esquerda casa com o número sem zeros.
+- [x] API: `GET /compras/pedidos-venda/{numero}` devolve `proposta` e `compra_proposta` como na seção 8 para um PV nascido de proposta, e `null` nos dois para um PV digitado no Omie.
+- [x] API: o número do Omie com zeros à esquerda casa com o número sem zeros.
 - [ ] Frontend: na Nova OC com esse PV, o item mostra o bloco "Cotado na proposta", a comparação e o aviso quando o valor passa do cotado.
 - [ ] Frontend: "Usar o preço da proposta" preenche o valor unitário; a proposta não muda no banco.
 - [ ] Frontend: PV sem proposta mostra a tela como hoje.
@@ -149,7 +149,7 @@ Nenhuma. Omie e MES não mudam.
 
 ## 14. Ordem de implementação e responsáveis
 
-1. **API (Gustavo):** os dois campos na rota. Não depende de nada.
+1. **API (Gustavo):** ✅ os dois campos na rota (12/11, `bebca52`; 36 verificações no relatório de entrega).
 2. **Front (Nathan):** tipos, função pura, bloco no item e linha do frete. Pode começar antes, contra este contrato; só vai para a `develop` depois da API.
 
 ## 15. Riscos, rollback e perguntas em aberto
@@ -158,6 +158,8 @@ Nenhuma. Omie e MES não mudam.
 - **Risco:** pedido do Hub ainda sem `numero_pedido_omie` (o Omie recusou) não acha o PV pela rota. É o caso de PV-000004 e PV-000005 no Docker; na produção o pedido só chega a Compras depois de existir no Omie.
 - **Pergunta (Nathan):** o fornecedor cotado é texto livre. Vale pedir à proposta o parceiro do cadastro (código Omie) em vez do nome? Isso é da raia 01 (Robert).
 - **Pergunta (Nathan):** o `custo_liquido_unit` está vazio em todas as propostas do banco de teste. Ele deveria vir preenchido pelo motor da proposta (BL-078)?
+- **Escolhas da entrega (Gustavo, 12/11) que o contrato não dizia:** a rota casa o PV por `pedidos_venda.codigo_empresa_omie` (`:73`, `WHERE codigo_empresa_omie = :e`), o mesmo critério do LOG-56 §7.6, e não por `codigo_empresa` (hoje os dois são iguais nas três unidades); com mais de um pedido do Hub para o mesmo PV, vale o mais recente, com aviso `[API-019]` no log (`:75`, `ORDER BY pedido_hub_criado_em DESC`); produto repetido no pedido do Hub usa a linha de menor `ordem`; se a leitura da proposta falhar, a rota responde com os dois campos nulos (`:78`, `const vazio = { proposta: null`); os números saem como número, como na seção 8, embora o `CLAUDE.md` da API peça string para dinheiro novo.
+- **Pergunta (Gustavo, 12/11):** pedido do Hub `CANCELADO` (não excluído) também casa e mostra a cotação na OC, porque a seção 8 só tira os excluídos. Continua assim, ou só os ativos? ❓
 
 ## 16. Impacto no vault quando for entregue
 

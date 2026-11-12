@@ -1,7 +1,7 @@
 ---
 id: LOG-58
 titulo: O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento
-status: para-implementar
+status: parcial
 autor: Nathan
 data: 2026-11-12
 camadas: [frontend, backend, api, sql]
@@ -10,12 +10,12 @@ nos_0b: [Q3, R5, C1]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, 07-Recebimento, 08-Qualidade-Entrada, Integracao-AvHub-MES, Backlog-por-Frente]
 depende_de: []
 decisoes: [N16-126, N16-127, N16-135, N16-137, N16-157, N16-158]
-develop-conferida: [api-pcp 2e564e6, api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-12]
+develop-conferida: [api-pcp 2e564e6, api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-12; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo]
 tags: [contrato, compras, mes, rnc, recebimento, recompra]
 criado: 2026-11-12
 estado-em: 2026-11-12
 dono: Nathan
-fontes: [Registro-de-Decisoes N16-126, N16-127, N16-135 e N16-137, 06-Circuito-de-Compra-Detalhe-Tecnico-2 (item 7 de "O que falta" e a pendência da recompra), api-pcp develop 2e564e6 (recebimento.service.ts, circuito-compra.ts, qualidade.service.ts, prisma/models), api-acos-vital develop 637f183]
+fontes: [Registro-de-Decisoes N16-126, N16-127, N16-135 e N16-137, 06-Circuito-de-Compra-Detalhe-Tecnico-2 (item 7 de "O que falta" e a pendência da recompra), api-pcp develop 2e564e6 (recebimento.service.ts, circuito-compra.ts, qualidade.service.ts, prisma/models), api-acos-vital develop 637f183, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-58), conferido na develop bebca52 e no dump de teste de 12/11"]
 ---
 
 # LOG-58 · O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento
@@ -39,7 +39,7 @@ Nasce em `Q3` ([[08-Qualidade-Entrada]]) e em `R5` ([[07-Recebimento]]) e chega 
 
 - **MES.** ✅ As duas devoluções existem, como na seção 2. O lote guarda o item da OC do av-hub (`Lote.idItemOc`, `prisma/models/estoque.prisma:406`), e o recebimento sem requisição guarda a OC (`Recebimento.idOrdemCompra`, `prisma/models/compras.prisma:196`); o com requisição chega à OC pela requisição. 🔴 Nenhuma chamada ao av-hub nesses dois pontos.
 - **Canal existente.** O MES lê os marcos do av-hub por polling (contrato 35) e manda a requisição por `PUT` (contrato 34). Não existe caminho do MES para o av-hub com eventos de compra.
-- **av-hub.** 🔴 Nenhuma tabela nem rota para aviso do MES. A OC já aceita a finalidade `recompra`, que liga ao pedido de venda (`ordens_compra.route.js:91-93`).
+- **av-hub.** ✅ Entregue pelo Gustavo em 12/11. Banco aplicado no teste ([[Dump-AvHub-Teste-2026-11-12]]): `core_vendas_faturamento.avisos_mes_compra` (`:23757`) e `ordens_compra.id_aviso_mes` (`:18986`); produção pendente. API na `develop` (`bebca52`): `POST /integracao/mes/avisos-compra` (`api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:110`, `integracaoMesAvisos.post("/"`), `GET /compras/avisos-mes` (`:161`, `comprasAvisosMes.get("/"`), `GET /compras/avisos-mes/{id}` (`:183`, `comprasAvisosMes.get("/:id"`, a mais que a seção 8, para a tela de recompra montar a OC) e `PATCH /compras/avisos-mes/{id}` (`:192`, `comprasAvisosMes.patch("/:id"`). A chave do MES abre só a rota nova (`src/middlewares/apiKeyAuth.js:108`, `const ROTA_MES_AVISOS`). A OC aceita a finalidade `recompra`, que liga ao pedido de venda (`src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:96`, `const FINALIDADES_COM_PV`).
 
 ## 5. Regras de negócio
 
@@ -118,9 +118,9 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 ## 12. Critérios de aceite
 
 - [ ] MES: reprovar um lote de OC do av-hub e reabrir um recebimento geram um aviso cada, enviados ao av-hub; com o av-hub fora, o aviso espera e é reenviado.
-- [ ] API: o POST grava o aviso; repetir o `id_aviso_mes` não duplica; OC inexistente dá `404`.
+- [x] API: o POST grava o aviso; repetir o `id_aviso_mes` não duplica; OC inexistente dá `404`.
 - [ ] Front: o detalhe da OC mostra o aviso; "Nova OC de recompra" abre a OC preenchida e, emitida, resolve o aviso; "Fornecedor vai substituir" pede motivo.
-- [ ] Banco: tabela e coluna como na seção 9.
+- [x] Banco: tabela e coluna como na seção 9.
 
 ## 13. Como testar
 
@@ -130,7 +130,7 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 
 ## 14. Ordem de implementação e responsáveis
 
-1. **Banco e API do av-hub (Gustavo):** tabela, coluna, as três rotas e a chave do MES.
+1. **Banco e API do av-hub (Gustavo):** ✅ tabela, coluna, as três rotas (mais `GET /compras/avisos-mes/{id}`) e a chave do MES (12/11, `bebca52`; 96 verificações no relatório de entrega).
 2. **MES (Robert, com o Gustavo acompanhando, N16-158):** a fila de saída e o envio nos dois pontos.
 3. **Front (Nathan):** detalhe da OC, lista, Nova OC de recompra.
 
@@ -140,6 +140,8 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 - **Pergunta (Nathan):** reprovação parcial (N16-128 é da saída; a de entrada já cinde o lote) avisa com a quantidade reprovada; confirmar que é por lote, não por item da OC.
 - **Rollback:** o MES para de enviar; os avisos gravados ficam como histórico.
 - **Risco:** OC cancelada ou já recomprada à mão antes do aviso chegar: o Compras trata com "Sem recompra".
+- **Pergunta (Gustavo, 12/11):** se a OC de recompra for cancelada depois, o aviso deve voltar a `ABERTO`? Hoje não volta (o contrato não pede). ❓
+- **Escolhas da entrega (Gustavo, 12/11) que o contrato não dizia:** `ordens_compra.id_aviso_mes` aponta o `id` do aviso no av-hub (o do GET), não o `id_aviso_mes` do MES; a finalidade `recompra` não é obrigatória no banco (aviso de OC de estoque não tem PV, e `recompra` exige vínculo); a OC de recompra tem de ser da mesma unidade da OC do aviso (AV585); `id_aviso_mes` repetido com corpo diferente devolve o aviso original sem conferir (R5), com log `[LOG-58]`; OC excluída dá `404 OC_NAO_ENCONTRADA`, e o MES deve marcar o envio como recusado; além do índice `(status, id_ordem_compra)` há `(id_ordem_compra, created_at)`. A tabela aceita aviso por lote ou por item (o item é opcional), enquanto a pergunta acima não for respondida.
 
 ## 16. Impacto no vault quando for entregue
 

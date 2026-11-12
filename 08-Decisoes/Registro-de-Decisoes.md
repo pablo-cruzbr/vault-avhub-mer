@@ -84,7 +84,7 @@ Resumo das decisões vigentes que mais pesam, agrupadas por assunto. O ID entre 
 
 Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (Ctrl+F no ID). Um ID pode aparecer em mais de um assunto.
 
-- **Proposta (criar, aprovar, cancelar, tela):** N16-01, N16-02, N16-03, N16-04, N16-05, N16-12, N16-19, N16-24, N16-25, N16-26, N16-27, N16-28, N16-29, N16-31, N16-75, N16-115, N16-116, N16-118, N16-119.
+- **Proposta (criar, aprovar, cancelar, tela):** N16-01, N16-02, N16-03, N16-04, N16-05, N16-12, N16-19, N16-24, N16-25, N16-26, N16-27, N16-28, N16-29, N16-31, N16-75, N16-115, N16-116, N16-118, N16-119, N16-160.
 - **Pedido de venda e Omie (criar, alterar, impostos de venda):** N16-02, N16-30, N16-35, N16-36, N16-82, N16-83, N16-84, N16-90, N16-95, N16-102, N16-104, N16-106, N16-142.
 - **Datas e previsão de faturamento:** N16-86, N16-88, N16-91, N16-96, N16-97, N16-104, #105, #106.
 - **Faturamento em partes e pedido sequencial:** N16-89, N16-91, N16-92, N16-93, N16-94, N16-97, N16-99, N16-100, N16-101, N16-130.
@@ -120,7 +120,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-73-a-N16-96]]: N16-73 a N16-96
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
-- [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026)
+- [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026; empresa, responsável e carteira de clientes da proposta, N16-160, pedidos do Robert de 11/11/2026)
 
 ## Onde está cada decisão
 
