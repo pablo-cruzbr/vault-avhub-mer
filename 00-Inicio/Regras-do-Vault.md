@@ -1,7 +1,7 @@
 ---
 tags: [vault, regras]
 criado: 2026-10-14
-estado-em: 2026-11-06
+estado-em: 2026-11-12
 status: vigente
 dono: Nathan
 fontes: [plano de 14/10/2026, instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, fatos F1 a F5 de 05/11/2026)]
