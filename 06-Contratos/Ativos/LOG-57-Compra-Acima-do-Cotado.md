@@ -1,7 +1,7 @@
 ---
 id: LOG-57
 titulo: Compra acima do cotado na proposta, aprovação do vendedor e lista de Compras (C8)
-status: para-implementar
+status: parcial
 autor: Nathan
 data: 2026-11-11
 camadas: [frontend, backend, api, sql]
@@ -10,12 +10,12 @@ nos_0b: [C8]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, Estados-e-Status, 15-Custo-Real-e-Comissao, Backlog-por-Frente]
 depende_de: [API-019, BL-078]
 decisoes: [N16-159, N16-17, N16-60, N16-61, N16-62, N16-63, N16-64, N16-65, N16-66, N16-67, N16-73, N16-76, N16-102, N16-157]
-develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11]
+develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo]
 tags: [contrato, compras, c8, divergencia, vendedor, meus-pedidos]
 criado: 2026-11-11
 estado-em: 2026-11-12
 dono: Nathan
-fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 16 a 20 e item 12 de "O que falta"), Registro-de-Decisoes N16-60 a N16-67, N16-73, N16-76 e N16-102, Estados-e-Status (divergencias_compra), escolhas do Nathan de 11/11/2026 (OC espera; só PV de proposta nesta etapa; diferença de custo agora e margem considerada com o BL-078), api-acos-vital develop 637f183, av-hub develop d0e8f8f]
+fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 16 a 20 e item 12 de "O que falta"), Registro-de-Decisoes N16-60 a N16-67, N16-73, N16-76 e N16-102, Estados-e-Status (divergencias_compra), escolhas do Nathan de 11/11/2026 (OC espera; só PV de proposta nesta etapa; diferença de custo agora e margem considerada com o BL-078), api-acos-vital develop 637f183, av-hub develop d0e8f8f, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-57), conferido na develop bebca52 e no dump de teste de 12/11"]
 ---
 
 # LOG-57 · Compra acima do cotado na proposta, aprovação do vendedor e lista de Compras (C8)
@@ -39,7 +39,7 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 ## 4. Como está hoje
 
 - **Banco.** ✅ **Aplicado no teste em 12/11** ([[Dump-AvHub-Teste-2026-11-12]]): as duas tabelas, a coluna, a view `vw_divergencias_compra` e as funções da seção 9. Até o dump de 10/11 não existia `core_comercial.divergencias_compra` ([[Banco-AvHub]]). Os estados `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` e os tipos de solução estão só no desenho ([[Estados-e-Status]]). O cotado por item existe em `core_comercial.propostas_itens.preco_unit_compra`.
-- **API.** 🔴 Nenhuma rota de divergência. A OC é emitida em `POST /compras/ordens` ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:935` (`router.post("/"`) e aprovada ou cancelada em `PATCH /compras/ordens/{id}` (`:1183`, `router.patch("/:id"`), com os estados `rascunho`, `aguardando_aprovacao`, `aprovado` e `cancelado` (`:92`, `const STATUS`).
+- **API.** ✅ Entregue pelo Gustavo em 12/11 (`bebca52`). As cinco rotas da seção 8 exigem token de usuário: `GET /compras/divergencias` e `POST /compras/divergencias/{id}/solucao` (`api-acos-vital` `src/schemas/core_comercial/tables/divergencias_compra/divergencias_compra.route.js:147`, `comprasDivergencias.get("/"`; `:167`, `comprasDivergencias.post("/:id/solucao"`), `GET /meus-pedidos/divergencias` (`:200`, `meusPedidosDivergencias.get("/"`) e as decisões do vendedor (`:235`, `meusPedidosDivergencias.post("/:id/aprovar"`; `:237`, `meusPedidosDivergencias.post("/:id/reprovar"`). A OC é emitida em `POST /compras/ordens` (`src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:935`, `router.post("/"`), que gera as divergências (`:1206`, `fn_divergencias_compra_gerar(:id)`); o `PATCH /compras/ordens/{id}` (`:1227`, `router.patch("/:id"`) dá `409 DIVERGENCIA_PENDENTE` com divergência aberta (`:1305`, `codigo: "DIVERGENCIA_PENDENTE"`). Estados da OC: `rascunho`, `aguardando_aprovacao`, `aprovado` e `cancelado` (`:94`, `const STATUS`).
 - **Front.** 🔴 Meus Pedidos (`av-hub` `app/(protected)/vendas/meus-pedidos/page.tsx`) não tem área de pendências. Compras não tem lista de divergências. A tela da OC ganha a comparação com o cotado no API-019 (rascunho, `av-hub` PR #282).
 
 ## 5. Regras de negócio
@@ -152,12 +152,12 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 
 ## 12. Critérios de aceite
 
-- [ ] Banco: as duas tabelas e a coluna existem no teste, com os `CHECK` da seção 9.
-- [ ] API: OC com item acima do cotado nasce em `aguardando_aprovacao` e com a divergência `PENDENTE`; sem motivo, `400 MOTIVO_DIVERGENCIA_OBRIGATORIO`.
-- [ ] API: `PATCH` para `aprovado` com divergência aberta dá `409 DIVERGENCIA_PENDENTE`.
-- [ ] API: o vendedor do PV aprova e a OC abaixo do limite fica `aprovado`; outro usuário recebe `403 NAO_E_O_VENDEDOR`.
-- [ ] API: reprovar leva à lista de Compras; `MANTIDO` libera a OC; cancelar a OC resolve as abertas com `OC_CANCELADA`.
-- [ ] API: item abaixo do cotado gera `INFORMATIVA` e não segura a OC.
+- [x] Banco: as duas tabelas e a coluna existem no teste, com os `CHECK` da seção 9.
+- [x] API: OC com item acima do cotado nasce em `aguardando_aprovacao` e com a divergência `PENDENTE`; sem motivo, `400 MOTIVO_DIVERGENCIA_OBRIGATORIO`.
+- [x] API: `PATCH` para `aprovado` com divergência aberta dá `409 DIVERGENCIA_PENDENTE`.
+- [x] API: o vendedor do PV aprova e a OC abaixo do limite fica `aprovado`; outro usuário recebe `403 NAO_E_O_VENDEDOR`.
+- [x] API: reprovar leva à lista de Compras; `MANTIDO` libera a OC; cancelar a OC resolve as abertas com `OC_CANCELADA`.
+- [x] API: item abaixo do cotado gera `INFORMATIVA` e não segura a OC.
 - [ ] Frontend: Meus Pedidos mostra "Para você responder" e "Avisos"; Compras · Divergências lista e registra a solução; o detalhe da OC mostra por que não aprova.
 
 ## 13. Como testar
@@ -169,17 +169,19 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 
 ## 14. Ordem de implementação e responsáveis
 
-1. **Banco (Gustavo):** tabelas e coluna.
-2. **API (Gustavo):** emissão, `PATCH`, as cinco rotas. Depende do API-019 para o cotado.
+1. **Banco (Gustavo):** ✅ tabelas e coluna (aplicadas no teste em 12/11, [[Dump-AvHub-Teste-2026-11-12]]; produção pendente).
+2. **API (Gustavo):** ✅ emissão, `PATCH`, as cinco rotas (12/11, `bebca52`; 83 verificações no relatório de entrega).
 3. **Front (Nathan):** motivo na OC, detalhe da OC, Meus Pedidos e a lista de Compras. Pode começar contra este contrato.
 4. **Comissão (Robert, BL-078):** a margem considerada, depois.
 
 ## 15. Riscos, rollback e perguntas em aberto
 
 - **Risco:** o vendedor não responde e a compra fica parada (N16-63: "o problema é dele"). A lista de Compras mostra há quanto tempo; avaliar um lembrete depois.
-- **Rollback:** desligar a regra R3 na API devolve o fluxo de hoje; as tabelas ficam.
+- **Rollback:** a R3 não tem chave para desligar (escolha do Gustavo: sem flags). Voltar é reverter a API e rodar o down que está no cabeçalho da migration log57, que fica com o DBA (N16-155).
 - **Pergunta (Nathan):** o vendedor do PV é o `id_responsavel` do pedido do Hub. Diligenciador ou auxiliar do vendedor também decide?
 - **Pergunta (Nathan):** o e-mail de Compras deixa de existir (N16-64), ou a Gerência e a Controladoria ainda recebem cópia?
+- **Pergunta (Gustavo, 12/11):** registrar no contrato a unicidade por item da OC × PV × produto e o `varchar(60)`? ❓
+- **Escolhas da entrega (Gustavo, 12/11) que diferem da seção 9 ou que ela não dizia:** a unicidade ficou por item da OC × PV × produto (`uq_divergencias_compra_item_pv`), e não só `id_ordem_compra_item`, porque um item da OC pode atender dois PVs; `codigo_produto_pv` é `varchar(60)`, igual ao vínculo, e não `varchar(30)`; há a coluna a mais `codigo_empresa_pv` (a conta Omie do PV); NOVO_VALOR, NOVO_FORNECEDOR e PEDIDO_CANCELADO cancelam a OC na mesma chamada (R7); a margem é a do item da proposta e, vazia, a margem líquida da proposta (R8); o vendedor é `pedidos_venda.id_responsavel` e, sem ele, o responsável da proposta (sem nenhum dos dois não nasce divergência, só um WARNING no log do banco); a unidade da cotação é `unidade_compra` e, vazia, a `unidade_medida` do item da proposta; a OC liberada pelo vendedor fica com `aprovado_por` nulo, como a aprovação automática.
 - **Segunda etapa:** PV digitado no Omie, com o valor de referência informado por Compras (N16-102).
 
 ## 16. Impacto no vault quando for entregue
