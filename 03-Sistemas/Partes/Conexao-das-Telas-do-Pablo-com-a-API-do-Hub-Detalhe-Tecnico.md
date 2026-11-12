@@ -1,7 +1,7 @@
 ---
 tags: [comercial, suprimentos, api-acos-vital, analise, rascunho, parte]
 criado: 2026-11-05
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: proposta
 dono: Nathan
 parte-de: "[[Conexao-das-Telas-do-Pablo-com-a-API-do-Hub]]"
@@ -32,7 +32,7 @@ fontes: ["Dump do Avhub para referência (completo).sql (avhub_prd_db, gerado em
 
 | Conceito | Fica (fonte única no Hub) | Sai ou se funde |
 |---|---|---|
-| Empresa que emite | `core.unidades` (+ extensão do PDF: logo, CRC, textos, se o Gustavo mantiver) | `core_comercial.unidades_emissoras` como cadastro próprio |
+| Empresa que emite | `core.unidades` (+ extensão do PDF: logo, CRC, textos, se o Gustavo mantiver) | `core_comercial.unidades_emissoras` como cadastro próprio (✅ saiu: no dump de teste de 12/11 a emissora é a unidade, com `sigla` e os campos do documento em `core.unidades`, [[Dump-AvHub-Teste-2026-11-12]]) |
 | Quem vende e em nome de quem | `auth.usuarios`, `vendedores`, `auxiliar_vendedor`, `/me/permissoes` | `perfis_comerciais`, `fn_responsaveis_proposta` |
 | Permissão | `auth.telas`, `auth.rotas_telas` | capacidades próprias do módulo |
 | Cliente | `core.parceiros` (tipo cliente), grupos e setores; **uma tela**: Acompanhamento de Clientes, que ganha a ficha e o que o comercial acrescentar | `core_comercial.clientes`, `clientes_contatos` e a tela Clientes paralela |
