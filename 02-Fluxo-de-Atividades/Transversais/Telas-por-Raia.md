@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, telas, rotas, raias, referencia]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-12
 status: vigente
 dono: Nathan
 fontes: [app-pcp 1fca8d3 (app/(protected)/**/page.tsx, títulos dos PageHeader), HUB b55ac55 em disco (app/(protected), components), v1 Fluxograma-Telas-por-Bloco, 00-Fluxo-Mestre-0b, Regras-do-Vault, app-pcp develop 93f96de e av-hub develop 758d5f0 de 29/10/2026, av-hub 44bb770 e app-pcp 4c11886 de 10/11/2026, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
-develop-conferida: [av-hub 44bb770, app-pcp 4c11886, em 2026-11-10]
+develop-conferida: [av-hub d82d58b, em 2026-11-12, só Compras e Proposta; av-hub 44bb770, app-pcp 4c11886, em 2026-11-10]
 ---
 
 # Telas por raia
@@ -17,7 +17,7 @@ Esta nota lista cada tela do fluxo de Atividades ([[00-Fluxo-Mestre-0b]]), setor
 ## Como usar esta nota
 
 - Ache o seu setor no **Mapa rápido** logo abaixo e vá à seção dele.
-- O nó do fluxo vai entre parênteses. Rotas, slugs, arquivos, nomes antigos e o sistema (HUB ou app-pcp) estão em "Detalhe técnico", no fim.
+- O nó do fluxo vai entre parênteses. Rotas, slugs, arquivos, nomes antigos e o sistema (HUB ou app-pcp) estão em [[Telas-por-Raia-Detalhe-Tecnico]].
 
 Os nomes novos já estão nos títulos do `app-pcp`; rotas, slugs e permissões seguem com os nomes antigos (ver "Detalhe técnico"). Convenção de nomes: [[Regras-do-Vault]].
 
@@ -39,7 +39,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Qualidade de saída · Q7, Q8 | Aprovar o fabricado (develop) | ✅ |
 | Expedição · X1 a X4 | Pallets e entrega. Faltam carga e transporte | ✅ 🔴 |
 | Fiscal · O1, O2 | Ver notas depois do fato. Falta a sinalização | ✅ 🔴 |
-| Proposta, Orçamento, comissão | Telas novas de 26/10/2026: proposta com criar, aprovar, cancelar, copiar e transformar em tela; Orçamento em andamento; comissão nova sem tela | ✅ 🟡 🔴 |
+| Proposta, Orçamento, comissão | Telas novas de 26/10/2026: proposta com criar, aprovar, cancelar, copiar, transformar e PDF; `C6` a `C8` com tela; Orçamento em andamento; comissão nova sem tela | ✅ 🟡 🔴 |
 | Todos | Login, Acessos, Inicial. Torre de Fluxo existe sobre dados de exemplo | ✅ 🟡 |
 
 ## Vendas (V1 a V3) · [[03-Pedido-de-Venda-e-Liberacao]]
@@ -99,6 +99,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Follow-up (C5) | Follow-up do CCP | Comprador | ✅ |
 | Dashboard de Compras | Painel de Compras | Compras | ✅ |
 | Compradores | Cadastro usado pela OC (LOG-18, LOG-28, LOG-36) | Compras | ✅ |
+| Avisos do MES (C1) | Recompra por RNC e recebimento reaberto, no detalhe da OC e em Requisições, com a Nova OC de recompra (LOG-58). Falta o MES mandar os avisos | Comprador | ✅ |
 | Fornecedor (FN1) | Externo, sem tela | Fornecedor | — |
 
 ## Recebimento (R0 a R6) · [[07-Recebimento]]
@@ -154,16 +155,16 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 
 ## Proposta, Orçamento e comissão nova (`V0`, `B1` a `B4`, `C6` a `C8`, `K1` a `K6`) · [[01-Proposta-de-Venda]] · [[02-Orcamento-Base-de-Preco]] · [[06-Circuito-de-Compra]] · [[15-Custo-Real-e-Comissao]]
 
-Desenho aprovado em 26/10/2026. Em 10/11/2026 a proposta tem API na `api-acos-vital` e tela e BFF no `av-hub` para criar, aprovar, cancelar, copiar e transformar em pedido; o resto segue sem código 🔴. As telas de proposta são do Robert e o Orçamento é do Pablo, com o Robert. Auditoria, conexões e menu: [[Telas-e-Experiencia-do-Usuario]].
+Desenho aprovado em 26/10/2026. Em 12/11/2026 a proposta tem API na `api-acos-vital` e tela e BFF no `av-hub` para criar, aprovar, cancelar, copiar, transformar em pedido e gerar o PDF comercial, e o `C6` a `C8` têm API e tela; o resto segue sem código 🔴. As telas de proposta são do Robert e o Orçamento é do Pablo, com o Robert. Auditoria, conexões e menu: [[Telas-e-Experiencia-do-Usuario]].
 
 | Tela | Para que serve | Quem usa | Situação |
 |---|---|---|---|
-| Proposta (`V0.1` a `V0.7`, `V0C`) | Cinco blocos e um botão principal por estado | Vendedor | ✅ criar, aprovar, cancelar, copiar e transformar, com botão e BFF (`av-hub` `components/Propostas/PropostaForm/AndamentoProposta.tsx:236`, `Transformar em pedido`); o modal envia as seis respostas, com Qualidade e faturamento em partes (PR #277); `V0.7` ✅ com "Tentar novamente no Omie". Detalhe em [[01-Proposta-de-Venda]] |
-| Meus Pedidos (`V1` a `V3`, `C8`, datas) | Pedido das duas origens, parte de compras, respostas, pendências de compra acima do valor, histórico de datas | Vendedor | 🔴 |
+| Proposta (`V0.1` a `V0.7`, `V0C`) | Cinco blocos e um botão principal por estado | Vendedor | ✅ criar, aprovar, cancelar, copiar e transformar, com botão e BFF (`av-hub` `components/Propostas/PropostaForm/AndamentoProposta.tsx:236`, `Transformar em pedido`); o modal envia as seis respostas, com Qualidade e faturamento em partes (PR #277); `V0.7` ✅ com "Tentar novamente no Omie". ✅ PDF comercial, item só do catálogo e encargo da condição do Omie (PRs #278, #286, #288 e #291); 🔴 envio por e-mail. Detalhe em [[01-Proposta-de-Venda]] |
+| Meus Pedidos (`V1` a `V3`, `C8`, datas) | Pedido das duas origens, parte de compras, respostas, pendências de compra acima do valor, histórico de datas | Vendedor | 🟡 `C8` ✅ "Para você responder" no topo da lista (`av-hub` `app/(protected)/vendas/meus-pedidos/page.tsx:9`, `topo={<DivergenciasDoVendedor />}`); 🔴 o resto |
 | Página do produto (`B2`) | Consulta de preço e fornecedores | Vendedor, Orçamento, Compras | 🔴 |
 | Orçamento · Pedidos de custo (`B3`, `B4`) | Fila de pedidos de custo | Setor de Orçamento | 🟡 tela ✅ (aba da página Pedidos de custo); API na `api-acos-vital` 🔴 |
-| Emitir OC (`C6`, `C7`) | Com os dados do vendedor e imposto por item | Comprador | 🔴 |
-| Compras · Reprovados (`C8`) | Casos reprovados pelo vendedor | Comprador | 🔴 |
+| Emitir OC (`C6`, `C7`) | Com os dados do vendedor e imposto por item | Comprador | 🟡 `C6` e `C7` ✅ "Cotado na proposta" na emissão (PR #282); 🔴 imposto por item (BL-053) |
+| Compras · Divergências (`C8`) | Casos acima do cotado, com a solução de Compras para os reprovados | Comprador | ✅ `/compras/divergencias` (PR #283); entra no menu quando a tela `compras-divergencias` estiver cadastrada |
 | Faturamento em partes (`O1`) | Bloco do pedido | Fiscal | 🔴 |
 | Calendário (datas) | Exceções de feriado e dia útil por unidade | Marketing | 🔴 |
 | Comissões novas (`K1` a `K6`) | Estimada, Minhas Comissões, fila e decisão da Controladoria, notas esperando a simulação, devoluções | Vendedor, Controladoria, Gerência, Coordenação, Fiscal | 🔴 |
@@ -179,137 +180,4 @@ Desenho aprovado em 26/10/2026. Em 10/11/2026 a proposta tem API na `api-acos-vi
 
 ## Detalhe técnico
 
-Fontes: `app-pcp` `1fca8d3` (`app/(protected)/**/page.tsx` e títulos dos `PageHeader`), HUB `b55ac55` (`app/(protected)`, `components`), v1 Fluxograma-Telas-por-Bloco, [[00-Fluxo-Mestre-0b]] e [[Regras-do-Vault]]. As colunas "Slug" são os identificadores de `telaId` ou de permissão. Nó, nome antigo e sistema vêm das tabelas por setor da versão anterior desta nota.
-
-Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só rótulos). **Rotas, slugs, pastas e permissões seguem com os nomes antigos.** O texto do menu vem da tabela `telas` do banco, não do código ❓. A convenção de nomes está em [[Regras-do-Vault]]. Cabe ao Nathan decidir se rotas e slugs acompanham os títulos; isso altera `auth.telas` no av-hub e `telas` no MES, fora do repositório.
-
-**Sistemas:** **HUB** é o front do av-hub (`b55ac55`, conferido em disco). **app-pcp** é o front do MES. As rotas do HUB passam pelo BFF (`app/api/...`).
-
-### Vendas
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| V2, V3 | Liberar Pedidos | Caixa de entrada do vendedor (1.1) | HUB | `/vendas/liberar-pedidos` | `liberar-pedidos` | `av-hub` `app/(protected)/vendas/liberar-pedidos/page.tsx:6` (`Portal do Vendedor`) |
-| V2 (leitura) | Liberação da Equipe | Visão do gerente da 1.1 | HUB | `/liberacao-equipe` | `liberacao-equipe` | `av-hub` `components/Layout/AppLayout/Menu/MenuItem/groupMap.ts:25` (`'liberacao-equipe': 'Portal do Gerente'`) |
-| V1 a O2 | Meus Pedidos, detalhe com o cartão "Andamento na produção" | Meus Pedidos por etapa (1.2) | HUB | `/meus-pedidos`, `/meus-pedidos/pedido/[codigoEmpresa]/[pedidoVenda]` | `meus-pedidos` | Cartão `components/Pedidos/EtapaDosItens.tsx:61` (`<h2>Andamento na produção</h2>`; o arquivo guarda o nome antigo "Etapa dos itens"), usado em `components/Pedidos/PedidoDetalhe.tsx:93` (`<EtapaDosItens`) |
-| idem | Pedidos da Equipe, detalhe | idem | HUB | `/pedidos-equipe`, `/pedidos-equipe/pedido/...` | `pedidos-equipe` | Mesmo cartão |
-| — | Pedidos do PCP | Portal PCP | HUB | `/pcp-pedidos`, `/pcp-pedidos/pedido/...` | `pcp-pedidos` | Não é o `app-pcp` |
-| V0.1 a V0.7 | Propostas (lista, nova, detalhe) | — | HUB | `/vendas/propostas`, `/vendas/propostas/nova`, `/vendas/propostas/[id]` | `propostas` | BFF `app/api/comercial/[...rota]/route.ts`; lê e grava na `api-acos-vital` (`/comercial/propostas`) |
-| — | Acompanhamento de Clientes | Clientes | HUB | `/vendas/acompanhamento-clientes` (e ficha `cliente/...`, `grupo/[id]`) | `acompanhamento-clientes` | N16-112 |
-| — | Relatório Gerencial, Meu Dashboard, Minhas Notas | — | HUB | `/vendas/relatorio-gerencial`, `/vendas/meu-dashboard`, `/vendas/minhas-notas` | ❓ |  |
-
-### PCP
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| P1 | Triagem dos Pedidos | Carteira (de Pedidos) | app-pcp | `/carteira` | `carteira` ❓ | Título em `carteira/page.tsx:178`; lê `GET /pedidos/carteira` |
-| P2 | Destinação do Pedido | Nova Ordem de Produção | app-pcp | `/ordens-producao/novo` | `ordens-producao` | Título em `ordens-producao/novo/page.tsx:517`; `POST /pedidos/completo/lote` |
-| — | Acompanhamento dos Pedidos | Ordens de Produção (lista) | app-pcp | `/ordens-producao` | `ordens-producao` | Título em `ordens-producao/page.tsx:144` |
-| — | Acompanhamento dos Pedidos, detalhe | Ordem de Produção (detalhe) | app-pcp | `/ordens-producao/[id]` | `ordens-producao` | Mini-roteiro, histórico, anexos, embalagens; 🟡 falta mostrar o split atendido pelo estoque e a reserva |
-| — | Pedidos excluídos | — | app-pcp | `/pedidos-excluidos` | ❓ | Snapshot de pedido excluído |
-| P6 | Novo norte (retrabalho ou reabrir compra) | Fila "Novo norte" (2.5) | app-pcp | — | — | 🔴 Sem tela; `/decisoes-pcp` só trata recebimento |
-| P1, P2 | OC do pedido (coluna ou cartão na Triagem e na Destinação) | — | app-pcp | `/carteira`, `/ordens-producao/novo` | — | 🔴 N14-20, BL-049 |
-| P2 | Montagem do Roteiro | — | app-pcp | `/montagem-roteiro`, `/montagem-roteiro/[id]` | `montagem-roteiro` | Só na develop (22/10); `GET /pedidos/roteiros`, `PUT /pedidos/:id/roteiro` |
-| — | Produtos em Produção | — | app-pcp | `/produtos-em-producao` | `produtos-em-producao` | Só na develop (20/10); `GET /pedidos/produtos-em-producao` |
-| P2 | Ordem de Produção (entidade e documento imprimível, só do que será fabricado) | — | app-pcp | `/ordens-producao/[id]` (botão "Imprimir OP") | `ordens-producao` | ✅ só na develop (27/10, `ab3318d`, BL-052); `GET /pedidos/:id/op` |
-
-### Estoque
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| E1 a E4 | Atendimento | Atendimento / Baixa (8.12) | app-pcp | `/estoque-operacao/atendimento` | `atendimento` | `AtenderEstoqueModal` (título `atendimento/page.tsx:10`) |
-| E5 (consulta) | Saldo | Consulta de Saldo (8.4) | app-pcp | `/estoque-operacao/saldo` | ❓ | Título `saldo/page.tsx:73` |
-| E3 | Reservas | Reservas (8.5) | app-pcp | `/estoque-operacao/reservas` | ❓ |  |
-| E6 (parcial) | Movimentação e Ajuste | Movimentação (8.6) | app-pcp | `/estoque-operacao/movimentacao` | ❓ | O histórico mostra `ENTRADA`, `SAIDA`, `TRANSFERENCIA` e `AJUSTE`; à mão, só `TRANSFERENCIA` e `AJUSTE` (`app-pcp` `app/(protected)/estoque-operacao/movimentacao/page.tsx:229` `Transferência entre localizações`, `:230` `Ajuste de saldo`) |
-| E5 | Detalhe do lote | Detalhe do lote (8.7) | app-pcp | `/estoque-operacao/lotes/[id]` | ❓ | Movimentos, etiqueta Code128 |
-| — | Painel do Estoque | Dashboard do Estoque | app-pcp | `/estoque-operacao/painel-estoque` | `painel-estoque` | Protótipo com dados de exemplo; alertas reais |
-| — | Mapa do Depósito | — | app-pcp | `/estoque-operacao/mapa-deposito` | ❓ | Sobre `MOCK_DEPOSITOS` |
-| — | Materiais, Depósitos | Cadastro de material, Depósitos (8.1, 8.2) | app-pcp | `/cadastros/estoque/materiais`, `/cadastros/estoque/depositos` | ❓ | API real |
-| E6 | Documento de retirada | — | app-pcp | — | — | 🔴 |
-| E1 | Saldo futuro (no Atendimento e no Saldo: saldo atual + OCs em andamento de estoque) | — | app-pcp | `/estoque-operacao/atendimento`, `/estoque-operacao/saldo` | — | 🔴 N14-20, BL-050 |
-
-### Compras e fornecedor
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| P3 | Requisições de compras | Setor Compras (2.4), fila `requisicoes` | app-pcp | `/compras/requisicoes` | `requisicoes` | `RequisitarCompraModal` ("Solicitar compra" do Estoque cai aqui); título `requisicoes/page.tsx:10` |
-| C5 | Compras · CCP | Pedidos de Compra / Compras | app-pcp | `/compras/pedidos-compra` (e `/compras`) | `pedidos-compra` | Só leitura; título `pedidos-compra/page.tsx:11`; linha do tempo por material, `EventosRequisicaoModal` |
-| C0, C1 | Requisições (caixa do Compras), "Nova requisição" | Caixa de entrada de Requisições (3.1) | HUB | `/compras/requisicoes`, `/compras/requisicoes/kanban` | ❓ | `components/Compras/ComprasRequisicoes.tsx:188`, `:426` |
-| C4 | Nova Ordem de Compra | Emissão da OC (3.2) | HUB | `/compras/nova`, `/compras/nova/[requisicaoId]` | ❓ |  |
-| C4 | Ordens de Compra | Ordens de Compra (3.3) | HUB | `/compras/ordens`, `/compras/ordens/kanban`, `/compras/ordem/[id]`, `/compras/pedido-omie/[id]` | ❓ |  |
-| C2, C3 | Aprovações | Fila de Aprovações (3.4) | HUB | `/compras/aprovacoes` | ❓ | Aprova só OC acima de R$ 30 mil (Gerência de Compras); sem Diretoria (N14-21) |
-| C5 | Follow-up | Follow-up do CCP (3.6) | HUB | `/compras/followup` | ❓ |  |
-| — | Dashboard de Compras | (3.5) | HUB | `/compras/dashboard-compras` | ❓ |  |
-| — | Compradores | — | HUB | `/compras/compradores` | ❓ | Cadastro usado pela OC (LOG-18, LOG-28, LOG-36) |
-| FN1 | — | — | — | — | — | — |
-
-### Recebimento
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| R0 a R4 | Recebimento | Logística de entrada | app-pcp | `/logistica/logistica-entrada` | `logistica-entrada` | Título `logistica-entrada/page.tsx:10`; esperados, "Receber com NF" (`ReceberComNfModal`), conferência (`ConferirRecebimentoModal`), recontagem (`RecontarRecebimentoModal`) |
-| R6 | Divergências de Recebimento | Decisões do PCP | app-pcp | `/decisoes-pcp` | `decisoes-pcp` | Título `decisoes-pcp/page.tsx:74`; `ACEITO` ou `REABERTO` |
-| R4 | Detalhe do lote, "Imprimir etiqueta" | (6.5) | app-pcp | `/estoque-operacao/lotes/[id]` | ❓ |  |
-| — | Logística (índice) | — | app-pcp | `/logistica` | ❓ |  |
-
-### Qualidade de entrada
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| Q1 a Q4 | Inspeção de entrada | Qualidade (mock) | app-pcp | `/qualidade/inspecao-entrada` | `inspecao-entrada` | Título `inspecao-entrada/page.tsx:117` |
-| — | Fila Qualidade · Entrada | — | app-pcp | `/movimentacoes/[setorId]` (setor `qualidade-entrada`) | `movimentacoes` | Só leitura (`acoes.ts:98-100`) |
-
-### Produção
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| F1 | Filas de Produção (setores) | Movimentações | app-pcp | `/movimentacoes` | `movimentacoes` | Título `movimentacoes/page.tsx:121` |
-| F1 | Fila do setor | Board do setor (7.1) | app-pcp | `/movimentacoes/[setorId]` | `movimentacoes` | `FilaSetor.tsx`, 17 ações |
-| — | Dashboard | Dashboard de produção (7.3) | app-pcp | `/dashboard` | ❓ |  |
-| — | Painel TV | (7.4) | app-pcp | — | — | 🔴 Backend `GET /dashboard/tv` sem página |
-| — | Fábricas, Setores, Máquinas, Operadores | Cadastros operacionais | app-pcp | `/cadastros/operacional/fabricas`, `setores`, `maquinas`, `operadores` | ❓ |  |
-| — | Relatórios | — | app-pcp | `/relatorios` | ❓ |  |
-
-### Qualidade de saída
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| Q7, Q8 | Inspeção de saída | Fila do setor Qualidade no roteiro | app-pcp | `/qualidade/inspecao-saida` | `inspecao-saida` | `inspecao-saida/page.tsx:1-18` |
-| Q7 | Qualidade (índice) | — | app-pcp | `/qualidade` | ❓ |  |
-
-### Expedição
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| X1, X4 | Expedição | Embalagem e Logística de saída | app-pcp | `/logistica/expedicao` | `expedicao` | `expedicao/page.tsx:1-16`; pallets (`PalletsModal`), `ConfirmarEntregaModal` |
-| X1 | Seção Embalagens do pedido | — | app-pcp | `/ordens-producao/[id]` | `ordens-producao` | `EmbalagensSection.tsx` |
-| X3 | Consolidação de carga | — | app-pcp | — | — | 🔴 |
-| X4 | Transporte e roteiro | — | app-pcp | — | — | 🔴 |
-
-### Fiscal
-
-| Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
-|---|---|---|---|---|---|---|
-| O1 | Fila de sinalização de faturamento | — | app-pcp | — | — | 🔴 |
-| O2 | Notas Fiscais de Saída | — | HUB | `/vendas/notas-fiscais-saida` | ❓ | Título `app/(protected)/vendas/notas-fiscais-saida/page.tsx:98` (`PageHeader`) |
-| O2 | Minhas Notas, Notas da Equipe, Notas do PCP | — | HUB | `/vendas/minhas-notas`, `/notas-equipe`, `/pcp-notas` | ❓ | Pós-fato |
-
-### Telas que servem a todos
-
-| Nome atual | Nome antigo | Sistema | Rota | Observação |
-|---|---|---|---|---|
-| Login (Azure AD e usuário e senha) | T.1 | app-pcp | `/login` | `(public)/login/page.tsx` |
-| Cadastros › Acessos: Usuários, Perfis, Permissões, Telas, Usuários por Perfil, Setores por Perfil, Depósitos por Perfil | T.2 | app-pcp | `/cadastros/acessos/usuarios`, `perfis`, `permissoes`, `telas`, `usuarios-perfis`, `setores-perfil`, `depositos-perfil` | `PerfilSetor` sem filial 🔴 |
-| Torre de Fluxo (mapa, ranking, tempo por etapa, item) | T.3 a T.6 | HUB | `/torre-fluxo`, `/torre-fluxo/ranking`, `/torre-fluxo/tempo`, `/torre-fluxo/item/[id]` | Telas e BFF `/api/fluxo` sobre dados de exemplo (BL-022, `3cd55de`, 15/10); registro de 14/10 (superado): nenhuma ocorrência de "torre" no HUB |
-| Inicial, Blank | — | app-pcp | `/`, `/blank` |  |
-
-### Nomes novos que ainda não chegaram ao código
-
-| Nome novo (título e vault) | Ainda no código |
-|---|---|
-| Triagem dos Pedidos | Pasta e rota `carteira`; `GET /pedidos/carteira`; `services/carteira.ts` |
-| Destinação do Pedido | Rota `/ordens-producao/novo`; campo `ordemProducao`; códigos `OP-` |
-| Acompanhamento dos Pedidos | Rota `/ordens-producao`; permissão `ordens-producao` |
-| Filas de Produção | Rota `/movimentacoes`; permissão `movimentacoes` (também protege Entrega, Divergência e Recebimento) |
-| Divergências de Recebimento | Rota e slug `decisoes-pcp` |
-| Compras · CCP | Rota `/compras/pedidos-compra`; slug `pedidos-compra` |
+Rotas, slugs, arquivos, nomes antigos e o sistema de cada tela ficam em [[Telas-por-Raia-Detalhe-Tecnico]].
