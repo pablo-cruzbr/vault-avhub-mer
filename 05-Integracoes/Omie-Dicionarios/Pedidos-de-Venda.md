@@ -1,10 +1,10 @@
 ---
 tags: [omie, dicionario, pipeline, pedidos, itens]
 criado: 2026-10-14
-atualizado: 2026-10-29
+atualizado: 2026-11-12
 status: vigente
 dono: Gustavo (DBA)
-fontes: [v1 08-Integracao-Omie/01-Dados-Extraidos/Pedidos-de-Venda, omie-elt-pipeline 0f739f0]
+fontes: [omie-elt-pipeline develop d8fddca (histórico do pedido, PR #6), v1 08-Integracao-Omie/01-Dados-Extraidos/Pedidos-de-Venda, omie-elt-pipeline 0f739f0]
 ---
 
 # Dicionário Omie: Pedidos de venda e itens
@@ -45,6 +45,10 @@ Fonte: `ListarPedidos` (`/produtos/pedido/`), resource `pedidosVendas.ts`. Chave
 | `id`, `created_at/by`, `updated_at/by`, `deleted_at/by` | controle do banco (identificador, autoria e datas de criação, alteração e exclusão) |
 
 `devolucao_parcial` é só boolean: o valor da devolução parcial não existe em coluna nenhuma (devolução é nativa do Estoque, Ciclo 2, 📝 DEC-10, [[Registro-de-Decisoes]]).
+
+### Histórico de situação e de previsão
+
+Nem o Omie nem o banco guardam o valor antigo da `situacao` e da `data_previsao`. A pipeline grava cada mudança dos dois campos em `core_vendas_faturamento.pedidos_vendas_status_historico` (`codigo_empresa`, `codigo_pedido_omie`, `campo`, `valor_anterior`, `valor_novo`); a primeira linha de cada pedido e campo sai com `valor_anterior` nulo e não conta como mudança. A view `vw_vendas_base` usa a tabela para o `esteve_atrasado` ✅ `omie-elt-pipeline` `src/omie/resources/pedidosVendas.ts:30` (`const SQL_HISTORICO_PEDIDO = `), `develop` `d8fddca`. Detalhe em [[Pipeline-Omie]].
 
 ## Itens: `core_vendas_faturamento.produto_vendas`
 
