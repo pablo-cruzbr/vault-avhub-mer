@@ -5,7 +5,7 @@ estado-em: 2026-11-13
 status: vigente
 dono: Robert (MES) · Nathan (decisões)
 parte-de: "[[07-Recebimento]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-03), API-007, API-008, v1 02-PRD-Estoque/Fluxo-Recebimento-Completo, v1 App-PCP-Recebimento-Conferencia, decisões do Nathan de 14/10 (conferência contra a NF), api-pcp 579a625 (recebimento.service.ts, compras.service.ts, compras.prisma, compras-ccp.dto.ts), app-pcp 1fca8d3 (FilaSetor, ConferirRecebimentoModal, decisoes-pcp), api-pcp develop de 27/10/2026 (recebimento por OC e por NF, custo da OC), API-011, N16-134 a N16-137]
 ---
 
@@ -90,7 +90,7 @@ Parcial no setor `LOGISTICA_ENTRADA` (nome "Recebimento", código `logistica-ent
 | `GET /compras/recebimentos`, `GET /:id` | `movimentacoes:visualizar` | Lista (até 200) e detalhe | `recebimento.controller.ts:26-43` ✅ |
 | `GET /compras/recebimentos/decisoes` | `decisoes-pcp:visualizar` | Fila `AGUARDANDO_DECISAO` | `:32-37` ✅ |
 | `POST /compras/recebimentos` | `movimentacoes:editar` | R1 a R4: conferir (`idRequisicao`, `idItemParcial`, itens com `quantidadeNf`, `quantidadeContada`, `pesoReal`, `idLocalizacao`; cabeçalho `numeroNf`, `chaveAcessoNf`, `fornecedor`, `laudoUrl`; divergências informadas) | `:45-49` ✅ |
-| `POST /compras/recebimentos/nf` | `movimentacoes:editar` | Conferência de uma NF com várias conferências, cada uma de uma requisição do MES (`itensRequisicao`) ou de uma OC do hub sem requisição (`idOrdemCompra` e `itensOc`); item de uso interno não vira lote | `recebimento.controller.ts`, `recebimento.service.ts` (`ConferirNfDto`) ✅ `develop` |
+| `POST /compras/recebimentos/nf` | `movimentacoes:editar` | Conferência de uma NF com várias conferências, cada uma de uma requisição do MES (`itensRequisicao`) ou de uma OC do hub sem requisição (`idOrdemCompra` e `itensOc`); item de uso interno não vira lote. Testado pela tela em 13/11: a NF 999022 juntou a requisição do MES e uma OC do Hub sem requisição, com um recebimento para cada (RB-20261113-0004 e -0005) | `recebimento.controller.ts`, `recebimento.service.ts` (`ConferirNfDto`) ✅ `develop` |
 | `GET /compras/recebimentos/oc-esperadas` | `movimentacoes:visualizar` | Esperados por item de OC aprovada, com ou sem requisição do MES | `recebimento.controller.ts` ✅ `develop` |
 | `POST /compras/recebimentos/:id/recontar` | `movimentacoes:editar` | Recontagem por outra pessoa | `:51-59` ✅ |
 | `POST /compras/recebimentos/:id/decidir` `{decisao: ACEITAR\|REABRIR, motivo}` | `decisoes-pcp:editar` | Decisão do PCP | `:61-69` ✅ |
