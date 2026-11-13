@@ -1,9 +1,10 @@
 ---
 tags: [diagramas, modelo-de-dados, banco, mes, av-hub]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Robert
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 Diagramas-UML (17, 18, 21), api-pcp 579a625 prisma/models/*.prisma, Dump Avhub e Dump MES de 14/10/2026]
 ---
 
@@ -446,9 +447,9 @@ Selo ✅ `producao.prisma`, `fabricas.prisma`. `fabrica_setores` tem PK composta
 
 | Tabela | Colunas-chave | Para quê | Selo |
 |---|---|---|---|
-| `integracao_avhub_envios` | `id` PK, `tipo`, `id_origem`, `corpo` json, `status`, `tentativas`, `proxima_tentativa_em`, `http_status`, `ultimo_erro` | Fila de saída do PUT do contrato 34; índice `(status, proxima_tentativa_em)` | ✅ `integracao.prisma:33-60` |
-| `requisicoes_compra_eventos_avhub` | `id` PK (id do evento do hub), `id_origem`, `id_requisicao_avhub`, `tipo`, `registrado_em`, `status_requisicao`, `dados` json, `processado_em`, `acao` | Eventos lidos do contrato 35, gravados por `id_evento` | ✅ `integracao.prisma:69-110` |
-| `integracao_avhub_cursores` | `chave` PK (`requisicoes-eventos`), `alterado_desde`, `apos_id` | Cursor do polling | ✅ `integracao.prisma:112-120` |
+| `integracao_avhub_envios` | `id` PK, `tipo`, `id_origem`, `corpo` json, `status`, `tentativas`, `proxima_tentativa_em`, `http_status`, `ultimo_erro` | Fila de saída do PUT do contrato 34 (`REQUISICAO_COMPRA`) e do POST dos avisos de compra (`AVISO_COMPRA`, LOG-58); índice `(status, proxima_tentativa_em)` | ✅ `api-pcp` `prisma/models/integracao.prisma:32-63` (`model IntegracaoAvhubEnvio {`) |
+| `requisicoes_compra_eventos_avhub` | `id` PK (id do evento do hub), `id_origem`, `id_requisicao_avhub`, `tipo`, `registrado_em`, `status_requisicao`, `dados` json, `processado_em`, `acao` | Eventos lidos do contrato 35, gravados por `id_evento` | ✅ `api-pcp` `prisma/models/integracao.prisma:68-108` (`model RequisicaoCompraEventoAvhub {`) |
+| `integracao_avhub_cursores` | `chave` PK (`requisicoes-eventos`), `alterado_desde`, `apos_id` | Cursor do polling | ✅ `api-pcp` `prisma/models/integracao.prisma:111-119` (`model IntegracaoAvhubCursor {`) |
 
 ### 4. av-hub: tabelas do fluxo 0b
 
