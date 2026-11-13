@@ -27,7 +27,7 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-13, teste da propo
 
 São os commits do `develop-conferida` das notas conferidas nesta atualização; as raias não tocadas ainda dizem commits anteriores.
 
-**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 12/11/2026 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-12.sql`, [[Dump-AvHub-Teste-2026-11-12]]). Ele é anterior à migration do encargo da condição (PS-054). As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
+**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 13/11/2026 09:40 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-13.sql`, [[Dump-AvHub-Teste-2026-11-13]]), com o LOG-58b, a SQL-022 e a coluna da SQL-021. As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
 
 ## Como usar na próxima atualização
 
