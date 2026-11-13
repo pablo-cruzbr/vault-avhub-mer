@@ -1,10 +1,10 @@
 ---
 tags: [sistemas, rbac, permissoes, mes, av-hub, seguranca]
 criado: 2026-10-14
-estado-em: 2026-11-11
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 1654f65 (develop, 05/11), api-acos-vital 0384e89 (develop, 29/10), av-hub 758d5f0 (develop), Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, v1 AV-Hub-RBAC, Achado-Duplicacao-RBAC, PS-048, OQ-50, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -78,7 +78,7 @@ Dump MES `:1046-1113`, `:1396-1440` ✅.
 - **OR entre perfis.** Basta **um** perfil do usuário permitir ✅ `permissions.guard.ts:56-70`; mesma regra em `PerfisService.temPermissao` ✅ `rbac/perfis/perfis.service.ts:332-345` (`async temPermissao(`).
 - **`movimentacoes` é virtual.** Vale "qualquer tela de fila de setor": `movimentacoes`, `atendimento`, `requisicoes`, `pedidos-compra`, `logistica-entrada`, `expedicao`, `inspecao-saida` ✅ `common/constants/telas-fila-setor.constants.ts:7-15` (`TELAS_FILA_SETOR`). É o `@RequirePermission('movimentacoes', …)` das rotas de parcial, compras, entregas e divergências.
 - **Limite real por setor.** Mesmo com a tela, o service chama `PerfisService.ensurePodeAtuar(userId, idSetor)`: só age quem tem `perfil_setores.pode_atuar` no setor atual da parcial ✅ `perfis.service.ts:278`; `compras.service.ts:356-401` exige `pode_atuar` no **Recebimento** para registrar a chegada.
-- **Limite real por depósito.** `ensurePodeAtuarDepositos` (carga inicial, movimento, reserva) e `depositosVisiveis` (Saldo só mostra os depósitos que o perfil vê) ✅ `estoque-operacao.service.ts:61-65,401`.
+- **Limite real por depósito.** `ensurePodeAtuarDepositos` (carga inicial, movimento, reserva) e `depositosVisiveis` (Saldo só mostra os depósitos que o perfil vê) ✅ `estoque-operacao.service.ts:62-66,401`.
 - **Permissão que muda o conteúdo.** `temPermissao(userId, slug, campo)` decide o que vai na resposta, não a rota: `estoque-custo` e `compras-liberar` ✅ abaixo.
 - **Front.** O menu da sessão (`GET /auth/menu`) leva as 4 flags por tela; `usePermission()` usa o último segmento da URL como slug ✅ `app-pcp/hooks/usePermission.ts:8-17`, `lib/permissions.ts:3`. O front esconde botões; quem garante é a API.
 
@@ -86,13 +86,13 @@ Dump MES `:1046-1113`, `:1396-1440` ✅.
 
 | Slug | Flag | Efeito | Código |
 |---|---|---|---|
-| `estoque-custo` | `pode_visualizar` | `GET /estoque/saldo` e `GET /estoque/lotes/:id` incluem o custo do lote (`custoUnitario`, bloco `custo`) | ✅ `estoque-operacao.service.ts:66,546`; `app-pcp/…/saldo/page.tsx:35` |
-| `estoque-custo` | `pode_editar` | `POST /estoque/lotes/carga-inicial` aceita `custoUnitario` (sem a flag, 403 "Sem permissão para informar o custo do lote") | ✅ `estoque-operacao.service.ts:406-411`; `EntradaLoteModal.tsx:36` |
+| `estoque-custo` | `pode_visualizar` | `GET /estoque/saldo` e `GET /estoque/lotes/:id` incluem o custo do lote (`custoUnitario`, bloco `custo`) | ✅ `estoque-operacao.service.ts:67,546`; `app-pcp/…/saldo/page.tsx:36` |
+| `estoque-custo` | `pode_editar` | `POST /estoque/lotes/carga-inicial` aceita `custoUnitario` (sem a flag, 403 "Sem permissão para informar o custo do lote") | ✅ `api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:634-640` (`Sem permissão para informar o custo do lote`); `EntradaLoteModal.tsx:36` |
 | `compras-liberar` | `pode_editar` | `POST /compras/requisicoes/:id/liberar-recebimento` (rede de segurança: esperados do Recebimento sem OC aprovada, com motivo obrigatório) | ✅ `compras.service.ts:404-409`; `fila/CartaoItemParcial.tsx:227` (`liberarModal`) |
 
 Terceira tela só de permissão, desde 26/10: `programar-fila` (`editar` muda a ordem de qualquer fila de fabricação, inclusive nos setores travados para o PCP; o líder com "pode atuar" só muda onde o setor não é travado; vale só para setor produtivo) ✅ `api-pcp/src/setores/fila-ordem.service.ts:13,84`.
 
-Seeds: `estoque-custo` nasce "default-deny, só o Administrador" ✅ `common/constants/estoque-custo.constants.ts:1-5` ❓ "não achado na develop de 10/11"; `compras-liberar` entra por `01-base.sql`, que **não está nos repositórios** ❓ Robert. A lista de telas só de permissão: `app-pcp/lib/telasSoPermissao.ts:10`.
+Seeds: `estoque-custo` nasce "default-deny, só o Administrador" ✅ `api-pcp` `src/common/constants/estoque-custo.constants.ts:3` (`TELA_CUSTO_LOTE = 'estoque-custo'`) é a tela; o seed "default-deny, só o Administrador" ❓ não achado na develop de 10/11 nem na de 12/11; `compras-liberar` entra por `01-base.sql`, que **não está nos repositórios** ❓ Robert. A lista de telas só de permissão: `app-pcp/lib/telasSoPermissao.ts:10`.
 
 #### Slugs do MES (extraídos dos controllers) ✅
 
@@ -109,12 +109,17 @@ Seeds: `estoque-custo` nasce "default-deny, só o Administrador" ✅ `common/con
 | `decisoes-pcp` | Divergências de Recebimento | visualizar (lista), editar (decidir) |
 | `inspecao-entrada` | Qualidade de entrada | visualizar, editar (aprovar, reprovar) |
 | `saldo`, `reservas`, `movimentacao`, `depositos`, `materiais`, `painel-estoque` | Estoque | conforme tabela de rotas em [[MES-Backend]] |
-| `fabricas`, `maquinas`, `operadores`, `roteiros`, `setores` | cadastros de produção | criar, editar, visualizar, deletar |
+| `fabricas`, `maquinas`, `operadores`, `roteiros`, `setores` | cadastros de produção | criar, editar, visualizar, deletar (🟡 `roteiros`: ver abaixo) |
 | `usuarios`, `perfis`, `telas`, `usuarios-perfis` | acessos | idem |
 | `relatorios` | relatórios | visualizar |
 | `estoque-custo`, `compras-liberar`, `programar-fila` | só permissão | ver acima |
 
-`movimentacao` (singular, ajuste e carga inicial) e `movimentacoes` (plural, fila) são telas distintas ✅ `estoque-operacao.controller.ts:55-85` e `itens-parciais.controller.ts:57`; conferir o cadastro de ambas em produção ❓.
+**Reteste no Docker de 13/11 (MES, develop de 12/11)** 🟡:
+- `GET /setores`, `/setores/:id` e `/setores/:id/painel` só exigem login, sem `@RequirePermission` ✅ `api-pcp` `src/setores/setores.controller.ts:41-54` (`@Get(':id/painel')`). As duas primeiras já eram assim de propósito (o BFF filtra); o painel, não: um perfil sem permissão nenhuma recebe a fila do setor com pedido, cliente, prazo, prioridade e as últimas observações.
+- O escopo por setor e por depósito só vale quando a consulta filtra o setor ou o depósito: sem filtro, um perfil sem setores vê todas as parciais, reservas, lotes e o saldo futuro ✅ `src/itens-parciais/itens-parciais.service.ts:100-101` (`PerfilSetor.podeVisualizar só é checado quando a consulta filtra um setor`).
+- A tela `roteiros` da tabela acima não existe na tabela `telas` do MES de teste, e o CRUD `/roteiros` exige essa tela: até o Administrador recebe 403 ✅ `src/roteiros/roteiros.controller.ts:24` (`@RequirePermission('roteiros', 'editar')`). O app não usa essas rotas: a Montagem do Roteiro usa `/pedidos/roteiros` e `/pedidos/:id/roteiro`. ❓ A decidir (Robert): criar a tela ou tirar o CRUD.
+
+`movimentacao` (singular, ajuste e carga inicial) e `movimentacoes` (plural, fila) são telas distintas ✅ `estoque-operacao.controller.ts:63-93` e `itens-parciais.controller.ts:57`; conferir o cadastro de ambas em produção ❓.
 
 #### Autenticação do MES
 
@@ -139,7 +144,7 @@ Seeds: `estoque-custo` nasce "default-deny, só o Administrador" ✅ `common/con
 
 #### Como a API decide ✅
 
-1. **Chave de serviço** (`x-api-key`): `API_KEYS` do `.env` (admin), chaves de `auth.chaves_servico` (com `modo_rotas`, migration 051), ou `MES_INTEGRACAO_KEYS` (só `PUT /compras/requisicoes/origem/:id`; qualquer outra rota dá 403 `CHAVE_MES_ROTA_NAO_PERMITIDA`) ✅ `api-acos-vital/src/middlewares/apiKeyAuth.js:1-76`. O limite geral é de 5 000 requisições por minuto por chave.
+1. **Chave de serviço** (`x-api-key`): `API_KEYS` do `.env` (admin), chaves de `auth.chaves_servico` (com `modo_rotas`, migration 051), ou `MES_INTEGRACAO_KEYS` (só `PUT /compras/requisicoes/origem/:id` e, desde o LOG-58, `POST /integracao/mes/avisos-compra`; qualquer outra rota dá 403 `CHAVE_MES_ROTA_NAO_PERMITIDA`) ✅ `api-acos-vital` `src/middlewares/apiKeyAuth.js:110` (`metodo === "POST" && ROTA_MES_AVISOS.test(caminho)`). Confirmado no Docker em 13/11. O limite geral é de 5 000 requisições por minuto por chave.
 2. **Token de usuário** (`Authorization: Bearer`): `identidadeUsuario` valida o token e chama `auth.fn_autorizar(usuario, versão, método, caminho)` ✅ `middlewares/identidadeUsuario.js:40-100`. A função devolve 401 `usuario_invalido` ou `token_revogado`; 403 `rota_sem_mapa` (rota sem linha em `auth.rotas_telas`: **fail-closed**) ou 403 `sem_permissao` (com a lista `exige_uma_de`); 200 com o escopo de vendedores. A permissão é **OR entre perfis** do usuário ✅ dump `fn_autorizar` `:357` (join `usuarios_perfis → perfis → permissoes → telas`).
 3. **Identidade passa a ser a do token.** `id_usuario_sessao` na query e os campos `created_by`, `updated_by`, `deleted_by`, `aprovado_por`, `decidido_por`, `cancelado_por` do corpo são **sobrescritos** pelo id do token ✅ `identidadeUsuario.js:29-37`.
 4. **Sem token:** chave de `.env` e chave do MES seguem sem identidade (o MES e a pipeline não são usuários). Chave com `exige_usuario` recebe 401 `TOKEN_USUARIO_AUSENTE` ✅ `:63-69`.
@@ -155,12 +160,12 @@ Dados em `auth.rotas_telas` e `auth.telas`: **o dump é só esqueleto** (sem `CO
 |---|---|---|---|---|
 | `liberar-pedidos` | `pode_visualizar`, `pode_editar` | BFF + mapa | lista e libera os próprios pedidos (V2, V3) | ✅ `HUB app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:19` |
 | `liberacao-equipe` | `pode_visualizar` | BFF | caixa da equipe | ✅ `app/api/liberar-pedidos/route.ts:31-36` |
-| **`compras`** | **`pode_criar`** | BFF (`requirePermission('compras','pode_criar')`) e tela | **"Nova requisição"** (`POST /compras/requisicoes`, C0) e **emitir OC** (`POST /compras/ordens`, C4); também o botão "Gerar OC" | ✅ `HUB app/api/compras/requisicoes/route.ts:80`, `app/api/compras/ordens/route.ts:111`, `components/Compras/ComprasRequisicoes.tsx:92,186` |
-| `compras` | `pode_editar` | BFF e API | mudar status da requisição (cotação, cancelar com motivo); **reenviar OC ao Omie** | ✅ `app/api/compras/requisicoes/[id]/route.ts:32`, `api-acos-vital …/ordens_compra.route.js:1340` |
-| **`compras`** | **`pode_aprovar`** | BFF **e** API (regra fixa `EXIGIR_PODE_APROVAR = true`) | **aprovar e cancelar OC** que excede o limite (R$ 30 mil por padrão; perfil Gerência de Compras); até o limite a OC é liberada sem aprovação (N14-21) | ✅ `HUB app/api/compras/ordens/[id]/route.ts:35`, `ordens_compra.route.js:37-41,1232` |
+| **`compras`** | **`pode_criar`** | BFF (`requirePermission('compras','pode_criar')`) e tela | **"Nova requisição"** (`POST /compras/requisicoes`, C0) e **emitir OC** (`POST /compras/ordens`, C4); também o botão "Gerar OC" | ✅ `HUB app/api/compras/requisicoes/route.ts:80`, `app/api/compras/ordens/route.ts:113`, `components/Compras/ComprasRequisicoes.tsx:94,186` |
+| `compras` | `pode_editar` | BFF e API | mudar status da requisição (cotação, cancelar com motivo); **reenviar OC ao Omie** | ✅ `app/api/compras/requisicoes/[id]/route.ts:32`, `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:1420` (`"compras", "pode_editar"`) |
+| **`compras`** | **`pode_aprovar`** | BFF **e** API (regra fixa `EXIGIR_PODE_APROVAR = true`) | **aprovar e cancelar OC** que excede o limite (R$ 30 mil por padrão; perfil Gerência de Compras); até o limite a OC é liberada sem aprovação (N14-21) | ✅ `HUB app/api/compras/ordens/[id]/route.ts:35`, `ordens_compra.route.js:39-43,1232` |
 | `compras` | `pode_visualizar` | BFF | listas, detalhes, catálogos de apoio | ✅ `app/api/compras/**` |
 | `followup` | `pode_visualizar`, `pode_editar`, `pode_aprovar` | BFF e API | ler a fila do CCP; gravar confirmação, previsão, despacho, contato, ocorrência; **decidir ocorrência** (precisa também ser o comprador da OC ou admin) | ✅ `HUB app/api/compras/ocorrencias/[id]/route.ts:13`, `api-acos-vital …/ordens_compra_acompanhamento.route.js:154`, `utils/acessoConfig.js` |
-| `compradores` | `pode_visualizar`, `pode_editar` | BFF e API | vínculo comprador × funcionário; só quem é comprador vinculado na unidade emite OC (regra fixa, `BLOQUEAR_SEM_COMPRADOR = true`) | ✅ `compradores.route.js:210`, `ordens_compra.route.js:34` |
+| `compradores` | `pode_visualizar`, `pode_editar` | BFF e API | vínculo comprador × funcionário; só quem é comprador vinculado na unidade emite OC (regra fixa, `BLOQUEAR_SEM_COMPRADOR = true`) | ✅ `compradores.route.js:210`, `ordens_compra.route.js:36` |
 | **`custo-itens`** | `pode_visualizar` | **API, sempre** (também sem token) e BFF | `GET /itens_pedido_custo` e a tela `/orcamento/custo-itens`; **nasce sem permissão para nenhum perfil** (decisão de 13/10) | ✅ `itens_pedido_custo.route.js:41-48,76-85`; `av-hub app/api/custo-itens/route.ts:10` |
 | **`torre-fluxo`** | visualizar | mapa (migration 046/046b) e BFF | `GET /fluxo/torre`, `/fluxo/sla-etapas`, `/fluxo/itens/:id/tempo`; telas `/torre-fluxo` | ✅ `item_estado_projetado.route.js:16-25`; `av-hub app/api/fluxo/torre/route.ts:18` |
 | **`torre-fluxo-trilha`** | visualizar | mapa e BFF | `GET /fluxo/itens/:id` (mostra nomes de pessoas); 046b concede só ao perfil de testes do time de TI (nenhum perfil de negócio) | ✅ idem; `av-hub app/api/fluxo/itens/[id]/route.ts:13` |
