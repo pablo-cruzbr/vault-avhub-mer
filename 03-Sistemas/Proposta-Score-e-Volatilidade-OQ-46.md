@@ -1,7 +1,7 @@
 ---
 tags: [decisoes, orcamento, score, fornecedor, volatilidade, oq-46, staging]
 criado: 2026-10-19
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: proposta
 dono: Nathan
 fontes: [proposta do Nathan de 19/10/2026 (dados de exemplo), Perguntas-Proposta-Pedido-Comissao OQ-46, Registro-de-Decisoes N16-52, api-comercial suprimentos.prisma (model Oferta; histórico, f7d8d7f), Dump Avhub (Esqueleto) ordens_compra]
@@ -36,11 +36,11 @@ fontes: [proposta do Nathan de 19/10/2026 (dados de exemplo), Perguntas-Proposta
 
 Se falta prazo ou histórico, a nota é neutra e aparece o aviso "poucos dados".
 
-## Ainda em aberto
+## Fechado em 12/11/2026 (N16-163)
 
-- Limite exato de volatilidade (15% ou 20%).
-- Quem preenche o prazo em dias.
-- Janela do histórico (12 meses?) e mínimo de compras para o fornecedor ter nota.
+- Volatilidade alta: acima de 20%.
+- O Orçamento preenche o prazo de entrega em dias, ao gravar a oferta.
+- Histórico de 12 meses; o fornecedor ganha nota depois de 3 compras.
 
 Ligadas: [[Perguntas-Proposta-Pedido-Comissao]] OQ-46, OQ-34 (unidades) e OQ-35 (base de preço).
 
