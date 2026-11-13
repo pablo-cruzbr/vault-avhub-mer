@@ -1,11 +1,11 @@
 ---
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento, parte]
 criado: 2026-11-09
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Catálogo da API da Omie consultado em 09/11/2026 pelo conector do Omie (produtos/pedido:AlterarPedidoVenda, só a descrição; a operação não foi executada)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
 ---
 
@@ -31,7 +31,7 @@ Escreve-se na rota da tela (`/pedidos_liberacao`), lê-se na rota do MES (`/pedi
 
 ### 8.1 GET /prontidao-omie
 
-Cinco códigos, e só eles, de `comercial-propostas.ts:431-435` (`'VENDEDOR_SEM_OMIE'` … `'UNIDADE_SEM_CONFIG'`). Somente leitura.
+Cinco códigos, e só eles, de `comercial-propostas.ts:481-485` (`'VENDEDOR_SEM_OMIE'` … `'UNIDADE_SEM_CONFIG'`). Somente leitura.
 
 ⚠️ Esta rota teria evitado o teste de 09/11 terminar em erro do Omie: `UNIDADE_SEM_CONFIG` é o caso da conta corrente ausente. A conferência existe no desenho, só não existe em código.
 
@@ -42,7 +42,7 @@ PUT /comercial/pedidos/{id}/conta-corrente   // string: o codigo_conta_omie é b
 { "codigo_conta_corrente": "1234567890" }
 ```
 
-- **Permissão:** a tela do financeiro com `pode_editar` (§7.5), não `propostas`. Precisa da linha em `auth.rotas_telas` (§14, passo 10) e da entrada no BFF; a entrada de `/contas-correntes` hoje é `tela: 'propostas'` (`route.ts:52`) e passa a aceitar as duas telas.
+- **Permissão:** a tela do financeiro com `pode_editar` (§7.5), não `propostas`. Precisa da linha em `auth.rotas_telas` (§14, passo 10) e da entrada no BFF; a entrada de `/contas-correntes` hoje é `tela: 'propostas'` (`av-hub` `app/api/comercial/[...rota]/route.ts:54` (`'/contas-correntes'`)) e passa a aceitar as duas telas.
 - **Ordem de escrita:** chama o `AlterarPedidoVenda` primeiro e só grava no Hub depois que o Omie aceitar. Se o Omie recusar, devolve o `faultstring` e nada muda no Hub.
 - **Erros:** 409 se o pedido já estiver faturado; 422 se a conta não for da conta Omie do pedido; o erro do Omie repassado quando ele recusar.
 - **Histórico:** quem trocou, quando, de qual conta para qual, no molde de `pedidos_vendas_liberacao_historico` com `valor_anterior`, gravado por trigger (§7.5).
@@ -53,7 +53,7 @@ PUT /comercial/pedidos/{id}/conta-corrente   // string: o codigo_conta_omie é b
 
 ## 9. Banco (SQL)
 
-❓ O código nomeia duas migrations que não estão no repositório. O vault registra isso desde 05/11 ([[Dump-AvHub-Teste-2026-11-04]] e [[Onde-Estamos]]). A citação da fonte, `propostas.route.js:32-34`:
+❓ O código nomeia duas migrations que não estão no repositório. O vault registra isso desde 05/11 ([[Dump-AvHub-Teste-2026-11-04]] e [[Onde-Estamos]]). A citação da fonte, `propostas.route.js:31-33`:
 
 ```
 // Migrations: 2026-11-05_comercial_limpeza_core_comercial.sql (item do produto
@@ -63,7 +63,7 @@ PUT /comercial/pedidos/{id}/conta-corrente   // string: o codigo_conta_omie é b
 
 A pergunta ao Gustavo é a mesma de 05/11, sem resposta: onde estão as duas migrations? Na v8 ela ganhou um segundo item: de qual coluna `fn_pedido_venda_payload_omie` tira o `obs_venda` (§7.7); a função é da mesma migration.
 
-❓ Continuam até ela aparecer: `dados_adicionais_nf` e `envio_omie_iniciado_em` (o código usa, o dump de 04/11 não tem), `codigo_condicao_pagamento` em `core_comercial.propostas` (idem) e a assinatura de `fn_proposta_transformar`, que o dump traz com 3 parâmetros e a API chama com 4 (`propostas.route.js:611`).
+❓ Continuam até ela aparecer: `dados_adicionais_nf` e `envio_omie_iniciado_em` (o código usa, o dump de 04/11 não tem), `codigo_condicao_pagamento` em `core_comercial.propostas` (idem) e a assinatura de `fn_proposta_transformar`, que o dump traz com 3 parâmetros e a API chama com 4 (`propostas.route.js:642`).
 
 | Tabela | Coluna | Estado |
 |---|---|---|
@@ -137,7 +137,7 @@ As decisões de 09/11 estão todas tomadas; não há passo de decisão. Restam a
 | # | O quê | Quem | Depende de |
 |---|---|---|---|
 | 1 | Achar as duas migrations da §9 e dizer de onde sai o `obs_venda` (§7.7) | Gustavo | — |
-| 2 | ~~Corrigir `id_unidade_conta_omie` da HRM (N16-98)~~ ✅ **Não é mais preciso (N16-154, 10/11):** `unidades_emissoras` saiu e cada unidade usa a própria conta Omie (`cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`) | Gustavo | — |
+| 2 | ~~Corrigir `id_unidade_conta_omie` da HRM (N16-98)~~ ✅ **Não é mais preciso (N16-154, 10/11):** `unidades_emissoras` saiu e cada unidade usa a própria conta Omie (`cadastros.route.js:104`, `id_unidade_conta_omie: e.id,`) | Gustavo | — |
 | 3 | Migration: `qualidade_acompanha`, `faturar_em_partes` e `codigo_conta_corrente` em `pedidos_venda`; `faturar_em_partes` na liberação | Gustavo | 1 |
 | 4 | Tabela da configuração padrão por conta Omie (§7.4 e §7.8) | Gustavo | 1 |
 | 5 | `esquemaEnvioOmie` + payload: a conta corrente lida da configuração; regra do §7.1 | Gustavo | 3, 4 |
@@ -147,7 +147,7 @@ As decisões de 09/11 estão todas tomadas; não há passo de decisão. Restam a
 | 7c | `faturar_em_partes` no corpo do `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido` e legível em `GET /pedidos_liberados` (perna 2b) | Gustavo | 3 |
 | 7d | Deixar o campo passar no BFF da liberação (`app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:27-29` e `:51`) | Robert | 7c |
 | 8 | `GET /prontidao-omie`, com `UNIDADE_SEM_CONFIG` quando faltar a conta padrão | Gustavo | 4 |
-| 9 | ~~`id_unidade_conta_omie` no corpo de `/empresas_emissoras`~~ ✅ **Feito na develop (N16-154):** o campo já vem, igual ao `id_unidade` (`cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`) | Gustavo | — |
+| 9 | ~~`id_unidade_conta_omie` no corpo de `/empresas_emissoras`~~ ✅ **Feito na develop (N16-154):** o campo já vem, igual ao `id_unidade` (`cadastros.route.js:104`, `id_unidade_conta_omie: e.id,`) | Gustavo | — |
 | 10 | Linhas de `auth.rotas_telas` (§10), incluindo a rota do passo 6 | Gustavo | 6 |
 | 11 | Modal: Qualidade e faturar em partes | Robert | 5 |
 | 12 | BFF da prontidão | Robert | 8 (para ter efeito) |
@@ -203,7 +203,7 @@ O `CLAUDE.md` do av-hub já diz "procure se já existe" e o `conferir-mapa.mjs` 
 O número da linha também é fonte: só de `grep -n` ou de leitura contígua, nunca de trechos concatenados e renumerados. Foi o que deslocou as duas citações de `pedidos_liberacao.route.js` na v8 (a regra geral está em [[Regras-do-Vault]]).
 
 **3. Nome parecido não é a mesma coisa, e regra repetida em dois lugares não é a mesma regra (nova na v8).**
-- `/pedidos_liberacao` × `/pedidos_liberados`: dois nomes quase iguais, montados em linhas vizinhas (`index.js:193-194`), finalidades opostas. A v7 citava as âncoras certas e o nome errado: ler a âncora não basta, é preciso conferir o nome contra o que a tela chama (`route.ts:53`).
+- `/pedidos_liberacao` × `/pedidos_liberados`: dois nomes quase iguais, montados em linhas vizinhas (`api-acos-vital` `src/schemas/core_vendas_faturamento/index.js:195-196` (`{ path: "/pedidos_liberacao"`)), finalidades opostas. A v7 citava as âncoras certas e o nome errado: ler a âncora não basta, é preciso conferir o nome contra o que a tela chama (`av-hub` `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:46` (`/pedidos_liberacao/`)).
 - "G6" na `vw_vendas_planilha` × na `vw_faturamento_planilha`: o mesmo conceito, duas redações no mesmo banco, e a nota do vault documentava uma só.
 
 **A regra operacional:** antes de mandar alguém mexer numa rota, numa view ou numa regra, abrir o ponto de consumo (a linha da tela que chama, ou a view que a tela lê) e confirmar que o nome bate. A âncora prova que o trecho existe; o consumo prova que é o trecho certo.
