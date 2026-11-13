@@ -64,6 +64,6 @@ A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`
 | [[API-019-Compra-da-Proposta-na-OC\|API-019]] | A emissão da OC mostra a parte de compras da proposta (`C6` e `C7`) | `implementado-na-develop` | Nathan | 2026-11-11 |
 | [[LOG-57-Compra-Acima-do-Cotado\|LOG-57]] | Compra acima do cotado na proposta, aprovação do vendedor e lista de Compras (`C8`) | `parcial` | Nathan | 2026-11-11 |
 | [[LOG-58-Avisos-do-MES-ao-Compras\|LOG-58]] | O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento | `parcial` | Nathan | 2026-11-12 |
-| [[SQL-022-Aviso-da-Recompra-na-Referencia-da-OC\|SQL-022]] | A referência da OC para o MES diz de qual aviso do MES a OC é a recompra (saldo futuro, BL-050) | `parcial` | Nathan | 2026-11-13 |
+| [[SQL-022-Aviso-da-Recompra-na-Referencia-da-OC\|SQL-022]] | A referência da OC para o MES diz de qual aviso do MES a OC é a recompra (saldo futuro, BL-050) | `implementado-na-develop` | Nathan | 2026-11-13 |
 
 O modelo de consulta está em [[Modelo-de-Consulta]].

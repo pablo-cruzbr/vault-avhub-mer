@@ -73,7 +73,7 @@ Tudo o que é MES nesta nota está na `develop` do `api-pcp` e do `app-pcp`. A `
   - o que ainda vai chegar por OC de estoque aprovada aparece no modal "Atender pelo estoque" e num card da tela Saldo;
   - backend: `api-pcp` `src/estoque/operacao/saldo-futuro.ts:68` (`export async function saldoFuturoPorProduto`);
   - front: `app-pcp` `app/(protected)/estoque-operacao/saldo/SaldoFuturoCard.tsx:50` (`A chegar por OC de estoque`);
-  - 🟡 a view do SQL-022 está no tst desde 13/11 (Gustavo); falta o teste no tst confirmar que a reprovada que já tem recompra conta uma vez só. Na produção, até a view chegar (depois da log58), ela conta duas vezes.
+  - ✅ a reprovada que já tem OC de recompra conta uma vez só: a view do SQL-022 está no tst desde 13/11 ([[Dump-AvHub-Teste-2026-11-13]], `avhub-tst-esqueleto-2026-11-13.sql:27920`, `av.id_aviso_mes AS id_aviso_mes_origem`). Falta o teste no tst com uma recompra de verdade. Na produção, até a view chegar (depois da log58), ela conta duas vezes.
 - 🔴 Custo obrigatório em todo lote (BL-066) e custo do fabricado (BL-067).
 - 🔴 Contagem cíclica, transferência entre filiais e separação física.
 

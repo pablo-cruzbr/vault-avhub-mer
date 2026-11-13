@@ -15,7 +15,7 @@ tags: [contrato, compras, mes, rnc, recebimento, recompra]
 criado: 2026-11-12
 estado-em: 2026-11-13
 dono: Nathan
-fontes: [Registro-de-Decisoes N16-126, N16-127, N16-135 e N16-137, 06-Circuito-de-Compra-Detalhe-Tecnico-2 (item 7 de "O que falta" e a pendência da recompra), api-pcp develop 2e564e6 (recebimento.service.ts, circuito-compra.ts, qualidade.service.ts, prisma/models), api-acos-vital develop 637f183, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-58), conferido na develop bebca52 e no dump de teste de 12/11"]
+fontes: [Registro-de-Decisoes N16-126, N16-127, N16-135 e N16-137, 06-Circuito-de-Compra-Detalhe-Tecnico-2 (item 7 de "O que falta" e a pendência da recompra), api-pcp develop 2e564e6 (recebimento.service.ts, circuito-compra.ts, qualidade.service.ts, prisma/models), api-acos-vital develop 637f183, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-58), conferido na develop bebca52 e no dump de teste de 12/11", "Relatório de entrega de Gustavo de 13/11/2026 (LOG-57, LOG-58 e SQL-022: respostas e log58b)", Dump-AvHub-Teste-2026-11-13]
 ---
 
 # LOG-58 · O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento
@@ -46,7 +46,7 @@ Nasce em `Q3` ([[08-Qualidade-Entrada]]) e em `R5` ([[07-Recebimento]]) e chega 
 - **R1. Dois avisos.** `RECOMPRA_RNC`: a Qualidade reprovou toda a quantidade ou parte de um lote comprado (N16-126). `RECEBIMENTO_REABERTO`: o PCP decidiu `REABRIR` um recebimento (N16-137).
 - **R2. O que o aviso leva:** a OC e o item do av-hub, a quantidade devolvida e a unidade, o motivo (o da RNC ou o da decisão do PCP), o código da RNC ou do recebimento, o lote (se houver), o pedido de venda (se houver), quem decidiu e quando.
 - **R3. A OC não muda sozinha.** O aviso não cancela nem altera a OC: o Compras decide (devolver, cobrar a substituição do fornecedor, emitir outra OC). O aviso fica `ABERTO` até o Compras tratar.
-- **R4. Tratar o aviso.** O Compras escolhe: **"Nova OC de recompra"** (abre a Nova OC com finalidade `recompra`, o mesmo produto, a quantidade devolvida e o mesmo pedido de venda; ao emitir, o aviso vai a `RESOLVIDO` com a OC nova) ou **"Fornecedor vai substituir"** / **"Sem recompra"**, com motivo obrigatório.
+- **R4. Tratar o aviso.** O Compras escolhe: **"Nova OC de recompra"** (abre a Nova OC com finalidade `recompra`, o mesmo produto, a quantidade devolvida e o mesmo pedido de venda; ao emitir, o aviso vai a `RESOLVIDO` com a OC nova) ou **"Fornecedor vai substituir"** / **"Sem recompra"**, com motivo obrigatório. Se a OC de recompra for cancelada ou excluída depois, o aviso volta a `ABERTO`, sem o tratamento, e o Compras pode emitir outra OC de recompra; a OC cancelada guarda o `id_aviso_mes` como histórico (Gustavo, 13/11; migration `2026-11-13_log58b_aviso_volta_aberto_recompra_cancelada.sql`, no tst, [[Dump-AvHub-Teste-2026-11-13]]).
 - **R5. Uma vez só.** O MES manda cada aviso com um id próprio; repetir o mesmo id não cria outro.
 - **R6. Falha de envio.** Se o av-hub não responder, o MES guarda o aviso e tenta de novo, como já faz no envio da requisição (`integracao.prisma`, estados `PENDENTE`, `ENVIADO`, `RECUSADO`, `FALHOU`). A devolução no MES não espera o av-hub.
 - **R7. Substituição antes da baixa.** O que acontece se a substituição chegar antes de o lote reprovado sair fisicamente segue aberto (N16-126); este contrato não muda isso.
@@ -130,9 +130,10 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 
 ## 14. Ordem de implementação e responsáveis
 
-1. **Banco e API do av-hub (Gustavo):** ✅ tabela, coluna, as três rotas (mais `GET /compras/avisos-mes/{id}`) e a chave do MES (12/11, `bebca52`; 96 verificações no relatório de entrega).
+1. **Banco e API do av-hub (Gustavo):** ✅ tabela, coluna, as três rotas (mais `GET /compras/avisos-mes/{id}`) e a chave do MES (12/11, `bebca52`; 96 verificações no relatório de entrega). ✅ LOG-58b (13/11): OC de recompra cancelada reabre o aviso; migration `2026-11-13_log58b_aviso_volta_aberto_recompra_cancelada.sql` aplicada no tst (Gustavo), só banco, sem API nova.
 2. **MES (Robert, com o Gustavo acompanhando, N16-158):** ✅ a fila de saída e o envio nos dois pontos (12/11, `api-pcp` PR #80): `api-pcp` `src/integracao-avhub/aviso-compra-avhub.envio.ts:68` (`export async function enfileirarAvisoRecompraRnc(`) e `:104` (`export async function enfileirarAvisosRecebimentoReaberto(`).
 3. **Front (Nathan):** ✅ detalhe da OC, lista, Nova OC de recompra (12/11, `av-hub` PR #287). A recompra de aviso sem pedido de venda usa a finalidade da OC original (13/11, PR #294). Testado no Docker local; falta o teste no tst.
+4. **Histórico da recompra cancelada (Gustavo na API, Nathan no front):** 🔴 decidido em 13/11 (seção 15): o `GET /compras/avisos-mes/{id}` traz as OCs de recompra canceladas do aviso, e a faixa do aviso reaberto as mostra.
 
 ## 15. Riscos, rollback e perguntas em aberto
 
@@ -140,7 +141,8 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 - **Pergunta (Nathan):** reprovação parcial (N16-128 é da saída; a de entrada já cinde o lote) avisa com a quantidade reprovada; confirmar que é por lote, não por item da OC.
 - **Rollback:** o MES para de enviar; os avisos gravados ficam como histórico.
 - **Risco:** OC cancelada ou já recomprada à mão antes do aviso chegar: o Compras trata com "Sem recompra".
-- **Pergunta (Gustavo, 12/11):** se a OC de recompra for cancelada depois, o aviso deve voltar a `ABERTO`? Hoje não volta (o contrato não pede). ❓
+- **Pergunta (Gustavo, 12/11):** se a OC de recompra for cancelada depois, o aviso deve voltar a `ABERTO`? ✅ Sim (Gustavo, 13/11): volta, pela migration log58b (R4).
+- **Decidido (Nathan, 13/11), pergunta do Gustavo:** o aviso reaberto mostra que houve uma OC de recompra cancelada antes. Hoje o GET do aviso não traz esse histórico; só a OC cancelada guarda o `id_aviso_mes`. O Gustavo acrescenta a lista dessas OCs no `GET /compras/avisos-mes/{id}`, e o Nathan a mostra na faixa do aviso 🔴.
 - **Escolhas da entrega (Gustavo, 12/11) que o contrato não dizia:** `ordens_compra.id_aviso_mes` aponta o `id` do aviso no av-hub (o do GET), não o `id_aviso_mes` do MES; a finalidade `recompra` não é obrigatória no banco (aviso de OC de estoque não tem PV, e `recompra` exige vínculo); a OC de recompra tem de ser da mesma unidade da OC do aviso (AV585); `id_aviso_mes` repetido com corpo diferente devolve o aviso original sem conferir (R5), com log `[LOG-58]`; OC excluída dá `404 OC_NAO_ENCONTRADA`, e o MES deve marcar o envio como recusado; além do índice `(status, id_ordem_compra)` há `(id_ordem_compra, created_at)`. A tabela aceita aviso por lote ou por item (o item é opcional), enquanto a pergunta acima não for respondida.
 
 ## 16. Impacto no vault quando for entregue

@@ -1,7 +1,7 @@
 ---
 id: SQL-022
 titulo: A referência da OC para o MES diz de qual aviso do MES a OC é a recompra
-status: parcial
+status: implementado-na-develop
 autor: Nathan
 data: 2026-11-13
 camadas: [frontend, backend, api, sql]
@@ -15,14 +15,14 @@ tags: [contrato, banco, view, mes, estoque, saldo-futuro, recompra]
 criado: 2026-11-13
 estado-em: 2026-11-13
 dono: Nathan
-fontes: [Backlog-Frente-Robert BL-050, LOG-58-Avisos-do-MES-ao-Compras, Dump-AvHub-Teste-2026-11-12, api-acos-vital develop 9abda4f (PR #310), api-pcp develop bd6b442 (PR #81), app-pcp develop 897dcd7 (PR #66), teste no Docker local de 12/11/2026 (docker-teste, fora do vault), "Mensagem de Gustavo de 13/11/2026 (SQL-022 aplicada no tst)"]
+fontes: [Backlog-Frente-Robert BL-050, LOG-58-Avisos-do-MES-ao-Compras, Dump-AvHub-Teste-2026-11-12, api-acos-vital develop 9abda4f (PR #310), api-pcp develop bd6b442 (PR #81), app-pcp develop 897dcd7 (PR #66), teste no Docker local de 12/11/2026 (docker-teste, fora do vault), "Mensagem de Gustavo de 13/11/2026 (SQL-022 aplicada no tst)", "Relatório de entrega de Gustavo de 13/11/2026 (LOG-57, LOG-58 e SQL-022: respostas e log58b)", Dump-AvHub-Teste-2026-11-13]
 ---
 
 # SQL-022 · A referência da OC para o MES diz de qual aviso do MES a OC é a recompra
 
 ## 1. Resumo em linguagem simples
 
-O Estoque do MES já mostra o que ainda vai chegar por OC de estoque (o "saldo futuro", BL-050). Para não contar duas vezes a peça reprovada que o Compras já recomprou, falta uma coluna numa view do banco do av-hub. O código dos três sistemas está pronto na `develop`; só falta o Gustavo aplicar a mudança da view no tst e, depois, na produção.
+O Estoque do MES já mostra o que ainda vai chegar por OC de estoque (o "saldo futuro", BL-050). Para não contar duas vezes a peça reprovada que o Compras já recomprou, falta uma coluna numa view do banco do av-hub. O código dos três sistemas está pronto na `develop`, e a view está no tst desde 13/11 (Gustavo); falta só a produção.
 
 ## 2. Contexto: o que deve ser feito e por quê
 
@@ -48,7 +48,7 @@ O Estoque do MES já mostra o que ainda vai chegar por OC de estoque (o "saldo f
   - bloco no modal: `app/(protected)/movimentacoes/components/AtenderEstoqueModal.tsx:448` (`A chegar por OC de estoque:`);
   - card na tela Saldo: `app/(protected)/estoque-operacao/saldo/SaldoFuturoCard.tsx:50` (`<Card title="A chegar por OC de estoque">`).
 - ✅ **API do av-hub** (`api-acos-vital`, `9abda4f`): a rota lê a coluna nova em `src/schemas/core_vendas_faturamento/views/vw_ordens_compra_referencia_mes/vw_ordens_compra_referencia_mes.route.js:71` (`v.id_aviso_mes_origem`). Sem a coluna no banco, lê o conjunto anterior (`:89`, `migration: "bl050"`).
-- 🟡 **Banco do av-hub:** aplicada no tst em 13/11 pelo Gustavo (migration `2026-11-13_sql022_aviso_recompra_referencia_oc.sql`, com o DBA, N16-155): a view tem `id_aviso_mes_origem` no fim. No tst as 9 OCs da referência vêm com o campo nulo, porque lá ainda não há recompra emitida a partir de aviso. ❓ Não conferido em dump: o de 12/11 ainda não tem a coluna ([[Dump-AvHub-Teste-2026-11-12]], `avhub-tst-esqueleto-2026-11-12.sql:27831`). Produção pendente, depois da log58.
+- ✅ **Banco do av-hub:** aplicada no tst em 13/11 pelo Gustavo (migration `2026-11-13_sql022_aviso_recompra_referencia_oc.sql`, com o DBA, N16-155): a view tem `id_aviso_mes_origem` no fim ([[Dump-AvHub-Teste-2026-11-13]], `avhub-tst-esqueleto-2026-11-13.sql:27920`, `av.id_aviso_mes AS id_aviso_mes_origem`). No tst as 9 OCs da referência vêm com o campo nulo, porque lá ainda não há recompra emitida a partir de aviso. Produção pendente, depois da log58.
 
 ## 5. Regras de negócio
 
@@ -78,7 +78,7 @@ O Estoque do MES já mostra o que ainda vai chegar por OC de estoque (o "saldo f
 - **Quem aplica:** Gustavo (DBA), primeiro no tst e depois na produção.
 - **Dados existentes:**
   - a mudança da view sozinha não altera o `alterado_em`, então as recompras já emitidas só chegariam ao MES quando a OC mudasse;
-  - **como o Gustavo aplicou (13/11):** a migration marca de novo as OCs que têm `id_aviso_mes`, e o job do MES relê só essas. Não é preciso voltar o cursor `ordens-compra-referencia` do MES (o SQL abaixo é o do contrato e não faz essa marcação; a versão aplicada fica com o DBA).
+  - **como o Gustavo aplicou (13/11):** na 1ª execução, a migration marca de novo em `ordens_compra_referencia_mes` só as OCs que já têm `id_aviso_mes`, e o MES as relê; o cursor do MES não é mexido (o SQL abaixo é o do contrato e não faz essa marcação; a versão aplicada fica com o DBA).
 
 ```sql
 -- BL-050 / LOG-58: a referência da OC para o MES passa a dizer de qual aviso do MES
@@ -159,7 +159,7 @@ Nenhuma mudança: a rota continua de serviço (chave de leitura do MES), e as te
    - confira que a OC-000014 chega com `id_aviso_mes_origem`;
    - `GET /estoque/saldo/futuro` deve mostrar o produto 10222656014 com 2 PÇ, só da OC-000014 (antes da view, mostrava 4).
 2. **Sem a view:** a rota da API responde 200 sem o campo, e o MES continua contando como hoje.
-3. **Limite:** se a OC de recompra for cancelada, as 2 PÇ voltam a contar na OC-000013.
+3. **Limite:** se a OC de recompra for cancelada, as 2 PÇ voltam a contar na OC-000013, e o aviso volta a `ABERTO` para o Compras (LOG-58b).
 4. **No tst (Nathan, pedido do Gustavo em 13/11), sem mexer no cursor:**
    - reprovar parte de um lote de uma OC de estoque aprovada e conferir que o aviso chega ao Hub;
    - emitir e aprovar a OC de recompra a partir do aviso: ela aparece na referência com `id_aviso_mes_origem` preenchido (o Gustavo confere no banco);
@@ -168,8 +168,8 @@ Nenhuma mudança: a rota continua de serviço (chave de leitura do MES), e as te
 ## 14. Ordem de implementação e responsáveis
 
 1. ✅ **API, MES e front** (Nathan, 12/11 e 13/11): `api-acos-vital` PR #310, `api-pcp` PR #81 e `app-pcp` PR #66, todos na `develop`.
-2. 🟡 **Banco do tst** (Gustavo): ✅ view aplicada em 13/11; falta o teste no tst (seção 13, item 4) e o Gustavo conferir a OC de recompra no banco.
-3. 🔴 **Produção** (Gustavo): a view vai junto com o deploy da `api-acos-vital`, depois da log58. A migration do MES sobe sozinha com o container.
+2. ✅ **Banco do tst** (Gustavo, 13/11): view aplicada com `2026-11-13_sql022_aviso_recompra_referencia_oc.sql`. Falta o teste no tst (seção 13, item 4, Nathan), e o Gustavo confere a OC de recompra no banco.
+3. 🔴 **Produção** (Gustavo): vai junto com tudo o que está no tst, de uma vez, quando o Nathan pedir; sempre depois da log58. A migration do MES sobe sozinha com o container.
 
 ## 15. Riscos, rollback e perguntas em aberto
 
@@ -178,7 +178,7 @@ Nenhuma mudança: a rota continua de serviço (chave de leitura do MES), e as te
   - a API passa a ler o conjunto anterior de colunas, e o MES fica com o último valor gravado;
   - para zerar esse valor, rode no MES `UPDATE oc_referencia SET id_aviso_mes_origem = NULL`.
 - **Risco: recompra de outro produto.** O desconto é pelo item do aviso (`id_ordem_compra_item`), então uma recompra de produto diferente não tira nada do produto original.
-- **Respondida (Gustavo, 13/11):** a view entra na produção depois da log58. Os cadastros do LOG-57 e do LOG-58 (tela, permissões e `auth.rotas_telas`) vêm dentro das próprias migrations e vão junto (PS-055).
+- **Respondida (Gustavo, 13/11):** tudo o que está no tst vai de uma vez para a produção, quando o Nathan pedir, e a view vai depois da log58. Os cadastros do LOG-57 e do LOG-58 (tela, permissões e `auth.rotas_telas`) vêm dentro das próprias migrations e vão junto (PS-055).
 
 ## 16. Impacto no vault quando for entregue
 
