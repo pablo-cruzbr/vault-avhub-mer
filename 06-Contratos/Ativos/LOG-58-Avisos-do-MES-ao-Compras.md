@@ -10,7 +10,7 @@ nos_0b: [Q3, R5, C1]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, 07-Recebimento, 08-Qualidade-Entrada, Integracao-AvHub-MES, Backlog-por-Frente]
 depende_de: []
 decisoes: [N16-126, N16-127, N16-135, N16-137, N16-157, N16-158]
-develop-conferida: [api-pcp 2e564e6, api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-12; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #287); api-pcp bd6b442, av-hub c6310ad, em 2026-11-13, o envio do MES (PR #80) e a recompra sem pedido (PR #294)]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-pcp 2e564e6, api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-12; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #287); api-pcp bd6b442, av-hub c6310ad, em 2026-11-13, o envio do MES (PR #80) e a recompra sem pedido (PR #294)]
 tags: [contrato, compras, mes, rnc, recebimento, recompra]
 criado: 2026-11-12
 estado-em: 2026-11-13
@@ -39,7 +39,7 @@ Nasce em `Q3` ([[08-Qualidade-Entrada]]) e em `R5` ([[07-Recebimento]]) e chega 
 
 - **MES.** ✅ As duas devoluções existem, como na seção 2. O lote guarda o item da OC do av-hub (`Lote.idItemOc`, `prisma/models/estoque.prisma:406`), e o recebimento sem requisição guarda a OC (`Recebimento.idOrdemCompra`, `prisma/models/compras.prisma:196`); o com requisição chega à OC pela requisição. 🔴 Nenhuma chamada ao av-hub nesses dois pontos.
 - **Canal existente.** O MES lê os marcos do av-hub por polling (contrato 35) e manda a requisição por `PUT` (contrato 34). Não existe caminho do MES para o av-hub com eventos de compra.
-- **av-hub.** ✅ Entregue pelo Gustavo em 12/11. Banco aplicado no teste ([[Dump-AvHub-Teste-2026-11-12]]): `core_vendas_faturamento.avisos_mes_compra` (`:23757`) e `ordens_compra.id_aviso_mes` (`:18986`); produção pendente. API na `develop` (`bebca52`): `POST /integracao/mes/avisos-compra` (`api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:110`, `integracaoMesAvisos.post("/"`), `GET /compras/avisos-mes` (`:161`, `comprasAvisosMes.get("/"`), `GET /compras/avisos-mes/{id}` (`:183`, `comprasAvisosMes.get("/:id"`, a mais que a seção 8, para a tela de recompra montar a OC) e `PATCH /compras/avisos-mes/{id}` (`:192`, `comprasAvisosMes.patch("/:id"`). A chave do MES abre só a rota nova (`src/middlewares/apiKeyAuth.js:108`, `const ROTA_MES_AVISOS`). A OC aceita a finalidade `recompra`, que liga ao pedido de venda (`src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:96`, `const FINALIDADES_COM_PV`). Front ✅ (Nathan, 12/11, `av-hub` PR #287): faixa do aviso no detalhe da OC com "Nova OC de recompra", "Fornecedor vai substituir" e "Sem recompra" (`av-hub` `components/Compras/OrdemDetalhe.tsx:216`, `<AvisosMesDaOrdem`), cartão em Requisições (`components/Compras/ComprasRequisicoes.tsx:167`, `<AvisosMesPainel`) e a OC de recompra montada pelo `GET /compras/avisos-mes/{id}` (`components/Compras/FecharCompra/montarDoAviso.ts:21`, `getAvisoMes(avisoId)`).
+- **av-hub.** ✅ Entregue pelo Gustavo em 12/11. Banco aplicado no teste ([[Dump-AvHub-Teste-2026-11-12]]): `core_vendas_faturamento.avisos_mes_compra` (`:23757`) e `ordens_compra.id_aviso_mes` (`:18986`); produção pendente. API na `develop` (`bebca52`): `POST /integracao/mes/avisos-compra` (`api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:110`, `integracaoMesAvisos.post("/"`), `GET /compras/avisos-mes` (`:161`, `comprasAvisosMes.get("/"`), `GET /compras/avisos-mes/{id}` (`:183`, `comprasAvisosMes.get("/:id"`, a mais que a seção 8, para a tela de recompra montar a OC) e `PATCH /compras/avisos-mes/{id}` (`:192`, `comprasAvisosMes.patch("/:id"`). A chave do MES abre só a rota nova (`src/middlewares/apiKeyAuth.js:119`, `const ROTA_MES_AVISOS`). A OC aceita a finalidade `recompra`, que liga ao pedido de venda (`src/schemas/core_vendas_faturamento/tables/ordens_compra/ordens_compra.route.js:98`, `const FINALIDADES_COM_PV`). Front ✅ (Nathan, 12/11, `av-hub` PR #287): faixa do aviso no detalhe da OC com "Nova OC de recompra", "Fornecedor vai substituir" e "Sem recompra" (`av-hub` `components/Compras/OrdemDetalhe.tsx:225`, `<AvisosMesDaOrdem`), cartão em Requisições (`components/Compras/ComprasRequisicoes.tsx:172`, `<AvisosMesPainel`) e a OC de recompra montada pelo `GET /compras/avisos-mes/{id}` (`components/Compras/FecharCompra/montarDoAviso.ts:22`, `getAvisoMes(avisoId)`).
 
 ## 5. Regras de negócio
 
@@ -117,7 +117,7 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 
 ## 12. Critérios de aceite
 
-- [ ] MES: reprovar um lote de OC do av-hub e reabrir um recebimento geram um aviso cada, enviados ao av-hub; com o av-hub fora, o aviso espera e é reenviado.
+- [ ] MES: reprovar um lote de OC do av-hub e reabrir um recebimento geram um aviso cada, enviados ao av-hub; com o av-hub fora, o aviso espera e é reenviado. *13/11:* a reprovação foi testada ponta a ponta no Docker (reteste R2, ver seção 13); faltam a reabertura e o av-hub fora do ar.
 - [x] API: o POST grava o aviso; repetir o `id_aviso_mes` não duplica; OC inexistente dá `404`.
 - [x] Front: o detalhe da OC mostra o aviso; "Nova OC de recompra" abre a OC preenchida e, emitida, resolve o aviso; "Fornecedor vai substituir" pede motivo.
 - [x] Banco: tabela e coluna como na seção 9.
@@ -127,6 +127,8 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 1. No Docker, emitir uma OC ligada ao PV 28189, receber no MES (lote em quarentena) e reprovar 2 PÇ na inspeção → aviso `RECOMPRA_RNC` de 2 PÇ no detalhe da OC → "Nova OC de recompra" → OC nova `recompra` de 2 PÇ ligada ao PV 28189 → aviso `RESOLVIDO`.
 2. Recebimento com divergência, recontagem que continua divergindo e decisão `REABRIR` → aviso `RECEBIMENTO_REABERTO`.
 3. Desligar a API do av-hub, reprovar, religar: o aviso chega depois.
+
+✅ **Teste 1 feito no Docker em 13/11 (reteste R2, develop de 12/11):** 2 de 5 PÇ reprovadas criaram, na mesma transação, o lote filho, a RNC e o `AVISO_COMPRA` na fila; o envio saiu em 49 s (201); o Hub gravou em `avisos_mes_compra`; a OC de recompra emitida com `id_aviso_mes` resolveu o aviso (`RESOLVIDO`, `RECOMPRA`) e voltou ao MES com `oc_referencia.id_aviso_mes_origem` igual ao id do aviso. 🟡 O aviso esperou o ciclo da fila (60 s), porque a reprovação não chama `disparar()`. Os testes 2 e 3 não foram feitos.
 
 ## 14. Ordem de implementação e responsáveis
 
