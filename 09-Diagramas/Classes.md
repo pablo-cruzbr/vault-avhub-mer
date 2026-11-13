@@ -1,9 +1,10 @@
 ---
 tags: [diagramas, classes, uml, mes, estoque, comercial]
 criado: 2026-10-14
-estado-em: 2026-11-11
+estado-em: 2026-11-13
 status: vigente
 dono: Robert
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 Diagramas-UML (1, 2, 3, 23, 25), api-pcp 579a625 prisma/models/*.prisma (LoteCusto e OrigemLote reconferidos na develop befd973 em 29/10/2026), HUB b55ac55 api-comercial/prisma/models/*.prisma]
 ---
 
@@ -409,7 +410,7 @@ Selo ✅ para todas as classes exceto `RetiradaEstoque` (📝 decidida em 14/10,
 
 ### Diagrama 2: Produção no MES
 
-Selo ✅ `producao.prisma:88-620`, `fabricas.prisma:36-170`. Observações conferidas:
+Selo ✅ `api-pcp` `prisma/models/producao.prisma:1-579` (o arquivo inteiro), `fabricas.prisma:36-170`. Observações conferidas:
 
 - O roteiro existe em dois níveis: `Roteiros` (por pedido) e `RoteiroItem` (por item) ✅ `producao.prisma:262-292`.
 - O setor Estoque é inserido pelo backend como etapa 1 de todo roteiro (`GET /pedidos/setor-estoque-fixo` ✅ `pedidos.controller.ts:92`).
@@ -419,7 +420,7 @@ Selo ✅ `producao.prisma:88-620`, `fabricas.prisma:36-170`. Observações confe
 
 ### Diagrama 3: Compras, recebimento e integração
 
-Selo ✅ `compras.prisma:51-262`, `integracao.prisma:33-120`. Enums: `StatusRequisicaoCompra` (`ABERTA`, `EM_COMPRA`, `RECEBIDA_PARCIAL`, `RECEBIDA`, `CANCELADA`), `TipoItemRequisicao` (`PRODUTO_FINAL`, `MATERIA_PRIMA`), `TipoDivergenciaRecebimento` (`QUANTIDADE`, `DESCRICAO`, `PESO`, `AVARIA`), `StatusEnvioAvhub` (`PENDENTE`, `ENVIADO`, `RECUSADO`, `FALHOU`), `TipoEnvioAvhub` (`REQUISICAO_COMPRA`). Mudanças em relação ao v1 (08/10):
+Selo ✅ `compras.prisma:51-262`, `api-pcp` `prisma/models/integracao.prisma:32-172` (`model IntegracaoAvhubEnvio {`). Enums: `StatusRequisicaoCompra` (`ABERTA`, `EM_COMPRA`, `RECEBIDA_PARCIAL`, `RECEBIDA`, `CANCELADA`), `TipoItemRequisicao` (`PRODUTO_FINAL`, `MATERIA_PRIMA`), `TipoDivergenciaRecebimento` (`QUANTIDADE`, `DESCRICAO`, `PESO`, `AVARIA`), `StatusEnvioAvhub` (`PENDENTE`, `ENVIADO`, `RECUSADO`, `FALHOU`), `TipoEnvioAvhub` (`REQUISICAO_COMPRA`, `AVISO_COMPRA` desde o LOG-58). Na `oc_referencia` (`OcReferencia`), `idAvisoMesOrigem` marca a OC de recompra com o aviso do MES que ela resolve. Mudanças em relação ao v1 (08/10):
 
 - Entraram os campos de **Compras · CCP** (14/10): `etapaCompra`, `numeroOc`, `numeroPedidoOmie`, `previsaoChegada`, `ocAprovadaEm`, `despachadaEm`, `nfFornecedor`, `transportadora`, `ocorrenciaAberta` no item; `pedidoCompra`, `previsaoEntrega`, `compradoEm`, `liberadaRecebimento*`, `nfChegada`, `chaveNfChegada`, `chegadaEm`, `canceladaPor` na requisição.
 - O registro manual da compra (`PATCH :id/compra`) saiu; `pedidoCompra`, `fornecedor` e `previsaoEntrega` agora são espelho do av-hub, nunca digitados ✅ `compras.prisma` (comentário do bloco CCP).
