@@ -1,10 +1,11 @@
 ---
 tags: [pesquisa, comercial, suprimentos, api-comercial, proposta, orcamento, mapa, staging, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-13
 status: proposta
 dono: Pablo
 parte-de: "[[Mapa-do-Modulo-do-Pablo]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [av-hub 5aa5311 (branch feat/menu-orcamento-vendas-compras) api-comercial/prisma/models e prisma/migrations, api-comercial/src/modules e src/domain, api-comercial/README.md, app/api/comercial/[...rota]/route.ts, app/(protected)/vendas orcamento compras, components/Propostas Suprimentos PainelComprador, lib/domain/fluxo-suprimentos.ts, docs/ENVIAR - contrato-comercial-suprimentos-telas.md, Dump Avhub (Esqueleto).sql, omie-elt-pipeline src/jobs/envioOrdensCompra.ts, 00-Briefing-Decisoes]
 ---
 
@@ -141,7 +142,7 @@ Configurador por classe, espessura, núcleo (EPS ou PIR) e pintura; o custo base
 - Escopo por usuário dono (`id_responsavel`): `PROPRIAS`, `COMPARTILHADA` (que não restringe nada) e `TODAS` ✅ `propostas.service.ts:23-34`.
 - Slugs que decidem capacidade ✅ `src/domain/permissoes/capacidades.ts:47-56`: `propostas`, `propostas-delegacao`, `propostas-valores`, `custo-item`, `relatorio-gerencial`, `painel-comprador`, `clientes`, `simulador`. Capacidades: `veValores`, `veCusto`, `comprador`, `podeDelegar`, `editaTerceiros`, `exclui`, `escopo`, `escopoClientes`, `relatorioGerencial`, `simulador`.
 - Perfis de teste (bypass de desenvolvimento): `Comercial - Vendedor`, `Auxiliar`, `Gestão`, `Diretoria`, `Suprimentos - Comprador`, `Pós-venda`, `Comissões - Simulador` ✅ `perfisDev.ts:12-77`. São fixtures do bypass; não migram.
-- Telas cadastradas em 16/10 (nome, slug, pai, ordem relativa) ✅ `telas-vendas-orcamento-compras.sql:51-70` (anexo removido em 29/10/2026):
+- Telas cadastradas em 16/10 (nome, slug, pai, ordem relativa) ✅ `telas-vendas-orcamento-compras.sql`, linhas 51 a 70 (anexo removido em 29/10/2026; fica só este registro):
 
 | Grupo | Slugs |
 |---|---|
@@ -150,4 +151,4 @@ Configurador por classe, espessura, núcleo (EPS ou PIR) e pintura; o custo base
 | `compras` | `historico-compras` (30) |
 | fora do menu | `sincronizacao-omie` sai (passo 4 do SQL); as 5 telas antigas do Orçamento (`categorias`, `fornecedores`, `historico-produtos`, `sem-cadastro`, `vinculos`) saem (passo 2) |
 
-- O BFF ainda cita o slug `matriz-precos` (`app/api/comercial/[...rota]/route.ts:89,104`), que o SQL de 16/10 não cadastra; o contrato de telas diz "tela ainda não construída" ✅ `docs/ENVIAR - contrato-comercial-suprimentos-telas.md:75`. O slug `simulador` (Simulador de Comissões) também é consultado ✅ `capacidades.ts:55`.
+- O BFF ainda cita o slug `matriz-precos` (`app/api/comercial/[...rota]/route.ts:125,104`), que o SQL de 16/10 não cadastra; o contrato de telas diz "tela ainda não construída" ✅ `docs/ENVIAR - contrato-comercial-suprimentos-telas.md:75`. O slug `simulador` (Simulador de Comissões) também é consultado ✅ `capacidades.ts:55`.
