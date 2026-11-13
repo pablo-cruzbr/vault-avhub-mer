@@ -1,9 +1,10 @@
 ---
 tags: [sistemas, av-hub, api-acos-vital, express, sequelize, compras, torre-de-fluxo, custo]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-acos-vital 1654f65 (develop, 05/11), api-acos-vital 0384e89 (develop, 29/10), Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/), Dump Avhub (Esqueleto).sql de 14/10, v1 AV-Hub-API-Estado-Atual, AV-Hub-RBAC, Integracao-AvHub-MES-Especificacao-F1]
 ---
 
@@ -44,9 +45,10 @@ fontes: [api-acos-vital 1654f65 (develop, 05/11), api-acos-vital 0384e89 (develo
 - ✅ O MES consome a referência da OC (`GET /ordens-compra/referencia`, desde 15/10, `develop` do MES) e agora a referência da requisição do Compras (API-009).
 - ✅ Requisição de compra pode ser excluída (exclusão lógica, 23/10, contrato 55).
 - ✅ Rotas do módulo comercial (`/comercial/*`): `me`, empresas emissoras, responsáveis, parâmetros de custo, propostas, clientes e parceiros (28 e 29/10).
-- ✅ Em 05/11 (`api-acos-vital` `develop` `1654f65`) entraram: `POST /comercial/pedidos/:id/enviar-omie` (`pedidos.route.js:30`), `GET /comercial/produtos` (`produtos.route.js:42`), o corpo do `transformar` com o envio síncrono ao Omie (`propostas.route.js:597-618`, `pedidoOmie.js`), `GET /categorias?tipo=receita` (`categorias.route.js:47-57`) e `GET /compras/condicoes-pagamento/com-encargos` (`condicoes_pagamento_compras.route.js:29`). ❓ O banco dessas funções está fora do repositório (migrations de 05/11; ver [[Dump-AvHub-Teste-2026-11-04]]).
+- ✅ Em 05/11 (`api-acos-vital` `develop` `1654f65`) entraram: `POST /comercial/pedidos/:id/enviar-omie` (`api-acos-vital` `src/schemas/core_comercial/aggregates/pedidos/pedidos.route.js:33` (`router.post("/pedidos/:id/enviar-omie"`)), `GET /comercial/produtos` (`src/schemas/core_comercial/aggregates/produtos/produtos.route.js:42` (`router.get("/produtos"`)), o corpo do `transformar` com o envio síncrono ao Omie (`propostas.route.js:645` (`"/propostas/:id/transformar"`), `pedidoOmie.js`), `GET /categorias?tipo=receita` (`categorias.route.js:47-60` (`query.tipo !== "receita"`)) e `GET /compras/condicoes-pagamento/com-encargos` (`condicoes_pagamento_compras.route.js:29` (`"/condicoes-pagamento/com-encargos"`)). ❓ O banco dessas funções está fora do repositório (migrations de 05/11; ver [[Dump-AvHub-Teste-2026-11-04]]).
 - ✅ A requisição do Compras passou a ter as travas fixas, sem a chave `COMPRAS_REQUISICAO_EXIGIR_CADASTRO`: `finalidade` obrigatória, material do cadastro da unidade e pedido de venda existente; a OC liga a trava "pedido do vínculo é da unidade da OC" (`api-acos-vital` `requisicoes_compra.route.js` e `ordens_compra.route.js`, `develop` `1654f65`).
 - ✅ Escopo do vendedor (LOG-50): "sem vínculo" passa a olhar os vínculos de todas as unidades. Quem só tem vínculo em outra unidade recebe `PEDIDO_FORA_DO_ESCOPO` no detalhe e `VENDEDOR_FORA_DO_ESCOPO` na lista, em vez de `SEM_VENDEDOR_VINCULADO` (`api-acos-vital` `src/middlewares/escopoVendedor.js`, `develop` `1654f65`).
+- 🟡 Cabeçalho dos documentos por unidade (N16-154): `core.unidades` tem `sigla` (gerada do nome fantasia) e `nome_documento`, `telefone_documento`, `email_documento`, `site_documento` e `logo_url`, e a API aceita os cinco no `PUT /unidades/{id}` ✅ `api-acos-vital` `src/schemas/core/tables/unidades/unidades.route.js:49` (`"nome_documento", "telefone_documento"`), `cc3fbb3`. 🔴 O av-hub não tem tela para editá-los: hoje só pelo banco ou pela API ([[Banco-AvHub]]).
 - 🟡 O limite de R$ 30 mil é provisório. Endurece depois da conversa com Compras.
 - ✅ O filtro `alterado_desde` de produtos e parceiros foi corrigido em 16/10 (`38d2f74`).
 - 🔴 `pessoa_vendedor` continua sem tabela (conferido no dump de 29/10).
