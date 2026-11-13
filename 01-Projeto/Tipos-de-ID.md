@@ -4,6 +4,7 @@ criado: 2026-11-05
 estado-em: 2026-11-13
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07-Desenvolvimento/v3), Registro-de-Decisoes, Backlog-por-Frente, Pontas-Soltas, Perguntas-Proposta-Pedido-Comissao, Riscos, Contradicoes-Resolvidas, Contratos-da-v2, Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault) (BL-086 a BL-088, PS-046 a PS-053, RS-023, OQ-49 a OQ-53)]
 ---
 
@@ -29,7 +30,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 | `EN-nn`, `EC-nn` | Encaixe do Estoque e da Revenda no PCP (EN) e do circuito de compra (EC) | [[Registro-DEC-EN-EC-e-1-a-38]] | 7 e 8 | séries fechadas |
 | `#n` | Decisão do registro de 07/10/2026 (vault v1) | [[Registro-DEC-EN-EC-e-1-a-38]], [[Registro-39-a-80]], [[Registro-81-a-100-e-Estado-no-Codigo]] | `#1` a `#106` | série fechada |
 | `BL-nnn` | Tarefa do backlog: o que falta desenvolver | [[Backlog-por-Frente]] (uma nota por frente) | 87 (até `BL-088`) | `BL-089` |
-| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 56 (até `PS-056`) | `PS-057` |
+| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 59 (até `PS-059`) | `PS-060` |
 | `OQ-nn` | Pergunta em aberto (de negócio ou técnica) | [[Perguntas-Proposta-Pedido-Comissao]] e notas de estudo (por exemplo [[Estudo-Omie-API]]) | 52 (até `OQ-53`) | `OQ-54` |
 | `RS-nn` | Risco | [[Riscos]] | 24 (até `RS-024`) | `RS-025` |
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |
@@ -65,5 +66,5 @@ Nó novo entre dois existentes usa letra ou sufixo, sem renumerar os outros (vej
 ## Outros códigos que aparecem
 
 - **Commits** (`b97981c`): sempre com o repositório ao lado; a base da última atualização está em [[Ultima-Atualizacao-do-Vault]].
-- **Arquivo:linha** (`compras.service.ts:120`): posição no código da `develop` citada por um ✅.
+- **Arquivo:linha** (`api-pcp` `src/qualidade/qualidade.service.ts:75` (`async aprovar(`)): posição no código da `develop` citada por um ✅, com a âncora, um trecho literal da linha.
 - **PR** (`#306` em `api-acos-vital`): número de pull request no GitHub. Não confundir com as decisões `#n`, que só aparecem no Registro e nas notas que o citam.
