@@ -1,10 +1,10 @@
 ---
 tags: [desenvolvimento, atualizacao, develop, manutencao]
 criado: 2026-11-05
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
-fontes: [git log -1 origin/develop de cada sistema em 2026-11-12, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
+fontes: [git log -1 origin/develop de cada sistema em 2026-11-13, teste da proposta no Docker local de 13/11, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Última atualização do vault
@@ -15,15 +15,15 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-12, validação lo
 
 ## Base atual
 
-**Data:** 12/11/2026. **Motivo:** comando "atualizar o vault" depois dos merges de 12/11. Antes, no mesmo dia, o vault já tinha registrado a entrega do Gustavo (API e banco do API-019, do LOG-57 e do LOG-58, `bebca52`) e o front do C6 a C8 e dos avisos do MES (av-hub #282, #283 e #287). **Conferidas nesta atualização:** a tela da proposta (av-hub #278, #279, #286, #288 e #291) em [[01-Proposta-de-Venda]] e na parte técnica 1; o encargo da condição em [[15-Custo-Real-e-Comissao]] e no [[01-Motor-Atual-Como-Calcula]]; o follow-up do CCP (#284) na parte técnica 2 de [[06-Circuito-de-Compra]]; a chave do MES com a rota dos avisos em [[Chaves-e-Autenticacao]] e [[Integracao-AvHub-MES]]; a pipeline (a `develop` nova, o histórico de situação e previsão do pedido e a proposta da `tipos_frete`) em [[Pipeline-Omie]], [[03-Pedido-de-Venda-e-Liberacao]] e no dicionário [[Pedidos-de-Venda]]; as regras e as skills que diziam que a pipeline não tinha `develop`; [[Onde-Estamos]] e [[Pontas-Soltas]] (PS-054). **Ainda sem conferir:** o MES não mudou desde 10/11, e as raias 02, 07, 09, 10, 12 e 14 continuam com o `develop-conferida` antigo; os campos novos de `core.unidades` (`cc3fbb3`); as citações quebradas fora das notas tocadas (o `conferir-citacoes` acusava 73 antes desta atualização, a maior parte do `api-comercial` removido e de caminhos ambíguos).
+**Data:** 13/11/2026. **Motivo:** comando "atualizar o vault" depois dos merges do fim de 12/11. **Conferidas nesta atualização:** o filtro da fila por PV (BL-086, api-acos-vital #309 e av-hub #295), os avisos do MES de ponta a ponta (LOG-58, api-pcp #80 e av-hub #294) e os ajustes de Compras (av-hub #293, #296, #297 e #298) em [[06-Circuito-de-Compra]], na parte técnica 2 e no LOG-58; o menu (#292) em [[Telas-por-Raia]]; o histórico do pedido (#285) em [[03-Pedido-de-Venda-e-Liberacao]]; o prazo da requisição (app-pcp #65) em [[04-PCP-Triagem-e-Destinacao]]; o teste da proposta no Docker de 13/11 em [[01-Proposta-de-Venda]], com a PS-056 e a PS-046 em [[Pontas-Soltas]]; [[Onde-Estamos]]. O saldo futuro (BL-050, api-pcp #81, app-pcp #66, api-acos-vital #310) já tinha entrado no PR #127 do vault. **Ainda sem conferir:** as raias 02, 09, 10, 12 e 14 continuam com o `develop-conferida` antigo; os campos novos de `core.unidades` (`cc3fbb3`); 71 citações quebradas ou deslocadas fora das notas tocadas (a maior parte do `api-comercial` removido e de caminhos ambíguos).
 
 | Sistema | Ramo lido | Commit | Data do commit | Último merge |
 |---|---|---|---|---|
-| `api-acos-vital` | `origin/develop` | `bebca52` | 12/11/2026 | commit direto na `develop`: avisos do MES ao Compras (LOG-58) |
-| `av-hub` | `origin/develop` | `d82d58b` | 12/11/2026 | PR #291 (`feat/encargo-condicao-omie`) |
-| `api-pcp` | `origin/develop` | `2e564e6` | 10/11/2026 | PR #79 (`docs/guia-para-ia`) |
-| `app-pcp` | `origin/develop` | `4c11886` | 10/11/2026 | PR #64 (`docs/guia-para-ia`) |
-| `omie-elt-pipeline` | `origin/develop` (existe desde 12/11; a `master`, de produção, está em `8f79d12` com o mesmo conteúdo) | `d8fddca` | 12/11/2026 | PR #7 (`feat/tipos-frete`) |
+| `api-acos-vital` | `origin/develop` | `9abda4f` | 12/11/2026 | PR #310 (`feat/oc-referencia-aviso-recompra`) |
+| `av-hub` | `origin/develop` | `c6310ad` | 12/11/2026 | PR #297 (`fix/compras-oc-omie-sem-fornecedor`) |
+| `api-pcp` | `origin/develop` | `bd6b442` | 12/11/2026 | PR #81 (`feat/saldo-futuro-oc-estoque`) |
+| `app-pcp` | `origin/develop` | `897dcd7` | 12/11/2026 | PR #66 (`feat/saldo-futuro-oc-estoque`) |
+| `omie-elt-pipeline` | `origin/develop` (a `master`, de produção, está em `8f79d12` com o mesmo conteúdo) | `d8fddca` | 12/11/2026 | PR #7 (`feat/tipos-frete`), sem mudança desde 12/11 |
 
 São os commits do `develop-conferida` das notas conferidas nesta atualização; as raias não tocadas ainda dizem commits anteriores.
 
