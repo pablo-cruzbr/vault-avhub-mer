@@ -1,10 +1,10 @@
 ---
 tags: [desenvolvimento, backlog, pendencias]
 criado: 2026-10-14
-estado-em: 2026-11-11
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES, api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55, Dump Avhub e Dump MES de 14/10, Registro-de-Decisoes (N16 de 16 a 26/10), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault), PDF de Gustavo de 10/11/2026 (entrega BL-056, LOG-51 S15)]
 ---
 
@@ -40,6 +40,7 @@ A lista completa desta nota fica em 4 notas à parte, uma por frente, para cada 
 - [[Backlog-Frente-Gustavo]]: Frente Gustavo (banco e API do av-hub)
 - [[Backlog-Frente-Nathan]]: Frente Nathan (front do av-hub, BFF e coordenação)
 - [[Backlog-Frente-Nathan-Proposta-Omie-e-Comissao]]: itens BL-075 a BL-081 (proposta, pedido no Omie e comissão), do Robert desde 11/11 (N16-157), com o Nathan apoiando
+- [[Backlog-Reteste-por-Cliques-2026-11-13]]: itens BL-089 a BL-096, defeitos de tela do reteste por cliques de 13/11/2026 (frentes Robert, Gustavo e Nathan, indicadas em cada linha)
 - [[Backlog-Frente-Comercial-e-Suprimentos]]: Frente Comercial & Suprimentos (Robert conduz; Pablo acompanha)
 
 ## Fechados em 14/10/2026
