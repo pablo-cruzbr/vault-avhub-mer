@@ -10,10 +10,10 @@ nos_0b: [Q3, R5, C1]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, 07-Recebimento, 08-Qualidade-Entrada, Integracao-AvHub-MES, Backlog-por-Frente]
 depende_de: []
 decisoes: [N16-126, N16-127, N16-135, N16-137, N16-157, N16-158]
-develop-conferida: [api-pcp 2e564e6, api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-12; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #287)]
+develop-conferida: [api-pcp 2e564e6, api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-12; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #287); api-pcp bd6b442, av-hub c6310ad, em 2026-11-13, o envio do MES (PR #80) e a recompra sem pedido (PR #294)]
 tags: [contrato, compras, mes, rnc, recebimento, recompra]
 criado: 2026-11-12
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 dono: Nathan
 fontes: [Registro-de-Decisoes N16-126, N16-127, N16-135 e N16-137, 06-Circuito-de-Compra-Detalhe-Tecnico-2 (item 7 de "O que falta" e a pendência da recompra), api-pcp develop 2e564e6 (recebimento.service.ts, circuito-compra.ts, qualidade.service.ts, prisma/models), api-acos-vital develop 637f183, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-58), conferido na develop bebca52 e no dump de teste de 12/11"]
 ---
@@ -26,7 +26,7 @@ Quando a Qualidade reprova um lote comprado ou o PCP reabre um recebimento, o ME
 
 ## 2. Contexto: o que deve ser feito e por quê
 
-- **O problema hoje.** No MES, a reprovação na inspeção de entrada move a parte reprovada para Compras ✅ `api-pcp` `src/compras/circuito-compra.ts:253` (`export async function devolverAComprasParteReprovada(`), e a decisão `REABRIR` do PCP faz o mesmo com o recebimento ✅ `src/compras/recebimento.service.ts:630` (`if (dto.decisao === 'REABRIR') {`). Nada disso sai do MES: no av-hub a OC e a requisição seguem como estavam.
+- **O problema hoje.** No MES, a reprovação na inspeção de entrada move a parte reprovada para Compras ✅ `api-pcp` `src/compras/circuito-compra.ts:253` (`export async function devolverAComprasParteReprovada(`), e a decisão `REABRIR` do PCP faz o mesmo com o recebimento ✅ `src/compras/recebimento.service.ts:631` (`if (dto.decisao === 'REABRIR') {`). Nada disso sai do MES: no av-hub a OC e a requisição seguem como estavam.
 - **Quem sofre.** O comprador, que só descobre a devolução por conversa; o pedido de venda, que espera um material que ninguém está comprando.
 - **De onde vem.** N16-126 (lote 100% reprovado: devolve e abre a recompra), N16-127 (o Compras é avisado no av-hub), N16-137 (a reabertura avisa pelo mesmo caminho), N16-135 (divergência contra a OC bloqueia como a da nota). Raia do Nathan desde a N16-157; a API do MES é do Robert, com o Gustavo acompanhando (N16-158).
 - **Se não for feito.** A recompra depende de alguém lembrar, e o custo e o prazo do pedido ficam errados no av-hub.
@@ -131,8 +131,8 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 ## 14. Ordem de implementação e responsáveis
 
 1. **Banco e API do av-hub (Gustavo):** ✅ tabela, coluna, as três rotas (mais `GET /compras/avisos-mes/{id}`) e a chave do MES (12/11, `bebca52`; 96 verificações no relatório de entrega).
-2. **MES (Robert, com o Gustavo acompanhando, N16-158):** a fila de saída e o envio nos dois pontos.
-3. **Front (Nathan):** ✅ detalhe da OC, lista, Nova OC de recompra (12/11, `av-hub` PR #287). Conferido contra o código da API, ainda não contra a API rodando.
+2. **MES (Robert, com o Gustavo acompanhando, N16-158):** ✅ a fila de saída e o envio nos dois pontos (12/11, `api-pcp` PR #80): `api-pcp` `src/integracao-avhub/aviso-compra-avhub.envio.ts:68` (`export async function enfileirarAvisoRecompraRnc(`) e `:104` (`export async function enfileirarAvisosRecebimentoReaberto(`).
+3. **Front (Nathan):** ✅ detalhe da OC, lista, Nova OC de recompra (12/11, `av-hub` PR #287). A recompra de aviso sem pedido de venda usa a finalidade da OC original (13/11, PR #294). Testado no Docker local; falta o teste no tst.
 
 ## 15. Riscos, rollback e perguntas em aberto
 

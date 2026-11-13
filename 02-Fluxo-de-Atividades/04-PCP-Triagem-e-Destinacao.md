@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, pcp, triagem, destinacao, mes, p1, p2, p6]
 criado: 2026-10-14
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: vigente
 ordem: 4
 nos: [P1, P2, P6]
 anterior: "[[03-Pedido-de-Venda-e-Liberacao]]"
 proxima: "[[05-Estoque-Atendimento]]"
-develop-conferida: [api-pcp 2e564e6, app-pcp 4c11886, em 2026-11-10; api-acos-vital b97981c, av-hub 2e5456d, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [app-pcp 897dcd7, em 2026-11-13, só o prazo da requisição; api-pcp 2e564e6, app-pcp 4c11886, em 2026-11-10; api-acos-vital b97981c, av-hub 2e5456d, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, v1 Fluxo-Estoque-Completo, api-pcp 579a625 (pedidos.service.ts, pedidos-carteira.service.ts, pedidos.controller.ts, fabricas.prisma), app-pcp 1fca8d3 (carteira, ordens-producao/novo), Registro-de-Decisoes #31b #50b, api-pcp e app-pcp develop de 27/10/2026 (OP, Montagem do Roteiro), N16-138 a N16-142, api-pcp develop 2e564e6 e app-pcp develop 4c11886 de 10/11/2026 (pedido inteiro destinado: pedidos.service.ts, ordens-producao/novo/page.tsx e ItensSection.tsx), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -73,6 +73,7 @@ O que aparece como "develop" nesta nota não está na `main` do MES, parada em 0
 - 🟡 Pedido manual fica fora da espinha.
 - ✅ (`api-pcp`, `app-pcp`) Na `develop` (27/10): Ordem de Produção como documento impresso, com 2ª via (BL-052). [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`, `app-pcp` `b9e8cb1`).
 - ✅ (`api-pcp`, `app-pcp`) Na `develop` (22/10): Montagem do Roteiro separada da Destinação; roteiro individual do item lido pelo motor.
+- ✅ (`app-pcp`) O "Necessário até" da requisição ao Compras só começa com o prazo de entrega se ele não venceu, e não aceita data passada (defeito 4 da validação de 10/11; `app-pcp` `lib/prazoNecessidade.ts:15` (`export function prazoNecessidadeInicial(`), PR #65).
 - 🔴 Mostrar a OC do pedido na Triagem, na Destinação e no Atendimento (BL-049).
 - 🔴 Fila "Novo norte" (P6).
 - Retrabalho (N16-141): hoje o código volta sempre ao setor anterior.

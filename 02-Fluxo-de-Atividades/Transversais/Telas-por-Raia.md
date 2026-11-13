@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, telas, rotas, raias, referencia]
 criado: 2026-10-14
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
 fontes: [app-pcp 1fca8d3 (app/(protected)/**/page.tsx, títulos dos PageHeader), HUB b55ac55 em disco (app/(protected), components), v1 Fluxograma-Telas-por-Bloco, 00-Fluxo-Mestre-0b, Regras-do-Vault, app-pcp develop 93f96de e av-hub develop 758d5f0 de 29/10/2026, av-hub 44bb770 e app-pcp 4c11886 de 10/11/2026, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
-develop-conferida: [av-hub d82d58b, em 2026-11-12, só Compras e Proposta; av-hub 44bb770, app-pcp 4c11886, em 2026-11-10]
+develop-conferida: [av-hub c6310ad, em 2026-11-13, Avisos do MES, Propostas e o menu; av-hub d82d58b, em 2026-11-12, só Compras e Proposta; av-hub 44bb770, app-pcp 4c11886, em 2026-11-10]
 ---
 
 # Telas por raia
@@ -99,7 +99,7 @@ Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 | Follow-up (C5) | Follow-up do CCP | Comprador | ✅ |
 | Dashboard de Compras | Painel de Compras | Compras | ✅ |
 | Compradores | Cadastro usado pela OC (LOG-18, LOG-28, LOG-36) | Compras | ✅ |
-| Avisos do MES (C1) | Recompra por RNC e recebimento reaberto, no detalhe da OC e em Requisições, com a Nova OC de recompra (LOG-58). Falta o MES mandar os avisos | Comprador | ✅ |
+| Avisos do MES (C1) | Recompra por RNC e recebimento reaberto, no detalhe da OC e em Requisições, com a Nova OC de recompra (LOG-58). O MES manda os avisos desde 12/11 (`api-pcp` PR #80) | Comprador | ✅ |
 | Fornecedor (FN1) | Externo, sem tela | Fornecedor | — |
 
 ## Recebimento (R0 a R6) · [[07-Recebimento]]
@@ -177,6 +177,8 @@ Desenho aprovado em 26/10/2026. Em 12/11/2026 a proposta tem API na `api-acos-vi
 | Cadastros › Acessos (T.2) | Usuários, Perfis, Permissões, Telas e vínculos ([[RBAC-e-Permissoes]]). 🔴 `PerfilSetor` sem filial | Administrador | ✅ |
 | Torre de Fluxo (T.3 a T.6) | Mapa, ranking, tempo e trilha por item. As telas existem no HUB sobre dados de exemplo (BL-022, 15/10, `3cd55de`); o MES ainda não publica o feed ([[Rastreabilidade-e-Torre-de-Fluxo]], [[Contratos-da-v2\|LOG-46]]) | Gestão | 🟡 |
 | Inicial, Blank | Páginas básicas | Todos | ✅ |
+
+Tela cadastrada só para dar permissão (`torre-fluxo-trilha`, `organograma-debug-fatias`) não aparece no menu desde 13/11: `av-hub` `components/Layout/AppLayout/Menu/menuUtils.ts:39` (`SLUGS_SO_PERMISSAO`), PR #292.
 
 ## Detalhe técnico
 

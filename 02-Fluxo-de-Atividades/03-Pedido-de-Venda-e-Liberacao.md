@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3]
 criado: 2026-10-14
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: vigente
 ordem: 3
 nos: [V1, V2, V3]
 anterior: "[[02-Orcamento-Base-de-Preco]]"
 proxima: "[[04-PCP-Triagem-e-Destinacao]]"
-develop-conferida: [omie-elt-pipeline develop d8fddca, em 2026-11-12, só o histórico do pedido; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, em 2026-11-10; app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [av-hub c6310ad, em 2026-11-13, só o histórico na tela; omie-elt-pipeline develop d8fddca, em 2026-11-12, só o histórico do pedido; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, em 2026-11-10; app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan
 fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10, api-acos-vital develop cc3fbb3 (pedidos_liberacao.route.js, pedidoOmie.js), av-hub develop 44bb770 (EtapaDosItens.tsx, LiberarPedidosLista.tsx, AndamentoProposta.tsx), api-pcp develop 2e564e6 (omie-integracao.ts), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -75,6 +75,7 @@ O Cliente Exemplo S.A. pede 100 flanges, e o pedido é digitado no Omie. Ele che
 - ✅ (`api-pcp`) O MES lê os liberados, recusa pedido não liberado e confirma a importação, com reenvio automático.
 - ✅ (`av-hub`) Cartão "Andamento na produção" no detalhe do pedido (`av-hub` `components/Pedidos/EtapaDosItens.tsx:61`, `<h2>Andamento na produção</h2>`; o arquivo guarda o nome antigo "Etapa dos itens").
 - ✅ (`omie-elt-pipeline`) Cada mudança de situação e de previsão de faturamento do pedido que vem do Omie fica gravada em `pedidos_vendas_status_historico` (PR #6 da pipeline, 12/11/2026): `src/omie/resources/pedidosVendas.ts:53` (`async function registrarHistoricoPedido(`). Tinha parado na reescrita da pipeline; ver [[Pipeline-Omie]].
+- ✅ (`av-hub`) O histórico do pedido na tela diz "Registrado como" na primeira linha, em vez de mostrar uma mudança sem valor anterior (`components/Pedidos/PedidoDetalhe/HistoricoPedido.tsx:51` (`Registrado como`), PR #285).
 - 🟡 Os 9 estados macro do vendedor não existem no código. Hoje ele vê a situação da liberação e 11 etapas por item.
 - 🔴 Chave própria do MES, mapa de rotas por tela e teste do escopo do vendedor.
 - 🔴 Renovar o token expirado, reabrir marcação depois da importação e alertar pedido parado.
