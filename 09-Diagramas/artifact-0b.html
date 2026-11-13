@@ -138,7 +138,7 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <section class="hud" id="detail" hidden aria-live="polite"></section>
 <section class="hud" id="areas" hidden aria-labelledby="areasT"></section>
 <script>
-var LANES=[["proposta","Vendas · proposta","81%"],["orc","Orçamento · av-hub","21%"],["vendas","Vendas · pedido","50%"],["pcp","PCP · MES","50%"],["estoque","Estoque · MES","56 · 50 · 0%"],["compras","Compras · CCP","78%"],["forn","Fornecedor",""],["rec","Recebimento · MES","70%"],["qe","Qualidade de entrada","57%"],["prod","Produção · MES","70%"],["qs","Qualidade de saída","50%"],["exp","Expedição · MES","29%"],["fis","Fiscal · Omie","30%"],["comis","Comissão · av-hub","35%"]];
+var LANES=[["proposta","Vendas · proposta","81%"],["orc","Orçamento · av-hub","21%"],["vendas","Vendas · pedido","50%"],["pcp","PCP · MES","50%"],["estoque","Estoque · MES","56 · 50 · 0%"],["compras","Compras · CCP","78%"],["forn","Fornecedor",""],["rec","Recebimento · MES","65%"],["qe","Qualidade de entrada","57%"],["prod","Produção · MES","70%"],["qs","Qualidade de saída","50%"],["exp","Expedição · MES","29%"],["fis","Fiscal · Omie","30%"],["comis","Comissão · av-hub","35%"]];
 /* Conclusão por etapa do fluxo, pelos selos do vault (12/11/2026) e pela develop de 13/11 (saldo futuro, avisos do MES ao Compras): funcionalidades = seção "O que já existe e o que falta" (✅ 1, 🟡 0,5, 🔴 0); telas = nota Telas-por-Raia. */
 var AREAS=[
 ["1","Proposta de venda","AV-Hub · Vendas › Propostas",81,33],
@@ -147,7 +147,7 @@ var AREAS=[
 ["4","PCP: triagem e destinação","MES · PCP",50,85],
 ["5","Estoque: atendimento","MES · Estoque",56,70],
 ["6","Circuito de compra","AV-Hub · Compras; MES · Compras",78,100],
-["7","Recebimento","MES · Logística de entrada",70,100],
+["7","Recebimento","MES · Logística de entrada",65,100],
 ["8","Qualidade de entrada","MES · Inspeção de entrada",57,100],
 ["9","Estoque: entrada do lote","MES · Estoque",50,70],
 ["10","Produção e roteiro","MES · Produção",70,83],
