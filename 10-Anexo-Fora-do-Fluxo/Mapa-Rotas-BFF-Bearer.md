@@ -1,9 +1,10 @@
 ---
 tags: [anexo, bff, bearer, permissoes, rotas, av-hub, fora-do-fluxo]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [av-hub develop 758d5f0 em 29/10 (lib/api/comercialApi.ts, lib/api/escopoUnidade.ts, app/api/**/route.ts, conferência em 29/10), HUB b55ac55 app/api/**/route.ts (extração por script em 14/10), api-acos-vital f322dcd middlewares/identidadeUsuario.js e utils/acessoConfig.js, Dump Avhub 14/10 (auth.rotas_telas), v1 Mapa-Rotas-BFF-API-para-Bearer e anexo mapa-rotas.js]
 ---
 
@@ -40,9 +41,9 @@ fontes: [av-hub develop 758d5f0 em 29/10 (lib/api/comercialApi.ts, lib/api/escop
 
 ### A regra na API (✅ conferida)
 
-- Chamada **com** `Authorization: Bearer` passa por `auth.fn_autorizar` (`identidadeUsuario.js`): usuário inativo ou token revogado dá 401; ação não permitida na tela que a rota exige dá 403 `SEM_PERMISSAO`; rota sem linha em `auth.rotas_telas` dá 403 `ROTA_SEM_PERMISSAO_MAPEADA` (fail-closed). Fixo desde 08/10: a variável `PERMISSOES_ROTA_MODO` não é mais lida ✅ `acessoConfig.js:10-16`, `identidadeUsuario.js:85-110`.
+- Chamada **com** `Authorization: Bearer` passa por `auth.fn_autorizar` (`identidadeUsuario.js`): usuário inativo ou token revogado dá 401; ação não permitida na tela que a rota exige dá 403 `SEM_PERMISSAO`; rota sem linha em `auth.rotas_telas` dá 403 `ROTA_SEM_PERMISSAO_MAPEADA` (fail-closed). Fixo desde 08/10: a variável `PERMISSOES_ROTA_MODO` não é mais lida ✅ `api-acos-vital` `src/utils/acessoConfig.js:9-14` (`PERMISSOES_ROTA_MODO`), `identidadeUsuario.js:85-110`.
 - **Sem** Bearer nada muda: segue só a `x-api-key` (BFF, MES e pipeline) e os campos de autoria do corpo são os informados.
-- Escopo de vendedores: fixo desde 09/10 (contrato 40); só vale com token ✅ `acessoConfig.js:28-35`.
+- Escopo de vendedores: fixo desde 09/10 (contrato 40); só vale com token ✅ `api-acos-vital` `src/utils/acessoConfig.js:26-32` (`Escopo de vendedores — FIXO desde 09/10/2026`).
 - Com token, a API sobrescreve `id_usuario_sessao` e os campos de autoria (`created_by`, `updated_by`, `deleted_by`, `aprovado_por`, `decidido_por`, `cancelado_por`) pelo id do token ✅ `identidadeUsuario.js:55-64`.
 - O `backendToken` dura 15 minutos. O BFF o renova quando faltam menos de 5 min (a sessão é relida a cada 4 min com a aba aberta); quem fica ocioso além da validade não renova (a API recusa token vencido): a sessão é marcada como expirada e a tela leva ao login. Rota com `requirePermission` responde 401 sem token, em vez de seguir só com a chave ✅ HUB `d0ef359` (`app/api/auth/[...nextauth]/route.ts`, `lib/api/requirePermission.ts`, `providers/SessaoExpiradaGuard.tsx`); ❓ não testado na homologação.
 - A tabela `auth.rotas_telas` existe no dump, com `acao` entre `pode_visualizar`, `pode_criar`, `pode_editar`, `pode_deletar`, `pode_aprovar` ✅ (`CREATE TABLE auth.rotas_telas`). Quais linhas existem em produção ❓ Gustavo.
