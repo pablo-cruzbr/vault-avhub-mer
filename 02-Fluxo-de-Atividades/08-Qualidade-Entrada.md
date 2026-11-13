@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, qualidade, qualidade-entrada, lote, rnc, quarentena, mes]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: vigente
 ordem: 8
 nos: [Q1, Q2, Q3, Q4]
 anterior: "[[07-Recebimento]]"
 proxima: "[[09-Estoque-Entrada-do-Lote]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
 dono: Robert (MES) · Qualidade (regra de negócio) · Nathan (decisões)
 fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Encaixe-Estoque-Revenda-no-PCP (EC-01, EC-07), api-pcp 579a625 (qualidade.service.ts, circuito-compra.ts, estoque.prisma), app-pcp 1fca8d3 (qualidade/inspecao-entrada), Registro-de-Decisoes #25 #26, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -70,7 +70,7 @@ As quatro decisões acima são de 29/10/2026 (bloco N16-120 a N16-143).
 - 🟡 Painel do Estoque com alerta de RNC pendentes: é protótipo, mas o alerta usa API real.
 - 🟡 Travar a decisão ao setor da Qualidade (decidido em N16-124, falta código).
 - 🔴 Fechar a RNC: registrar a nota de devolução e dar baixa do lote reprovado. Hoje é manual, fora do MES.
-- 🔴 Avisar o Compras no av-hub da recompra por RNC (N16-127). Sem contrato.
+- ✅ (`api-pcp`) Avisar o Compras no av-hub da recompra por RNC (N16-127, LOG-58, 12/11): `api-pcp` `src/qualidade/qualidade.service.ts:226` (`await enfileirarAvisoRecompraRnc(tx, {`). Testado no Docker: 2 PÇ reprovadas na OC-000013 viraram aviso no Hub, resolvido pela recompra OC-000014.
 - 🔴 Inspeção de processo (Ciclo 2).
 - ❓ Nome do perfil da Qualidade no ambiente real.
 

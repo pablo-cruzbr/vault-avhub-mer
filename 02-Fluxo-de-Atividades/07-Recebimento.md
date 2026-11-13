@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, recebimento, doca, nf, conferencia, divergencia, lote, mes, r0, r1, r2, r3, r4, r6]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-13
 status: vigente
 ordem: 7
 nos: [R0, R1, R2, R3, R4, R6]
 anterior: "[[06-Circuito-de-Compra]]"
 proxima: "[[08-Qualidade-Entrada]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-03), API-007, API-008, v1 02-PRD-Estoque/Fluxo-Recebimento-Completo, v1 App-PCP-Recebimento-Conferencia, decisões do Nathan de 14/10 (conferência contra a NF), api-pcp 579a625 (recebimento.service.ts, compras.service.ts, compras.prisma, compras-ccp.dto.ts), app-pcp 1fca8d3 (FilaSetor, ConferirRecebimentoModal, decisoes-pcp), api-pcp develop de 27/10/2026 (recebimento por OC e por NF, custo da OC), API-011, N16-134 a N16-137]
 ---
@@ -81,7 +81,8 @@ As decisões N16-134 a N16-137 são de 29/10/2026 (lote N16-120 a N16-143).
 - ✅ Na `develop` do MES: uma nota com itens de várias OCs (N16-136). `POST /compras/recebimentos/nf` recebe várias conferências na mesma nota, cada uma de uma requisição do MES ou de uma OC do hub, e a tela "Receber com NF" aceita vários itens (`api-pcp` 19 a 20/10, `app-pcp` `5f50fff`, `9ced089`).
 - O que aparece como ✅ de MES nesta nota, a partir da conferência por OC e do custo da OC, está na `develop` do `api-pcp` e do `app-pcp`. A `main` do MES parou em 08/10 e só recebe com o merge BL-035.
 - 🔴 A conferência ainda não cruza com a OC (preço, quantidade comprada, fornecedor); só compara contado com a NF. O rateio da chegada entre destinos da OC também falta (API-011).
-- 🔴 Aviso ao av-hub quando o PCP reabre o recebimento (N16-137, sem contrato); leitor de código de barras da NF; reabertura de divergência de produção.
+- ✅ (`api-pcp`) Aviso ao av-hub quando o PCP reabre o recebimento (N16-137, LOG-58, 12/11): `api-pcp` `src/compras/recebimento.service.ts:640` (`await enfileirarAvisosRecebimentoReaberto(tx, {`), enviado pela fila `integracao_avhub_envios`.
+- 🔴 Leitor de código de barras da NF; reabertura de divergência de produção.
 - 🟡 Aviso à doca quando uma OC esperada é cancelada.
 - 🔴 Alerta de OC que passou da previsão sem chegar.
 - ❓ Teste ponta a ponta com OC real.

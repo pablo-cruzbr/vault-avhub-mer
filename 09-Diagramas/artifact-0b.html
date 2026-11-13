@@ -121,7 +121,7 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <div id="vp"><div id="world"></div></div>
 <div class="hud" id="info">
   <h1>Fluxo 0b: Atividades</h1>
-  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> de 12/11/2026 na proposta, em Compras e na pipeline, e de 10/11 no MES; os ● são achados da validação ponta a ponta de 10/11 (pedido 28189, em Docker com os dados do tst). Clique num nó para ver os detalhes ou em <b>Áreas</b> para a conclusão de cada uma.</p>
+  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> de 12/11/2026 na proposta, em Compras e na pipeline, e de 13/11 no MES; os ● são achados da validação ponta a ponta de 10/11 (pedido 28189, em Docker com os dados do tst). Clique num nó para ver os detalhes ou em <b>Áreas</b> para a conclusão de cada uma.</p>
   <div class="chips" id="sum"></div>
   <div id="dica">Arraste para mover · roda do mouse ou pinça para zoom · duplo clique preenche a tela</div>
 </div>
@@ -138,17 +138,17 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <section class="hud" id="detail" hidden aria-live="polite"></section>
 <section class="hud" id="areas" hidden aria-labelledby="areasT"></section>
 <script>
-var LANES=[["proposta","Vendas · proposta","81%"],["orc","Orçamento · av-hub","21%"],["vendas","Vendas · pedido","50%"],["pcp","PCP · MES","50%"],["estoque","Estoque · MES","44 · 50 · 0%"],["compras","Compras · CCP","78%"],["forn","Fornecedor",""],["rec","Recebimento · MES","65%"],["qe","Qualidade de entrada","43%"],["prod","Produção · MES","70%"],["qs","Qualidade de saída","50%"],["exp","Expedição · MES","29%"],["fis","Fiscal · Omie","30%"],["comis","Comissão · av-hub","35%"]];
-/* Conclusão por etapa do fluxo, pelos selos do vault (12/11/2026): funcionalidades = seção "O que já existe e o que falta" (✅ 1, 🟡 0,5, 🔴 0); telas = nota Telas-por-Raia. */
+var LANES=[["proposta","Vendas · proposta","81%"],["orc","Orçamento · av-hub","21%"],["vendas","Vendas · pedido","50%"],["pcp","PCP · MES","50%"],["estoque","Estoque · MES","56 · 50 · 0%"],["compras","Compras · CCP","78%"],["forn","Fornecedor",""],["rec","Recebimento · MES","65%"],["qe","Qualidade de entrada","57%"],["prod","Produção · MES","70%"],["qs","Qualidade de saída","50%"],["exp","Expedição · MES","29%"],["fis","Fiscal · Omie","30%"],["comis","Comissão · av-hub","35%"]];
+/* Conclusão por etapa do fluxo, pelos selos do vault (12/11/2026) e pela develop de 13/11 (saldo futuro, avisos do MES ao Compras): funcionalidades = seção "O que já existe e o que falta" (✅ 1, 🟡 0,5, 🔴 0); telas = nota Telas-por-Raia. */
 var AREAS=[
 ["1","Proposta de venda","AV-Hub · Vendas › Propostas",81,33],
 ["2","Orçamento e base de preço","AV-Hub · Orçamento",21,33],
 ["3","Pedido de venda e liberação","AV-Hub · Vendas, Portal do Gerente, PCP no Hub",50,100],
 ["4","PCP: triagem e destinação","MES · PCP",50,85],
-["5","Estoque: atendimento","MES · Estoque",44,70],
+["5","Estoque: atendimento","MES · Estoque",56,70],
 ["6","Circuito de compra","AV-Hub · Compras; MES · Compras",78,100],
 ["7","Recebimento","MES · Logística de entrada",65,100],
-["8","Qualidade de entrada","MES · Inspeção de entrada",43,100],
+["8","Qualidade de entrada","MES · Inspeção de entrada",57,100],
 ["9","Estoque: entrada do lote","MES · Estoque",50,70],
 ["10","Produção e roteiro","MES · Produção",70,83],
 ["11","Qualidade de saída","MES · Inspeção de saída",50,100],
@@ -333,16 +333,16 @@ var N={
 "r": "Requisição de necessidade própria do Compras (origem av-hub), sem pedido de venda",
 "tela": "Nova requisição · /compras/requisicoes (HUB)",
 "ep": "POST /compras/requisicoes (av-hub); DELETE /compras/requisicoes/:id 🔴 (exclusão lógica da requisição criada no Hub e sem OC; a do MES se cancela com motivo; LOG-55)",
-"cod": "✅ no av-hub; ✅ o MES lê a OC (K4) e mostra na Triagem as requisições do Compras com pedido de venda (API-009); 🔴 o PCP ver a OC do pedido (BL-049) e o Estoque ver o saldo futuro (BL-050)"
+"cod": "✅ no av-hub; ✅ o MES lê a OC (K4) e mostra na Triagem as requisições do Compras com pedido de venda (API-009); ✅ o Estoque vê o saldo futuro (BL-050, 13/11); 🔴 o PCP ver a OC do pedido (BL-049)"
 },
 "E1": {
 "l": "estoque",
 "t": "Saldo disponível",
 "s": "ok",
 "r": "Saldo disponível = lotes LIBERADO − reservas ATIVA na filial do pedido",
-"tela": "Atendimento · /estoque-operacao/atendimento",
-"ep": "GET /estoque/saldo/disponivel-parcial/:idItemParcial",
-"cod": "✅"
+"tela": "Atendimento · /estoque-operacao/atendimento; Saldo · /estoque-operacao/saldo",
+"ep": "GET /estoque/saldo/disponivel-parcial/:idItemParcial; GET /estoque/saldo/futuro (BL-050)",
+"cod": "✅ saldo; ✅ saldo futuro: o que ainda vai chegar por OC de estoque aprovada, no modal Atender pelo estoque e na tela Saldo (BL-050, api-pcp #81 e app-pcp #66, 13/11); 🔴 no tst, a reprovada que já tem recompra só sai da conta depois da view do SQL-022 (Gustavo)"
 },
 "E2": {
 "l": "estoque",
@@ -512,7 +512,7 @@ var N={
 "r": "Divergência (QUANTIDADE, DESCRICAO, PESO, AVARIA)",
 "tela": "Divergências de Recebimento · /decisoes-pcp",
 "ep": "POST /compras/recebimentos/:id/decidir",
-"cod": "✅; reabertura do recebimento avisa o Compras pelo LOG-58 (API e tela ✅, envio do MES 🔴)"
+"cod": "✅; reabertura do recebimento avisa o Compras pelo LOG-58 (API, tela e envio do MES ✅, api-pcp #80)"
 },
 "P6": {
 "l": "pcp",
@@ -550,7 +550,7 @@ var N={
 "r": "RNC; a parte reprovada volta a Compras (devolução e substituição)",
 "tela": "Inspeção de entrada · /qualidade/inspecao-entrada",
 "ep": "RNC; nota_devolucao_pendente",
-"cod": "✅ RNC; recompra: API e tela dos avisos do MES ✅ (LOG-58, av-hub #287), com a Nova OC de recompra; 🔴 o MES ainda não envia o aviso"
+"cod": "✅ RNC; recompra: API e tela dos avisos do MES ✅ (LOG-58, av-hub #287), com a Nova OC de recompra; ✅ o MES envia o aviso (api-pcp #80), testado no Docker: 2 PÇ reprovadas na OC-000013 e a recompra OC-000014 resolveu o aviso"
 },
 "Q4": {
 "l": "qe",
@@ -819,7 +819,7 @@ var A=document.getElementById("areas"),bA=document.getElementById("abrirAreas");
 function barra(v){return '<span class="bar '+(v<35?'lo':v<60?'mid':'')+'"><i style="--w:'+v+'%"></i>'+v+'%</span>'}
 (function(){var mf=Math.round(AREAS.reduce(function(t,a){return t+a[3]},0)/AREAS.length);
  A.innerHTML='<button type="button" id="closeA" aria-label="Fechar conclusão por área">×</button><h2 id="areasT">Conclusão por área</h2>'+
- '<p>Pelos selos do vault em 12/11/2026. Funcionalidades: itens de "O que já existe e o que falta" de cada etapa (✅ vale 1, 🟡 0,5, 🔴 0). Telas: nota Telas-por-Raia.</p>'+
+ '<p>Pelos selos do vault em 12/11/2026, com a develop de 13/11 no MES (saldo futuro e avisos ao Compras). Funcionalidades: itens de "O que já existe e o que falta" de cada etapa (✅ vale 1, 🟡 0,5, 🔴 0). Telas: nota Telas-por-Raia.</p>'+
  '<div class="tot"><span><b>'+mf+'%</b>funcionalidades (média)</span><span><b>80%</b>telas</span></div>'+
  '<table class="atab"><thead><tr><th>#</th><th>Etapa e onde fica</th><th class="pc">Funções</th><th class="pc">Telas</th></tr></thead><tbody>'+
  AREAS.map(function(a){return '<tr><td class="n">'+a[0]+'</td><td>'+a[1]+'<small>'+a[2]+'</small></td><td class="pc">'+barra(a[3])+'</td><td class="pc">'+barra(a[4])+'</td></tr>'}).join("")+
