@@ -1,7 +1,7 @@
 ---
 tags: [decisoes, perguntas, oq, consulta, proposta, orcamento, comissao, staging]
 criado: 2026-10-16
-estado-em: 2026-11-11
+estado-em: 2026-11-12
 status: proposta
 dono: Nathan
 fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora do vault), Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault) (perguntas das seções 4 e 5), Modelo-de-Consulta, Registro-de-Decisoes (até N16-155), LOG-56 (R7 e R11, 09/11/2026), CON-03 da v2 (Contratos-da-v2), Estudo-Omie-API, Pontas-Soltas, Riscos, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault) (OQ-49 a OQ-53), develop de 11/11/2026 (api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f)]
@@ -32,7 +32,6 @@ Das 51 perguntas (OQ-02 a OQ-53, sem a OQ-18): **33 respondidas**, **5 adiadas**
   - OQ-49: na fabricação sem matéria-prima no estoque, o restante volta a poder seguir o roteiro (regra 7 de [[05-Estoque-Atendimento]]) ou a regra muda para "só compra", como a `develop` faz? (trava `E4` e `F1`.)
   - OQ-50: a Gerência Geral e Diretoria deve ter "Visualizar" nas 12 telas que hoje não tem, entre elas a Liberação da Equipe? (PS-048; trava `V3`.)
   - OQ-51: quais perfis veem o custo real dos itens, e com qual escopo? (PS-049, BL-088; trava `K2` e `K5`.)
-  - OQ-52: mantém a N16-123 (quem emite a OC pode aprová-la) ou exige outra pessoa? (depois da conversa com Compras; `C3`.)
   - OQ-53: as contas genéricas `admin` do MES e "Admin" do Hub existem na produção, e podem ser desativadas? (RS-023; segurança.)
   - OQ-47, com Compras: o aviso na tela "Meus Pedidos" substitui o e-mail usado hoje para a compra acima do valor? (não trava o sistema.)
 - **Robert:** OQ-07 e OQ-38 fecharam em 11/11 (N16-156): não há carga em 13/11, e na carga futura o lote sem custo entra com custo `MANUAL` e motivo.

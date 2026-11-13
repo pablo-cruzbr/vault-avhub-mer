@@ -23,13 +23,13 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 
 | Prefixo | O que é | Onde nasce (a linha "dona") | Quantos hoje | Próximo livre |
 |---|---|---|---|---|
-| `N16-nn` | Decisão do Nathan desde 16/10/2026 (proposta, pedido, custo real, comissão e o que veio depois) | [[Registro-de-Decisoes]], nas notas `Registro-N16-...` | 160 (`N16-01` a `N16-160`) | `N16-161` |
+| `N16-nn` | Decisão do Nathan desde 16/10/2026 (proposta, pedido, custo real, comissão e o que veio depois) | [[Registro-de-Decisoes]], nas notas `Registro-N16-...` | 165 (`N16-01` a `N16-165`) | `N16-166` |
 | `N14-nn` | Decisão do Nathan de 14 e 15/10/2026 | [[Registro-N14-01-a-N14-33]] | 33 | série fechada |
 | `DEC-n` | Decisão com prazo de 21 e 22/09/2026 | [[Registro-DEC-EN-EC-e-1-a-38]] | 12 | série fechada |
 | `EN-nn`, `EC-nn` | Encaixe do Estoque e da Revenda no PCP (EN) e do circuito de compra (EC) | [[Registro-DEC-EN-EC-e-1-a-38]] | 7 e 8 | séries fechadas |
 | `#n` | Decisão do registro de 07/10/2026 (vault v1) | [[Registro-DEC-EN-EC-e-1-a-38]], [[Registro-39-a-80]], [[Registro-81-a-100-e-Estado-no-Codigo]] | `#1` a `#106` | série fechada |
 | `BL-nnn` | Tarefa do backlog: o que falta desenvolver | [[Backlog-por-Frente]] (uma nota por frente) | 87 (até `BL-088`) | `BL-089` |
-| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 54 (até `PS-054`) | `PS-055` |
+| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 55 (até `PS-055`) | `PS-056` |
 | `OQ-nn` | Pergunta em aberto (de negócio ou técnica) | [[Perguntas-Proposta-Pedido-Comissao]] e notas de estudo (por exemplo [[Estudo-Omie-API]]) | 52 (até `OQ-53`) | `OQ-54` |
 | `RS-nn` | Risco | [[Riscos]] | 24 (até `RS-024`) | `RS-025` |
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |

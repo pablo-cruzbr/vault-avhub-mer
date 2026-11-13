@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, pcp, triagem, destinacao, mes, p1, p2, p6]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-12
 status: vigente
 ordem: 4
 nos: [P1, P2, P6]
@@ -24,9 +24,9 @@ fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Mo
 
 1. O PCP abre a Triagem do Pedido e vê os pedidos liberados, por mês, ano e filial. A Triagem não mostra o saldo do Estoque (N16-138). `P1`
 2. Para cada item, escolhe o destino: uma fábrica de fabricação ou a Revenda. `P2`
-3. Define quanto manda nesta rodada, até o que ainda resta do pedido, e a prioridade. Item sem destino fica para a próxima rodada.
+3. Define o destino de todos os itens do pedido, cada um com um destino só, e a prioridade. A Destinação é do pedido inteiro, de uma vez (N16-162).
 4. Cada destino ganha uma ordem com o Estoque fixo como primeira etapa. A Destinação cria a ordem só com o Estoque (`develop`, desde 22/10). O roteiro dos demais setores é montado depois, na tela Montagem do Roteiro (`/montagem-roteiro`), que libera a OP (Ordem de Produção). Roteiro de fabricação precisa de uma inspeção de qualidade antes da expedição. Na `main` do MES o roteiro ainda é montado nesta mesma tela.
-5. O sistema grava a rodada de uma vez, com uma ordem por destino. Se uma falhar, nenhuma grava. Cada item vira uma parcial no Estoque, com 100% da quantidade. Enquanto o roteiro não é liberado, a parcial só sai do Estoque para compra (`develop`).
+5. O sistema grava a Destinação de uma vez, com uma ordem por destino. Se uma falhar, nenhuma grava. Cada item vira uma parcial no Estoque, com 100% da quantidade. Enquanto o roteiro não é liberado, a parcial só sai do Estoque para compra (`develop`).
 6. Toda ordem de destino de fabricação é uma OP, emitida na criação. Ela é numerada `pedido/N`, tem PDF e o botão "Imprimir OP" (2ª via). Revenda não gera OP ([[Contratos-da-v2|LOG-53]]).
 7. O MES avisa o av-hub que importou o pedido, e a marcação do vendedor trava. Se o aviso falhar, ele tenta de novo a cada 10 minutos, por 7 dias.
 8. O Estoque responde se há saldo. Essa pergunta não é do PCP. `E1`
@@ -49,13 +49,13 @@ O pedido de 100 flanges de aço carbono do Cliente Exemplo S.A. aparece na Triag
 
 As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do [[Registro-de-Decisoes]].
 
-- Fabricação ou revenda não é do produto. É o tipo da fábrica escolhida na rodada.
+- Fabricação ou revenda não é do produto. É o tipo da fábrica escolhida na Destinação.
 - Só pedido liberado vira ordem. Sem liberação, o sistema recusa.
 - O Estoque é sempre a primeira etapa. O PCP não inclui nem retira.
 - Compras e Estoque não entram no roteiro montado pelo PCP.
 - Roteiro de fabricação exige inspeção de qualidade antes da expedição.
 - A soma das ordens de um produto não passa do total do pedido de venda.
-- A rodada é tudo ou nada.
+- A Destinação é do pedido inteiro, cada item com um destino só, e é tudo ou nada (N16-162).
 - Saldo zero exige clique do almoxarife.
 - O clique vale sempre, mesmo depois do marco zero do Estoque, em 13/11 (N16-139).
 - A Triagem não mostra o saldo do Estoque. Quem decide sobre saldo é o Estoque, na etapa dele (N16-138).
@@ -67,8 +67,8 @@ As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do 
 
 O que aparece como "develop" nesta nota não está na `main` do MES, parada em 08/10 (merge BL-035).
 
-- ✅ Triagem, Destinação, gravação da rodada em lote e confirmação ao av-hub com reenvio.
-- 🔴 A develop não segue a regra da rodada (PS-052): desde 22/10 o MES só salva a Destinação com o pedido inteiro, cada item pela quantidade que resta e com um destino só, o que também impede a divisão de emergência da regra 1. A validação local em Docker de 10/11/2026 confirmou na tela. Falta decidir se o código volta à rodada ou se a regra muda (meio-termo).
+- ✅ Triagem, Destinação, gravação da Destinação em lote e confirmação ao av-hub com reenvio.
+- ✅ A Destinação é do pedido inteiro, cada item pela quantidade que resta e com um destino só, como a `develop` faz desde 22/10 (`api-pcp` `src/pedidos/pedidos.service.ts:482`, `exigirPedidoInteiroDestinado`) e a validação local de 10/11/2026 confirmou. A rodada parcial e a divisão de emergência saíram do desenho na N16-162 (fecha a PS-052).
 - 🟡 Nomes técnicos antigos no código: `/carteira`, `ordemProducao`, prefixo `OP-`. Os rótulos novos já estão na tela.
 - 🟡 Pedido manual fica fora da espinha.
 - ✅ (`api-pcp`, `app-pcp`) Na `develop` (27/10): Ordem de Produção como documento impresso, com 2ª via (BL-052). [[Contratos-da-v2|LOG-53]] ✅ está na `develop` do MES desde 27/10/2026 (`api-pcp` `ab3318d`, `app-pcp` `b9e8cb1`).
@@ -98,12 +98,12 @@ Nós do [[00-Fluxo-Mestre-0b]]: `P1` Triagem do Pedido, `P2` Destinação do Ped
 
 | # | Regra | Selo |
 |---|---|---|
-| 1 | A natureza do item (fabricação ou revenda) **não é do produto**: é o `Fabrica.tipo` do destino escolhido na Destinação. Emergência: poucas unidades de um produto fabricado podem ir à Revenda, o resto à fabricação, em ordens diferentes (24/09); 🔴 a tela de hoje dá um destino só por item (`app-pcp` `app/(protected)/ordens-producao/novo/page.tsx:147`, `const itensSemDestino`), então essa divisão não é possível | 📝 ✅ `fabricas.prisma:1-8` |
+| 1 | A natureza do item (fabricação ou revenda) **não é do produto**: é o `Fabrica.tipo` do destino escolhido na Destinação. A divisão de emergência entre Revenda e fabricação (24/09) saiu do desenho na N16-162: cada item tem um destino só (`app-pcp` `app/(protected)/ordens-producao/novo/page.tsx:147`, `const itensSemDestino`) | 📝 ✅ `fabricas.prisma:1-8` |
 | 2 | Só pedido **liberado** vira ordem: a Destinação consulta `GET /pedidos_liberados/:numero/itens` e recusa com 409 se o vendedor não liberou | 📝 ✅ `pedidos.service.ts:240-249` |
 | 3 | O setor Estoque (código `estoque`) é **sempre a etapa 0/1** do roteiro, inserido pelo backend; o PCP monta só o restante e **não** pode incluí-lo | 📝 ✅ `pedidos.service.ts:226-232`, `:459-463` |
 | 4 | Circuito de compra (`REQUISICAO`, `COMPRAS`, `LOGISTICA_ENTRADA`) e o Estoque ficam **fora** do roteiro; tentar pô-los no roteiro dá 409 | 📝 ✅ `pedidos.service.ts:500-506` |
 | 5 | Roteiro de **fabricação** exige um setor tipo `QUALIDADE` (inspeção de saída, EC-06) antes da primeira etapa `EXPEDICAO` | 📝 ✅ `pedidos.service.ts:512-525` |
-| 6 | Quantidade da rodada: até o **restante** do produto no pedido de venda; a soma de todas as ordens do produto não passa do total (409 se ultrapassa) | 📝 🔴 **a develop diverge** (PS-052): exige o pedido inteiro destinado, sem rodada parcial (`api-pcp` `src/pedidos/pedidos.service.ts:482`, `exigirPedidoInteiroDestinado`; `app-pcp` `app/(protected)/ordens-producao/novo/page.tsx:551`, `destine todos para salvar`), desde o commit `fe11538` do Robert (22/10/2026), sem decisão no vault. Ajustar o código à regra ou combinar um meio-termo |
+| 6 | A Destinação é do **pedido inteiro**: cada item pela quantidade que resta, com um destino só; a soma de todas as ordens do produto não passa do total (409 se ultrapassa). A rodada parcial saiu do desenho (N16-162, fecha a PS-052) | 📝 ✅ (`api-pcp` `src/pedidos/pedidos.service.ts:482`, `exigirPedidoInteiroDestinado`; `app-pcp` `app/(protected)/ordens-producao/novo/page.tsx:551`, `destine todos para salvar`), desde o commit `fe11538` do Robert (22/10/2026) |
 | 7 | Grão do item no MES = **produto**: linhas repetidas do mesmo produto somam num item só (09/10) | 📝 ✅ `pedidos.service.ts:41-61` |
 | 8 | A rodada é **atômica**: todas as ordens (uma por destino) gravam numa transação só; erro em qualquer uma desfaz tudo | ✅ `api-pcp` `src/pedidos/pedidos.service.ts:227` (`criarCompletoLote`), `:322` (`this.prisma.$transaction(`) |
 | 9 | Numeração: ordem = `pedidoVenda/N` (N = contagem de ordens do pedido + 1); colisão (P2002) refaz a transação até 3 vezes | ✅ `pedidos.service.ts:30`, `:272-278`, `:408-420` |
@@ -203,7 +203,7 @@ O `POST /pedidos/completo` singular foi apagado (PR #50); só o `/lote` existe.
 ```mermaid
 flowchart TD
     V3["V3 · Vendedor libera o pedido"] --> P1["P1 · Triagem do Pedido<br/>GET pedidos carteira, só liberados"]
-    P1 --> P2["P2 · Destinação do Pedido<br/>destino, quantidade e roteiro por rodada<br/>Estoque entra como etapa 1<br/>POST pedidos completo lote"]
+    P1 --> P2["P2 · Destinação do Pedido<br/>destino de todo o pedido, de uma vez<br/>Estoque entra como etapa 1<br/>POST pedidos completo lote"]
     P2 -->|"POST importado ao av-hub"| V3
     P2 --> E1["E1 · Saldo disponível na filial do pedido<br/>mais saldo futuro das OCs do hub"]
     C0["C0 · Requisição de compra (Compras, av-hub)<br/>a OC chega ao MES pela referência"] -.->|"PCP vê a OC do pedido"| P1
