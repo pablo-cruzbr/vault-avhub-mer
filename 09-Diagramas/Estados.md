@@ -1,9 +1,10 @@
 ---
 tags: [diagramas, estados, uml, mes, av-hub]
 criado: 2026-10-14
-estado-em: 2026-11-11
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 Diagramas-UML (5, 6, 7, 8, 20, 24), api-pcp 579a625 prisma/models, api-acos-vital f322dcd, 00-Fluxo-Mestre-0b, api-comercial 5aa5311 enums.prisma, migrações de 26/10/2026, Dump Avhub de 29/10/2026 e rotas `/comercial/propostas` da api-acos-vital develop (29/10), Registro-de-Decisoes N16]
 ---
 
@@ -370,11 +371,11 @@ Selo ✅: enum em `estoque.prisma`; `qualidade.service.ts` (quarentena); carga i
 
 ### 3. Reserva de estoque (`StatusReserva`)
 
-Selo ✅ enum `estoque.prisma:48-52`, `consumirReservasDaParcial` em `estoque-operacao.helpers.ts:208`; 📝 retirada decidida; 🔴 sem código. Liberação manual: `PATCH /estoque/reservas/:id/liberar` ✅ `estoque-operacao.controller.ts:97`.
+Selo ✅ enum `estoque.prisma:48-52`, `consumirReservasDaParcial` em `estoque-operacao.helpers.ts:208`; 📝 retirada decidida; 🔴 sem código. Liberação manual: `PATCH /estoque/reservas/:id/liberar` ✅ `api-pcp` `src/estoque/operacao/estoque-operacao.controller.ts:131` (`@Patch('reservas/:id/liberar')`).
 
 ### 4. Recebimento (`StatusRecebimento`)
 
-Selo ✅: enum `compras.prisma:31-37`; `recebimento.service.ts:135,249,331`. Motivo obrigatório em `ACEITO` e `REABERTO`. Tipos de divergência do recebimento: `QUANTIDADE`, `DESCRICAO`, `PESO`, `AVARIA` ✅ `compras.prisma:42-47`.
+Selo ✅: enum `compras.prisma:31-37`; `recebimento.service.ts:136,249,331`. Motivo obrigatório em `ACEITO` e `REABERTO`. Tipos de divergência do recebimento: `QUANTIDADE`, `DESCRICAO`, `PESO`, `AVARIA` ✅ `compras.prisma:42-47`.
 
 ### 5. Divergência de produção (`StatusDivergencia`)
 
@@ -396,11 +397,11 @@ Selo ✅ `requisicoes_compra.route.js:13-22` (`atendida` só pela trigger da OC,
 
 ### 9. Ordem de compra no av-hub (`ordens_compra.status`)
 
-Selo ✅ valores em `ordens_compra.route.js:91` e no `CHECK` do dump (`ck_ordens_compra_status`); 🟡 as transições exatas são feitas por trigger do banco e não foram relidas; ✅ regra de aprovação N14-21: até o limite da unidade (R$ 30 mil por padrão) a trigger `fn_ordens_compra_recalcular` aprova sozinha; acima dele, só o Gerente de Compras (`ordens_compra.route.js:1230-1240`); a Diretoria não aprova (Mestre, nós C2/C3). Envio ao Omie tem estado próprio (`status_sincronizacao_omie`) fora deste diagrama.
+Selo ✅ valores em `ordens_compra.route.js:94` (`const STATUS = ["rascunho"`) e no `CHECK` do dump (`ck_ordens_compra_status`); 🟡 as transições exatas são feitas por trigger do banco e não foram relidas; ✅ regra de aprovação N14-21: até o limite da unidade (R$ 30 mil por padrão) a trigger `fn_ordens_compra_recalcular` aprova sozinha; acima dele, só o Gerente de Compras (`ordens_compra.route.js:1280-1290` (`if (EXIGIR_PODE_APROVAR) {`)); a Diretoria não aprova (Mestre, nós C2/C3). Envio ao Omie tem estado próprio (`status_sincronizacao_omie`) fora deste diagrama.
 
 ### 10. Envio da requisição ao av-hub (`StatusEnvioAvhub`)
 
-Selo ✅ `integracao.prisma:17-29`, `envio-avhub.service.ts:164-169`.
+Selo ✅ `integracao.prisma:20-32`, `envio-avhub.service.ts:167-172`.
 
 ### 11. Liberação do pedido (`status_liberacao`)
 
