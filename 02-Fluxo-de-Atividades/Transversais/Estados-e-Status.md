@@ -1,9 +1,10 @@
 ---
 tags: [fluxo, estados, status, enums, referencia]
 criado: 2026-10-14
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-pcp 579a625 prisma/models/*.prisma, integracao-avhub.service.ts, requisicao-avhub.eventos.ts, Dump MES 14/10 (CREATE TYPE, linhas 128-424), Dump Avhub 14/10 (CHECK constraints), app-pcp 1fca8d3 movimentacoes/labels.ts e acoes.ts, HUB b55ac55 lib/domain/etapas-item.ts, 00-Fluxo-Mestre-0b, api-pcp develop de 27/10/2026 (FINALIZADO, PRODUCAO), api-acos-vital develop (propostas)]
 ---
 
@@ -183,7 +184,7 @@ Uso: `ENTREGUE` é gravado por `EntregasService.create` quando zera o pendente e
 | `RETRABALHO` | Retrabalho | **Legado**: nenhuma ação chega aqui; só `retomar` aceita como origem |
 | `CANCELADO` | Cancelado | Terminal; origem de `devolver`, `retrabalho` e `cancelar` |
 
-Rótulos: `movimentacoes/labels.ts:7-17`. Ações por status: `movimentacoes/acoes.ts:61-71` (tabela em [[10-Producao-e-Roteiro]]). Estados fora da fila (`STATUS_FILA_MOVIMENTACOES`): `api-pcp/src/common/constants/item-parcial-status.constants.ts:30` ✅.
+Rótulos: `movimentacoes/labels.ts:7-17`. Ações por status: `movimentacoes/acoes.ts:61-71` (tabela em [[10-Producao-e-Roteiro]]). Estados fora da fila (`STATUS_FILA_MOVIMENTACOES`): `api-pcp` `src/common/constants/item-parcial-status.constants.ts:19` (`STATUS_FILA_MOVIMENTACOES`) ✅.
 
 Flags relacionadas: `atendidoPeloEstoque` (parcial atendida pelo saldo), `retrabalho` (linha de retorno de retrabalho), `idLoteCompra` (lote que espera a Qualidade), `idParcialOrigem` (split), `idDevolvidoDe` (devolução e retrabalho).
 
@@ -228,12 +229,12 @@ Resumo: `ABERTA` e `EM_COMPRA` alternam pelos marcos do av-hub; `RECEBIDA_PARCIA
 | `requisicao_cancelada` | `CANCELADA` |
 | `oc_no_omie`, `fornecedor_confirmou`, `previsao_alterada`, `ocorrencia` | não mudam a etapa; atualizam previsão, ocorrência ou histórico |
 
-#### Envio ao av-hub (fila do contrato 34)
+#### Envio ao av-hub (fila do contrato 34 e dos avisos do LOG-58)
 
 | Enum | Valores | Fonte |
 |---|---|---|
-| `TipoEnvioAvhub` | `REQUISICAO_COMPRA` | `integracao.prisma:13-15` (371) ✅ |
-| `StatusEnvioAvhub` | `PENDENTE`, `ENVIADO`, `RECUSADO` (409 `REQUISICAO_COM_OC`), `FALHOU` (400) | `integracao.prisma:24-29` (211) ✅ |
+| `TipoEnvioAvhub` | `REQUISICAO_COMPRA` (PUT do contrato 34), `AVISO_COMPRA` (POST dos avisos de compra, LOG-58; confirmado no Docker em 13/11) | `api-pcp` `prisma/models/integracao.prisma:13` (`AVISO_COMPRA`) ✅ |
+| `StatusEnvioAvhub` | `PENDENTE`, `ENVIADO`, `RECUSADO` (409 `REQUISICAO_COM_OC`), `FALHOU` (400) | `api-pcp` `prisma/models/integracao.prisma:23-28` (`enum StatusEnvioAvhub {`) ✅ |
 
 #### Recebimento
 
@@ -330,19 +331,19 @@ Os 9 estados macro do desenho do vendedor (`AGUARDANDO_LIBERACAO`, `PENDENTE_PCP
 
 #### Proposta, pedido de venda do Hub, custo real e comissão nova (proposta 🟡)
 
-Valores dos `CHECK` das migrações propostas em 26/10/2026. Ainda não estão no banco de produção.
+Valores dos `CHECK` das migrações propostas em 26/10/2026. No dump de teste de 13/11 ([[Banco-AvHub]]) só existem `propostas` e `pedidos_venda`; as linhas marcadas 🔴 são tabelas planejadas, e o schema `core_comissao` ainda não existe.
 
 | Campo | Valores | Fonte |
 |---|---|---|
-| `core_comercial.propostas.status` | `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA` | N16-02, N16-03 |
-| `core_comercial.pedidos.origem` | `PROPOSTA`, `OMIE` | N16-106 |
-| `core_comercial.pedidos.status_sincronizacao_omie` | `pendente`, `sincronizado`, `erro` (o pedido do Omie nasce `sincronizado`) | padrão da OC |
-| `core_comercial.pedidos_previsoes.tipo` | `INICIAL`, `ENTREGA_COMPRAS`, `ENTREGA_CCP` | N16-88 |
-| `core_comercial.pedidos_sequenciais.status` | `ABERTO`, `FATURADO`, `CANCELADO` | N16-92 |
-| `core_vendas_faturamento.pedidos_vendas_sequenciais_itens.origem_vinculo` | `HUB`, `PRODUTO`, `AMBIGUO`, `SEM_VINCULO` | N16-99, N16-100 |
-| `core_comercial.calendario_excecoes.tipo` | `FERIADO`, `DIA_UTIL` | N16-104 |
-| `core_comercial.ofertas.fonte` | `MANUAL`, `MAPA_COTACAO`, `MIGRACAO`, `OC_HUB`, `OC_OMIE` | |
-| `core_comercial.custos_eventos.origem` | `OC_MATERIAL`, `LOTE_ESTOQUE`, `MATERIA_PRIMA_FABRICACAO`, `MAO_DE_OBRA_OC_SERVICO`; `status` `VALIDO`, `DESCARTADO`; `sentido` `1` ou `-1` (estorno) | N16-09, N16-20 |
+| `core_comercial.propostas.status` | `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`, `EXPIRADA` ✅ `ck_propostas_status` (dump 13/11) | N16-02, N16-03 |
+| `core_comercial.pedidos.origem` | `PROPOSTA`, `OMIE` 🔴 planejada (a tabela que existe é `pedidos_venda`, sem `origem`) | N16-106 |
+| `core_comercial.pedidos_venda.status_sincronizacao_omie` | `pendente`, `sincronizado`, `erro` ✅ `ck_pedidos_venda_sinc` (dump 13/11) | padrão da OC |
+| `core_comercial.pedidos_previsoes.tipo` | `INICIAL`, `ENTREGA_COMPRAS`, `ENTREGA_CCP` 🔴 planejada | N16-88 |
+| `core_comercial.pedidos_sequenciais.status` | `ABERTO`, `FATURADO`, `CANCELADO` 🔴 planejada | N16-92 |
+| `core_vendas_faturamento.pedidos_vendas_sequenciais_itens.origem_vinculo` | `HUB`, `PRODUTO`, `AMBIGUO`, `SEM_VINCULO` 🔴 planejada | N16-99, N16-100 |
+| `core_comercial.calendario_excecoes.tipo` | `FERIADO`, `DIA_UTIL` 🔴 planejada | N16-104 |
+| `core_comercial.ofertas.fonte` | `MANUAL`, `MAPA_COTACAO`, `MIGRACAO`, `OC_HUB`, `OC_OMIE` 🔴 planejada | |
+| `core_comercial.custos_eventos.origem` | `OC_MATERIAL`, `LOTE_ESTOQUE`, `MATERIA_PRIMA_FABRICACAO`, `MAO_DE_OBRA_OC_SERVICO`; `status` `VALIDO`, `DESCARTADO`; `sentido` `1` ou `-1` (estorno) 🔴 planejada | N16-09, N16-20 |
 | `core_comercial.divergencias_compra.estado` | `PENDENTE`, `APROVADO`, `REPROVADO`, `RESOLVIDO` e `INFORMATIVA` (compra abaixo do cotado, só aviso); `solucao_tipo` `NOVO_VALOR`, `NOVO_FORNECEDOR`, `MANTIDO`, `PEDIDO_CANCELADO` e `OC_CANCELADA` (a OC foi cancelada). ✅ no banco de teste ([[Dump-AvHub-Teste-2026-11-12]]) e nas telas (LOG-57, 12/11) | N16-60 a N16-73, N16-159 |
 | `core_comissao.comissoes.estado` | `ESTIMADA`, `CONGELADA`, `EM_ACOMPANHAMENTO`, `ENCERRADA`, `CANCELADA`; `origem` `PROPOSTA`, `PEDIDO_OMIE` | N16-10, N16-103 |
 | `core_comissao.comissao_calculos.tipo` | `COTADO` (estimada ou simulação do vendedor), `REAL` (custo real) | N16-10 |
