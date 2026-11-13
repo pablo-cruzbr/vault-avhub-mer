@@ -1,9 +1,10 @@
 ---
 tags: [anexo, orcamento, av-hub, comercial, fora-do-fluxo]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: arquivado
 dono: Pablo
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-acos-vital f322dcd src/schemas/core_compras/aggregates/orcamento, HUB b55ac55 lib/orcamento e app/api/orcamento, Dump Avhub 14/10, LOG-42, v1 LOG-07a]
 ---
 
@@ -39,8 +40,8 @@ Fora do fluxo 0b. Decisão do Nathan de 07/10 (item 39 do v1): o orçamento é d
 | Tabelas `orc_*` e views `orc_vw_*` no banco | `orc_categorias`, `orc_cotacoes`, `orc_familias`, `orc_fornecedores`, `orc_produtos`, `orc_vinculos` e as views | ✅ Dump Avhub, schema `core_compras` |
 | Rotas `/orcamento` na API | `GET /fornecedores`, `/fornecedores/:codigo`, `/produtos`, `/cotacoes`, `/vinculos`, `/categorias`, `/familias` | ✅ `orcamento.route.js:140-328` |
 | Telas do HUB | `orcamento/categorias`, `fornecedores`, `historico-produtos`, `sem-cadastro`, `vinculos` | ✅ `app/(protected)/orcamento/**` |
-| De onde o HUB lê | **Dos JSON do repositório**, não da API: `lib/orcamento/data/*.json` (fornecedores, histórico de preços, produtos, vínculos, categorias, famílias), com busca e ordenação em memória | ✅ `lib/orcamento/dados.ts:60,75`, `app/api/orcamento/fornecedores/route.ts:3` |
-| Marcas `GAMBIARRA` do contrato 42 (O1, O2) | Ainda no código | ✅ `lib/orcamento/dados.ts:60,75` |
+| De onde o HUB lê | Em 14/10, **dos JSON do repositório**, não da API: `lib/orcamento/data/*.json` (fornecedores, histórico de preços, produtos, vínculos, categorias, famílias), com busca e ordenação em memória (`lib/orcamento/dados.ts`, linhas 60 e 75, e `app/api/orcamento/fornecedores/route.ts`, linha 3, no HUB `b55ac55`). *Conferido em 13/11/2026:* o módulo legado saiu do av-hub em 16/10 (`c851cda`, "remove the legacy Orcamento module"); os dois arquivos não existem mais na `develop` | 🔴 removido |
+| Marcas `GAMBIARRA` do contrato 42 (O1, O2) | Saíram com o módulo (`c851cda`); as do contrato 42 que sobram são as da comissão de coordenadores (C1 a C3) | 🔴 removido |
 
 ### Consequência
 
