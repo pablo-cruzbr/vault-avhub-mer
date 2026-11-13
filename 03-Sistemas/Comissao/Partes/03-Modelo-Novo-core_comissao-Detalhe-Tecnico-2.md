@@ -1,10 +1,11 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [N16-02, N16-03, N16-09, N16-10, N16-11, N16-17, N16-18, N16-19, N16-20, OQ-06, OQ-11, OQ-12, OQ-28, dump core_comissionamento convertido, av-hub lib/simulador/motor.ts, tela-simulador-comissao.png]
 ---
 
@@ -286,7 +287,7 @@ Cada execução do motor sobre uma comissão. COTADO = com o custo que o vendedo
 | `estado_destino` | varchar(12) | não |  | Código de parametros_icms_saida.destino (SP, MG, PR, RJ, SC, RS, DEMAIS). A tela mostra rotulo e icms_destino_pct (ex.: São Paulo, ICMS 18%). |
 | `icms_destino_pct` | numeric(7,4) | não |  |  |
 | `condicao_pagamento` | varchar(40) | não |  |  |
-| `encargo_pagamento_pct` | numeric(7,4) | não |  | Encargo da condição de pagamento da VENDA; entra só no preço sugerido (motor.ts:324), não no custo nem na margem. |
+| `encargo_pagamento_pct` | numeric(7,4) | não |  | Encargo da condição de pagamento da VENDA; entra só no preço sugerido (motor.ts:330), não no custo nem na margem. |
 | `isento_imposto` | boolean | não | false |  |
 | `frete_compra_tipo` | varchar(6) | não | 'RATEIO' |  |
 | `frete_compra_total` | numeric(15,2) | não | 0 |  |
@@ -297,8 +298,8 @@ Cada execução do motor sobre uma comissão. COTADO = com o custo que o vendedo
 | `venda_sugerida` | numeric(15,2) | não |  |  |
 | `valor_liquido` | numeric(15,2) | não |  |  |
 | `total_nf` | numeric(15,2) | não |  |  |
-| `markup_projetado` | numeric(10,4) | sim |  | Preço sugerido total / custo total (`av-hub` `lib/simulador/motor.ts:496` (`markup_projetado`)). |
-| `markup_real` | numeric(10,4) | sim |  | MARK-UP REAL da tela: arredondarParaCima(venda de revenda / custo total, 2) (`av-hub` `lib/simulador/motor.ts:499` (`markup_real`)). |
+| `markup_projetado` | numeric(10,4) | sim |  | Preço sugerido total / custo total (`av-hub` `lib/simulador/motor.ts:502` (`markup_projetado`)). |
+| `markup_real` | numeric(10,4) | sim |  | MARK-UP REAL da tela: arredondarParaCima(venda de revenda / custo total, 2) (`av-hub` `lib/simulador/motor.ts:505` (`markup_real`)). |
 | `markup_bruto_pct` | numeric(10,4) | não |  | O "AC8": (total NF de revenda - compra bruta) / compra bruta. Gatilho da regra fixa. Não é a margem líquida que decide a letra. |
 | `margem_liquida_pct` | numeric(10,4) | não |  |  |
 | `lucro` | numeric(15,2) | não |  |  |
@@ -390,7 +391,7 @@ Detalhe por evento do custo líquido de um item REAL (N16-20): condições do pr
 | `cotacao_moeda` | numeric(15,6) | sim |  |  |
 | `condicao_pagamento` | varchar(40) | sim |  |  |
 | `encargo_pagamento_pct` | numeric(7,4) | sim |  | Encargo da condição de pagamento da OC (OQ-12, N16-22). Guardado para auditoria; não entra no custo líquido do evento (o encargo só entra no preço sugerido, como no motor atual). |
-| `frete_tipo` | varchar(6) | não | 'RATEIO' | VALOR quando a OC traz o frete do evento; RATEIO usa parametros.rateio_logistica_pct sobre compra + IPI + ST, como motor.ts:307-310. |
+| `frete_tipo` | varchar(6) | não | 'RATEIO' | VALOR quando a OC traz o frete do evento; RATEIO usa parametros.rateio_logistica_pct sobre compra + IPI + ST, como motor.ts:313-316. |
 | `frete_valor` | numeric(15,2) | não | 0 |  |
 | `origem_compra` | varchar(25) | sim |  |  |
 | `ipi_pct` | numeric(7,4) | não | 0 |  |
@@ -402,4 +403,4 @@ Detalhe por evento do custo líquido de um item REAL (N16-20): condições do pr
 | `icms_recuperar` | numeric(15,2) | não | 0 |  |
 | `valor_ipi` | numeric(15,2) | não | 0 |  |
 | `frete_evento` | numeric(15,2) | não | 0 |  |
-| `custo_liquido` | numeric(15,2) | não |  | compra_bruta - icms_recuperar + valor_ipi + valor_st + frete_evento (motor.ts:312). icms_recuperar = 0 quando valor_st > 0 (motor.ts:280-283). |
+| `custo_liquido` | numeric(15,2) | não |  | compra_bruta - icms_recuperar + valor_ipi + valor_st + frete_evento (motor.ts:318). icms_recuperar = 0 quando valor_st > 0 (motor.ts:286-289). |
