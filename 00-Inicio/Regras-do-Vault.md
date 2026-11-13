@@ -1,7 +1,7 @@
 ---
 tags: [vault, regras]
 criado: 2026-10-14
-estado-em: 2026-11-06
+estado-em: 2026-11-12
 status: vigente
 dono: Nathan
 fontes: [plano de 14/10/2026, instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, fatos F1 a F5 de 05/11/2026)]
@@ -102,7 +102,7 @@ Contrato é o combinado por escrito entre dois sistemas ou entre duas pessoas so
 
 ### Fontes da verdade, em ordem
 
-1. **Código na `develop`** dos sistemas (`origin/develop`, depois de `git fetch`), lido sem trocar de branch: `git show origin/develop:<arquivo>`. O `omie-elt-pipeline` não tem `develop`: a base é `origin/master`. Os commits lidos ficam no `develop-conferida` de cada nota.
+1. **Código na `develop`** dos sistemas (`origin/develop`, depois de `git fetch`), lido sem trocar de branch: `git show origin/develop:<arquivo>`. O `omie-elt-pipeline` também: a `develop` dele existe desde 12/11/2026, e a `master` é a produção. Os commits lidos ficam no `develop-conferida` de cada nota.
 2. **Dumps de esquema** (MES e av-hub).
 3. **Decisões** em [[Registro-de-Decisoes]].
 4. **O fluxo mestre** em [[00-Fluxo-Mestre-0b]].
@@ -128,7 +128,7 @@ ordem: 6                        # posição no fluxo (00 é o Mestre)
 nos: [P3, C0, C1]               # nós do mermaid de que esta nota é dona
 anterior: "[[05-Estoque-Atendimento]]"   # ausente só na primeira raia
 proxima: "[[07-Recebimento]]"            # ausente só na última raia
-develop-conferida: [api-acos-vital <commit>, av-hub <commit>, api-pcp <commit>, app-pcp <commit>, omie-elt-pipeline master <commit>, em AAAA-MM-DD]
+develop-conferida: [api-acos-vital <commit>, av-hub <commit>, api-pcp <commit>, app-pcp <commit>, omie-elt-pipeline <commit>, em AAAA-MM-DD]
 ```
 
 ### Contratos novos: pastas e status

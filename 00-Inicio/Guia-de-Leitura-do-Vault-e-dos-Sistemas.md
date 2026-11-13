@@ -19,7 +19,7 @@ Faça isto no início de toda sessão, antes de ler ou escrever (é a seção 1 
 
 1. **Atualize os seis repositórios.** Em cada pasta, rode `git fetch --all --prune` e anote o commit de `origin/develop` (no vault, o de `origin/main`).
 2. **Vault:** traga o remoto com `git pull --ff-only`. Se não for fast-forward, pare e avise; não faça merge nem rebase por conta própria.
-3. **Sistemas:** só leitura, sempre pela `origin/develop` (F5). Nunca troque de branch, faça commit ou stash neles. O `omie-elt-pipeline` não tem `develop`: a base é `origin/master`.
+3. **Sistemas:** só leitura, sempre pela `origin/develop` (F5). Nunca troque de branch, faça commit ou stash neles. O `omie-elt-pipeline` também tem `develop` desde 12/11/2026: a base é `origin/develop`, e a `master` é a produção.
 4. **Quebra de linha:** no vault, `git config core.autocrlf` tem de ser `false`. O `.gitattributes` exige `eol=lf`.
 5. **Obsidian:** antes de mexer em muitas notas de uma vez (renomear, mover, dividir), confirme com quem está usando que o Obsidian está fechado.
 
@@ -51,7 +51,7 @@ Faça isto em `api-acos-vital`, `av-hub`, `api-pcp`, `app-pcp` e `omie-elt-pipel
 1. `git fetch --all --prune`.
 2. Relate, sem mexer, se há alteração não commitada ou commit local sem push na branch atual. É trabalho de alguém.
 3. Se a branch atual for `develop`, o working tree estiver limpo e só faltar trazer o remoto, rode `git pull --ff-only`. Fora isso, não troque de branch, não faça commit e não faça stash.
-4. Leia sempre pela `origin/develop`, sem checkout. Por exemplo: `git show origin/develop:<arquivo>` e `git grep <termo> origin/develop`. Se o repositório não tiver `develop`, use o ramo principal (`origin/master` no `omie-elt-pipeline`) e avise.
+4. Leia sempre pela `origin/develop`, sem checkout. Por exemplo: `git show origin/develop:<arquivo>` e `git grep <termo> origin/develop`. Se um repositório não tiver `develop`, use o ramo principal e avise.
 
 **3. Descubra o que mudou desde a última atualização.**
 

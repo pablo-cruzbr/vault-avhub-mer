@@ -6,7 +6,7 @@ status: proposta
 ordem: 15
 nos: [K1, K2, K3, K4, K5, K6]
 anterior: "[[14-Fiscal-Omie]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; av-hub a43befe, em 2026-11-12, só a aprovação do vendedor (LOG-57)]
+develop-conferida: [av-hub d82d58b, em 2026-11-12, só o encargo da condição (PR #291); api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; av-hub a43befe, em 2026-11-12, só a aprovação do vendedor (LOG-57)]
 dono: Nathan (fluxo) · Gustavo (banco e API) · Robert (custo no MES) · Michele (decisão da comissão)
 fontes: [Registro-de-Decisoes (N16-09 a N16-11, N16-17 a N16-23, N16-34 a N16-51, N16-57, N16-71, N16-74), Proposta-Orcamento-Comissao/01-Decisoes/Respostas-da-Controladoria-2026-10-19 (fora do vault), Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, av-hub comissoes/simulador/page.tsx e lib/simulador/motor.ts, 03-Sistemas/Comissao/01-Motor-Atual-Como-Calcula, 00-Fluxo-Mestre-0b, 03-Estoque-Atendimento-e-Despacho, 04-Circuito-de-Compra, Modelo-Estoque-e-Custo-do-Lote, API-008, LOG-47, 10-Anexo-Fora-do-Fluxo/Comissoes, api-pcp (estoque.prisma, compras.service.ts), 09-Diagramas/artifact-proposta-pedido.html, api-pcp develop de 27/10/2026 (GET /itens/custo, custo da OC), N16-143, N16-144, BL-067, BL-088, OQ-51, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -64,6 +64,7 @@ Um pedido com 50 flanges (item A). Na proposta, o vendedor cotou R$ 100 por flan
 - Cada nota fecha com o percentual vigente. Nunca se paga duas vezes a mesma peça.
 - A nota de entrada manda: ela substitui o valor da OC.
 - O encargo da condição de pagamento entra no preço sugerido, não no custo.
+- ✅ O encargo é o da condição de pagamento do Omie, gravado na proposta e na simulação (`encargo_pagamento`, de 0 a 100%). O motor usa esse valor e só procura a condição na tabela da vigência quando ele falta, como nas propostas gravadas antes do campo: `av-hub` `lib/simulador/motor.ts:230` (`const encargo = encargoInformado ??`). A tela está em [[01-Proposta-de-Venda]].
 - Cancelamento, devolução ou recusa abatem a comissão. Se já foi paga, o desconto entra na próxima apuração.
 - Devolução total vem do Omie. Na parcial, o Fiscal ou a Controladoria informam o que voltou.
 - O imposto por item da OC vem da parte de compras do pedido (finalidade `pedidos_venda` ou `recompra`) ou é digitado (`estoque`, `uso_interno`). Uma linha por pedido, sem média. O frete é rateado pelo valor. A fórmula do custo com imposto segue o motor do comissionamento (N16-144). O contrato só será escrito quando o desenvolvimento começar.

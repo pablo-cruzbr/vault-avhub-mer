@@ -5,19 +5,19 @@ description: Ler e procurar no omie-elt-pipeline, que traz os dados do Omie para
 
 # Sistema `omie-elt-pipeline`
 
-Fica ao lado do vault: `../omie-elt-pipeline`. **Só leitura.** **A base é a `origin/master`**: este repositório não tem `develop`.
+Fica ao lado do vault: `../omie-elt-pipeline`. **Só leitura.** **A base é a `origin/develop`**, que existe desde 12/11/2026 e recebe os PRs; a `master` é a produção.
 
 ## 0. Antes de ler
 0. Se `../omie-elt-pipeline` não existir, siga "Repositório ausente" no `CLAUDE.md`: não adivinhe o código.
-1. `git -C ../omie-elt-pipeline fetch --all --prune`; anote o commit de `origin/master`.
-2. Leia sem checkout: `git -C ../omie-elt-pipeline show origin/master:<arquivo>`, `git -C ../omie-elt-pipeline grep -n "<termo>" origin/master -- src sql`. Cite repositório, commit e arquivo:linha com âncora.
+1. `git -C ../omie-elt-pipeline fetch --all --prune`; anote o commit de `origin/develop`.
+2. Leia sem checkout: `git -C ../omie-elt-pipeline show origin/develop:<arquivo>`, `git -C ../omie-elt-pipeline grep -n "<termo>" origin/develop -- src sql`. Cite repositório, commit e arquivo:linha com âncora.
 3. **Nunca abra o `.env`** (tem chaves do Omie, senhas e segredos de TOTP). Os nomes das variáveis estão no `.env.example`.
 4. **Nunca rode** worker, job ou CLI do pipeline (`full-sync`, `envio-oc`, `scheduler`...). **O Omie não tem ambiente de teste**: qualquer escrita afeta dado real.
 
 ## 1. Onde fica cada coisa
 | O que procuro | Onde |
 |---|---|
-| Mapa do repositório para IA | `CLAUDE.md` (caminho de um dado, agendamento, tabelas, exclusões, limites do Omie, o que está velho no `ARCHITECTURE.md`). Enquanto o PR #5 não entrar na `master`: `git -C ../omie-elt-pipeline show origin/docs/guia-para-ia:CLAUDE.md` |
+| Mapa do repositório para IA | `CLAUDE.md` (caminho de um dado, agendamento, tabelas, exclusões, limites do Omie, o que está velho no `ARCHITECTURE.md`). |
 | Visão geral e decisões | `ARCHITECTURE.md` (camadas de sync, multi-filial, rate limit, colunas protegidas, exclusões). **Partes estão velhas** (destino `omie_raw`, 5 recursos, 3 processos, chave do `produto_vendas`): confira no código |
 | Cliente e chamadas do Omie | `src/omie/` |
 | Recurso do Omie → tabela de destino | `src/omie/resources/<nome>.ts`, campo `table:` (por exemplo `core.produtos`, `core_vendas_faturamento.pedidos_vendas`) |
@@ -31,7 +31,7 @@ Fica ao lado do vault: `../omie-elt-pipeline`. **Só leitura.** **A base é a `o
 
 ## 2. Receita: de onde vem um dado
 1. A carga grava direto nas tabelas do av-hub, nos schemas `core.*` e `core_vendas_faturamento.*` (não em tabelas `omie_*`). Confira a tabela no dump (skill `banco-de-dados`).
-2. Ache o recurso que grava nela: `git -C ../omie-elt-pipeline grep -n "table: '<schema>.<tabela>'" origin/master -- src/omie/resources`. Filhos (itens, vínculos) são gravados no `afterUpsert` de outro recurso: se não achar pelo `table:`, busque só o nome da tabela em `src`.
+2. Ache o recurso que grava nela: `git -C ../omie-elt-pipeline grep -n "table: '<schema>.<tabela>'" origin/develop -- src/omie/resources`. Filhos (itens, vínculos) são gravados no `afterUpsert` de outro recurso: se não achar pelo `table:`, busque só o nome da tabela em `src`.
 3. No recurso, o `mapRow` diz de qual campo do Omie vem cada coluna. Se a coluna não está no `mapRow`, ela é protegida, vem do `afterUpsert` de outro recurso, de um job ou de um trigger do banco. Siga até a chamada do Omie em `src/omie/` e o job que agenda em `src/jobs/`.
 4. Confira as colunas protegidas (que o pipeline nunca escreve) em `ARCHITECTURE.md` e na nota `05-Integracoes/Colunas-Protegidas`.
 

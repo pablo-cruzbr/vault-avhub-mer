@@ -15,7 +15,7 @@ fontes: [instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, seções 1, 3, 6
 
 **Três regras que valem para tudo:**
 
-- **Base = `develop`** (F5): o estado vem da `origin/develop` dos sistemas (no `omie-elt-pipeline`, `origin/master`). A `main` é só informação.
+- **Base = `develop`** (F5): o estado vem da `origin/develop` dos sistemas, também no `omie-elt-pipeline` desde 12/11/2026. A `main` é só informação.
 - **Nada some:** o vault só muda de lugar com `git mv`; antes de reescrever ou dividir, salve a lista de fatos.
 - **Um commit por tarefa**, e `node scripts/validar.mjs` verde antes do push.
 

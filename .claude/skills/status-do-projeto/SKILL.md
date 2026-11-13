@@ -9,7 +9,7 @@ Só leitura: funciona para todos e não grava nada no vault. Se o admin quiser r
 
 ## 1. Prepare
 1. Prepare o ambiente como manda o `CLAUDE.md` (fetch do vault e dos cinco sistemas; `git pull --ff-only` no vault). Repositório que faltar: "Repositório ausente" no `CLAUDE.md`.
-2. Anote o commit de `origin/develop` de cada sistema (`origin/master` no `omie-elt-pipeline`) e compare com `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md`.
+2. Anote o commit de `origin/develop` de cada sistema e compare com `07-Desenvolvimento/Ultima-Atualizacao-do-Vault.md`.
 
 ## 2. Leia, nesta ordem (só o necessário)
 | Fonte | Para quê |

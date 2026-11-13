@@ -10,7 +10,7 @@ Este repositório é um vault Obsidian em português: o manual do fluxo de um pe
 
 ## Antes de qualquer tarefa: preparar o ambiente
 
-1. Em cada um dos seis repositórios: `git fetch --all --prune`; anote o commit de `origin/develop` (no `omie-elt-pipeline`, `origin/master`).
+1. Em cada um dos seis repositórios: `git fetch --all --prune`; anote o commit de `origin/develop` (todos têm `develop`; no `omie-elt-pipeline` ela existe desde 12/11/2026 e a produção é a `master`).
 2. No vault: `git pull --ff-only`. Se não for fast-forward, pare e avise quem pediu a tarefa; nada de merge ou rebase por conta própria.
 3. Sistemas são **só leitura**: nunca troque de branch, faça commit ou stash neles. Leia sem checkout: `git show origin/develop:<arquivo>`, `git grep <termo> origin/develop`.
 4. No vault, `git config core.autocrlf` tem de ser `false` (o `.gitattributes` exige LF).

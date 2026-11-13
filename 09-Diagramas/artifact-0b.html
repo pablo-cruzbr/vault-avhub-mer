@@ -34,6 +34,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14
 #world.anim{transition:transform .28s cubic-bezier(.2,.7,.2,1)}
 .lane{position:absolute;left:0}
 .lane::before{content:"";position:absolute;left:-8000px;right:-8000px;top:0;bottom:0;background:inherit}
+.lname small{display:block;margin-top:4px;font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--sel)}
 .lane.a{background:var(--lane-a)}.lane.b{background:var(--lane-b)}
 .lname{position:absolute;left:0;top:0;bottom:0;width:112px;padding:10px 12px;display:flex;align-items:center;font-family:var(--f-display);font-size:15px;font-weight:600;line-height:1.2;color:var(--muted);border-right:1px solid var(--line)}
 svg.edges{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
@@ -76,6 +77,26 @@ svg.edges{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
 #dica{margin:8px 0 0;font-size:12px;color:var(--muted)}
 #detail{right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(400px,calc(100vw - 32px));max-height:min(64vh,calc(100vh - 110px));overflow:auto;padding:14px 16px 16px;cursor:default}
 #detail[hidden]{display:none}
+#areas{left:max(16px,env(safe-area-inset-left,0px));top:calc(12px + env(safe-area-inset-top,0px));width:min(470px,calc(100vw - 32px));max-height:min(70vh,calc(100vh - 120px));overflow:auto;padding:14px 16px 16px;cursor:default}
+#areas[hidden]{display:none}
+#areas h2{font-family:var(--f-display);font-size:1.15rem;margin:0 28px 2px 0;line-height:1.2}
+#areas>p{margin:0 0 10px;color:var(--muted);font-size:12px}
+#areas .tot{display:flex;gap:16px;margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+#areas .tot b{font-family:var(--f-display);font-size:18px;color:var(--fg);font-variant-numeric:tabular-nums;margin-right:4px}
+#closeA{position:absolute;right:8px;top:8px;width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:var(--muted);font-size:18px;line-height:1;cursor:pointer}
+#closeA:hover{background:var(--lane-b);color:var(--fg)}
+#closeA:focus-visible{outline:2px solid var(--sel);outline-offset:1px}
+.atab{width:100%;border-collapse:collapse;font-size:12.5px}
+.atab th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;padding:4px 6px;border-bottom:1px solid var(--line)}
+.atab td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+.atab td.n{font-family:var(--f-mono);color:var(--muted);width:24px}
+.atab small{display:block;color:var(--muted);font-size:11px}
+.atab .pc{width:92px}
+.bar{display:flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:11.5px;font-variant-numeric:tabular-nums}
+.bar i{flex:1;height:6px;border-radius:3px;background:var(--lane-b);position:relative;overflow:hidden;min-width:34px}
+.bar i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--ok-bd)}
+.bar.lo i::after{background:var(--fa-bd)}.bar.mid i::after{background:var(--pa-bd)}
+#areas .nota{margin:10px 0 0;font-size:11.5px;color:var(--muted)}
 #detail h2{font-family:var(--f-display);font-size:1.15rem;margin:0 28px 2px 0;line-height:1.2}
 #close{position:absolute;right:8px;top:8px;width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:var(--muted);font-size:18px;line-height:1;cursor:pointer}
 #close:hover{background:var(--lane-b);color:var(--fg)}
@@ -100,7 +121,7 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <div id="vp"><div id="world"></div></div>
 <div class="hud" id="info">
   <h1>Fluxo 0b: Atividades</h1>
-  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> de 05/11/2026 e, nas raias tocadas pela validação ponta a ponta de 10/11 (pedido 28189, em Docker com os dados do tst), de 10/11/2026. Clique num nó para ver os detalhes.</p>
+  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> de 12/11/2026 na proposta, em Compras e na pipeline, e de 10/11 no MES; os ● são achados da validação ponta a ponta de 10/11 (pedido 28189, em Docker com os dados do tst). Clique num nó para ver os detalhes ou em <b>Áreas</b> para a conclusão de cada uma.</p>
   <div class="chips" id="sum"></div>
   <div id="dica">Arraste para mover · roda do mouse ou pinça para zoom · duplo clique preenche a tela</div>
 </div>
@@ -111,10 +132,30 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
   <i class="sep"></i>
   <button type="button" id="fit" title="Ajustar tudo na tela (tecla 0)">Ajustar</button>
   <button type="button" id="one" title="Tamanho real (tecla 1)">100%</button>
+  <i class="sep"></i>
+  <button type="button" id="abrirAreas" aria-expanded="false" aria-controls="areas" title="Conclusão por área (tecla A)">Áreas</button>
 </div>
 <section class="hud" id="detail" hidden aria-live="polite"></section>
+<section class="hud" id="areas" hidden aria-labelledby="areasT"></section>
 <script>
-var LANES=[["proposta","Vendas · proposta"],["orc","Orçamento · av-hub"],["vendas","Vendas · pedido"],["pcp","PCP · MES"],["estoque","Estoque · MES"],["compras","Compras · CCP"],["forn","Fornecedor"],["rec","Recebimento · MES"],["qe","Qualidade de entrada"],["prod","Produção · MES"],["qs","Qualidade de saída"],["exp","Expedição · MES"],["fis","Fiscal · Omie"],["comis","Comissão · av-hub"]];
+var LANES=[["proposta","Vendas · proposta","81%"],["orc","Orçamento · av-hub","21%"],["vendas","Vendas · pedido","50%"],["pcp","PCP · MES","50%"],["estoque","Estoque · MES","44 · 50 · 0%"],["compras","Compras · CCP","78%"],["forn","Fornecedor",""],["rec","Recebimento · MES","65%"],["qe","Qualidade de entrada","43%"],["prod","Produção · MES","70%"],["qs","Qualidade de saída","50%"],["exp","Expedição · MES","29%"],["fis","Fiscal · Omie","30%"],["comis","Comissão · av-hub","35%"]];
+/* Conclusão por etapa do fluxo, pelos selos do vault (12/11/2026): funcionalidades = seção "O que já existe e o que falta" (✅ 1, 🟡 0,5, 🔴 0); telas = nota Telas-por-Raia. */
+var AREAS=[
+["1","Proposta de venda","AV-Hub · Vendas › Propostas",81,33],
+["2","Orçamento e base de preço","AV-Hub · Orçamento",21,33],
+["3","Pedido de venda e liberação","AV-Hub · Vendas, Portal do Gerente, PCP no Hub",50,100],
+["4","PCP: triagem e destinação","MES · PCP",50,85],
+["5","Estoque: atendimento","MES · Estoque",44,70],
+["6","Circuito de compra","AV-Hub · Compras; MES · Compras",78,100],
+["7","Recebimento","MES · Logística de entrada",65,100],
+["8","Qualidade de entrada","MES · Inspeção de entrada",43,100],
+["9","Estoque: entrada do lote","MES · Estoque",50,70],
+["10","Produção e roteiro","MES · Produção",70,83],
+["11","Qualidade de saída","MES · Inspeção de saída",50,100],
+["12","Estoque: despacho","MES · Estoque",0,70],
+["13","Expedição","MES · Logística › Expedição",29,50],
+["14","Fiscal / Omie","Omie e pipeline",30,67],
+["15","Custo real e comissão","AV-Hub · Comissões",35,33]];
 var N={
 "V0.1": {
 "l": "proposta",
@@ -123,8 +164,8 @@ var N={
 "r": "Vendedor cria a proposta: unidade emissora (logo, cores, CRC no PDF), cliente com cadastro no Omie da conta, itens com CFOP, cenário e impostos digitados, condição de pagamento da lista da conta",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "· 01-Proposta-de-Venda",
-"cod": "🟡 API ✅ (api-acos-vital develop, 29/10) e telas de criar, listar e abrir ✅; revisar sem tela; numeração diverge da N16-04 🔴",
-"v": "O número ainda sai no formato antigo, como CO-AV2026-0011-R00. Guardar só dígitos no banco (N16-148) não foi aplicado."
+"cod": "🟡 API ✅ e telas de criar, listar e abrir ✅; o item só aceita produto do catálogo da unidade (av-hub #278); revisar sem tela; numeração só de dígitos (N16-148) 🔴",
+"v": "Desde 10/11 o número sai sem o CO- (AV2026-0011-R00). Guardar só dígitos no banco (N16-148) não foi feito."
 },
 "V0.2": {
 "l": "proposta",
@@ -138,11 +179,11 @@ var N={
 "V0.3": {
 "l": "proposta",
 "t": "Comissão estimada nasce",
-"s": "fa",
+"s": "pa",
 "r": "Comissão estimada nasce (motor atual); proposta com item sem custo ou sem fornecedor é incompleta e não aprova",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "—",
-"cod": "🟡 análise de margem gravada com a proposta (29/10); 🔴 comissão estimada"
+"cod": "🟡 análise de margem com o frete da compra no rateio (av-hub #286) e o encargo da condição do Omie, gravado na proposta (av-hub #291); 🔴 comissão estimada"
 },
 "V0.4": {
 "l": "proposta",
@@ -156,11 +197,11 @@ var N={
 "V0.5": {
 "l": "proposta",
 "t": "Proposta aprovada?",
-"s": "pa",
+"s": "ok",
 "r": "Vendedor marca a proposta aprovada (quem, quando, revisão); depois disso ela trava",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "trg_propostas_travar",
-"cod": "🟡 API aprovar ✅ (develop, 29/10); 🔴 tela",
+"cod": "✅ API e tela (\"Cliente aprovou\"); PDF comercial da proposta para enviar ao cliente (av-hub #288; o envio por e-mail ainda não existe)",
 "d": 1
 },
 "V0C": {
@@ -170,7 +211,7 @@ var N={
 "r": "Proposta cancelada: não reabre (o vendedor duplica); a comissão estimada vira histórico",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "—",
-"cod": "🟡 API cancelar ✅ (develop, 29/10); 🔴 tela e histórico da comissão estimada"
+"cod": "🟡 API e tela de cancelar ✅; 🔴 histórico da comissão estimada"
 },
 "V0.6": {
 "l": "proposta",
@@ -179,7 +220,7 @@ var N={
 "r": "Transformar em pedido: previsão de faturamento, Qualidade e faturamento em partes obrigatórios; produto pendente bloqueia",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "fn_propostas_transformar_em_pedido",
-"cod": "🟡 API transformar ✅ (grava o pedido do Hub pendente, 29/10); 🔴 tela",
+"cod": "🟡 API e tela ✅: o modal envia as seis respostas (av-hub #277); 🔴 data por item no faturamento em partes",
 "v": "O modal pergunta e envia as seis respostas, inclusive Qualidade e faturar em partes (av-hub PR #277). Falta a data por item no faturamento em partes (N16-150); na API, categoria e tipo da venda seguem opcionais."
 },
 "V0.7": {
@@ -189,7 +230,7 @@ var N={
 "r": "Cria o pedido no Omie por API (direto pela API, síncrono, sem fila, N16-149), com o nosso número; recusa mostra o motivo e \"Tentar novamente\"",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "IncluirPedido · Mapa-IncluirPedido-Omie",
-"cod": "🟡 ✅ API envia ao Omie (api-acos-vital pedidoOmie.js:151, develop 1654f65); ❓ banco fora do repositório; 🔴 tela",
+"cod": "🟡 ✅ a API envia ao Omie e a tela tem \"Tentar novamente no Omie\"; ❓ migrations fora do repositório (BL-024); nenhum teste real no Omie (BL-081)",
 "v": "O transformar cria o pedido do Hub e, na mesma requisição, chama ConsultarPedido e IncluirPedido, com uma tentativa só. A função de 4 argumentos está no banco de teste, mas a migration segue fora do repositório (BL-024)."
 },
 "B1": {
@@ -292,7 +333,7 @@ var N={
 "r": "Requisição de necessidade própria do Compras (origem av-hub), sem pedido de venda",
 "tela": "Nova requisição · /compras/requisicoes (HUB)",
 "ep": "POST /compras/requisicoes (av-hub); DELETE /compras/requisicoes/:id 🔴 (exclusão lógica da requisição criada no Hub e sem OC; a do MES se cancela com motivo; LOG-55)",
-"cod": "✅ no av-hub; a requisição não chega ao MES, mas a OC dela deve chegar (o MES lê GET /ordens-compra/referencia): PCP vê a OC do pedido e o Estoque vê o saldo futuro 📝 (N14-20), 🔴 MES não lê"
+"cod": "✅ no av-hub; ✅ o MES lê a OC (K4) e mostra na Triagem as requisições do Compras com pedido de venda (API-009); 🔴 o PCP ver a OC do pedido (BL-049) e o Estoque ver o saldo futuro (BL-050)"
 },
 "E1": {
 "l": "estoque",
@@ -370,7 +411,7 @@ var N={
 "tela": "Ordens · /compras/ordens (HUB)",
 "ep": "POST /compras/ordens; envio ao Omie GET /compras/ordens/fila-omie (pipeline) · LOG-23, LOG-36",
 "cod": "✅",
-"v": "Pela \"Nova ordem de compra\" com pedido de venda, a OC não leva a requisição: ela fica aberta e a compra se desliga do pedido no MES (BL-086). Aberta pela requisição, funciona."
+"v": "Achado em 10/11 e corrigido em 12/11 (BL-086, av-hub #281): a \"Nova ordem de compra\" com pedido de venda oferece a requisição na fila, e a OC ligada a fecha."
 },
 "C5": {
 "l": "compras",
@@ -379,34 +420,34 @@ var N={
 "r": "Follow-up (confirmação, previsão, despacho, ocorrência)",
 "tela": "Follow-up · /compras/followup (HUB); Compras · CCP · /compras/pedidos-compra (MES, só leitura)",
 "ep": "GET /compras/requisicoes/eventos · LOG-35, LOG-32",
-"cod": "✅ perfil CCP 🔴"
+"cod": "✅ follow-up; a ocorrência espera a decisão do CCP (av-hub #284); 🟡 perfil CCP: SQL pronto, falta aplicar no tst e na produção"
 },
 "C6": {
 "l": "compras",
 "t": "Compras confere a parte de compras",
-"s": "fa",
+"s": "pa",
 "r": "Confere a parte de compras que o vendedor preencheu (fornecedor, impostos, frete), puxada para a OC; pode alterar os impostos da OC",
-"tela": "Emitir OC · /compras/ordens",
-"ep": "· 06-Circuito-de-Compra",
-"cod": "🔴"
+"tela": "Nova OC · /compras/nova (HUB)",
+"ep": "GET /compras/pedidos-venda/:numero/compras · API-019",
+"cod": "✅ API (bebca52) e tela \"Cotado na proposta\" na emissão da OC (av-hub #282); 🔴 imposto por item (BL-053)"
 },
 "C7": {
 "l": "compras",
 "t": "Segue o fornecedor do vendedor",
-"s": "fa",
+"s": "ok",
 "r": "Segue o fornecedor do vendedor ou usa o valor correto; a proposta não muda",
-"tela": "Emitir OC · /compras/ordens",
+"tela": "Nova OC · /compras/nova (HUB)",
 "ep": "—",
-"cod": "🔴"
+"cod": "✅ \"Usar o preço da proposta\" e aviso quando a OC passa do cotado (av-hub #282); a proposta não muda"
 },
 "C8": {
 "l": "compras",
 "t": "Acima do custo do vendedor?",
-"s": "fa",
+"s": "pa",
 "r": "Compra acima do custo do vendedor (por produto, sem tolerância): aviso em Meus Pedidos, o vendedor aprova ou reprova; reprovado, Compras leva à Gerência fisicamente, registra a solução e o vendedor é avisado. Vale para os dois tipos de pedido",
-"tela": "Meus Pedidos; Compras · Reprovados",
-"ep": "divergencias_compra",
-"cod": "🔴",
+"tela": "Meus Pedidos (\"Para você responder\"); Compras · Divergências · /compras/divergencias",
+"ep": "divergencias_compra · LOG-57",
+"cod": "✅ API e banco de teste (bebca52) e as duas telas (av-hub #283); 🟡 a margem considerada sai nula até o motor da comissão estar na API (BL-078); a tela Divergências entra no menu depois de cadastrada",
 "d": 1
 },
 "FN1": {
@@ -471,7 +512,7 @@ var N={
 "r": "Divergência (QUANTIDADE, DESCRICAO, PESO, AVARIA)",
 "tela": "Divergências de Recebimento · /decisoes-pcp",
 "ep": "POST /compras/recebimentos/:id/decidir",
-"cod": "✅ reabertura de divergência de produção 🔴"
+"cod": "✅; reabertura do recebimento avisa o Compras pelo LOG-58 (API e tela ✅, envio do MES 🔴)"
 },
 "P6": {
 "l": "pcp",
@@ -509,7 +550,7 @@ var N={
 "r": "RNC; a parte reprovada volta a Compras (devolução e substituição)",
 "tela": "Inspeção de entrada · /qualidade/inspecao-entrada",
 "ep": "RNC; nota_devolucao_pendente",
-"cod": "✅ recompra por RNC sem contrato 🔴"
+"cod": "✅ RNC; recompra: API e tela dos avisos do MES ✅ (LOG-58, av-hub #287), com a Nova OC de recompra; 🔴 o MES ainda não envia o aviso"
 },
 "Q4": {
 "l": "qe",
@@ -700,7 +741,7 @@ function build(){
 world.innerHTML="";pos={};paths=[];
 TW=LW+PAD+(maxc+1)*CW+PAD;TH=LANES.length*LH;
 world.style.width=TW+"px";world.style.height=TH+"px";
-LANES.forEach(function(l,i){var d=document.createElement("div");d.className="lane "+(i%2?"b":"a");d.style.top=i*LH+"px";d.style.height=LH+"px";d.style.width=TW+"px";d.innerHTML='<div class="lname">'+l[1]+'</div>';world.appendChild(d)});
+LANES.forEach(function(l,i){var d=document.createElement("div");d.className="lane "+(i%2?"b":"a");d.style.top=i*LH+"px";d.style.height=LH+"px";d.style.width=TW+"px";d.innerHTML='<div class="lname"><span>'+l[1]+(l[2]?'<small>'+l[2]+' concluído</small>':'')+'</span></div>';world.appendChild(d)});
 var NS="http://www.w3.org/2000/svg",svg=document.createElementNS(NS,"svg");svg.setAttribute("class","edges");svg.setAttribute("width",TW);svg.setAttribute("height",TH);
 svg.innerHTML='<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--edge)"/></marker><marker id="arh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--sel)"/></marker></defs>';
 world.appendChild(svg);
@@ -773,6 +814,20 @@ function pick(i,noFocus){
  try{history.replaceState(null,"","#"+i)}catch(e){}
 }
 var sel=null;
+/* ---------- painel de conclusão por área ---------- */
+var A=document.getElementById("areas"),bA=document.getElementById("abrirAreas");
+function barra(v){return '<span class="bar '+(v<35?'lo':v<60?'mid':'')+'"><i style="--w:'+v+'%"></i>'+v+'%</span>'}
+(function(){var mf=Math.round(AREAS.reduce(function(t,a){return t+a[3]},0)/AREAS.length);
+ A.innerHTML='<button type="button" id="closeA" aria-label="Fechar conclusão por área">×</button><h2 id="areasT">Conclusão por área</h2>'+
+ '<p>Pelos selos do vault em 12/11/2026. Funcionalidades: itens de "O que já existe e o que falta" de cada etapa (✅ vale 1, 🟡 0,5, 🔴 0). Telas: nota Telas-por-Raia.</p>'+
+ '<div class="tot"><span><b>'+mf+'%</b>funcionalidades (média)</span><span><b>80%</b>telas</span></div>'+
+ '<table class="atab"><thead><tr><th>#</th><th>Etapa e onde fica</th><th class="pc">Funções</th><th class="pc">Telas</th></tr></thead><tbody>'+
+ AREAS.map(function(a){return '<tr><td class="n">'+a[0]+'</td><td>'+a[1]+'<small>'+a[2]+'</small></td><td class="pc">'+barra(a[3])+'</td><td class="pc">'+barra(a[4])+'</td></tr>'}).join("")+
+ '</tbody></table><p class="nota">Proposta, Orçamento e comissão dividem uma linha na nota de telas (33%), e o Estoque outra (70%). O despacho (12) funciona e foi validado; a seção do vault só lista o que falta (documento de retirada e baixa na retirada). Dashboards, RH e Cadastros ficam fora do fluxo e o vault não os mede.</p>';
+ A.querySelector("#closeA").addEventListener("click",function(){alternarAreas(false)})})();
+function alternarAreas(on){A.hidden=!on;bA.setAttribute("aria-expanded",on?"true":"false");if(on)A.scrollTop=0}
+bA.addEventListener("click",function(){alternarAreas(A.hidden)});
+document.addEventListener("keydown",function(e){if(e.metaKey||e.ctrlKey||e.altKey)return;if(e.key==="a"||e.key==="A")alternarAreas(A.hidden);else if(e.key==="Escape"&&!A.hidden)alternarAreas(false)});
 fit(false);
 var h=(location.hash||"").slice(1);if(h&&N[h])pick(h);
 </script>
