@@ -23,7 +23,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 
 | Prefixo | O que é | Onde nasce (a linha "dona") | Quantos hoje | Próximo livre |
 |---|---|---|---|---|
-| `N16-nn` | Decisão do Nathan desde 16/10/2026 (proposta, pedido, custo real, comissão e o que veio depois) | [[Registro-de-Decisoes]], nas notas `Registro-N16-...` | 160 (`N16-01` a `N16-160`) | `N16-161` |
+| `N16-nn` | Decisão do Nathan desde 16/10/2026 (proposta, pedido, custo real, comissão e o que veio depois) | [[Registro-de-Decisoes]], nas notas `Registro-N16-...` | 165 (`N16-01` a `N16-165`) | `N16-166` |
 | `N14-nn` | Decisão do Nathan de 14 e 15/10/2026 | [[Registro-N14-01-a-N14-33]] | 33 | série fechada |
 | `DEC-n` | Decisão com prazo de 21 e 22/09/2026 | [[Registro-DEC-EN-EC-e-1-a-38]] | 12 | série fechada |
 | `EN-nn`, `EC-nn` | Encaixe do Estoque e da Revenda no PCP (EN) e do circuito de compra (EC) | [[Registro-DEC-EN-EC-e-1-a-38]] | 7 e 8 | séries fechadas |
