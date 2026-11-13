@@ -4,7 +4,7 @@ criado: 2026-11-05
 estado-em: 2026-11-13
 status: vigente
 dono: Nathan
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07-Desenvolvimento/v3), Registro-de-Decisoes, Backlog-por-Frente, Pontas-Soltas, Perguntas-Proposta-Pedido-Comissao, Riscos, Contradicoes-Resolvidas, Contratos-da-v2, Integracao-AvHub-MES, 00-Fluxo-Mestre-0b, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault) (BL-086 a BL-088, PS-046 a PS-053, RS-023, OQ-49 a OQ-53)]
 ---
 
@@ -29,7 +29,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 | `DEC-n` | Decisão com prazo de 21 e 22/09/2026 | [[Registro-DEC-EN-EC-e-1-a-38]] | 12 | série fechada |
 | `EN-nn`, `EC-nn` | Encaixe do Estoque e da Revenda no PCP (EN) e do circuito de compra (EC) | [[Registro-DEC-EN-EC-e-1-a-38]] | 7 e 8 | séries fechadas |
 | `#n` | Decisão do registro de 07/10/2026 (vault v1) | [[Registro-DEC-EN-EC-e-1-a-38]], [[Registro-39-a-80]], [[Registro-81-a-100-e-Estado-no-Codigo]] | `#1` a `#106` | série fechada |
-| `BL-nnn` | Tarefa do backlog: o que falta desenvolver | [[Backlog-por-Frente]] (uma nota por frente) | 87 (até `BL-088`) | `BL-089` |
+| `BL-nnn` | Tarefa do backlog: o que falta desenvolver | [[Backlog-por-Frente]] (uma nota por frente) | 95 (até `BL-096`) | `BL-097` |
 | `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 59 (até `PS-059`) | `PS-060` |
 | `OQ-nn` | Pergunta em aberto (de negócio ou técnica) | [[Perguntas-Proposta-Pedido-Comissao]] e notas de estudo (por exemplo [[Estudo-Omie-API]]) | 52 (até `OQ-53`) | `OQ-54` |
 | `RS-nn` | Risco | [[Riscos]] | 24 (até `RS-024`) | `RS-025` |
