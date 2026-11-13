@@ -7,7 +7,7 @@ ordem: 8
 nos: [Q1, Q2, Q3, Q4]
 anterior: "[[07-Recebimento]]"
 proxima: "[[09-Estoque-Entrada-do-Lote]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
 dono: Robert (MES) · Qualidade (regra de negócio) · Nathan (decisões)
 fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Encaixe-Estoque-Revenda-no-PCP (EC-01, EC-07), api-pcp 579a625 (qualidade.service.ts, circuito-compra.ts, estoque.prisma), app-pcp 1fca8d3 (qualidade/inspecao-entrada), Registro-de-Decisoes #25 #26, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -59,7 +59,7 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 - Só o setor da Qualidade decide o lote (N16-124). Hoje qualquer usuário com permissão de editar a inspeção decide.
 - Não existe concessão: o lote é liberado ou reprovado (N16-125).
 - Lote 100% reprovado volta ao fornecedor e abre a recompra (RNC, N16-126).
-- O Compras será avisado no av-hub da recompra (N16-127). Exige contrato novo entre MES e hub.
+- O Compras é avisado no av-hub da recompra (N16-127), pelo contrato LOG-58.
 
 As quatro decisões acima são de 29/10/2026 (bloco N16-120 a N16-143).
 
@@ -71,6 +71,7 @@ As quatro decisões acima são de 29/10/2026 (bloco N16-120 a N16-143).
 - 🟡 Travar a decisão ao setor da Qualidade (decidido em N16-124, falta código).
 - 🔴 Fechar a RNC: registrar a nota de devolução e dar baixa do lote reprovado. Hoje é manual, fora do MES.
 - ✅ (`api-pcp`) Avisar o Compras no av-hub da recompra por RNC (N16-127, LOG-58, 12/11): `api-pcp` `src/qualidade/qualidade.service.ts:226` (`await enfileirarAvisoRecompraRnc(tx, {`). Testado no Docker: 2 PÇ reprovadas na OC-000013 viraram aviso no Hub, resolvido pela recompra OC-000014.
+- ✅ Teste ponta a ponta no Docker em 13/11 (reteste R2): a reprovação de 2 de 5 PÇ criou, na mesma transação, o lote filho, a RNC e o `AVISO_COMPRA` na fila; o envio saiu em 49 s (201); o Hub gravou em `avisos_mes_compra`; a OC de recompra emitida com `id_aviso_mes` resolveu o aviso (`RESOLVIDO`, `RECOMPRA`) e voltou ao MES com `oc_referencia.id_aviso_mes_origem` igual ao id do aviso. 🟡 O aviso espera o ciclo da fila (60 s): a reprovação não chama `disparar()`, e a requisição de compra chama ✅ `api-pcp` `src/compras/compras.service.ts:591` (`this.envioAvhub.disparar();`).
 - 🔴 Inspeção de processo (Ciclo 2).
 - ❓ Nome do perfil da Qualidade no ambiente real.
 
@@ -93,11 +94,11 @@ CCP = acompanhamento de compras. Os perfis são dados do banco (`perfis`, `permi
 |---|---|---|
 | Inspeção de entrada é por **lote**; a de saída é um setor tipo `QUALIDADE` no roteiro | EC-01 (Nathan, 29/09) | 📝 ✅ (`api-pcp`) |
 | Aprovar exige laudo; reprovar exige laudo, motivo e evidência | Regra de Q4 do v1, trava dura no DTO | 📝 ✅ `api-pcp/src/qualidade/dto/aprovar-lote.dto.ts:4-9`, `reprovar-lote.dto.ts:5-26` |
-| Reprovação total ou parcial: a parte aprovada fica em **QUARENTENA** até a substituição; a parte reprovada volta a Compras, que alinha devolução e substituição com o fornecedor; a substituição passa de novo pela inspeção e, aprovada, **une-se** à parte em quarentena | EC-07 (Nathan, 29/09) | 📝 ✅ `circuito-compra.ts:166-250`, `qualidade.service.ts:222-246` |
+| Reprovação total ou parcial: a parte aprovada fica em **QUARENTENA** até a substituição; a parte reprovada volta a Compras, que alinha devolução e substituição com o fornecedor; a substituição passa de novo pela inspeção e, aprovada, **une-se** à parte em quarentena | EC-07 (Nathan, 29/09) | 📝 ✅ `api-pcp` `src/compras/circuito-compra.ts:163` (`export async function devolverAoEstoqueParciaisProntas(`), `src/qualidade/qualidade.service.ts:234-245` (`aindaEsperando`) |
 | Aprovado volta ao Estoque (entrada no saldo); nunca vai direto à Expedição | Decisão do Nathan de 24/09, reafirmada em 14/10 (tudo que é comprado vai ao Estoque) | 📝 ✅ `circuito-compra.ts:239-249` |
 | O sistema nunca emite a nota de devolução: só sinaliza (`nota_devolucao_pendente`); o Omie emite | Regra de Q10/Q11 do v1; Registro #30 (Omie é o fiscal) | 📝 ✅ sinalização, 🔴 fechamento |
-| Lote da carga inicial nasce `LIBERADO`, sem inspeção (dupla conferência faz o papel do laudo) | DEC-4, Registro #25 | 📝 ✅ `estoque-operacao.service.ts:429` |
-| Reprovação **total** do lote não fica sem saída: a parcial volta a Compras (nunca estado final sem dono) | Princípio "nenhum estado é beco sem saída" | 📝 ✅ `qualidade.service.ts:226-234` (ver "Como está no código") |
+| Lote da carga inicial nasce `LIBERADO`, sem inspeção (dupla conferência faz o papel do laudo) | DEC-4, Registro #25 | 📝 ✅ `api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:658-659` (`origem: 'CARGA_INICIAL'`, `statusQualidade: 'LIBERADO'`) |
+| Reprovação **total** do lote não fica sem saída: a parcial volta a Compras (nunca estado final sem dono) | Princípio "nenhum estado é beco sem saída" | 📝 ✅ `api-pcp` `src/qualidade/qualidade.service.ts:217-224` (`devolverAComprasParteReprovada`) (ver "Como está no código") |
 | Devolução a fornecedor (RNC) e devolução de cliente são conceitos distintos; só o primeiro existe aqui | Nota de Q10/Q11 do v1 | 📝 |
 
 ### Estados
@@ -106,7 +107,7 @@ CCP = acompanhamento de compras. Os perfis são dados do banco (`perfis`, `permi
 
 | Valor | Significado | Entra no saldo disponível? |
 |---|---|---|
-| `PENDENTE` | Recém-recebido, aguardando inspeção. Quarentena de recebimento. Já tem linha de saldo desde o recebimento (`api-pcp` `src/compras/recebimento.service.ts:1139` e `src/compras/compras.service.ts:1047`, `aplicarDeltaSaldo(tx`), com disponível 0 | Não (`api-pcp` `src/estoque/operacao/estoque-operacao.helpers.ts:10`, `Disponível do lote = saldo total (só se LIBERADO)`) |
+| `PENDENTE` | Recém-recebido, aguardando inspeção. Quarentena de recebimento. Já tem linha de saldo desde o recebimento (`api-pcp` `src/compras/recebimento.service.ts:1152` e `src/compras/compras.service.ts:1047`, `aplicarDeltaSaldo(tx`), com disponível 0 | Não (`api-pcp` `src/estoque/operacao/estoque-operacao.helpers.ts:10`, `Disponível do lote = saldo total (só se LIBERADO)`) |
 | `LIBERADO` | Aprovado (ou carga inicial). Só lote `LIBERADO` conta no disponível e pode ser reservado | Sim (`estoque-operacao.helpers.ts:165`) |
 | `REPROVADO` | Lote inteiro reprovado, ou o **lote filho** da cisão com a quantidade reprovada | Não |
 | `QUARENTENA` | Parte aprovada de uma reprovação parcial, bloqueada até a substituição ser aprovada | Não |
@@ -128,7 +129,7 @@ stateDiagram-v2
     REPROVADO --> [*] : RNC aberta, devolucao ao fornecedor
 ```
 
-Em toda reprovação parcial nasce um **lote filho** `REPROVADO` (`idLotePai` apontando o pai) com a quantidade reprovada. O pai fica `LIBERADO` na mesma ação quando nenhuma parcial espera por ele, ou `QUARENTENA` quando ainda há parcial aguardando ✅ (`api-pcp` `src/qualidade/qualidade.service.ts:194`, `statusQualidade: 'LIBERADO'`, e `:229`, `aindaEsperando > 0`). A validação local em Docker de 10/11/2026 viu o primeiro caso: reprovado 1 de 2 peças, o filho nasceu `REPROVADO` com RNC e o pai ficou `LIBERADO` com disponível 1, o que diverge da EC-07 (PS-053).
+Em toda reprovação parcial nasce um **lote filho** `REPROVADO` (`idLotePai` apontando o pai) com a quantidade reprovada. O pai fica `LIBERADO` na mesma ação quando nenhuma parcial espera por ele, ou `QUARENTENA` quando ainda há parcial aguardando ✅ (`api-pcp` `src/qualidade/qualidade.service.ts:195` (`statusQualidade: 'LIBERADO'`) e `:239` (`aindaEsperando > 0`)). A validação local em Docker de 10/11/2026 viu o primeiro caso: reprovado 1 de 2 peças, o filho nasceu `REPROVADO` com RNC e o pai ficou `LIBERADO` com disponível 1, o que diverge da EC-07 (PS-053).
 
 #### Estado da parcial na raia
 
@@ -148,9 +149,9 @@ A tela de inspeção lista os lotes `PENDENTE` com material, quantidade, fornece
 
 | Método e rota | Direção | Permissão | Efeito | Código |
 |---|---|---|---|---|
-| `GET /qualidade/lotes` | app-pcp → api-pcp | `inspecao-entrada:visualizar` | Fila: lotes com `statusQualidade = PENDENTE`, mais antigo primeiro | `qualidade.controller.ts:19-23`, `qualidade.service.ts:39-81` ✅ |
-| `POST /qualidade/lotes/:id/aprovar` | idem | `inspecao-entrada:editar` | Lote `LIBERADO`, devolve parciais ao Estoque | `qualidade.controller.ts:25-29`, `qualidade.service.ts:83-100` ✅ |
-| `POST /qualidade/lotes/:id/reprovar` | idem | `inspecao-entrada:editar` | RNC, cisão, devolução a Compras | `qualidade.controller.ts:31-34`, `qualidade.service.ts:102-265` ✅ |
+| `GET /qualidade/lotes` | app-pcp → api-pcp | `inspecao-entrada:visualizar` | Fila: lotes com `statusQualidade = PENDENTE`, mais antigo primeiro | `api-pcp` `src/qualidade/qualidade.controller.ts:16-20` (`fila()`), `src/qualidade/qualidade.service.ts:31-73` (`async fila()`) ✅ |
+| `POST /qualidade/lotes/:id/aprovar` | idem | `inspecao-entrada:editar` | Lote `LIBERADO`, devolve parciais ao Estoque | `api-pcp` `src/qualidade/qualidade.controller.ts:22-26` (`@Post(':id/aprovar')`), `src/qualidade/qualidade.service.ts:75-92` (`async aprovar(`) ✅ |
+| `POST /qualidade/lotes/:id/reprovar` | idem | `inspecao-entrada:editar` | RNC, cisão, devolução a Compras | `api-pcp` `src/qualidade/qualidade.controller.ts:28-32` (`@Post(':id/reprovar')`), `src/qualidade/qualidade.service.ts:94-265` (`async reprovar(`) ✅ |
 | `GET /estoque/alertas/rnc-pendentes` | app-pcp → api-pcp | permissão do Estoque | Lista RNC com `notaDevolucaoPendente = true` | `estoque/alertas/alertas.service.ts:63-64` ✅ |
 
 Não há contrato com o av-hub para a RNC. O Compras só vê o efeito indireto (ver "O que falta desenvolver"). Contratos relacionados: [[Contratos-da-v2|LOG-35]] (marcos), [[Contratos-da-v2|LOG-34]] (ida da requisição), [[Contratos-da-v2|API-008]] (a cisão herda o custo do pai).
@@ -159,7 +160,7 @@ Não há contrato com o av-hub para a RNC. O Compras só vê o efeito indireto (
 
 #### Aprovar (nó `Q2` sim, depois `E5`)
 
-`QualidadeService.aprovar` (`qualidade.service.ts:83-100`), numa transação:
+`QualidadeService.aprovar` (`api-pcp` `src/qualidade/qualidade.service.ts:75-92` (`async aprovar(`)), numa transação:
 
 1. Trava o lote (`travarLotes`) e exige `PENDENTE` (`loteParaDecidir`, `:276-283`; outro status dá 409 "já foi decidido").
 2. Grava `statusQualidade = LIBERADO`, `laudoUrl`, `liberadoById`, `liberadoEm`.
@@ -168,13 +169,13 @@ Não há contrato com o av-hub para a RNC. O Compras só vê o efeito indireto (
 
 #### Reprovar (nós `Q2` não, `Q3`, `Q4`)
 
-`QualidadeService.reprovar` (`qualidade.service.ts:102-265`):
+`QualidadeService.reprovar` (`api-pcp` `src/qualidade/qualidade.service.ts:94-265` (`async reprovar(`)):
 
 1. Exige `PENDENTE`. `quantidadeReprovada` é opcional; ausente = saldo total do lote. Tem de estar entre 0,0001 e o saldo (`:107-112`).
 2. **Total** (`reprovada >= saldo`): o próprio lote vira `REPROVADO` com `motivoReprovacao`, `evidenciaUrl`, `reprovadoPor`, `reprovadoEm` (`:124-128`).
 3. **Parcial** (cisão, `:129-208`): nasce o lote filho `LT-AAAAMMDD-NNNN`, `REPROVADO`, com `idLotePai`; o saldo é tirado das localizações do pai (maior saldo primeiro) com um `MovimentoEstoque` `SAIDA` no pai e um `ENTRADA` no filho, motivo "Cisão por reprovação (RNC)". O filho herda o custo do pai (`copiarCustoParaFilho`, `:153`). O pai fica `LIBERADO`.
-4. Abre a `Rnc` (`rncs`) do lote reprovado: motivo (300), evidência, quantidade reprovada, `notaDevolucaoPendente = true` por padrão (`:212-220`; modelo em `estoque.prisma:263-276`).
-5. EC-07: `devolverAComprasParteReprovada` (`circuito-compra.ts:256-298`) move a parte reprovada das parciais que esperavam o lote para o setor Compras (parcial inteira se a quantidade cobre, senão `splitParaDestino`); o restante continua no setor Qualidade · Entrada. Se ainda há parcial esperando (`STATUS_AGUARDANDO`), o **pai passa a `QUARENTENA`** (`:235-246`).
+4. Abre a `Rnc` (`rncs`) do lote reprovado: motivo (300), evidência, quantidade reprovada, `notaDevolucaoPendente = true` por padrão (`:205-213`; modelo em `estoque.prisma:263-276`).
+5. EC-07: `devolverAComprasParteReprovada` (`circuito-compra.ts:253`) move a parte reprovada das parciais que esperavam o lote para o setor Compras (parcial inteira se a quantidade cobre, senão `splitParaDestino`); o restante continua no setor Qualidade · Entrada. Se ainda há parcial esperando (`STATUS_AGUARDANDO`), o **pai passa a `QUARENTENA`** (`:234-245`). Na mesma transação, avisa o Compras no Hub (LOG-58, `:226`, `enfileirarAvisoRecompraRnc`).
 6. Compras precisa recomprar: `RequisicaoCompraItem.quantidadeRecebida` decrementa a quantidade reprovada e a requisição `RECEBIDA` volta a `RECEBIDA_PARCIAL` (`:248-259`).
 7. Fecha chamando `devolverAoEstoqueParciaisProntas` de novo, para o caso da matéria-prima (`:261-262`).
 
@@ -217,7 +218,7 @@ Consequência de projeto: qualquer usuário com `inspecao-entrada:editar` decide
 | # | Item | Dono | Nó | Selo |
 |---|---|---|---|---|
 | 1 | Fechar a RNC: endpoint e tela para registrar a nota de devolução, dar baixa do lote reprovado e zerar `nota_devolucao_pendente` | Robert (MES) | Q3 | 🔴 |
-| 2 | Contrato para a **recompra por RNC**: avisar o Compras no av-hub que a parte reprovada exige devolução e substituição (hoje só o MES sabe; a OC no av-hub segue "atendida") | Nathan decide, Gustavo e Robert implementam | Q3 → `C1` | 🔴 sem contrato |
+| 2 | Contrato para a **recompra por RNC**: avisar o Compras no av-hub que a parte reprovada exige devolução e substituição (hoje só o MES sabe; a OC no av-hub segue "atendida") | Nathan decide, Gustavo e Robert implementam | Q3 → `C1` | ✅ LOG-58 (12/11; testado no Docker em 13/11) |
 | 3 | Vincular a inspeção ao setor: checar `PerfilSetor` em `aprovar` e `reprovar` (decidido em N16-124; conferido em 29/10 na `develop` do MES: `qualidade.service.ts` ainda não checa o setor) | Robert | Q2 | 📝 🔴 |
 | 4 | Concessão de lote fora de especificação: não existe (N16-125). Lote 100% reprovado: volta ao fornecedor e abre a recompra (N16-126), o que depende do item 1 e do contrato do item 2 | Nathan | Q2 | 📝 decidido; 🔴 sem código |
 | 5 | Inspeção de processo (vendedor marca "Qualidade acompanha desde o início"; inspeção documental). O flag existe em `Pedidos.acompanhamentoQualidade` mas nada o consome | Robert, Ciclo 2 | — | 🔴 |
