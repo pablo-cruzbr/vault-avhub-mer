@@ -1,10 +1,11 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [N16-02, N16-03, N16-09, N16-10, N16-11, N16-17, N16-18, N16-19, N16-20, OQ-06, OQ-11, OQ-12, OQ-28, dump core_comissionamento convertido, av-hub lib/simulador/motor.ts, tela-simulador-comissao.png]
 ---
 
@@ -135,8 +136,8 @@ A tela da proposta e a tela da Controladoria usam o **mesmo motor e as mesmas re
 | Rodapé: VENDA | total | `valor_liquido` | `valor_liquido` |
 | Rodapé: TOTAL DA NF | total | `total_nf` | `total_nf` |
 | Rodapé: SUGERIDO | total | `venda_sugerida` | `venda_sugerida` |
-| Rodapé: MARK-UP REAL | total | `markup_real` (revenda sobre custo, `av-hub` `lib/simulador/motor.ts:499` (`markup_real`)) | `markup_real` |
-| Rodapé: MARK-UP S/ COMPRA | total | `markup_bruto_pct` (o "AC8", `motor.ts:464-465`) | `markup_bruto` |
+| Rodapé: MARK-UP REAL | total | `markup_real` (revenda sobre custo, `av-hub` `lib/simulador/motor.ts:505` (`markup_real`)) | `markup_real` |
+| Rodapé: MARK-UP S/ COMPRA | total | `markup_bruto_pct` (o "AC8", `motor.ts:470-471`) | `markup_bruto` |
 | Rodapé: MARGEM e letra do pedido | total | `margem_liquida_pct`, `letra_equivalente` | `margem_liquida`, `letra_equivalente` |
 
 Colunas que o modelo da rodada anterior **não tinha** e que foram acrescentadas: `comissao_calculos.icms_destino_pct`, `encargo_pagamento_pct`, `frete_compra_total`, `markup_projetado`, `markup_real`; `comissao_calculo_itens.codigo_produto`, `preco_total_sugerido`. A origem dessas entradas no lado da proposta (`core_comercial`) é o anexo `0003-entradas-do-motor-em-core_vendas_faturamento.sql`; o modelo de 16/10 ainda não tinha a origem da compra, a quantidade e a unidade de compra, o IPI, a ST e o frete da compra por item, o destino do ICMS, a condição com encargo e o DIFAL.
