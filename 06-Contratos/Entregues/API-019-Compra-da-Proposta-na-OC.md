@@ -10,10 +10,10 @@ nos_0b: [C6, C7]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, 01-Proposta-de-Venda, Backlog-por-Frente]
 depende_de: [LOG-56]
 decisoes: [N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, N16-157]
-develop-conferida: [api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #282)]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #282)]
 tags: [contrato, compras, proposta, oc, c6, c7]
 criado: 2026-11-11
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 dono: Nathan
 fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 14, 15 e 30; item 7 de "O que falta"), Registro-de-Decisoes N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, api-acos-vital develop 637f183, av-hub develop d0e8f8f, banco do ambiente Docker local (dados do tst) em 11/11/2026, "Relatório de entrega de Gustavo de 12/11/2026 (API-019), conferido na develop bebca52 e no dump de teste de 12/11"]
 ---
@@ -39,7 +39,7 @@ Nós `C6` e `C7` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]] (dona
 
 - **Banco.** 🟡 A proposta já guarda a cotação de compra por item: `core_comercial.propostas_itens` tem `fornecedor` (texto livre), `origem_compra`, `qtd_compra`, `unidade_compra`, `preco_unit_compra`, `ipi_compra_pct`, `st_compra_valor`, `frete_compra_valor`, `custo_liquido_unit` e `custo_liquido_total`; o cabeçalho `core_comercial.propostas` tem `frete_compra_tipo` e `frete_compra_valor` (banco do Docker local, dados do tst, 11/11). O pedido do Hub liga as duas pontas: `core_comercial.pedidos_venda` (`id_proposta`, `numero_proposta`, `numero_pedido_omie`, `codigo_empresa`) e `core_comercial.pedidos_venda_itens` (`id_proposta_item`, `codigo_produto_omie`).
 - **API.** ✅ Entregue pelo Gustavo em 12/11. `GET /compras/pedidos-venda/{numero}` (`api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:175`, `router.get("/:numero"`) devolve, além do cabeçalho do Omie e dos itens de `vw_pedido_venda_itens_compra`, a `proposta` no cabeçalho (`:241`, `proposta: compra.proposta,`) e a `compra_proposta` em cada item (`:244`, `compra_proposta: compra.compraPorProduto.get(`), lidas da view da seção 9. Até 11/11 nenhuma rota de Compras lia esses campos.
-- **Front.** ✅ Entregue pelo Nathan em 12/11 (`av-hub` PR #282). Na `/compras/nova`, o item ligado a PV de proposta mostra o bloco "Cotado na proposta" (`av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:248`, `<CotacaoDaProposta`; `components/Compras/FecharCompra/CotacaoDaProposta.tsx:45`, `Cotado na proposta {proposta.numero_proposta}`), a comparação (`lib/domain/compras-fechamento-tela.ts:140`, `export function compararComProposta(`) e o botão "Usar o preço da proposta" (`CotacaoDaProposta.tsx:56`, `Usar o preço da proposta`). Até 11/11 a tela mostrava só o destino no PV. O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
+- **Front.** ✅ Entregue pelo Nathan em 12/11 (`av-hub` PR #282). Na `/compras/nova`, o item ligado a PV de proposta mostra o bloco "Cotado na proposta" (`av-hub` `components/Compras/FecharCompra/ItemOrdem.tsx:255`, `<CotacaoDaProposta`; `components/Compras/FecharCompra/CotacaoDaProposta.tsx:45`, `Cotado na proposta {proposta.numero_proposta}`), a comparação (`lib/domain/compras-fechamento-tela.ts:140`, `export function compararComProposta(`) e o botão "Usar o preço da proposta" (`CotacaoDaProposta.tsx:56`, `Usar o preço da proposta`). Até 11/11 a tela mostrava só o destino no PV. O BFF é `app/api/compras/pedidos-venda/[numero]/route.ts:20` (`${process.env.API_URL}/compras/pedidos-venda/`).
 
 ## 5. Regras de negócio
 
