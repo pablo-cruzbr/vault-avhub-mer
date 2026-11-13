@@ -135,7 +135,7 @@ Em Uberaba todo pedido com `1.01.99` é refaturamento por definição; `sem_refa
 
 **Não usamos** (decisão do Nathan, 23/10): os dados que o Hub tem e o Omie não (Qualidade, faturamento em partes, previsões, requisitos, moeda de origem) **ficam só no Hub**. O Omie recebe o que ele precisa para faturar e nada mais.
 
-❓ **Pergunta aberta ao Gustavo (09/11/2026):** o envio ao Omie manda `observacoes.obs_venda` (`api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.swagger.json:2651` (`observacoes.obs_venda`), `develop` `655896a`), e o payload sai de `fn_pedido_venda_payload_omie` (`src/schemas/core_comercial/pedidoOmie.js:37` (`fn_pedido_venda_payload_omie`)). Essa função não está no repositório nem no dump de 04/11: vem da migration `2026-11-05_comercial_pedido_venda_omie.sql`, que falta. Se o `obs_venda` vier das observações da proposta, escrever "refat" na proposta derruba o pedido da Liberar Pedidos (G6 pela observação, seção 5.3.1).
+❓ **Pergunta aberta ao Gustavo (09/11/2026):** o envio ao Omie manda `observacoes.obs_venda` (`api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.swagger.json:2819` (`observacoes.obs_venda`), `develop` `655896a`), e o payload sai de `fn_pedido_venda_payload_omie` (`src/schemas/core_comercial/pedidoOmie.js:38` (`fn_pedido_venda_payload_omie`)). Essa função não está no repositório nem no dump de 04/11: vem da migration `2026-11-05_comercial_pedido_venda_omie.sql`, que falta. Se o `obs_venda` vier das observações da proposta, escrever "refat" na proposta derruba o pedido da Liberar Pedidos (G6 pela observação, seção 5.3.1).
 
 ## 6. O que a documentação **não** responde (testes no Omie, OQ-16)
 
