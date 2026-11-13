@@ -1,9 +1,10 @@
 ---
 tags: [integracao, av-hub, mes, contratos, sequencia]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-pcp develop befd973 e api-acos-vital develop 0384e89 (conferência de 29/10; antes 579a625 e f322dcd), app-pcp 1fca8d3, HUB b55ac55, Dump Avhub e Dump MES de 14/10, v1 Chaves-de-Integracao-AvHub-MES-Pipeline, Integracao-AvHub-MES-Especificacao-F1, Integracao-AvHub-MES-Volta-Plano, MES-Arquitetura-Decisoes]
 ---
 
@@ -38,7 +39,7 @@ O MES nunca fala com o Omie (o ERP, sistema fiscal e financeiro). O que ele prec
 
 ## O que falta
 
-- **Robert (MES):** o módulo da Torre (BL-003); usar a leitura da OC no PCP e no Estoque (BL-049, BL-050, BL-051); subir a `develop` para a `main` (BL-035); mensagens novas MES para hub dos avisos de recompra por RNC e de reabertura do recebimento (N16-127, N16-137, ainda sem contrato).
+- **Robert (MES):** o módulo da Torre (BL-003); usar a leitura da OC no PCP (BL-049, BL-051; o saldo futuro do Estoque, BL-050, está na `develop` desde 13/11); subir a `develop` para a `main` (BL-035); mandar o motivo no cancelamento da requisição. Os avisos de recompra por RNC e de reabertura do recebimento (N16-127, N16-137) estão na `develop` pelo LOG-58; a recompra foi testada no Docker em 13/11.
 - **Gustavo (banco e API):** cadastrar as listas de rotas das chaves de serviço do MES e do pipeline (BL-018, BL-057) e permissões das telas de custo e Torre (BL-020, BL-021).
 - **Nathan (HUB):** telas da Torre (BL-022, consideradas ok em 29/10 sobre dados de teste) e de custo (BL-023, restam o simulador, Compras e Orçamento).
 
