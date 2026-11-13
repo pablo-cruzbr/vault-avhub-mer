@@ -1,9 +1,10 @@
 ---
 tags: [diagramas, sequencia, uml, mes, av-hub]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML (0a, 12, 15), v1 02-PRD-Estoque/Fluxo-*-Completo, 00-Fluxo-Mestre-0b, api-pcp 579a625, api-acos-vital f322dcd, app-pcp 1fca8d3]
 ---
 
@@ -255,7 +256,7 @@ sequenceDiagram
 
 ### 1. Do pedido liberado à Destinação
 
-Fluxo 4 da integração ([[Integracao-AvHub-MES]], INT-01). Selo ✅: rotas em `api-pcp/src/pedidos/pedidos.controller.ts:58,102` e `omie-integracao.ts:331-425` (conferidas na nota de integração).
+Fluxo 4 da integração ([[Integracao-AvHub-MES]], INT-01). Selo ✅: rotas em `api-pcp/src/pedidos/pedidos.controller.ts:91` (`@Get('carteira')`) e `:55` (`@Post()`, que marca o pedido importado no Hub, `pedidos.service.ts:175`), e `api-pcp` `src/pedidos/omie-integracao.ts:277-369` (`listarCarteiraIntegracao`, `marcarPedidoImportadoIntegracao`) (conferidas na nota de integração).
 
 ### 2. Atendimento do Estoque
 
@@ -263,7 +264,7 @@ Selo ✅: `itens-parciais.service.ts` (`atenderEstoque`, `destinoRestante` `'ROT
 
 ### 3.1 Ida (LOG-34)
 
-Selo ✅: `envio-avhub.service.ts:21,98-102,129-175`; resposta do hub `requisicoes_compra.route.js:221-265`.
+Selo ✅: `api-pcp` `src/integracao-avhub/envio-avhub.service.ts:93` (`process.env.AVHUB_MES_INTEGRACAO_KEY`), `:124-126` (`private async enviar(`); resposta do hub `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/requisicoes_compra/requisicoes_compra.route.js:271` (`const MOTIVO = {`) e `:380` (`router.put("/origem/:id_origem"`).
 
 ### 3.2 Volta (LOG-35)
 
@@ -275,7 +276,7 @@ Selo ✅: `compras.service.ts` (chegada exige NF, parcial em `COMPRAS`; liberar)
 
 ### 5. Inspeção de entrada e volta ao Estoque
 
-Selo ✅: `qualidade.service.ts:83-100` (aprovar), `:102-262` (reprovar, quarentena em `:243`), `circuito-compra.ts:166-` (união e volta ao Estoque). 🟡 A recompra por RNC não tem contrato com o av-hub.
+Selo ✅: `api-pcp` `src/qualidade/qualidade.service.ts:75-92` (`async aprovar(`), `:94-265` (reprovar, quarentena em `:242`, `statusQualidade: 'QUARENTENA'`), `src/compras/circuito-compra.ts:163` (`devolverAoEstoqueParciaisProntas`, união e volta ao Estoque). ✅ A recompra por RNC tem contrato com o av-hub desde 12/11 (LOG-58): a reprovação enfileira o aviso `AVISO_COMPRA` em `:226` (`enfileirarAvisoRecompraRnc`); testado ponta a ponta no Docker em 13/11.
 
 ### 6. Produção, inspeção de saída e Expedição
 
