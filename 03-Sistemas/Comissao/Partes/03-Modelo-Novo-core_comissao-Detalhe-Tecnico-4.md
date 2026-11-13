@@ -1,10 +1,11 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [N16-02, N16-03, N16-09, N16-10, N16-11, N16-17, N16-18, N16-19, N16-20, OQ-06, OQ-11, OQ-12, OQ-28, dump core_comissionamento convertido, av-hub lib/simulador/motor.ts, tela-simulador-comissao.png]
 ---
 
@@ -20,10 +21,10 @@ O cálculo de **margem, letra, prejuízo, fabricação interna, teto da regra fi
 
 | Regra (nota 01) | Módulo atual | Módulo novo |
 |---|---|---|
-| R1 Custo líquido | `motor.ts:277-312` | Mesma função no motor da API; contas intermediárias gravadas em `comissao_calculo_itens` (`compra_bruta`, `icms_recuperar`, `valor_ipi`, `frete_item`, `custo_liquido`) |
-| R2 Margem líquida do item | `motor.ts:336-348` | Idêntica; `margem_item_pct` |
+| R1 Custo líquido | `motor.ts:283-318` | Mesma função no motor da API; contas intermediárias gravadas em `comissao_calculo_itens` (`compra_bruta`, `icms_recuperar`, `valor_ipi`, `frete_item`, `custo_liquido`) |
+| R2 Margem líquida do item | `motor.ts:342-354` | Idêntica; `margem_item_pct` |
 | R3 Letra e % | `motor.ts:176-179, 389-401` | Idêntica; faixas em `parametros_faixas` |
-| R4 Prejuízo e fabricação | `motor.ts:363-388` | Idêntica; `parametros.fabricacao_interna_pct` |
+| R4 Prejuízo e fabricação | `motor.ts:369-394` | Idêntica; `parametros.fabricacao_interna_pct` |
 | R5 Percentual de Compras | Segunda simulação digitada por Compras | **Cálculo `REAL`**, automático, por evento de custo (N16-20); a conferência de Compras (🟡 OQ-28) vira `compras_estado` |
 | R6 `pct_final` = menor | `dump:1186-1190` | `comissoes_nf_itens.comissao_final_pct = LEAST(cotada, real)` (CHECK `final <= cotada`) |
 | R7 Teto da regra fixa | View (`dump:1151-1198`) | Aplicado **no motor, por cálculo** (cada versão com o markup bruto dela) e gravado (`teto_regra_pct`, `regra_aplicada`). O resultado é o mesmo da view |
@@ -34,9 +35,9 @@ O cálculo de **margem, letra, prejuízo, fabricação interna, teto da regra fi
 
 **O que muda (e só isso)**
 
-1. **A entrada de custo, por evento (N16-20).** No cálculo `REAL`, o custo de compra do item vem de `core_comercial.custos_eventos` (as linhas de OC, lote, matéria-prima e mão de obra), **não de digitação**. Cada evento é calculado **com as condições dele** pela fórmula de `motor.ts:277-312` (nota 01, seção 3) e o item soma os eventos. A parte do item ainda sem evento usa o preço e as condições cotados. IPI, ST, DIFAL e origem do ICMS **reais** não existem na OC do hub (N14-23): enquanto não vierem (OQ-11), o evento herda os da proposta e o cálculo fica marcado `imposto_completo = false` (🟡, "custo parcial por imposto"). O encargo da condição de pagamento do evento (OQ-12) fica guardado, mas a fórmula atual do custo líquido não o usa: no motor atual o encargo só entra no preço sugerido (`motor.ts:324`).
+1. **A entrada de custo, por evento (N16-20).** No cálculo `REAL`, o custo de compra do item vem de `core_comercial.custos_eventos` (as linhas de OC, lote, matéria-prima e mão de obra), **não de digitação**. Cada evento é calculado **com as condições dele** pela fórmula de `motor.ts:283-318` (nota 01, seção 3) e o item soma os eventos. A parte do item ainda sem evento usa o preço e as condições cotados. IPI, ST, DIFAL e origem do ICMS **reais** não existem na OC do hub (N14-23): enquanto não vierem (OQ-11), o evento herda os da proposta e o cálculo fica marcado `imposto_completo = false` (🟡, "custo parcial por imposto"). O encargo da condição de pagamento do evento (OQ-12) fica guardado, mas a fórmula atual do custo líquido não o usa: no motor atual o encargo só entra no preço sugerido (`motor.ts:330`).
 2. **Chaves por código** em vez de texto (origem da compra, destino da venda).
-3. **O teto da regra fixa** passa a ser aplicado dentro do motor (já existe o trecho, `motor.ts:467-484`, não usado hoje) e não só na view. Equivalência a provar nos testes.
+3. **O teto da regra fixa** passa a ser aplicado dentro do motor (já existe o trecho, `motor.ts:473-490`, não usado hoje) e não só na view. Equivalência a provar nos testes.
 4. **Arredondamento** do valor em reais no banco (`round(numeric, 2)`), como a view atual.
 5. **Onde roda** (abaixo).
 
@@ -139,7 +140,7 @@ Perguntas para a Michele estão em M01 a M16 na nota [[01-Motor-Atual-Como-Calcu
 | C06 | ✅ **Respondida (N16-68 a N16-71):** pedido cancelado antes da NF: a comissão estimada vira histórico, com motivo; o comprado vai ao Estoque. **Falta no DDL:** campos do cancelamento do pedido e a pendência de devolução parcial (passo seguinte) | Nathan (feito) | Histórico com motivo |
 | C07 | ✅ **Respondida (N16-44, N16-45):** decidem a Controladoria, a Gerência e a Coordenação, com as mesmas permissões e sem teto; ninguém decide sobre a própria comissão (`perfil_decisor` em `comissao_decisoes`) | Nathan (feito) | Três perfis |
 | C09 | ✅ **Respondida (N16-38, OQ-11):** a OC e o item da OC ganham campos de IPI, ICMS, ST e DIFAL, pré-preenchidos com os da proposta e editados por Compras antes de comprar. `imposto_real` = true quando vêm da OC aprovada 🟡 | Nathan (feito) | Campos da OC |
-| C10 | ✅ **Respondida (N16-22):** o encargo da condição de pagamento **não entra no custo do evento**; entra só no preço sugerido, como no motor atual (`motor.ts:324`). O percentual do evento fica guardado para auditoria | Nathan (feito) | Não entra no custo |
+| C10 | ✅ **Respondida (N16-22):** o encargo da condição de pagamento **não entra no custo do evento**; entra só no preço sugerido, como no motor atual (`motor.ts:330`). O percentual do evento fica guardado para auditoria | Nathan (feito) | Não entra no custo |
 | C11 | DIFAL da **compra** (uso e consumo) entra no custo líquido? O motor atual só conhece o DIFAL da **venda** (cabeçalho, total da NF) | Michele | Não entra; guardado no evento |
 | C12 | ✅ **Respondida (N16-51, OQ-28):** o passo em que Compras aprova o percentual de compras **sai do fluxo e fica pronto no sistema, desligado** (`exige_conferencia_compras = false`); o cálculo `REAL` o substitui | Nathan (feito) | Desligado |
 | C13 | Onde fica o pedido de aprovação do vendedor (`C8`): em `core_comercial` (`divergencia_compra`), não em `core_comissao`; a comissão só reage ao resultado (aprovada: margem e comissão caem) | Gustavo | `core_comercial` |

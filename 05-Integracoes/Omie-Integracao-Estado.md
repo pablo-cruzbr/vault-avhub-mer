@@ -1,9 +1,10 @@
 ---
 tags: [omie, pipeline, integracao, estado]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [omie-elt-pipeline 0f739f0, v1 08-Integracao-Omie (Indice, Arquitetura-do-Pipeline, Contradicao-CFOP, Colunas-Protegidas), Registro-de-Decisoes #5 #7 #15 #16 #17 #18 #19 #20 #28 #29 #30 #31 #63, api-acos-vital f322dcd]
 ---
 
@@ -108,7 +109,7 @@ Os crons dos jobs mais antigos ainda lêem variável de ambiente com padrão no 
 | `sql/002_staging_tables.sql` **obsoleto** (marcado pelo Nathan em 14/10): auditoria `omie_raw` removida do código no contrato 38. Resta o `DROP` das 5 tabelas e do schema `omie_raw` no banco | Gustavo | BL-054, N14-27, #18 |
 | Cadastros TESTE (fornecedor, cliente, transportadora) entram na pipeline e nos relatórios: filtrar ou ignorar em relatórios e conferências (convenção `- dev` e "IGNORAR ESSE CLIENTE TESTE" definida em 28/10; falta aplicar o filtro) 🟡 | Nathan | BL-055, N14-25 |
 | Manifesto: o login de Mogi traz as duas empresas; confirmar linhas de Uberaba; HRM não coberta | Gustavo | PS-022, #19 |
-| `FAMILIA_PADRAO_POR_FILIAL` hardcoded para mogi e uberaba; corrigir `ARCHITECTURE.md` | Gustavo | PS-016, #20 |
+| `FAMILIA_PADRAO_POR_FILIAL` hardcoded para mogi e uberaba; corrigir `ARCHITECTURE.md`. Família da HRM decidida (P17, 13/11): seed 013 na `develop` do pipeline (`46b53d4`), ⏳ o DBA aplica antes de o código ganhar `hrm` | Nathan (código, P9); Gustavo (aplicar a seed) | PS-016, #20, BL-039 |
 | Locais de estoque (B6) sem recurso | Gustavo | BL-030, #63 |
 | Frete, parcelas e desconto do PV no pipeline | Gustavo | 🔴 sem decisão |
 | BENAFER (pedidos 44333 e 44568, R$ 82,7 mi) e nomes das etapas 10, 15, 20 de `pedidos_compras` | Nathan | #52, adiado |

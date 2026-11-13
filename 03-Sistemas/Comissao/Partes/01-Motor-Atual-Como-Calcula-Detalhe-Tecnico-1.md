@@ -1,10 +1,11 @@
 ---
 tags: [comissao, motor-atual, core_comissionamento, proposta, validacao, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: proposta
 dono: Nathan
 parte-de: "[[01-Motor-Atual-Como-Calcula]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, av-hub lib/simulador/motor.ts, av-hub app/(protected)/comissoes/simulador e analise-simuladores, av-hub app/api/comissoes, tela-simulador-comissao.png, N16-10, N16-11, N16-18, N16-19, N16-20]
 ---
 
@@ -72,7 +73,7 @@ flowchart LR
 | Frete (rateio) | 5.000 × 1,438975% | R$ 71,95 |
 | **Custo líquido** | 5.000 − 600 + 0 + 0 + 71,95 | **R$ 4.471,95** |
 
-**De onde vem.** ✅ `lib/simulador/motor.ts:277-283` (compra, IPI, crédito de ICMS), `:307-312` (frete e custo líquido). Alíquotas: `simulador_parametros.icms_entrada` e `pct_rateio_logistica` (`dump:909-952`). A quantidade da compra é separada da quantidade da venda (`qtd_compra`, `dump:697-699`); o motor não converte unidade, cada lado usa o seu total.
+**De onde vem.** ✅ `lib/simulador/motor.ts:283-289` (compra, IPI, crédito de ICMS), `:307-312` (frete e custo líquido). Alíquotas: `simulador_parametros.icms_entrada` e `pct_rateio_logistica` (`dump:909-952`). A quantidade da compra é separada da quantidade da venda (`qtd_compra`, `dump:697-699`); o motor não converte unidade, cada lado usa o seu total.
 
 ### R2. Margem líquida do item
 
@@ -94,7 +95,7 @@ flowchart LR
 | Lucro do item | 11.500 − 4.471,95 − 1.316,95 − 2.098,98 − 230 | R$ 3.382,12 |
 | **Margem líquida** | 3.382,12 ÷ 11.500 | **29,41%** |
 
-**De onde vem.** ✅ `lib/simulador/motor.ts:336-348` (lucro e margem), `:104-110` (impostos), `:144-167` (ICMS efetivo na venda: importação, base reduzida e ST têm regras próprias). Gravado em `simulacao_itens.margem_item` (`dump:745-747`).
+**De onde vem.** ✅ `lib/simulador/motor.ts:342-354` (lucro e margem), `:104-110` (impostos), `:144-167` (ICMS efetivo na venda: importação, base reduzida e ST têm regras próprias). Gravado em `simulacao_itens.margem_item` (`dump:745-747`).
 
 ### R3. Letra e percentual do vendedor
 
@@ -119,7 +120,7 @@ flowchart LR
 
 **Exemplo.** Flange sobre desenho (fabricação interna) vendida a R$ 1.800: 1.800 × 2% = **R$ 36,00**. Item de revenda com venda de R$ 4.000 e custo líquido de R$ 4.471,95: prejuízo, comissão **R$ 0,00**.
 
-**De onde vem.** ✅ `motor.ts:363-388`. Fabricação vem **antes** do teste de prejuízo de propósito (`:364-371`). Regra gravada em `simulacao_itens.regra_aplicada` (`PREJUIZO`, `FABRICACAO_INTERNA`, `LETRA`, `TETO_PADRAO`, `TETO_CONDICIONAL`; `dump:704, 754-756`).
+**De onde vem.** ✅ `motor.ts:369-394`. Fabricação vem **antes** do teste de prejuízo de propósito (`:364-371`). Regra gravada em `simulacao_itens.regra_aplicada` (`PREJUIZO`, `FABRICACAO_INTERNA`, `LETRA`, `TETO_PADRAO`, `TETO_CONDICIONAL`; `dump:704, 754-756`).
 
 ### R5. Percentual de Compras
 
@@ -150,7 +151,7 @@ Atenção: o gatilho usa o **markup bruto** do pedido, `(total da NF − compra 
 
 **Exemplo.** Cliente com padrão 0,5%, condicional 1,3% e gatilho 100%. Pedido com markup bruto de 127,87%: usa a condicional (1,3%). Item de letra A (2%) fica em **1,3%**. Se Compras refez o custo e o markup do pedido dela caiu para 60,19% (abaixo de 100%), o teto da versão de Compras é 0,5%; o `pct_final` é o menor dos dois tetos, **0,5%**. Esse é o caso do pedido 27917: 5.709,01 × 0,5% + 5.125,68 × 0,5% = **R$ 54,18** (e não os R$ 142,48 de Compras sem o teto). Conta feita sobre o valor do pedido; o real usa o faturado.
 
-**De onde vem.** ✅ A view aplica o teto: `dump:1151-1198` (cada versão usa o markup da própria versão; `regra_fixa_aplicada` em `:1136-1142`). Regra em `regras_comissoes_fixas` (`dump:589-603`). ⚠️ O motor do front **tem** um trecho que aplica o teto (`av-hub` `lib/simulador/motor.ts:436-453` (`regraFixa`)), mas a tela chama `calcularSimulacao(form, parametros)` **sem** a regra fixa (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)): na prática o teto só é aplicado pela view.
+**De onde vem.** ✅ A view aplica o teto: `dump:1151-1198` (cada versão usa o markup da própria versão; `regra_fixa_aplicada` em `:1136-1142`). Regra em `regras_comissoes_fixas` (`dump:589-603`). ⚠️ O motor do front **tem** um trecho que aplica o teto (`av-hub` `lib/simulador/motor.ts:442-459` (`regraFixa`)), mas a tela chama `calcularSimulacao(form, parametros)` **sem** a regra fixa (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)): na prática o teto só é aplicado pela view.
 
 ### R8. Comissão em reais: sobre o faturado, por item
 

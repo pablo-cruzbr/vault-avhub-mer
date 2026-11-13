@@ -1,9 +1,10 @@
 ---
 tags: [sistemas, bugs, pendencias, mes, av-hub, pipeline]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 0384e89 (develop), av-hub 758d5f0 (develop), omie-elt-pipeline 0f739f0, Dump MES de 14/10, Dump do Avhub de 29/10, v1 AV-Hub-Bugs-Catalogo (revisado item a item)]
 ---
 
@@ -65,8 +66,8 @@ Só entra aqui o que foi **conferido no código ou nos dumps**. Cada linha tem s
 | B12 | média | Gustavo | **`pessoa_vendedor` tem model e rota (`/pessoa_vendedor`) e não existe tabela nem view nos dumps de 14/10 e de 29/10** | ✅ `schemas/core_vendas_faturamento/index.js` (import e rota) x dumps sem `pessoa_vendedor` |
 | B13 | baixa | Gustavo | `POST /usuarios/:id/favoritos`: `usuarios_favoritos.model.js` declara `id` como PK sem `defaultValue`/`allowNull` (de propósito: o banco tem `DEFAULT uuidv7()`); em setembro dava `400 "Campo obrigatório não informado: id"`. Não reproduzido em 14/10 e não reconferido em 29/10 | ❓ `auth/tables/usuarios_favoritos/usuarios_favoritos.model.js:10-14` |
 | B14 | baixa | Gustavo | O job do status por item ainda lê regra de ambiente (`MES_STATUS_INTERVALO_SEG`, `MES_STATUS_CORTE_INICIAL_DIAS`), contra a regra do Nathan; Torre e custo já são constantes | ✅ `itens_pedido_status.job.js:30-52` x `item_estado_projetado.job.js:41-46` |
-| B15 | baixa | Robert | Os cinco timers do MES (`AVHUB_ENVIO_INTERVALO_SEG`, `AVHUB_EVENTOS_INTERVALO_MIN`, `AVHUB_REENVIO_IMPORTADO_MIN`, `AVHUB_OC_INTERVALO_MIN`, `AVHUB_REQ_HUB_INTERVALO_MIN`) são regra em ambiente | ✅ `envio-avhub.service.ts:40`, `eventos-avhub.service.ts:56`, `pedidos.service.ts:81`, `oc-referencia-avhub.service.ts:105`, `requisicao-hub-referencia-avhub.service.ts:87` |
-| B16 | baixa | Robert | `GET /requisicoes-compra` (contrato 003) continua exposto e sem consumidor; o comentário "JOB DE POLLING do MES" em `requisicoes_compra.route.js` está velho (o MES empurra por `PUT`) | ✅ `integracao-avhub.controller.ts:18`; `requisicoes_compra.route.js:31-34` |
+| B15 | baixa | Robert | Os cinco timers do MES (`AVHUB_ENVIO_INTERVALO_SEG`, `AVHUB_EVENTOS_INTERVALO_MIN`, `AVHUB_REENVIO_IMPORTADO_MIN`, `AVHUB_OC_INTERVALO_MIN`, `AVHUB_REQ_HUB_INTERVALO_MIN`) são regra em ambiente | ✅ `envio-avhub.service.ts:42`, `eventos-avhub.service.ts:56`, `pedidos.service.ts:81`, `oc-referencia-avhub.service.ts:108`, `requisicao-hub-referencia-avhub.service.ts:87` |
+| B16 | baixa | Robert | `GET /requisicoes-compra` (contrato 003) continua exposto e sem consumidor. O comentário da lista de campos já foi corrigido (BL-033, `:35`, "não há mais polling do MES"), mas a mensagem de duplicidade ainda fala do "job de polling" (o MES empurra por `PUT`) | ✅ `api-pcp` `src/integracao-avhub/integracao-avhub.controller.ts:18` (`@Get('requisicoes-compra')`); `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/requisicoes_compra/requisicoes_compra.route.js:276-280` (`job de polling`) |
 | B17 | baixa | Robert | `StatusPedido.BLOQUEADO` nunca é atribuído (só o dashboard o lê); o `ENTREGUE` sobrescreve qualquer status | ✅ `dashboard.service.ts:86`; `entregas.service.ts:81` |
 | B18 | baixa | Robert | Rota de demonstração `GET /auth/dashboard-check` ainda exposta | ✅ `auth.controller.ts:57` |
 | B19 | baixa | Nathan | 9 marcas `GAMBIARRA(` no HUB (regra de negócio no front), em 8 arquivos: `dashboards/dash-comissoes/page.tsx`, `AcompanhamentoClientes.tsx`, `PedidosLista.tsx`, `PropostaForm.tsx`, `lib/api/acompanhamentoClientesPlanilha.ts`, `lib/comissoes/coordenadores.ts`, `lib/domain/acompanhamentoClientes.ts`, `services/cadastros/auxiliares/produtosDuplicadosMock.ts` | ✅ grep de 29/10 |
@@ -90,7 +91,7 @@ Itens do catálogo de bugs do v1 (revisão de 07/10) que o código já resolve o
 - ✅ **"Registrar compra" manual do MES** (`PATCH /compras/requisicoes/:id/compra`): removido.
 - ✅ **Contrato 35 incompleto no MES**: o MES agora usa **todos** os 14 marcos ✅ `requisicao-avhub.eventos.ts` (ver [[Integracao-AvHub-MES]]).
 - ✅ **`lote_custo`, `core_fluxo` e `itens_pedido_custo` "não existem"**: existem no código e nos dumps.
-- ✅ **Aprovação da OC** (antes B3): não é bug. O banco aprova até o limite e a API exige `pode_aprovar` acima dele, que é a regra decidida em 14/10 (N14-21; `ordens_compra.route.js:1230-1240`).
+- ✅ **Aprovação da OC** (antes B3): não é bug. O banco aprova até o limite e a API exige `pode_aprovar` acima dele, que é a regra decidida em 14/10 (N14-21; `ordens_compra.route.js:1271-1281`).
 - ✅ **Requisição criada só no av-hub não chega ao MES** (antes B4): a requisição não precisa chegar; o MES lê a **OC** pela referência. Virou requisito de integração (N14-20; BL-006, BL-049 a BL-051), não bug, e hoje o MES lê a referência da requisição e da OC (`develop`).
 
 ### Como usar esta lista

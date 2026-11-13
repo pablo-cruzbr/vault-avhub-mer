@@ -11,7 +11,7 @@ Os dois repositórios ficam ao lado do vault: `../av-hub` e `../api-acos-vital`.
 0. Se `../av-hub` ou `../api-acos-vital` não existir, siga "Repositório ausente" no `CLAUDE.md`: não adivinhe o código.
 1. `git -C ../av-hub fetch --all --prune` e `git -C ../api-acos-vital fetch --all --prune`; anote o commit de `origin/develop` de cada um.
 2. Leia sem checkout: `git -C ../av-hub show origin/develop:<arquivo>`, `git -C ../av-hub grep -n "<termo>" origin/develop -- <pastas>`, `git -C ../av-hub ls-tree -r --name-only origin/develop <pasta>`.
-3. Cite sempre: repositório, commit da `origin/develop` e arquivo:linha com âncora (um trecho literal da linha, entre parênteses: `ordens_compra.route.js:42` (`EXIGIR_PODE_APROVAR`)).
+3. Cite sempre: repositório, commit da `origin/develop` e arquivo:linha com âncora (um trecho literal da linha, entre parênteses: `ordens_compra.route.js:44` (`EXIGIR_PODE_APROVAR`)).
 4. Nunca abra `.env`, `.env.local` nem chaves. Os nomes das variáveis estão no código (`process.env.NOME`).
 
 ## 1. Onde fica cada coisa no `av-hub` (front)

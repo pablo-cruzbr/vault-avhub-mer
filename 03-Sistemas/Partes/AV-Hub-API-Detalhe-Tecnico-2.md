@@ -1,10 +1,11 @@
 ---
 tags: [sistemas, av-hub, api-acos-vital, express, sequelize, compras, torre-de-fluxo, custo, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
 parte-de: "[[AV-Hub-API]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-acos-vital 0384e89 (develop, 29/10), Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/), Dump Avhub (Esqueleto).sql de 14/10, v1 AV-Hub-API-Estado-Atual, AV-Hub-RBAC, Integracao-AvHub-MES-Especificacao-F1]
 ---
 
@@ -38,13 +39,13 @@ Rotas montadas em `core_comercial/index.js`, todas com `exigirTokenUsuario` (tok
 
 | Rota | Faz | Código |
 |---|---|---|
-| `GET /comercial/me` | capacidades do usuário no módulo | ✅ `aggregates/cadastros/cadastros.route.js:39` |
+| `GET /comercial/me` | capacidades do usuário no módulo | ✅ `aggregates/cadastros/cadastros.route.js:40` |
 | `GET /comercial/empresas_emissoras`, `GET /comercial/responsaveis` | empresa que emite a proposta; quem pode emitir em nome de quem | ✅ `:66`, `:107` |
 | `GET`/`PUT /comercial/parametros_custo` | parâmetros de custo, com vigência | ✅ `:144`, `:170` |
-| `POST /comercial/clientes` | cadastra o cliente no Omie da unidade e grava em `core.parceiros` (upsert por CNPJ) | ✅ `aggregates/clientes/clientes.route.js:120` |
-| `GET /comercial/parceiros?tipo=&empresa=` | cadastro de parceiros para a proposta | ✅ `aggregates/parceiros/parceiros.route.js:33` |
-| `POST`/`GET /comercial/propostas`, `GET …/resumo`, `GET …/:id`, `GET …/:id/eventos` | cria (status `ABERTA`), lista, KPIs, abre, linha do tempo | ✅ `aggregates/propostas/propostas.route.js:328-478` |
-| `PUT …/:id`, `POST …/:id/aprovar`, `…/cancelar`, `…/copiar`, `…/transformar` | revisão na negociação, ciclo de vida até o pedido | ✅ `:495-548` |
+| `POST /comercial/clientes` | cadastra o cliente no Omie da unidade e grava em `core.parceiros` (upsert por CNPJ) | ✅ `aggregates/clientes/clientes.route.js:123` |
+| `GET /comercial/parceiros?tipo=&empresa=` | cadastro de parceiros para a proposta | ✅ `aggregates/parceiros/parceiros.route.js:60` |
+| `POST`/`GET /comercial/propostas`, `GET …/resumo`, `GET …/:id`, `GET …/:id/eventos` | cria (status `ABERTA`), lista, KPIs, abre, linha do tempo | ✅ `aggregates/propostas/propostas.route.js:383-548` (`router.post("/propostas"` a `"/propostas/:id/eventos"`) |
+| `PUT …/:id`, `POST …/:id/aprovar`, `…/cancelar`, `…/copiar`, `…/transformar` | revisão na negociação, ciclo de vida até o pedido | ✅ `propostas.route.js:550-676` (`router.put("/propostas/:id"` a `"/propostas/:id/transformar"`) |
 
 ⚠️ O código e o dump de 29/10 ainda guardam proposta, itens e eventos em `core_comercial.*` (23 tabelas, herdadas da `api-comercial`), enquanto a decisão N16-116 manda a proposta para `core_vendas_faturamento` e diz que `core_comercial` não existirá. Ver [[Banco-AvHub]] e a dúvida registrada no relatório do dia.
 
@@ -64,8 +65,8 @@ Vendas e faturamento (`/pedidos_venda`, `/vendas_*`, `/faturamento_*`, `/dashboa
 |---|---|---|
 | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_POOL_MAX`, `DB_STATEMENT_TIMEOUT_MS` | banco | ✅ `db.js:6-55` |
 | `SESSION_SECRET`, `AZURE_AD_CLIENT_ID`, `_CLIENT_SECRET`, `_TENANT_ID`, `_REDIRECT_URI` | obrigatórias na subida | ✅ `utils/env.js:1-12` |
-| `API_KEYS` | chaves de serviço do `.env` (valem como admin) | ✅ `apiKeyAuth.js:53` |
-| `MES_INTEGRACAO_KEYS` | chaves do MES (≥ 32 caracteres), só para `PUT /compras/requisicoes/origem/:id` | ✅ `apiKeyAuth.js:59-64` |
+| `API_KEYS` | chaves de serviço do `.env` (valem como admin) | ✅ `apiKeyAuth.js:59` |
+| `MES_INTEGRACAO_KEYS` | chaves do MES (≥ 32 caracteres), só para `PUT /compras/requisicoes/origem/:id` e `POST /integracao/mes/avisos-compra` (LOG-58) | ✅ `api-acos-vital` `src/middlewares/apiKeyAuth.js:93` (`process.env.MES_INTEGRACAO_KEYS`), `:110` (`ROTA_MES_AVISOS`) |
 | `USUARIO_TOKEN_SEGREDO` (≥ 32), `USUARIO_TOKEN_TTL_SEGUNDOS` | token de usuário; sem o segredo a API não sobe | ✅ `utils/env.js:25-32`, `tokenUsuario.js:30-35` |
 | `MES_API_URL`, `MES_API_KEY` | os 3 jobs que leem o MES; sem elas o job não sobe e avisa | ✅ `itens_pedido_status.job.js:204-205`, `utils/mesFluxo.js:21-22` |
 | `MES_STATUS_INTERVALO_SEG`, `MES_STATUS_CORTE_INICIAL_DIAS` | só o job do status por item ainda lê regra em ambiente | ✅ `itens_pedido_status.job.js:34-37` |
@@ -81,4 +82,6 @@ Resumo; lista com severidade em [[Bugs-Conhecidos]].
 - ✅ Corrigido em 16/10 (`38d2f74`): `alterado_desde` em `GET /produtos` e `GET /parceiros` agora roda antes do `return where` (`core/tables/produtos/produtos.route.js:51-70`, `core/tables/parceiros/parceiros.route.js:97-110`).
 - 🔴 `pessoa_vendedor` tem model e rota (`/pessoa_vendedor`) e a tabela não existe nos dumps de 14/10 e de 29/10 (`schemas/core_vendas_faturamento/index.js` monta o router).
 - ✅ A tabela `itens_pedido_custo` do dump de 29/10 já está na versão 047b.
+- 🟡 Reteste no Docker de 13/11 (develop de 12/11): 7 GET com id de tipo errado respondem 500 (`invalid input syntax for type uuid`) em vez de 400: `GET /permissoes_usuario/menu/:id_usuario`, `/permissoes_usuario/:id_usuario/:id_perfil/:id_tela`, `/mapa_unidades/:id`, `/fechamento_manual/:ano/:mes/:tipo`, `/metas_mensais/:ano/:mes/:tipo`, `/metas_mensais/:ano/:mes` e `/pessoa_vendedor/:id`. A rota passa o parâmetro direto ao banco, sem validar o tipo, por exemplo `api-acos-vital` `src/schemas/core_mapas/views/mapa_unidades/mapa_unidades.route.js:33` (`router.get("/:id"`) e `src/schemas/core_vendas_faturamento/tables/metas_mensais/metas_mensais.route.js:64-65` (`getMeta`). As outras 81 rotas com parâmetro respondem 400 ou 404.
+- 🟡 Reteste de 13/11: a API aceita texto com UTF-8 inválido e grava o caractere de substituição `U+FFFD`. Uma chamada feita fora de UTF-8 gravou a unidade `PÇ` como `P` mais o `U+FFFD` nas OC-000013 e OC-000016, e por isso o lote do MES nasceu sem custo (a unidade da OC não bateu com a do material, PS-059). Esperado: 400 para corpo com UTF-8 inválido.
 - ❓ `usuarios_favoritos.model.js:13` declara `id` sem `defaultValue` (de propósito, o banco tem `DEFAULT uuidv7()`); o POST de favoritos já deu `400 "Campo obrigatório não informado: id"` em setembro; não reproduzido em 14/10 e não reconferido em 29/10.

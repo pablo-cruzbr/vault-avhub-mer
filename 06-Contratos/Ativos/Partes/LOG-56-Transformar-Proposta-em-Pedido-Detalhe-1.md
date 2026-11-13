@@ -1,11 +1,11 @@
 ---
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento, parte]
 criado: 2026-11-09
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
-develop-conferida: [api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09; api-acos-vital cc3fbb3, em 2026-11-11, só a N16-154; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital 655896a, av-hub 6fcbba6, em 2026-11-09; api-acos-vital cc3fbb3, em 2026-11-11, só a N16-154; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
 fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Dump do Avhub de 04/11/2026 (04-Dados/Dumps/avhub-tst-esqueleto-2026-11-04.sql)"]
 ---
 
@@ -21,7 +21,7 @@ Volta para [[LOG-56-Transformar-Proposta-em-Pedido]]. Continua em [[LOG-56-Trans
 
 No modal, dois campos, e só: "A Qualidade acompanha o pedido por todos os processos?" (`Sim` / `Não`, sem valor inicial) e "O pedido pode faturar em partes?" (`Pode faturar em partes` / `Só quando tudo estiver pronto`, sem valor inicial). Os dois bloqueiam o botão. Nenhum dos dois pode ser escrito antes de o `esquemaEnvioOmie` aceitá-los: o `z.object` descarta chave desconhecida sem erro, e a tela passaria a mentir para o vendedor.
 
-No BFF da liberação, o mesmo cuidado (novo na v8). O `PUT /api/liberar-pedidos/:codigoEmpresa/:numeroPedido` não repassa o corpo que recebe: monta um corpo novo com dois campos (`route.ts:51`) e valida só o `acompanhamento_qualidade` (`route.ts:27-29`). É um acerto de projeto (nada do navegador passa direto para a API), mas o `faturar_em_partes` precisa ser deixado passar explicitamente. Sem esse passo, o Gustavo entrega o campo na API, o teste falha e o sintoma é "a API aceita e a tela não manda".
+No BFF da liberação, o mesmo cuidado (novo na v8). O `PUT /api/liberar-pedidos/:codigoEmpresa/:numeroPedido` não repassa o corpo que recebe: monta um corpo novo com dois campos (`av-hub` `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:51` (`body: JSON.stringify({ acompanhamento_qualidade: acompanha`)) e valida só o `acompanhamento_qualidade` (`app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:27-29` (`typeof acompanha !== 'boolean'`)). É um acerto de projeto (nada do navegador passa direto para a API), mas o `faturar_em_partes` precisa ser deixado passar explicitamente. Sem esse passo, o Gustavo entrega o campo na API, o teste falha e o sintoma é "a API aceita e a tela não manda".
 
 ### 6.2 O aviso de refaturamento casa pela descrição
 
@@ -37,7 +37,7 @@ Testar `codigo === '1.01.96'` afirmava que esse código é refaturamento em qual
 
 ### 6.3 A unidade das listas por conta Omie
 
-✅ `core.categorias` e `core.contas_correntes` são por unidade (Contrato 22), com FK para `core.unidades(id)`. A chave certa é a da conta Omie do pedido. Até 10/11, `unidades_emissoras` separava `id_unidade` (quem emite) de `id_unidade_conta_omie` (de qual conta), e o modal usava o primeiro, o que errava na HRM. **Resolvido pela N16-154 (10/11):** a emissora passou a ser a própria unidade, cada unidade com a própria conta Omie, e `GET /comercial/empresas_emissoras` devolve `id_unidade_conta_omie` igual ao `id_unidade` (`api-acos-vital` `cadastros.route.js:103`, `id_unidade_conta_omie: e.id,`). O modal pode continuar usando o `id_unidade`.
+✅ `core.categorias` e `core.contas_correntes` são por unidade (Contrato 22), com FK para `core.unidades(id)`. A chave certa é a da conta Omie do pedido. Até 10/11, `unidades_emissoras` separava `id_unidade` (quem emite) de `id_unidade_conta_omie` (de qual conta), e o modal usava o primeiro, o que errava na HRM. **Resolvido pela N16-154 (10/11):** a emissora passou a ser a própria unidade, cada unidade com a própria conta Omie, e `GET /comercial/empresas_emissoras` devolve `id_unidade_conta_omie` igual ao `id_unidade` (`api-acos-vital` `cadastros.route.js:115`, `id_unidade_conta_omie: e.id,`). O modal pode continuar usando o `id_unidade`.
 
 ### 6.4 A ordem das entradas do BFF é armadilha estrutural
 
@@ -62,11 +62,11 @@ O caminho que a Qualidade já percorre (Contrato 26 / Fluxo 4) é o modelo. A pe
 | # | Perna | Onde | Frente |
 |---|---|---|---|
 | 1 | Coluna na liberação | `pedidos_vendas_liberacao` | este contrato |
-| 2a | Escrita: campo no corpo do PUT da tela | `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido` (`pedidos_liberacao.route.js:165`), mais o BFF (§6.1) | este contrato |
+| 2a | Escrita: campo no corpo do PUT da tela | `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido` (`pedidos_liberacao.route.js:173`), mais o BFF (§6.1) | este contrato |
 | 2b | Leitura pelo MES: campo no corpo das rotas do Fluxo 4, como o `acompanhamento_qualidade` já aparece lá | `GET /pedidos_liberados` e `/:numero/itens`: `COLUNAS` em `pedidos_liberados.route.js:36` (`v.status_liberacao, v.acompanhamento_qualidade, v.faturar_em_partes`) | este contrato; ✅ na `develop` de 12/11 (`faturar_em_partes` já sai nas duas rotas) |
 | 3 | Leitura pelo MES | `api-pcp` `omie-integracao.ts:141` | frente do MES |
 | 4 | Coluna em `pedidos` | migration `20260929150000_pedido_acompanhamento_qualidade` | frente do MES |
-| 5 | Uso na geração da OP | `pedidos.service.ts:306` | frente do MES |
+| 5 | Uso na geração da OP | `api-pcp` `src/pedidos/pedidos.service.ts:288` (`acompanhamentoQualidade: consulta.pedido.acompanhamentoQualidade`) | frente do MES |
 
 ⚠️ Enquanto as pernas 3 a 5 não existirem, a resposta fica no Hub: o PCP não a lê. A tela mostra, a liberação guarda, e mais nada. Isso precisa ser dito a quem for usar (está também na §16 e no bloco do fim).
 
@@ -74,7 +74,7 @@ O caminho que a Qualidade já percorre (Contrato 26 / Fluxo 4) é o modelo. A pe
 
 ## 7. Backend
 
-- **R1, R2** no `esquemaEnvioOmie` (`propostas.route.js:581`): `qualidade_acompanha` e `faturar_em_partes`, booleanos obrigatórios no `/transformar` e opcionais no `/enviar-omie`, com o mesmo "ausente = mantém" que o `dados_adicionais_nf` já tem.
+- **R1, R2** no `esquemaEnvioOmie` (`propostas.route.js:614`): `qualidade_acompanha` e `faturar_em_partes`, booleanos obrigatórios no `/transformar` e opcionais no `/enviar-omie`, com o mesmo "ausente = mantém" que o `dados_adicionais_nf` já tem.
 - **R10:** `faturar_em_partes` gravado no pedido do Hub e levado à liberação quando o vendedor liberar (§7.6), mais o campo nas rotas do Fluxo 4 (§6.7).
 - **R11:** `codigo_conta_corrente` (§7.4).
 
@@ -84,9 +84,9 @@ O `/enviar-omie` não passa a exigir os campos novos: ele existe para reenviar o
 
 ### 7.2 A liberação continua com uma origem de escrita só
 
-Com a §7.3, o `/transformar` não escreve em `pedidos_vendas_liberacao`. A única origem continua sendo o `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido` (`pedidos_liberacao.route.js:165`, com o `ON CONFLICT ... DO UPDATE` em `:204-206`), o caminho da correção da N16-29. Não há upsert novo, e por isso não há o que sobrescrever.
+Com a §7.3, o `/transformar` não escreve em `pedidos_vendas_liberacao`. A única origem continua sendo o `PUT /pedidos_liberacao/:codigo_empresa/:numero_pedido` (`pedidos_liberacao.route.js:173`, com o `ON CONFLICT ... DO UPDATE` em `:204-206`), o caminho da correção da N16-29. Não há upsert novo, e por isso não há o que sobrescrever.
 
-**Correção da v7:** a v7 escrevia `PUT /pedidos_liberados/:empresa/:numero` citando `pedidos_liberacao.route.js:204-206`, o nome de uma rota com a âncora de outra. O erro era de redação: todas as âncoras da v7 apontam para o arquivo certo. Em `/pedidos_liberados` não existe PUT (`pedidos_liberados.route.js:57, 115, 143`).
+**Correção da v7:** a v7 escrevia `PUT /pedidos_liberados/:empresa/:numero` citando `pedidos_liberacao.route.js:204-206`, o nome de uma rota com a âncora de outra. O erro era de redação: todas as âncoras da v7 apontam para o arquivo certo. Em `/pedidos_liberados` não existe PUT (`pedidos_liberados.route.js:62, 115, 143`).
 
 **Correção da v4, mantida:** o histórico da N16-29 já está implementado (`fn_pedidos_vendas_liberacao_historico`: `liberado` / `alterado` só quando a marcação muda, com `valor_anterior` / `importado_mes`).
 
@@ -96,7 +96,7 @@ Decisão do Nathan, 09/11: a terceira saída. O `/transformar` grava a resposta 
 
 A tela Liberar Pedidos passa a mostrar essa resposta como valor inicial, e a liberação segue sendo um ato explícito, como no Contrato 26. O `faturar_em_partes` segue o mesmo caminho: grava no pedido e entra na liberação quando o vendedor liberar.
 
-**Por que esta saída.** A `vw_pedidos_liberacao` é a fonte do Fluxo 4 do MES (`GET /pedidos_liberados`, que filtra `v.status_liberacao IN ('liberado', 'importado')` em `pedidos_liberados.route.js:59`) e dá `liberado` sempre que existe linha. Criar a linha no `/transformar` faria o pedido nascer importável pelo MES sem ninguém liberar. Com esta decisão, a resposta do vendedor vira uma sugestão informada para quem libera, não a liberação em si.
+**Por que esta saída.** A `vw_pedidos_liberacao` é a fonte do Fluxo 4 do MES (`GET /pedidos_liberados`, que filtra `v.status_liberacao IN ('liberado', 'importado')` em `pedidos_liberados.route.js:64`) e dá `liberado` sempre que existe linha. Criar a linha no `/transformar` faria o pedido nascer importável pelo MES sem ninguém liberar. Com esta decisão, a resposta do vendedor vira uma sugestão informada para quem libera, não a liberação em si.
 
 ### 7.4 Conta corrente, decidido: padrão por conta Omie, invisível para o vendedor
 
@@ -127,7 +127,7 @@ Depois que a proposta vira pedido, o financeiro pode abrir o pedido e trocar a c
 
 | # | Ponto | Proposta |
 |---|---|---|
-| 1 | Onde troca | Na tela do pedido de venda, não na proposta. A lista vem de `core.contas_correntes` da conta Omie do pedido, pela rota `/contas-correntes` que o BFF já tem (`route.ts:52`). |
+| 1 | Onde troca | Na tela do pedido de venda, não na proposta. A lista vem de `core.contas_correntes` da conta Omie do pedido, pela rota `/contas-correntes` que o BFF já tem (`av-hub` `app/api/comercial/[...rota]/route.ts:54` (`'/contas-correntes'`)). |
 | 2 | Quem pode | Uma tela do financeiro com `pode_editar`, não `propostas`, para o vendedor não conseguir trocar. Precisa da linha em `auth.rotas_telas` para a rota de alteração e da entrada do BFF com essa tela (a de `/contas-correntes` hoje é `tela: 'propostas'` e vai precisar aceitar as duas). |
 | 3 | Como chega ao Omie | Grava no Hub e chama `AlterarPedidoVenda` na hora. ⚠️ O Omie localiza o pedido por `codigo_pedido_integracao` (o `PV-000001` que o Hub já guarda) e aceita `informacoes_adicionais.codigo_conta_corrente`. Regra do Omie: `numero_pedido` não deve ser enviado na alteração. |
 | 4 | Até quando | Enquanto o pedido não estiver faturado. Depois disso a alteração é outra operação (`AlterarPedFaturado`) e fica fora. Se o Omie recusar, o Hub não grava: a tela mostra o `faultstring` e a conta continua a anterior. |
@@ -141,11 +141,11 @@ A §7.3 diz que a tela mostra a resposta do vendedor como valor inicial. Isso n�
 
 A chave é o `codigo_pedido_omie`, que os dois lados têm:
 - `core_comercial.pedidos_venda.codigo_pedido_omie` `bigint`, preenchido quando o envio dá certo; a constraint `ck_pedidos_venda_sincronizado` garante (status sincronizado exige `codigo_pedido_omie IS NOT NULL`, dump de 04/11, linha 15702);
-- `core_vendas_faturamento.pedidos_vendas.codigo_pedido_omie` `bigint NOT NULL`, e a `vw_pedidos_liberacao` já o expõe (`pedidos_liberacao.route.js:40`).
+- `core_vendas_faturamento.pedidos_vendas.codigo_pedido_omie` `bigint NOT NULL`, e a `vw_pedidos_liberacao` já o expõe (`pedidos_liberacao.route.js:47`).
 
 **Proposta:** a `vw_pedidos_liberacao` ganha dois campos, vindos de `core_comercial.pedidos_venda` por esse join: `qualidade_acompanha_sugerida` e `faturar_em_partes_sugerido`. Nomes diferentes dos da liberação, de propósito: são sugestão do vendedor, não a marcação efetiva. A tela usa o valor sugerido para pré-marcar o controle quando ainda não há liberação, e mostra de onde veio.
 
-**Rota (a correção central da v8):** `GET /pedidos_liberacao`, a que a tela usa (`app/api/liberar-pedidos/route.ts:53`, `${process.env.API_URL}/pedidos_liberacao?${params}`). A v7 escrevia `GET /pedidos_liberados`, que filtra `v.status_liberacao IN ('liberado', 'importado')` (`pedidos_liberados.route.js:59`); o valor sugerido só serve enquanto o pedido está pendente.
+**Rota (a correção central da v8):** `GET /pedidos_liberacao`, a que a tela usa (`app/api/liberar-pedidos/route.ts:53`, `${process.env.API_URL}/pedidos_liberacao?${params}`). A v7 escrevia `GET /pedidos_liberados`, que filtra `v.status_liberacao IN ('liberado', 'importado')` (`pedidos_liberados.route.js:64`); o valor sugerido só serve enquanto o pedido está pendente.
 
 **Duas camadas, não uma.** As duas rotas leem a mesma view, mas cada uma tem a sua lista de colunas: `COLUNAS` em `pedidos_liberacao.route.js:39-47` e em `pedidos_liberados.route.js:25-32`. Então: campos na view (uma vez só, e o Fluxo 4 aproveita depois) **e** acrescentados ao `COLUNAS` da rota da tela. O mesmo `COLUNAS` volta na resposta do PUT (`:211`), então a tela recebe o valor atualizado sem recarregar a caixa.
 
@@ -153,7 +153,7 @@ Quem faz: a view, o `COLUNAS` e o corpo são do Gustavo (§14, passos 7a a 7c); 
 
 ❓ **Pergunta ao Gustavo, item 1: o join.** O pedido do Hub tem dois campos de empresa: `codigo_empresa` (a emissora) e `codigo_empresa_omie` (a conta Omie). A `vw_vendas_planilha` traz `codigo_empresa` de `pedidos_vendas`, que a pipeline preenche a partir da conta Omie. O join é `pedidos_venda.codigo_empresa_omie = pedidos_vendas.codigo_empresa`, e não pelo `codigo_empresa` do Hub? Com três contas e a pendência da HRM, errar isso mistura unidades em silêncio.
 
-❓ **Pergunta ao Gustavo, item 2: view ou SELECT.** A proposta é pôr os campos na view, para não escrever o join duas vezes. Mas a `vw_pedidos_liberacao` já é cara (`pedidos_liberacao.route.js:107`, `a view é cara (vw_vendas_planilha por baixo)`; a v8 citava `:49-50`, corrigido em 09/11). Se for melhor no SELECT da rota, tudo bem, mas a escolha precisa estar feita antes do passo 7a.
+❓ **Pergunta ao Gustavo, item 2: view ou SELECT.** A proposta é pôr os campos na view, para não escrever o join duas vezes. Mas a `vw_pedidos_liberacao` já é cara (`pedidos_liberacao.route.js:115`, `a view é cara (vw_vendas_planilha por baixo)`; a v8 citava `:49-50`, corrigido em 09/11). Se for melhor no SELECT da rota, tudo bem, mas a escolha precisa estar feita antes do passo 7a.
 
 ### 7.7 Refaturamento: o alcance real, e o que a N16-152 muda
 
@@ -178,7 +178,7 @@ mais a porta da família (linha 25390): se alguma parcial (`sequencial > 0`, nã
 
 **Para o pedido nascido no Hub:** em Mogi, some sempre. Em Uberaba e na HRM, some quando a observação tiver "refat" ou "reaft"; a detecção de refaturamento da v5 é por descrição da categoria, no select (`ehRefaturamento`), e não escreve em `obs_venda`. Para pedido que vem do Omie pela pipeline, vale o que estiver lá, e em Uberaba praticamente todo `1.01.99` é refaturamento ([[Mapa-IncluirPedido-Omie]], parte 2, linha 126).
 
-❓ **Pergunta ao Gustavo, item 3: de onde vem o `obs_venda` do payload.** É o que decide se o parágrafo acima é alívio ou o pior caso. O envio ao Omie manda `observacoes.obs_venda` (`propostas.swagger.json:2552`), e o payload sai de `fn_pedido_venda_payload_omie` (`pedidoOmie.js:37`), que não está no repositório nem no dump de 04/11: é da migration `2026-11-05` que falta (§9). Se vier das `observacoes` da proposta (`propostas.route.js:174`, até 10000 caracteres), basta o vendedor escrever "refat" na proposta para o pedido sumir da Liberar Pedidos, em qualquer unidade. Vai junto com as migrations, no mesmo pedido.
+❓ **Pergunta ao Gustavo, item 3: de onde vem o `obs_venda` do payload.** É o que decide se o parágrafo acima é alívio ou o pior caso. O envio ao Omie manda `observacoes.obs_venda` (`api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.swagger.json:2651` (`observacoes.obs_venda`)), e o payload sai de `fn_pedido_venda_payload_omie` (`pedidoOmie.js:37`), que não está no repositório nem no dump de 04/11: é da migration `2026-11-05` que falta (§9). Se vier das `observacoes` da proposta (`propostas.route.js:198`, até 10000 caracteres), basta o vendedor escrever "refat" na proposta para o pedido sumir da Liberar Pedidos, em qualquer unidade. Vai junto com as migrations, no mesmo pedido.
 
 **O que a N16-152 decide.** Decisão do Nathan, 09/11: a saída (b). O refaturamento passa a ser decidido pela tabela `core_vendas_faturamento.refaturamentos`, e a observação deixa de ser porta. Não se acrescenta código à regra global: `1.01.98` é Venda de Sucata em Uberaba e `1.01.99` é Cobranças Jurídicas em Mogi, então "consertar" a regra por código quebra outra unidade. **Superada em parte pela N16-153 (10/11/2026):** o código de refaturamento passa a ser lido pela unidade do pedido, e a observação continua sendo porta ([[Registro-N16-150-a-N16-155]]).
 

@@ -44,7 +44,7 @@ Gatilho: quem está usando diz "atualizar o vault" (ou "atualiza", "sincroniza")
 
 | Selo | Quando |
 |---|---|
-| ✅ | Está na `develop`: cite o repositório e o arquivo:linha com âncora, um trecho literal da linha (ex.: `api-pcp` `src/qualidade/qualidade.service.ts:97` (`aprovarLote`)) |
+| ✅ | Está na `develop`: cite o repositório e o arquivo:linha com âncora, um trecho literal da linha (ex.: `api-pcp` `src/qualidade/qualidade.service.ts:75` (`async aprovar(`)) |
 | 🟡 | Parcial na `develop`: diga o que falta |
 | 🔴 | Não está na `develop` (no módulo do Pablo: "sem API e sem banco") |
 | 📝 | Decidido: cite o ID da decisão |

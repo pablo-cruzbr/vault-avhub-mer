@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3, parte]
 criado: 2026-11-05
-estado-em: 2026-11-11
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
 parte-de: "[[03-Pedido-de-Venda-e-Liberacao]]"
-develop-conferida: [av-hub 44bb770, em 2026-11-10; api-acos-vital b97981c, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; av-hub 44bb770, em 2026-11-10; api-acos-vital b97981c, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), av-hub develop 44bb770 (EtapaDosItens.tsx)]
 ---
 
@@ -97,11 +97,11 @@ Abas com contagem vinda do backend (`contagem.pendente`, `liberado`, `importado`
 | `GET /itens/status` (MES) e `GET /itens_pedido_status?codigo_empresa=&pedido_venda=&historico=` (hub) | MES para hub (job de 90 s) e HUB lê | cartão "Andamento na produção" (`av-hub` `components/Pedidos/EtapaDosItens.tsx:61`, `<h2>Andamento na produção</h2>`) | [[Contratos-da-v2\|API-005]], [[Contratos-da-v2\|API-006]], [[Contratos-da-v2\|SQL-010]] |
 | `GET /api/pedidos-venda/:fonte/:empresa/:pedido/etapas` | BFF do HUB | repassa `/itens_pedido_status`; responde `disponivel: false` quando o hub ainda não tem a rota | API-006 |
 
-**As duas rotas leem a mesma view, mas servem a lados diferentes** ✅ (`api-acos-vital` `src/schemas/core_vendas_faturamento/index.js:193-194` (`/pedidos_liberacao`), `develop` `655896a`; `av-hub` `develop` `6fcbba6`):
+**As duas rotas leem a mesma view, mas servem a lados diferentes** ✅ (`api-acos-vital` `src/schemas/core_vendas_faturamento/index.js:195-196` (`/pedidos_liberacao`), `develop` `655896a`; `av-hub` `develop` `6fcbba6`):
 
 - **`/pedidos_liberacao` grava e serve a tela Liberar Pedidos.** `GET /` em `aggregates/pedidos_liberacao/pedidos_liberacao.route.js:97` (`router.get("/"`); `PUT /:codigo_empresa/:numero_pedido` em `:173` (`router.put`), que exige `acompanhamento_qualidade` booleano (`:184`, `typeof acompanha !== "boolean"`) e grava com `ON CONFLICT` (`:217`). O BFF chama `${process.env.API_URL}/pedidos_liberacao` (`av-hub` `app/api/liberar-pedidos/route.ts:53` (`/pedidos_liberacao?`) e `app/api/liberar-pedidos/[codigoEmpresa]/[numeroPedido]/route.ts:46` (`/pedidos_liberacao/`), com o corpo montado à mão em `:51` (`acompanhamento_qualidade: acompanha`)).
-- **`/pedidos_liberados` só lê e serve o MES (Fluxo 4).** `GET /` filtra `v.status_liberacao IN ('liberado', 'importado')` (`aggregates/pedidos_liberados/pedidos_liberados.route.js:59`); `GET /:numero/itens` em `:115`; `POST /:numero/importado` em `:143`, que só confirma a importação. Não tem PUT.
-- Cada rota escolhe suas colunas da view (`COLUNAS`, `pedidos_liberacao.route.js:39` e `pedidos_liberados.route.js:25`).
+- **`/pedidos_liberados` só lê e serve o MES (Fluxo 4).** `GET /` filtra `v.status_liberacao IN ('liberado', 'importado')` (`aggregates/pedidos_liberados/pedidos_liberados.route.js:64`); `GET /:numero/itens` em `:115`; `POST /:numero/importado` em `:143`, que só confirma a importação. Não tem PUT.
+- Cada rota escolhe suas colunas da view (`COLUNAS`, `pedidos_liberacao.route.js:46` e `pedidos_liberados.route.js:30`).
 - O `LOG-56` (`06-Contratos/Ativos/LOG-56-Transformar-Proposta-em-Pedido`) é o contrato que acrescenta o valor inicial sugerido e o `faturar_em_partes`.
 
 **Pedido do grupo G6 nunca aparece na Liberar Pedidos** ✅ (nem chega ao MES, que lê a mesma view). A `vw_pedidos_liberacao` é construída sobre a `vw_vendas_planilha` e filtra `p.grupo IS NULL` (dump de teste de 04/11, linha 25492). Nessa view o G6 pega todo pedido com `refat` ou `reaft` na observação, em qualquer unidade (Mogi, Uberaba, HRM), e todo pedido com categoria `1.01.96` (o refaturamento de Mogi), também pela família (uma parcial basta para levar o pedido-pai). Pela categoria, o `1.01.99` (refaturamento de Uberaba) e o `1.01.98` (da HRM) não caem em G6. Detalhe das duas redações do G6 em [[Banco-AvHub]]; risco em [[Riscos]] (RS-022); correção decidida na N16-152 (b) ([[Registro-N16-150-a-N16-155]]).
@@ -112,12 +112,12 @@ Banco e telas (DDL e `auth.telas`): apêndices A e B do contrato 26. Diagnóstic
 
 ### Banco e API (`api-acos-vital` f322dcd)
 
-- ✅ Rotas montadas em `src/schemas/core_vendas_faturamento/index.js:179-180` (`/pedidos_liberacao`, `/pedidos_liberados`) e job de status em `:181-186`.
-- ✅ `GET /pedidos_liberacao` em `aggregates/pedidos_liberacao/pedidos_liberacao.route.js:88` (lê uma vez a view e deriva página, total e contagem por status); `PUT` em `:164`, com `PEDIDO_FORA_DA_LIBERACAO` (`:187`) e `PEDIDO_IMPORTADO_MES` (`:194`, `:222`).
-- ✅ `GET /pedidos_liberados` em `aggregates/pedidos_liberados/pedidos_liberados.route.js:57` (filtra `status_liberacao IN ('liberado','importado')`), `/:numero/itens` em `:115` (409 `PEDIDO_NAO_LIBERADO` definido em `:50`), `POST /:numero/importado` em `:143`.
-- ✅ Escopo do vendedor **fixo no código**: `src/utils/acessoConfig.js:73-74` (`escopoVendedoresExigir = () => true`; a chave `ESCOPO_VENDEDORES_EXIGIR` não é mais lida). Regra da rota em `src/middlewares/escopoVendedor.js:79` (`pedidos_liberacao`: formato `par`, detalhe `pedido_venda`).
+- ✅ Rotas montadas em `src/schemas/core_vendas_faturamento/index.js:181-182` (`/pedidos_liberacao`, `/pedidos_liberados`) e job de status em `:181-186`.
+- ✅ `GET /pedidos_liberacao` em `aggregates/pedidos_liberacao/pedidos_liberacao.route.js:97` (`router.get("/"`) (lê uma vez a view e deriva página, total e contagem por status); `PUT` em `:164`, com `PEDIDO_FORA_DA_LIBERACAO` (`:187`) e `PEDIDO_IMPORTADO_MES` (`:194`, `:222`).
+- ✅ `GET /pedidos_liberados` em `aggregates/pedidos_liberados/pedidos_liberados.route.js:62` (filtra `status_liberacao IN ('liberado','importado')`), `/:numero/itens` em `:115` (409 `PEDIDO_NAO_LIBERADO` definido em `:50`), `POST /:numero/importado` em `:143`.
+- ✅ Escopo do vendedor **fixo no código**: a chave `ESCOPO_VENDEDORES_EXIGIR` não é mais lida, e desde o LOG-51 S26 nem a função `escopoVendedoresExigir` existe: o middleware aplica a regra direto, `api-acos-vital` `src/utils/acessoConfig.js:26-27` (`Escopo de vendedores — FIXO desde 09/10/2026`). Regra da rota em `src/middlewares/escopoVendedor.js:92` (`pedidos_liberacao:`; formato `par`, detalhe `pedido_venda`).
 - ✅ Regras no banco (Dump Avhub 14/10): trigger `fn_pedidos_vendas_liberacao_regras` (linha 7783: `liberado_por` e `liberado_em` não mudam; depois de `importado_mes_em`, trocar a marcação dá `23514`), `fn_pedidos_vendas_liberacao_historico` (linha 7743), tabela `parametros_vendas` (linha 18031), `pedidos_vendas_liberacao` (linha 18285), view `vw_pedidos_liberacao` (linha 20870).
-- ✅ Job que alimenta o cartão: `tables/itens_pedido_status/itens_pedido_status.job.js` (intervalo `MES_STATUS_INTERVALO_SEG`, padrão 90, linha 217) e rota `itens_pedido_status.route.js:54`. O escopo do vendedor cobre `/itens_pedido_status` (dono por pedido; pedido sem dono conhecido em `pedidos_vendas` dá 403, fail-closed).
+- ✅ Job que alimenta o cartão: `tables/itens_pedido_status/itens_pedido_status.job.js` (intervalo `MES_STATUS_INTERVALO_SEG`, padrão 90, linha 217) e rota `itens_pedido_status.route.js:55` (`router.get("/"`). O escopo do vendedor cobre `/itens_pedido_status` (dono por pedido; pedido sem dono conhecido em `pedidos_vendas` dá 403, fail-closed).
 
 ### HUB (b55ac55)
 
@@ -127,7 +127,7 @@ Banco e telas (DDL e `auth.telas`): apêndices A e B do contrato 26. Diagnóstic
 
 ### MES (`api-pcp` 579a625, `app-pcp` 1fca8d3)
 
-- ✅ A Triagem lê `GET /pedidos_liberados` (`api-pcp/src/pedidos/omie-integracao.ts:338`); os itens vêm de `/pedidos_liberados/:numero/itens` (`:141`).
-- ✅ A criação da destinação recusa pedido não liberado (`pedidos.service.ts:244-249`, `ConflictException`) e guarda `Pedidos.acompanhamentoQualidade` (`:283`, coluna em `producao.prisma:118`). A Triagem mostra a coluna Qualidade ("Acompanha" ou "Não", `app-pcp/app/(protected)/carteira/page.tsx:286-290`).
+- ✅ A Triagem lê `GET /pedidos_liberados` (`api-pcp` `src/pedidos/omie-integracao.ts:284` (`/pedidos_liberados`)); os itens vêm de `/pedidos_liberados/:numero/itens` (`:141`).
+- ✅ A criação da destinação recusa pedido não liberado (`api-pcp` `src/pedidos/pedidos.service.ts:277-281` (`consulta.naoLiberado`), `ConflictException`) e guarda `Pedidos.acompanhamentoQualidade` (`:288` (`acompanhamentoQualidade: consulta.pedido.acompanhamentoQualidade`), coluna em `prisma/models/producao.prisma:104` (`acompanhamentoQualidade Boolean?`)). A Triagem mostra a coluna Qualidade ("Acompanha" ou "Não", `app-pcp/app/(protected)/carteira/page.tsx:286-290`).
 - ✅ Confirmação de importação (`POST .../importado`, `omie-integracao.ts:339-349`) feita depois da criação das OPs (`pedidos.service.ts:402-406`), com **reenvio automático** a cada `AVHUB_REENVIO_IMPORTADO_MIN` (padrão 10 min) para pedidos dos últimos 7 dias (`pedidos.service.ts:63-122`). Isto cumpre a promessa de retentativa feita no contrato 26.
 - ✅ O status por item sai de `GET /itens/status` (`integracao-avhub.controller.ts:26`; `integracao-avhub.service.ts:114-156`; `etapaDoItem` em `:167-192`), protegido por `AvhubApiKeyGuard` com `MES_API_KEY` (fail-closed).

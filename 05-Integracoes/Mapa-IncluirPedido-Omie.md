@@ -1,9 +1,10 @@
 ---
 tags: [omie, pedido-de-venda, incluir-pedido, api, mapa-de-campos, pesquisa]
 criado: 2026-10-23
-atualizado: 2026-11-05
+estado-em: 2026-11-13
 status: proposta
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api/v1/produtos/pedido/ (serviço PedidoVendaProduto, método IncluirPedido e tipos complexos)", "Exemplo de IncluirPedido enviado pelo Nathan em 23/10/2026", "05-Integracoes/Estudo-Omie-API (estudo de 21/10)", "av-hub components/Propostas/PropostaForm (PedidoOmieModal.tsx, ItemProposta.tsx, PropostaForm.tsx)", "Pedido do Robert ao Nathan de 03/11/2026 e errata de 05/11/2026", "api-acos-vital develop 1654f65 (pedidoOmie.js, propostas.route.js, pedidos.route.js, categorias.route.js), conferido em 05/11/2026", "Consultas só de leitura ao Omie nas três contas em 04/11/2026 (ListarCategorias, ListarFormasPagCompras, ListarFormasPagVendas, ListarContasCorrentes)", "Dump do Avhub de 29/10/2026 (vw_faturamento_planilha, vw_comissao_master)"]
 ---
 
@@ -26,15 +27,15 @@ fontes: ["Documentação do Omie lida em 23/10/2026: https://app.omie.com.br/api
 
 ## O pedido mínimo e o que está fechado (04 e 05/11/2026)
 
-O primeiro pedido de teste sai com o payload mínimo: cabeçalho (cliente, código de integração do pedido, previsão, etapa, condição de pagamento, quantidade de itens), itens (código de integração do item, produto, descrição, quantidade, unidade e valor unitário), vendedor, categoria, número do pedido do cliente, consumidor final, e-mail e frete. O envio é **síncrono**: a `api-acos-vital` chama o Omie direto pelo cliente `utils/omie.js`, sem fila e sem worker na pipeline (pedido do Robert, 03/11). ✅ Está no código: o `transformar` cria o pedido do Hub e chama `ConsultarPedido` pelo número do pedido (`PV-000001`, o código de integração) antes de incluir; se o Omie já tem, só grava o retorno. Depois chama `IncluirPedido` com uma tentativa só, para não duplicar após um timeout (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:74` e `:151`, `develop` `1654f65`). Se o Omie recusar, o pedido fica no Hub com status `erro` e `POST /comercial/pedidos/:id/enviar-omie` reenvia (`pedidos.route.js:30`). O payload sai pronto de `fn_pedido_venda_envio_iniciar`, função do banco que **não está no repositório nem no dump de 04/11** ❓: os campos da tabela abaixo não podem ser conferidos no que é enviado.
+O primeiro pedido de teste sai com o payload mínimo: cabeçalho (cliente, código de integração do pedido, previsão, etapa, condição de pagamento, quantidade de itens), itens (código de integração do item, produto, descrição, quantidade, unidade e valor unitário), vendedor, categoria, número do pedido do cliente, consumidor final, e-mail e frete. O envio é **síncrono**: a `api-acos-vital` chama o Omie direto pelo cliente `utils/omie.js`, sem fila e sem worker na pipeline (pedido do Robert, 03/11). ✅ Está no código: o `transformar` cria o pedido do Hub e chama `ConsultarPedido` pelo número do pedido (`PV-000001`, o código de integração) antes de incluir; se o Omie já tem, só grava o retorno. Depois chama `IncluirPedido` com uma tentativa só, para não duplicar após um timeout (`api-acos-vital` `src/schemas/core_comercial/pedidoOmie.js:116` (`call: "ConsultarPedido"`) e `:239` (`call: "IncluirPedido"`), `develop` `1654f65`, reconferido em 13/11). Se o Omie recusar, o pedido fica no Hub com status `erro` e `POST /comercial/pedidos/:id/enviar-omie` reenvia (`pedidos.route.js:33`). O payload sai pronto de `fn_pedido_venda_envio_iniciar`, função do banco que **não está no repositório nem no dump de 04/11** ❓: os campos da tabela abaixo não podem ser conferidos no que é enviado.
 
 | Ponto | Situação |
 |---|---|
-| Etapa | 📝 sempre `"10"` (Nathan, 04/11). ❓ O Hub tem a coluna `etapa` no pedido (`pedidoOmie.js:52`), mas o valor enviado vem do banco |
-| `bloqueado` | 📝 `"S"` no primeiro teste, para ver como o pedido aparece no Omie (Nathan, 04/11). ✅ O corpo do `transformar` aceita `bloqueado` (booleano) e o padrão é `true` (`propostas.route.js:585`) |
+| Etapa | 📝 sempre `"10"` (Nathan, 04/11). ❓ O Hub tem a coluna `etapa` no pedido (`pedidoOmie.js:69`), mas o valor enviado vem do banco |
+| `bloqueado` | 📝 `"S"` no primeiro teste, para ver como o pedido aparece no Omie (Nathan, 04/11). ✅ O corpo do `transformar` aceita `bloqueado` (booleano) e o padrão é `true` (`propostas.route.js:620`) |
 | Condição de pagamento | 📝 vem de `condicoes_pagamento_compras`; não há recurso novo de venda (Nathan, 04/11) |
-| Categoria | 📝 lista por unidade, filtrada pela unidade emissora; o vendedor escolhe (Nathan, 04/11). ✅ `GET /categorias?codigo_empresa=&tipo=receita` devolve as de receita lançáveis (`categorias.route.js:47-57`) e o `transformar` recebe `codigo_categoria` (opcional hoje, `propostas.route.js:587`). 🟡 Pré-selecionar `1.01.01` e avisar a consequência do refaturamento (Robert, 05/11; seção 5.3.1; N16-152) |
-| `numero_contrato` | ✅ o `transformar` recebe `SPOT` ou `CONTRATO` (opcional hoje, `propostas.route.js:589-591`); só informativo (N16-150) |
+| Categoria | 📝 lista por unidade, filtrada pela unidade emissora; o vendedor escolhe (Nathan, 04/11). ✅ `GET /categorias?codigo_empresa=&tipo=receita` devolve as de receita lançáveis (`categorias.route.js:47-57`) e o `transformar` recebe `codigo_categoria` (opcional hoje, `propostas.route.js:622`). 🟡 Pré-selecionar `1.01.01` e avisar a consequência do refaturamento (Robert, 05/11; seção 5.3.1; N16-152) |
+| `numero_contrato` | ✅ o `transformar` recebe `SPOT` ou `CONTRATO` (opcional hoje, `propostas.route.js:624-626`); só informativo (N16-150) |
 | Conta corrente | ⚠️ **em aberto, decisão do Nathan.** O vendedor não preenche conta no Omie hoje (quem tem acesso é o Financeiro). O Robert propõe **omitir** o campo e ver no teste o que o Omie grava 🟡; a ideia de 04/11 era uma lista por unidade |
 | CFOP | 🟡 não mandar: o vendedor também não o preenche, e se o pedido sai certo assim é o cenário de impostos que resolve. O teste confirma |
 | Impostos (`det[].imposto`) | 📝 não viajam (decidido em 03/11, registrado pelo Robert) |

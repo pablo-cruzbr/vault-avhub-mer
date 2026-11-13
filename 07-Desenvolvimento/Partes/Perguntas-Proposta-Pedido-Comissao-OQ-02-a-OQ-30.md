@@ -1,10 +1,11 @@
 ---
 tags: [decisoes, perguntas, oq, consulta, proposta, orcamento, comissao, staging, parte]
 criado: 2026-11-05
-estado-em: 2026-11-11
+estado-em: 2026-11-13
 status: proposta
 dono: Nathan
 parte-de: "[[Perguntas-Proposta-Pedido-Comissao]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora do vault), Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault) (perguntas das seções 4 e 5), Modelo-de-Consulta, protótipo api-comercial (commit 5aa5311; removido do av-hub em 06/11/2026, PR #261, dd9d729; legível em f7d8d7f), Dump Avhub 14/10, Registro-de-Decisoes (até N16-155), LOG-56 (R7 e R11), CON-03 da v2 (Contratos-da-v2), develop de 11/11/2026 (api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, omie-elt-pipeline master 0593c9f)]
 ---
 
@@ -54,7 +55,7 @@ fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora d
 
 **Situação.** **Aberta.** Pergunta: na carga inicial do marco zero (13/11/2026), o lote sem custo é recusado ou entra com custo `MANUAL` e motivo? Quem responde: Robert, com o Nathan. Trava: BL-066 e BL-031 e o marco zero (M5).
 
-**Contexto.** N16-09 torna o custo obrigatório em todo lote e supera o #93. A `develop` ainda aceita custo opcional na carga inicial (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:617` (`dto.custoUnitario && dto.custoUnitario > 0`)), a carga é de um lote por chamada e a carga em lote (G1) não existe. A origem `MANUAL` já existe no MES (`api-pcp` `prisma/models/estoque.prisma:375` (`MANUAL`)). Exigir custo de todo o saldo inicial é trabalho de Compras e Controladoria, não só de código.
+**Contexto.** N16-09 torna o custo obrigatório em todo lote e supera o #93. A `develop` ainda aceita custo opcional na carga inicial (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:634` (`dto.custoUnitario && dto.custoUnitario > 0`)), a carga é de um lote por chamada e a carga em lote (G1) não existe. A origem `MANUAL` já existe no MES (`api-pcp` `prisma/models/estoque.prisma:375` (`MANUAL`)). Exigir custo de todo o saldo inicial é trabalho de Compras e Controladoria, não só de código.
 
 **Opções.** (a) Obrigatório já na G1: sem custo, a linha não entra; (b) obrigatório no Recebimento (`R4`) e, na carga inicial, custo informado ou custo `MANUAL` com motivo obrigatório e auditoria; (c) obrigatório só depois do marco zero. **Default 🟡:** (b). A estimativa está em `Proposta-Orcamento-Comissao/07-Cronograma/Proposta-de-Cronograma.md` (fora do vault, a validar). Ligada à OQ-38 (o saldo está confiável?).
 
@@ -106,7 +107,7 @@ fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora d
 | **OQ-23** Unidade de medida diferente | Proposta em `PC`, `KG`, `M`, `TN`; OC e lote em outra unidade. Era a PS-006 e o D2 do 008, que a N16-09 supera | (a) fator por produto; (b) bloquear; (c) custo parcial marcado | ✅ Compras (19/10): não há conversão no sistema; a OC segue a unidade do faturamento do fornecedor |
 | **OQ-24** Produto pendente vira pedido? | Produto novo nasce `PEND-xxxx` sem cadastro no Omie ([[Contratos-da-v2\|LOG-52]] seção 3.3) | (a) não vira pedido até o cadastro; (b) `V0.7` cria o produto | ✅ N16-28: (a). Quem cadastra e em quanto tempo é a OQ-36 (Fiscal) |
 | **OQ-25** Comissão enquanto o custo é parcial | No exemplo do Nathan o item A passa dias com 10, 30 e 50 de 50 flanges cobertas ([[15-Custo-Real-e-Comissao]]) | (a) real do coberto mais cotado do resto; (b) só com o item completo; (c) custo médio | ✅ N16-48 (Michele): comissão só sobre as peças com custo real; a diferença vem na apuração seguinte. Diverge do default (a) |
-| **OQ-28** Aprovação de Compras sobre o percentual | O Simulador atual tem um passo de Compras: cria uma versão com origem `COMPRAS` e o percentual final é o menor entre o do vendedor e o de Compras (`api-acos-vital` `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:233` (`cabecalho.origem === "COMPRAS"`); `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803` (`aprovarCompras`)). N16-08: Compras não altera a proposta | (a) o passo some e o cálculo `REAL` faz o papel; (b) Compras aprova antes; (c) Compras só confere | ⏸ N16-51 (provisório): (a), o passo fica desligado e o valor estimado por Compras vem do Omie. Falta Compras validar (A20, a mesma da OQ-45); a N16-77 manda seguir sem travar o banco |
+| **OQ-28** Aprovação de Compras sobre o percentual | O Simulador atual tem um passo de Compras: cria uma versão com origem `COMPRAS` e o percentual final é o menor entre o do vendedor e o de Compras (`api-acos-vital` `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:252` (`cabecalho.origem === "COMPRAS"`); `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803` (`aprovarCompras`)). N16-08: Compras não altera a proposta | (a) o passo some e o cálculo `REAL` faz o papel; (b) Compras aprova antes; (c) Compras só confere | ⏸ N16-51 (provisório): (a), o passo fica desligado e o valor estimado por Compras vem do Omie. Falta Compras validar (A20, a mesma da OQ-45); a N16-77 manda seguir sem travar o banco |
 | **OQ-29** Pedidos de Venda e NF de Saída | O Nathan inativou as duas telas na api-test (16/10); o SQL de produção não as tocava. As páginas seguem no código em `app/(protected)/vendas/pedidos-de-venda` e `.../notas-fiscais-saida` | (a) inativar também em produção; (b) manter | ✅ N16-33: (a) |
 | **OQ-30** Correção da marcação no pedido da proposta | O vendedor corrige a marcação até o MES importar (regra 5 de [[03-Pedido-de-Venda-e-Liberacao]]) | (a) manter, com histórico `alterado`; (b) bloquear | ✅ N16-29: (a) |
 

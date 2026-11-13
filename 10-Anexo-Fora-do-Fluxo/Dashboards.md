@@ -1,9 +1,10 @@
 ---
 tags: [anexo, dashboards, vendas, faturamento, av-hub, fora-do-fluxo]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-acos-vital f322dcd src/schemas/core_vendas_faturamento, HUB b55ac55 app/(protected), conferência de 29/10/2026 em av-hub develop 758d5f0, LOG-31, LOG-33, LOG-37, LOG-04b]
 ---
 
@@ -55,10 +56,10 @@ Fora do fluxo 0b (nota de 09/10: dashboards, comissões, orçamento e pedidos ma
 | Rota | O que entrega | Selo |
 |---|---|---|
 | `GET /dashboard/vendedor`, `/dashboard/equipe`, `/dashboard/pcp` | Agregado pronto por perfil (`fn_variacao_pct`, painel de clientes inativos) | ✅ `dashboard.route.js:99,151,217` |
-| `GET /dashboard_mensal_vendas`, `/dashboard_mensal_faturamento` | Consolidado e uma linha por unidade, com `participacao_perc`, `variacao_pct` e `variacao_quantidade_pct` | ✅ `core_vendas_faturamento/index.js:208,222`; `fn_dashboard_mensal_faturamento.route.js` cita `variacao_pct` |
+| `GET /dashboard_mensal_vendas`, `/dashboard_mensal_faturamento` | Consolidado e uma linha por unidade, com `participacao_perc`, `variacao_pct` e `variacao_quantidade_pct` | ✅ `core_vendas_faturamento/index.js:216,222`; `fn_dashboard_mensal_faturamento.route.js` cita `variacao_pct` |
 | Rankings e detalhe por vendedor e cliente | `fn_ranking_vendedores_*`, `fn_ranking_clientes_*`, `fn_detalhe_vendedor_*` | ✅ pastas `functions/` |
 | Ritmo de meta e volume | `fn_ritmo_meta_*`, `ritmo_*_hora`, `volume_pedidos_diario*` | ✅ pastas `functions/` e `aggregates/` |
-| `GET /compras/ordens/dashboard` | Gasto, fornecedores, recebimento e atrasos do Compras | ✅ `ordens_compra.route.js:810` |
+| `GET /compras/ordens/dashboard` | Gasto, fornecedores, recebimento e atrasos do Compras | ✅ `ordens_compra.route.js:820` |
 | `GET /dashboard/comissoes` | Comissão de coordenadores | ✅ API, front 🔴 ([[Comissoes]]) |
 
 ### Regras (detalhe)

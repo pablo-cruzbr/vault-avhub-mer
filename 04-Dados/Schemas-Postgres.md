@@ -1,9 +1,10 @@
 ---
 tags: [dados, schemas, postgres, mes, av-hub]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, prisma/migrations do api-pcp até 28/10, Registro-de-Decisoes #21, v1 Schema-Postgres-Multi-Dominio, Infraestrutura-Self-Hosted]
 ---
 
@@ -72,7 +73,7 @@ A chave de negócio comum é **`codigo_empresa`** (uuid de `core.unidades`) ✅ 
 2. **Nunca criar objeto de Estoque no av-hub.** O saldo real mora no MES ([[Modelo-Estoque-e-Custo-do-Lote]]); `core.estoque_saldo` e `core.locais_estoque` são espelho do Omie, sem sync ligado ✅ `omie-elt-pipeline/src/omie/resources/estoque.ts:16`.
 3. **Convenção de chave:** av-hub usa `uuidv7()` no banco; MES gera `uuid` na aplicação (Prisma) e não tem `DEFAULT` ✅ dumps.
 4. **Convenção de auditoria:** av-hub tem `created_by`, `updated_by`, `deleted_by` e `deleted_at` em quase toda tabela; MES guarda autor só onde importa (`created_by_id`, `delivered_by_id`) e usa `deleted_at` em cadastros.
-5. **Quantidade:** MES `numeric(14,4)`; requisição e OC no av-hub `numeric(15,4)`. O PUT de requisição aceita até 11 dígitos inteiros e arredonda a 5ª casa ✅ `requisicoes_compra.route.js:48-50`.
+5. **Quantidade:** MES `numeric(14,4)`; requisição e OC no av-hub `numeric(15,4)`. O PUT de requisição aceita até 11 dígitos inteiros e arredonda a 5ª casa ✅ `requisicoes_compra.route.js:50-52`.
 6. **`core_comercial` está no dump de 29/10** ✅ (23 tabelas); no de 14/10 não estava. No dump do banco de teste de 04/11/2026 tem 12 tabelas (saíram as do módulo de teste do Pablo; entraram `pedidos_venda` e `pedidos_venda_itens`), e há um 15º schema, `orcamento_pdf` ✅ [[Dump-AvHub-Teste-2026-11-04]]. É o schema do módulo comercial; ver a decisão N16-116 acima.
 
 Detalhe das tabelas: [[Banco-MES]] e [[Banco-AvHub]]. O que existe em um lado e não no outro: [[Diferencas-Codigo-x-Banco]].

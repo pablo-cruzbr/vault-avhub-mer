@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, producao, roteiro, f1, p6, mes]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-13
 status: vigente
 ordem: 10
 nos: [F1]
 anterior: "[[09-Estoque-Entrada-do-Lote]]"
 proxima: "[[11-Qualidade-Saida]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, divergencias, roteiro-item, prisma/models/producao.prisma e fabricas.prisma), app-pcp 1fca8d3 (movimentacoes), v1 02-PRD-Estoque/Fluxo-Producao-OS-OP-Completo, v1 01-Fluxo-Operacional/Fluxograma-Telas-por-Bloco bloco 7, Dump MES 14/10, api-pcp e app-pcp develop de 27/10/2026 (finalizar, Montagem do Roteiro, aprovar-saida, ConsumoMateriaPrima), N16-140, N16-141]
 ---
@@ -135,7 +135,7 @@ Ações por status na fila (`app-pcp/app/(protected)/movimentacoes/acoes.ts:61-7
 | `CONCLUIDO` | `confirmar-entrega` |
 | `CANCELADO` | nenhuma |
 
-A tela filtra: `concluir` só com `ehUltimaEtapa`, `mover` só sem ela, `devolver` e `retrabalho` só com `idSetorOrigem`, `reprovar` só em setor `QUALIDADE` (`fila/CartaoItemParcial.tsx:301-305`). `cancelar` não aparece na fila: vive no detalhe do pedido (`acoes.ts:55-60`).
+A tela filtra: `concluir` só com `ehUltimaEtapa`, `mover` só sem ela, `devolver` e `retrabalho` só com `idSetorOrigem`, `reprovar` só em setor `QUALIDADE` (`fila/CartaoItemParcial.tsx:301-305`). `cancelar` não aparece na fila: vive no detalhe do pedido (`app-pcp` `app/(protected)/movimentacoes/acoes.ts:58-61` (`'cancelar' saiu deste mapa`)).
 
 ```mermaid
 stateDiagram-v2

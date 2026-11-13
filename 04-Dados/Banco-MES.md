@@ -1,9 +1,10 @@
 ---
 tags: [dados, banco, mes, postgres, prisma]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Robert
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [Dump MES (Esqueleto).sql de 14/10/2026 15:00 (defasado: não há dump mais novo), api-pcp befd973 develop (prisma/models/*.prisma, 66 migrations até 20261028120100), v1 App-PCP-Modelo-Producao, MES-Arquitetura-Decisoes]
 ---
 
@@ -34,7 +35,7 @@ Convenções ✅: chave `uuid` (gerada pela aplicação, sem `DEFAULT` no banco)
 | `TipoAnexo` | `NOTA`, `CANHOTO`, `DESENHO`, `PEDIDO`, `ORDEM_PRODUCAO`, `COMPROVANTE_ENTREGA` | `pedido_anexos.tipo` |
 | `TipoDivergencia` | `QUALIDADE`, `QUANTIDADE`, `PRAZO`, `DANO`, `DOCUMENTACAO`, `OUTRO` | `divergencias.tipo` |
 | `TipoDivergenciaRecebimento` | `QUANTIDADE`, `DESCRICAO`, `PESO`, `AVARIA` | `recebimentos_divergencias.tipo` |
-| `TipoEnvioAvhub` | `REQUISICAO_COMPRA` | `integracao_avhub_envios.tipo` |
+| `TipoEnvioAvhub` | `REQUISICAO_COMPRA`, `AVISO_COMPRA` (LOG-58, migration `20261112120000_log58_aviso_compra`) | `integracao_avhub_envios.tipo` |
 | `TipoFabrica` | `FABRICACAO`, `REVENDA` | `fabricas.tipo` (UI "Destinos") |
 | `TipoItemRequisicao` | `PRODUTO_FINAL`, `MATERIA_PRIMA` | `requisicoes_compra_itens.tipo` |
 | `TipoMovimentoEstoque` | `ENTRADA`, `SAIDA`, `TRANSFERENCIA`, `AJUSTE` | `movimentos_estoque.tipo` |
@@ -96,7 +97,7 @@ Estados do pedido e da parcial: [[Estados-e-Status]].
 | `recebimentos_itens` (`:1164`) | linha conferida | `quantidade_pendente`, `quantidade_nf`, `quantidade_contada`, `quantidade_recontada`, `peso_teorico`, `peso_real`, `peso_recontado`, `tolerancia_peso`, `id_localizacao` (sem FK), **`id_lote`** (sem FK) |
 | `recebimentos_divergencias` (`:1145`) | divergência da conferência | `tipo`, `etapa` (15), `evidencia_url` |
 
-✅ **Projeção da OC e da requisição do Hub no MES** (desde 15/10 e 16/10; N14-20): `oc_referencia` e `oc_referencia_itens` guardam a referência da OC lida do av-hub (`GET /ordens-compra/referencia`: OC por pedido, quantidade, `destino`, `finalidade`, valor, moeda, cotação e, desde 27/10, `codigo_fornecedor`, `nome_fornecedor`, `cnpj_fornecedor`); `requisicoes_hub_referencia` guarda a referência da requisição do Compras (API-009). `requisicoes_compra_itens.id_oc_item` liga a requisição ao item da OC. A tabela do saldo futuro do Estoque (BL-049, BL-050) sai dessa projeção; o que falta é o Estoque usá-la ❓.
+✅ **Projeção da OC e da requisição do Hub no MES** (desde 15/10 e 16/10; N14-20): `oc_referencia` e `oc_referencia_itens` guardam a referência da OC lida do av-hub (`GET /ordens-compra/referencia`: OC por pedido, quantidade, `destino`, `finalidade`, valor, moeda, cotação e, desde 27/10, `codigo_fornecedor`, `nome_fornecedor`, `cnpj_fornecedor`); `requisicoes_hub_referencia` guarda a referência da requisição do Compras (API-009). `requisicoes_compra_itens.id_oc_item` liga a requisição ao item da OC. Desde 12/11, `oc_referencia.id_aviso_mes_origem` marca a OC de recompra com o id do aviso do MES que ela resolve (LOG-58) ✅ `api-pcp` `prisma/models/integracao.prisma:159` (`idAvisoMesOrigem`). O saldo futuro do Estoque (BL-050) sai dessa projeção e já está na `develop`, descontando a reprovada que tem recompra ✅ `api-pcp` `src/estoque/operacao/saldo-futuro.ts:38` (`async function reprovadoComRecompra(`); confirmado no Docker em 13/11. O rateio (BL-049) continua aberto.
 
 ### Acesso e auditoria
 

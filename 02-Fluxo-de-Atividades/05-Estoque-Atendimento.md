@@ -7,7 +7,7 @@ ordem: 5
 nos: [E1, E2, E3, E4]
 anterior: "[[04-PCP-Triagem-e-Destinacao]]"
 proxima: "[[06-Circuito-de-Compra]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050)]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050, reteste)]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026 (E5 foi para 09-Estoque-Entrada-do-Lote e E6 para 12-Estoque-Despacho), v1 02-PRD-Estoque/Fluxo-Estoque-Completo, v1 Estoque-Custo-do-Lote, v1 Rota-Estoque, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, decisões do Nathan de 14/10, API-008, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.*, estoque.prisma, circuito-compra.ts), app-pcp 1fca8d3 (AtenderEstoqueModal), api-pcp develop befd973 de 27/10/2026 (aprovar-saida, receber-fabricado, itens-custo.ts, ConsumoMateriaPrima), LOG-53, N16-09, N16-140, OQ-49, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -73,7 +73,9 @@ Tudo o que é MES nesta nota está na `develop` do `api-pcp` e do `app-pcp`. A `
   - o que ainda vai chegar por OC de estoque aprovada aparece no modal "Atender pelo estoque" e num card da tela Saldo;
   - backend: `api-pcp` `src/estoque/operacao/saldo-futuro.ts:68` (`export async function saldoFuturoPorProduto`);
   - front: `app-pcp` `app/(protected)/estoque-operacao/saldo/SaldoFuturoCard.tsx:50` (`A chegar por OC de estoque`);
-  - ✅ a reprovada que já tem OC de recompra conta uma vez só: a view do SQL-022 está no tst desde 13/11 ([[Dump-AvHub-Teste-2026-11-13]], `avhub-tst-esqueleto-2026-11-13.sql:27920`, `av.id_aviso_mes AS id_aviso_mes_origem`). Falta o teste no tst com uma recompra de verdade. Na produção, até a view chegar (depois da log58), ela conta duas vezes.
+  - ✅ a reprovada que já tem OC de recompra conta uma vez só: a view do SQL-022 está no tst desde 13/11 ([[Dump-AvHub-Teste-2026-11-13]], `avhub-tst-esqueleto-2026-11-13.sql:27920`, `av.id_aviso_mes AS id_aviso_mes_origem`). Na produção, até a view chegar (depois da log58), ela conta duas vezes.
+  - ✅ (`api-pcp`) testado no Docker em 13/11: 3 a chegar pela OC-000016, zero depois do recebimento; com a recompra, 2 pela OC-000017 e 0 pela original.
+  - 🟡 Requisições não mostra a OC de estoque a chegar ao requisitar o mesmo produto: risco de comprar duas vezes (RS-008).
 - 🔴 Custo obrigatório em todo lote (BL-066) e custo do fabricado (BL-067).
 - 🔴 Contagem cíclica, transferência entre filiais e separação física.
 
@@ -92,7 +94,7 @@ Nós do [[00-Fluxo-Mestre-0b]]: `E1` saldo disponível, `E2` saldo cobre?, `E3` 
 | Compras · CCP | Recebe o "Solicitar compra" via setor Requisições | [[06-Circuito-de-Compra]] |
 | Robert | Dono do código | `api-pcp`, `app-pcp` |
 
-Permissão: agir no setor exige `PerfilSetor.podeAtuar` (`ensurePodeAtuar`, `itens-parciais.service.ts:617`); movimentação e carga inicial exigem `PerfilDeposito.podeAtuar` no depósito (`estoque.prisma:86-106`, `estoque-operacao.service.ts:614-616`).
+Permissão: agir no setor exige `PerfilSetor.podeAtuar` (`ensurePodeAtuar`, `itens-parciais.service.ts:617`); movimentação e carga inicial exigem `PerfilDeposito.podeAtuar` no depósito (`estoque.prisma:86-106`, `estoque-operacao.service.ts:631-633`).
 
 ### Regras decididas
 
@@ -109,10 +111,10 @@ As regras 9 e 11 (entrada do lote) estão em [[09-Estoque-Entrada-do-Lote]]; a r
 | 7 | Na **Fabricação** o restante pode seguir o roteiro (`ROTEIRO`) ou ir à compra (`COMPRA`, matéria-prima) | 📝 🔴 a `develop` recusa `ROTEIRO` sem matéria-prima com 400 (`api-pcp` `src/itens-parciais/itens-parciais.service.ts:932`, `destinoRestante === 'ROTEIRO'`); a #100 aceitou isso só até o levantamento físico; ❓ OQ-49 |
 | 8 | A parte atendida vai para a **primeira etapa `EXPEDICAO`** depois do Estoque; sem ela no roteiro, 409 | ✅ `itens-parciais.service.ts:701-714` |
 | 12 | **Custo do item = média ponderada dos lotes** das reservas (Regra A: faturamento parcial usa o custo médio do item no pedido) | 📝 ✅ `GET /itens/custo` na `develop` (27/10, `6c11147`, `integracao-avhub.controller.ts`, regra em `itens-custo.ts`); fabricado fora até o custo da matéria-prima ([[Contratos-da-v2\|API-008]]) |
-| 13 | O custo do lote é **opcional hoje** e não bloqueia carga inicial, recebimento, reserva nem despacho. A N16-09 decide que **todo lote tem custo** (obrigatório, inclusive na carga inicial) | ✅ opcional no código (`estoque-operacao.service.ts:404-409`, `estoque.prisma:385-393`); 📝 N16-09, 🔴 obrigatório (BL-066) |
+| 13 | O custo do lote é **opcional hoje** e não bloqueia carga inicial, recebimento, reserva nem despacho. A N16-09 decide que **todo lote tem custo** (obrigatório, inclusive na carga inicial) | ✅ opcional no código (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:633-634` (`Custo opcional: vazio ou 0 = lote sem custo`), `estoque.prisma:385-393`); 📝 N16-09, 🔴 obrigatório (BL-066) |
 | 14 | Lote filho de cisão herda o custo do pai; transferência entre depósitos não muda o custo | 📝 ✅ `estoque-operacao.helpers.ts:431-452` |
-| 15 | Ajuste de saldo não pode comer o que já está reservado; motivo obrigatório | ✅ `estoque-operacao.service.ts:657-673` |
-| 16 | Carga inicial (marco zero) nasce `LIBERADO` sem inspeção; é o primeiro estoque | 📝 ✅ `estoque-operacao.service.ts:429-437` |
+| 15 | Ajuste de saldo não pode comer o que já está reservado; motivo obrigatório | ✅ `estoque-operacao.service.ts:674-690` |
+| 16 | Carga inicial (marco zero) nasce `LIBERADO` sem inspeção; é o primeiro estoque | 📝 ✅ `estoque-operacao.service.ts:446-454` |
 | 17 | **Saldo futuro:** para OC de itens de **estoque** (sem pedido de venda), o Estoque do MES mostra as **OCs em andamento** e a parte delas que preenche o estoque: **saldo atual + saldo futuro** ([[Glossario]]). A fonte é a referência da OC do hub (`GET /ordens-compra/referencia`, item com `destino` do tipo `estoque`) | 📝 N14-20; ✅ (`api-pcp`) o MES já lê a referência da OC (K4, `develop`, 15/10); 🔴 o cálculo e a coluna (BL-050) |
 | 18 | Se a OC está **vinculada a um pedido de venda** (`destino` do tipo `pedido_venda`), o Estoque e o PCP veem que já existe OC para aquele pedido; essa quantidade **não** entra no saldo futuro livre | 📝 N14-20 🔴 (BL-049: o PCP ainda não vê a OC do pedido na Triagem e na Destinação) |
 
@@ -154,18 +156,18 @@ Aceita agir em `CRIADO`, `EM_TRANSITO`, `RECEBIDO`, `EM_ANDAMENTO` (`itens-parci
 | Lote (detalhe, etiqueta) | — | `/estoque-operacao/lotes/[id]` | `saldo` | ✅ (`app-pcp`, `api-pcp`) PDF Code128 `GET /estoque/lotes/:id/etiqueta` |
 | Painel do Estoque | Dashboard do Estoque | `/estoque-operacao/painel-estoque` | `painel-estoque` | 🟡 protótipo com dados de exemplo; dois alertas reais |
 | Mapa do Depósito | — | `/estoque-operacao/mapa-deposito` | — | 🟡 mock |
-| Saldo futuro (coluna e detalhe das OCs em andamento no Atendimento e no Saldo) | — | `/estoque-operacao/atendimento`, `/estoque-operacao/saldo` | `atendimento`, `saldo` | 🔴 não existe (BL-050) |
+| Saldo futuro (coluna e detalhe das OCs em andamento no Atendimento e no Saldo) | — | `/estoque-operacao/atendimento`, `/estoque-operacao/saldo` | `atendimento`, `saldo` | ✅ `api-pcp` (BL-050, 13/11) |
 
 ### Endpoints e contratos
 
 | Método e rota | Permissão | Efeito | Código |
 |---|---|---|---|
-| `GET /estoque/saldo/disponivel-parcial/:idItemParcial` | `movimentacoes:visualizar` | Lotes `LIBERADO` com disponível, mais `outrasFiliais` | `estoque-operacao.controller.ts:45-49`, `estoque-operacao.service.ts:112-147` ✅ |
+| `GET /estoque/saldo/disponivel-parcial/:idItemParcial` | `movimentacoes:visualizar` | Lotes `LIBERADO` com disponível, mais `outrasFiliais` | `estoque-operacao.controller.ts:53-57`, `estoque-operacao.service.ts:112-147` ✅ |
 | `PATCH /itens-parciais/:id/atender-estoque` | `movimentacoes:editar` | `quantidadeEstoque`, `alocacoes[]` (lote e quantidade), `materiaPrima` (consumos e unidades cobertas), `destinoRestante` `COMPRA` (`ROTEIRO` ainda está no tipo, mas é recusado), observação | `itens-parciais.controller.ts:163-180`, `itens-parciais.service.ts:796` ✅ |
 | `GET /estoque/saldo` | `saldo:visualizar` | Saldo por lote e localização; custo só para quem tem `estoque-custo` | `estoque-operacao.controller.ts:39-43` ✅ |
-| `POST /estoque/lotes/carga-inicial` | `movimentacao:criar` | Lote `LIBERADO`, custo opcional (`estoque-custo:editar`) | `estoque-operacao.controller.ts:66-70`, `estoque-operacao.service.ts:398-445` ✅ |
-| `GET /estoque/movimentos`, `POST /estoque/movimentos` | `movimentacao` | Transferência e ajuste | `estoque-operacao.controller.ts:78-88` ✅ |
-| `GET /estoque/reservas`, `PATCH /estoque/reservas/:id/liberar` | `reservas` | Consulta e liberação com motivo | `estoque-operacao.controller.ts:90-98` ✅ |
+| `POST /estoque/lotes/carga-inicial` | `movimentacao:criar` | Lote `LIBERADO`, custo opcional (`estoque-custo:editar`) | `estoque-operacao.controller.ts:74-78`, `estoque-operacao.service.ts:415-462` ✅ |
+| `GET /estoque/movimentos`, `POST /estoque/movimentos` | `movimentacao` | Transferência e ajuste | `estoque-operacao.controller.ts:86-96` ✅ |
+| `GET /estoque/reservas`, `PATCH /estoque/reservas/:id/liberar` | `reservas` | Consulta e liberação com motivo | `estoque-operacao.controller.ts:98-106` ✅ |
 | `GET /estoque/alertas/estoque-minimo`, `/rnc-pendentes` | Estoque | Dois alertas do painel | `alertas.controller.ts:19-25` ✅ |
 | `GET /itens/custo` (MES → av-hub) | chave do av-hub | Custo do item (uma linha por filial, pedido e produto; cursor `alterado_em`) | [[Contratos-da-v2\|API-008]], [[Contratos-da-v2\|LOG-47]] ✅ na `develop` do MES (27/10, `6c11147`); o job do hub ainda não foi testado junto |
 | `PUT /estoque/lotes/:id/custo` | `estoque-custo:editar` | Informa ou corrige o custo do lote à mão, com motivo e histórico | [[Contratos-da-v2\|API-008]] ✅ (`api-pcp`) `develop` (27/10) |
@@ -176,7 +178,7 @@ Aceita agir em `CRIADO`, `EM_TRANSITO`, `RECEBIDO`, `EM_ANDAMENTO` (`itens-parci
 
 ✅ O modal busca `GET /estoque/saldo/disponivel-parcial/:id` e sugere lotes (inclusive os da compra daquele item). `E2` não é um nó automático: o almoxarife informa quanto atende (0 a quantidade da parcial) e de quais lotes (`alocacoes` somando exatamente a quantidade atendida, `itens-parciais.service.ts:650-659`). Só é possível agir em setor tipo `ESTOQUE` (`:623-627`).
 
-🔴 **Saldo futuro (N14-20).** O modal e a tela Saldo só mostram o saldo atual (lotes `LIBERADO` menos reservas). Falta mostrar as OCs em andamento. Do lado do hub já há: `ordens_compra.finalidade` (`estoque` é o padrão, `ordens_compra.route.js:982`), `ordens_compra_itens_vinculos` (item da OC para pedido de venda), a view `vw_pedido_venda_itens_compra` e a referência `GET /ordens-compra/referencia`, cujo item traz `destino[]` (`pedido_venda` ou `estoque`, somando a quantidade) ✅ (`vw_ordens_compra_referencia_mes.swagger.json:61-88`). No MES, o job que lê a referência já existe na `develop` (K4, `6914fe9`, 15/10, `oc-referencia-avhub.service.ts`) ✅ e o aviso de compra em andamento aparece ao requisitar (API-011, 20/10). Falta o cálculo do saldo futuro (OC aprovada, parte `estoque` do `destino`, menos o que já foi recebido) e a coluna no Atendimento e no Saldo (BL-050). A referência só traz OC `aprovado` e as canceladas que já foram aprovadas (`vw_ordens_compra_referencia_mes`, [[Banco-AvHub]]): OC em aprovação não entra, e o Gustavo confere se isso basta (BL-028). Como a mercadoria entra no Estoque: [[07-Recebimento]].
+✅ **Saldo futuro (N14-20, BL-050, 13/11).** O modal e a tela Saldo mostram o saldo atual e as OCs de estoque em andamento (ver "O que já existe"). Do lado do hub há: `ordens_compra.finalidade` (`estoque` é o padrão, `ordens_compra.route.js:999`), `ordens_compra_itens_vinculos` (item da OC para pedido de venda), a view `vw_pedido_venda_itens_compra` e a referência `GET /ordens-compra/referencia`, cujo item traz `destino[]` (`pedido_venda` ou `estoque`, somando a quantidade) ✅ (`vw_ordens_compra_referencia_mes.swagger.json:61-88`). No MES, o job que lê a referência já existe na `develop` (K4, `6914fe9`, 15/10, `oc-referencia-avhub.service.ts`) ✅ e o aviso de compra em andamento aparece ao requisitar (API-011, 20/10), só para OC com destino ao pedido. O cálculo soma a parte `estoque` das OCs aprovadas menos o recebido ✅ `api-pcp` `src/estoque/operacao/saldo-futuro.ts:7-11` (`Saldo futuro (BL-050, N14-20)`). A referência só traz OC `aprovado` e as canceladas que já foram aprovadas (`vw_ordens_compra_referencia_mes`, [[Banco-AvHub]]): OC em aprovação não entra, e o Gustavo confere se isso basta (BL-028). Como a mercadoria entra no Estoque: [[07-Recebimento]].
 
 #### E3: atender pelo saldo (split e reserva)
 
@@ -227,7 +229,7 @@ O item 1 (documento de retirada) está em [[12-Estoque-Despacho]] e o item 2 (fa
 | 8 | Separação física (`ordem_separacao`): sem código | Robert | E3 | 🔴 |
 | 9 | Trocar os mocks do `painel-estoque` e `mapa-deposito` por dados reais | Robert | — | 🟡 |
 | 10 | Importação de carga inicial em lote (hoje um lote por vez) | Robert | — | 🔴 |
-| 11 | **Saldo futuro** no Atendimento e no Saldo (saldo atual + OCs em andamento de estoque), a partir da referência da OC (BL-050; depende de BL-001) | Robert (MES), Gustavo (BL-028) | E1 | 🔴 |
+| 11 | **Saldo futuro** no Atendimento e no Saldo (saldo atual + OCs em andamento de estoque), a partir da referência da OC (BL-050; depende de BL-001) | Robert (MES), Gustavo (BL-028) | E1 | ✅ `api-pcp` 13/11 |
 
 ### Pendências
 
@@ -239,7 +241,7 @@ As pendências do despacho estão em [[12-Estoque-Despacho]] e as do fabricado e
 
 ```mermaid
 flowchart TD
-    P2["P2 · Destinação do Pedido<br/>Estoque como etapa 1"] --> E1["E1 · Saldo disponível<br/>lotes LIBERADO menos reservas ATIVA, na filial do pedido<br/>saldo futuro das OCs em andamento, a construir"]
+    P2["P2 · Destinação do Pedido<br/>Estoque como etapa 1"] --> E1["E1 · Saldo disponível<br/>lotes LIBERADO menos reservas ATIVA, na filial do pedido<br/>saldo futuro das OCs em andamento"]
     C0["C0 · Requisição de compra<br/>origem Compras, no av-hub<br/>a OC chega ao MES pela referência, destino estoque ou pedido"] -.->|"saldo futuro"| E1
     E1 --> E2{"E2 · Saldo cobre o item?<br/>almoxarife informa quanto atende"}
     E2 -->|"sim, tudo ou parte"| E3["E3 · Atende pelo saldo<br/>split e reserva ATIVA<br/>custo do item = média dos lotes, GET itens custo"]

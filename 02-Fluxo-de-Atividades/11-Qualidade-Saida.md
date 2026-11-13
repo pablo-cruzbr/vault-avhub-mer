@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, qualidade, qualidade-saida, q7, q8, mes]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: vigente
 ordem: 11
 nos: [Q7, Q8]
 anterior: "[[10-Producao-e-Roteiro]]"
 proxima: "[[12-Estoque-Despacho]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 dono: Robert (MES) · Qualidade (regra) · Nathan (decisões)
 fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts), app-pcp 1fca8d3 (qualidade/inspecao-saida, movimentacoes), v1 Fluxo-Qualidade-Completo, v1 Encaixe-Estoque-Revenda-no-PCP (EC-06), 06-Qualidade-Entrada, 00-Fluxo-Mestre-0b, api-pcp develop de 27/10/2026 (aprovar-saida, receber-fabricado), LOG-53, N16-128, N16-129, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -98,7 +98,7 @@ Perfis são dados do banco; o inspetor precisa de `PerfilSetor.podeAtuar` no set
 | 3 | Reprovar grava histórico e abre `Divergencia` tipo `QUALIDADE`, `ABERTA`, com motivo | ✅ `:1036-1058` |
 | 4 | Na fila, reprovado só tem duas saídas: `resolver` (falso alarme, volta a `EM_ANDAMENTO`) ou `retrabalho` (volta ao setor anterior; pela N16-141, de 29/10, o PCP passará a escolher o setor). Mover, concluir, pausar e devolver somem. Ajustar roteiro e reabrir compra são do novo norte (`P6`, sem tela; item 3 de "O que falta desenvolver") | ✅ `app-pcp` `app/(protected)/movimentacoes/acoes.ts:76` (`REPROVADO: ['retrabalho'`) |
 | 5 | Aprovado volta ao Estoque: **lote e saldo do fabricado**, retirada depois ([[Contratos-da-v2\|LOG-53]], [[Contratos-da-v2\|LOG-54]]) | 📝 ✅ (`api-pcp`) lote e saldo na `develop` (27/10); 🔴 retirada |
-| 6 | Reprovação de inspeção de saída **não** gera RNC nem nota de devolução: RNC é conceito do lote comprado | ✅ `rncs` só em `qualidade.service.ts:212` |
+| 6 | Reprovação de inspeção de saída **não** gera RNC nem nota de devolução: RNC é conceito do lote comprado | ✅ `rncs` só em `api-pcp` `src/qualidade/qualidade.service.ts:205` (`await tx.rnc.create({`) |
 | 7 | Inspeção de saída sem laudo nem checklist: um clique e um motivo (N16-129, 29/10, responde a pergunta T-04 da inspeção documental, ciclo 2). Hoje não há laudo na saída | 📝 ✅ (`api-pcp`) |
 | 8 | Pode reprovar só parte da parcial (N16-128, 29/10) | 📝 🔴 |
 
@@ -139,7 +139,7 @@ Contrato com o av-hub: só a etapa do item ([[Contratos-da-v2|API-005]], [[Contr
 - Como a Qualidade é um setor comum no roteiro, `ehUltimaEtapa` é falso nela (a Expedição vem depois), então a tela oferece `mover`, não `concluir` (`fila/CartaoItemParcial.tsx:301-302`).
 - Na `main` do MES (registro de 14/10), o fabricado aprovado nunca passa pelo Estoque, e `mover` leva a parcial direto à primeira etapa `EXPEDICAO`. Na `develop`, a reserva do lote `PRODUCAO` nasce em `receber-fabricado`.
 - `ensureLotesCompradosLiberados` só barra envio a setor `ESTOQUE` com lote comprado pendente (`service:862-874`); não protege este caso.
-- `Pedidos.acompanhamentoQualidade` (V2) é gravado (`producao.prisma:118`) e mostrado na Triagem, mas nenhuma fila consome ([[03-Pedido-de-Venda-e-Liberacao]], item 7).
+- `Pedidos.acompanhamentoQualidade` (V2) é gravado (`api-pcp` `prisma/models/producao.prisma:104` (`acompanhamentoQualidade Boolean?`)) e mostrado na Triagem, mas nenhuma fila consome ([[03-Pedido-de-Venda-e-Liberacao]], item 7).
 - ❓ Ninguém conferiu o uso real da tela em ambiente.
 
 ### O que falta desenvolver

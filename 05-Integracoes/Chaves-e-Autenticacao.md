@@ -1,9 +1,10 @@
 ---
 tags: [integracao, seguranca, chaves, autenticacao, av-hub, mes, pipeline]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-acos-vital develop bebca52 em 12/11 (apiKeyAuth.js, rota dos avisos do MES), api-acos-vital develop 0384e89 em 29/10 (apiKeyAuth.js, acessoConfig.js, docs/rotas.js; antes f322dcd), api-pcp develop befd973, app-pcp 1fca8d3, omie-elt-pipeline 0f739f0, av-hub develop 758d5f0 em 29/10 (antes b55ac55), v1 Chaves-de-Integracao-AvHub-MES-Pipeline, Registro-de-Decisoes #8 #9 #10 #11 #12 #87 #88]
 ---
 
@@ -46,7 +47,7 @@ A tabela de regras que já viraram fixas, o mapa completo das chaves e as rotas 
 
 | Chave | Direção | Variável no emissor | Variável no receptor | Vale para | Selo |
 |---|---|---|---|---|---|
-| A, requisição e avisos de compra | MES para av-hub | `api-pcp`: `AVHUB_MES_INTEGRACAO_KEY` (singular) ✅ `envio-avhub.service.ts:98` | `api-acos-vital`: `MES_INTEGRACAO_KEYS` (lista, plural) ✅ `apiKeyAuth.js` | **só** `PUT /compras/requisicoes/origem/:id` e, desde 12/11/2026, `POST /integracao/mes/avisos-compra` (LOG-58) ✅ `apiKeyAuth.js:110` (`(metodo === "PUT" && ROTA_MES.test(caminho)) || (metodo === "POST" && ROTA_MES_AVISOS.test(caminho))`), `api-acos-vital` `bebca52`; qualquer outra rota ou método dá 403 `CHAVE_MES_ROTA_NAO_PERMITIDA`. 🔴 O MES ainda não manda os avisos (Robert, LOG-58). Mínimo de 32 caracteres; as curtas são ignoradas com aviso | ✅ |
+| A, requisição e avisos de compra | MES para av-hub | `api-pcp`: `AVHUB_MES_INTEGRACAO_KEY` (singular) ✅ `api-pcp` `src/integracao-avhub/envio-avhub.service.ts:93` (`process.env.AVHUB_MES_INTEGRACAO_KEY`) | `api-acos-vital`: `MES_INTEGRACAO_KEYS` (lista, plural) ✅ `apiKeyAuth.js` | **só** `PUT /compras/requisicoes/origem/:id` e, desde 12/11/2026, `POST /integracao/mes/avisos-compra` (LOG-58) ✅ `apiKeyAuth.js:110` (`(metodo === "PUT" && ROTA_MES.test(caminho)) || (metodo === "POST" && ROTA_MES_AVISOS.test(caminho))`), `api-acos-vital` `bebca52`; qualquer outra rota ou método dá 403 `CHAVE_MES_ROTA_NAO_PERMITIDA`. O MES já manda os avisos pela mesma fila e pela mesma chave ✅ `api-pcp` `src/integracao-avhub/envio-avhub.service.ts:125` (`envio.tipo === 'AVISO_COMPRA'`); confirmado no Docker em 13/11. Mínimo de 32 caracteres; as curtas são ignoradas com aviso | ✅ |
 | B, leitura e confirmação do MES | MES para av-hub | `api-pcp`: `API_KEY` e `API_URL` ✅ `omie-integracao.ts:149`, `eventos-avhub.service.ts:192`, `produtos-avhub.client.ts:60` | `api-acos-vital`: `API_KEYS` (admin) ou `auth.chaves_servico` | pedidos liberados, `importado`, eventos de requisição (35), referência da OC (004/007) e das requisições (API-009), produtos, unidades. **Acesso total se for chave `API_KEYS`**; com chave do banco em modo `exigir`, só as rotas da lista | ✅ código; modo em produção ❓ (BL-018) |
 | C, pipeline | pipeline para av-hub | `omie-elt-pipeline`: `AVHUB_API_URL`, `AVHUB_API_KEY` ✅ `src/config/index.ts:164-165` | `API_KEYS` ou `auth.chaves_servico` | `GET /compras/ordens/fila-omie`, `PATCH /compras/ordens/:id/sincronizacao`, `POST :id/reenviar` | ✅ código; modo em produção ❓ (BL-018) |
 | D, av-hub lê o MES | av-hub para MES | `api-acos-vital`: `MES_API_URL`, `MES_API_KEY` ✅ `app.js`, `utils/mesFluxo.js` | `api-pcp`: `MES_API_KEY` (guard fail-closed, 401 sem a variável) ✅ `avhub-api-key.guard.ts:11-23` | `GET /itens/status` (005), `GET /requisicoes-compra` (003, legado), `GET /itens/custo` (008; rota feita só na `develop` do MES, `6c11147` de 27/10), `GET /fluxo/*` (46; o MES ainda não tem o módulo 🔴) | ✅ |
@@ -96,7 +97,7 @@ As três últimas só podem ser fixadas depois de separar as chaves de serviço 
 
 ### Front do HUB
 
-- Os helpers do BFF (`headersDaApi()` em `HUB lib/api/escopoUnidade.ts:45`; `headersApi = () => headersDaApi()` em `lib/api/pedidosVenda.ts:96`) mandam `x-api-key` e, havendo sessão, `Authorization: Bearer`, sem variável de ambiente ✅ (#88, HUB b55ac55). Sem Bearer a API trata a chamada como serviço, sem escopo nem permissão por tela. Reauditado em 29/10/2026 (`av-hub` develop `758d5f0`): todos os ajudantes (`headersComIdentidade`, `headersDaApi`, `headersCompras`, `headersApi`) mandam o Bearer quando a sessão tem token; a chave sozinha só aparece nas quatro chamadas do login (`/autenticacao/azure`, `/autenticacao/login`, `/autenticacao/renovar` e `fetchMenu`) ✅ → [[Pontas-Soltas]] PS-018. Desde a PR #206 (HUB `d0ef359`) o token é lido do cookie no servidor e não vai na sessão do navegador, e `requirePermission` responde 401 sem ele.
+- Os helpers do BFF (`headersDaApi()` em `HUB lib/api/escopoUnidade.ts:45`; `headersApi = () => headersDaApi()` em `av-hub` `lib/api/pedidosVenda.ts:108` (`export const headersApi = () => headersDaApi()`)) mandam `x-api-key` e, havendo sessão, `Authorization: Bearer`, sem variável de ambiente ✅ (#88, HUB b55ac55). Sem Bearer a API trata a chamada como serviço, sem escopo nem permissão por tela. Reauditado em 29/10/2026 (`av-hub` develop `758d5f0`): todos os ajudantes (`headersComIdentidade`, `headersDaApi`, `headersCompras`, `headersApi`) mandam o Bearer quando a sessão tem token; a chave sozinha só aparece nas quatro chamadas do login (`/autenticacao/azure`, `/autenticacao/login`, `/autenticacao/renovar` e `fetchMenu`) ✅ → [[Pontas-Soltas]] PS-018. Desde a PR #206 (HUB `d0ef359`) o token é lido do cookie no servidor e não vai na sessão do navegador, e `requirePermission` responde 401 sem ele.
 - Páginas e permissões: [[RBAC-e-Permissoes]]; rotas do BFF: [[Mapa-Rotas-BFF-Bearer]].
 
 ### Guards do MES

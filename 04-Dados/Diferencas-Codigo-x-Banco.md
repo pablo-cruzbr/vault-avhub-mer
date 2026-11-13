@@ -1,9 +1,10 @@
 ---
 tags: [dados, auditoria, codigo-x-banco, mes, av-hub]
 criado: 2026-10-14
-atualizado: 2026-11-12
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 0384e89 (develop), av-hub 758d5f0 (develop), omie-elt-pipeline 0f739f0, Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, conferência por script em 14/10 e 29/10, Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-12 (12/11/2026) com api-acos-vital bebca52 e av-hub 16891f9 (develop)]
 ---
 
@@ -31,7 +32,7 @@ Conferido de novo em 29/10 no código da `develop`.
 | Objeto | Situação | Selo | Evidência |
 |---|---|---|---|
 | Tabela `fornecedores` | existe, tem model, **nenhum código escreve nem lê** (projeção de `core.parceiros` prevista na D3) | 🟡 | dump `:595`; grep `prisma.fornecedor` sem ocorrência |
-| `OrigemCusto` `OC` e `MANUAL` | **agora têm escritor**: `OC` no Recebimento (`compra-oc.ts:114`, desde 16/10) e `MANUAL` em `PUT /estoque/lotes/:id/custo` (`estoque-operacao.service.ts:715`, 27/10) | ✅ | `compras.service.ts:1045`, `recebimento.service.ts:1135` |
+| `OrigemCusto` `OC` e `MANUAL` | **agora têm escritor**: `OC` no Recebimento (`compra-oc.ts:114`, desde 16/10) e `MANUAL` em `PUT /estoque/lotes/:id/custo` (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:719` (`async informarCustoLote(`), 27/10) | ✅ | `compras.service.ts:1045`, `recebimento.service.ts:1135` |
 | `OrigemLote` | ganhou `PRODUCAO` (28/10) e o código a usa para o fabricado aprovado | ✅ | `estoque.prisma:11-17`, `itens-parciais.service.ts:1489,1505` |
 | `StatusPedido.BLOQUEADO` | só é lido pelo dashboard; nenhum código o atribui | 🟡 | `dashboard.service.ts` |
 | `TipoAnexo` `CANHOTO`, `COMPROVANTE_ENTREGA` | sem referência fora do enum; `DESENHO` é usado | 🟡 | grep |
@@ -77,7 +78,7 @@ Resolvidos desde 14/10 (só na `develop`): `GET /itens/custo` com `alterado_desd
 | API-004/007 (`moeda`, `cotacao_*`, `valor_frete`, `valor_seguro` na referência) e api007b (fornecedor) | ✅ colunas na view (fornecedor no dump de 29/10) | ✅ | dump `vw_ordens_compra_referencia_mes` |
 | API-009 (`requisicoes_compra_referencia_mes` e a view) | ✅ existem no dump de 29/10 | ✅ | `vw_requisicoes_compra_referencia_mes.route.js:59` |
 | rotas `/comercial/*` (funções `core_comercial.fn_proposta_*`, `fn_cliente_omie_registrar`, `fn_parametros_custo_salvar`, `vw_propostas_lista`) | ✅ existem no dump de 29/10 só a criação e o cálculo do item (`fn_proposta_criar`, `fn_proposta_item_calcular`); as de revisar, aprovar, cancelar, copiar, transformar e expirar, e as tabelas `core_comercial.pedidos_venda` e `pedidos_venda_itens`, aparecem no dump do banco de teste de 04/11/2026; o envio ao Omie (`fn_pedido_venda_*`) e a `fn_proposta_transformar` de 4 argumentos, no de 09/11/2026 ([[Dump-AvHub-Teste-2026-11-09]]), com as migrations fora do repositório (BL-024) | ✅ | `core_comercial/aggregates/*` |
-| views `vw_ritmo_*_hora`, `vw_volume_pedidos_diario*` | não existem; **só aparecem em comentários** (as rotas foram reconstruídas) | ✅ sem problema | `ritmo_faturamento_hora.route.js:8` |
+| views `vw_ritmo_*_hora`, `vw_volume_pedidos_diario*` | não existem; **só aparecem em comentários** (as rotas foram reconstruídas) | ✅ sem problema | `api-acos-vital` `src/schemas/core_vendas_faturamento/aggregates/ritmo_faturamento_hora/ritmo_faturamento_hora.route.js:9-11` (`RECONSTRUÍDA`) |
 | `core.vw_unidades_cabecalho` no lugar de `core_comercial.unidades_emissoras` (a emissora virou a unidade, 10/11) | ✅ no dump de 12/11 a view existe e a tabela saiu (`:17658`) | ✅ | `api-acos-vital` `src/schemas/core_comercial/aggregates/cadastros/cadastros.route.js:83` (`FROM core.vw_unidades_cabecalho e`) |
 | LOG-57: `core_comercial.vw_divergencias_compra` e `fn_divergencia_compra_decidir` | ✅ existem no dump de 12/11 (`:19278`, `:2541`) | ✅ | `api-acos-vital` `src/schemas/core_comercial/tables/divergencias_compra/divergencias_compra.route.js:11` (`vw_divergencias_compra`) |
 | LOG-58: `core_vendas_faturamento.vw_avisos_mes_compra` e `fn_aviso_mes_compra_registrar` | ✅ existem no dump de 12/11 (`:26232`, `:7295`) | ✅ | `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:36` (`vw_avisos_mes_compra`) |

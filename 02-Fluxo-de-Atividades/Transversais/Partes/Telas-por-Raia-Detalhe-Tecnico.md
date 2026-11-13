@@ -1,12 +1,12 @@
 ---
 tags: [fluxo, telas, rotas, raias, referencia, parte]
 criado: 2026-11-12
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
 parte-de: "[[Telas-por-Raia]]"
 fontes: [Telas-por-Raia (Detalhe técnico movido em 12/11/2026 para a nota ficar abaixo de 25 KB), app-pcp 1fca8d3, HUB b55ac55, av-hub develop d82d58b em 12/11 (Compras · Divergências e avisos do MES)]
-develop-conferida: [av-hub d82d58b, em 2026-11-12, só as linhas C8 e C1 de Compras; av-hub 44bb770, app-pcp 4c11886, em 2026-11-10]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; av-hub d82d58b, em 2026-11-12, só as linhas C8 e C1 de Compras; av-hub 44bb770, app-pcp 4c11886, em 2026-11-10]
 ---
 
 # Telas por raia: detalhe técnico
@@ -54,7 +54,7 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 | Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
 |---|---|---|---|---|---|---|
 | E1 a E4 | Atendimento | Atendimento / Baixa (8.12) | app-pcp | `/estoque-operacao/atendimento` | `atendimento` | `AtenderEstoqueModal` (título `atendimento/page.tsx:10`) |
-| E5 (consulta) | Saldo | Consulta de Saldo (8.4) | app-pcp | `/estoque-operacao/saldo` | ❓ | Título `saldo/page.tsx:73` |
+| E5 (consulta) | Saldo | Consulta de Saldo (8.4) | app-pcp | `/estoque-operacao/saldo` | ❓ | Título `saldo/page.tsx:74` |
 | E3 | Reservas | Reservas (8.5) | app-pcp | `/estoque-operacao/reservas` | ❓ |  |
 | E6 (parcial) | Movimentação e Ajuste | Movimentação (8.6) | app-pcp | `/estoque-operacao/movimentacao` | ❓ | O histórico mostra `ENTRADA`, `SAIDA`, `TRANSFERENCIA` e `AJUSTE`; à mão, só `TRANSFERENCIA` e `AJUSTE` (`app-pcp` `app/(protected)/estoque-operacao/movimentacao/page.tsx:229` `Transferência entre localizações`, `:230` `Ajuste de saldo`) |
 | E5 | Detalhe do lote | Detalhe do lote (8.7) | app-pcp | `/estoque-operacao/lotes/[id]` | ❓ | Movimentos, etiqueta Code128 |
@@ -70,7 +70,7 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 |---|---|---|---|---|---|---|
 | P3 | Requisições de compras | Setor Compras (2.4), fila `requisicoes` | app-pcp | `/compras/requisicoes` | `requisicoes` | `RequisitarCompraModal` ("Solicitar compra" do Estoque cai aqui); título `requisicoes/page.tsx:10` |
 | C5 | Compras · CCP | Pedidos de Compra / Compras | app-pcp | `/compras/pedidos-compra` (e `/compras`) | `pedidos-compra` | Só leitura; título `pedidos-compra/page.tsx:11`; linha do tempo por material, `EventosRequisicaoModal` |
-| C0, C1 | Requisições (caixa do Compras), "Nova requisição" | Caixa de entrada de Requisições (3.1) | HUB | `/compras/requisicoes`, `/compras/requisicoes/kanban` | ❓ | `components/Compras/ComprasRequisicoes.tsx:188`, `:426` |
+| C0, C1 | Requisições (caixa do Compras), "Nova requisição" | Caixa de entrada de Requisições (3.1) | HUB | `/compras/requisicoes`, `/compras/requisicoes/kanban` | ❓ | `components/Compras/ComprasRequisicoes.tsx:189`, `:426` |
 | C4 | Nova Ordem de Compra | Emissão da OC (3.2) | HUB | `/compras/nova`, `/compras/nova/[requisicaoId]` | ❓ |  |
 | C4 | Ordens de Compra | Ordens de Compra (3.3) | HUB | `/compras/ordens`, `/compras/ordens/kanban`, `/compras/ordem/[id]`, `/compras/pedido-omie/[id]` | ❓ |  |
 | C2, C3 | Aprovações | Fila de Aprovações (3.4) | HUB | `/compras/aprovacoes` | ❓ | Aprova só OC acima de R$ 30 mil (Gerência de Compras); sem Diretoria (N14-21) |
@@ -78,7 +78,7 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 | — | Dashboard de Compras | (3.5) | HUB | `/compras/dashboard-compras` | ❓ |  |
 | — | Compradores | — | HUB | `/compras/compradores` | ❓ | Cadastro usado pela OC (LOG-18, LOG-28, LOG-36) |
 | C8 | Compras · Divergências | — | HUB | `/compras/divergencias` | `compras-divergencias` | Compra acima do cotado na proposta (LOG-57); a tela entra no menu quando estiver cadastrada nas telas da API: `app/(protected)/compras/divergencias/page.tsx:5` (`C8 (LOG-57): a tela`) |
-| C1 | Avisos do MES | — | HUB | no detalhe da OC e em `/compras/requisicoes`; a recompra abre `/compras/nova?aviso={id}` | `compras` | Recompra por RNC e recebimento reaberto (LOG-58): `components/Compras/OrdemDetalhe.tsx:216` (`<AvisosMesDaOrdem idOrdem={ordem.id} />`) e `components/Compras/ComprasRequisicoes.tsx:167` (`<AvisosMesPainel`) |
+| C1 | Avisos do MES | — | HUB | no detalhe da OC e em `/compras/requisicoes`; a recompra abre `/compras/nova?aviso={id}` | `compras` | Recompra por RNC e recebimento reaberto (LOG-58): `components/Compras/OrdemDetalhe.tsx:216` (`<AvisosMesDaOrdem idOrdem={ordem.id} />`) e `components/Compras/ComprasRequisicoes.tsx:168` (`<AvisosMesPainel`) |
 | FN1 | — | — | — | — | — | — |
 
 ### Recebimento

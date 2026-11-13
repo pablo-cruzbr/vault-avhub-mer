@@ -1,9 +1,10 @@
 ---
 tags: [sistemas, mes, app-pcp, nextjs, frontend]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: vigente
 dono: Robert
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [app-pcp 93f96de (develop, 27/10; a main parou em 08/10), api-pcp befd973, v1 App-PCP-Visao-Geral, App-PCP-Modelo-Producao, App-PCP-Recebimento-Conferencia]
 ---
 
@@ -49,6 +50,7 @@ Cada etapa do fluxo tem a sua tela. A lista completa, por nó, está no Detalhe 
 - 🔴 Não há tela de documento de retirada (`E6`).
 - 🔴 Não há tela do `P6` (Novo norte).
 - 🟡 Em Compras · CCP a atualização leva até 5 minutos, ou vale o botão "Atualizar".
+- 🟡 Reteste no Docker de 13/11 (43 telas abertas): `/ordens-producao/<id inválido>` fica em "Carregando..." para sempre, sem mensagem, porque a tela só sai do carregando quando acha o pedido ✅ `app-pcp` `app/(protected)/ordens-producao/[id]/page.tsx:502-505` (`loading || !pedido`); a Montagem do Roteiro e o Lote tratam o caso. A fila de um setor que não existe (`/movimentacoes/<id>`) aparece vazia ("Nenhum item na fila deste setor") em vez de "setor não encontrado".
 - ❓ O nome interno de quatro telas (Mapa do Depósito, Permissões, Setores por Perfil e Depósitos por Perfil) não foi conferido no cadastro.
 
 ## Detalhe técnico
@@ -93,7 +95,7 @@ Todas as telas "módulo" (Atendimento, Requisições, Compras · CCP, Recebiment
 
 | Tela | Rota | Slug | Observação |
 |---|---|---|---|
-| Saldo | `/estoque-operacao/saldo` | `saldo` | mostra custo do lote só com `estoque-custo` visualizar; modal de entrada (carga inicial) com custo opcional só com `estoque-custo` editar ✅ `saldo/page.tsx:35`, `EntradaLoteModal.tsx:36` |
+| Saldo | `/estoque-operacao/saldo` | `saldo` | mostra custo do lote só com `estoque-custo` visualizar; modal de entrada (carga inicial) com custo opcional só com `estoque-custo` editar ✅ `saldo/page.tsx:36`, `EntradaLoteModal.tsx:36` |
 | Lote | `/estoque-operacao/lotes/[id]` | `saldo` | bloco `custo` só com `estoque-custo` visualizar ✅ `app-pcp` `estoque-operacao/lotes/[id]/page.tsx:181` (`lote.custo !== undefined`), `app-pcp` `estoque-operacao/lotes/[id]/types.ts:24-26` (`custo?: LoteCusto | null`) |
 | Reservas | `/estoque-operacao/reservas` | `reservas` | liberar reserva ✅ |
 | Movimentação e Ajuste | `/estoque-operacao/movimentacao` | `movimentacao` | transferência e ajuste ✅ |
@@ -127,7 +129,7 @@ Todas as telas "módulo" (Atendimento, Requisições, Compras · CCP, Recebiment
 | Onde | Regra | Código |
 |---|---|---|
 | Entrada de lote (Saldo) | campo de custo só com `estoque-custo` editar | ✅ `saldo/EntradaLoteModal.tsx:36` |
-| Saldo e Lote | coluna/bloco de custo só com `estoque-custo` visualizar | ✅ `saldo/page.tsx:35`, `lotes/[id]/page.tsx:181` (`lote.custo !== undefined`) |
+| Saldo e Lote | coluna/bloco de custo só com `estoque-custo` visualizar | ✅ `saldo/page.tsx:36`, `lotes/[id]/page.tsx:181` (`lote.custo !== undefined`) |
 | Fila de Recebimento | botão "Liberar sem OC" só com `compras-liberar` editar | ✅ `app-pcp` `movimentacoes/components/fila/useFilaSetor.ts:55` (`TELA_LIBERAR_RECEBIMENTO`) |
 | Botões das filas | `PermissionButton` + `setoresPermitidos` da sessão (a garantia é o `PerfilSetor` no `api-pcp`) | ✅ `components/Ui/PermissionButton` |
 | Rotas de ação (BFF) | `requirePermission(session, 'movimentacoes', 'pode_editar')` e equivalentes | ✅ `app/api/requisicoes-compra/[id]/chegada/route.ts:12` |

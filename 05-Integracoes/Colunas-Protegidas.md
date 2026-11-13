@@ -1,9 +1,10 @@
 ---
 tags: [omie, pipeline, colunas-protegidas, dados]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [omie-elt-pipeline 0f739f0 src/db/protectedColumns.ts, v1 08-Integracao-Omie/02-Analise-de-Lacunas/Colunas-Protegidas, Registro-de-Decisoes #15 #62, contratos 28 29 39 45, PDF de Gustavo de 09/11/2026 (entrega BL-026)]
 ---
 
@@ -23,7 +24,7 @@ fontes: [omie-elt-pipeline 0f739f0 src/db/protectedColumns.ts, v1 08-Integracao-
 
 ## Detalhe técnico
 
-Colunas que existem nas tabelas sincronizadas do Omie mas pertencem a **outro sistema**. O pipeline nunca as inclui no `INSERT` nem no `UPDATE` do upsert ✅ (`omie-elt-pipeline/src/db/protectedColumns.ts:60-73`). Sem isso, cada re-sincronização zeraria o valor em silêncio (incidente de `notas_fiscais.descontos`). Padrão a copiar em qualquer integração nova: declarar o dono de cada coluna desde o início (📝 [[Registro-de-Decisoes]], decisões-chave do ERP).
+Colunas que existem nas tabelas sincronizadas do Omie mas pertencem a **outro sistema**. O pipeline nunca as inclui no `INSERT` nem no `UPDATE` do upsert ✅ (`omie-elt-pipeline/src/db/protectedColumns.ts:63-76`). Sem isso, cada re-sincronização zeraria o valor em silêncio (incidente de `notas_fiscais.descontos`). Padrão a copiar em qualquer integração nova: declarar o dono de cada coluna desde o início (📝 [[Registro-de-Decisoes]], decisões-chave do ERP).
 
 ### Lista conferida no código
 

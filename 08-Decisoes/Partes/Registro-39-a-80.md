@@ -1,10 +1,11 @@
 ---
 tags: [decisoes, registro, dec, en, ec, n14, n16, parte]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
 parte-de: "[[Registro-de-Decisoes]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 00-Indice/Registro-de-Decisoes-2026-10-07 (#1 a #99), v1 Decisoes-Chave-ERP e Perguntas-em-Aberto-Consolidadas (DEC-1 a DEC-12), v1 Encaixe-Estoque-Revenda-no-PCP (EN-01 a EN-07, EC-01 a EC-08), decisões do Nathan de 14/10/2026, decisões N16 de 16 a 26/10/2026 (pasta Proposta-Orcamento-Comissao, histórico), código de 14/10]
 ---
 
@@ -25,7 +26,7 @@ fontes: [v1 00-Indice/Registro-de-Decisoes-2026-10-07 (#1 a #99), v1 Decisoes-Ch
 | #43 | **Consumidor do 005.** **(09/10)** Implementado em `dee35b0` (08/10): job no processo da `api-acos-vital` a cada 90 s, por unidade, com migration `api005` (não verificada no banco). Aceite das 3 diferenças: ✅ Nathan, 08/10 (#42). O código cita um contrato 006 que não está no vault. | 07/10/2026 | Gustavo | ✅ no código (Gustavo) |  |
 | #44 | **IM-02 (pedido sem prazo).** Resolvida pelo código: o MES cai para `pedido.prazoEntrega` e recusa se ainda não houver prazo. | 07/10/2026 | Nathan | 🟡 |  |
 | #45 | **IM-01 e IM-03 antigo.** Superados pelo contrato 34. | 07/10/2026 | Nathan | 🟡 |  |
-| #46 | **PTAX.** É a cotação de **venda**. A API não recusa OC com outra cotação: **reclassifica a origem para `manual`** e zera `cotacao_data` (`ordens_compra.route.js:964-977`, conferido em 08/10). | 07/10/2026 | Nathan | 🟡 |  |
+| #46 | **PTAX.** É a cotação de **venda**. A API não recusa OC com outra cotação: **reclassifica a origem para `manual`** e zera `cotacao_data` (`ordens_compra.route.js:975-988`, conferido em 08/10). | 07/10/2026 | Nathan | 🟡 |  |
 | #47 | **IPI e ICMS-ST no PDF da OC.** **Não incluir.** O Omie é o fiscal; o PDF já avisa quando o total não bate. | 07/10/2026 | Nathan | 📝 |  |
 | #48 | **CCP (contrato 32).** P2: só OC criada no av-hub. P6: transportadora em texto livre. P3: 2 dias úteis como padrão, em `parametros_compras`. P4 e P5: 🔴 Nathan. P1: 🔴 Gustavo. **08/10 (Nathan): P5 ✅ — criar um perfil CCP, que trata os "Follow-ups".** | 07/10/2026 | Nathan | 🟡 |  |
 | #49 | **Dashboards por unidade (contrato 33).** Em resumo: dashboards por unidade: o "- Dev" não entra e os painéis passam a filtrar pela unidade do vendedor. P4 (lotação do RH) e P5 (histórico muda se o RH transferir) ficam como estão implementados. P1, P2, P3, P6 e P7: 🔴 Nathan. **08/10 (Nathan):** P1 fica a cargo dele e dos trabalhadores (uso da tela, não é decisão de projeto); P2 ✅ o "- Dev" **não entra** nos dashboards, e deve existir uma marca que identifique quem tem "- Dev" como desenvolvedor; P3 (comissões por unidade) ✅ "no futuro"; P6 ✅ `inativo_desde` = **último mês de venda**; P7 ✅ as telas `fn_painel_*` passam a **filtrar por unidade do vendedor** (gera trabalho de backend e contrato). | 07/10/2026 | Nathan | 🟡 |  |

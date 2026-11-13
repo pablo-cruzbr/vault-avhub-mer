@@ -1,10 +1,11 @@
 ---
 tags: [sistemas, mes, api-pcp, nestjs, backend, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: vigente
 dono: Robert
 parte-de: "[[MES-Backend]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf56), prisma/migrations até 20261028120100, Dump MES (Esqueleto).sql de 14/10 (defasado), v1 App-PCP-Backend-Producao, App-PCP-Visao-Geral, MES-Arquitetura-Decisoes]
 ---
 
@@ -59,7 +60,7 @@ fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf
 | `POST /auth/azure` | `x-api-key` = `MES_INTERNAL_API_KEY` (só o BFF do app-pcp) | ✅ `auth.controller.ts:31`, `guards/api-key.guard.ts:15` |
 | `GET /auth/me`, `/auth/menu`, `/auth/setores-permitidos` | só JWT | ✅ `auth.controller.ts:38-60` |
 | `GET /auth/dashboard-check` | `dashboard`, visualizar | ✅ `auth.controller.ts:56-57` (`dashboard-check`) |
-| `GET /auditoria/login`, `/auditoria/acesso` | `usuarios`, visualizar | ✅ `auditoria.controller.ts:18,24` |
+| `GET /auditoria/login`, `/auditoria/acesso` | `usuarios`, visualizar | ✅ `api-pcp` `src/auditoria/auditoria.controller.ts:14` (`@Get('login')`), `:20` (`@Get('acesso')`) |
 
 ### Pedidos (Triagem e Destinação) — P1, P2
 
@@ -118,7 +119,7 @@ A rota `PATCH /compras/requisicoes/:id/compra` ("Registrar compra" manual) **nã
 
 | Rota | Permissão | Código |
 |---|---|---|
-| `GET /estoque/saldo` | `saldo`, visualizar (inclui `custoUnitario` só com `estoque-custo` visualizar) | ✅ `estoque-operacao.controller.ts:40`, `estoque-operacao.service.ts:62-105` |
+| `GET /estoque/saldo` | `saldo`, visualizar (inclui `custoUnitario` só com `estoque-custo` visualizar) | ✅ `estoque-operacao.controller.ts:41`, `estoque-operacao.service.ts:63-106` |
 | `GET /estoque/saldo/disponivel-parcial/:idItemParcial` | `movimentacoes`, visualizar | ✅ `:46` |
 | `GET /estoque/lotes/:id` | `saldo`, visualizar | ✅ `:73` |
 | `GET /estoque/lotes/:id/etiqueta` | `saldo`, visualizar | ✅ `etiqueta.controller.ts:21` |
@@ -131,13 +132,13 @@ A rota `PATCH /compras/requisicoes/:id/compra` ("Registrar compra" manual) **nã
 | `GET/PATCH /estoque/materiais`, `/:id` | `materiais` visualizar/editar | ✅ `materiais.controller.ts:21-41` (`estoque/materiais`) |
 | `GET /estoque/alertas/estoque-minimo`, `/rnc-pendentes` | `painel-estoque`, visualizar | ✅ `alertas.controller.ts:19,25` |
 
-Observação: o controller usa o slug `movimentacao` (singular, ações do Estoque) e `movimentacoes` (plural, fila de setor). São duas telas diferentes em `telas` ✅ `estoque-operacao.controller.ts:55-85` x `itens-parciais.controller.ts:57`. Conferir se as duas existem em produção ❓.
+Observação: o controller usa o slug `movimentacao` (singular, ações do Estoque) e `movimentacoes` (plural, fila de setor). São duas telas diferentes em `telas` ✅ `estoque-operacao.controller.ts:63-93` x `itens-parciais.controller.ts:57`. Conferir se as duas existem em produção ❓.
 
 ### Qualidade — Q1 a Q4
 
 | Rota | Permissão | Código |
 |---|---|---|
-| `GET /qualidade/lotes` | `inspecao-entrada`, visualizar | ✅ `qualidade.controller.ts:21` |
+| `GET /qualidade/lotes` | `inspecao-entrada`, visualizar | ✅ `api-pcp` `src/qualidade/qualidade.controller.ts:16-20` (`fila()`) |
 | `POST /qualidade/lotes/:id/aprovar`, `/:id/reprovar` | `inspecao-entrada`, editar | ✅ `:27,33` |
 
 A Inspeção de saída (Q7) não tem controller próprio: é uma fila de setor tipo `QUALIDADE` (`/itens-parciais/:id/reprovar`).
@@ -169,7 +170,7 @@ A Inspeção de saída (Q7) não tem controller próprio: é uma fila de setor t
 | `POST /compras/requisicoes/op` | `movimentacoes`, editar | requisita a OP inteira | ✅ `:87-88` |
 | `GET /compras/recebimentos/oc-esperadas` | `movimentacoes`, visualizar | itens de OC esperados no Recebimento, sem requisição | ✅ `recebimento.controller.ts:39-40` |
 | `POST /compras/recebimentos/nf` | `movimentacoes`, editar | recebe com NF (várias OCs) | ✅ `:59-60` |
-| `GET /estoque/saldo/disponivel-setor/:idSetor`, `GET /estoque/saldo/materia-prima/:idItemParcial` | `movimentacoes`, visualizar | saldo por setor; matéria-prima que cobre a parcial | ✅ `estoque-operacao.controller.ts:50-58` |
+| `GET /estoque/saldo/disponivel-setor/:idSetor`, `GET /estoque/saldo/materia-prima/:idItemParcial` | `movimentacoes`, visualizar | saldo por setor; matéria-prima que cobre a parcial | ✅ `estoque-operacao.controller.ts:58-66` |
 | `PUT /estoque/lotes/:id/custo` | `estoque-custo`, editar | custo manual do lote, com motivo e histórico (`lote_custo_historico`) | ✅ `:94-95` |
 | `POST /itens-parciais/atender-estoque/lote` | `movimentacoes`, editar | atende a OP inteira pelo Estoque | ✅ `itens-parciais.controller.ts:88-89` |
 | `PATCH /itens-parciais/:id/finalizar`, `/:id/reabrir` | `movimentacoes`, editar | status novo `FINALIZADO` (produção acabou, a peça espera no setor) | ✅ `:149-161` |

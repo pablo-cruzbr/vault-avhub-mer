@@ -7,7 +7,7 @@ ordem: 7
 nos: [R0, R1, R2, R3, R4, R6]
 anterior: "[[06-Circuito-de-Compra]]"
 proxima: "[[08-Qualidade-Entrada]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-03), API-007, API-008, v1 02-PRD-Estoque/Fluxo-Recebimento-Completo, v1 App-PCP-Recebimento-Conferencia, decisões do Nathan de 14/10 (conferência contra a NF), api-pcp 579a625 (recebimento.service.ts, compras.service.ts, compras.prisma, compras-ccp.dto.ts), app-pcp 1fca8d3 (FilaSetor, ConferirRecebimentoModal, decisoes-pcp), api-pcp develop de 27/10/2026 (recebimento por OC e por NF, custo da OC), API-011, N16-134 a N16-137]
 ---
@@ -84,6 +84,7 @@ As decisões N16-134 a N16-137 são de 29/10/2026 (lote N16-120 a N16-143).
 - ✅ (`api-pcp`) Aviso ao av-hub quando o PCP reabre o recebimento (N16-137, LOG-58, 12/11): `api-pcp` `src/compras/recebimento.service.ts:640` (`await enfileirarAvisosRecebimentoReaberto(tx, {`), enviado pela fila `integracao_avhub_envios`.
 - 🔴 Leitor de código de barras da NF; reabertura de divergência de produção.
 - 🟡 Aviso à doca quando uma OC esperada é cancelada.
+- 🟡 Reteste no Docker de 13/11 (PS-059): a lista "A chegar" da doca (`GET /compras/recebimentos/oc-esperadas`) não desconta a recompra, e a OC original e a recompra ficam esperadas juntas; só o saldo futuro do Estoque desconta ✅ `api-pcp` `src/estoque/operacao/saldo-futuro.ts:35-63` (`async function reprovadoComRecompra(`). Receber acima da OC sem requisição entra sem divergência (é a regra) e esconde a reprovação no "a chegar". Quando a unidade da OC difere da do material, o lote nasce sem custo e a conferência não avisa; o motivo só fica no histórico do lote ✅ `src/compras/compra-oc.ts:102-106` (`custo a informar (D2)`). ❓ Pergunta do reteste: receber acima da OC sem requisição continua sem aviso?
 - 🔴 Alerta de OC que passou da previsão sem chegar.
 - ❓ Teste ponta a ponta com OC real.
 

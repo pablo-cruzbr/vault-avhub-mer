@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, expedicao, logistica-saida, paletes, entrega, x1, x2, x3, x4, mes]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: vigente
 ordem: 13
 nos: [X1, X2, X3, X4]
 anterior: "[[12-Estoque-Despacho]]"
 proxima: "[[14-Fiscal-Omie]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 dono: Robert (MES) · Expedição/Logística (regra) · Nathan (decisões)
 fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens, pedido-embalagem-pallets, estoque-operacao.helpers.ts), app-pcp 1fca8d3 (logistica/expedicao, movimentacoes, ordens-producao), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 10, T-06, api-pcp develop de 27/10/2026, N16-130 a N16-133, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -142,7 +142,7 @@ Pedido: `StatusPedido` `AGUARDANDO`, `EM_PRODUCAO`, `BLOQUEADO`, `ENTREGUE`. Tod
 | `POST /entregas` `{ idItemPedido, idItemParcial, quantidade, numeroNf?, observacao? }` | confirma entrega; baixa `quantidadePendente`; pode marcar o pedido `ENTREGUE` | idem | `entregas.controller.ts:34-38`, `entregas.service.ts:25` ✅ |
 | `GET /entregas`, `GET /entregas/:id` | consulta | `movimentacoes:visualizar` | `entregas.controller.ts:40-44` ✅ |
 | `POST /pedido-anexos` | comprovante, canhoto, NF da entrega (via `criarPedidoAnexo`) | ❓ | `ConfirmarEntregaModal.tsx:94` ✅ |
-| `/pedido-embalagens` e `/pedido-embalagem-pallets` (CRUD) | embalagens e pallets por pedido, total em sincronia | `ordens-producao` | `pedido-embalagens.controller.ts:32`, `pedido-embalagem-pallets.controller.ts:28` ✅ |
+| `/pedido-embalagens` e `/pedido-embalagem-pallets` (CRUD) | embalagens e pallets por pedido, total em sincronia | `ordens-producao` | `api-pcp` `src/pedido-embalagens/pedido-embalagens.controller.ts:28` (`@Post()`), `pedido-embalagem-pallets.controller.ts:28` ✅ |
 
 Não há contrato com o av-hub para a Expedição além da etapa do item ([[Contratos-da-v2|API-005]]). A baixa do item ("faturado") volta pelo pipeline do Omie, sem contrato.
 
