@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, fiscal, omie, nota-fiscal, o1, o2, pipeline]
 criado: 2026-10-14
-estado-em: 2026-11-05
+estado-em: 2026-11-13
 status: vigente
 ordem: 14
 nos: [O1, O2]
 anterior: "[[13-Expedicao]]"
 proxima: "[[15-Custo-Real-e-Comissao]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Gustavo (DBA, pipeline e banco) · Robert (sinalização no MES) · Nathan (decisões)
 fontes: [omie-elt-pipeline 0f739f0 (notasFiscais.ts, pedidosVendas.ts, scheduler/config), Dump Avhub 14/10 (fn_sync_situacao_pv, pedidos_vendas, notas_fiscais, produto_vendas), api-pcp 579a625 (entregas), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 11, v1 08-Integracao-Omie/01-Dados-Extraidos, api-acos-vital develop 0384e89 (POST /comercial/clientes)]
 ---
@@ -101,7 +101,7 @@ O Omie é o sistema fiscal e financeiro (decisão #30 do registro de 07/10). O M
 | 7 | `autorizado` | `Autorizado` |
 | 8 | nenhuma | `Pendente` |
 
-Os flags vêm dos campos `S`/`N` do cabeçalho e de `infoCadastro` (`pedidosVendas.ts:134-136`). `pedidos_vendas.etapa` (`numeric(2,0)`) é a etapa do Omie (`cabecalho.etapa`); os nomes por operação estão em `core.etapas_faturamento` (Dump Avhub linha 11084; recurso `etapasFaturamento` habilitado, tabela populada em produção, registro #5). `sequencial` 0 é o pedido guarda-chuva e 1, 2... são parciais. A liberação (`status_liberacao`) usa `situacao = 'Pendente'` ([[03-Pedido-de-Venda-e-Liberacao]]).
+Os flags vêm dos campos `S`/`N` do cabeçalho e de `infoCadastro` (`pedidosVendas.ts:192-194`). `pedidos_vendas.etapa` (`numeric(2,0)`) é a etapa do Omie (`cabecalho.etapa`); os nomes por operação estão em `core.etapas_faturamento` (Dump Avhub linha 11084; recurso `etapasFaturamento` habilitado, tabela populada em produção, registro #5). `sequencial` 0 é o pedido guarda-chuva e 1, 2... são parciais. A liberação (`status_liberacao`) usa `situacao = 'Pendente'` ([[03-Pedido-de-Venda-e-Liberacao]]).
 
 O MES não tem estado fiscal: guarda só `Entrega.numeroNf` (texto de até 30 caracteres) digitado na entrega e `ItensPedido.quantidadePendente` ([[13-Expedicao]]).
 
@@ -123,9 +123,9 @@ As telas de notas do HUB são **pós-fato**: mostram a NF que o Omie já emitiu.
 | O quê | Direção | Fonte |
 |---|---|---|
 | `ListarPedidos` (`/produtos/pedido/`) | pipeline lê do Omie por janela de data de inclusão | `pedidosVendas.ts` ✅ |
-| `ListarNF` (`/produtos/nfconsultar/`, `tpNF = 1`, por data de emissão) | pipeline lê do Omie | `notasFiscais.ts:21-46` ✅ |
-| `core_vendas_faturamento.notas_fiscais` (chave `codigo_empresa`, `codigo_nf_omie`) | destino da NF | `notasFiscais.ts:57-58` ✅ |
-| `afterUpsert` da NF | grava `codigo_nf_omie` e `numero_nf` nos itens de `produto_vendas` do mesmo pedido que ainda não têm NF | `notasFiscais.ts:125-165` ✅ |
+| `ListarNF` (`/produtos/nfconsultar/`, `tpNF = 1`, por data de emissão) | pipeline lê do Omie | `omie-elt-pipeline` `src/omie/resources/notasFiscais.ts:21-48` (`listMethod: 'ListarNF'`) ✅ |
+| `core_vendas_faturamento.notas_fiscais` (chave `codigo_empresa`, `codigo_nf_omie`) | destino da NF | `omie-elt-pipeline` `src/omie/resources/notasFiscais.ts:57-58` (`conflictColumns: ['codigo_empresa', 'codigo_nf_omie']`) ✅ |
+| `afterUpsert` da NF | grava `codigo_nf_omie` e `numero_nf` nos itens de `produto_vendas` do mesmo pedido que ainda não têm NF | `omie-elt-pipeline` `src/omie/resources/notasFiscais.ts:125-169` (`async afterUpsert(`) ✅ |
 | Cron do pipeline | hoje a cada 3 min (`SYNC_HOJE_CRON`); mês a cada 20 min; últimos meses a cada 3 h; full 3h17 | `config` `:89-104` ✅ |
 | Sinalização do MES ao Omie (ligação do `O1`) | MES para Omie, via av-hub | 🔴 sem contrato |
 
