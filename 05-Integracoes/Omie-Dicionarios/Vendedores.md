@@ -1,9 +1,10 @@
 ---
 tags: [omie, dicionario, pipeline, vendedores]
 criado: 2026-10-14
-atualizado: 2026-10-29
+estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 08-Integracao-Omie/01-Dados-Extraidos/Vendedores, omie-elt-pipeline 0f739f0 (protectedColumns.ts), contrato 39]
 ---
 
@@ -26,6 +27,6 @@ Fonte: `ListarVendedores` (`/geral/vendedores/`), resource `vendedores.ts`. Sem 
 
 Um vendedor pode ter várias linhas (uma por filial ou conta Omie), ligadas pelo `id_funcionario`, que o pipeline não gere. O vínculo é feito na tela de Vendedores do HUB ([[Contratos-da-v2|LOG-39]]).
 
-O escopo do vendedor (ver só os próprios pedidos) é aplicado pela API a partir do token, fixo no código desde o contrato 40 ✅ (`api-acos-vital/src/utils/acessoConfig.js:75`; [[Contratos-da-v2|LOG-40]]).
+O escopo do vendedor (ver só os próprios pedidos) é aplicado pela API a partir do token, fixo no código desde o contrato 40 ✅ (`api-acos-vital` `src/utils/acessoConfig.js:26` (`Escopo de vendedores — FIXO desde 09/10/2026`); `src/middlewares/escopoVendedor.js:179` (`export async function aplicarEscopoVendedor`); [[Contratos-da-v2|LOG-40]]).
 
 Ver também: [[Pedidos-de-Venda]].
