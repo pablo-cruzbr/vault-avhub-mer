@@ -10,7 +10,7 @@ nos_0b: [C6, C7]
 notas_afetadas: [06-Circuito-de-Compra, 06-Circuito-de-Compra-Detalhe-Tecnico-2, 01-Proposta-de-Venda, Backlog-por-Frente]
 depende_de: [LOG-56]
 decisoes: [N16-08, N16-17, N16-19, N16-38, N16-53, N16-144, N16-157]
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #282)]
+develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #282)]
 tags: [contrato, compras, proposta, oc, c6, c7]
 criado: 2026-11-11
 estado-em: 2026-11-13
@@ -155,7 +155,7 @@ Nenhuma. Omie e MES não mudam.
 ## 15. Riscos, rollback e perguntas em aberto
 
 - **Rollback:** campos novos e opcionais; o front ignora a ausência deles.
-- **Risco:** pedido do Hub ainda sem `numero_pedido_omie` (o Omie recusou) não acha o PV pela rota. É o caso de PV-000004 e PV-000005 no Docker; na produção o pedido só chega a Compras depois de existir no Omie.
+- **Risco:** pedido do Hub ainda sem `numero_pedido_omie` (o Omie recusou) não acha o PV pela rota. É o caso de PV-000004 e PV-000005 no Docker; na produção o pedido só chega a Compras depois de existir no Omie. ✅ **Decidido pelo Nathan em 13/11/2026: fica assim.** A OC lê o pedido de venda só do espelho do Omie (`core_vendas_faturamento.pedidos_vendas`); o pedido que ficou só no Hub responde 404 na busca da OC (PV-000007 no Docker, 13/11) e só aparece depois que o Omie aceita e a pipeline traz o PV.
 - **Pergunta (Nathan):** o fornecedor cotado é texto livre. Vale pedir à proposta o parceiro do cadastro (código Omie) em vez do nome? Isso é da raia 01 (Robert).
 - **Pergunta (Nathan):** o `custo_liquido_unit` está vazio em todas as propostas do banco de teste. Ele deveria vir preenchido pelo motor da proposta (BL-078)?
 - **Escolhas da entrega (Gustavo, 12/11) que o contrato não dizia:** a rota casa o PV por `pedidos_venda.codigo_empresa_omie` (`:73`, `WHERE codigo_empresa_omie = :e`), o mesmo critério do LOG-56 §7.6, e não por `codigo_empresa` (hoje os dois são iguais nas três unidades); com mais de um pedido do Hub para o mesmo PV, vale o mais recente, com aviso `[API-019]` no log (`:75`, `ORDER BY pedido_hub_criado_em DESC`); produto repetido no pedido do Hub usa a linha de menor `ordem`; se a leitura da proposta falhar, a rota responde com os dois campos nulos (`:78`, `const vazio = { proposta: null`); os números saem como número, como na seção 8, embora o `CLAUDE.md` da API peça string para dinheiro novo.

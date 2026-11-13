@@ -4,13 +4,16 @@ criado: 2026-10-14
 estado-em: 2026-11-13
 status: vigente
 dono: Nathan
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13, conferência completa e reteste no Docker; api-acos-vital bebca52, av-hub d82d58b, omie-elt-pipeline d8fddca, em 2026-11-12, só proposta, Compras e pipeline; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13, conferência completa e reteste no Docker; api-acos-vital bebca52, av-hub d82d58b, omie-elt-pipeline d8fddca, em 2026-11-12, só proposta, Compras e pipeline; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas de raia 01 a 15 (conferidas na develop em 05/11/2026, Bloco 3 da v3), Backlog-por-Frente, Registro-de-Decisoes (N16-01 a N16-149), Contratos-da-v2, api-pcp src/common/constants/item-parcial-status.constants.ts:33 (EM_PRODUCAO nunca gravado), av-hub lib/api/custoItensFixtures.ts (custo por item ainda com dados de exemplo), Dump-AvHub-Teste-2026-11-09 (09/11/2026), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Onde estamos (estado conferido na develop em 13/11/2026: conferência completa do vault e reteste no Docker)
 
 **Em uma frase:** o fluxo do pedido já funciona da liberação ao recebimento, e a OP, o lote do fabricado e o custo por item já estão na `develop` do MES; o que falta é, sobretudo, o pedido da proposta no Omie, a API e o banco do Orçamento, a comissão nova e o documento de retirada. Publicar o MES na `main` (BL-035) é informação de publicação, não critério de pronto.
+
+> [!info] Reteste por cliques e "Da proposta à comissão", 13/11/2026 (fim do dia)
+> O reteste por cliques no Docker refez pela tela os 8 pontos que o R2 testou pela API: nenhum 🔴; os defeitos de tela viraram BL-089 a BL-096 ([[Backlog-Reteste-por-Cliques-2026-11-13]]), o principal é o "Necessário até" aceitar data passada. Na `develop` da `api-acos-vital` (`8265223`, pedido do Robert) entrou "Da proposta à comissão": o pedido de proposta é liberado sozinho para o MES depois que o Omie aceita, a simulação v1 nasce rascunho e só vai a enviada com o pedido faturado. A migration dessa mudança ainda não está no banco de teste. Detalhe em [[Ultima-Atualizacao-do-Vault]].
 
 > [!info] Conferência completa do vault e reteste no Docker, 13/11/2026
 > Todas as citações de código do vault foram relidas na `develop` de 12/11 (pipeline `46b53d4`) e os 14 fatos desatualizados foram corrigidos. No mesmo dia, o reteste R2 no Docker varreu o Hub e o MES por rota e por tela e refez o fluxo com dados novos (proposta AV2026-0017 → PV-000007; pedido 28224 no MES): ✅ o saldo futuro (BL-050) e o aviso de recompra do MES ao Compras (LOG-58) funcionam de ponta a ponta. Os achados novos viraram PS-057 (rotas do BFF que escondem o erro da API), PS-058 (Cadastros sem famílias de produto) e PS-059 (a doca não desconta a recompra). A autoaprovação da OC vista no reteste é a regra da N16-161, não defeito. Detalhe em [[Ultima-Atualizacao-do-Vault]].

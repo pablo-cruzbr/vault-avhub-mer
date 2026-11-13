@@ -5,7 +5,7 @@ estado-em: 2026-11-13
 status: vigente
 dono: Gustavo (DBA)
 parte-de: "[[AV-Hub-API]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-acos-vital 0384e89 (develop, 29/10), Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/), Dump Avhub (Esqueleto).sql de 14/10, v1 AV-Hub-API-Estado-Atual, AV-Hub-RBAC, Integracao-AvHub-MES-Especificacao-F1]
 ---
 
@@ -45,6 +45,7 @@ Rotas montadas em `core_comercial/index.js`, todas com `exigirTokenUsuario` (tok
 | `POST /comercial/clientes` | cadastra o cliente no Omie da unidade e grava em `core.parceiros` (upsert por CNPJ) | ✅ `aggregates/clientes/clientes.route.js:123` |
 | `GET /comercial/parceiros?tipo=&empresa=` | cadastro de parceiros para a proposta | ✅ `aggregates/parceiros/parceiros.route.js:60` |
 | `POST`/`GET /comercial/propostas`, `GET …/resumo`, `GET …/:id`, `GET …/:id/eventos` | cria (status `ABERTA`), lista, KPIs, abre, linha do tempo | ✅ `aggregates/propostas/propostas.route.js:383-548` (`router.post("/propostas"` a `"/propostas/:id/eventos"`) |
+| `POST …/:id/eventos/pdf_gerado` (13/11) | o Hub avisa que gerou o PDF (`COMERCIAL` ou `TECNICA`): evento `PDF_GERADO` na linha do tempo; o mesmo usuário, tipo e revisão em menos de 10 min não grava de novo (200); `COMERCIAL` só para quem vê valores (senão 403). A função `fn_proposta_pdf_gerado` vem da migration `2026-11-13_comercial_proposta_pedido_comissao`, ainda não aplicada no teste | 🟡 `propostas.route.js:708` (`router.post("/propostas/:id/eventos/pdf_gerado"`) |
 | `PUT …/:id`, `POST …/:id/aprovar`, `…/cancelar`, `…/copiar`, `…/transformar` | revisão na negociação, ciclo de vida até o pedido | ✅ `propostas.route.js:550-676` (`router.put("/propostas/:id"` a `"/propostas/:id/transformar"`) |
 
 ⚠️ O código e o dump de 29/10 ainda guardam proposta, itens e eventos em `core_comercial.*` (23 tabelas, herdadas da `api-comercial`), enquanto a decisão N16-116 manda a proposta para `core_vendas_faturamento` e diz que `core_comercial` não existirá. Ver [[Banco-AvHub]] e a dúvida registrada no relatório do dia.

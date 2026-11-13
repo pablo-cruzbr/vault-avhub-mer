@@ -70,7 +70,7 @@ Tudo o que é MES nesta nota está na `develop` do `api-pcp` e do `app-pcp`. A `
 - ✅ (`api-pcp`) Na `develop` do MES: fabricado aprovado vira lote `PRODUCAO` e saldo (27/10); rota `GET /itens/custo` com o custo do item (27/10, `6c11147`); custo da OC no lote do Recebimento (19/10); baixa de matéria-prima no "Atender pelo estoque" (19/10).
 - 🔴 Baixa da matéria-prima na retirada (N16-140). Hoje a `develop` baixa no "Atender pelo estoque" de item de fabricação (`ConsumoMateriaPrima`, 19/10, `8d07917`).
 - ✅ (`api-pcp`, `app-pcp`) Saldo futuro (BL-050, 13/11):
-  - o que ainda vai chegar por OC de estoque aprovada aparece no modal "Atender pelo estoque" e num card da tela Saldo;
+  - o que ainda vai chegar por OC de estoque aprovada aparece no "Atender pelo estoque" dos cartões (🟡 não no "Atender OP", BL-090) e num card da tela Saldo;
   - backend: `api-pcp` `src/estoque/operacao/saldo-futuro.ts:68` (`export async function saldoFuturoPorProduto`);
   - front: `app-pcp` `app/(protected)/estoque-operacao/saldo/SaldoFuturoCard.tsx:50` (`A chegar por OC de estoque`);
   - ✅ a reprovada que já tem OC de recompra conta uma vez só: a view do SQL-022 está no tst desde 13/11 ([[Dump-AvHub-Teste-2026-11-13]], `avhub-tst-esqueleto-2026-11-13.sql:27920`, `av.id_aviso_mes AS id_aviso_mes_origem`). Na produção, até a view chegar (depois da log58), ela conta duas vezes.

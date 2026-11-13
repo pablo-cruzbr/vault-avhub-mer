@@ -7,7 +7,7 @@ ordem: 8
 nos: [Q1, Q2, Q3, Q4]
 anterior: "[[07-Recebimento]]"
 proxima: "[[09-Estoque-Entrada-do-Lote]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
+develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
 dono: Robert (MES) · Qualidade (regra de negócio) · Nathan (decisões)
 fontes: [v1 02-PRD-Estoque/Fluxo-Qualidade-Completo, v1 01-Fluxo-Operacional/Encaixe-Estoque-Revenda-no-PCP (EC-01, EC-07), api-pcp 579a625 (qualidade.service.ts, circuito-compra.ts, estoque.prisma), app-pcp 1fca8d3 (qualidade/inspecao-entrada), Registro-de-Decisoes #25 #26, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -70,7 +70,7 @@ As quatro decisões acima são de 29/10/2026 (bloco N16-120 a N16-143).
 - 🟡 Painel do Estoque com alerta de RNC pendentes: é protótipo, mas o alerta usa API real.
 - 🟡 Travar a decisão ao setor da Qualidade (decidido em N16-124, falta código).
 - 🔴 Fechar a RNC: registrar a nota de devolução e dar baixa do lote reprovado. Hoje é manual, fora do MES.
-- ✅ (`api-pcp`) Avisar o Compras no av-hub da recompra por RNC (N16-127, LOG-58, 12/11): `api-pcp` `src/qualidade/qualidade.service.ts:226` (`await enfileirarAvisoRecompraRnc(tx, {`). Testado no Docker: 2 PÇ reprovadas na OC-000013 viraram aviso no Hub, resolvido pela recompra OC-000014.
+- ✅ (`api-pcp`) Avisar o Compras no av-hub da recompra por RNC (N16-127, LOG-58, 12/11): `api-pcp` `src/qualidade/qualidade.service.ts:226` (`await enfileirarAvisoRecompraRnc(tx, {`). Testado no Docker: 2 PÇ reprovadas na OC-000013 viraram aviso no Hub, resolvido pela recompra OC-000014. Pela tela, em 13/11: a reprovação parcial do LT-20261113-0008 virou `AVISO_COMPRA` enviado em 26 s e resolvido pela OC-000023. 🟡 O "Prazo do pedido" da Inspeção de entrada sai um dia antes (29/10 para 30/10, fuso; `app-pcp` `app/(protected)/qualidade/inspecao-entrada/page.tsx:189` (`new Date(row.prazoPedido).toLocaleDateString`), BL-094).
 - ✅ Teste ponta a ponta no Docker em 13/11 (reteste R2): a reprovação de 2 de 5 PÇ criou, na mesma transação, o lote filho, a RNC e o `AVISO_COMPRA` na fila; o envio saiu em 49 s (201); o Hub gravou em `avisos_mes_compra`; a OC de recompra emitida com `id_aviso_mes` resolveu o aviso (`RESOLVIDO`, `RECOMPRA`) e voltou ao MES com `oc_referencia.id_aviso_mes_origem` igual ao id do aviso. 🟡 O aviso espera o ciclo da fila (60 s): a reprovação não chama `disparar()`, e a requisição de compra chama ✅ `api-pcp` `src/compras/compras.service.ts:591` (`this.envioAvhub.disparar();`).
 - 🔴 Inspeção de processo (Ciclo 2).
 - ❓ Nome do perfil da Qualidade no ambiente real.
