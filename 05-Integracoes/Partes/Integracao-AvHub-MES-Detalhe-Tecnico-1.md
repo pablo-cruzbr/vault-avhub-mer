@@ -1,10 +1,11 @@
 ---
 tags: [integracao, av-hub, mes, contratos, sequencia, parte]
 criado: 2026-11-05
-estado-em: 2026-11-12
+estado-em: 2026-11-13
 status: vigente
 dono: Nathan
 parte-de: "[[Integracao-AvHub-MES]]"
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-acos-vital develop bebca52 e api-pcp develop 2e564e6 em 12/11 (chave do MES e três citações), api-pcp develop befd973 e api-acos-vital develop 0384e89 (conferência de 29/10; antes 579a625 e f322dcd), app-pcp 1fca8d3, HUB b55ac55, Dump Avhub e Dump MES de 14/10, v1 Chaves-de-Integracao-AvHub-MES-Pipeline, Integracao-AvHub-MES-Especificacao-F1, Integracao-AvHub-MES-Volta-Plano, MES-Arquitetura-Decisoes]
 ---
 
@@ -83,13 +84,13 @@ sequenceDiagram
 
 **Para quê:** o PCP pede compra de material de um pedido e o av-hub (Compras) passa a ver a requisição. Nó P3.
 
-- **Rota:** `PUT {API_URL}/compras/requisicoes/origem/{id_origem}` ✅ `envio-avhub.service.ts:130`. `id_origem` = id do `RequisicaoCompraItem`. Uma requisição do MES com N materiais vira N requisições no av-hub.
+- **Rota:** `PUT {API_URL}/compras/requisicoes/origem/{id_origem}` ✅ `api-pcp` `src/integracao-avhub/envio-avhub.service.ts:126` (`/compras/requisicoes/origem/`). `id_origem` = id do `RequisicaoCompraItem`. Uma requisição do MES com N materiais vira N requisições no av-hub.
 - **Corpo:** `codigo_empresa`, `material`, `quantidade`, `unidade_medida`, `prazo_necessidade` e opcionais (`numero_requisicao_mes`, `descricao`, `acabado_sugerido`, `solicitante`, `observacao`, `codigo_pedido_omie`, `numero_pedido_venda`, `cancelada`) ✅ `requisicao-avhub.envio.ts:40-62`. O PUT não leva `id_item_parcial`.
 - **Chave:** `AVHUB_MES_INTEGRACAO_KEY` no MES = um valor de `MES_INTEGRACAO_KEYS` no hub. Só abre esta rota e o `POST /integracao/mes/avisos-compra` dos avisos de compra (LOG-58, [[06-Circuito-de-Compra]]); qualquer outra dá 403 `CHAVE_MES_ROTA_NAO_PERMITIDA` ✅ `api-acos-vital` `src/middlewares/apiKeyAuth.js:110` (`(metodo === "PUT" && ROTA_MES.test(caminho))`) e `:244` (`codigo: "CHAVE_MES_ROTA_NAO_PERMITIDA"`).
 - **Respostas do hub** ✅ `requisicoes_compra.route.js:221-260`: 201 criou (nasce `aberta`, número `REQ-…`); 200 atualizou (sem OC); 200 `{aplicado:false, motivo:"com_oc"}` ou `"cancelada"`; 409 `REQUISICAO_COM_OC` ao cancelar requisição com OC; 400 campo inválido; 500 se falta a função de banco `fn_requisicao_mes_aplicar`.
-- **Fila de saída (outbox):** a requisição e o envio nascem na mesma transação em `integracao_avhub_envios` (`PENDENTE`, `ENVIADO`, `RECUSADO`, `FALHOU`; `api-pcp` `prisma/models/integracao.prisma:29` (`model IntegracaoAvhubEnvio {`)). Dispara logo após criar ou cancelar e a cada `AVHUB_ENVIO_INTERVALO_SEG` (padrão 60 s). Espera crescente 1, 2, 5, 10, 30, 60 min ✅ `envio-avhub.service.ts:21`.
-- **Tratamento:** 200/201 vira `ENVIADO` e espelha id, número e status no item; 409 vira `RECUSADO` e não repete (o log avisa Compras) ✅ `:164-169`; 400 vira `FALHOU`; 401, 403, 404 e 5xx reagendam. Sem a chave definida, a fila espera com aviso no log ✅ `:98-102`.
-- **Cancelamento** também vai pela fila e só vale sem OC.
+- **Fila de saída (outbox):** a requisição e o envio nascem na mesma transação em `integracao_avhub_envios` (`PENDENTE`, `ENVIADO`, `RECUSADO`, `FALHOU`; `api-pcp` `prisma/models/integracao.prisma:32` (`model IntegracaoAvhubEnvio {`)). Dispara logo após criar ou cancelar e a cada `AVHUB_ENVIO_INTERVALO_SEG` (padrão 60 s). Espera crescente 1, 2, 5, 10, 30, 60 min ✅ `envio-avhub.service.ts:17` (`ESPERAS_MIN`). A mesma fila leva, desde o LOG-58, os avisos de compra (tipo `AVISO_COMPRA`, `POST /integracao/mes/avisos-compra`) ✅ `:125` (`envio.tipo === 'AVISO_COMPRA'`); testado ponta a ponta no Docker em 13/11 ([[08-Qualidade-Entrada]]). O aviso da reprovação espera o ciclo de 60 s, porque a reprovação não chama `disparar()`.
+- **Tratamento:** 200/201 vira `ENVIADO` e espelha id, número e status no item; 409 vira `RECUSADO` e não repete (o log avisa Compras) ✅ `:160-167` (`resposta.status === 409`); 400 vira `FALHOU`; 401, 403, 404 e 5xx reagendam. Sem a chave definida, a fila espera com aviso no log ✅ `:93-100` (`AVHUB_MES_INTEGRACAO_KEY não definida`).
+- **Cancelamento** também vai pela fila e só vale sem OC. 🟡 Chega ao Hub sem o motivo: o MES manda só `{ cancelada: true }`, e `motivo_cancelamento` fica vazio no Hub (visto em 10/11 e de novo no reteste de 13/11) ✅ `api-pcp` `src/integracao-avhub/requisicao-avhub.envio.ts:119` (`corpo: { cancelada: true }`). "Devolver" no MES cancela a parcial e cria outra, e o Hub recebe um `CANCELADO` do item, que parece cancelamento do item.
 - **Se o av-hub cai:** nada se perde; a fila acumula e retoma. **Se o MES cai:** o hub não recebe requisição nova.
 - **Precisão:** o MES guarda 4 casas e o hub 3 (10,1234 vira 10,123).
 - **Pendência:** o SQL de `fn_requisicao_mes_aplicar` (migration 034) existe em produção, mas não está versionado 🔴 Gustavo.
