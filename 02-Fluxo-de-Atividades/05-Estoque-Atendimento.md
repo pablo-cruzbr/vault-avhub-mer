@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, estoque, atendimento, reserva, lote, custo, mes, e1, e2, e3, e4]
 criado: 2026-10-14
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: vigente
 ordem: 5
 nos: [E1, E2, E3, E4]
 anterior: "[[04-PCP-Triagem-e-Destinacao]]"
 proxima: "[[06-Circuito-de-Compra]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050)]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026 (E5 foi para 09-Estoque-Entrada-do-Lote e E6 para 12-Estoque-Despacho), v1 02-PRD-Estoque/Fluxo-Estoque-Completo, v1 Estoque-Custo-do-Lote, v1 Rota-Estoque, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, decisões do Nathan de 14/10, API-008, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.*, estoque.prisma, circuito-compra.ts), app-pcp 1fca8d3 (AtenderEstoqueModal), api-pcp develop befd973 de 27/10/2026 (aprovar-saida, receber-fabricado, itens-custo.ts, ConsumoMateriaPrima), LOG-53, N16-09, N16-140, OQ-49, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -69,7 +69,11 @@ Tudo o que é MES nesta nota está na `develop` do `api-pcp` e do `app-pcp`. A `
 - 🟡 Painel do Estoque e Mapa do Depósito ainda são protótipos.
 - ✅ (`api-pcp`) Na `develop` do MES: fabricado aprovado vira lote `PRODUCAO` e saldo (27/10); rota `GET /itens/custo` com o custo do item (27/10, `6c11147`); custo da OC no lote do Recebimento (19/10); baixa de matéria-prima no "Atender pelo estoque" (19/10).
 - 🔴 Baixa da matéria-prima na retirada (N16-140). Hoje a `develop` baixa no "Atender pelo estoque" de item de fabricação (`ConsumoMateriaPrima`, 19/10, `8d07917`).
-- 🔴 Saldo futuro, com as OCs (ordens de compra) em andamento (BL-050).
+- ✅ (`api-pcp`, `app-pcp`) Saldo futuro (BL-050, 13/11):
+  - o que ainda vai chegar por OC de estoque aprovada aparece no modal "Atender pelo estoque" e num card da tela Saldo;
+  - backend: `api-pcp` `src/estoque/operacao/saldo-futuro.ts:68` (`export async function saldoFuturoPorProduto`);
+  - front: `app-pcp` `app/(protected)/estoque-operacao/saldo/SaldoFuturoCard.tsx:50` (`A chegar por OC de estoque`);
+  - 🔴 até a view do SQL-022 chegar ao tst, a reprovada que já tem recompra conta duas vezes.
 - 🔴 Custo obrigatório em todo lote (BL-066) e custo do fabricado (BL-067).
 - 🔴 Contagem cíclica, transferência entre filiais e separação física.
 
