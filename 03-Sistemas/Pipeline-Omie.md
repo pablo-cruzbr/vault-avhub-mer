@@ -4,7 +4,7 @@ criado: 2026-10-14
 atualizado: 2026-11-12
 status: vigente
 dono: Gustavo (DBA)
-fontes: [omie-elt-pipeline develop d8fddca e master 8f79d12 (12/11; PRs #6 e #7), omie-elt-pipeline 0f739f0 (master), README.md, ARCHITECTURE.md, src/config/index.ts, src/jobs/*, src/omie/resources/*, src/workers/*, ecosystem.config.cjs, v1 Omie-ELT-Pipeline]
+fontes: [omie-elt-pipeline develop d8fddca e master 8f79d12 (12/11; PRs #6 e #7), omie-elt-pipeline 0f739f0 (master), README.md, ARCHITECTURE.md, src/config/index.ts, src/jobs/*, src/omie/resources/*, src/workers/*, ecosystem.config.cjs, v1 Omie-ELT-Pipeline, "omie-elt-pipeline develop 46b53d4 (13/11/2026, codigo_item_integracao)", Dump-AvHub-Teste-2026-11-13]
 ---
 
 # Pipeline Omie (`omie-elt-pipeline`)
@@ -103,7 +103,7 @@ Fonte: ✅ `src/config/index.ts:89-159`, `src/jobs/scheduler.ts:25-130`. Por que
 
 Os catálogos de Compras (condições, projetos, contas, categorias, compradores) rodam só na camada "últimos meses" e no full sync (`somenteCamadaLenta`) ✅
 
-🟡 **Na branch `feat/produto-vendas-codigo-item-integracao` (sem PR, 05/11/2026):** o pedido de venda passa a mapear `det[].ide.codigo_item_integracao` para `produto_vendas.codigo_item_integracao` ([[Contratos-da-v2|SQL-021]]) e filtra as colunas pelo que a tabela tem de fato (`src/db/colunasExistentes.ts`, o mesmo filtro que o `pedidosCompras.ts` já usava), para a coluna ausente não derrubar o pedido inteiro; a coluna `encargos` de `condicoes_pagamento_compras` entra em `PROTECTED_COLUMNS`. Typecheck passa; não foi testado contra banco nem Omie. README `:118-120`. `core.estoque_saldo` fica vazia: **o saldo do Estoque da fábrica vive no MES**, não no Omie ([[Modelo-Estoque-e-Custo-do-Lote]]).
+🟡 **Na `develop` e na `master` (a branch `feat/produto-vendas-codigo-item-integracao` entrou na master em 05/11/2026, PR #4):** o pedido de venda passa a mapear `det[].ide.codigo_item_integracao` para `produto_vendas.codigo_item_integracao` ([[Contratos-da-v2|SQL-021]]) e filtra as colunas pelo que a tabela tem de fato (`src/db/colunasExistentes.ts`, o mesmo filtro que o `pedidosCompras.ts` já usava), para a coluna ausente não derrubar o pedido inteiro (`omie-elt-pipeline` `src/omie/resources/pedidosVendas.ts:259`, `A coluna codigo_item_integracao chega ao banco depois do código`). A coluna existe no banco de teste desde 13/11 ([[Dump-AvHub-Teste-2026-11-13]]); falta a produção; a coluna `encargos` de `condicoes_pagamento_compras` entra em `PROTECTED_COLUMNS`. Typecheck passa; não foi testado contra banco nem Omie. README `:118-120`. `core.estoque_saldo` fica vazia: **o saldo do Estoque da fábrica vive no MES**, não no Omie ([[Modelo-Estoque-e-Custo-do-Lote]]).
 
 **Histórico do pedido de venda:** a cada sincronização, a pipeline compara a `situacao` e a `data_previsao` do pedido com o último valor gravado em `core_vendas_faturamento.pedidos_vendas_status_historico` e grava uma linha só quando mudou; a primeira linha de cada pedido e campo sai com `valor_anterior` nulo. Roda num `SAVEPOINT` próprio: uma falha fica no log e não impede o pedido de sincronizar ✅ `src/omie/resources/pedidosVendas.ts:30` (`const SQL_HISTORICO_PEDIDO = `) e `:53` (`async function registrarHistoricoPedido(`), `develop` `d8fddca` (PR #6). É a fonte das mudanças de previsão de faturamento ([[03-Pedido-de-Venda-e-Liberacao]]).
 
