@@ -5,7 +5,7 @@ estado-em: 2026-11-13
 status: vigente
 dono: Nathan
 parte-de: "[[03-Pedido-de-Venda-e-Liberacao]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, em 2026-11-10; api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, em 2026-11-10; api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [LOG-26 (contrato de liberação), LOG-40 (escopo do vendedor), API-005, API-006, SQL-010, 00-Fluxo-Mestre-0b, v1 01-Fluxo-Operacional/Entrada-Comercial, v1 Fluxograma-Telas-por-Bloco bloco 1, v1 Fluxo-Sistema-no-Meio atos 1b e 17, api-acos-vital f322dcd, HUB b55ac55, api-pcp 579a625, app-pcp 1fca8d3, Dump Avhub 14/10, api-acos-vital develop cc3fbb3 (pedidos_liberacao.route.js), av-hub develop 44bb770 (LiberarPedidosLista.tsx, EtapaDosItens.tsx), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -134,7 +134,7 @@ O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Ped
 |---|---|---|
 | 1 | Auxiliar pode liberar pelo titular? Está implementado que sim; confirmar a regra de negócio | Nathan |
 | 2 | ✅ (`api-pcp`) Pedidos anteriores à data de corte ficam fora do MES e terminam no sistema antigo (N16-142). Falta só trocar o erro 404 dos itens por uma mensagem clara 🔴 | Robert (mensagem) |
-| 3 | O vendedor confirma pedido a pedido ou existe liberação automática depois de um prazo? (T-07) | Nathan e Comercial |
+| 3 | O vendedor confirma pedido a pedido ou existe liberação automática depois de um prazo? (T-07). Em parte respondida em 13/11: o pedido que vem de proposta é liberado sozinho depois que o Omie aceita (`api-acos-vital` `8265223`, banco pendente); o pedido que nasce no Omie continua com o vendedor | Nathan e Comercial |
 | 4 | Quem avisa o vendedor quando o pedido já está importado e ele tenta trocar a marcação (hoje aparece o cadeado)? | Nathan |
 | 5 | Perfil com escopo `todos`: só a Gerência PCP? Os demais perfis passam a ver só os vendedores vinculados, o que muda o dia a dia de comprador e diligenciador | Nathan e Gustavo |
 
