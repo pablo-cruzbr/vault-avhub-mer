@@ -25,7 +25,7 @@ Se um sistema não estiver ao lado do vault (`../<repo>` não existe), não adiv
 
 ## A regra de estado (F5)
 
-**Se está na `develop`, está pronto (✅).** A `main` não é critério de pronto, só informação. Todo ✅ cita o repositório e o arquivo:linha com âncora, por exemplo `api-acos-vital` `src/.../ordens_compra.route.js:42` (`EXIGIR_PODE_APROVAR`): a âncora é um trecho literal e curto da linha citada, e acha o lugar mesmo se a linha mudar; o commit lido fica no `develop-conferida` da nota. O módulo do Pablo (proposta e suprimentos) que não estiver na `develop` é 🔴 "sem API e sem banco".
+**Se está na `develop`, está pronto (✅).** A `main` não é critério de pronto, só informação. Todo ✅ cita o repositório e o arquivo:linha com âncora, por exemplo `api-acos-vital` `src/.../ordens_compra.route.js:44` (`EXIGIR_PODE_APROVAR`): a âncora é um trecho literal e curto da linha citada, e acha o lugar mesmo se a linha mudar; o commit lido fica no `develop-conferida` da nota. O módulo do Pablo (proposta e suprimentos) que não estiver na `develop` é 🔴 "sem API e sem banco".
 
 ## Gatilho: "atualizar o vault"
 
