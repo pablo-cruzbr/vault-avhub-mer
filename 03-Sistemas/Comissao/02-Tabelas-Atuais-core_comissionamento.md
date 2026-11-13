@@ -1,9 +1,10 @@
 ---
 tags: [comissao, banco, core_comissionamento, tabelas, dba]
 criado: 2026-10-16
-estado-em: 2026-11-10
+estado-em: 2026-11-13
 status: proposta
 dono: Gustavo (DBA)
+develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, N16-11]
 ---
 
@@ -164,7 +165,7 @@ Teto por cliente e unidade.
 | `created_at`, `updated_at`, `deleted_at` | timestamptz | Sem `created_by`/`updated_by`/`deleted_by` |
 
 **Problemas e melhorias**
-- `margem` é, na verdade, **gatilho de markup bruto** (`motor.ts:469`), e o nome convida a confundir com margem líquida. → `gatilho_markup_pct`.
+- `margem` é, na verdade, **gatilho de markup bruto** (`motor.ts:475`), e o nome convida a confundir com margem líquida. → `gatilho_markup_pct`.
 - CHECK limita `margem` a 0..100, mas markup bruto passa de 100 (ex.: 115,24). → faixa 0..1000.
 - **Sem vigência**: mudar a regra reescreve o passado. → `vigencia_inicio/fim` com EXCLUDE.
 - **Sem autoria** (nenhum `*_by`) e sem histórico. → auditoria.
