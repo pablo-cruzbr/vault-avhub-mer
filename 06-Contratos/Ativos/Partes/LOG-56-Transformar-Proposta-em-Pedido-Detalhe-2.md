@@ -1,12 +1,12 @@
 ---
 tags: [contrato, proposta, pedido-de-venda, omie, liberacao, refaturamento, parte]
 criado: 2026-11-09
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: para-implementar
 dono: Nathan
 parte-de: "[[LOG-56-Transformar-Proposta-em-Pedido]]"
 develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 6fcbba6, em 2026-11-11; api-acos-vital bebca52, av-hub 16891f9, em 2026-11-12, só as citações]
-fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Catálogo da API da Omie consultado em 09/11/2026 pelo conector do Omie (produtos/pedido:AlterarPedidoVenda, só a descrição; a operação não foi executada)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
+fontes: ["PDF de Robert de 09/11/2026 (contrato v8)", "Catálogo da API da Omie consultado em 09/11/2026 pelo conector do Omie (produtos/pedido:AlterarPedidoVenda, só a descrição; a operação não foi executada)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)", "PDF de Gustavo de 16/11/2026 (status dos contratos)"]
 ---
 
 # LOG-56 · Transformar proposta em pedido: §8 API a §17 (2/2)
@@ -155,6 +155,11 @@ As decisões de 09/11 estão todas tomadas; não há passo de decisão. Restam a
 | 14 | Liberar Pedidos: mostrar o valor inicial (§7.6) | Robert | 7b |
 | — | Medição do alcance do G6 nas três unidades (§7.7) | Robert + Nathan (dado) | — |
 | — | Contrato próprio: pernas 3 a 5 do MES; data por item | frentes do MES / Nathan | — |
+
+**Situação em 16/11 (status do Gustavo):** os passos 1 a 10, o log56b e o adendo R7 estão no tst. O R7 é o pedido da proposta liberado para o MES sozinho assim que o Omie aceita: migration `2026-11-13_comercial_proposta_pedido_comissao`, no dump de 16/11 ([[Dump-AvHub-Teste-2026-11-16]]). Ele está `para-conferir`, e quem confere é o Robert. Falta:
+- **Gustavo:** a produção, nesta ordem: log56, o INSERT da conta corrente padrão, `emissora_vira_unidade`, log56b e a API (fila em [[Banco-AvHub]]); o BL-093 espera a decisão do Nathan.
+- **Robert:** 7d, 12, 13 e 14; BL-081 (provar o pedido com conta corrente no Omie de teste); BL-092 (o cartão não se atualiza depois da falha do Omie); conferir o R7.
+- **Nathan:** o refaturamento passa pela Qualidade (saída 1 ou 3 da §7.7)?; BL-093 (limitar a 15 ou avisar que o Omie corta?); o contrato das pernas 3 a 5 do MES e da data por item, que ainda não existe.
 
 A coluna "Depende de" foi remontada a partir do PDF, cuja tabela saiu desalinhada na extração; confira contra o PDF antes de cobrar uma dependência.
 
