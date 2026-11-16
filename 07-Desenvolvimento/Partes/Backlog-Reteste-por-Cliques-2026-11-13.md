@@ -1,12 +1,12 @@
 ---
 tags: [desenvolvimento, backlog, pendencias, parte, validacao]
 criado: 2026-11-13
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: vigente
 dono: Nathan
 parte-de: "[[Backlog-por-Frente]]"
 develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13]
-fontes: [reteste por cliques no Docker local de 13/11/2026 (docker-teste/RETESTE-CLIQUES-2026-11-13.md e seção R3 de docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
+fontes: [reteste por cliques no Docker local de 13/11/2026 (docker-teste/RETESTE-CLIQUES-2026-11-13.md e seção R3 de docker-teste/RELATORIO-VALIDACAO.md, fora do vault), PDF de Gustavo de 16/11/2026 (status dos contratos)]
 ---
 
 # Backlog: defeitos do reteste por cliques de 13/11
@@ -25,7 +25,7 @@ O reteste rodou na `develop` de 12/11 (av-hub `c6310ad`, api-acos-vital `9abda4f
 | BL-092 | V0.6, V0.7 | Robert (raia 01, N16-157), com o Nathan | **O cartão da proposta não se atualiza depois da falha do Omie.** Depois do transformar com o Omie recusando, o cartão continua "Aprovada", com "Transformar em pedido" e sem o "Tentar novamente", até recarregar a página. O cartão "Virou pedido" mostra "Qualidade: não informada" com o pedido gravado `qualidade_acompanha = true` (visto também no R1 e no R2) | 🟡 | `av-hub` `components/Propostas/PropostaForm/TransformarModal.tsx:320-327`; [[01-Proposta-de-Venda]] |
 | BL-093 | V0.7 | Robert e Gustavo | **O nº do pedido do cliente é cortado em 15 caracteres sem aviso.** O modal do transformar aceita 30, mas o envio ao Omie (`fn_pedido_venda_payload_omie`) leva só 15. **Pergunta (Nathan):** limitar o campo a 15 ou avisar que o Omie corta? | 🟡 ❓ | [[Mapa-IncluirPedido-Omie]]; pedido PV-000008 (`OC-CLI-CLIQUES-1311`) |
 | BL-094 | Q1 | Robert | **O "Prazo do pedido" da Inspeção de entrada sai um dia antes** (29/10 para um prazo de 30/10): a data vira `Date` no fuso do navegador | 🟡 | `app-pcp` `app/(protected)/qualidade/inspecao-entrada/page.tsx:189` (`new Date(row.prazoPedido).toLocaleDateString`) |
-| BL-095 | C2, C8 | Gustavo | **A OC aprovada pelo vendedor fica sem `aprovado_por`.** Na OC-000020 (compra acima do cotado aprovada em Meus Pedidos) a decisão ficou só na divergência; a OC passou a `aprovado` sem quem aprovou | 🟡 | LOG-57; OC-000020 no Docker |
+| BL-095 | C2, C8 | Gustavo | **A OC aprovada pelo vendedor fica sem `aprovado_por`.** Na OC-000020 (compra acima do cotado aprovada em Meus Pedidos) a decisão ficou só na divergência; a OC passou a `aprovado` sem quem aprovou. Foi uma escolha da entrega de 12/11; o Gustavo corrige banco e API assim que o Nathan decidir (status de 16/11). **Pergunta (Nathan):** a OC liberada pelo vendedor grava o vendedor em `aprovado_por`? | 🟡 ❓ | LOG-57; OC-000020 no Docker |
 | BL-096 | C5 | Nathan e Gustavo | **O Follow-up lista OCs já recebidas como "Sem confirmação".** As OC-000010, 11, 16 e 17 estão concluídas no MES e continuam na lista do CCP | 🟡 | [[06-Circuito-de-Compra]] |
 
 Pequenos pontos de tela do mesmo reteste, sem item próprio: a margem aparece como "em breve", os pallets em "unid." para item em KG, o lote não aparece no modal de inspeção e há números fora do formato brasileiro.
