@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, producao, roteiro, f1, p6, mes]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: vigente
 ordem: 10
 nos: [F1]
@@ -242,7 +242,7 @@ Desde 27/10/2026 (`ab3318d`) a `develop` do MES tem `OrigemLote.PRODUCAO`: o "si
 | 4 | Tela do novo norte para divergência de produção (reprovada na inspeção de saída), com retrabalho e reabrir compra; `/decisoes-pcp` só cobre recebimento | Robert, Nathan decide | P6 | 🔴 |
 | 5 | Reabertura de divergência (hoje `RESOLVIDA` e `CANCELADA` são terminais) | Robert | P6 | 🔴 |
 | 6 | Reabertura de compra a partir da produção (P6 para P3): sem rota; só a divergência de recebimento reabre (`REABERTO`) | Robert | P6 | 🔴 |
-| 7 | Botões de `split` e `consolidar` na fila (API existe) | Robert | F1 | 🟡 |
+| 7 | Botões de `split` e `consolidar` na fila (API existe; testada pela API no reteste R6 de 16/11). Antes do botão, o `consolidar` precisa levar as reservas (BL-103), e o `pausar` da API precisa exigir o motivo (BL-104) | Robert | F1 | 🟡 |
 | 8 | Painel TV (`GET /dashboard/tv` sem página) | Robert | F1 | 🔴 |
 | 9 | `PerfilSetor` sem dimensão de filial (T.2/C3) | Robert | F1 | 🔴 |
 | 10 | Feed `/fluxo/eventos` com ator, autorizador e tempo por etapa ([[Rastreabilidade-e-Torre-de-Fluxo]]) | Robert | todos | 🔴 |

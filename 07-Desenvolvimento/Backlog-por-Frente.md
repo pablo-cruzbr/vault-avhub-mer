@@ -42,6 +42,7 @@ A lista completa desta nota fica em 4 notas à parte, uma por frente, para cada 
 - [[Backlog-Frente-Nathan-Proposta-Omie-e-Comissao]]: itens BL-075 a BL-081 (proposta, pedido no Omie e comissão), do Robert desde 11/11 (N16-157), com o Nathan apoiando
 - [[Backlog-Reteste-por-Cliques-2026-11-13]]: itens BL-089 a BL-096, defeitos de tela do reteste por cliques de 13/11/2026 (frentes Robert, Gustavo e Nathan, indicadas em cada linha)
 - [[Backlog-Reteste-R4-2026-11-16]]: itens BL-097 a BL-100, o que o reteste R4 (o fluxo de 0 a 100% pelas telas, 16/11/2026) achou
+- [[Backlog-Reteste-R5-R6-2026-11-16]]: itens BL-101 a BL-107, o que os retestes R5 e R6 pela API (16/11/2026, banco igual ao tst de 16/11) acharam
 - [[Backlog-Frente-Comercial-e-Suprimentos]]: Frente Comercial & Suprimentos (Robert conduz; Pablo acompanha)
 
 ## Fechados em 14/10/2026

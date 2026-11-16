@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, qualidade, qualidade-entrada, lote, rnc, quarentena, mes]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: vigente
 ordem: 8
 nos: [Q1, Q2, Q3, Q4]
@@ -50,7 +50,8 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 
 - A inspeção vale para o lote, nunca para a parcial (decisão EC-01).
 - Aprovar exige laudo. Reprovar exige laudo, motivo e evidência. No recebimento e na entrada de lote no estoque o laudo é opcional ✅ (`api-pcp` `src/qualidade/dto/aprovar-lote.dto.ts:8` e `reprovar-lote.dto.ts:9` obrigatórios; `src/compras/dto/registrar-recebimento.dto.ts:53`, `conferir-recebimento.dto.ts:106,268` e `src/estoque/operacao/dto/entrada-lote.dto.ts:25` opcionais).
-- Na reprovação parcial, a parte aprovada fica em quarentena até a substituição ser aprovada (EC-07). 🔴 A `develop` só segue isso quando ainda há parcial esperando o lote; sem parcial, libera a parte boa na mesma ação (PS-053): ajustar o código ou combinar um meio-termo.
+- Na reprovação parcial, a parte aprovada fica em quarentena até a substituição ser aprovada (EC-07). 🔴 A `develop` só segue isso quando ainda há parcial esperando o lote; sem parcial, libera a parte boa na mesma ação (PS-053): ajustar o código ou combinar um meio-termo. 🔴 E a substituição só libera a quarentena quando chega **pela requisição**: a recompra pela OC com `id_aviso_mes`, recebida pela doca, vira lote solto e o lote original fica em `QUARENTENA` (`api-pcp` `src/qualidade/qualidade.service.ts:88` (`this.itemDoLote(tx, lote.idRequisicaoItem)`); BL-102, retestes R5 e R6 de 16/11).
+- ✅ Cancelar a OC de recompra devolve o aviso ao Compras (LOG-58b): o aviso volta a `ABERTO`, aceita nova recompra, e o saldo futuro e a doca do MES voltam a contar pela OC original (`api-pcp` `src/compras/recebimento.service.ts:279` (`saldoDosItensOc(this.prisma, itens)`); detalhe do aviso em `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:138` (`recompras_canceladas`)). Testado pela API no Docker com o banco igual ao tst de 16/11 (reteste R6, [[Backlog-Reteste-R5-R6-2026-11-16]]).
 - Material aprovado vai ao Estoque. Nunca segue direto à Expedição.
 - O sistema nunca emite a nota de devolução. Ele só sinaliza e o Omie emite.
 - Lote da carga inicial já nasce liberado, porque a dupla conferência faz o papel do laudo.
