@@ -1,14 +1,14 @@
 ---
 tags: [decisoes, registro, n16, parte]
 criado: 2026-11-05
-estado-em: 2026-11-12
+estado-em: 2026-11-16
 status: vigente
 dono: Nathan
 parte-de: "[[Registro-de-Decisoes]]"
 fontes: ["Relatórios de entrega de Gustavo de 12/11/2026 (LOG-56 complemento; empresa, responsável e carteira de clientes), conferidos na develop bebca52 e no dump de teste de 12/11", conversa do Nathan de 05/11/2026 sobre o botão "Transformar em pedido de venda", N16-05, N16-89, N16-130, N16-149, api-acos-vital develop 1654f65 (src/schemas/core_comercial/aggregates/propostas/propostas.route.js:579-618), dump do banco de teste de 04/11/2026 (core.categorias, core_comercial.pedidos_venda), PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), conversa do Nathan de 10/11/2026 sobre o refaturamento, dump do banco de teste de 10/11/2026, prova-recalculo-refaturamento.sql (10/11/2026), api-acos-vital develop cc3fbb3 (src/schemas/core_comercial/aggregates/cadastros/cadastros.route.js:66-108; src/schemas/core/tables/unidades/unidades.model.js:167-170), dump do banco de teste de 10/11/2026 às 07:36 (ainda com core_comercial.unidades_emissoras, linha 17220)]
 ---
 
-# Registro de decisões: decisões N16, N16-150 a N16-155
+# Registro de decisões: decisões N16, N16-150 a N16-155 (e N16-156 a N16-166)
 
 **Em uma frase:** decisões N16 da nota [[Registro-de-Decisoes]], linhas N16-150 a N16-160 (parte 6): o que o vendedor responde ao transformar a proposta em pedido, o que a Qualidade "Sim" obriga o PCP a fazer, o refaturamento sem comissão, a regra do refaturamento por unidade, a empresa emissora que vira a própria unidade e o dono de cada raia do fluxo 0b.
 
@@ -100,3 +100,9 @@ Contrato afetado: LOG-56, Transformar proposta em pedido (§4.2, §6.3, §8 e pa
 | N16-163 | **O Orçamento entra completo na entrega das etapas 1 a 6, com os parâmetros que faltavam na OQ-46.** Nathan, 12/11/2026. (1) Volatilidade alta: acima de **20%**. (2) O **Orçamento** preenche o prazo de entrega em dias, ao gravar a oferta. (3) Histórico de **12 meses**; o fornecedor ganha nota depois de **3 compras**. O resto das regras de score, top fornecedores e "dado recente" segue a N16-55, a N16-56 e a N16-72 ([[Proposta-Score-e-Volatilidade-OQ-46]], [[02-Orcamento-Base-de-Preco]]). | 12/11/2026 | Nathan | 📝 | N16-55, N16-56 e N16-72 (completa) |
 | N16-164 | **Comissão na entrega das etapas 1 a 6: a parte de compras.** Nathan, 12/11/2026, com a informação do Robert de que a versão do vendedor já funciona (a Análise de margem da proposta, com a régua do simulador, e o "Simular comissão deste pedido"). Entram: (1) o motor da comissão na API (BL-078), para a proposta, o pedido e a margem considerada do `C8` usarem o mesmo cálculo; (2) a parte de compras do pedido digitado no Omie (`V3`). A comissão pelo custo real e o fechamento por nota (`K2` a `K6`) ficam na etapa 15. | 12/11/2026 | Nathan | 📝 | N16-19 (completa) |
 | N16-165 | **Entrega das etapas 1 a 6 em 3 dias, do 6 para o 1.** Nathan, 12/11/2026. De 13 a 15/11/2026 o Nathan, com IA, escreve o código das etapas 6 (Compras), 5 (Estoque), 4 (PCP), 3 (Pedido), 2 (Orçamento) e 1 (Proposta), nessa ordem, em PRs: o Gustavo aplica o banco no tst e o Robert revisa o MES, as raias 01 e 03 (dele, N16-157) e o motor da comissão; o Pablo acompanha o Orçamento. Fecha com a validação ponta a ponta no Docker. Fora: a regra de aprovação definitiva com Compras, o pedido manual e a produção (migrations e envio real ao Omie). | 12/11/2026 | Nathan | 📝 | N16-157 (completa) |
+
+## Decisão de 16/11/2026 (custo do item de fabricação) (N16-166)
+
+| ID | Decisão | Data | Dono | Selo | Superada |
+|---|---|---|---|---|---|
+| N16-166 | **Item de fabricação não calcula custo, por enquanto.** Nathan, 16/11/2026. Ao lançar a proposta no Hub, o vendedor diz se cada item é Revenda ou Fabricação interna (campo "Tipo do item", que já existe: `av-hub` `components/Propostas/PropostaForm/CompositorItem.tsx:373` (`<MenuItem value="FABRICACAO_INTERNA">`), e a API aceita `tipo_item`, `api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:153` (`tipo_item: z.enum`)). O item de fabricação **não tem custo**: não passa pela compra, não tem margem nem letra, e a comissão é o percentual fixo da unidade (hoje 2%; o selo "FAB", `av-hub` `components/Orcamento/LetraAnalise.tsx:33` (`if (regra === 'FABRICACAO_INTERNA') {`)). Consequências: (1) a regra da proposta incompleta (`V0.3`, item sem custo e sem fornecedor) vale só para item de revenda; (2) o custo do fabricado pela matéria-prima (N16-09) fica suspenso, e o BL-067 é adiado; (3) o custo real do fabricado que não chega ao Hub (reteste R4 no Docker, 16/11) deixa de ser defeito. **Em aberto:** o pedido que vem direto do Omie não tem o tipo do item; só o MES sabe, pela Destinação. De onde a comissão desses pedidos tira o tipo ainda não foi decidido. | 16/11/2026 | Nathan | 📝 decidido; o Hub já se comporta assim | suspende em parte N16-09 |

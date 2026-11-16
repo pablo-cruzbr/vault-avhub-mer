@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, raia, vendas, proposta, v0, simulador, tela, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: proposta
 dono: Nathan (regra) · Robert (rotas e telas de proposta) · Pablo (acompanha) · Gustavo (banco) · Compras (C6, C7, C8)
 parte-de: "[[01-Proposta-de-Venda]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, em 2026-11-10; api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 96316f4, av-hub f63b01b, em 2026-11-16, os dados técnicos e o reteste R4; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, em 2026-11-10; api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [nota 11-Proposta-e-Pedido-de-Venda da v2 (tag v2-antes-da-v3), sem C6–C8, V1–V3 e B2–B4, que foram para 06, 03 e 02 em 05/11/2026, Registro-de-Decisoes (N16-01 a N16-144), api-acos-vital develop cc30c85 e 0384e89 de 29/10/2026 (core_comercial/aggregates/propostas/propostas.route.js, clientes, cadastros, parceiros), Dump Avhub 29/10/2026 (fn_proposta_criar, core_comercial.propostas), av-hub develop 758d5f0 (app/api/comercial/[...rota]/route.ts, lib/domain/andamento-proposta.ts), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, 09-Diagramas/fontes/email-divergencia-margem-pv27824.jpg e pv28204.jpg, av-hub comissoes/simulador/page.tsx, 00-Fluxo-Mestre-0b, 01-Vendas-Liberacao, 04-Circuito-de-Compra, Proposta-Orcamento-Comissao/08-Reuniao/Proposta-Orcamento-Pedido-Comissao.docx (fora do vault), 09-Diagramas/artifact-proposta-pedido.html, api-comercial 5aa5311 (propostas.routes.ts, propostas.service.ts, vendas.prisma, enums.prisma, custos.routes.ts, numeroProposta.ts), Dump Avhub 14/10, av-hub develop 44bb770 (PR #277, commit 20e6089), api-acos-vital develop cc3fbb3, Dump-AvHub-Teste-2026-11-10, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -80,6 +80,8 @@ As colunas e as condições **vêm das mesmas entradas do motor atual** (`simula
 **Três visões da mesma tela** (detalhe e tabela por bloco em [[15-Custo-Real-e-Comissao]]): (a) o vendedor, na proposta, preenche o custo e vê margem, letra e a comissão estimada que ele colocou; (b) Compras vê o cotado do vendedor ao lado do valor da OC e usa o valor correto na OC, sem alterar a proposta; quando o valor é maior, o vendedor aprova em Meus Pedidos; (c) a Controladoria vê estimado e real lado a lado, com o drill-down por evento de custo (cada evento com as suas condições, N16-20), e decide com justificativa.
 
 ## O que falta desenvolver
+
+- 🟡 **Reteste R4 no Docker (16/11), da AV2026-0021 ao PV-000009:** criar, revisar (R01), PDF comercial e PDF técnico (`?tipo=tecnica`, `av-hub` `app/api/comercial/propostas/[id]/pdf/route.ts:31` (`get('tipo') === 'tecnica'`)), aprovar e transformar funcionaram, e o transformar gravou a simulação de comissão. Os "Dados técnicos" do item ganharam "Desvios" e "Pintura/acabamento" (av-hub #299 a #301, api `96316f4`), que dependem da migration de 16/11 (BL-097). Continuam o cartão "Qualidade: não informada" e sem atualizar depois da falha do Omie (BL-092), e o pedido do Hub fora de Meus Pedidos. Item de fabricação não tem custo (N16-166). Detalhe em [[Backlog-Reteste-R4-2026-11-16]].
 
 Os itens 7 e 12 (`C6`, `C7`, `C8`) estão em [[06-Circuito-de-Compra-Detalhe-Tecnico-2#C6, C7 e C8: a parte de compras do pedido da proposta]].
 
