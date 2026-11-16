@@ -35,6 +35,7 @@ Resumo das decisões vigentes que mais pesam, agrupadas por assunto. O ID entre 
 - Uma proposta vale um pedido: não existe fechamento parcial, e proposta cancelada não vira pedido (N16-02).
 - Ao transformar em pedido, o vendedor responde três coisas obrigatórias: a previsão de faturamento, se a Qualidade acompanha desde o zero e se o pedido pode faturar em partes (N16-05, N16-89).
 - O pedido digitado direto no Omie segue o mesmo fluxo do pedido criado no Hub; o que veio do Omie só se altera no Omie (N16-106).
+- A proposta se exclui pelo Hub só quando é seguro (aberta, cancelada, expirada, ou pedido que nunca chegou ao Omie). Pedido excluído direto no Omie leva a proposta a "Excluído no Omie", de onde se copia (N16-167).
 - "Sequencial" é só um agrupamento para o Fiscal faturar em partes, não outro pedido; o que se preserva é o código do produto (N16-94, N16-101).
 
 **Orçamento**
@@ -121,6 +122,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
 - [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026; empresa, responsável e carteira de clientes da proposta, N16-160, pedidos do Robert de 11/11/2026; entrega das etapas 1 a 6 em 3 dias: aprovação da OC, Destinação do pedido inteiro, Orçamento completo e comissão, N16-161 a N16-165, 12/11/2026; item de fabricação sem custo, N16-166, 16/11/2026)
+- [[Registro-N16-167-em-diante]]: N16-167 em diante (excluir proposta pelo Hub e o pedido excluído no Omie, 16/11/2026)
 
 ## Onde está cada decisão
 
