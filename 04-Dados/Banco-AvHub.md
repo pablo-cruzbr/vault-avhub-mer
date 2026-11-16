@@ -1,7 +1,7 @@
 ---
 tags: [dados, banco, av-hub, postgres]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: vigente
 dono: Gustavo (DBA)
 develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
@@ -11,7 +11,7 @@ fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/
 # Banco do av-hub
 
 > [!info] Dump mais novo: banco de teste, 13/11/2026
-> O esqueleto do banco de **teste** de 13/11/2026 09:40 ([[Dump-AvHub-Teste-2026-11-13]]) é o mais novo: tem **151 tabelas, 55 views, 284 funções e 205 triggers**. Desde 12/11 entraram a OC de recompra cancelada que devolve o aviso do MES ao Compras (LOG-58b, `trg_ordens_compra_aviso_mes_reabrir`), a coluna `id_aviso_mes_origem` na referência da OC para o MES (SQL-022) e `produto_vendas.codigo_item_integracao` (SQL-021).
+> O esqueleto do banco de **teste** de 16/11/2026 11:23 ([[Dump-AvHub-Teste-2026-11-16]]) é o mais novo: tem **151 tabelas, 55 views, 291 funções e 209 triggers**. Desde 13/11 entraram o "Da proposta à comissão" (simulação v1 que nasce rascunho e só vai a enviada com o pedido faturado, liberação automática do pedido da proposta, item do Omie ligado ao item da proposta, evento do PDF) e os campos "Desvios" e "Pintura/acabamento" do item da proposta. Ainda não tem a coluna `numero_pedido_omie` que a lista de propostas da `api-acos-vital` `2e333e3` lê (BL-101). O anterior, de 13/11, é o [[Dump-AvHub-Teste-2026-11-13]].
 >
 > O esqueleto do banco de **teste** de 12/11/2026 15:01 ([[Dump-AvHub-Teste-2026-11-12]]) tem **151 tabelas, 55 views, 283 funções e 204 triggers**. A tabela `core_comercial.unidades_emissoras` **saiu**: a empresa emissora agora é a própria unidade (`core.unidades` ganhou `sigla` e os campos do cabeçalho dos documentos, lidos pela `core.vw_unidades_cabecalho`), e `id_unidade_emissora` saiu de `propostas` e `pedidos_venda` (em `sequencias_proposta` virou `codigo_empresa`). Entraram o índice único do LOG-56 (`uq_pedidos_venda_omie`), o banco do LOG-57 (`core_comercial.divergencias_compra` e `_eventos`), do LOG-58 (`core_vendas_faturamento.avisos_mes_compra`) e do API-019 (`vw_pedido_venda_compra_proposta`), a carteira de clientes na proposta (`parametros_carteira_clientes`, `fn_carteira_clientes`) e o `encargo_pagamento` da proposta e da simulação. A regra do refaturamento não mudou. A tabela de schemas abaixo foi reconferida no dump de 13/11 para `core`, `core_vendas_faturamento` e `core_comercial`; as outras listas de tabelas são de dumps anteriores.
 >
