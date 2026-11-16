@@ -1,7 +1,7 @@
 ---
 tags: [inicio, status]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: vigente
 dono: Nathan
 develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13, conferência completa e reteste no Docker; api-acos-vital bebca52, av-hub d82d58b, omie-elt-pipeline d8fddca, em 2026-11-12, só proposta, Compras e pipeline; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
@@ -11,6 +11,9 @@ fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas 
 # Onde estamos (estado conferido na develop em 13/11/2026: conferência completa do vault e reteste no Docker)
 
 **Em uma frase:** o fluxo do pedido já funciona da liberação ao recebimento, e a OP, o lote do fabricado e o custo por item já estão na `develop` do MES; o que falta é, sobretudo, o pedido da proposta no Omie, a API e o banco do Orçamento, a comissão nova e o documento de retirada. Publicar o MES na `main` (BL-035) é informação de publicação, não critério de pronto.
+
+> [!info] Reteste R4: o fluxo de 0 a 100% pelas telas, 16/11/2026
+> No Docker local, com a `develop` de 16/11, o fluxo passou inteiro por cliques: a proposta AV2026-0021 virou o pedido do Hub PV-000009 e a simulação de comissão foi aprovada por Compras; o pedido do Omie 28190 foi liberado, destinado à fabricação, comprou a chapa, recebeu, passou pela Qualidade e pelo Corte e foi entregue. Os achados viraram BL-097 a BL-100 ([[Backlog-Reteste-R4-2026-11-16]]); o mais sério é a migration de "Desvios" e "Pintura" do item (BL-097). Decisão nova: item de fabricação não calcula custo, por enquanto (N16-166, BL-067 adiado).
 
 > [!info] Reteste por cliques e "Da proposta à comissão", 13/11/2026 (fim do dia)
 > O reteste por cliques no Docker refez pela tela os 8 pontos que o R2 testou pela API: nenhum 🔴; os defeitos de tela viraram BL-089 a BL-096 ([[Backlog-Reteste-por-Cliques-2026-11-13]]), o principal é o "Necessário até" aceitar data passada. Na `develop` da `api-acos-vital` (`8265223`, pedido do Robert) entrou "Da proposta à comissão": o pedido de proposta é liberado sozinho para o MES depois que o Omie aceita, a simulação v1 nasce rascunho e só vai a enviada com o pedido faturado. A migration dessa mudança ainda não está no banco de teste. Detalhe em [[Ultima-Atualizacao-do-Vault]].
