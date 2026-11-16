@@ -13,9 +13,9 @@ decisoes: [N16-159, N16-17, N16-60, N16-61, N16-62, N16-63, N16-64, N16-65, N16-
 develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-11; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #283)]
 tags: [contrato, compras, c8, divergencia, vendedor, meus-pedidos]
 criado: 2026-11-11
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 dono: Nathan
-fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 16 a 20 e item 12 de "O que falta"), Registro-de-Decisoes N16-60 a N16-67, N16-73, N16-76 e N16-102, Estados-e-Status (divergencias_compra), escolhas do Nathan de 11/11/2026 (OC espera; só PV de proposta nesta etapa; diferença de custo agora e margem considerada com o BL-078), api-acos-vital develop 637f183, av-hub develop d0e8f8f, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-57), conferido na develop bebca52 e no dump de teste de 12/11", "Relatório de entrega de Gustavo de 13/11/2026 (LOG-57, LOG-58 e SQL-022: respostas e log58b)", Dump-AvHub-Teste-2026-11-13]
+fontes: [06-Circuito-de-Compra-Detalhe-Tecnico-2 (regras 16 a 20 e item 12 de "O que falta"), Registro-de-Decisoes N16-60 a N16-67, N16-73, N16-76 e N16-102, Estados-e-Status (divergencias_compra), escolhas do Nathan de 11/11/2026 (OC espera; só PV de proposta nesta etapa; diferença de custo agora e margem considerada com o BL-078), api-acos-vital develop 637f183, av-hub develop d0e8f8f, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-57), conferido na develop bebca52 e no dump de teste de 12/11", "Relatório de entrega de Gustavo de 13/11/2026 (LOG-57, LOG-58 e SQL-022: respostas e log58b)", Dump-AvHub-Teste-2026-11-13, PDF de Gustavo de 16/11/2026 (status dos contratos)]
 ---
 
 # LOG-57 · Compra acima do cotado na proposta, aprovação do vendedor e lista de Compras (C8)
@@ -173,6 +173,8 @@ Nó `C8` do [[00-Fluxo-Mestre-0b]], raia [[06-Circuito-de-Compra]]. Lê o cotado
 2. **API (Gustavo):** ✅ emissão, `PATCH`, as cinco rotas (12/11, `bebca52`; 83 verificações no relatório de entrega).
 3. **Front (Nathan):** ✅ motivo na OC, detalhe da OC, Meus Pedidos e a lista de Compras (12/11, `av-hub` PR #283). Conferido contra o código da API, ainda não contra a API rodando.
 4. **Comissão (Robert, BL-078):** a margem considerada, depois.
+
+**Situação em 16/11 (status do Gustavo):** banco e API no tst. Falta a produção, com a API-019 antes da log57 (fila em [[Banco-AvHub]]). O BL-095 espera a decisão do Nathan: a OC liberada pelo vendedor fica sem `aprovado_por` (escolha da entrega de 12/11; o reteste marcou como defeito), e o Gustavo corrige banco e API se a decisão for gravar o vendedor. Perguntas do Nathan: o diligenciador ou o auxiliar do vendedor também decide? O e-mail de Compras para a Gerência e a Controladoria continua? A segunda etapa (PV digitado no Omie, N16-102) não tem contrato.
 
 ## 15. Riscos, rollback e perguntas em aberto
 
