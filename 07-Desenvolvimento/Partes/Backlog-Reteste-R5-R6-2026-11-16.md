@@ -6,7 +6,7 @@ status: vigente
 dono: Nathan
 parte-de: "[[Backlog-por-Frente]]"
 develop-conferida: [api-acos-vital 2e333e3, av-hub f63b01b, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-16]
-fontes: [retestes R5 e R6 pela API no Docker local de 16/11/2026 (docker-teste/RETESTE-R5-2026-11-16-HUB.md, -MES.md, RETESTE-R6-2026-11-16-HUB.md e -MES.md, fora do vault), Dump-AvHub-Teste-2026-11-16]
+fontes: [retestes R5 e R6 pela API no Docker local de 16/11/2026 (docker-teste/RETESTE-R5-2026-11-16-HUB.md, -MES.md, RETESTE-R6-2026-11-16-HUB.md e -MES.md, fora do vault), Dump-AvHub-Teste-2026-11-16, PDF de Gustavo de 16/11/2026 (status dos contratos)]
 ---
 
 # Backlog: defeitos dos retestes R5 e R6 de 16/11
@@ -28,7 +28,7 @@ Continuam abertos, sem mudança: BL-098 (visto também na fabricação), BL-096,
 
 | ID | Nó | Frente | O que falta | Selo | Evidência |
 |---|---|---|---|---|---|
-| BL-101 | V0.7 | Gustavo | **A lista de propostas responde 500 sem a migration do nº do Omie.** A `api-acos-vital` `2e333e3` lê `p.numero_pedido_omie` na lista e na busca (`src/schemas/core_comercial/aggregates/propostas/propostas.route.js:455` (`OR p.numero_pedido_omie ILIKE :termo`), `:478`); a coluna não está no tst de 16/11 nem no Docker (log: `column p.numero_pedido_omie does not exist`). Aplicar a migration `2026-11-16_comercial_proposta_lista_pedido_omie` no tst junto com o deploy do commit, senão a tela de Propostas para | 🔴 banco pendente | R6 Hub, defeito 1 |
+| BL-101 | V0.7 | Gustavo | ✅ **Resolvido em 16/11: a migration `2026-11-16_comercial_proposta_lista_pedido_omie` foi aplicada no tst (Gustavo) e está no dump das 13:58 ([[Dump-AvHub-Teste-2026-11-16]]); no Docker, a lista voltou a 200 e a busca pelo nº do Omie acha a proposta.** Registro anterior: **A lista de propostas responde 500 sem a migration do nº do Omie.** A `api-acos-vital` `2e333e3` lê `p.numero_pedido_omie` na lista e na busca (`src/schemas/core_comercial/aggregates/propostas/propostas.route.js:455` (`OR p.numero_pedido_omie ILIKE :termo`), `:478`); a coluna não está no tst de 16/11 nem no Docker (log: `column p.numero_pedido_omie does not exist`). Aplicar a migration `2026-11-16_comercial_proposta_lista_pedido_omie` no tst junto com o deploy do commit, senão a tela de Propostas para | ✅ | R6 Hub, defeito 1 |
 | BL-102 | R1, Q4 | Robert | **A recompra de um item de pedido recebida pela doca não libera a parte boa em quarentena.** A doca mostra duas linhas para a mesma peça (a OC de recompra e a requisição); recebida pela linha da OC, a recompra vira lote solto, e o lote original fica em `QUARENTENA` (aprovar dá 409). A liberação só corre com lote de requisição (`api-pcp` `src/qualidade/qualidade.service.ts:88` (`this.itemDoLote(tx, lote.idRequisicaoItem)`)) e a doca conta a OC de recompra sem ligá-la ao aviso (`src/compras/compra-oc.ts:196` (`const esperado =`)). É o PS-059 no item de pedido | 🔴 | R5 (28879) e R6 (28725/2, LT-20261116-0012 e -0014) |
 | BL-103 | F1 | Robert | **Consolidar parciais não leva as reservas.** Depois de consolidar, a reserva fica presa na parcial cancelada e o saldo do lote some para o estoque (`api-pcp` `src/itens-parciais/itens-parciais.service.ts:2275` (`async consolidar(`)). Só pela API: o app não tem o botão | 🟡 | R6 (28725/1, LT-20261116-0009) |
 | BL-104 | F1 | Robert | **Pausar aceita motivo vazio pela API** (`api-pcp` `src/itens-parciais/dto/pausar-item-parcial.dto.ts:4`); a tela exige o motivo | 🟡 | R6 MES |
