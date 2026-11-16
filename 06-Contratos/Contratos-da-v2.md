@@ -1,7 +1,7 @@
 ---
 tags: [contratos, indice, v2]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: vigente
 dono: Nathan
 fontes: ["tag v2-antes-da-v3 do vault (06-Contratos)", "gerado por 07-Desenvolvimento/v3/scripts/contratos-indice.mjs", "PDF de Robert de 09/11/2026 (contrato LOG-56 v8)", "PDF de Gustavo de 10/11/2026 (entrega LOG-56, banco e API)"]
@@ -56,7 +56,7 @@ Estas seções ficam em notas à parte, para cada arquivo ficar abaixo de 25 KB 
 
 ## Contratos novos (v3)
 
-A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`, `CON-04`, `LOG-59`, `SQL-023`.
+A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`, `CON-04`, `LOG-60`, `SQL-023`.
 
 | ID | Título | Status | Autor | Data |
 |---|---|---|---|---|
@@ -64,6 +64,7 @@ A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`
 | [[API-019-Compra-da-Proposta-na-OC\|API-019]] | A emissão da OC mostra a parte de compras da proposta (`C6` e `C7`) | `implementado-na-develop` | Nathan | 2026-11-11 |
 | [[LOG-57-Compra-Acima-do-Cotado\|LOG-57]] | Compra acima do cotado na proposta, aprovação do vendedor e lista de Compras (`C8`) | `parcial` | Nathan | 2026-11-11 |
 | [[LOG-58-Avisos-do-MES-ao-Compras\|LOG-58]] | O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento | `parcial` | Nathan | 2026-11-12 |
+| [[LOG-59-Exclusao-de-Proposta-e-Pedido-Excluido-no-Omie\|LOG-59]] | Excluir proposta pelo Hub e tratar o pedido excluído direto no Omie | `para-implementar` | Robert e Nathan | 2026-11-16 |
 | [[SQL-022-Aviso-da-Recompra-na-Referencia-da-OC\|SQL-022]] | A referência da OC para o MES diz de qual aviso do MES a OC é a recompra (saldo futuro, BL-050) | `implementado-na-develop` | Nathan | 2026-11-13 |
 
 O modelo de consulta está em [[Modelo-de-Consulta]].
