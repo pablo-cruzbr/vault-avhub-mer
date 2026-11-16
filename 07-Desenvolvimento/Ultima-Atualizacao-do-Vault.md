@@ -15,11 +15,11 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-16, reteste R4 no 
 
 ## Base atual
 
-**Data:** 16/11/2026. **Motivo:** o reteste R4 no Docker de 16/11, o fluxo de 0 a 100% pelas telas (`docker-teste/RETESTE-R4-2026-11-16.md`, fora do vault), a decisão N16-166 (item de fabricação não calcula custo, por enquanto) e o que entrou na `develop` desde 13/11: no av-hub, o simulador com visual novo (#299) e o PDF técnico com os dados técnicos do item (#300 e #301); na `api-acos-vital`, os campos "Desvios" e "Pintura/acabamento" do item (`96316f4`). **Nesta atualização:** a N16-166 no [[Registro-de-Decisoes]] (e a N16-09 suspensa em parte); o BL-067 adiado; a nota [[Backlog-Reteste-R4-2026-11-16]] (BL-097 a BL-100); o BL-089 resolvido; [[01-Proposta-de-Venda]] e a parte técnica 2; [[15-Custo-Real-e-Comissao]]; [[Onde-Estamos]]. **Ainda sem conferir:** a migration `2026-11-16_comercial_proposta_item_desvios_pintura` no tst; as citações quebradas fora das notas tocadas.
+**Data:** 16/11/2026 (tarde). **Motivo:** o esqueleto do banco de teste de 16/11 ([[Dump-AvHub-Teste-2026-11-16]]), a conferência do Docker contra ele e os retestes R5 e R6 pela API (`docker-teste/RETESTE-R5-2026-11-16-*.md` e `RETESTE-R6-2026-11-16-*.md`, fora do vault); na `develop`, só a `api-acos-vital` `2e333e3` (nº do Omie na lista de propostas) desde a base da manhã. **Nesta atualização:** [[Dump-AvHub-Teste-2026-11-16]] e [[Banco-AvHub]]; a nota [[Backlog-Reteste-R5-R6-2026-11-16]] (BL-101 a BL-107); [[01-Proposta-de-Venda]] e a parte técnica 2; [[06-Circuito-de-Compra]]; [[08-Qualidade-Entrada]]; [[10-Producao-e-Roteiro]]; [[15-Custo-Real-e-Comissao]] ("Da proposta à comissão" no tst); [[Onde-Estamos]]. A base anterior (manhã de 16/11) foi o reteste R4 e a N16-166. **Ainda sem conferir:** a migration `2026-11-16_comercial_proposta_lista_pedido_omie` (BL-101); as citações quebradas fora das notas tocadas.
 
 | Sistema | Ramo lido | Commit | Data do commit | Último merge |
 |---|---|---|---|---|
-| `api-acos-vital` | `origin/develop` | `96316f4` | 16/11/2026 | `96316f4` (desvios e pintura do item), direto na `develop` |
+| `api-acos-vital` | `origin/develop` | `2e333e3` | 16/11/2026 | `2e333e3` (nº do Omie na lista de propostas), direto na `develop` |
 | `av-hub` | `origin/develop` | `f63b01b` | 16/11/2026 | PR #301 (`feat/proposta-pdf-tecnico`) |
 | `api-pcp` | `origin/develop` | `bd6b442` | 12/11/2026 | PR #81 (`feat/saldo-futuro-oc-estoque`) |
 | `app-pcp` | `origin/develop` | `897dcd7` | 12/11/2026 | PR #66 (`feat/saldo-futuro-oc-estoque`) |
@@ -27,7 +27,7 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-16, reteste R4 no 
 
 São os commits do `develop-conferida` das notas conferidas nesta atualização; as raias não tocadas ainda dizem commits anteriores.
 
-**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 13/11/2026 09:40 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-13.sql`, [[Dump-AvHub-Teste-2026-11-13]]), com o LOG-58b, a SQL-022 e a coluna da SQL-021. As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
+**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 16/11/2026 11:23 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-16.sql`, [[Dump-AvHub-Teste-2026-11-16]]), com o "Da proposta à comissão" e os campos "Desvios" e "Pintura" do item. As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
 
 ## Como usar na próxima atualização
 
