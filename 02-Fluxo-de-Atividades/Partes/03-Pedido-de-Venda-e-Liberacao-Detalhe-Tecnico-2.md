@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, vendas, liberacao, av-hub, v1, v2, v3, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 status: vigente
 dono: Nathan
 parte-de: "[[03-Pedido-de-Venda-e-Liberacao]]"
@@ -101,7 +101,7 @@ O pedido da proposta nasce em `status_liberacao = liberado` (valores em [[03-Ped
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
 | 6 | Liberação gravada na resposta do `IncluirPedido`, com histórico | Gustavo | `V1` | 🔴 |
-| 13 | **Cancelamento:** registro no hub, requisição e OC não emitida canceladas com tarja, aviso à OC e ao PCP, comprado ao Estoque, ajuste do `exclusionSync` | Nathan, Gustavo, Robert (Estoque) | cancelamento | 🔴 |
+| 13 | **Cancelamento:** registro no hub, requisição e OC não emitida canceladas com tarja, aviso à OC e ao PCP, comprado ao Estoque, ajuste do `exclusionSync` (a trava para resposta vazia do Omie e o lado da proposta, quando o pedido some do espelho, estão no `LOG-59` (`06-Contratos/Ativos/LOG-59-Exclusao-de-Proposta-e-Pedido-Excluido-no-Omie`)\|`LOG-59` (`06-Contratos/Ativos/LOG-59-Exclusao-de-Proposta-e-Pedido-Excluido-no-Omie`); o aviso ao MES continua aqui) | Nathan, Gustavo, Robert (Estoque) | cancelamento | 🔴 |
 
 ### Pendências (numeração da nota de proposta)
 
