@@ -93,7 +93,7 @@ Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (C
 - **Compra acima do valor da proposta:** N16-159, N16-17, N16-18, N16-60, N16-61, N16-62, N16-63, N16-64, N16-65, N16-66, N16-67, N16-73, N16-76, N16-102.
 - **Custo real (por evento, NF de entrada, imposto da OC):** N16-09, N16-20, N16-22, N16-23, N16-37, N16-38, N16-40, N16-48, N16-53, N16-57, N16-86, N16-102, N16-144.
 - **Custo do lote e custo no Estoque:** #93, #94, #95, #97, #98, #99, N16-37, DEC-12.
-- **Comissão (cálculo, Controladoria, relatórios):** N16-10, N16-11, N16-12, N16-21, N16-34, N16-35, N16-39, N16-42, N16-43, N16-44, N16-45, N16-46, N16-47, N16-48, N16-49, N16-50, N16-51, N16-74, N16-77, N16-78, N16-103, N16-104, N16-105, N16-143, #90, N16-164.
+- **Comissão (cálculo, Controladoria, relatórios):** N16-10, N16-11, N16-12, N16-21, N16-34, N16-35, N16-39, N16-42, N16-43, N16-44, N16-45, N16-46, N16-47, N16-48, N16-49, N16-50, N16-51, N16-74, N16-77, N16-78, N16-103, N16-104, N16-105, N16-143, #90, N16-164, N16-166.
 - **Unidades e contas Omie:** N16-79, N16-80, N16-81, N16-83, N16-85, N14-31, DEC-1, EN-07, #31c.
 - **Menu e telas:** N16-14, N16-19, N16-33, N16-107, N16-108, N16-119, N14-33, #54, #74.
 - **Banco e API (onde cada coisa mora):** N16-15, N16-98, N16-154, N16-155, N16-109, N16-111, N16-112, N16-113, N16-116, N16-117, N16-143, N14-07, N14-15, N14-26, #3, #6, #82.
@@ -120,7 +120,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-73-a-N16-96]]: N16-73 a N16-96
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
-- [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026; empresa, responsável e carteira de clientes da proposta, N16-160, pedidos do Robert de 11/11/2026; entrega das etapas 1 a 6 em 3 dias: aprovação da OC, Destinação do pedido inteiro, Orçamento completo e comissão, N16-161 a N16-165, 12/11/2026)
+- [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026; empresa, responsável e carteira de clientes da proposta, N16-160, pedidos do Robert de 11/11/2026; entrega das etapas 1 a 6 em 3 dias: aprovação da OC, Destinação do pedido inteiro, Orçamento completo e comissão, N16-161 a N16-165, 12/11/2026; item de fabricação sem custo, N16-166, 16/11/2026)
 
 ## Onde está cada decisão
 
