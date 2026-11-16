@@ -15,7 +15,7 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-16, reteste R4 no 
 
 ## Base atual
 
-**Data:** 16/11/2026 (tarde). **Motivo:** o esqueleto do banco de teste de 16/11 ([[Dump-AvHub-Teste-2026-11-16]]), a conferência do Docker contra ele e os retestes R5 e R6 pela API (`docker-teste/RETESTE-R5-2026-11-16-*.md` e `RETESTE-R6-2026-11-16-*.md`, fora do vault); na `develop`, só a `api-acos-vital` `2e333e3` (nº do Omie na lista de propostas) desde a base da manhã. **Nesta atualização:** [[Dump-AvHub-Teste-2026-11-16]] e [[Banco-AvHub]]; a nota [[Backlog-Reteste-R5-R6-2026-11-16]] (BL-101 a BL-107); [[01-Proposta-de-Venda]] e a parte técnica 2; [[06-Circuito-de-Compra]]; [[08-Qualidade-Entrada]]; [[10-Producao-e-Roteiro]]; [[15-Custo-Real-e-Comissao]] ("Da proposta à comissão" no tst); [[Onde-Estamos]]. A base anterior (manhã de 16/11) foi o reteste R4 e a N16-166. **Ainda sem conferir:** a migration `2026-11-16_comercial_proposta_lista_pedido_omie` (BL-101); as citações quebradas fora das notas tocadas.
+**Data:** 16/11/2026 (tarde). **Motivo:** o esqueleto do banco de teste de 16/11 ([[Dump-AvHub-Teste-2026-11-16]]), a conferência do Docker contra ele e os retestes R5 e R6 pela API (`docker-teste/RETESTE-R5-2026-11-16-*.md` e `RETESTE-R6-2026-11-16-*.md`, fora do vault); na `develop`, só a `api-acos-vital` `2e333e3` (nº do Omie na lista de propostas) desde a base da manhã. **Nesta atualização:** [[Dump-AvHub-Teste-2026-11-16]] e [[Banco-AvHub]]; a nota [[Backlog-Reteste-R5-R6-2026-11-16]] (BL-101 a BL-107); [[01-Proposta-de-Venda]] e a parte técnica 2; [[06-Circuito-de-Compra]]; [[08-Qualidade-Entrada]]; [[10-Producao-e-Roteiro]]; [[15-Custo-Real-e-Comissao]] ("Da proposta à comissão" no tst); [[Onde-Estamos]]. A base anterior (manhã de 16/11) foi o reteste R4 e a N16-166. **Depois, no mesmo dia:** o dump das 13:58 trouxe a migration `2026-11-16_comercial_proposta_lista_pedido_omie` (BL-101 resolvido) e o status do Gustavo (PDF de 16/11) foi registrado nos LOG-56, LOG-57 e LOG-58, no [[Banco-AvHub]] (fila da produção) e no BL-095. **Ainda sem conferir:** as citações quebradas fora das notas tocadas.
 
 | Sistema | Ramo lido | Commit | Data do commit | Último merge |
 |---|---|---|---|---|
@@ -27,7 +27,7 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-16, reteste R4 no 
 
 São os commits do `develop-conferida` das notas conferidas nesta atualização; as raias não tocadas ainda dizem commits anteriores.
 
-**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 16/11/2026 11:23 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-16.sql`, [[Dump-AvHub-Teste-2026-11-16]]), com o "Da proposta à comissão" e os campos "Desvios" e "Pintura" do item. As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
+**Banco (fonte 2, depois do código):** o dump mais novo é o esqueleto do banco de **teste** do av-hub de 16/11/2026 13:58 (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-16.sql`, que substituiu o das 11:23, [[Dump-AvHub-Teste-2026-11-16]]), com o "Da proposta à comissão" e os campos "Desvios" e "Pintura" do item. As migrations ficam com o DBA, fora do repositório, por decisão (N16-155); o dump é a referência do esquema. Do MES, o mais novo é o de 14/10.
 
 ## Como usar na próxima atualização
 
