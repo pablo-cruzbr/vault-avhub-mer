@@ -13,9 +13,9 @@ decisoes: [N16-126, N16-127, N16-135, N16-137, N16-157, N16-158]
 develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-pcp 2e564e6, api-acos-vital 637f183, av-hub d0e8f8f, em 2026-11-12; api-acos-vital bebca52, em 2026-11-12, a entrega do Gustavo; av-hub a43befe, em 2026-11-12, o front (PR #287); api-pcp bd6b442, av-hub c6310ad, em 2026-11-13, o envio do MES (PR #80) e a recompra sem pedido (PR #294)]
 tags: [contrato, compras, mes, rnc, recebimento, recompra]
 criado: 2026-11-12
-estado-em: 2026-11-13
+estado-em: 2026-11-16
 dono: Nathan
-fontes: [Registro-de-Decisoes N16-126, N16-127, N16-135 e N16-137, 06-Circuito-de-Compra-Detalhe-Tecnico-2 (item 7 de "O que falta" e a pendência da recompra), api-pcp develop 2e564e6 (recebimento.service.ts, circuito-compra.ts, qualidade.service.ts, prisma/models), api-acos-vital develop 637f183, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-58), conferido na develop bebca52 e no dump de teste de 12/11", "Relatório de entrega de Gustavo de 13/11/2026 (LOG-57, LOG-58 e SQL-022: respostas e log58b)", Dump-AvHub-Teste-2026-11-13]
+fontes: [Registro-de-Decisoes N16-126, N16-127, N16-135 e N16-137, 06-Circuito-de-Compra-Detalhe-Tecnico-2 (item 7 de "O que falta" e a pendência da recompra), api-pcp develop 2e564e6 (recebimento.service.ts, circuito-compra.ts, qualidade.service.ts, prisma/models), api-acos-vital develop 637f183, "Relatório de entrega de Gustavo de 12/11/2026 (LOG-58), conferido na develop bebca52 e no dump de teste de 12/11", "Relatório de entrega de Gustavo de 13/11/2026 (LOG-57, LOG-58 e SQL-022: respostas e log58b)", Dump-AvHub-Teste-2026-11-13, PDF de Gustavo de 16/11/2026 (status dos contratos)]
 ---
 
 # LOG-58 · O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento
@@ -135,7 +135,9 @@ Comprador e Gerência de Compras veem e tratam (tela `compras`). O CCP vê os av
 1. **Banco e API do av-hub (Gustavo):** ✅ tabela, coluna, as três rotas (mais `GET /compras/avisos-mes/{id}`) e a chave do MES (12/11, `bebca52`; 96 verificações no relatório de entrega). ✅ LOG-58b (13/11): OC de recompra cancelada reabre o aviso; migration `2026-11-13_log58b_aviso_volta_aberto_recompra_cancelada.sql` aplicada no tst (Gustavo), só banco, sem API nova.
 2. **MES (Robert, com o Gustavo acompanhando, N16-158):** ✅ a fila de saída e o envio nos dois pontos (12/11, `api-pcp` PR #80): `api-pcp` `src/integracao-avhub/aviso-compra-avhub.envio.ts:68` (`export async function enfileirarAvisoRecompraRnc(`) e `:104` (`export async function enfileirarAvisosRecebimentoReaberto(`).
 3. **Front (Nathan):** ✅ detalhe da OC, lista, Nova OC de recompra (12/11, `av-hub` PR #287). A recompra de aviso sem pedido de venda usa a finalidade da OC original (13/11, PR #294). Testado no Docker local; falta o teste no tst.
-4. **Histórico da recompra cancelada (Gustavo na API, Nathan no front):** 🔴 decidido em 13/11 (seção 15): o `GET /compras/avisos-mes/{id}` traz as OCs de recompra canceladas do aviso, e a faixa do aviso reaberto as mostra.
+4. **Histórico da recompra cancelada (Gustavo na API, Nathan no front):** ✅ API entregue em 16/11 (`api-acos-vital` `57bd81d`): `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:138` (`recompras_canceladas: await buscarRecomprasCanceladas(id)`); testada no Docker no reteste R6 ([[Backlog-Reteste-R5-R6-2026-11-16]]: o aviso reabre e lista as canceladas; a resposta do `POST` ainda não as traz, BL-106). 🔴 Falta o front (Nathan). Decidido em 13/11 (seção 15): o `GET /compras/avisos-mes/{id}` traz as OCs de recompra canceladas do aviso, e a faixa do aviso reaberto as mostra.
+
+**Situação em 16/11 (status do Gustavo):** banco, API, log58b e o histórico das recompras canceladas estão no tst e na `develop`. Falta a produção: log58, depois SQL-022 e log58b, e a API (fila em [[Banco-AvHub]]). Robert: o teste 2 (REABRIR) e o teste 3 (av-hub fora do ar); a reprovação não chama `disparar()`, então o aviso espera ~60 s; e a pergunta dele: a OC de recompra acha sozinha a parcial que voltou ao CCP, ou o aviso manda o id? Nathan: mostrar `recompras_canceladas` na faixa do aviso; aviso por lote ou por item da OC?; testar no tst a recompra sem pedido de venda (PR #294).
 
 ## 15. Riscos, rollback e perguntas em aberto
 
