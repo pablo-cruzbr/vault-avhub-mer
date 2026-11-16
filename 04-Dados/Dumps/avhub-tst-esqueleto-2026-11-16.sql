@@ -2,9 +2,9 @@
 -- PostgreSQL database cluster dump
 --
 
--- Started on 2026-11-16 11:23:35
+-- Started on 2026-11-16 13:58:14
 
-\restrict iOntheleLeSz3MdqxUPCa601oW0Z8hiVG1Ulu61iUfVnWpF2jf0Iy3aI4pVBPg8
+\restrict 3nkOdDcWqA3b1wAkZlP5MnY2qeAC2rHMHXUvL8DBaJNFEMBd3S2jcyi2rHnMdel
 
 SET default_transaction_read_only = off;
 
@@ -39,7 +39,7 @@ ALTER ROLE avhub_api SET jit TO 'off';
 
 
 
-\unrestrict iOntheleLeSz3MdqxUPCa601oW0Z8hiVG1Ulu61iUfVnWpF2jf0Iy3aI4pVBPg8
+\unrestrict 3nkOdDcWqA3b1wAkZlP5MnY2qeAC2rHMHXUvL8DBaJNFEMBd3S2jcyi2rHnMdel
 
 --
 -- Databases
@@ -55,12 +55,12 @@ ALTER ROLE avhub_api SET jit TO 'off';
 -- PostgreSQL database dump
 --
 
-\restrict PaARe0uMJkSwRhZMGj5GRVvJ9RzmBfuEKobE8bQxY7ESK529kbz5djqsTV57Kth
+\restrict PcDxf92SeWZ2RwwKFwhPYJ3tI7YnKpKogNrkOjrGi6SjNBZOibqRMrdIOw22NgW
 
 -- Dumped from database version 18.6
 -- Dumped by pg_dump version 18.3
 
--- Started on 2026-11-16 11:23:36
+-- Started on 2026-11-16 13:58:16
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -74,13 +74,13 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
--- Completed on 2026-11-16 11:23:48
+-- Completed on 2026-11-16 13:58:27
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict PaARe0uMJkSwRhZMGj5GRVvJ9RzmBfuEKobE8bQxY7ESK529kbz5djqsTV57Kth
+\unrestrict PcDxf92SeWZ2RwwKFwhPYJ3tI7YnKpKogNrkOjrGi6SjNBZOibqRMrdIOw22NgW
 
 --
 -- Database "postgres" dump
@@ -92,12 +92,12 @@ SET row_security = off;
 -- PostgreSQL database dump
 --
 
-\restrict CYDbdqhU9BmtF5w1VjbGWTeyefiOSkDkOd93GXQuxYpdXxCjacDJBAMHiwdixKs
+\restrict T0ObY4pFi42vRzvctkBk0mWlOkDAgfVNpwXoSN1eZQsw0qtrp51nuKduhw88tCg
 
 -- Dumped from database version 18.6
 -- Dumped by pg_dump version 18.3
 
--- Started on 2026-11-16 11:23:48
+-- Started on 2026-11-16 13:58:27
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19927,7 +19927,11 @@ CREATE VIEW core_comercial.vw_propostas_lista AS
     ( SELECT pv.numero_pedido
            FROM core_comercial.pedidos_venda pv
           WHERE ((pv.id_proposta = p.id) AND (pv.deleted_at IS NULL))
-         LIMIT 1) AS numero_pedido
+         LIMIT 1) AS numero_pedido,
+    ( SELECT (COALESCE(NULLIF(ltrim(btrim((pv.numero_pedido_omie)::text), '0'::text), ''::text), NULLIF(btrim((pv.numero_pedido_omie)::text), ''::text)))::character varying(15) AS "coalesce"
+           FROM core_comercial.pedidos_venda pv
+          WHERE ((pv.id_proposta = p.id) AND (pv.deleted_at IS NULL))
+         LIMIT 1) AS numero_pedido_omie
    FROM ((core_comercial.propostas p
      JOIN core.unidades u ON ((u.id = p.codigo_empresa)))
      LEFT JOIN core.parceiros pa ON ((pa.id = p.id_cliente)))
@@ -19940,7 +19944,7 @@ CREATE VIEW core_comercial.vw_propostas_lista AS
 -- Name: VIEW vw_propostas_lista; Type: COMMENT; Schema: core_comercial; Owner: -
 --
 
-COMMENT ON VIEW core_comercial.vw_propostas_lista IS 'Uma linha por proposta não excluída para a tela de listagem (GET /comercial/propostas e /resumo). Cliente pelo cadastro atual (core.parceiros), com o snapshot como reserva; responsável pelo nome atual; validade_ate, id_proposta_origem (cópia) e numero_pedido (TRANSFORMADA) desde 29/10/2026; empresa = core.unidades.sigla e sem id_unidade_emissora desde 10/11/2026. O escopo (próprias, vinculadas, todas) e o sigilo de margem/letra (custo-item) são aplicados pela API.';
+COMMENT ON VIEW core_comercial.vw_propostas_lista IS 'Uma linha por proposta não excluída para a tela de listagem (GET /comercial/propostas e /resumo). Cliente pelo cadastro atual (core.parceiros), com o snapshot como reserva; responsável pelo nome atual; validade_ate, id_proposta_origem (cópia) e numero_pedido (TRANSFORMADA) desde 29/10/2026; empresa = core.unidades.sigla e sem id_unidade_emissora desde 10/11/2026; numero_pedido_omie (o número do pedido no Omie, do mesmo pedido do Hub, sem zeros à esquerda como pedidos_vendas.numero_pedido; NULL até o Omie aceitar) desde 16/11/2026. O escopo (próprias, vinculadas, todas) e o sigilo de margem/letra (custo-item) são aplicados pela API.';
 
 
 --
@@ -38348,15 +38352,15 @@ ALTER TABLE ONLY core_vendas_faturamento.requisicoes_compra_eventos
     ADD CONSTRAINT requisicoes_compra_eventos_id_requisicao_fkey FOREIGN KEY (id_requisicao) REFERENCES core_vendas_faturamento.requisicoes_compra(id) ON DELETE CASCADE;
 
 
--- Completed on 2026-11-16 11:24:54
+-- Completed on 2026-11-16 13:59:25
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict CYDbdqhU9BmtF5w1VjbGWTeyefiOSkDkOd93GXQuxYpdXxCjacDJBAMHiwdixKs
+\unrestrict T0ObY4pFi42vRzvctkBk0mWlOkDAgfVNpwXoSN1eZQsw0qtrp51nuKduhw88tCg
 
--- Completed on 2026-11-16 11:24:54
+-- Completed on 2026-11-16 13:59:25
 
 --
 -- PostgreSQL database cluster dump complete
