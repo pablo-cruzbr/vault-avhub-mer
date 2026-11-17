@@ -1,7 +1,7 @@
 ---
 id: LOG-59
 titulo: Excluir proposta pelo Hub e tratar o pedido excluído direto no Omie
-status: para-implementar
+status: parcial
 autor: Robert (pedido), Nathan (ajustes e registro)
 data: 2026-11-16
 camadas: [frontend, backend, api, sql]
@@ -10,15 +10,21 @@ nos_0b: [V0.4, V0.6, V0.7]
 notas_afetadas: [01-Proposta-de-Venda, 01-Proposta-de-Venda-Detalhe-Tecnico-2, 03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2, Estados-e-Status, Colunas-Protegidas]
 depende_de: [LOG-56]
 decisoes: [N16-167, N16-03, N16-84, N16-02]
-develop-conferida: [api-acos-vital 2e333e3, av-hub 25e0a34, omie-elt-pipeline 3aaea0e, em 2026-11-16]
+develop-conferida: [api-acos-vital 96e83de, av-hub 4cce84b, omie-elt-pipeline 28efc5a, em 2026-11-17]
 tags: [contrato, proposta, exclusao, omie, pipeline]
 criado: 2026-11-16
-estado-em: 2026-11-16
+estado-em: 2026-11-17
 dono: Nathan
 fontes: [PDF de Robert de 16/11/2026 ("Exclusão de proposta e pedido excluído no Omie"), resposta do Nathan de 16/11/2026 (Documentos-para-o-Nathan/2026-11-16_Resposta_Nathan_exclusao-de-proposta.pdf, fora do vault), Dump-AvHub-Teste-2026-11-16, api-acos-vital develop 2e333e3, av-hub develop 25e0a34, omie-elt-pipeline develop 3aaea0e]
 ---
 
 # LOG-59 · Excluir proposta pelo Hub e tratar o pedido excluído direto no Omie
+
+> **Situação em 17/11:** 🟡 parcial.
+> - ✅ **API (Parte A):** a exclusão lógica está na `develop`: `api-acos-vital` `96e83de` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:759` (`router.delete("/propostas/:id"`). A API também lê o pedido excluído no Omie (`src/schemas/core_comercial/pedidoOmie.js:91`, `excluido_omie_em`).
+> - ✅ **Tela:** excluir pela lista e pelo andamento, e o "Excluído no Omie" na linha do tempo: `av-hub` `e073fe0` `components/Propostas/PropostasLista.tsx:284` (`await excluirProposta(p.id, p.versao)`) e `lib/domain/andamento-proposta.ts:166` (`Excluído no Omie em`).
+> - ❓ **Banco:** a API cita a migration `2026-11-16_comercial_proposta_exclusao_pedido_excluido_omie` (`src/utils/erroHttp.js:143`, `fn_proposta_excluir`). Ela não estava na lista das 20 da MEGA aplicada em produção em 17/11 (N16-171) e não foi conferida em dump.
+> - 🔴 **Pipeline:** a trava do `exclusionSync` para resposta vazia do Omie não está na `develop` da `omie-elt-pipeline` (`28efc5a`).
 
 ## 1. Resumo em linguagem simples
 
