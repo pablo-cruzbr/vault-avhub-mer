@@ -65,7 +65,7 @@ Quem desenvolve: o Orçamento é do Pablo, com o Robert (N16-117, N16-119).
 
 ## O que já existe e o que falta
 
-- 📝 **Contrato `LOG-60` (`06-Contratos/Ativos/LOG-60-Orcamento-Pedido-de-Custo-e-Cotacao`, 17/11/2026):** pedido de custo com cronômetro, cotação imutável, página do produto com as duas fontes (N16-172) e fornecedores, com o menu de três telas (N16-173). Código em PR (api-acos-vital #312, av-hub #306), ainda fora da `develop`; a migration fica com o Gustavo.
+- 📝 **Contrato `LOG-60` (`06-Contratos/Ativos/LOG-60-Orcamento-Pedido-de-Custo-e-Cotacao`, 17/11/2026):** pedido de custo com cronômetro, cotação imutável, página do produto com as duas fontes (N16-172) e fornecedores, com o menu de três telas (N16-173). Validade da cotação definida por quem registra, só produto do catálogo, sem e-mail de cotação e nota e ranking do fornecedor para o futuro (N16-174). Código em PR (api-acos-vital #312, av-hub #306), ainda fora da `develop`; a migration fica com o Gustavo.
 - O front de Fornecedores, Produtos, Cotação e a análise da proposta lê a API do Hub desde 27/10 (`av-hub` `d6dc1a6`).
 - A `api-comercial` de teste não roda desde 29/10/2026 e foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>`.
 - 🔴 Na `api-acos-vital` (`develop`), o router `/suprimentos` existe, mas ainda não tem rota: nasce fechado (`core_comercial/index.js`, "fase 4").

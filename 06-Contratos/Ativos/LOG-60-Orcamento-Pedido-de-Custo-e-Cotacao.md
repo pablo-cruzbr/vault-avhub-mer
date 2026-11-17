@@ -9,7 +9,7 @@ donos: {frontend: Nathan, backend: Nathan, api: Nathan, sql: Gustavo}
 nos_0b: [B1, B2, B3, B4]
 notas_afetadas: [02-Orcamento-Base-de-Preco, 02-Orcamento-Base-de-Preco-Detalhe-Tecnico-1, 02-Orcamento-Base-de-Preco-Detalhe-Tecnico-2, Registro-N16-167-em-diante]
 depende_de: []
-decisoes: [N16-07, N16-41, N16-52, N16-54, N16-55, N16-58, N16-59, N16-72, N16-168, N16-172, N16-173]
+decisoes: [N16-07, N16-41, N16-52, N16-54, N16-55, N16-58, N16-59, N16-72, N16-168, N16-172, N16-173, N16-174]
 develop-conferida: [api-acos-vital 96e83de, av-hub 4cce84b, em 2026-11-17]
 tags: [contrato, orcamento, pedido-de-custo, cotacao, oferta, fornecedores, pagina-do-produto]
 criado: 2026-11-17
@@ -60,12 +60,12 @@ Também ficam prontos o histórico de preço de cada produto (última compra, m�
 ## 5. Regras de negócio
 
 - **R1.** O pedido de custo **não tem prazo**. O sistema guarda `aberta_em`, `assumida_em` e `respondida_em` e mostra há quanto tempo o pedido espera. O vendedor nunca fica bloqueado (N16-58).
-- **R2.** Um pedido por item, numerado `PC-AAAA-NNNN`. Pode vir com produto do catálogo ou como item sem cadastro (só a descrição).
+- **R2.** Um pedido por item, numerado `PC-AAAA-NNNN`, **só de produto do catálogo**. O item sem cadastro no Omie fica de fora: quem precisa pede o cadastro por fora ao setor responsável e, quando o produto chega pelo sync, pede o custo (N16-174).
 - **R3.** O Orçamento (`painel-comprador:pode_editar`) assume, devolve à fila, registra cotação e responde. Registrar cotação num pedido livre já o assume.
 - **R4.** A resposta é **uma cotação vigente** do mesmo produto, ou **"sem fornecedor"** com justificativa. Pode ser uma cotação de outro pedido que ainda vale; não precisa cotar de novo.
 - **R5.** Quem pediu, ou o Orçamento, cancela o pedido aberto, com motivo.
 - **R6.** A cotação **não se edita nem se apaga**. Para corrigir, invalida-se com motivo e lança-se outra, e o histórico fica inteiro (RN-130, N16-41).
-- **R7.** A cotação vale **7 dias** por padrão (dado recente, N16-55 e N16-72). Vigente quer dizer não invalidada e com `valida_ate` maior ou igual a hoje.
+- **R7.** A validade **não é fixa**: quem registra a cotação informa até quando o fornecedor garante o preço (1 dia, 10, 30, uma promoção). O campo é obrigatório e não tem padrão (N16-174, que supera os "7 dias" da N16-55 e o parâmetro por categoria da N16-72). Vigente quer dizer não invalidada e com `valida_ate` maior ou igual a hoje.
 - **R8.** **Duas fontes, o vendedor escolhe** (N16-172): a página do produto mostra a cotação vigente e a última compra lado a lado, sem "valor sugerido". O vendedor responde pelo valor que põe (N16-54).
 - **R9.** A última compra vem dos itens de pedidos de compra do Omie. Ficam de fora o pedido excluído, a etapa `CA` e o preço zero.
   - Preço acima de 3 vezes ou abaixo de 1/3 da mediana fica **fora da curva**; item em outra unidade fica **outra unidade**. Os dois aparecem marcados e ficam fora das contas.
@@ -93,10 +93,10 @@ Também ficam prontos o histórico de preço de cada produto (última compra, m�
   - Saem também a faixa "Fluxo do custo", o guia "Como funciona Suprimentos" e as dicas e selos do menu lateral. Os componentes antigos ficam no repositório, porque branches abertas ainda os usam (BL-084).
 - **Estados:** skeleton com a forma do conteúdo. Vazio com saída ("Limpar filtros", "Novo pedido"). Erro com "Tentar novamente". Sem acesso, com mensagem própria. A mensagem de erro da API (`detail`) aparece no aviso.
 - **Diálogos:**
-  - "Pedir cotação": produto ou item sem cadastro, quantidade, unidade e observação.
+  - "Pedir cotação": produto do catálogo, quantidade, unidade e observação. Produto que não aparece na busca mostra o aviso "Produto sem cadastro no Omie fica de fora: peça o cadastro ao setor responsável e depois peça o custo".
   - "Registrar cotação":
     - fornecedor do cadastro, por nome ou CNPJ, ou sem cadastro;
-    - preço sem IPI, unidade, IPI, prazo em dias, validade (padrão de 7 dias), condição de pagamento e observação.
+    - preço sem IPI, unidade, IPI, prazo em dias, **validade (obrigatória, começa vazia, não aceita data passada)**, condição de pagamento e observação.
   - Diálogo de motivo para cancelar, fechar sem fornecedor e invalidar.
 - **BFF:** a lista `ROTAS` de `app/api/comercial/[...rota]/route.ts:92` passa `/solicitacoes-custo`, `/solicitacoes-custo/:id` e as ações, `/ofertas`, `/ofertas/:id/invalidar`, `/fornecedores` e `/fornecedores/:id` para a API do Hub (`api: 'hub'`).
 
@@ -136,7 +136,7 @@ Também ficam prontos o histórico de preço de cada produto (última compra, m�
 - **Detalhe:** o pedido, com `pode: { assumir, liberar, cotar, responder, cancelar }`. A tela mostra só o que a API libera.
 - **Registrar cotação:**
   - Obrigatórios: `id_produto` e `preco`, mais o fornecedor (`id_fornecedor` ou `fornecedor_nome`).
-  - Sem `valida_ate`, vale hoje + 7 dias. Sem `unidade`, vale a do produto.
+  - `valida_ate` é obrigatória e não pode ser antes da data da cotação (400 "informe até quando a cotação vale"). Sem `unidade`, vale a do produto.
   - Response 201: a cotação, com `situacao`, `preco_com_ipi`, `dias_para_vencer` e `outra_unidade`.
 - **Responder:** `{ "id_oferta": "<uuid>" }` ou `{ "sem_fornecedor": "justificativa" }`.
 - **Erros:**
@@ -153,7 +153,7 @@ Migration `2026-11-17_orcamento_cotacoes_pedidos_custo`. O texto completo está 
 - **`core_comercial.solicitacoes_custo`** (nova)
   - Colunas:
     - identificação: `id`, `numero` (único), `codigo_empresa` (FK `core.unidades`);
-    - origem: `id_proposta` e `id_item_proposta` (FK com `ON DELETE SET NULL`), `id_produto` (FK `core.produtos`, nulo no item sem cadastro);
+    - origem: `id_proposta` e `id_item_proposta` (FK com `ON DELETE SET NULL`), `id_produto` (FK `core.produtos`, **obrigatório**, N16-174);
     - o item: `descricao`, `quantidade numeric(18,4)`, `unidade_medida`, `observacao`;
     - estado: `status` (`ABERTA`, `RESPONDIDA`, `SEM_FORNECEDOR`, `CANCELADA`), `id_solicitante`, `aberta_em`, `id_orcamentista`, `assumida_em`;
     - desfecho: `id_oferta_resposta` (FK `ofertas`), `justificativa`, `respondida_em`, `respondida_por`, `motivo_cancelamento`, `cancelada_em`, `cancelada_por`, `updated_at`.
@@ -207,7 +207,7 @@ Migration `2026-11-17_orcamento_cotacoes_pedidos_custo`. O texto completo está 
 1. **Caminho feliz** (feito em 17/11 no Docker, como `teste.admin`):
    1. "Novo pedido" para o TBA1064012K (tubo A106 SCH40 1/2"), 120 KG: virou o PC-2026-0003.
    2. Assumir.
-   3. Registrar a cotação da BENAFER: R$ 16,80/KG, IPI 3,25%, 7 dias, válida até 24/11.
+   3. Registrar a cotação da BENAFER: R$ 16,80/KG, IPI 3,25%, entrega em 7 dias, válida até 24/11 (no teste a validade ainda vinha preenchida; depois da N16-174 o campo começa vazio).
    4. "Responder com esta": o pedido ficou respondido.
    5. A página do produto mostra "Cotação vigente" ao lado de "Última compra".
 2. **Erro:** dois orçamentistas clicam em "Assumir" ao mesmo tempo. O segundo recebe 409 "… já foi assumido por …". 🔴 Não testado.
@@ -229,16 +229,17 @@ Migration `2026-11-17_orcamento_cotacoes_pedidos_custo`. O texto completo está 
 - **Risco: deploy separado.** O front sem a migration deixa o menu velho apontando para endereços que mudaram, e as rotas novas dão 403.
 - **Risco: fornecedor por unidade.** O mesmo fornecedor tem uma linha em `core.parceiros` por unidade (AV, AU, HRM), então aparece mais de uma vez na lista. A unidade vai junto em cada linha.
 - **Rollback:** reverter os dois PRs e rodar o down da seção 9.
-- ❓ O e-mail de cotação aos fornecedores (a antiga aba "Cotação") volta? Hoje o orçamentista cota por fora e registra o preço.
-- ❓ A nota do fornecedor e o ranking (N16-55) dependem do prazo em dias (agora na oferta) e da data real de recebimento (`dRec`, recurso novo da pipeline). Ficam para um contrato próprio.
-- ❓ A validade de 7 dias é por categoria (N16-72) ou fixa? Hoje é fixa no código.
-- ❓ O item sem cadastro só recebe cotação depois que o orçamentista escolhe o produto do catálogo. Ligar ao Omie um produto criado no Hub ("produtos pendentes") continua sem API.
+Respondidas pelo Nathan em 17/11/2026 (N16-174):
+- **E-mail de cotação aos fornecedores:** não volta. O orçamentista pede o preço por fora e registra a cotação no pedido.
+- **Nota e ranking do fornecedor (N16-55):** cancelados neste contrato; ficam para o futuro. O prazo em dias já fica gravado na cotação.
+- **Validade:** não é fixa; quem registra define (R7).
+- **Item sem cadastro:** fica de fora (R2).
 
 ## 16. Impacto no vault quando for entregue
 
 - [[02-Orcamento-Base-de-Preco]]:
   - "O que já existe e o que falta": passam a ✅ a página do produto (B2), o pedido de custo com cronômetro (B3), a oferta imutável com histórico (B1, B4) e o prazo de entrega em dias **na oferta**;
-  - continuam 🔴 a nota e o ranking, a matriz como tela própria (decidido: vira a aba Cotações, N16-173) e o perfil do vendedor;
+  - continua 🔴 o perfil do vendedor; a matriz como tela própria sai (vira a aba Cotações, N16-173); a nota e o ranking do fornecedor ficam para o futuro (N16-174);
   - a tabela "Telas" da parte 1 muda para as 3 telas.
 - [[02-Orcamento-Base-de-Preco-Detalhe-Tecnico-2]]: os itens 1, 2, 4 (parte), 5, 7 e 8 de "O que falta desenvolver".
 - [[Onde-Estamos]] e a porcentagem da raia 02.
