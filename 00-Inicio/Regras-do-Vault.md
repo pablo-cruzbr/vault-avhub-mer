@@ -1,7 +1,7 @@
 ---
 tags: [vault, regras]
 criado: 2026-10-14
-estado-em: 2026-11-12
+estado-em: 2026-11-17
 status: vigente
 dono: Nathan
 fontes: [plano de 14/10/2026, instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, fatos F1 a F5 de 05/11/2026)]
@@ -85,7 +85,8 @@ Use o nome novo. O código ainda usa o antigo em alguns pontos, então registre 
 - **Gustavo (DBA):** banco e API do av-hub (`api-acos-vital`).
 - **Nathan:** front do av-hub (telas e BFF, a camada que liga o front à API).
 - **Robert:** MES (`api-pcp` e `app-pcp`) e, desde 28/10/2026, as rotas do módulo comercial na `api-acos-vital` (N16-117).
-- **Pablo:** acompanha o módulo comercial e cuida do Orçamento, com a supervisão do Robert. A `api-comercial` dele era de teste e foi removida inteira (F3, 05/11/2026; PR #261 do av-hub).
+- **Pablo:** analista desde 17/11/2026; não desenvolve (N16-168). A `api-comercial` dele era de teste e foi removida inteira (F3, 05/11/2026; PR #261 do av-hub).
+- **Comercial:** só o Nathan e o Robert desenvolvem; o Nathan é dono do Orçamento e das telas da comissão, e o Robert da proposta, do pedido, do motor da comissão e do custo por evento (N16-168, N16-169).
 
 ## Contratos
 

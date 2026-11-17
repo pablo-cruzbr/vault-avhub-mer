@@ -1,7 +1,7 @@
 ---
 id: LOG-59
 titulo: Excluir proposta pelo Hub e tratar o pedido excluído direto no Omie
-status: para-implementar
+status: parcial
 autor: Robert (pedido), Nathan (ajustes e registro)
 data: 2026-11-16
 camadas: [frontend, backend, api, sql]
@@ -10,15 +10,21 @@ nos_0b: [V0.4, V0.6, V0.7]
 notas_afetadas: [01-Proposta-de-Venda, 01-Proposta-de-Venda-Detalhe-Tecnico-2, 03-Pedido-de-Venda-e-Liberacao-Detalhe-Tecnico-2, Estados-e-Status, Colunas-Protegidas]
 depende_de: [LOG-56]
 decisoes: [N16-167, N16-03, N16-84, N16-02]
-develop-conferida: [api-acos-vital 2e333e3, av-hub 25e0a34, omie-elt-pipeline 3aaea0e, em 2026-11-16]
+develop-conferida: [api-acos-vital 96e83de, av-hub 4cce84b, omie-elt-pipeline 28efc5a, em 2026-11-17]
 tags: [contrato, proposta, exclusao, omie, pipeline]
 criado: 2026-11-16
-estado-em: 2026-11-16
+estado-em: 2026-11-17
 dono: Nathan
 fontes: [PDF de Robert de 16/11/2026 ("Exclusão de proposta e pedido excluído no Omie"), resposta do Nathan de 16/11/2026 (Documentos-para-o-Nathan/2026-11-16_Resposta_Nathan_exclusao-de-proposta.pdf, fora do vault), Dump-AvHub-Teste-2026-11-16, api-acos-vital develop 2e333e3, av-hub develop 25e0a34, omie-elt-pipeline develop 3aaea0e]
 ---
 
 # LOG-59 · Excluir proposta pelo Hub e tratar o pedido excluído direto no Omie
+
+> **Situação em 17/11:** 🟡 parcial.
+> - ✅ **API (Parte A):** a exclusão lógica está na `develop`: `api-acos-vital` `96e83de` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:759` (`router.delete("/propostas/:id"`). A API também lê o pedido excluído no Omie (`src/schemas/core_comercial/pedidoOmie.js:91`, `excluido_omie_em`).
+> - ✅ **Tela:** excluir pela lista e pelo andamento, e o "Excluído no Omie" na linha do tempo: `av-hub` `e073fe0` `components/Propostas/PropostasLista.tsx:284` (`await excluirProposta(p.id, p.versao)`) e `lib/domain/andamento-proposta.ts:166` (`Excluído no Omie em`).
+> - ❓ **Banco:** a API cita a migration `2026-11-16_comercial_proposta_exclusao_pedido_excluido_omie` (`src/utils/erroHttp.js:143`, `fn_proposta_excluir`). Ela não estava na lista das 20 da MEGA aplicada em produção em 17/11 (N16-171) e não foi conferida em dump.
+> - 🔴 **Pipeline:** a trava do `exclusionSync` para resposta vazia do Omie não está na `develop` da `omie-elt-pipeline` (`28efc5a`).
 
 ## 1. Resumo em linguagem simples
 
@@ -28,7 +34,7 @@ Quando alguém **exclui o pedido direto no Omie**, a proposta que virou esse ped
 
 ## 2. Contexto: o que deve ser feito e por quê
 
-- **O problema hoje:** a lista de propostas já tem a exclusão, uma a uma e em lote, e chama `DELETE /comercial/propostas/{id}` (`av-hub` `services/comercial/propostas.ts:576` (`export function excluirProposta(`)). A API não tem essa rota: as rotas de `propostas.route.js` são criar, listar, resumo, detalhe, eventos, revisar, aprovar, cancelar, copiar, transformar, prontidão e PDF (`api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:394` (`router.post("/propostas"`)). Além disso, a proposta cujo pedido falhou no Omie fica presa em "Virou pedido", com o "Tentar novamente" como única saída.
+- **O problema hoje:** a lista de propostas já tem a exclusão, uma a uma e em lote, e chama `DELETE /comercial/propostas/{id}` (`av-hub` `services/comercial/propostas.ts:583` (`export function excluirProposta(`)). A API não tem essa rota: as rotas de `propostas.route.js` são criar, listar, resumo, detalhe, eventos, revisar, aprovar, cancelar, copiar, transformar, prontidão e PDF (`api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:400` (`router.post("/propostas"`)). Além disso, a proposta cujo pedido falhou no Omie fica presa em "Virou pedido", com o "Tentar novamente" como única saída.
 - **Pedido excluído no Omie:** a proposta continua dizendo "Virou pedido" e aponta para um pedido que não existe mais.
 - **Quem sofre:** o vendedor, que não limpa a própria lista e não sabe que o pedido sumiu; os indicadores do `/resumo`, que contam a proposta como convertida.
 - **De onde vem:** pedido do Robert de 16/11/2026, com a regra combinada com o Nathan; ajustado pelo Nathan na mesma data, depois de conferir a pipeline e o banco (N16-167).
@@ -42,11 +48,11 @@ Nós `V0.4` (aprovar), `V0.6` (transformar) e `V0.7` (pedido no Omie) do [[00-Fl
 
 | Camada | Estado |
 |---|---|
-| Front | 🟡 A lista oferece "Excluir" a quem tem `propostas:pode_deletar` (`av-hub` `components/Propostas/PropostasLista.tsx:253` (`const podeExcluir = can('pode_deletar');`)) e chama a rota que não existe |
+| Front | 🟡 A lista oferece "Excluir" a quem tem `propostas:pode_deletar` (`av-hub` `components/Propostas/PropostasLista.tsx:256` (`const podeExcluir = can('pode_deletar');`)) e chama a rota que não existe |
 | API | 🔴 Sem `DELETE /comercial/propostas/{id}` |
 | Banco | ✅ `core_comercial.propostas` já tem `deleted_at` e `deleted_by` ([[Dump-AvHub-Teste-2026-11-16]]); o evento `EXCLUIDA` já está no `ck_propostas_eventos_tipo` (`04-Dados/Dumps/avhub-tst-esqueleto-2026-11-16.sql:18917` (`ck_propostas_eventos_tipo`)). 🔴 O status é `varchar(12)` e o `CHECK` só aceita cinco valores (`:4426` (`status character varying(12)`), `:4496` (`ck_propostas_status`)); evento sem usuário só no `EXPIRADA` (`:18918` (`ck_propostas_eventos_usuario`)) |
 | Pipeline | O pedido excluído no Omie é **apagado** do espelho, não marcado: `omie-elt-pipeline` `src/jobs/exclusionSync.ts:136` (`DELETE FROM core_vendas_faturamento.pedidos_vendas`), a cada 20 minutos (janela de 60 dias) e uma vez por dia às 4h27 (janela de 180 dias) (`src/config/index.ts:110` (`exclusionSyncCurtaCron`)). Não há trava para resposta vazia do Omie (`src/jobs/exclusionSync.ts:109` (`const excluidos = rows.filter`)) |
-| Indicadores | A conversão do `/resumo` é transformadas sobre decididas (transformadas, canceladas e expiradas) (`propostas.route.js:524` (`const decididas`)) |
+| Indicadores | A conversão do `/resumo` é transformadas sobre decididas (transformadas, canceladas e expiradas) (`propostas.route.js:531` (`const decididas`)) |
 
 ## 5. Regras de negócio
 

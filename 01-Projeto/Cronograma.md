@@ -1,7 +1,7 @@
 ---
 tags: [projeto, cronograma, marcos, gantt]
 criado: 2026-10-14
-estado-em: 2026-11-11
+estado-em: 2026-11-17
 status: vigente
 dono: Nathan
 fontes: [v1 07-Cronograma/Cronograma-2-Meses seções 1, 3.2, 3.3, 3.4, 6, 9, v1 Registro-de-Decisoes #27 #33b #34 #36 #75 #77 #96, código de 14/10 (api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, HUB b55ac55) e de 29/10 (api-pcp befd973, app-pcp 93f96de, api-acos-vital f2fa237, av-hub 758d5f0), proposta de cronograma de 16/10 (Proposta-Orcamento-Comissao, fora do vault), Registro-de-Decisoes N16-09, N16-15, N16-117, N16-118 e N16-119]
@@ -25,11 +25,12 @@ fontes: [v1 07-Cronograma/Cronograma-2-Meses seções 1, 3.2, 3.3, 3.4, 6, 9, v1
 | 13/11/2026 | **Marco zero do saldo**: carga inicial conferida em dupla; saldo, movimento e reserva em homologação (M5) | 🟡 Saldo e reserva no código ✅; existe `POST /estoque/lotes/carga-inicial` (um lote por chamada); a carga em lote (G1) não foi encontrada na `develop` de 29/10 🔴 |
 | 15/11/2026 | Protótipo | 📝 |
 | 18/11/2026 | Decisão de seguir ou não com o piloto de recebimento (M6) | 🟡 |
+| 01/12/2026 | **Comercial entregue** pelo Nathan e pelo Robert (N16-170) | 🟡 Só a entrega mínima cabe: a proposta vira pedido no Omie (cerca de 15 pd contra 12 a 21 pd de capacidade); conta em [[Capacidade-do-Robert]] |
 | ~~18/12/2026~~ 03/03/2027 | Rastreabilidade completa: Torre de Fluxo e log de eventos (M7) | 🔴 O MES ainda não envia os eventos |
 | 18/02/2027 | **Fim do Ciclo 1**: o déficit do Robert zerado. Começa o Ciclo 2 em 19/02/2027 | 🟡 Deslocado de 21/01 pelo N14-30; com BL-007, BL-049 e BL-050 (N16-145): 36,1 pd e 03/03/2027 a 75% de foco; o Robert valida |
 | 11/05/2027 a 18/11/2027 | PCP antigo migrado para o MES, em quatro marcos: Flange alta (M8), Flange completa (M9), Caldeiraria (M10) e Análise e gestão (M11) | 🟡 |
 
-As novas frentes de 16/10 (proposta, Orçamento, custo real e comissão nova) ainda não mexem nesses marcos. Elas estão em "Novas frentes" no Detalhe técnico e só valem depois que cada pessoa validar seus pd 🟡. **Os donos mudaram em 28/10** (o Robert conduz o módulo comercial na API do Hub, N16-117 a N16-119) e os contratos dessa parte foram removidos em 29/10 para o Robert recriar; a distribuição por pessoa abaixo é só o histórico da proposta de 16/10 e precisa ser refeita.
+As novas frentes de 16/10 (proposta, Orçamento, custo real e comissão nova) ainda não mexem nesses marcos. Elas estão em "Novas frentes" no Detalhe técnico e só valem depois que cada pessoa validar seus pd 🟡. **Os donos mudaram em 28/10** (o Robert conduz o módulo comercial na API do Hub, N16-117 a N16-119) **e de novo em 17/11** (o Pablo passou a analista e não desenvolve; o Comercial é só do Nathan e do Robert, N16-168 e N16-169) e os contratos dessa parte foram removidos em 29/10 para o Robert recriar; a distribuição por pessoa abaixo é só o histórico da proposta de 16/10 e precisa ser refeita.
 
 ## Gargalos
 
@@ -143,6 +144,8 @@ Custo do lote (09/10) somou ao Robert K3 1,0 + K4 3,0 + K5 1,5 + K6 0,5 pd; ao G
 
 ### Novas frentes de 16/10: proposta, Orçamento, custo real e comissão nova (🟡 a validar; histórico)
 
+> **Superado em parte (17/11/2026):** o Pablo passou a analista (N16-168), e a linha dele não é mais capacidade de desenvolvimento. Os blocos P4 e P5 (Orçamento) e o N7 passam ao Nathan; o P6 e o P7, ao Robert (N16-169).
+>
 > **Superado em parte (29/10/2026):** os blocos do Pablo (P1 a P4, P6, P7) e as telas da proposta do Nathan (N1, N2) mudaram de dono em 28/10: o Robert faz as rotas e as telas da proposta (N16-117 a N16-119). Os 15 contratos de proposta, orçamento, custo real e comissão nova foram removidos em 29/10; o Robert os recria. A tabela fica como registro da estimativa de 16/10; os pd por pessoa precisam ser refeitos.
 
 Estimativas da proposta de cronograma de 16/10/2026 (`Proposta-Orcamento-Comissao/07-Cronograma/Proposta-de-Cronograma.md`, pasta de histórico fora do vault), com o mesmo método desta nota (pd por complexidade, ±30%, dias úteis = pd ÷ foco, mesmos feriados, crédito só do que está na `develop`). **Nada aqui vale como compromisso:** cada pessoa confirma os seus pd e o seu foco livre. **Os marcos M1 a M11, o fim do Ciclo 1 e as trilhas W0 a W4 não mudam** até essa validação. Os itens estão no [[Backlog-por-Frente]] (BL-066 a BL-078) e as regras em [[01-Proposta-de-Venda]], [[02-Orcamento-Base-de-Preco]] e [[15-Custo-Real-e-Comissao]].
@@ -160,7 +163,7 @@ Alternativas para o gargalo do Nathan 🟡 (decisão do Nathan):
 
 | Alternativa | Efeito |
 |---|---|
-| (A) O Pablo faz as telas de Orçamento (N7, 9 pd) | Nathan termina em 03/06/2027; o Pablo vai a 68 pd e termina em 01/03/2027 |
+| (A) O Pablo faz as telas de Orçamento (N7, 9 pd) | Fora desde 17/11: o Pablo é analista (N16-168) |
 | (B) Foco do Nathan sobe de 40% para 60% a partir de 21/12 | Os 53 pd terminam em 30/04/2027 (faixa 22/03 a 08/06/2027) |
 | (C) Primeiro corte só com proposta e pedido (N1 a N3, 18 pd) | Fim em 26/02/2027; comissão, Compras e Orçamento vão ao Ciclo 2 |
 

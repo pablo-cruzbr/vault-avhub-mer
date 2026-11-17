@@ -68,6 +68,7 @@ Resumo das decisões vigentes que mais pesam, agrupadas por assunto. O ID entre 
 
 **Banco e API**
 
+- As 20 migrations de 05 a 16/11 e os 3 extras estão no banco de produção do Hub desde 17/11, e a `develop` de todos os sistemas foi para a `main` no mesmo dia (N16-171).
 - Toda a API do comercial fica na `api-acos-vital`, reusando o que o Hub já tem; a `api-comercial` sai de produção (N16-111).
 - O Hub é um sistema só: cada conceito tem uma tabela, uma rota e uma tela (N16-112).
 - Não existirá `core_comercial`: a proposta fica em `core_vendas_faturamento` (N16-116).
@@ -76,7 +77,9 @@ Resumo das decisões vigentes que mais pesam, agrupadas por assunto. O ID entre 
 
 **Quem faz o quê**
 
-- O Robert começa pela proposta e faz as rotas; o Nathan cuida da tela e do começo da comissão; o Gustavo, do banco; o Pablo acompanha (N16-118, N16-117).
+- O Comercial é desenvolvido só pelo Nathan e pelo Robert; o Pablo passa a analista, e o Nathan fica dono do Orçamento (N16-168).
+- O Robert fica com a Proposta, o Pedido, o motor da comissão e o custo por evento; o Nathan, com o Orçamento e as telas da comissão e do custo real; o Gustavo, com o banco e a API (N16-169).
+- O Comercial tem de ser entregue até 01/12/2026; o escopo mínimo é a proposta virando pedido no Omie (N16-170).
 - Quem precisa da mercadoria (Expedição ou Produção) pede a retirada ao Estoque, e só o Estoque confirma; é aí que o saldo baixa (N16-120).
 - Pedido integral ou por partes: quem decide é o vendedor, no pedido (N16-130).
 - Só quem está vinculado à Qualidade libera ou reprova lote em quarentena (N16-124).
@@ -98,7 +101,7 @@ Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (C
 - **Unidades e contas Omie:** N16-79, N16-80, N16-81, N16-83, N16-85, N14-31, DEC-1, EN-07, #31c.
 - **Menu e telas:** N16-14, N16-19, N16-33, N16-107, N16-108, N16-119, N14-33, #54, #74.
 - **Banco e API (onde cada coisa mora):** N16-15, N16-98, N16-154, N16-155, N16-109, N16-111, N16-112, N16-113, N16-116, N16-117, N16-143, N14-07, N14-15, N14-26, #3, #6, #82.
-- **Quem faz o quê e cronograma:** N16-157, N16-158, N14-09, N14-10, N14-11, N14-13, N14-32, N16-115, N16-117, N16-118, #32, #33, #33b, #34, #35, #36, #37, #73, #75, #96, #27, N16-165.
+- **Quem faz o quê e cronograma:** N16-157, N16-158, N14-09, N14-10, N14-11, N14-13, N14-32, N16-115, N16-117, N16-118, #32, #33, #33b, #34, #35, #36, #37, #73, #75, #96, #27, N16-165, N16-168, N16-169, N16-170, N16-171.
 - **Estoque, retirada e baixa:** N14-05, N14-06, N16-87, N16-120, N16-121, N16-122, N16-139, N16-140, EN-01, EN-03, EN-04, EC-02, EC-05, DEC-4, #31b, #24, #25, #28, #29, #78, #100.
 - **Recebimento e Qualidade:** N14-04, N16-124, N16-125, N16-126, N16-127, N16-128, N16-129, N16-134, N16-135, N16-136, N16-137, DEC-5, DEC-6, EC-01, EC-06, EC-07, #26.
 - **PCP, Triagem e Produção:** N14-22, N16-93, N16-138, N16-141, EN-02, EN-05, EN-06, EC-03, #74, #78, #104, #105, #106, N16-162.
@@ -122,7 +125,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
 - [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026; empresa, responsável e carteira de clientes da proposta, N16-160, pedidos do Robert de 11/11/2026; entrega das etapas 1 a 6 em 3 dias: aprovação da OC, Destinação do pedido inteiro, Orçamento completo e comissão, N16-161 a N16-165, 12/11/2026; item de fabricação sem custo, N16-166, 16/11/2026)
-- [[Registro-N16-167-em-diante]]: N16-167 em diante (excluir proposta pelo Hub e o pedido excluído no Omie, 16/11/2026)
+- [[Registro-N16-167-em-diante]]: N16-167 em diante (excluir proposta pelo Hub e o pedido excluído no Omie, 16/11/2026; o Pablo analista e o Comercial com o Nathan e o Robert, N16-168, a divisão entre os dois, N16-169, e o prazo de 01/12, N16-170, 17/11/2026; banco do Hub em produção e release de 17/11, N16-171)
 
 ## Onde está cada decisão
 

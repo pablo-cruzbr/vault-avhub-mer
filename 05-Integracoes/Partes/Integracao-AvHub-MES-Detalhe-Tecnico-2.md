@@ -75,7 +75,7 @@ sequenceDiagram
 **Para quê:** o custo do item do pedido = média dos lotes reservados (nó E3), usado pelo hub no Ciclo 2 para o simulador e a comissão ([[Contratos-da-v2|LOG-47]]).
 
 - **Rota no MES** ✅ (`integracao-avhub.controller.ts`, `itens-custo.ts`, `6c11147`, 27/10, só na `develop`): `GET /itens/custo?alterado_desde=&codigo_empresa=&apos_id=&limit=`, array puro, uma linha por filial + pedido + **produto** (`codigo_produto_omie`; linhas repetidas do pedido são somadas), com `quantidade`, `quantidade_com_custo`, `custo_total`, `custo_medio`, `completo`, `cotacao_a_conferir`, `lotes[]`, `alterado_em` ([[Contratos-da-v2|API-008]]). Entram só pedidos do Omie e itens que têm ou tiveram reserva no Estoque; fabricado fica de fora até o custo da matéria-prima; só entra o que mudou há mais de 180 s (janela de segurança). BL-004 feito pelo Robert.
-- **Job no hub** ✅ `itens_pedido_custo.job.js`: a cada 90 s por unidade, cursor `alterado_em` + `id`; **404 do MES avisa e tenta a cada 10 min** (produção ainda sem a rota: `main` do MES parou em 08/10); sem a migration 047b o job nem chama o MES.
+- **Job no hub** ✅ `itens_pedido_custo.job.js`: a cada 90 s por unidade, cursor `alterado_em` + `id`; **404 do MES avisa e tenta a cada 10 min** (a `main` do MES ficou parada em 08/10 até 17/11/2026, quando recebeu a `develop`, PR #82 da `api-pcp`, N16-171; ❓ deploy não conferido); sem a migration 047b o job nem chama o MES.
 - **Rota de leitura no hub:** `GET /itens_pedido_custo?codigo_empresa=&numero_pedido=` exige sempre `custo-itens:pode_visualizar`; a tela nasce sem perfil, então responde 403 a todos 🔴 Gustavo (BL-020). Devolve `custo_sem_impostos: true` (custo do Ciclo 1 não tem ICMS, IPI nem ST).
 - **Chave:** `MES_API_KEY` (a mesma do INT-05).
 - **Banco:** a função `fn_itens_pedido_custo_gravar` ainda grava por `item integer` no Dump Avhub; a migration 047b troca para produto. 🔴 Gustavo aplicar (BL-019). A API já exige a 047b.
@@ -149,7 +149,7 @@ Compras cria requisição de necessidade própria no HUB (nó C0, `POST /compras
 |---|---|---|
 | av-hub (`api-acos-vital`) | Triagem e Destinação do Pedido falham com mensagem; a fila de requisição acumula; o polling de marcos reagenda; o "importado" é reenviado a cada 10 min por 7 dias | automática ao voltar; depois de 7 dias o "importado" não é mais reenviado, sem alerta 🔴 BL-034 |
 | MES (`api-pcp`) | O vendedor segue liberando; os jobs de status, custo e Torre falham e repetem (90 s; 10 min em 404); o HUB mostra "dado velho" após 10 min | automática ao voltar; cursores não andam em falha |
-| Banco do MES vazio ou sem migrations | a `main` do MES parou em 08/10 e o banco de produção não tem as migrations da `develop` (job da OC, custo por item, OP e lote do fabricado só na `develop`) | merge `develop`→`main` antes do piloto 📝 ([[Riscos]], RS-002) |
+| Banco do MES vazio ou sem migrations | a `main` do MES ficou parada em 08/10; em 17/11/2026 recebeu a `develop` (`api-pcp` PR #82, `app-pcp` PR #67), e as 17 migrations de 09/10 a 13/11 entram no banco de produção quando o container subir (`prisma migrate deploy`, N16-171) | 🟡 merge feito; ❓ conferir o deploy e as migrations aplicadas ([[Riscos]], RS-002) |
 
 ## O que falta desenvolver
 

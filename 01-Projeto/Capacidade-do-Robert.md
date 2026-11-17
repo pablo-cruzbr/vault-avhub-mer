@@ -1,10 +1,10 @@
 ---
 tags: [projeto, cronograma, capacidade]
 criado: 2026-11-11
-estado-em: 2026-11-11
+estado-em: 2026-11-17
 status: vigente
 dono: Nathan
-fontes: [Cronograma (ondas W0 a W4, feriados, foco), Equipe-e-Divisao, Registro-de-Decisoes N16-145, N16-156, N16-157 e N16-158, Q&A de 11/11/2026 com o Robert (P4, P13, P16; fora do vault, ../Perguntas-e-Respostas/), proposta de cronograma de 16/10/2026 (blocos N1 a N8, P1 a P7; fora do vault), Backlog-por-Frente (estado de 10/11/2026)]
+fontes: [Cronograma (ondas W0 a W4, feriados, foco), Equipe-e-Divisao, Registro-de-Decisoes N16-145, N16-156, N16-157, N16-158, N16-168, N16-169 e N16-170, Q&A de 11/11/2026 com o Robert (P4, P13, P16; fora do vault, ../Perguntas-e-Respostas/), proposta de cronograma de 16/10/2026 (blocos N1 a N8, P1 a P7; fora do vault), Backlog-por-Frente (estado de 10/11/2026)]
 ---
 
 # Capacidade do Robert depois da N16-157
@@ -35,6 +35,12 @@ Antes da N16-157 a fila do Robert era: o plano até 18/12/2026, depois a W0 (dé
 | **Total** | | **62,0** (43,4 a 80,6) | |
 
 **Fora da conta, sem pd** ❓: o faturamento em partes no Fiscal (N16-92 a N16-100), o cancelamento pelo Omie (N16-68 a N16-71), as datas do pedido e o calendário do marketing (N16-88 a N16-104) e o contrato próprio das pernas 3 a 5 do MES (N16-151). Quando ganharem pd, entram aqui.
+
+## Depois da divisão do Comercial (17/11/2026)
+
+Com a N16-169, as telas da raia 15 passam ao Nathan, e o Robert deixa de acompanhar o Orçamento (N16-168). Saem da conta do Robert 29 pd: as telas da Controladoria e da comissão (20), o custo real por item (5), a parte de tela do imposto por item (2) e o acompanhamento do Pablo (2). A conta dele nas raias novas cai de 62 para **cerca de 33 pd**: 29 do Comercial e 4 do Fiscal · Omie. O Nathan recebe esses 27 pd de telas e o Orçamento, que era do Pablo (blocos P4, P5 e N7 da proposta de 16/10, cerca de 27 pd), perto de **54 pd** 🟡. Os três cenários abaixo ainda usam os 62 pd e não foram refeitos.
+
+**Prazo de 01/12/2026 (N16-170).** De 17/11 a 01/12 são 10 ou 11 dias úteis (10 se 20/11 for feriado). No foco do plano (Robert 75%, Nathan 40%), os dois rendem cerca de 12 pd; a 100%, cerca de 21 pd. O Comercial inteiro (cerca de 80 pd) não cabe. A entrega mínima, em que a proposta vira pedido no Omie, pede cerca de 15 pd e só cabe com os dois perto de 100% no Comercial, o que segura o MES e a raia 06 nessas duas semanas 🟡.
 
 ## Os três cenários
 
