@@ -49,7 +49,7 @@ Decisão do Nathan de 17/11/2026 (N16-169). O corte é pela camada: o Robert fic
 | 02 Orçamento | — | Inteira; o Pablo levanta e valida as regras com o setor |
 | 03 Pedido de Venda e Liberação | Inteira: `transformar`, Omie e liberação para o MES | — |
 | 15 Custo Real e Comissão | Motor da comissão na API (BL-078) e custo por evento (`K2`) | Telas: comissão estimada na proposta (`K1`), Controladoria, visão geral, minhas comissões e parâmetros (`K4`) e custo real por item (BL-088, BL-053) |
-| **Estimativa** 🟡 | ~29 pd | ~29 pd |
+| **Estimativa** 🟡 | ~29 pd | ~54 pd: 27 das telas da raia 15 e ~27 do Orçamento (blocos P4, P5 e N7, que eram do Pablo) |
 
 A estimativa tem margem de ±30% e o Robert ainda valida ([[Capacidade-do-Robert]]). O prazo é 01/12/2026 (N16-170): nele cabe só a entrega mínima, em que a proposta vira pedido no Omie (cerca de 15 pd); o escopo ainda não foi fechado 🟡.
 
