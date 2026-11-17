@@ -1,14 +1,14 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4]
 criado: 2026-10-16
-estado-em: 2026-11-05
+estado-em: 2026-11-17
 status: proposta
 ordem: 2
 nos: [B1, B2, B3, B4]
 anterior: "[[01-Proposta-de-Venda]]"
 proxima: "[[03-Pedido-de-Venda-e-Liberacao]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
-dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
+develop-conferida: [api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+dono: Nathan (dono da raia desde 17/11, N16-168) · Gustavo (banco e API) · Pablo (analista)
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---
 
@@ -65,23 +65,26 @@ Quem desenvolve: o Orçamento é do Pablo, com o Robert (N16-117, N16-119).
 
 ## O que já existe e o que falta
 
-- 📝 **Contrato `LOG-60` (`06-Contratos/Ativos/LOG-60-Orcamento-Pedido-de-Custo-e-Cotacao`, 17/11/2026):** pedido de custo com cronômetro, cotação imutável, página do produto com as duas fontes (N16-172) e fornecedores, com o menu de três telas (N16-173). Validade da cotação definida por quem registra, só produto do catálogo, sem e-mail de cotação e nota e ranking do fornecedor para o futuro (N16-174). Código em PR (api-acos-vital #312, av-hub #306), ainda fora da `develop`; a migration fica com o Gustavo.
-- O front de Fornecedores, Produtos, Cotação e a análise da proposta lê a API do Hub desde 27/10 (`av-hub` `d6dc1a6`).
-- A `api-comercial` de teste não roda desde 29/10/2026 e foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>`.
-- 🔴 Na `api-acos-vital` (`develop`), o router `/suprimentos` existe, mas ainda não tem rota: nasce fechado (`core_comercial/index.js`, "fase 4").
-- ✅ Telas no `av-hub` (`develop`, menu enxuto de 27/10, N16-107 e N16-108): Pedidos de custo (Painel do Comprador e Pedido de cotação, em abas), Produtos (Catálogo, Pesquisa de materiais e Ofertas, em abas), Fornecedores, Parâmetros (custo e Telha, em abas) e Custo por item.
-- 🔴 Sem API e sem banco: oferta imutável com histórico, média por período e pedido de custo existiam só no `api-comercial` de teste, removido do av-hub em 06/11/2026 (PR #261, `dd9d729`); falta portar para a `api-acos-vital`. No banco de teste de 04/11/2026 as tabelas `core_comercial.ofertas` e `solicitacoes_custo` também saíram ([[Dump-AvHub-Teste-2026-11-04]]). Na API do Hub já há a leitura de fornecedores, vínculos, categorias e cotações (✅ `api-acos-vital` `orcamento.route.js:140-312`).
-- 📝 As regras acima estão decididas.
+Estado em 17/11/2026: o contrato `LOG-60` (`06-Contratos/Entregues/LOG-60-Orcamento-Pedido-de-Custo-e-Cotacao`) está na `develop` e na `main` (API `0e9f93e` e #313; Hub `a92272a` e #307), com a migration aplicada pelo Gustavo. Testado no Docker: 95 de 95.
+
+- ✅ Rotas do Orçamento na `api-acos-vital`, em `/comercial` (o `/suprimentos` vazio deixa de ser o caminho): `src/schemas/core_comercial/index.js:54` (`comercial.use(solicitacoesCusto);`), `:55` (`comercial.use(ofertas);`) e `:56` (`comercial.use(fornecedores);`).
+- ✅ Telas no `av-hub`, o menu com 3 telas (N16-173):
+  - Pedidos de custo: `components/Orcamento/PedidosFila.tsx:38` (`export default function PedidosFila`) e a página do pedido em `components/Orcamento/PedidoPagina.tsx:44` (`export default function PedidoPagina`);
+  - Produtos: `components/Orcamento/ProdutoPagina.tsx:54` (`export default function ProdutoPagina`);
+  - Fornecedores: `components/Orcamento/FornecedorPagina.tsx:25` (`export default function FornecedorPagina`);
+  - a tela do vendedor, Vendas › Solicitações de custo: `app/(protected)/vendas/solicitacoes-custo/page.tsx:9` (`<PedidosFila deVendas />`).
+- ✅ Oferta imutável com histórico (cotação de fornecedor): `core_comercial.ofertas`, com o trigger que impede editar e apagar; `api-acos-vital` `src/schemas/core_comercial/aggregates/ofertas/ofertas.route.js:141` (`router.post("/ofertas"`) e `:200` (`router.post("/ofertas/:id/invalidar"`).
+- ✅ As regras decididas estão implementadas: as duas fontes, com o vendedor escolhendo (N16-172, `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`)), e a validade definida por quem registra, só para produto do catálogo (N16-174, `src/schemas/core_comercial/aggregates/ofertas/ofertas.route.js:141`, `router.post("/ofertas"`).
+- ✅ Página do produto para o vendedor, com as duas fontes lado a lado: `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`), sobre `src/schemas/core/tables/produtos/produtos.route.js:282` (`router.get("/:id/precos"`). ❓ Em produção, depende do acesso do perfil de vendas (`catalogo-produtos`, `solicitacoes-custo`), com o Gustavo.
+- ✅ Volatilidade e média do histórico de compras: `src/utils/precosProduto.js:20` (`JANELA_VOLATILIDADE_DIAS = 90`).
+- ✅ Cronômetro do pedido de custo no lugar do prazo (N16-58): `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:118` (`router.get("/solicitacoes_custo"`).
+- ✅ Matriz de preços: virou a aba Cotações da página do produto (fornecedor × unidade × validade, N16-173), sem tela própria: `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`).
+- 🟡 Perfil "orçamentista": o perfil "Orçamentos" recebe as 3 telas pela migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, aplicada pelo Gustavo e fora dos repositórios (❓ conferir num dump novo). As pessoas do setor no perfil ficam com o Gustavo.
+- 🟡 Cadastro das telas em produção: a mesma migration (rotas em `auth.rotas_telas` e o menu em `auth.telas`), aplicada pelo Gustavo (❓ conferir num dump novo).
+- 🟡 Prazo de entrega em dias: está na cotação (`ofertas.route.js:123`, `prazo_entrega_dias`), mas não na OC.
+- 🟡 Valor correto da OC (`C7`) entrando no histórico de compras: a página de preço lê os pedidos de compra do Omie, incluindo as OCs do Hub; falta conferir se o valor corrigido chega igual.
 - 📝 Aviso ao vendedor quando o Orçamento responde, e ao Orçamento quando chega pedido novo: Central de Avisos do Hub, contrato `LOG-61` (`06-Contratos/Ativos/LOG-61-Central-de-Avisos`, N16-175).
-- 🟡 Valor correto da OC (`C7`) entrando no histórico de compras.
-- 🟡 Cadastro das telas em produção.
-- 🔴 Página do produto para o vendedor.
-- 🔴 Nota do fornecedor, ranking por categoria e volatilidade.
-- 🔴 Prazo de entrega em dias.
-- 🔴 Matriz de preços, com modelo e tela.
-- 🔴 Cronômetro do pedido de custo no lugar do prazo.
-- 🔴 Perfil "orçamentista".
-- 🔴 Migração do módulo para a `api-acos-vital`.
+- 📝 Fora, por decisão (N16-174): e-mail de cotação aos fornecedores, nota e ranking do fornecedor (para o futuro) e item sem cadastro no Omie.
 
 ## Detalhe técnico
 

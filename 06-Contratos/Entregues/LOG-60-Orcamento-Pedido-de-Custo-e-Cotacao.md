@@ -1,7 +1,7 @@
 ---
 id: LOG-60
 titulo: Orçamento com dado real — pedido de custo, cotação de fornecedor, preço do produto e fornecedores
-status: proposta
+status: implementado-na-develop
 autor: Nathan
 data: 2026-11-17
 camadas: [frontend, backend, api, sql]
@@ -10,7 +10,7 @@ nos_0b: [B1, B2, B3, B4]
 notas_afetadas: [02-Orcamento-Base-de-Preco, 02-Orcamento-Base-de-Preco-Detalhe-Tecnico-1, 02-Orcamento-Base-de-Preco-Detalhe-Tecnico-2, Registro-N16-167-em-diante]
 depende_de: []
 decisoes: [N16-07, N16-41, N16-52, N16-54, N16-55, N16-58, N16-59, N16-72, N16-168, N16-172, N16-173, N16-174]
-develop-conferida: [api-acos-vital 96e83de, av-hub 4cce84b, em 2026-11-17]
+develop-conferida: [api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17, entrega (também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital 96e83de, av-hub 4cce84b, em 2026-11-17]
 tags: [contrato, orcamento, pedido-de-custo, cotacao, oferta, fornecedores, pagina-do-produto]
 criado: 2026-11-17
 estado-em: 2026-11-17
@@ -20,11 +20,11 @@ fontes: [conversa do Nathan com o Claude de 17/11/2026, api-acos-vital PR #312 (
 
 # LOG-60 · Orçamento com dado real: pedido de custo, cotação, preço do produto e fornecedores
 
-> **Situação em 17/11:** 📝 proposta, com o código pronto em PR e ainda **fora da `develop`** (regra F5: nada aqui é ✅).
-> - API: [api-acos-vital #312](https://github.com/Acosvital/api-acos-vital/pull/312), branch `feat/orcamento-precos-produto` (`b3b670e`).
-> - Telas: [av-hub #306](https://github.com/Acosvital/av-hub/pull/306), branch `feat/orcamento-telas` (`e9c232e`).
-> - Testes no Docker em 17/11: **95 de 95** casos de API e banco passaram, e as telas foram conferidas como admin e como vendedor (seção 13).
-> - Banco: a migration `2026-11-17_orcamento_cotacoes_pedidos_custo` está no corpo do PR #312; aplicada só no Docker de teste. Falta o Gustavo revisar e aplicar no tst e na produção.
+> **Situação em 17/11 (tarde):** ✅ implementado na `develop` e levado à `main`.
+> - API: `api-acos-vital` #312 (`0e9f93e`) e release #313. Rotas: `src/schemas/core_comercial/index.js:54` (`comercial.use(solicitacoesCusto);`), `src/schemas/core_comercial/aggregates/ofertas/ofertas.route.js:141` (`router.post("/ofertas"`), `src/schemas/core_comercial/aggregates/fornecedores/fornecedores.route.js:48` (`router.get("/fornecedores"`) e `src/schemas/core/tables/produtos/produtos.route.js:282` (`router.get("/:id/precos"`). Correção do menu: `src/schemas/auth/views/vw_permissoes_usuario/vw_permissoes_usuario.route.js:82` (`telaMap.set(t.id, {`).
+> - Telas: `av-hub` #306 (`a92272a`) e release #307 (`f5b614a`): `components/Orcamento/PedidosFila.tsx:38` (`export default function PedidosFila`), `components/Orcamento/ProdutoPagina.tsx:54` (`export default function ProdutoPagina`) e `app/(protected)/vendas/solicitacoes-custo/page.tsx:9` (`<PedidosFila deVendas />`).
+> - Banco: a migration `2026-11-17_orcamento_cotacoes_pedidos_custo` foi aplicada pelo Gustavo (Nathan, 17/11).
+> - ❓ Em produção, não conferido: o deploy, o acesso do perfil de vendas (`catalogo-produtos`, `solicitacoes-custo`) e as pessoas no perfil "Orçamentos".
 
 ## 1. Resumo em linguagem simples
 
@@ -81,7 +81,7 @@ Também ficam prontos o histórico de preço de cada produto (última compra, m�
 
 | Tela | Rota | O que tem |
 |---|---|---|
-| Pedidos de custo | `/orcamento/painel-comprador` | KPIs: abertos, livres, comigo, o que espera há mais tempo e o tempo de resposta (mediana de 30 dias). Abas: Abertos, Comigo, Livres, Fechados e Todos. Busca. O pedido aberto mais antigo aparece primeiro. Botão "Novo pedido". `components/Orcamento/PedidosFila.tsx:37` (`export default function PedidosFila`) |
+| Pedidos de custo | `/orcamento/painel-comprador` | KPIs: abertos, livres, comigo, o que espera há mais tempo e o tempo de resposta (mediana de 30 dias). Abas: Abertos, Comigo, Livres, Fechados e Todos. Busca. O pedido aberto mais antigo aparece primeiro. Botão "Novo pedido". `components/Orcamento/PedidosFila.tsx:38` (`export default function PedidosFila`) |
 | Pedido de custo | `/orcamento/painel-comprador/[id]` | Ações: Assumir, Devolver à fila, Sem fornecedor e Cancelar pedido. Cartões: cotações deste pedido (com "Responder com esta"), cotações já vigentes do produto, o que foi pedido e "Quanto já pagamos" (última compra e 12 meses). `components/Orcamento/PedidoPagina.tsx:46` |
 | Produtos | `/orcamento/catalogo-produtos` e `/[id]` | Lista com o último preço pago e a média de 12 meses. A página mostra as **duas fontes** (cotação vigente e última compra) nos dois primeiros números, mais média, volatilidade, compras e o gráfico mensal. Abas: Cotações, Fornecedores, Compras e Vendas. Botão "Pedir cotação" para o vendedor ou "Registrar cotação" para o orçamentista. `components/Orcamento/ProdutoPagina.tsx:54` |
 | Solicitações de custo (Vendas) | `/vendas/solicitacoes-custo` | Os pedidos de custo do vendedor: a mesma lista de Pedidos de custo, com o título de Vendas; a API devolve só os dele, e o pedido abre a mesma página (para ele, só "Cancelar pedido"). A tela já estava no menu de Vendas, mas o endereço dava 404 (`e9c232e`) |

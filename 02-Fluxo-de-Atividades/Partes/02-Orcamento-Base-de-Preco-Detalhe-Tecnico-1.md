@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-17
 status: proposta
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 parte-de: "[[02-Orcamento-Base-de-Preco]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---
 
@@ -92,34 +92,29 @@ A oferta é **imutável** (RN-130): corrigir é invalidar com motivo e lançar o
 
 ## Telas
 
-Menu **Orçamento** desde 16/10/2026; enxugado em 27/10/2026 (N16-107 e N16-108, `av-hub` `a1493a8`): as telas antigas viraram abas dentro de 4 entradas. Conferido em `app/(protected)/orcamento/*` da `develop` em 29/10/2026:
+O menu Orçamento foi reescrito em 17/11/2026 (`LOG-60`, N16-173) com 3 telas e dado real. As telas do Pablo (abas Cotação, Ofertas, Pesquisa de materiais e Telha) saíram do menu; os componentes ficam no repositório enquanto branches abertas os usarem (BL-084). Conferido no `av-hub` `a92272a`:
 
-| Nome atual | Rota | Abas (conferidas no código) | Nó | Estado |
+| Tela | Rota | O que tem | Nó | Estado |
 |---|---|---|---|---|
-| Pedidos de custo (Painel do Comprador) | `/orcamento/painel-comprador` | fila do Painel do Comprador e Pedido de cotação (`PaginaComAbas`) | `B3`, `B4` | 🟡 tela no `av-hub`; os dados (`/painel-comprador`, `/solicitacoes-custo`) respondem 503 no BFF: sem API e sem banco 🔴 — fila de solicitações de custo; responde com oferta (PR #201) |
-| Produtos (Catálogo) | `/orcamento/catalogo-produtos`, `/[id]` | Catálogo, Pesquisa de materiais e Ofertas | `B1`, `B2` | ✅ o detalhe do produto mostra os preços (`components/Suprimentos/ProdutoDetalhe.tsx`); é a base da página do produto |
-| Fornecedores (e ficha) | `/orcamento/fornecedores`, `/[id]` | lista e ficha | `B1` | ✅ (`av-hub`) |
-| Parâmetros de custo | `/orcamento/parametros-custo` | Custo (ICMS a recuperar, densidades, validade) e Telha (tabela da telha) | `B1` | ✅ (`av-hub`); 🟡 recebe também os pesos do score e os limites |
-| Custo por item | `/orcamento/custo-itens` | — | `B2` | ✅ (`av-hub`) itens, lotes e custo médio do pedido |
-| Custo do item (oculta) | — | — | `B2` | ✅ (`api-acos-vital`) slug `custo-item`: libera ver custo, margem e sugestão |
-| Solicitações de custo (oculta, em Vendas) | — | — | `B3` | ✅ (`api-acos-vital`) slug `solicitacoes-custo`: o vendedor pede custo pela proposta |
-| Histórico de compras | — | — | `B1` | Sai (N16-108): `/compras/historico-compras` não existe mais na `develop`; o histórico está em Ordens de compra, com filtro por produto |
-| **Página do produto para o vendedor**: histórico, top fornecedores com score, flutuação anual, mensal e total, volatilidade, média | 🟡 | 🟡 | `B2` | 🔴 hoje só quem tem `custo-item` ou `painel-comprador` vê custo (`capacidades.ts:77`) |
-| Matriz de preços | 🟡 | 🟡 (o BFF já cita o slug `matriz-precos`, `app/api/comercial/[...rota]/route.ts:110,104`) | `B1`, `B2` | 🔴 tela ainda não construída |
+| Pedidos de custo | `/orcamento/painel-comprador` e `/[id]` | Fila com KPIs e tempo de espera; a página do pedido: assumir, registrar cotação, responder ou "sem fornecedor", cancelar | `B3`, `B4` | ✅ `components/Orcamento/PedidosFila.tsx:38` (`export default function PedidosFila`) |
+| Produtos | `/orcamento/catalogo-produtos` e `/[id]` | Lista com o último preço pago; página com as duas fontes (cotação vigente e última compra), gráfico e as abas Cotações, Fornecedores, Compras e Vendas | `B1`, `B2` | ✅ `components/Orcamento/ProdutoPagina.tsx:54` (`export default function ProdutoPagina`) |
+| Fornecedores | `/orcamento/fornecedores` e `/[id]` | Lista e ficha a partir de `core.parceiros`, compras e cotações | `B1` | ✅ `components/Orcamento/FornecedorPagina.tsx:25` (`export default function FornecedorPagina`) |
+| Solicitações de custo (Vendas) | `/vendas/solicitacoes-custo` | Os pedidos de custo do vendedor | `B3` | ✅ `app/(protected)/vendas/solicitacoes-custo/page.tsx:9` (`<PedidosFila deVendas />`) |
+| Parâmetros de custo | `/cadastros/auxiliares/parametros-custo` | Saiu do Orçamento: é configuração | — | ✅ `app/(protected)/cadastros/auxiliares/parametros-custo/page.tsx:6` (`export default function ParametrosCustoPage`) |
+| Custo real por item | `/comissoes/custo-itens` | Saiu do Orçamento: é da raia 15 | — | ✅ `app/(protected)/comissoes/custo-itens/page.tsx:3` (`export default function Page`) |
+| Matriz de preços | — | Virou a aba Cotações do produto (N16-173); a tela `matriz-precos` fica inativa | `B1`, `B2` | ✅ `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`) |
 
 ## Endpoints e contratos
 
-Rotas que o desenho pede ([[Contratos-da-v2|LOG-52]]). Existiam no `api-comercial` de teste, removido em 06/11/2026; as linhas citadas são históricas (`f7d8d7f:api-comercial/src/modules/...`). Na `api-acos-vital` (`develop` `cc3fbb3`, 11/11/2026) entre as rotas abaixo só a leitura de produtos existe; o resto é 🔴 "sem API e sem banco":
+Todos estão na `api-acos-vital` `0e9f93e` (contrato `LOG-60`), com o token do usuário e as linhas de `auth.rotas_telas` da migration `2026-11-17_orcamento_cotacoes_pedidos_custo`:
 
 | Método e rota | Uso | Nó | Código |
 |---|---|---|---|
-| `GET /produtos`, `/produtos/:id`, `POST /produtos` | catálogo | `B2` | 🟡 `GET /produtos` e `/produtos/:id` vão à API do Hub (✅ `api-acos-vital` `src/schemas/core/tables/produtos/produtos.route.js`); `POST /produtos` 🔴 só no módulo de teste (`suprimentos.routes.ts:29`, `:72`, `:106`) |
-| `GET /produtos/:id/precos?dias=` | mínimo, máximo, último, média e por fornecedor com variação sobre a média | `B2` | 🔴 sem API e sem banco: o BFF aponta para a API do Hub, mas a `api-acos-vital` não tem a rota; existe só no módulo de teste (`suprimentos.routes.ts:823-875`) (exige `veCusto`) |
-| `GET /produtos/:id/score_fornecedores`, `/volatilidade` | score, ranking por categoria, coeficiente de variação, dado recente | `B2` | 🔴 🟡 nomes |
-| `GET /ofertas`, `POST /ofertas`, `POST /ofertas/:id/invalidar`, `GET /ofertas/importacoes`, `/exportar` | base com histórico | `B1`, `B4` | 🔴 sem API e sem banco (existia só no módulo de teste, removido em 06/11/2026): `suprimentos.routes.ts:645`, `:687`, `:791`, `:561`, `:597` (histórico) |
-| `GET /solicitacoes_custo`, `POST /solicitacoes_custo` | fila e criação do pedido de custo | `B3` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:304`, `:367` |
-| `POST /solicitacoes_custo/:id/assumir`, `liberar`, `responder`, `cancelar` | comprador pega, devolve, responde, cancela | `B4` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:494`, `:500`, `:406`, `:508` |
-| `POST /custos/sugerir` | sugestão de custo | `B2` | 🔴 sem API e sem banco (existia só no módulo de teste `av-hub/api-comercial`, removido em 06/11/2026; o BFF responde 503): `custos.routes.ts:30` |
-| Matriz de preços | 🟡 | `B1`, `B2` | 🔴 |
+| `GET /produtos/precos`, `GET /produtos/:id/precos?meses=` | Lista com o último preço; página de preço (média, mínimo, máximo, volatilidade, série, fornecedores, compras) | `B1`, `B2` | ✅ `src/schemas/core/tables/produtos/produtos.route.js:281` (`router.get("/precos"`) e `:282` (`router.get("/:id/precos"`) |
+| `GET`, `POST /comercial/solicitacoes_custo`; `POST …/:id/assumir`, `liberar`, `responder`, `cancelar` | Pedido de custo | `B3`, `B4` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:225` (`router.post("/solicitacoes_custo"`) e `:313` (`router.post("/solicitacoes_custo/:id/responder"`) |
+| `GET`, `POST /comercial/ofertas`; `POST /comercial/ofertas/:id/invalidar` | Cotação de fornecedor (imutável) | `B1`, `B4` | ✅ `src/schemas/core_comercial/aggregates/ofertas/ofertas.route.js:93` (`router.get("/ofertas"`) |
+| `GET /comercial/fornecedores`, `/comercial/fornecedores/:id` | Lista e ficha do fornecedor | `B1` | ✅ `src/schemas/core_comercial/aggregates/fornecedores/fornecedores.route.js:48` (`router.get("/fornecedores"`) |
+| `POST /custos/sugerir` | Sugestão de custo na proposta | `B2` | 🔴 sem API (o BFF responde 503); a proposta deve passar a mostrar as duas fontes (N16-172), com o Robert |
+| Nota e ranking do fornecedor | — | `B2` | Fora do escopo por decisão (N16-174) |
 
-Contratos: os do Orçamento foram removidos em 29/10/2026 e o Robert cria os novos. Dependências: [[Contratos-da-v2|LOG-52]] (fases 4 e 5).
+Contrato: `LOG-60` (`06-Contratos/Entregues/LOG-60-Orcamento-Pedido-de-Custo-e-Cotacao`).
