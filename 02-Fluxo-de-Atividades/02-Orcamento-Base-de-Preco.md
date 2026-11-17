@@ -83,7 +83,7 @@ Estado em 17/11/2026: o contrato `LOG-60` (`06-Contratos/Entregues/LOG-60-Orcame
 - 🟡 Cadastro das telas em produção: a mesma migration (rotas em `auth.rotas_telas` e o menu em `auth.telas`), aplicada pelo Gustavo (❓ conferir num dump novo).
 - 🟡 Prazo de entrega em dias: está na cotação (`ofertas.route.js:123`, `prazo_entrega_dias`), mas não na OC.
 - 🟡 Valor correto da OC (`C7`) entrando no histórico de compras: a página de preço lê os pedidos de compra do Omie, incluindo as OCs do Hub; falta conferir se o valor corrigido chega igual.
-- 📝 Aviso ao vendedor quando o Orçamento responde, e ao Orçamento quando chega pedido novo: Central de Avisos do Hub, contrato `LOG-61` (`06-Contratos/Ativos/LOG-61-Central-de-Avisos`, N16-175).
+- 📝 Aviso ao vendedor quando o Orçamento responde, e ao Orçamento quando chega pedido novo: Central de Avisos do Hub, contrato `LOG-61` (`06-Contratos/Ativos/LOG-61-Central-de-Avisos`, N16-175). Código em PR (api-acos-vital #314, av-hub #308) e SQL com o Gustavo; testado no Docker (34 de 34).
 - 📝 Fora, por decisão (N16-174): e-mail de cotação aos fornecedores, nota e ranking do fornecedor (para o futuro) e item sem cadastro no Omie.
 
 ## Detalhe técnico
