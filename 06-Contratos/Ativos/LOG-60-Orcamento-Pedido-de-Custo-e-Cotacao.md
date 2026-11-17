@@ -21,8 +21,9 @@ fontes: [conversa do Nathan com o Claude de 17/11/2026, api-acos-vital PR #312 (
 # LOG-60 · Orçamento com dado real: pedido de custo, cotação, preço do produto e fornecedores
 
 > **Situação em 17/11:** 📝 proposta, com o código pronto em PR e ainda **fora da `develop`** (regra F5: nada aqui é ✅).
-> - API: [api-acos-vital #312](https://github.com/Acosvital/api-acos-vital/pull/312), branch `feat/orcamento-precos-produto` (`6e2c584`).
-> - Telas: [av-hub #306](https://github.com/Acosvital/av-hub/pull/306), branch `feat/orcamento-telas` (`4d6ca7f`).
+> - API: [api-acos-vital #312](https://github.com/Acosvital/api-acos-vital/pull/312), branch `feat/orcamento-precos-produto` (`b3b670e`).
+> - Telas: [av-hub #306](https://github.com/Acosvital/av-hub/pull/306), branch `feat/orcamento-telas` (`e9c232e`).
+> - Testes no Docker em 17/11: **95 de 95** casos de API e banco passaram, e as telas foram conferidas como admin e como vendedor (seção 13).
 > - Banco: a migration `2026-11-17_orcamento_cotacoes_pedidos_custo` está no corpo do PR #312; aplicada só no Docker de teste. Falta o Gustavo revisar e aplicar no tst e na produção.
 
 ## 1. Resumo em linguagem simples
@@ -83,6 +84,7 @@ Também ficam prontos o histórico de preço de cada produto (última compra, m�
 | Pedidos de custo | `/orcamento/painel-comprador` | KPIs: abertos, livres, comigo, o que espera há mais tempo e o tempo de resposta (mediana de 30 dias). Abas: Abertos, Comigo, Livres, Fechados e Todos. Busca. O pedido aberto mais antigo aparece primeiro. Botão "Novo pedido". `components/Orcamento/PedidosFila.tsx:37` (`export default function PedidosFila`) |
 | Pedido de custo | `/orcamento/painel-comprador/[id]` | Ações: Assumir, Devolver à fila, Sem fornecedor e Cancelar pedido. Cartões: cotações deste pedido (com "Responder com esta"), cotações já vigentes do produto, o que foi pedido e "Quanto já pagamos" (última compra e 12 meses). `components/Orcamento/PedidoPagina.tsx:46` |
 | Produtos | `/orcamento/catalogo-produtos` e `/[id]` | Lista com o último preço pago e a média de 12 meses. A página mostra as **duas fontes** (cotação vigente e última compra) nos dois primeiros números, mais média, volatilidade, compras e o gráfico mensal. Abas: Cotações, Fornecedores, Compras e Vendas. Botão "Pedir cotação" para o vendedor ou "Registrar cotação" para o orçamentista. `components/Orcamento/ProdutoPagina.tsx:54` |
+| Solicitações de custo (Vendas) | `/vendas/solicitacoes-custo` | Os pedidos de custo do vendedor: a mesma lista de Pedidos de custo, com o título de Vendas; a API devolve só os dele, e o pedido abre a mesma página (para ele, só "Cancelar pedido"). A tela já estava no menu de Vendas, mas o endereço dava 404 (`e9c232e`) |
 | Fornecedores | `/orcamento/fornecedores` e `/[id]` | Lista com última compra, pedidos e valor dos últimos 12 meses e cotações vigentes. Ficha com contato, produtos (último preço), compras e cotações. `components/Orcamento/FornecedorPagina.tsx:25` |
 
 - **Saem do Orçamento:**
@@ -184,7 +186,7 @@ Migration `2026-11-17_orcamento_cotacoes_pedidos_custo`. O texto completo está 
 | Perfil | O que faz |
 |---|---|
 | Orçamentos (orçamentista) | Tudo: fila, pedido, cotação, produtos e fornecedores (pela migration) |
-| Vendedor / Vendas | 🔴 **Falta configurar:** `catalogo-produtos` (visualizar), para ver a página do produto e pedir cotação, e `solicitacoes-custo` (criar e editar), para pedir pela proposta e cancelar os seus. Fica com o Gustavo, porque os perfis de produção são outros |
+| Vendedor / Vendas | 🔴 **Falta configurar em produção:** `catalogo-produtos` (visualizar), para ver a página do produto e pedir cotação, e `solicitacoes-custo` (criar e editar), para acompanhar e cancelar os seus. Fica com o Gustavo, porque os perfis de produção são outros. No Docker, o perfil Vendas recebeu esse acesso e foi testado: o menu mostra Orçamento › Produtos e Vendas › Solicitações de custo |
 | Compras, Gerência | Leitura, conforme os perfis (2.ª tabela da [[02-Orcamento-Base-de-Preco-Detalhe-Tecnico-2]]) |
 
 ## 11. Integrações afetadas
@@ -204,17 +206,34 @@ Migration `2026-11-17_orcamento_cotacoes_pedidos_custo`. O texto completo está 
 
 ## 13. Como testar
 
-1. **Caminho feliz** (feito em 17/11 no Docker, como `teste.admin`):
-   1. "Novo pedido" para o TBA1064012K (tubo A106 SCH40 1/2"), 120 KG: virou o PC-2026-0003.
-   2. Assumir.
-   3. Registrar a cotação da BENAFER: R$ 16,80/KG, IPI 3,25%, entrega em 7 dias, válida até 24/11 (no teste a validade ainda vinha preenchida; depois da N16-174 o campo começa vazio).
-   4. "Responder com esta": o pedido ficou respondido.
-   5. A página do produto mostra "Cotação vigente" ao lado de "Última compra".
-2. **Erro:** dois orçamentistas clicam em "Assumir" ao mesmo tempo. O segundo recebe 409 "… já foi assumido por …". 🔴 Não testado.
-3. **Limite:**
-   - Responder com uma cotação vencida ou invalidada dá 409.
-   - O vendedor sem `painel-comprador` vê só os próprios pedidos, e o de outra pessoa dá 404.
-   - 🔴 Não testado.
+**Roteiro automático:** `docker-teste/scripts/testes-orcamento.mjs` (fora dos repositórios, na pasta do ambiente de teste). Ele roda contra a API local (`localhost:3012`) e o banco do Docker, com quatro usuários: `teste.orcamentos`, `teste.vendas`, `teste.comprador` e `teste.admin`. Em 17/11: **95 de 95 passaram**.
+
+| Grupo | Casos | O que confere |
+|---|---|---|
+| Acesso | 4 | Sem token dá 401; o Comprador, sem as telas, recebe 403 na fila, na cotação e em Fornecedores |
+| Produtos | 8 | Lista, busca "tubo a106 sch40", alcance, página do produto (3 e 12 meses e tudo), 404 |
+| Fornecedores | 8 | Lista, busca por CNPJ, ordem por valor, alcance, ficha (contagem de produtos), 404 e 400 |
+| Pedido (vendedor) | 16 | Criar; sem produto, quantidade zero e sem itens dão 400; produto inexistente dá 404; `Idempotency-Key` não duplica; vê só os seus; o de outra pessoa dá 404; não assume nem cota (403); cancela o seu (motivo curto dá 400, cancelar de novo dá 409) |
+| Orçamento | 10 | Fila e resumo; aba Livres; busca pelo número; assumir; já assumido dá 409 `JA_ASSUMIDO`; devolver à fila; **dois assumindo ao mesmo tempo: um 200 e um 409** |
+| Cotação | 25 | 10 validações (validade vazia ou passada, preço, IPI, prazo, fornecedor, produto); preço com IPI (100,50 + 5% = 105,5250); unidade do produto por padrão e "outra unidade"; fornecedor sem cadastro; registrar assume o pedido; vigentes da mais barata para a mais cara; invalidar e invalidar de novo (409) |
+| Responder | 17 | Invalidada, vencida e de outro produto dão 409 com o código; o vendedor não responde (403); responder de novo, cancelar respondido e cotar em pedido fechado dão 409; "sem fornecedor"; o Orçamento cancela pedido de outra pessoa; o vendedor vê a resposta |
+| Banco | 7 | Editar, apagar ou mexer em cotação invalidada é recusado; `RESPONDIDA` sem cotação é recusado (CHECK); produto obrigatório; validade antes da cotação é recusada; a auditoria grava |
+
+**Pelas telas**, no Hub local:
+- **Admin:**
+  - Fila, pedido, produto (abas Cotações, Fornecedores, Compras e Vendas), Fornecedores e ficha, Parâmetros em Cadastros e Custo real em Comissões.
+  - Nada deu erro, e o console ficou limpo.
+- **Vendedor (`teste.vendas`):**
+  - Pediu cotação pela página do produto (PC-2026-0009) e vê só "Pedir cotação", sem "Registrar" nem "Invalidar".
+  - No pedido, só "Cancelar pedido".
+  - Em Vendas › Solicitações de custo, só os pedidos dele.
+
+**Defeitos achados nos testes e corrigidos nos PRs:**
+1. **Menu com endereço errado** (`api-acos-vital` `b3b670e`, `/permissoes_usuario/menu`).
+   - O problema: a tela permitida sem a tela-mãe subia para a raiz, e o front montava o endereço sem o pai. O "Produtos" do vendedor levava a `/catalogo-produtos` e o "Vendedores" a `/vendedores`, os dois com 404.
+   - A correção: o menu passa a trazer o ancestral que falta como grupo, sem permissão própria.
+   - O defeito já existia antes do Orçamento e vale para qualquer perfil.
+2. **`/vendas/solicitacoes-custo` sem página** (`av-hub` `e9c232e`). A tela já estava no menu de Vendas e dava 404.
 
 ## 14. Ordem de implementação e responsáveis
 
