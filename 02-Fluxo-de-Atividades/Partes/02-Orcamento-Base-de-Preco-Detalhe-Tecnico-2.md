@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4, parte]
 criado: 2026-11-05
-estado-em: 2026-11-11
+estado-em: 2026-11-17
 status: proposta
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 parte-de: "[[02-Orcamento-Base-de-Preco]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---
 
@@ -27,11 +27,14 @@ fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N
 - 🔴 (só no módulo de teste) **Ofertas do Omie:** `PEDIDO_OMIE` nasce de pedidos de compra lidos direto do Omie; no desenho do LOG-52 isso vira derivado de `pedidos_compras_itens` da pipeline (LOG-52 seção 3.4, Q1 ❓). É a fonte "OC efetivada" da base (N16-41).
 - 🔴 **Não existe:** score, ranking por categoria e volatilidade; prazo de entrega em dias; frequência de vitória; matriz de preços; página do produto sem acesso a custo; vínculo do valor correto da OC (`C7`) com o histórico; cronômetro do pedido de custo; migração para a `api-acos-vital` (BL-062).
 
-## Dados 🟡
+## Dados
 
-Tudo no `core_comercial`. O banco real já tem as ofertas (imutáveis, com histórico), as solicitações de custo, os fornecedores, os produtos e os parâmetros de custo; a migração acrescenta só o que falta: ofertas geradas das OCs, base e estatística de preço e o pedido de custo sem prazo. O schema separado `core_orcamento`, do desenho de 16 a 21/10, foi abandonado em 26/10 (o mesmo que o [[Contratos-da-v2|LOG-52]] já fazia).
+Desde 17/11/2026 (`LOG-60`, migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, aplicada pelo Gustavo):
+- `core_comercial.solicitacoes_custo`: pedido de custo com `aberta_em`, `assumida_em` e `respondida_em` (cronômetro), e produto obrigatório;
+- `core_comercial.ofertas`: cotação imutável com `prazo_entrega_dias` numérico e `valida_ate` obrigatória;
+- a última compra continua vindo de `core_vendas_faturamento.pedidos_compras_itens`, gravada pela pipeline.
 
-Campos novos pelas decisões 🟡: `oferta.prazo_entrega_dias` (número); `solicitacao_custo.aberta_em` e `respondida_em` (cronômetro); parâmetros do score (pesos, limite de volatilidade, dias de "dado recente", mínimo de pontos) em tabela de parâmetros **com vigência**, por categoria.
+O schema `core_orcamento`, do desenho de 16 a 21/10, foi abandonado em 26/10. As tabelas `core_compras.orc_*` seguem no banco sem consumidor; a aposentadoria é a fase 7 do LOG-52, com o Gustavo.
 
 ## Quem vê o quê
 
@@ -80,18 +83,22 @@ Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-ant
 
 ## O que falta desenvolver
 
+Atualizado em 17/11/2026, depois da entrega do `LOG-60`:
+
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 1 | Migrar suprimentos e custos para a `api-acos-vital` (LOG-52 fases 4 e 5) | Robert (rotas), Pablo (acompanha), Gustavo (banco) | `B1` a `B4` | 🔴 |
-| 2 | Página do produto para o vendedor, sem dar acesso ao que o Orçamento edita | Nathan, Pablo | `B2` | 🔴 |
-| 3 | Score, ranking por categoria, volatilidade e dado recente, com parâmetros e vigência | Pablo, Gustavo | `B2` | 🔴 |
-| 4 | Prazo de entrega em dias na oferta e na OC; data real de recebimento (recurso novo da pipeline) | Gustavo, Nathan | `B1`, `B2` | 🔴 ([[Estudo-Omie-API]]) |
-| 5 | Base com a fonte "OC efetivada" (última compra por item) e a atualização do orçamentista; regra do valor mais atualizado | Pablo, Gustavo | `B1` | 🔴 |
-| 6 | Matriz de preços: modelo e tela (produto × fornecedor × unidade × vigência) | Pablo, Gustavo, Nathan | `B1`, `B2` | 🔴 |
-| 7 | Cronômetro do pedido de custo no lugar do prazo | Pablo | `B3` | 🔴 |
-| 8 | Perfil "orçamentista" (setor novo) | Gustavo | — | 🔴 |
-| 9 | O valor correto da OC (`C7`) vira oferta ou linha do histórico de compras | Pablo, Gustavo | `B1` | 🟡 |
-| 10 | Cadastro das telas em produção (SQL do 16/10) | Gustavo | — | 🟡 |
+| 1 | Migrar suprimentos e custos para a `api-acos-vital` | Nathan, Gustavo | `B1` a `B4` | ✅ `LOG-60` (`src/schemas/core_comercial/index.js:54`, `comercial.use(solicitacoesCusto);`) |
+| 2 | Página do produto para o vendedor | Nathan | `B2` | ✅ `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`); ❓ o acesso do perfil de vendas em produção, com o Gustavo |
+| 3 | Score, ranking por categoria e dado recente com parâmetros | — | `B2` | Fora do escopo, para o futuro (N16-174); a volatilidade está ✅ (`src/utils/precosProduto.js:20`, `JANELA_VOLATILIDADE_DIAS = 90`) |
+| 4 | Prazo de entrega em dias na oferta e na OC; data real de recebimento | Gustavo, Nathan | `B1`, `B2` | 🟡 na oferta ✅ (`ofertas.route.js:123`, `prazo_entrega_dias`); na OC e o `dRec` 🔴 |
+| 5 | Base com as duas fontes (OC efetivada e orçamentista) | Nathan | `B1` | ✅ as duas fontes lado a lado, e o vendedor escolhe (N16-172): `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`) |
+| 6 | Matriz de preços | Nathan | `B1`, `B2` | ✅ virou a aba Cotações (N16-173): `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`) |
+| 7 | Cronômetro do pedido de custo | Nathan | `B3` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:118` (`router.get("/solicitacoes_custo"`) |
+| 8 | Perfil "orçamentista" | Gustavo | — | 🟡 aplicada no banco pelo Gustavo (migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, fora dos repositórios); ❓ conferir num dump novo; ❓ as pessoas no perfil |
+| 9 | O valor correto da OC (`C7`) no histórico de compras | Nathan, Gustavo | `B1` | 🟡 conferir |
+| 10 | Cadastro das telas em produção | Gustavo | — | 🟡 aplicada no banco pelo Gustavo (migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, fora dos repositórios); ❓ conferir num dump novo |
+| 11 | Aviso ao vendedor e ao Orçamento | Gustavo, Nathan | `B3`, `B4` | 📝 `LOG-61` (Central de Avisos, N16-175) |
+| 12 | A proposta pedindo custo no item e mostrando as duas fontes | Robert | `V0.2`, `B2` | 🔴 a API aceita `id_proposta` e `id_item_proposta`; falta a tela da proposta |
 
 ## Pendências
 

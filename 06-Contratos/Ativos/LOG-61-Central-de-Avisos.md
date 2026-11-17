@@ -21,8 +21,8 @@ fontes: [conversa do Nathan com o Claude de 17/11/2026 (o sininho do Pablo, opç
 # LOG-61 · Central de Avisos do Hub
 
 > **Situação em 17/11:** 📝 proposta. Nada na `develop`.
-> - O sino do Pablo está desligado: `av-hub` `components/Layout/AppLayout/Menu/Menu.tsx:55` (`const MOSTRAR_SINO = false;`).
-> - As rotas `/notificacoes` do BFF respondem 503: `app/api/comercial/[...rota]/route.ts:150` (`padrao: '/notificacoes'`).
+> - O sino do Pablo está desligado: `av-hub` `components/Layout/AppLayout/Menu/Menu.tsx:54` (`const MOSTRAR_SINO = false;`).
+> - As rotas `/notificacoes` do BFF respondem 503: `app/api/comercial/[...rota]/route.ts:156` (`padrao: '/notificacoes'`).
 
 ## 1. Resumo em linguagem simples
 
@@ -62,7 +62,7 @@ O aviso nasce junto com o fato, só chega para quem pode abrir o link e junta os
 |---|---|
 | Banco | 🔴 Nenhuma tabela de aviso geral. Há a caixa de Compras `core_vendas_faturamento.avisos_mes_compra` (LOG-58) e as tabelas de eventos de cada assunto |
 | API | 🔴 Sem `/notificacoes`. O router `/me` já existe (`src/schemas/auth/index.js:56`) e fica fora do mapa de telas (`src/utils/acessoConfig.js:72`, `ROTAS_SEM_PERMISSAO_DE_TELA`) |
-| BFF | 🔴 `/notificacoes` responde 503 (`route.ts:150-152`) |
+| BFF | 🔴 `/notificacoes` responde 503 (`app/api/comercial/[...rota]/route.ts:156`, `padrao: '/notificacoes'`) |
 | Tela | 🟡 O sino existe (`components/Layout/AppLayout/Menu/SinoNotificacoes.tsx`, com consulta a cada 60 s, `INTERVALO_MS = 60_000`), mas está desligado |
 
 ## 5. Regras de negócio
