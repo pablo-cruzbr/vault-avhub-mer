@@ -1,7 +1,7 @@
 ---
 tags: [inicio, status]
 criado: 2026-10-14
-estado-em: 2026-11-16
+estado-em: 2026-11-17
 status: vigente
 dono: Nathan
 develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13, conferência completa e reteste no Docker; api-acos-vital bebca52, av-hub d82d58b, omie-elt-pipeline d8fddca, em 2026-11-12, só proposta, Compras e pipeline; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
@@ -11,6 +11,9 @@ fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas 
 # Onde estamos (estado conferido na develop em 13/11/2026: conferência completa do vault e reteste no Docker)
 
 **Em uma frase:** o fluxo do pedido já funciona da liberação ao recebimento, e a OP, o lote do fabricado e o custo por item já estão na `develop` do MES; o que falta é, sobretudo, o pedido da proposta no Omie, a API e o banco do Orçamento, a comissão nova e o documento de retirada. Publicar o MES na `main` (BL-035) é informação de publicação, não critério de pronto.
+
+> [!info] Produção, release e equipe do Comercial, 17/11/2026
+> O Gustavo aplicou no banco de produção do Hub as 20 migrations de 05 a 16/11 e os 3 extras (SQL-021, conta "01 - Boleto/Pix/TED" e pg_cron do `fn_propostas_expirar`), e a `develop` de todos os sistemas foi para a `main` (`api-acos-vital` #311, `api-pcp` #82, `app-pcp` #67, `av-hub` #305, `omie-elt-pipeline` #9); as 17 migrations do MES entram no banco de produção do MES quando o container subir (N16-171; ❓ deploy não conferido). O Pablo passou a analista: o Comercial é desenvolvido só pelo Nathan e pelo Robert, o Nathan é dono do Orçamento e das telas da comissão, e o prazo é 01/12/2026, em que só cabe a proposta virando pedido no Omie (N16-168 a N16-170; [[Capacidade-do-Robert]]). Na `develop`, a exclusão de proposta (LOG-59, parcial) e a revenda completa no compositor.
 
 > [!info] Retestes R5 e R6 pela API e o banco de teste de 16/11, 16/11/2026 (tarde)
 > O Docker local foi igualado ao esqueleto do banco de teste de 16/11 ([[Dump-AvHub-Teste-2026-11-16]]) e conferido objeto a objeto. Com isso, "Da proposta à comissão" passou a estar no tst e foi testado: a simulação v1 nasce rascunho e só vai a enviada com o pedido faturado; "Desvios" e "Pintura" gravam (BL-097 era só do Docker). A recompra cancelada devolve o aviso ao Compras (LOG-58b). No MES, uma fabricação passou de ponta a ponta pela API (28887/1), e o `REABRIR` do PCP, o split, o retrabalho e o devolver destinação funcionam. Os defeitos viraram BL-101 a BL-107 ([[Backlog-Reteste-R5-R6-2026-11-16]]): o 🔴 que sobra é a recompra de item de pedido pela doca que não libera a quarentena (BL-102, Robert); a lista de propostas sem a migration do nº do Omie (BL-101) foi resolvida no tst no mesmo dia. Pelo status do Gustavo de 16/11, a parte de banco e API dos LOG-56, LOG-57 e LOG-58 está no tst, e a produção espera a MEGA com 20 migrations, que o Nathan decide quando vai ([[Banco-AvHub]]).
