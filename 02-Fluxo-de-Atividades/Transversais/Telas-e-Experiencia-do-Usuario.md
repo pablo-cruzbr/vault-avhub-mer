@@ -166,6 +166,7 @@ flowchart LR
 | **Calendário** (N16-104) | Cadastros | Marketing | datas |
 | **Histórico de datas do pedido** (N16-104) | Meus Pedidos e Carteira do PCP | Vendedor, PCP | datas |
 | **Pedido do Omie na tela do pedido** (N16-106) | Meus Pedidos | Vendedor | `V1`, `K1` |
+| **Central de Avisos** (sino no topo e página `/avisos`, N16-175, `LOG-61`) | Topo do layout, para todos | Todos | transversal (estreia em `B3` e `B4`) |
 
 ## 5. A página de proposta
 

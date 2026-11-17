@@ -72,6 +72,7 @@ Quem desenvolve: o Orçamento é do Pablo, com o Robert (N16-117, N16-119).
 - ✅ Telas no `av-hub` (`develop`, menu enxuto de 27/10, N16-107 e N16-108): Pedidos de custo (Painel do Comprador e Pedido de cotação, em abas), Produtos (Catálogo, Pesquisa de materiais e Ofertas, em abas), Fornecedores, Parâmetros (custo e Telha, em abas) e Custo por item.
 - 🔴 Sem API e sem banco: oferta imutável com histórico, média por período e pedido de custo existiam só no `api-comercial` de teste, removido do av-hub em 06/11/2026 (PR #261, `dd9d729`); falta portar para a `api-acos-vital`. No banco de teste de 04/11/2026 as tabelas `core_comercial.ofertas` e `solicitacoes_custo` também saíram ([[Dump-AvHub-Teste-2026-11-04]]). Na API do Hub já há a leitura de fornecedores, vínculos, categorias e cotações (✅ `api-acos-vital` `orcamento.route.js:140-312`).
 - 📝 As regras acima estão decididas.
+- 📝 Aviso ao vendedor quando o Orçamento responde, e ao Orçamento quando chega pedido novo: Central de Avisos do Hub, contrato `LOG-61` (`06-Contratos/Ativos/LOG-61-Central-de-Avisos`, N16-175).
 - 🟡 Valor correto da OC (`C7`) entrando no histórico de compras.
 - 🟡 Cadastro das telas em produção.
 - 🔴 Página do produto para o vendedor.
