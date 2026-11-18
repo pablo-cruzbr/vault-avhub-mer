@@ -24,7 +24,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 
 | Prefixo | O que é | Onde nasce (a linha "dona") | Quantos hoje | Próximo livre |
 |---|---|---|---|---|
-| `N16-nn` | Decisão do Nathan desde 16/10/2026 (proposta, pedido, custo real, comissão e o que veio depois) | [[Registro-de-Decisoes]], nas notas `Registro-N16-...` | 177 (`N16-01` a `N16-177`) | `N16-178` |
+| `N16-nn` | Decisão do Nathan desde 16/10/2026 (proposta, pedido, custo real, comissão e o que veio depois) | [[Registro-de-Decisoes]], nas notas `Registro-N16-...` | 178 (`N16-01` a `N16-178`) | `N16-179` |
 | `N14-nn` | Decisão do Nathan de 14 e 15/10/2026 | [[Registro-N14-01-a-N14-33]] | 33 | série fechada |
 | `DEC-n` | Decisão com prazo de 21 e 22/09/2026 | [[Registro-DEC-EN-EC-e-1-a-38]] | 12 | série fechada |
 | `EN-nn`, `EC-nn` | Encaixe do Estoque e da Revenda no PCP (EN) e do circuito de compra (EC) | [[Registro-DEC-EN-EC-e-1-a-38]] | 7 e 8 | séries fechadas |
@@ -35,7 +35,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 | `RS-nn` | Risco | [[Riscos]] | 24 (até `RS-024`) | `RS-025` |
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |
 | `INT-nn` | Troca de dados entre o av-hub e o MES | [[Integracao-AvHub-MES]] | 9 (até `INT-09`) | `INT-10` |
-| `LOG-nn` | Contrato de lógica (regra de negócio, fluxo) | [[Contratos-da-v2]] (v2) e `06-Contratos/` (v3) | 55 na v2 e 6 na v3 (`LOG-56` a `LOG-61`) | `LOG-62` |
+| `LOG-nn` | Contrato de lógica (regra de negócio, fluxo) | [[Contratos-da-v2]] (v2) e `06-Contratos/` (v3) | 55 na v2 e 7 na v3 (`LOG-56` a `LOG-62`) | `LOG-63` |
 | `SQL-nnn` | Contrato de banco (tabela, migration, view) | idem | 17 na v2; `SQL-022` e `SQL-023` na v3 | `SQL-024` |
 | `API-nnn` | Contrato de rota de API | idem | 17 na v2; `API-019` na v3 | `API-020` |
 | `CON-nn` | Consulta: pergunta formal a alguém, com resposta registrada | idem; modelo em [[Modelo-de-Consulta]] | 3 na v2 | `CON-04` |
