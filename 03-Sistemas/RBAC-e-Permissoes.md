@@ -178,6 +178,8 @@ As 21 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`,
 
 ### 3. Lacunas e decisões abertas
 
+> **Telas de Acessos (18/11/2026, N16-178):** Perfis e Pessoas no lugar de Perfis, Permissões, Usuários × Perfis e Usuários; cada tela mostra só as ações que as rotas dela usam; o alcance de vendedores do perfil passa a ser editável. Contrato `LOG-62` (`06-Contratos/Ativos/LOG-62-Telas-de-Acessos`), 📝 para implementar.
+
 > **Limpeza das telas antigas (18/11/2026, N16-177):** 12 telas sem uso saem com as permissões e as rotas, e 8 rotas passam a exigir as telas que as usam de verdade. Contrato `SQL-023` (`06-Contratos/Ativos/SQL-023-Limpeza-das-Telas-Antigas`), 📝 para implementar. Também mostra, conferido em produção em 18/11, que o Hub ignora a permissão de tela desativada e a API não, e que a tela `custo-item` só existe em produção, só com o Admin (Dev).
 
 | Item | Estado |
