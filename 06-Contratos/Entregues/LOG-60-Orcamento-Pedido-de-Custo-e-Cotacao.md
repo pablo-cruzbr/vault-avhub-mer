@@ -13,7 +13,7 @@ decisoes: [N16-07, N16-41, N16-52, N16-54, N16-55, N16-58, N16-59, N16-72, N16-1
 develop-conferida: [api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17, entrega (também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital 96e83de, av-hub 4cce84b, em 2026-11-17]
 tags: [contrato, orcamento, pedido-de-custo, cotacao, oferta, fornecedores, pagina-do-produto]
 criado: 2026-11-17
-estado-em: 2026-11-17
+estado-em: 2026-11-18
 dono: Nathan
 fontes: [conversa do Nathan com o Claude de 17/11/2026, api-acos-vital PR #312 (branch feat/orcamento-precos-produto, 6e2c584), av-hub PR #306 (branch feat/orcamento-telas, 4d6ca7f), migration 2026-11-17_orcamento_cotacoes_pedidos_custo (SQL no PR #312), banco do Docker de teste (cópia do tst de 16/11)]
 ---
@@ -23,7 +23,7 @@ fontes: [conversa do Nathan com o Claude de 17/11/2026, api-acos-vital PR #312 (
 > **Situação em 17/11 (tarde):** ✅ implementado na `develop` e levado à `main`.
 > - API: `api-acos-vital` #312 (`0e9f93e`) e release #313. Rotas: `src/schemas/core_comercial/index.js:54` (`comercial.use(solicitacoesCusto);`), `src/schemas/core_comercial/aggregates/ofertas/ofertas.route.js:141` (`router.post("/ofertas"`), `src/schemas/core_comercial/aggregates/fornecedores/fornecedores.route.js:48` (`router.get("/fornecedores"`) e `src/schemas/core/tables/produtos/produtos.route.js:282` (`router.get("/:id/precos"`). Correção do menu: `src/schemas/auth/views/vw_permissoes_usuario/vw_permissoes_usuario.route.js:82` (`telaMap.set(t.id, {`).
 > - Telas: `av-hub` #306 (`a92272a`) e release #307 (`f5b614a`): `components/Orcamento/PedidosFila.tsx:38` (`export default function PedidosFila`), `components/Orcamento/ProdutoPagina.tsx:54` (`export default function ProdutoPagina`) e `app/(protected)/vendas/solicitacoes-custo/page.tsx:9` (`<PedidosFila deVendas />`).
-> - Banco: a migration `2026-11-17_orcamento_cotacoes_pedidos_custo` foi aplicada pelo Gustavo (Nathan, 17/11).
+> - Banco: a migration `2026-11-17_orcamento_cotacoes_pedidos_custo` foi aplicada pelo Gustavo e está no dump de produção de 18/11 ([[Dump-AvHub-Producao-2026-11-18]]): `04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:19819` (`CREATE TABLE core_comercial.solicitacoes_custo`) e `:19065` (`CREATE TABLE core_comercial.ofertas`).
 > - ❓ Em produção, não conferido: o deploy, o acesso do perfil de vendas (`catalogo-produtos`, `solicitacoes-custo`) e as pessoas no perfil "Orçamentos".
 
 ## 1. Resumo em linguagem simples

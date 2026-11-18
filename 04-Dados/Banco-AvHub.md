@@ -1,7 +1,7 @@
 ---
 tags: [dados, banco, av-hub, postgres]
 criado: 2026-10-14
-estado-em: 2026-11-16
+estado-em: 2026-11-18
 status: vigente
 dono: Gustavo (DBA)
 develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
@@ -10,7 +10,9 @@ fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/
 
 # Banco do av-hub
 
-> [!info] Dump mais novo: banco de teste, 13/11/2026
+> [!info] Dump mais novo: banco de produção, 18/11/2026
+> O primeiro esqueleto do banco de **produção**, de 18/11/2026 07:22 ([[Dump-AvHub-Producao-2026-11-18]]), tem **156 tabelas, 55 views, 301 funções e 214 triggers**. Ele tem tudo o que o teste de 16/11 tinha, mais o Orçamento (`LOG-60`), a Central de Avisos (`LOG-61`) e a exclusão de proposta com o pedido excluído no Omie (`LOG-59`). O último do **teste** continua sendo o de 16/11, abaixo.
+>
 > O esqueleto do banco de **teste** de 16/11/2026 13:58 ([[Dump-AvHub-Teste-2026-11-16]]) é o mais novo: tem **151 tabelas, 55 views, 291 funções e 209 triggers**. Desde 13/11 entraram o "Da proposta à comissão" (simulação v1 que nasce rascunho e só vai a enviada com o pedido faturado, liberação automática do pedido da proposta, item do Omie ligado ao item da proposta, evento do PDF) e os campos "Desvios" e "Pintura/acabamento" do item da proposta. A versão das 13:58 já traz `numero_pedido_omie` na `vw_propostas_lista` (BL-101 resolvido).
 >
 > **Produção (17/11/2026, N16-171):** o Gustavo aplicou a MEGA: as **20 migrations** de 05/11 a 16/11 (18 de 05/11 a 13/11, de `condicoes_pagamento_encargos` a `comercial_proposta_pedido_comissao`, e 2 de 16/11, `comercial_proposta_item_desvios_pintura` e `comercial_proposta_lista_pedido_omie`) e os **3 extras** que ele tinha sugerido: a SQL-021 (`produto_vendas.codigo_item_integracao`), o INSERT da conta "01 - Boleto/Pix/TED" nas três unidades e o agendamento do `fn_propostas_expirar` no pg_cron. A `api-acos-vital` foi para a `main` no mesmo dia (PR #311). Fonte: o Nathan, 17/11; ❓ a produção ainda não foi lida por dump. O anterior, de 13/11, é o [[Dump-AvHub-Teste-2026-11-13]].

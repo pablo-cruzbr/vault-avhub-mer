@@ -27,6 +27,7 @@ fontes: [conversa do Nathan com o Claude de 17/11/2026 (o sininho do Pablo, opç
 > - Diferenças do desenho da seção 6:
 >   - o sino ficou no menu lateral, onde o sino antigo já ficava, e não no topo da tela;
 >   - o BFF é uma rota só, `app/api/avisos/[[...rota]]`, para a regra de permissão do `npm run check` ter uma exceção e não sete.
+> - Banco em produção, conferido no dump de 18/11 ([[Dump-AvHub-Producao-2026-11-18]]): `04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:17988` (`CREATE TABLE core.notificacoes`) e `:1625` (`CREATE FUNCTION core.fn_notificar`).
 > - ❓ Não conferido em produção: o deploy e o primeiro aviso de verdade.
 
 ## 1. Resumo em linguagem simples

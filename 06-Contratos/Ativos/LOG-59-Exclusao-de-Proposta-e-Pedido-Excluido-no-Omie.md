@@ -13,7 +13,7 @@ decisoes: [N16-167, N16-03, N16-84, N16-02]
 develop-conferida: [api-acos-vital 96e83de, av-hub 4cce84b, omie-elt-pipeline 28efc5a, em 2026-11-17]
 tags: [contrato, proposta, exclusao, omie, pipeline]
 criado: 2026-11-16
-estado-em: 2026-11-17
+estado-em: 2026-11-18
 dono: Nathan
 fontes: [PDF de Robert de 16/11/2026 ("Exclusão de proposta e pedido excluído no Omie"), resposta do Nathan de 16/11/2026 (Documentos-para-o-Nathan/2026-11-16_Resposta_Nathan_exclusao-de-proposta.pdf, fora do vault), Dump-AvHub-Teste-2026-11-16, api-acos-vital develop 2e333e3, av-hub develop 25e0a34, omie-elt-pipeline develop 3aaea0e]
 ---
@@ -23,7 +23,7 @@ fontes: [PDF de Robert de 16/11/2026 ("Exclusão de proposta e pedido excluído 
 > **Situação em 17/11:** 🟡 parcial.
 > - ✅ **API (Parte A):** a exclusão lógica está na `develop`: `api-acos-vital` `96e83de` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:759` (`router.delete("/propostas/:id"`). A API também lê o pedido excluído no Omie (`src/schemas/core_comercial/pedidoOmie.js:91`, `excluido_omie_em`).
 > - ✅ **Tela:** excluir pela lista e pelo andamento, e o "Excluído no Omie" na linha do tempo: `av-hub` `e073fe0` `components/Propostas/PropostasLista.tsx:284` (`await excluirProposta(p.id, p.versao)`) e `lib/domain/andamento-proposta.ts:166` (`Excluído no Omie em`).
-> - ❓ **Banco:** a API cita a migration `2026-11-16_comercial_proposta_exclusao_pedido_excluido_omie` (`src/utils/erroHttp.js:143`, `fn_proposta_excluir`). Ela não estava na lista das 20 da MEGA aplicada em produção em 17/11 (N16-171) e não foi conferida em dump.
+> - ✅ **Banco em produção:** a migration `2026-11-16_comercial_proposta_exclusao_pedido_excluido_omie` está no dump de produção de 18/11 ([[Dump-AvHub-Producao-2026-11-18]]): `04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:4725` (`CREATE FUNCTION core_comercial.fn_proposta_excluir`), `:3742` (`fn_pedido_venda_excluido_omie`) e o trigger `:36880` (`trg_pedidos_vendas_pedido_omie_saida`). ❓ No tst não foi conferida: o último dump do teste é de 16/11.
 > - 🔴 **Pipeline:** a trava do `exclusionSync` para resposta vazia do Omie não está na `develop` da `omie-elt-pipeline` (`28efc5a`).
 
 ## 1. Resumo em linguagem simples
