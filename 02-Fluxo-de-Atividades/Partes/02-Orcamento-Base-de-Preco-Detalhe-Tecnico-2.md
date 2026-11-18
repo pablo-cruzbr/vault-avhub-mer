@@ -90,7 +90,7 @@ Atualizado em 17/11/2026, depois da entrega do `LOG-60`:
 | 1 | Migrar suprimentos e custos para a `api-acos-vital` | Nathan, Gustavo | `B1` a `B4` | ✅ `LOG-60` (`src/schemas/core_comercial/index.js:54`, `comercial.use(solicitacoesCusto);`) |
 | 2 | Página do produto para o vendedor | Nathan | `B2` | ✅ `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`); ❓ o acesso do perfil de vendas em produção, com o Gustavo |
 | 3 | Score, ranking por categoria e dado recente com parâmetros | — | `B2` | Fora do escopo, para o futuro (N16-174); a volatilidade está ✅ (`src/utils/precosProduto.js:20`, `JANELA_VOLATILIDADE_DIAS = 90`) |
-| 4 | Prazo de entrega em dias na oferta e na OC; data real de recebimento | Gustavo, Nathan | `B1`, `B2` | 🟡 na oferta ✅ (`ofertas.route.js:123`, `prazo_entrega_dias`); na OC e o `dRec` 🔴 |
+| 4 | Prazo de entrega em dias na oferta e na OC; data real de recebimento | — | `B1`, `B2` | Na oferta ✅ (`ofertas.route.js:123`, `prazo_entrega_dias`); na OC e o `dRec` ficam para o futuro com a nota do fornecedor (N16-176) |
 | 5 | Base com as duas fontes (OC efetivada e orçamentista) | Nathan | `B1` | ✅ as duas fontes lado a lado, e o vendedor escolhe (N16-172): `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`) |
 | 6 | Matriz de preços | Nathan | `B1`, `B2` | ✅ virou a aba Cotações (N16-173): `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`) |
 | 7 | Cronômetro do pedido de custo | Nathan | `B3` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:124` (`router.get("/solicitacoes_custo"`) |
