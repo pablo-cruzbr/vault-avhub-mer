@@ -56,7 +56,7 @@ Estas seções ficam em notas à parte, para cada arquivo ficar abaixo de 25 KB 
 
 ## Contratos novos (v3)
 
-A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`, `CON-04`, `LOG-62`, `SQL-023`.
+A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`, `CON-04`, `LOG-62`, `SQL-024`.
 
 | ID | Título | Status | Autor | Data |
 |---|---|---|---|---|
@@ -68,5 +68,6 @@ A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`
 | [[LOG-60-Orcamento-Pedido-de-Custo-e-Cotacao\|LOG-60]] | Orçamento com dado real: pedido de custo, cotação de fornecedor, preço do produto e fornecedores (`B1` a `B4`) | `implementado-na-develop` | Nathan | 2026-11-17 |
 | [[LOG-61-Central-de-Avisos\|LOG-61]] | Central de Avisos do Hub: uma caixa de avisos por pessoa, para todos os módulos (estreia no Orçamento, `B3` e `B4`) | `implementado-na-develop` | Nathan | 2026-11-17 |
 | [[SQL-022-Aviso-da-Recompra-na-Referencia-da-OC\|SQL-022]] | A referência da OC para o MES diz de qual aviso do MES a OC é a recompra (saldo futuro, BL-050) | `implementado-na-develop` | Nathan | 2026-11-13 |
+| [[SQL-023-Limpeza-das-Telas-Antigas\|SQL-023]] | Limpeza das telas antigas do Hub: 12 telas, as rotas e as permissões sem uso; saem as páginas Pedidos de Venda, Notas Fiscais de Saída e Orçamento por PDF | `para-implementar` | Nathan | 2026-11-18 |
 
 O modelo de consulta está em [[Modelo-de-Consulta]].
