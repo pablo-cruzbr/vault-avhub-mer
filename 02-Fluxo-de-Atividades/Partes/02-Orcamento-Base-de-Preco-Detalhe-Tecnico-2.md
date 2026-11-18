@@ -1,7 +1,7 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4, parte]
 criado: 2026-11-05
-estado-em: 2026-11-17
+estado-em: 2026-11-18
 status: proposta
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 parte-de: "[[02-Orcamento-Base-de-Preco]]"
@@ -94,9 +94,9 @@ Atualizado em 17/11/2026, depois da entrega do `LOG-60`:
 | 5 | Base com as duas fontes (OC efetivada e orçamentista) | Nathan | `B1` | ✅ as duas fontes lado a lado, e o vendedor escolhe (N16-172): `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`) |
 | 6 | Matriz de preços | Nathan | `B1`, `B2` | ✅ virou a aba Cotações (N16-173): `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`) |
 | 7 | Cronômetro do pedido de custo | Nathan | `B3` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:124` (`router.get("/solicitacoes_custo"`) |
-| 8 | Perfil "orçamentista" | Gustavo | — | 🟡 aplicada no banco pelo Gustavo (migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, fora dos repositórios); ❓ conferir num dump novo; ❓ as pessoas no perfil |
+| 8 | Perfil "orçamentista" | Gustavo | — | ✅ migration em produção (`04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:19819`, `CREATE TABLE core_comercial.solicitacoes_custo`); ❓ as pessoas no perfil |
 | 9 | O valor correto da OC (`C7`) no histórico de compras | Nathan, Gustavo | `B1` | 🟡 conferir |
-| 10 | Cadastro das telas em produção | Gustavo | — | 🟡 aplicada no banco pelo Gustavo (migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, fora dos repositórios); ❓ conferir num dump novo |
+| 10 | Cadastro das telas em produção | Gustavo | — | ✅ migration em produção (`04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:19065`, `CREATE TABLE core_comercial.ofertas`) |
 | 11 | Aviso ao vendedor e ao Orçamento | Gustavo, Nathan | `B3`, `B4` | ✅ `LOG-61` (Central de Avisos, N16-175): `src/utils/avisos.js:52` (`export async function notificar`) |
 | 12 | A proposta pedindo custo no item e mostrando as duas fontes | Robert | `V0.2`, `B2` | 🔴 a API aceita `id_proposta` e `id_item_proposta`; falta a tela da proposta |
 
