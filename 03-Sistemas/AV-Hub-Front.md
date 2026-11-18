@@ -1,10 +1,10 @@
 ---
 tags: [sistemas, av-hub, hub, nextjs, frontend, bff]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-18
 status: vigente
 dono: Nathan
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [av-hub 857d90e (versão do Next), em 2026-11-18; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [av-hub 758d5f0 (develop, 29/10; repositório `av-hub`, antes `00 - HUB`), api-acos-vital 0384e89, v1 AV-Hub-Arquitetura-BFF, AV-Hub-Modulos, AV-Hub-RBAC]
 ---
 
@@ -52,7 +52,7 @@ fontes: [av-hub 758d5f0 (develop, 29/10; repositório `av-hub`, antes `00 - HUB`
 
 ## Detalhe técnico
 
-Front do av-hub: Portal do Vendedor, Portal do Gerente, Compras, Comercial & Suprimentos, PCP (portal de leitura), Comissões, RH. Dono: Nathan. Next.js 16 (App Router), React, MUI 9, NextAuth 4, `@react-pdf/renderer`, S3 ✅ `av-hub/package.json`. Repositório: `av-hub` (develop, 758d5f0). A pasta `api-comercial/` ficou nele como legado só de leitura (28/10, `a90d306`) e foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>` ([[API-Comercial]]). Esta nota cobre o que o fluxo de Atividades usa; o resto vai em [[Comissoes]], [[Dashboards]] e afins (anexo fora do fluxo).
+Front do av-hub: Portal do Vendedor, Portal do Gerente, Compras, Comercial & Suprimentos, PCP (portal de leitura), Comissões, RH. Dono: Nathan. Next.js 16 (App Router), React, MUI 9, NextAuth 4, `@react-pdf/renderer`, S3 ✅ `av-hub/package.json`. O Next está na **16.4.6** desde 18/11/2026: `av-hub` `package.json:33` (`"next": "^16.4.6"`), PR #325 e release #326. A 16.4.3 tinha duas falhas de cache com `'use cache'` (GHSA-mfr8-8qww-v76h e GHSA-vc7v-qv4w-wrv8, que o Hub não usa) e fazia o `next build` parar com `SecurityFatalError`. Repositório: `av-hub` (develop, 758d5f0). A pasta `api-comercial/` ficou nele como legado só de leitura (28/10, `a90d306`) e foi removida do av-hub em 06/11/2026 (PR #261, `dd9d729`); o código fica legível em `git show f7d8d7f:api-comercial/<arquivo>` ([[API-Comercial]]). Esta nota cobre o que o fluxo de Atividades usa; o resto vai em [[Comissoes]], [[Dashboards]] e afins (anexo fora do fluxo).
 
 ### Como funciona
 
