@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4]
 criado: 2026-10-16
-estado-em: 2026-11-17
+estado-em: 2026-11-18
 status: proposta
 ordem: 2
 nos: [B1, B2, B3, B4]
 anterior: "[[01-Proposta-de-Venda]]"
 proxima: "[[03-Pedido-de-Venda-e-Liberacao]]"
-develop-conferida: [api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18 (LOG-61); api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan (dono da raia desde 17/11, N16-168) · Gustavo (banco e API) · Pablo (analista)
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---
@@ -77,13 +77,13 @@ Estado em 17/11/2026: o contrato `LOG-60` (`06-Contratos/Entregues/LOG-60-Orcame
 - ✅ As regras decididas estão implementadas: as duas fontes, com o vendedor escolhendo (N16-172, `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`)), e a validade definida por quem registra, só para produto do catálogo (N16-174, `src/schemas/core_comercial/aggregates/ofertas/ofertas.route.js:141`, `router.post("/ofertas"`).
 - ✅ Página do produto para o vendedor, com as duas fontes lado a lado: `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`), sobre `src/schemas/core/tables/produtos/produtos.route.js:282` (`router.get("/:id/precos"`). ❓ Em produção, depende do acesso do perfil de vendas (`catalogo-produtos`, `solicitacoes-custo`), com o Gustavo.
 - ✅ Volatilidade e média do histórico de compras: `src/utils/precosProduto.js:20` (`JANELA_VOLATILIDADE_DIAS = 90`).
-- ✅ Cronômetro do pedido de custo no lugar do prazo (N16-58): `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:118` (`router.get("/solicitacoes_custo"`).
+- ✅ Cronômetro do pedido de custo no lugar do prazo (N16-58): `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:124` (`router.get("/solicitacoes_custo"`).
 - ✅ Matriz de preços: virou a aba Cotações da página do produto (fornecedor × unidade × validade, N16-173), sem tela própria: `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`).
 - 🟡 Perfil "orçamentista": o perfil "Orçamentos" recebe as 3 telas pela migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, aplicada pelo Gustavo e fora dos repositórios (❓ conferir num dump novo). As pessoas do setor no perfil ficam com o Gustavo.
 - 🟡 Cadastro das telas em produção: a mesma migration (rotas em `auth.rotas_telas` e o menu em `auth.telas`), aplicada pelo Gustavo (❓ conferir num dump novo).
 - 🟡 Prazo de entrega em dias: está na cotação (`ofertas.route.js:123`, `prazo_entrega_dias`), mas não na OC.
 - 🟡 Valor correto da OC (`C7`) entrando no histórico de compras: a página de preço lê os pedidos de compra do Omie, incluindo as OCs do Hub; falta conferir se o valor corrigido chega igual.
-- 📝 Aviso ao vendedor quando o Orçamento responde, e ao Orçamento quando chega pedido novo: Central de Avisos do Hub, contrato `LOG-61` (`06-Contratos/Ativos/LOG-61-Central-de-Avisos`, N16-175). Código em PR (api-acos-vital #314, av-hub #308) e SQL com o Gustavo; testado no Docker (34 de 34).
+- ✅ Aviso ao vendedor quando o Orçamento responde, e ao Orçamento quando chega pedido novo: Central de Avisos do Hub (`LOG-61`, `06-Contratos/Entregues/LOG-61-Central-de-Avisos`, N16-175), na `develop` e na `main` desde 18/11: `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:263` (`tipo: "orcamento.pedido_novo"`) e o sino em `components/Layout/AppLayout/Menu/SinoAvisos.tsx:26` (`export default function SinoAvisos`).
 - 📝 Fora, por decisão (N16-174): e-mail de cotação aos fornecedores, nota e ranking do fornecedor (para o futuro) e item sem cadastro no Omie.
 
 ## Detalhe técnico

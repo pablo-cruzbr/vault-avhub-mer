@@ -1,7 +1,7 @@
 ---
 id: LOG-61
 titulo: Central de Avisos do Hub — uma caixa de avisos por pessoa, para todos os módulos
-status: parcial
+status: implementado-na-develop
 autor: Nathan
 data: 2026-11-17
 camadas: [frontend, backend, api, sql]
@@ -10,25 +10,24 @@ nos_0b: [B3, B4]
 notas_afetadas: [02-Orcamento-Base-de-Preco, Telas-e-Experiencia-do-Usuario, Registro-N16-167-em-diante]
 depende_de: [LOG-60]
 decisoes: [N16-175, N16-58, N16-172]
-develop-conferida: [api-acos-vital 96e83de, av-hub 4cce84b, em 2026-11-17]
+develop-conferida: [api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18, entrega (também na main: api-acos-vital #315 e9d717b, av-hub #309 e6df9b8); api-acos-vital 96e83de, av-hub 4cce84b, em 2026-11-17]
 tags: [contrato, avisos, notificacoes, sino, transversal, orcamento]
 criado: 2026-11-17
-estado-em: 2026-11-17
+estado-em: 2026-11-18
 dono: Nathan
 fontes: [conversa do Nathan com o Claude de 17/11/2026 (o sininho do Pablo, opções de entrega), av-hub develop 4cce84b, api-acos-vital develop 96e83de, módulo de teste do Pablo (f7d8d7f:api-comercial/prisma/models/infra.prisma, model Notificacao; api-comercial/src/modules/notificacoes/notificacoes.routes.ts)]
 ---
 
 # LOG-61 · Central de Avisos do Hub
 
-> **Situação em 17/11 (noite):** 🟡 código pronto em PR, fora da `develop` (regra F5: nada aqui é ✅).
-> - API: [api-acos-vital #314](https://github.com/Acosvital/api-acos-vital/pull/314), branch `feat/central-de-avisos` (`a328b78`).
-> - Telas: [av-hub #308](https://github.com/Acosvital/av-hub/pull/308), branch `feat/central-de-avisos` (`62a7867`).
-> - Banco: a migration `2026-11-18_central_de_avisos` (SQL no corpo do PR #314) foi testada no Docker; o Gustavo aplica.
-> - Ordem de deploy: a API sobe antes do SQL sem quebrar nada. Sem as funções no banco, `notificar()` não faz nada e `/me/avisos` responde 503; o sino fica escondido.
+> **Situação em 18/11:** ✅ implementado na `develop` e levado à `main`; o Gustavo aplicou a migration `2026-11-18_central_de_avisos`.
+> - API: `api-acos-vital` #314 (`3f762d2`) e release #315. Rotas: `src/schemas/core/index.js:104` (`path: "/me/avisos"`), `src/schemas/core/aggregates/avisos/avisos.route.js:65` (`router.get("/resumo"`). O aviso nasce na transação: `src/utils/avisos.js:52` (`export async function notificar`), chamado em `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:263` (`tipo: "orcamento.pedido_novo"`). Limpeza diária: `src/utils/avisos.js:81` (`export function iniciarLimpezaAvisos`).
+> - Telas: `av-hub` #308 (`4b5c023`) e release #309. O sino: `components/Layout/AppLayout/Menu/SinoAvisos.tsx:26` (`export default function SinoAvisos`), no menu em `components/Layout/AppLayout/Menu/Menu.tsx:648` (`<SinoAvisos compacto`). A página: `components/Avisos/AvisosPagina.tsx:31` (`export default function AvisosPagina`). O BFF: `app/api/avisos/[[...rota]]/route.ts:25` (`async function levarParaApi`).
 > - Testes no Docker: `docker-teste/scripts/testes-avisos.mjs`, **34 de 34**; o roteiro do Orçamento continua 95 de 95.
 > - Diferenças do desenho da seção 6:
->   - o sino ficou **no menu lateral**, onde o sino antigo já ficava, e não no topo da tela;
->   - o BFF é **uma rota só**, `app/api/avisos/[[...rota]]`, para a regra de permissão do `npm run check` ter uma exceção e não sete.
+>   - o sino ficou no menu lateral, onde o sino antigo já ficava, e não no topo da tela;
+>   - o BFF é uma rota só, `app/api/avisos/[[...rota]]`, para a regra de permissão do `npm run check` ter uma exceção e não sete.
+> - ❓ Não conferido em produção: o deploy e o primeiro aviso de verdade.
 
 ## 1. Resumo em linguagem simples
 

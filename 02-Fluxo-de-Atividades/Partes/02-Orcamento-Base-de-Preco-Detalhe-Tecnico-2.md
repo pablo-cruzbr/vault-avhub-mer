@@ -5,7 +5,7 @@ estado-em: 2026-11-17
 status: proposta
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 parte-de: "[[02-Orcamento-Base-de-Preco]]"
-develop-conferida: [api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18 (LOG-61); api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---
 
@@ -93,11 +93,11 @@ Atualizado em 17/11/2026, depois da entrega do `LOG-60`:
 | 4 | Prazo de entrega em dias na oferta e na OC; data real de recebimento | Gustavo, Nathan | `B1`, `B2` | 🟡 na oferta ✅ (`ofertas.route.js:123`, `prazo_entrega_dias`); na OC e o `dRec` 🔴 |
 | 5 | Base com as duas fontes (OC efetivada e orçamentista) | Nathan | `B1` | ✅ as duas fontes lado a lado, e o vendedor escolhe (N16-172): `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`) |
 | 6 | Matriz de preços | Nathan | `B1`, `B2` | ✅ virou a aba Cotações (N16-173): `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`) |
-| 7 | Cronômetro do pedido de custo | Nathan | `B3` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:118` (`router.get("/solicitacoes_custo"`) |
+| 7 | Cronômetro do pedido de custo | Nathan | `B3` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:124` (`router.get("/solicitacoes_custo"`) |
 | 8 | Perfil "orçamentista" | Gustavo | — | 🟡 aplicada no banco pelo Gustavo (migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, fora dos repositórios); ❓ conferir num dump novo; ❓ as pessoas no perfil |
 | 9 | O valor correto da OC (`C7`) no histórico de compras | Nathan, Gustavo | `B1` | 🟡 conferir |
 | 10 | Cadastro das telas em produção | Gustavo | — | 🟡 aplicada no banco pelo Gustavo (migration `2026-11-17_orcamento_cotacoes_pedidos_custo`, fora dos repositórios); ❓ conferir num dump novo |
-| 11 | Aviso ao vendedor e ao Orçamento | Gustavo, Nathan | `B3`, `B4` | 📝 `LOG-61` (Central de Avisos, N16-175) |
+| 11 | Aviso ao vendedor e ao Orçamento | Gustavo, Nathan | `B3`, `B4` | ✅ `LOG-61` (Central de Avisos, N16-175): `src/utils/avisos.js:52` (`export async function notificar`) |
 | 12 | A proposta pedindo custo no item e mostrando as duas fontes | Robert | `V0.2`, `B2` | 🔴 a API aceita `id_proposta` e `id_item_proposta`; falta a tela da proposta |
 
 ## Pendências
