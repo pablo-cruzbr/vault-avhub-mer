@@ -111,7 +111,7 @@ Todos estão na `api-acos-vital` `0e9f93e` (contrato `LOG-60`), com o token do u
 | Método e rota | Uso | Nó | Código |
 |---|---|---|---|
 | `GET /produtos/precos`, `GET /produtos/:id/precos?meses=` | Lista com o último preço; página de preço (média, mínimo, máximo, volatilidade, série, fornecedores, compras) | `B1`, `B2` | ✅ `src/schemas/core/tables/produtos/produtos.route.js:281` (`router.get("/precos"`) e `:282` (`router.get("/:id/precos"`) |
-| `GET`, `POST /comercial/solicitacoes_custo`; `POST …/:id/assumir`, `liberar`, `responder`, `cancelar` | Pedido de custo | `B3`, `B4` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:225` (`router.post("/solicitacoes_custo"`) e `:313` (`router.post("/solicitacoes_custo/:id/responder"`) |
+| `GET`, `POST /comercial/solicitacoes_custo`; `POST …/:id/assumir`, `liberar`, `responder`, `cancelar` | Pedido de custo | `B3`, `B4` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:231` (`router.post("/solicitacoes_custo"`) e `:313` (`router.post("/solicitacoes_custo/:id/responder"`) |
 | `GET`, `POST /comercial/ofertas`; `POST /comercial/ofertas/:id/invalidar` | Cotação de fornecedor (imutável) | `B1`, `B4` | ✅ `src/schemas/core_comercial/aggregates/ofertas/ofertas.route.js:93` (`router.get("/ofertas"`) |
 | `GET /comercial/fornecedores`, `/comercial/fornecedores/:id` | Lista e ficha do fornecedor | `B1` | ✅ `src/schemas/core_comercial/aggregates/fornecedores/fornecedores.route.js:48` (`router.get("/fornecedores"`) |
 | `POST /custos/sugerir` | Sugestão de custo na proposta | `B2` | 🔴 sem API (o BFF responde 503); a proposta deve passar a mostrar as duas fontes (N16-172), com o Robert |
