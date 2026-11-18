@@ -30,9 +30,12 @@ A tela de permissões mostra telas que não existem mais, como Categorias, Vínc
   - ao dar ao orçamentista as telas do Orçamento, a tela de permissões mostra 7 telas, mas só 3 existem (N16-173);
   - o mesmo acontece em Vendas, em Suprimentos e em Experimental.
 - **Por que elas aparecem:** as telas antigas estão **desativadas** (`auth.telas.ativo = false`), mas não foram apagadas. A tela de permissões lista todas as linhas, inclusive as desativadas.
-- **O risco por trás da confusão:**
-  - a autorização da API (`auth.fn_autorizar`) não olha o `ativo` da tela;
-  - uma tela desativada continua **dando acesso** às rotas mapeadas para ela (por exemplo, `POST`, `PUT` e `DELETE` em `/categorias`) a quem tiver a permissão ligada.
+- **O risco por trás da confusão: o Hub e a API tratam a tela desativada de jeitos diferentes.**
+  - O Hub **ignora** a permissão de tela desativada: `auth.fn_me_permissoes`, lida pelo `requirePermission` do BFF, só junta telas com `t.ativo`.
+    - Por isso, em produção, as rotas do BFF das páginas Pedidos de Venda e Notas Fiscais de Saída já respondem "Acesso negado" a todos.
+    - Também ficam sem funcionar, sem ninguém perceber, a busca no topo dos dashboards e a busca de nota do Bloqueio de Comissões.
+  - A API **conta** a permissão de tela desativada: `auth.fn_autorizar` não olha o `ativo`.
+    - Uma tela desativada continua dando acesso às rotas mapeadas para ela a quem tiver a permissão ligada. Por exemplo: `POST`, `PUT` e `DELETE` em `/categorias`, e `GET /familias_produtos`.
 - **Quem sofre:** quem cadastra acesso (o Nathan e o Gustavo), e cada perfil que carrega permissões sem efeito.
 - **De onde vem:** pedido do Nathan de 18/11/2026, "fazer uma limpa, tirar tudo que não era para ter" (N16-177). Depois dele vem o redesenho das telas de Acessos, em contrato próprio.
 - **Se não for feito:**
@@ -59,6 +62,23 @@ A tela de permissões mostra telas que não existem mais, como Categorias, Vínc
 | `notas-fiscais-saida` | Vendas | não | 6 | 2 | sim, antiga |
 | `simulador-comissao` | Experimental | sim | 1 | 1 | não |
 | `orcamento-pdf` | Experimental | sim | 4 | 0 | sim (`experimental/orcamento-pdf`) |
+
+**Produção** (lida em 18/11/2026 pelo av-hub `main` `e6df9b8` ligado à API de produção, só leitura):
+- São 105 telas e 241 permissões. As 4 telas conferidas uma a uma estão desativadas:
+  - `pedidos-de-venda` e `notas-fiscais-saida`: perfis Vendas e Admin (Dev), com todas as ações;
+  - `historico-produtos` e `categorias`: perfis Orçamentos e Admin (Dev), com todas as ações.
+- Com o perfil Admin (Dev):
+  - a página Vendas › Pedidos de Venda abre vazia;
+  - `GET /api/pedidos-venda` e `GET /api/notas-fiscais-saida` respondem **403** "Acesso negado";
+  - `GET /api/familias` responde 200, porque o Admin tem `historico-produtos`.
+- Quem usaria as buscas que dependem dessas rotas:
+  - a lupa dos dashboards: Tvs, Gerência Geral e Diretoria e Admin (Dev), que têm `dash-vendas` e `dash-faturamento`;
+  - o Bloqueio de Comissões: Comissões - Admin e Admin (Dev). Nenhum desses dois perfis chega às notas hoje.
+- Produção tem 8 telas que o tst não tem, todas do módulo do Pablo e só com o Admin (Dev):
+  - `tabela-telha`, `pesquisa-materiais`, `ofertas-fornecedor`, `pedido-cotacao` e `custo-item` (em Orçamento);
+  - `historico-compras` (em Compras);
+  - `relatorio-cotacoes` e `clientes` (em Vendas).
+  - Ficam para uma segunda rodada (P3).
 
 **Ficam, por decisão (N16-177):**
 - `blog`, `organograma-clientes` e `organograma-debug-fatias`: **outro sistema usa**, mesmo sem página no Hub;
@@ -276,6 +296,8 @@ Nenhum perfil perde acesso a uma tela que existe. Quem tinha só as telas que sa
 
 ## 13. Como testar
 
+Em produção, só leitura (18/11/2026): os dados da seção 4. Nada foi gravado.
+
 Feito no Docker em 18/11/2026, com os dados do tst:
 - **Teste desfeito (`ROLLBACK`):** de 97 para 85 telas, de 613 para 592 linhas no mapa e de 223 para 206 permissões. As 6 telas que ficam continuaram lá.
 - **Aplicado de verdade:** um usuário do perfil "Orçamentos" teve o resultado da autorização (`auth.fn_autorizar`) abaixo:
@@ -297,7 +319,11 @@ Feito no Docker em 18/11/2026, com os dados do tst:
   - uma integração fora do Hub chamar, com token de usuário, uma rota que fica sem tela (R5);
   - a conferência de uso cobre as chaves de serviço, mas não as chamadas com token.
 - **Rollback:** pela `auth.auditoria` (seção 9).
-- **P1. A tela `custo-item` não existe.** A API decide quem vê o custo pela tela `custo-item` (`api-acos-vital` `src/schemas/core_comercial/capacidades.js:62` (`ve_custo: pode("custo-item"`)), e essa tela não existe no tst. A cadastrada é `custo-itens`, de Comissões. O vault já trata as duas como diferentes ([[RBAC-e-Permissoes]]). Então hoje ninguém tem `ve_custo` pela tela. Cria-se a tela oculta `custo-item`, ou a API passa a usar `custo-itens`? Não entra neste SQL.
+- **P1. Quem vê o custo (`custo-item`).** A API decide quem vê o custo pela tela `custo-item`: `api-acos-vital` `src/schemas/core_comercial/capacidades.js:62` (`ve_custo: pode("custo-item"`).
+  - No tst essa tela não existe.
+  - Em produção ela existe, em Orçamento, mas só o Admin (Dev) tem acesso. Então nenhum perfil de negócio tem `ve_custo`.
+  - Falta decidir quem recebe o acesso. Não entra neste SQL.
+- **P3. Segunda rodada.** As 8 telas do módulo do Pablo que só existem em produção (seção 4) ficam para depois, conferidas uma a uma.
 - **P2.** A tabela `orcamento_pdf.relatorio` está vazia em produção? Se estiver, o schema é apagado.
 
 ## 16. Impacto no vault quando for entregue
