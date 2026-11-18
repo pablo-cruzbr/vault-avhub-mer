@@ -70,7 +70,7 @@ Selos: ✅ existe e foi lido · 🔴 não existe · 🟡 proposta · ❓ não co
 | Fornecedores, lista e ficha | Perfil de compras e ofertas | Orçamento | ✅ Mantém |
 | Catálogo de produtos, lista e ficha | Produtos, preços, média de 90 dias | Orçamento | ✅ Vira a **página do produto** (`B2`) |
 | Pesquisa de materiais | Menor custo e fornecedor vencedor | Orçamento | ✅ Mantém; **repete** parte do catálogo (seção 3) |
-| Parâmetros de custo | ICMS, validade, janela do histórico | Orçamento | ✅ Mantém |
+| Parâmetros de custo | ICMS, validade, janela do histórico | Orçamento | **Saiu** (N16-179, 18/11): os valores ficam no banco e mudam por SQL (`SQL-024`) |
 | Tabela da telha | Custo por classe e espessura | Orçamento | ✅ Mantém |
 | Custo por item (`custo-itens`) | Itens, lotes e custo médio do pedido | Orçamento | ✅ Vira "Custo real do pedido"; o aviso de exemplo sai com dado real |
 | Simulador de Orçamento | Custo, preço e margem sem pedido; **não grava** | Vendedor | ✅ Existe; **repete** a análise da proposta (seção 3) |
