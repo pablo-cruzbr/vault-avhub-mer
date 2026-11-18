@@ -66,7 +66,7 @@ A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`
 | [[LOG-58-Avisos-do-MES-ao-Compras\|LOG-58]] | O MES avisa o Compras no av-hub da recompra por RNC e da reabertura do recebimento | `parcial` | Nathan | 2026-11-12 |
 | [[LOG-59-Exclusao-de-Proposta-e-Pedido-Excluido-no-Omie\|LOG-59]] | Excluir proposta pelo Hub e tratar o pedido excluído direto no Omie | `parcial` | Robert e Nathan | 2026-11-16 |
 | [[LOG-60-Orcamento-Pedido-de-Custo-e-Cotacao\|LOG-60]] | Orçamento com dado real: pedido de custo, cotação de fornecedor, preço do produto e fornecedores (`B1` a `B4`) | `implementado-na-develop` | Nathan | 2026-11-17 |
-| [[LOG-61-Central-de-Avisos\|LOG-61]] | Central de Avisos do Hub: uma caixa de avisos por pessoa, para todos os módulos (estreia no Orçamento, `B3` e `B4`) | `proposta` | Nathan | 2026-11-17 |
+| [[LOG-61-Central-de-Avisos\|LOG-61]] | Central de Avisos do Hub: uma caixa de avisos por pessoa, para todos os módulos (estreia no Orçamento, `B3` e `B4`) | `parcial` | Nathan | 2026-11-17 |
 | [[SQL-022-Aviso-da-Recompra-na-Referencia-da-OC\|SQL-022]] | A referência da OC para o MES diz de qual aviso do MES a OC é a recompra (saldo futuro, BL-050) | `implementado-na-develop` | Nathan | 2026-11-13 |
 
 O modelo de consulta está em [[Modelo-de-Consulta]].

@@ -1,7 +1,7 @@
 ---
 id: LOG-61
 titulo: Central de Avisos do Hub — uma caixa de avisos por pessoa, para todos os módulos
-status: proposta
+status: parcial
 autor: Nathan
 data: 2026-11-17
 camadas: [frontend, backend, api, sql]
@@ -20,9 +20,15 @@ fontes: [conversa do Nathan com o Claude de 17/11/2026 (o sininho do Pablo, opç
 
 # LOG-61 · Central de Avisos do Hub
 
-> **Situação em 17/11:** 📝 proposta. Nada na `develop`.
-> - O sino do Pablo está desligado: `av-hub` `components/Layout/AppLayout/Menu/Menu.tsx:54` (`const MOSTRAR_SINO = false;`).
-> - As rotas `/notificacoes` do BFF respondem 503: `app/api/comercial/[...rota]/route.ts:156` (`padrao: '/notificacoes'`).
+> **Situação em 17/11 (noite):** 🟡 código pronto em PR, fora da `develop` (regra F5: nada aqui é ✅).
+> - API: [api-acos-vital #314](https://github.com/Acosvital/api-acos-vital/pull/314), branch `feat/central-de-avisos` (`a328b78`).
+> - Telas: [av-hub #308](https://github.com/Acosvital/av-hub/pull/308), branch `feat/central-de-avisos` (`62a7867`).
+> - Banco: a migration `2026-11-18_central_de_avisos` (SQL no corpo do PR #314) foi testada no Docker; o Gustavo aplica.
+> - Ordem de deploy: a API sobe antes do SQL sem quebrar nada. Sem as funções no banco, `notificar()` não faz nada e `/me/avisos` responde 503; o sino fica escondido.
+> - Testes no Docker: `docker-teste/scripts/testes-avisos.mjs`, **34 de 34**; o roteiro do Orçamento continua 95 de 95.
+> - Diferenças do desenho da seção 6:
+>   - o sino ficou **no menu lateral**, onde o sino antigo já ficava, e não no topo da tela;
+>   - o BFF é **uma rota só**, `app/api/avisos/[[...rota]]`, para a regra de permissão do `npm run check` ter uma exceção e não sete.
 
 ## 1. Resumo em linguagem simples
 
