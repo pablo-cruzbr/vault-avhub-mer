@@ -5,7 +5,7 @@ estado-em: 2026-11-18
 status: proposta
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 parte-de: "[[02-Orcamento-Base-de-Preco]]"
-develop-conferida: [api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18 (LOG-61); api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [omie-elt-pipeline 28efc5a, em 2026-11-18 (C7); api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18 (LOG-61); api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---
 
@@ -95,7 +95,7 @@ Atualizado em 17/11/2026, depois da entrega do `LOG-60`:
 | 6 | Matriz de preços | Nathan | `B1`, `B2` | ✅ virou a aba Cotações (N16-173): `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`) |
 | 7 | Cronômetro do pedido de custo | Nathan | `B3` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:124` (`router.get("/solicitacoes_custo"`) |
 | 8 | Perfil "orçamentista" | Gustavo | — | ✅ migration em produção (`04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:19819`, `CREATE TABLE core_comercial.solicitacoes_custo`); ❓ as pessoas no perfil |
-| 9 | O valor correto da OC (`C7`) no histórico de compras | Nathan, Gustavo | `B1` | 🟡 conferir |
+| 9 | O valor correto da OC (`C7`) no histórico de compras | Nathan, Gustavo | `B1` | ✅ conferido pelo código em 18/11, `omie-elt-pipeline` `src/omie/resources/pedidosCompras.ts:179` (`valor_unitario: unitario,`) (preço antes do desconto) |
 | 10 | Cadastro das telas em produção | Gustavo | — | ✅ migration em produção (`04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:19065`, `CREATE TABLE core_comercial.ofertas`) |
 | 11 | Aviso ao vendedor e ao Orçamento | Gustavo, Nathan | `B3`, `B4` | ✅ `LOG-61` (Central de Avisos, N16-175): `src/utils/avisos.js:52` (`export async function notificar`) |
 | 12 | A proposta pedindo custo no item e mostrando as duas fontes | Robert | `V0.2`, `B2` | 🔴 a API aceita `id_proposta` e `id_item_proposta`; falta a tela da proposta |
@@ -127,7 +127,7 @@ flowchart TD
     B2 -.->|"só leitura"| V02
     B4 -->|"custo na proposta"| V03
     OC -->|"alimenta a base"| B1
-    C7 -.->|"valor da OC entra no histórico 🟡"| B1
+    C7 -->|"valor da OC entra no histórico ✅"| B1
 ```
 
 ## O que foi do antigo anexo `Orcamento.md`
