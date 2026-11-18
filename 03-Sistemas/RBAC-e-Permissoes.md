@@ -178,6 +178,8 @@ As 21 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`,
 
 ### 3. Lacunas e decisões abertas
 
+> **Limpeza das telas antigas (18/11/2026, N16-177):** 12 telas sem uso saem com as permissões e as rotas, e 8 rotas passam a exigir as telas que as usam de verdade. Contrato `SQL-023` (`06-Contratos/Ativos/SQL-023-Limpeza-das-Telas-Antigas`), 📝 para implementar. Também aponta que a tela oculta `custo-item` não existe no tst, então ninguém tem `ve_custo` pela tela.
+
 | Item | Estado |
 |---|---|
 | Aprovação da OC (N14-21, 14/10): acima de R$ 30 mil, Gerente de Compras; até R$ 30 mil, compradores livres; sem Diretoria | ✅ Uma permissão (`compras.pode_aprovar`); até o limite o banco aprova sozinho e acima dele só a Gerência decide ([[AV-Hub-API]]). Não há segunda alçada nem papel Diretoria. 🟡 A regra endurece depois da conversa com Compras. A Gerência de Compras ainda não tem usuários vinculados (tarefa cadastral, Nathan e Gustavo) |
