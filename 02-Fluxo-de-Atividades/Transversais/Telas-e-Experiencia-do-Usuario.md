@@ -91,7 +91,7 @@ Selos: ✅ existe e foi lido · 🔴 não existe · 🟡 proposta · ❓ não co
 | Follow-up (CCP) | Acompanha as OCs aprovadas | CCP (PCP) | ✅ Mantém. 📝 **CCP é parte do PCP** (N14-24) |
 | Pedido Omie (detalhe) | Pedido feito direto no Omie, só leitura | Comprador | ✅ Mantém |
 | Histórico de compras | Compras por conta, período, produto | Comprador | **Saiu** (N16-108): a tela Ordens de compra mostra o histórico, com filtro por produto |
-| Compradores | Liga comprador do Omie ao funcionário | Administrador | ✅ Mantém (Cadastros/Acessos) |
+| Compradores | Liga comprador do Omie ao funcionário | Administrador | ✅ Mantém; no menu, foi para Cadastros › Vínculos com Vendedores, Auxiliares e Diligenciadores (`LOG-62`, 18/11; a URL continua em Acessos). Cadastros › Acessos ficou com Perfis, Pessoas e Telas |
 
 ### 1.4 Painéis que a proposta deve respeitar
 
