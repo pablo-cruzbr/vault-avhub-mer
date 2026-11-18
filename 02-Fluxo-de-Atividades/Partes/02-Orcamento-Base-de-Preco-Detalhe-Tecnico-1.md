@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4, parte]
 criado: 2026-11-05
-estado-em: 2026-11-17
+estado-em: 2026-11-18
 status: proposta
 dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
 parte-de: "[[02-Orcamento-Base-de-Preco]]"
-develop-conferida: [api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [omie-elt-pipeline 28efc5a, em 2026-11-18 (C7); api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
 ---
 
@@ -59,7 +59,7 @@ Os nós (numeração 🟡: o desenho do Nathan fixou só o intervalo `B1` a `B4`
 | 5 | O vendedor tem a **página do produto** (histórico, top fornecedores e score, últimos preços, flutuação, volatilidade, média). É só consulta | 📝 N16-07, N16-52 |
 | 6 | **O vendedor não é o dono do dado de custo**: preenche com o que conseguiu; sem o dado, pede cotação ou vê o histórico das OC. Ele decide o valor e a responsabilidade é dele | 📝 N16-06, N16-54 |
 | 7 | O pedido de custo **não tem prazo fixo**; o tempo é cronometrado; o vendedor nunca fica bloqueado | 📝 N16-58, N16-06 |
-| 8 | O valor correto que Compras usa na OC (`C7`) entra no histórico de compras; a proposta não muda | 📝 N16-08 🟡 (liga ao histórico) |
+| 8 | O valor correto que Compras usa na OC (`C7`) entra no histórico de compras; a proposta não muda | 📝 N16-08 ✅ (liga ao histórico, conferido pelo código em 18/11: `omie-elt-pipeline` `src/omie/resources/pedidosCompras.ts:179` (`valor_unitario: unitario,`)) |
 | 9 | O Orçamento volta ao escopo (a decisão "só pro futuro" foi revista) | 📝 N16-16 |
 
 ### Regras da página do produto (N16-55, N16-56, N16-72)
