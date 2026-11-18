@@ -1,7 +1,7 @@
 ---
 id: LOG-62
 titulo: Redesenho das telas de Acessos (Perfis, Pessoas e Telas)
-status: para-implementar
+status: implementado-na-develop
 autor: Nathan
 data: 2026-11-18
 camadas: [frontend, backend, api, sql]
@@ -10,15 +10,26 @@ nos_0b: []
 notas_afetadas: [RBAC-e-Permissoes, Banco-AvHub, Telas-e-Experiencia-do-Usuario]
 depende_de: [SQL-023]
 decisoes: [N16-178, N16-177]
-develop-conferida: [api-acos-vital 68bbe9c, av-hub 718b41b, em 2026-11-18]
+develop-conferida: [api-acos-vital a6eee9d, av-hub 22ccece, em 2026-11-18, entrega (também na main: api-acos-vital #318 d282db3, av-hub #315 9f8f10a); api-acos-vital 68bbe9c, av-hub 718b41b, em 2026-11-18]
 tags: [contrato, rbac, permissoes, telas, acessos, perfis, usuarios]
 criado: 2026-11-18
 estado-em: 2026-11-18
 dono: Nathan
-fontes: [conversa do Nathan com o Claude de 18/11/2026 (redesenho das telas de Acessos e o protótipo no artifact "Acessos do Hub (redesenho)"), mapa das 9 telas de Cadastros › Acessos lido na develop do av-hub 718b41b e da api-acos-vital 68bbe9c, banco do Docker local com os dados do tst (docker-teste, fora do vault), SQL-023-Limpeza-das-Telas-Antigas, RBAC-e-Permissoes]
+fontes: [conversa do Nathan com o Claude de 18/11/2026 (redesenho das telas de Acessos e o protótipo no artifact "Acessos do Hub (redesenho)"), mapa das 9 telas de Cadastros › Acessos lido na develop do av-hub 718b41b e da api-acos-vital 68bbe9c, banco do Docker local com os dados do tst (docker-teste, fora do vault), SQL-023-Limpeza-das-Telas-Antigas, RBAC-e-Permissoes, conversa do Nathan com o Claude de 18/11/2026 à tarde (P1 e P2, testes no tst), av-hub PR #314 e releases #315 e api-acos-vital #318]
 ---
 
 # LOG-62 · Redesenho das telas de Acessos
+
+> **Situação em 18/11:** ✅ implementado na `develop` e levado à `main`; o Gustavo aplicou o SQL no tst e em produção.
+> - API (Gustavo, `a6eee9d`, release #318): o módulo é montado com token obrigatório em `api-acos-vital` `src/schemas/auth/index.js:60` (`path: "/acessos"`). Troca do conjunto inteiro: `src/schemas/auth/aggregates/acessos/acessos.perfis.route.js:207` (`router.put("/perfis/:id/permissoes"`). Ação que a tela não usa: `src/schemas/auth/aggregates/acessos/acessos.regras.js:119` (`codigo: "ACAO_NAO_USADA"`). Slug em uso: `src/schemas/auth/aggregates/acessos/acessos.telas.route.js:136` (`"SLUG_EM_USO"`). O que a pessoa acessa: `src/schemas/auth/aggregates/acessos/acessos.pessoas.route.js:92` (`router.get("/pessoas/:id"`). Último acesso no login: `src/schemas/auth/aggregates/autenticacao/autenticacao.route.js:53` (`async function registrarAcesso`).
+> - Telas (Nathan, av-hub #314 `22ccece`, release #315): o BFF em `av-hub` `app/api/acessos/[...rota]/route.ts:9` (`const ROTAS: RotaComercial`). Perfis: `components/Acessos/PerfisLista.tsx:29` (`export default function PerfisLista`) e `components/Acessos/PerfilPagina.tsx:26` (`export default function PerfilPagina`), com a aba `components/Acessos/AbaTelasAcoes.tsx:23` (`export default function AbaTelasAcoes`) e o resumo antes de salvar em `components/Acessos/ConfirmarMudancasDialog.tsx:11` (`export default function ConfirmarMudancasDialog`). Pessoas: `components/Acessos/PessoasLista.tsx:36` (`export default function PessoasLista`) e `components/Acessos/PessoaPagina.tsx:19` (`export default function PessoaPagina`). Telas: `components/Acessos/TelasDoMenu.tsx:22` (`export default function TelasDoMenu`). Permissões redireciona: `app/(protected)/cadastros/acessos/permissoes/page.tsx:5` (`redirect('/cadastros/acessos/perfis')`).
+> - Testado no tst em 18/11, com perfil, pessoa e telas criados só para o teste e apagados no fim: copiar perfil, ligar ações e salvar, dados do perfil, pôr e tirar pessoa, unidade, desativar e reativar, ordem, nome e slug com confirmação; e os erros `ACAO_NAO_USADA`, `TELA_INICIAL_FORA_DO_PERFIL`, `ESCOPO_INVALIDO` e `PERFIL_JA_EXISTE`.
+> - Diferenças do desenho:
+>   - sem "Redefinir senha": a API só troca a própria senha (BL-109);
+>   - criar pessoa, desativar, unidades, funcionário e "Nova tela" usam as rotas antigas (`/usuarios`, `/telas`), porque `/acessos/*` não tem essas escritas;
+>   - "o que acessa" esconde os grupos do menu no Hub, `lib/domain/acessos-pessoas.ts:115` (`export function semGrupos`), com `GAMBIARRA(vault LOG-62)`, até a API marcar os grupos (BL-108);
+>   - a tela fora do menu só aparece no perfil que já a tem; "Fica em" só grava com o botão Mover.
+> - 🔴 A P2 não entrou no SQL do tst: `custo-item` ainda é tela comum (BL-110).
 
 ## 1. Resumo em linguagem simples
 
@@ -30,9 +41,9 @@ O protótipo clicável está no artifact "Acessos do Hub (redesenho)", do Nathan
 
 - **O problema:** o mapa das 9 telas de Cadastros › Acessos (18/11/2026) achou:
   - quatro telas para dar acesso a uma pessoa, sem link entre elas;
-  - os mesmos interruptores (Visualizar, Criar, Editar e Deletar) em toda tela, mesmo onde a tela só tem rota de leitura. O "Aprovar" aparece só em duas telas, fixas no código: `av-hub` `app/(protected)/cadastros/acessos/permissoes/BulkPermissaoModal.tsx:65` (`const TELAS_COM_APROVACAO = new Set(['compras', 'solicitacoes-de-vagas']);`). O "Exportar" não aparece em lugar nenhum, e o BFF descarta o campo: `app/api/permissoes/bulk/route.ts:6` (`const CAMPOS_ACAO = ['pode_visualizar', 'pode_criar', 'pode_editar', 'pode_deletar'] as const;`);
+  - os mesmos interruptores (Visualizar, Criar, Editar e Deletar) em toda tela, mesmo onde a tela só tem rota de leitura. O "Aprovar" aparece só em duas telas, fixas no código: o `BulkPermissaoModal.tsx` da tela Permissões tinha `const TELAS_COM_APROVACAO = new Set(['compras', 'solicitacoes-de-vagas']);` (av-hub `718b41b`; o arquivo saiu no #314). O "Exportar" não aparece em lugar nenhum, e o BFF descarta o campo: `app/api/permissoes/bulk/route.ts:6` (`const CAMPOS_ACAO = ['pode_visualizar', 'pode_criar', 'pode_editar', 'pode_deletar'] as const;`);
   - o alcance de vendedores do perfil (`auth.perfis.escopo_vendedores`: todos, vinculados ou só os próprios), que decide o que o vendedor vê, não aparece nem se edita;
-  - números errados acima de 200 linhas: as telas pedem `limit: 1000`, e a API corta em 200. Por exemplo, `av-hub` `app/(protected)/cadastros/acessos/permissoes/page.tsx:65` (`const res = await getPermissoes({ limit: 1000 });`) contra `api-acos-vital` `src/utils/pagination.js:6` (`maxLimit = 200`);
+  - números errados acima de 200 linhas: as telas pedem `limit: 1000`, e a API corta em 200. Por exemplo, a página Permissões pedia `getPermissoes({ limit: 1000 })` (av-hub `718b41b`; a página virou um redirect no #314) contra `api-acos-vital` `src/utils/pagination.js:6` (`maxLimit = 200`);
   - Usuários × Perfis mostra códigos, porque a API devolve só os IDs: `src/schemas/auth/tables/usuarios_perfis/usuarios_perfis.route.js:26` (`router.get("/", async (req, res) => {`);
   - campos que ficam vazios sem aviso quando quem cadastra não tem a tela de Funcionários, Unidades ou Vendedores.
 - **Quem sofre:** quem cadastra acesso (o Nathan e o Gustavo) e quem recebe acesso errado ou a mais.
@@ -163,10 +174,10 @@ O protótipo clicável está no artifact "Acessos do Hub (redesenho)", do Nathan
 
 ## 12. Critérios de aceite
 
-- [ ] **Banco:** as colunas `auth.telas.acao_de` e `rotulo_acao` existem e estão preenchidas nas 4 telas; existem `auth.usuarios.ultimo_acesso_em` e `auth.vw_telas_acoes_usadas`; o grupo Vínculos existe com as 4 telas dentro.
-- [ ] **API:** as rotas da seção 8 estão na `develop`; `GET /acessos/perfis/:id` devolve `acoes_usadas`; o PUT de permissões recusa ação não usada; as listas paginam na API.
-- [ ] **Frontend:** as telas Perfis, Pessoas, Telas e as páginas de perfil e pessoa estão na `develop`; Permissões e Usuários × Perfis saíram do menu e redirecionam; nenhuma tela de Acessos pede `limit: 1000`; o `npm run check` passa.
-- [ ] **Uso:** dar a um vendedor novo o perfil Vendedor, com uma unidade, leva uma página só.
+- [x] **Banco:** as colunas `auth.telas.acao_de` e `rotulo_acao` existem e estão preenchidas nas 4 telas; existem `auth.usuarios.ultimo_acesso_em` e `auth.vw_telas_acoes_usadas`; o grupo Vínculos existe com as 4 telas dentro.
+- [x] **API:** as rotas da seção 8 estão na `develop`; `GET /acessos/perfis/:id` devolve `acoes_usadas`; o PUT de permissões recusa ação não usada; as listas paginam na API.
+- [x] **Frontend:** as telas Perfis, Pessoas, Telas e as páginas de perfil e pessoa estão na `develop`; Permissões e Usuários × Perfis saíram do menu e redirecionam; nenhuma tela de Acessos pede `limit: 1000`; o `npm run check` passa.
+- [x] **Uso:** dar a um vendedor novo o perfil Vendedor, com uma unidade, leva uma página só.
 
 ## 13. Como testar
 
@@ -186,8 +197,8 @@ O protótipo clicável está no artifact "Acessos do Hub (redesenho)", do Nathan
 
 - **Risco:** ao trocar o conjunto inteiro de permissões de um perfil, uma tela some sem querer. Por isso a tela mostra o que muda antes de salvar, e a auditoria guarda o antes.
 - **Rollback:** o Hub volta para as telas antigas (as rotas antigas da API continuam), e o SQL tem volta (seção 9).
-- **P1.** De qual tela a "Conta corrente" (`pedidos-venda-financeiro`) é ação: Pedidos da Equipe, Meus Pedidos ou outra?
-- **P2.** Quem recebe a tela `custo-item` (quem vê o custo), que em produção só o Admin (Dev) tem (P1 do `SQL-023`). Pode virar ação de uma tela do Orçamento pela R4.
+- **P1.** De qual tela a "Conta corrente" (`pedidos-venda-financeiro`) é ação: Pedidos da Equipe, Meus Pedidos ou outra? **Respondida pelo Nathan em 18/11:** de Pedidos da Equipe (`pedidos-equipe`). Está assim no tst; a tela continua desativada até o Hub ter onde trocar a conta.
+- **P2.** Quem recebe a tela `custo-item` (quem vê o custo), que em produção só o Admin (Dev) tem (P1 do `SQL-023`). Pode virar ação de uma tela do Orçamento pela R4. **Respondida pelo Nathan em 18/11:** vira a ação "Ver custo" de Propostas (`acao_de` = `propostas`), criada pelo SQL onde não existir (no tst não existia); cada perfil decide se liga. Falta no SQL (BL-110).
 
 ## 16. Impacto no vault quando for entregue
 

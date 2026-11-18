@@ -57,6 +57,8 @@ Contagem por `CREATE TABLE`/`CREATE VIEW` do dump de 29/10 ✅, reconferida no d
 
 Convenções ✅: chave `uuid` com `DEFAULT uuidv7()`; colunas de auditoria (`created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) com `trg_*_updated_at` (`public.set_updated_at`); quantidades de requisição e OC em `numeric(15,4)`; dinheiro `numeric(15,2)`; empresa por `codigo_empresa uuid` (= `core.unidades.id`).
 
+> **Acessos (`LOG-62`, 18/11/2026):** `auth.telas` ganhou `acao_de` e `rotulo_acao` (a tela que é uma ação de outra), `auth.usuarios` ganhou `ultimo_acesso_em`, há a view `auth.vw_telas_acoes_usadas` e o grupo de menu `vinculos`. SQL do Gustavo, aplicado no tst e em produção; conferido pelo Hub contra a API do tst em 18/11 (o arquivo do SQL ainda não está no vault).
+
 ## Tabelas do fluxo de Atividades (`core_vendas_faturamento`)
 
 ### Liberação do pedido (V1 a V3, P1, P2)

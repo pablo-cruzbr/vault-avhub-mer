@@ -43,6 +43,7 @@ A lista completa desta nota fica em 4 notas à parte, uma por frente, para cada 
 - [[Backlog-Reteste-por-Cliques-2026-11-13]]: itens BL-089 a BL-096, defeitos de tela do reteste por cliques de 13/11/2026 (frentes Robert, Gustavo e Nathan, indicadas em cada linha)
 - [[Backlog-Reteste-R4-2026-11-16]]: itens BL-097 a BL-100, o que o reteste R4 (o fluxo de 0 a 100% pelas telas, 16/11/2026) achou
 - [[Backlog-Reteste-R5-R6-2026-11-16]]: itens BL-101 a BL-107, o que os retestes R5 e R6 pela API (16/11/2026, banco igual ao tst de 16/11) acharam
+- [[Backlog-Teste-Acessos-2026-11-18]]: itens BL-108 a BL-110, o que o teste das telas de Acessos (`LOG-62`) contra a API do tst achou (18/11/2026, frente Gustavo)
 - [[Backlog-Frente-Comercial-e-Suprimentos]]: Frente Comercial & Suprimentos (Robert conduz; Pablo acompanha)
 
 ## Fechados em 14/10/2026
