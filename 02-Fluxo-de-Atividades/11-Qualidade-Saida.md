@@ -27,7 +27,7 @@ Recebe a parcial concluída pela produção ([[10-Producao-e-Roteiro]]). A inspe
 1. A produção conclui a parcial e ela cai na fila da Qualidade. `Q7`
 2. O inspetor recebe a parcial e inicia a inspeção. `Q7`
 3. Ele decide com um clique e um motivo. Não há laudo nem checklist (N16-129). `Q8`
-4. Aprovado: o item volta ao Estoque e vira lote quando o almoxarife informa a localização (na `develop`; na `main` do MES ainda segue à Expedição). `Q8`
+4. Aprovado: o item volta ao Estoque e vira lote quando o almoxarife informa a localização (na `develop`, e na `main` do MES desde 17/11). `Q8`
 5. Reprovado: o sistema abre uma divergência com o motivo. `Q8`
 6. A parcial reprovada tem duas saídas na fila: falso alarme ou retrabalho. Na tela, o falso alarme aparece como "Aprovar": ele não aprova, só desfaz a reprovação e devolve o item à inspeção, sem confirmação nem motivo. Não confundir com "Aprovar na inspeção de saída", que é o "sim" do passo 4. Decisões maiores, como ajustar o roteiro ou reabrir a compra, são o novo norte do PCP (`P6`), que ainda não tem tela. `P6`
 
@@ -35,7 +35,7 @@ Recebe a parcial concluída pela produção ([[10-Producao-e-Roteiro]]). A inspe
 
 As 100 flanges chegam à inspeção de saída. O inspetor as confere.
 
-- Estando boas, ele as aprova (tudo ou só uma quantidade). Elas voltam ao Estoque e viram lote (`develop`); na `main` do MES vão direto à Expedição.
+- Estando boas, ele as aprova (tudo ou só uma quantidade). Elas voltam ao Estoque e viram lote (`develop`, e na `main` do MES desde 17/11).
 - Havendo problema, ele reprova com um motivo. Pela decisão N16-128, pode ser só 5 das 100. Hoje são as 100.
 - O PCP vê a divergência e escolhe entre falso alarme e retrabalho. Se o problema for da compra, a reabertura da compra é decisão do novo norte (`P6`).
 
@@ -63,7 +63,7 @@ As decisões de 29/10/2026 (bloco N16-120 a N16-143) que tocam esta raia estão 
 
 - ✅ (`app-pcp`) Telas de inspeção e fila da Qualidade; reprovar, falso alarme e retrabalho.
 - ✅ (`api-pcp`) Na `develop` (27/10): o "sim" leva ao Estoque, com lote e saldo, por uma ação explícita de aprovar (`aprovar-saida`, com quantidade aprovada; o resto continua na inspeção).
-- O "sim" (`aprovar-saida`) e o lote do fabricado estão só na `develop` do `api-pcp` e do `app-pcp` (27/10/2026, `ab3318d`). A `main` do MES parou em 08/10 e só recebe com o merge BL-035.
+- O "sim" (`aprovar-saida`) e o lote do fabricado estão na `develop` do `api-pcp` e do `app-pcp` (27/10/2026, `ab3318d`) e foram publicados na `main` do MES em 17 e 18/11/2026 (BL-035).
 - 📝 ✅ (`api-pcp`) Sem laudo na saída (N16-129): é o que o código faz. A reprovação de saída pede só o motivo. Nada falta aqui.
 - 🔴 Reprovar só uma parte (N16-128): a reprovação continua sendo da parcela inteira.
 - 🔴 Escolha do setor de volta no retrabalho (N16-141): hoje volta ao anterior.

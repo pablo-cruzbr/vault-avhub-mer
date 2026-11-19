@@ -65,7 +65,7 @@ As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do 
 
 ## O que já existe e o que falta
 
-O que aparece como "develop" nesta nota não está na `main` do MES, parada em 08/10 (merge BL-035).
+O que aparece como "develop" nesta nota está publicado na `main` do MES desde 17 e 18/11/2026 (BL-035).
 
 - ✅ Triagem, Destinação, gravação da Destinação em lote e confirmação ao av-hub com reenvio.
 - ✅ A Destinação é do pedido inteiro, cada item pela quantidade que resta e com um destino só, como a `develop` faz desde 22/10 (`api-pcp` `src/pedidos/pedidos.service.ts:482`, `exigirPedidoInteiroDestinado`) e a validação local de 10/11/2026 confirmou. A rodada parcial e a divisão de emergência saíram do desenho na N16-162 (fecha a PS-052).
@@ -189,7 +189,7 @@ O `POST /pedidos/completo` singular foi apagado (PR #50); só o `/lote` existe.
 | 4 | Baixa de matéria-prima na retirada do Estoque (J2, J3; N16-140). Na `develop` há a baixa imediata no "Atender pelo estoque" (19/10) | Robert | P2, E4 | 🟡 baixa imediata ✅ (`api-pcp`); 🔴 retirada |
 | 5 | Pedido manual (`SistemaOrigem.MANUAL`) fora da espinha; ver anexo [[Pedido-Manual]] | Nathan | P2 | 🟡 |
 | 6 | Pedido liberado anterior à data de corte não aparece na Triagem (404 nos itens) | Nathan | P1 | 📝 decidido em 29/10 (N16-142): ficam fora do MES e terminam no sistema antigo; falta a mensagem no lugar do 404 (ver [[03-Pedido-de-Venda-e-Liberacao]]) |
-| 7 | **Ordem de Produção: entidade e documento imprimível**, só para o que será fabricado (BL-052): feito na `develop` (27/10); falta o merge do MES para a `main` (BL-035) | Robert | P2 | 📝 N14-22 ✅ (`api-pcp`) `develop` |
+| 7 | **Ordem de Produção: entidade e documento imprimível**, só para o que será fabricado (BL-052): feito na `develop` (27/10) e publicado na `main` do MES desde 17 e 18/11/2026 (BL-035) | Robert | P2 | 📝 N14-22 ✅ (`api-pcp`) `develop` |
 | 8 | **Mostrar a OC do pedido** (Triagem, Destinação, Atendimento) lendo a referência da OC do hub (BL-049; a leitura, BL-001, já existe na `develop`) | Robert | P1, P2, E1 | 🔴 📝 N14-20 |
 
 ### Pendências

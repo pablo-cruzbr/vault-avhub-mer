@@ -21,7 +21,7 @@ Esta nota lista cada tela do fluxo de Atividades ([[00-Fluxo-Mestre-0b]]), setor
 
 Os nomes novos já estão nos títulos do `app-pcp`; rotas, slugs e permissões seguem com os nomes antigos (ver "Detalhe técnico"). Convenção de nomes: [[Regras-do-Vault]].
 
-Conferido em 29/10/2026 contra a `develop` do `av-hub` (`758d5f0`) e do `app-pcp` (`93f96de`). As telas do MES marcadas "develop" não estão na `main` do MES, que parou em 08/10 (merge BL-035).
+Conferido em 29/10/2026 contra a `develop` do `av-hub` (`758d5f0`) e do `app-pcp` (`93f96de`). As telas do MES marcadas "develop" estão publicado na `main` do MES desde 17 e 18/11/2026 (BL-035).
 
 Selos: ✅ existe · 🟡 parcial · 🔴 não existe · ❓ não conferido.
 

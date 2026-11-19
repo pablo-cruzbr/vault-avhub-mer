@@ -89,7 +89,7 @@ Não é critério de pronto (F5): mostra o que já foi publicado. Contagem de 05
 | `api-pcp` | 53 | 08/10/2026 |
 | `app-pcp` | 51 | 08/10/2026 |
 
-O Nathan afirma que tudo o que está na `develop` foi testado e funciona, e que o merge para a `main` pode ser feito a qualquer momento 📝. No MES, a OP, o lote do fabricado e o custo por item ainda não foram publicados: o merge é do Robert (BL-035). O banco de produção do MES, pelo dump de 07/10, não tem as migrations da `develop` ❓ ([[Banco-MES]]). Em 29/10/2026 a `api-acos-vital` igualou a `main` à `develop` (PR #305).
+O Nathan afirma que tudo o que está na `develop` foi testado e funciona, e que o merge para a `main` pode ser feito a qualquer momento 📝. No MES, a `main` recebeu toda a `develop` em 17 e 18/11/2026 (`api-pcp` PRs #82 e #84, `app-pcp` PRs #67 e #69; BL-035): a OP, o lote do fabricado, o custo por item e o recebimento por OC estão publicados. O banco de produção do MES, pelo dump de 07/10, não tem as migrations da `develop` ❓ ([[Banco-MES]]). Em 29/10/2026 a `api-acos-vital` igualou a `main` à `develop` (PR #305).
 
 ## Próximos passos
 
