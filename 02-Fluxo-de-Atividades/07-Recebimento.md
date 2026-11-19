@@ -1,15 +1,15 @@
 ---
 tags: [fluxo, raia, recebimento, doca, nf, conferencia, divergencia, lote, mes, r0, r1, r2, r3, r4, r6]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-19
 status: vigente
 ordem: 7
 nos: [R0, R1, R2, R3, R4, R6]
 anterior: "[[06-Circuito-de-Compra]]"
 proxima: "[[08-Qualidade-Entrada]]"
-develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
+develop-conferida: [api-pcp 5aa95d5 (main 3af224e), app-pcp f3a10bf (main fe8972b), em 2026-11-19, main do MES e IT-LOG-REC-001; api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05; api-pcp bd6b442, em 2026-11-13 (aviso do LOG-58)]
 dono: Robert (MES) · Nathan (decisões)
-fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-03), API-007, API-008, v1 02-PRD-Estoque/Fluxo-Recebimento-Completo, v1 App-PCP-Recebimento-Conferencia, decisões do Nathan de 14/10 (conferência contra a NF), api-pcp 579a625 (recebimento.service.ts, compras.service.ts, compras.prisma, compras-ccp.dto.ts), app-pcp 1fca8d3 (FilaSetor, ConferirRecebimentoModal, decisoes-pcp), api-pcp develop de 27/10/2026 (recebimento por OC e por NF, custo da OC), API-011, N16-134 a N16-137]
+fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-03), API-007, API-008, v1 02-PRD-Estoque/Fluxo-Recebimento-Completo, v1 App-PCP-Recebimento-Conferencia, decisões do Nathan de 14/10 (conferência contra a NF), api-pcp 579a625 (recebimento.service.ts, compras.service.ts, compras.prisma, compras-ccp.dto.ts), app-pcp 1fca8d3 (FilaSetor, ConferirRecebimentoModal, decisoes-pcp), api-pcp develop de 27/10/2026 (recebimento por OC e por NF, custo da OC), API-011, N16-134 a N16-137, IT-LOG-REC-001 rev. 01 de Douglas Fonseca (recebida em 18/11/2026, aprovada pela gerência)]
 ---
 
 # Raia Recebimento (R0 a R6)
@@ -72,6 +72,34 @@ Se faltassem flanges mesmo depois da recontagem, o PCP decidiria entre aceitar o
 
 As decisões N16-134 a N16-137 são de 29/10/2026 (lote N16-120 a N16-143).
 
+## O processo da doca (IT-LOG-REC-001)
+
+Em 18/11/2026 o Douglas Fonseca (Recebimento) mandou a instrução de trabalho **IT-LOG-REC-001, Recebimento de Materiais, revisão 01**, aprovada pela gerência (o gerente a enviou ao Nathan). É o processo oficial da doca e a base para desenhar Recebimento e Compras. O documento fica fora do vault.
+
+**O que a IT define:**
+
+- Papéis: Programação de Frota, Motorista, Portaria, Operador Logístico Administrativo, Recebimento, Compras, Fiscal e Qualidade.
+- Duas formas de chegada: entrega do fornecedor na planta e coleta com a frota própria.
+- A conferência é contra a nota fiscal **e** contra a OC, na unidade de medida da OC. Material sem OC não é descarregado até Compras ou a liderança se manifestarem.
+- Três resultados: conforme, conforme com ressalva e não conforme. O material não conforme é segregado com a etiqueta "Material Bloqueado" e tem registro fotográfico.
+- Compras trata a divergência com o fornecedor e devolve a decisão ao Recebimento. A IT lista dez tratativas (recebimento parcial, recusa total ou parcial, devolução, carta de correção, nota complementar, reposição, aceite com ressalva, reclassificação, liberação excepcional) e os motivos de recusa.
+- A entrada fiscal só é feita depois da liberação do Recebimento.
+- Checklist da doca e indicadores do processo.
+
+**Onde a IT e o MES não batem** (a resolver no desenho de Compras e Recebimento; nenhuma regra desta nota mudou ainda):
+
+| Ponto | IT-LOG-REC-001 | MES hoje e regras desta nota | Situação |
+|---|---|---|---|
+| Contra o que conferir | NF e OC, na unidade da OC | só contado × NF | 🔴 o cruzamento com a OC falta (N16-135) |
+| Receber acima da OC | não conforme | sem requisição entra sem divergência | ❓ a IT responde a pergunta do reteste; falta o Nathan decidir |
+| Quem decide a divergência | Compras, com o fornecedor | o PCP ("O Recebimento nunca decide compra. A divergência vai ao PCP") | ❓ decisão do Nathan |
+| Recontagem | não fala | quem conferiu não pode recontar (BL-091: às cegas?) | ❓ pergunta ao Douglas |
+| Recusa no ato | prevista (o caminhão volta com o material) | não há recusa na doca, só divergência | 🔴 sem código |
+| Entrada fiscal | depois da liberação | o MES não trata a entrada fiscal | ❓ como o hub e o Omie entram nisso |
+| Coleta com frota própria | prevista, com coleta improdutiva | não existe no MES | 🔴 sem código |
+
+As perguntas que a IT deixou em aberto foram mandadas ao Douglas em 18/11; o roteiro está em [[06-Circuito-de-Compra#Roteiro até 100%]].
+
 ## O que já existe e o que falta
 
 - ✅ (`app-pcp`) Telas de recebimento, recontagem e decisão do PCP; lote em quarentena com etiqueta em PDF.
@@ -80,8 +108,8 @@ As decisões N16-134 a N16-137 são de 29/10/2026 (lote N16-120 a N16-143).
 - ✅ (`api-pcp`) Na `develop` do MES: o custo da OC é gravado no lote (19/10, `97b9adc`; unidade diferente da OC ou OC fora da projeção gera lote sem custo e sinalizado).
 - ✅ Na `develop` do MES: entrada de mercadoria de OC sem requisição do MES (OC criada só no av-hub), por OC e por NF, e uso interno sem lote (16 a 20/10).
 - ✅ Na `develop` do MES: uma nota com itens de várias OCs (N16-136). `POST /compras/recebimentos/nf` recebe várias conferências na mesma nota, cada uma de uma requisição do MES ou de uma OC do hub, e a tela "Receber com NF" aceita vários itens (`api-pcp` 19 a 20/10, `app-pcp` `5f50fff`, `9ced089`).
-- O que aparece como ✅ de MES nesta nota, a partir da conferência por OC e do custo da OC, está na `develop` do `api-pcp` e do `app-pcp`. A `main` do MES parou em 08/10 e só recebe com o merge BL-035.
-- 🔴 A conferência ainda não cruza com a OC (preço, quantidade comprada, fornecedor); só compara contado com a NF. O rateio da chegada entre destinos da OC também falta (API-011).
+- O que aparece como ✅ de MES nesta nota, a partir da conferência por OC e do custo da OC, está na `develop` do `api-pcp` e do `app-pcp` e foi publicado na `main` do MES desde 17 e 18/11/2026 (BL-035): em 19/11 a `main` contém toda a `develop` nos dois (`api-pcp` PRs #82 e #84, `app-pcp` PRs #67 e #69).
+- 🔴 A conferência ainda não cruza com a OC (preço, quantidade comprada, fornecedor); só compara contado com a NF. A IT-LOG-REC-001 exige a conferência contra a OC ([[#O processo da doca (IT-LOG-REC-001)]]). O rateio da chegada entre destinos da OC também falta (API-011).
 - ✅ (`api-pcp`) Aviso ao av-hub quando o PCP reabre o recebimento (N16-137, LOG-58, 12/11): `api-pcp` `src/compras/recebimento.service.ts:640` (`await enfileirarAvisosRecebimentoReaberto(tx, {`), enviado pela fila `integracao_avhub_envios`.
 - 🔴 Leitor de código de barras da NF; reabertura de divergência de produção.
 - 🟡 Aviso à doca quando uma OC esperada é cancelada.
