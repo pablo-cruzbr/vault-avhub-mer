@@ -62,7 +62,7 @@ As decisões de 29/10/2026 sobre esta etapa estão no lote N16-120 a N16-143 do 
 
 ## O que já existe e o que falta
 
-Tudo o que é MES nesta nota está na `develop` do `api-pcp` e do `app-pcp`. A `main` parou em 08/10 e só recebe com o merge BL-035.
+Tudo o que é MES nesta nota está na `develop` e na `main` do MES (desde 17/11, BL-035).
 
 - ✅ (`app-pcp`) Telas Atendimento, Saldo, Reservas, Movimentação e Lote com etiqueta.
 - ✅ (`api-pcp`) Reserva, divisão da parcial, solicitar compra, entrada do item comprado e baixa na Embalagem.

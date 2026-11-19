@@ -78,7 +78,7 @@ O PCP monta a rota das 100 flanges de aço carbono. O Estoque vem primeiro e a i
 - 🔴 Painel TV, `PerfilSetor` por filial e feed `/fluxo/eventos`.
 - 🟡 Botões de dividir e juntar parciais na fila (a API existe).
 - ❓ Nomes e filas reais dos setores produtivos no ambiente.
-- O que aparece como ✅ de MES nesta nota além da `main` está na `develop` do `api-pcp` e do `app-pcp`. A `main` parou em 08/10 (merge BL-035).
+- O que aparece como ✅ de MES nesta nota está na `develop` do `api-pcp` e do `app-pcp` e foi publicado na `main` do MES desde 17 e 18/11/2026 (BL-035).
 
 ## Detalhe técnico
 

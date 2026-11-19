@@ -82,7 +82,7 @@ Decisões de 29/10/2026 (bloco N16-120 a N16-143):
 
 ### Objetivo (original)
 
-A Expedição tem **duas portas de entrada** na `main` do MES (parada em 08/10): a parcial atendida pelo Estoque (`atendidoPeloEstoque`) e a parcial que a Qualidade moveu (fabricado, [[11-Qualidade-Saida]]). Na `develop` (27/10, `ab3318d`) o fabricado aprovado já volta ao Estoque antes de seguir ([[09-Estoque-Entrada-do-Lote]]); ❓ conferir se ainda sobra alguma porta direta. Pela decisão de 14/10 haverá uma só: o **documento de retirada do Estoque**, porque tudo que é fabricado ou comprado passa pelo Estoque ([[12-Estoque-Despacho]]).
+A Expedição tem **duas portas de entrada** na `main` do MES de 08/10 (antes do merge de 17/11, BL-035): a parcial atendida pelo Estoque (`atendidoPeloEstoque`) e a parcial que a Qualidade moveu (fabricado, [[11-Qualidade-Saida]]). Na `develop` (27/10, `ab3318d`) o fabricado aprovado já volta ao Estoque antes de seguir ([[09-Estoque-Entrada-do-Lote]]); ❓ conferir se ainda sobra alguma porta direta. Pela decisão de 14/10 haverá uma só: o **documento de retirada do Estoque**, porque tudo que é fabricado ou comprado passa pelo Estoque ([[12-Estoque-Despacho]]).
 
 O sistema **nunca emite nota fiscal**. Ele sinaliza a necessidade e o Omie emite. No v1 eram as telas 10.1 a 10.4; na v3 elas se chamam pelos nós `X1` a `X4`.
 
