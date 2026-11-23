@@ -1,15 +1,15 @@
 ---
 tags: [fluxo, raia, estoque, despacho, retirada, baixa, mes, e6]
 criado: 2026-11-05
-estado-em: 2026-11-05
+estado-em: 2026-11-23
 status: vigente
 ordem: 12
 nos: [E6]
 anterior: "[[11-Qualidade-Saida]]"
 proxima: "[[13-Expedicao]]"
-develop-conferida: [api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
-dono: Robert (MES) · Nathan (decisões)
-fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.helpers.ts), LOG-54, N16-120 a N16-122, N16-140]
+develop-conferida: [api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+dono: Nathan (MES e decisões, N16-180)
+fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.helpers.ts), LOG-54, N16-120 a N16-122, N16-140, N16-180, api-pcp c8036db (motor do Estoque, PR #86)]
 ---
 
 # Raia Estoque: despacho (E6)
@@ -33,7 +33,7 @@ Os passos 1 a 5 estão em [[05-Estoque-Atendimento]]; o passo 6 (entrada do lote
 | Expedição (Embalagem) | Hoje dispara a baixa ao receber a parcial. No desenho final, pede a retirada |
 | Produção | Receberia matéria-prima por documento de retirada, que ainda não existe |
 
-O almoxarife, o Gestor de Estoque e o Robert estão em [[05-Estoque-Atendimento]].
+O almoxarife, o Gestor de Estoque e o Nathan (dono do código, N16-180) estão em [[05-Estoque-Atendimento]].
 
 ## Regras que valem
 
@@ -47,7 +47,8 @@ Decisões de 29/10/2026 (bloco N16-120 a N16-143). Contrato: [[Contratos-da-v2|L
 
 ## O que já existe e o que falta
 
-- 🔴 Documento de retirada e baixa na retirada.
+- ✅ (`api-pcp`) A baixa de hoje (no recebimento da Embalagem) passa pelo motor único do Estoque, com o custo do lote e as travas do banco (N16-184).
+- 🔴 Documento de retirada e baixa na retirada (BL-007).
 - 🔴 Baixa de matéria-prima na retirada (hoje é na hora do atendimento).
 
 Entrada: [[11-Qualidade-Saida]] (fabricado aprovado) e o atendimento pelo saldo em [[05-Estoque-Atendimento]]. Próxima raia: [[13-Expedicao]].
@@ -87,7 +88,7 @@ A numeração é a da nota de Estoque da v2; as outras regras estão em [[05-Est
 
 #### E6: despacho
 
-✅ O que existe: quando a **Embalagem recebe** a parcial atendida (`PATCH /itens-parciais/:id/receber`), o código chama `consumirReservasDaParcial` (`itens-parciais.service.ts:318-328`). Ele tira o saldo das localizações do lote (maior saldo primeiro), grava um `MovimentoEstoque` `SAIDA` por pedaço com `idReserva`, e marca a reserva `CONSUMIDA` (`estoque-operacao.helpers.ts:317-393`). Se o saldo físico não cobre, 409 "registre um ajuste antes de entregar" (`:253-258`). Se a Embalagem desfaz o recebimento ou devolve ao Estoque, o saldo volta (`estornarConsumosDaParcial`).
+✅ O que existe: quando a **Embalagem recebe** a parcial atendida (`PATCH /itens-parciais/:id/receber`), o código chama `consumirReservasDaParcial`: `api-pcp` `src/itens-parciais/itens-parciais.service.ts:318` (`await consumirReservasDaParcial(tx, {`). A entrega chama de novo, por garantia, e não faz nada se já consumiu: `src/entregas/entregas.service.ts:72` (`await consumirReservasDaParcial(tx, {`). O helper `src/estoque/operacao/estoque-operacao.helpers.ts:272` (`export async function consumirReservasDaParcial(`) trava os lotes, consome as reservas mais antigas e tira o saldo pelo motor, `estoque-operacao.helpers.ts:295` (`await registrarSaidaDoLote(tx, {`): maior saldo primeiro, um `SAIDA` por pedaço com `idReserva` e o custo do lote; a reserva vira `CONSUMIDA` quando zera. Se o saldo físico não cobre, 409 "registre um ajuste de estoque antes de entregar", `estoque-operacao.helpers.ts:302` (`Saldo físico do lote da reserva não cobre`). Se a Embalagem desfaz o recebimento ou devolve ao Estoque, o saldo volta (`estornarConsumosDaParcial`).
 
 🔴 O que o desenho decidido exige e não existe:
 1. **Documento de retirada** gerado por quem precisa da mercadoria (Expedição ou Produção), com itens, lotes, quantidades e solicitante.
@@ -101,7 +102,7 @@ Consequência de hoje: o saldo físico só cai quando a Expedição recebe; o al
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 1 | **Documento de retirada** (modelo, rotas, tela de pedido e de confirmação) e **baixa do saldo na retirada**; tirar `consumirReservasDaParcial` do `receber()` da Embalagem | Robert (decisão: Nathan) | E6 | 🔴 |
+| 1 | **Documento de retirada** (modelo, rotas, tela de pedido e de confirmação) e **baixa do saldo na retirada**; tirar `consumirReservasDaParcial` do `receber()` da Embalagem | Nathan (N16-180) | E6 | 🔴 BL-007 |
 
 Os demais itens estão em [[05-Estoque-Atendimento]] e [[09-Estoque-Entrada-do-Lote]].
 
