@@ -69,4 +69,4 @@ fontes: ["Dump avhub produção 18.11 (esqueleto).sql, gerado em 18/11/2026 07:2
 - **`LOG-59`:** o banco passa de ❓ a ✅ em produção. Continua 🔴 a trava do `exclusionSync` na pipeline.
 - **`LOG-60` e `LOG-61`:** a migration conferida em produção. Na raia 02, o perfil "Orçamentos" e o cadastro das telas passam de 🟡 a ✅ (pela migration inteira). Ainda não conferido: quem está no perfil.
 - **[[Banco-AvHub]]:** o dump mais novo passa a ser este, o primeiro de produção.
-- **O teste:** o último dump do tst é o de 16/11. Não se sabe se o LOG-59, o LOG-60 e o LOG-61 também estão no tst.
+- **O teste:** o dump do tst de 23/11 ([[Dump-AvHub-Teste-2026-11-23]]) tem o LOG-59, o LOG-60 e o LOG-61, e mais a comissão de 18 a 23/11 e a estrutura do `LOG-62`, que esta produção ainda não tinha.

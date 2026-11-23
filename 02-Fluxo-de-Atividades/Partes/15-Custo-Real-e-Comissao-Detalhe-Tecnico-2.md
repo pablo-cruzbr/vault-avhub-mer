@@ -97,7 +97,7 @@ A decisão tem seis ações (`aprovar`, `desaprovar`, `bloquear`, `desbloquear`,
 
 | Item | Estado | Selo |
 |---|---|---|
-| Motor atual (letra pelo pedido, predominância, versão pré-aceita de menor comissão, regras fixas, bloqueios, blacklists, competência) | existe em `core_comissionamento` e no front, só leitura aqui ([[01-Motor-Atual-Como-Calcula]]) | ✅ código (`av-hub` `lib/simulador/motor.ts:475`, `Comissão por PEDIDO`); ❓ banco das migrations de 18 a 23/11 (PS-062) |
+| Motor atual (letra pelo pedido, predominância, versão pré-aceita de menor comissão, regras fixas, bloqueios, blacklists, competência) | existe em `core_comissionamento` e no front, só leitura aqui ([[01-Motor-Atual-Como-Calcula]]) | ✅ código (`av-hub` `lib/simulador/motor.ts:475`, `Comissão por PEDIDO`); ✅ banco no tst de 23/11; ❓ produção (PS-062) |
 | Módulo novo em `core_comissao`, em Operações | rascunhado e **testado num Postgres 18 em 19/10**; sem API nem tela; o schema não está no banco de teste (tst) de 10/11/2026, que só tem o `core_comissionamento` (validação local em Docker de 10/11/2026) | 🔴 Gustavo (banco), Nathan (telas) |
 | Comissão estimada na proposta (`K1`) | não existe; o simulador do Hub só pré-preenche o lado da compra | 🔴 |
 | Custo real por evento, com a NF de entrada como verdade (`K2`) | não existe | 🔴 Robert, Gustavo |

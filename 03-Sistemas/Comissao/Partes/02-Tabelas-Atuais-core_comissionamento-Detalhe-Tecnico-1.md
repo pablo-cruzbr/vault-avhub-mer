@@ -11,13 +11,13 @@ fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vi
 
 # Tabelas, views e funções atuais do `core_comissionamento`: detalhe técnico (1/2)
 
-**Em uma frase:** detalhe técnico da nota [[02-Tabelas-Atuais-core_comissionamento]] (parte 1 de 2): O que entrou de 18 a 23/11 (banco ❓, PS-062); Mapa do schema; Tabelas.
+**Em uma frase:** detalhe técnico da nota [[02-Tabelas-Atuais-core_comissionamento]] (parte 1 de 2): O que entrou de 18 a 23/11 (no tst; produção ❓, PS-062); Mapa do schema; Tabelas.
 
 **Onde estamos:** ← [[02-Tabelas-Atuais-core_comissionamento]] (resumo e índice) · partes: **02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-1** · [[02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-2]]
 
-## O que entrou de 18 a 23/11 (banco ❓, PS-062)
+## O que entrou de 18 a 23/11 (no tst; produção ❓, PS-062)
 
-A comissão passou ao grão do pedido (N16-185, N16-186), à competência (N16-187), ao escopo do vínculo próprio (N16-189), à trava da versão do vendedor (N16-188) e à versão pré-aceita (N16-190). O código da `api-acos-vital` está na `develop` (commits `7c05f92`, `0244b1a`, `e363da5`, `0e56354`, `06bb146`). As migrations ficam com o DBA, **fora do repositório** e **fora do dump de 18/11**: sem elas, o `SELECT` das rotas falha. ❓ Pedir dump novo ao Gustavo (PS-062).
+A comissão passou ao grão do pedido (N16-185, N16-186), à competência (N16-187), ao escopo do vínculo próprio (N16-189), à trava da versão do vendedor (N16-188) e à versão pré-aceita (N16-190). O código da `api-acos-vital` está na `develop` (commits `7c05f92`, `0244b1a`, `e363da5`, `0e56354`, `06bb146`). As migrations ficam com o DBA, **fora do repositório**. As seis estão no **tst** ✅ ([[Dump-AvHub-Teste-2026-11-23]], onde a ficha dá a linha de cada objeto) e não estão no dump de **produção** de 18/11: sem elas, o `SELECT` das rotas falha. ❓ Produção (PS-062).
 
 | Migration | O que cria ou muda | Onde o código cita |
 |---|---|---|
@@ -28,7 +28,7 @@ A comissão passou ao grão do pedido (N16-185, N16-186), à competência (N16-1
 | `2026-11-19_comissao_trava_versao_vendedor` | Trigger `trg_simulacoes_trava_versao_vendedor`: versão nova do vendedor só depois de `DEVOLVIDO`; erro 23514 `VERSAO_VENDEDOR_FECHADA` (409 na API) | `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:175` (`const versaoFechada`) |
 | `2026-11-23_comissao_pre_aceita_devolvido` | View `vw_simulacao_pre_aceita` (versão de menor comissão do pedido; empate, Compras); `origem_pre_aceita`, `id_simulacao_pre_aceita`, `valor_comissao_sem_bloqueio`; situação `DEVOLVIDO`; no resumo, `qtd_devolvido`, `valor_comissao_pre_aceito` e `valor_comissao_bloqueado` deixa de ser sempre 0 | `vw_simulacao_resolvida.model.js:136` (`origem_pre_aceita:`); `vw_comissao_master.model.js:123` (`valor_comissao_sem_bloqueio:`); `vw_comissao_resumo_mensal.model.js:45` (`valor_comissao_pre_aceito:`) |
 
-Sem migration, só no model: `simulador_parametros.pct_predominancia_fabricacao` (padrão 50; `api-acos-vital` `src/schemas/core_comissionamento/tables/simulador_parametros/simulador_parametros.model.js:112` (`pct_predominancia_fabricacao:`)), lido pelo motor do front. ❓ A coluna no banco não aparece nos dumps lidos. Não há tela para mudar o corte (PS-063).
+No tst de 23/11 também está `simulador_parametros.pct_predominancia_fabricacao` (`dump tst 23/11:21794`), que antes só aparecia no model: (padrão 50; `api-acos-vital` `src/schemas/core_comissionamento/tables/simulador_parametros/simulador_parametros.model.js:112` (`pct_predominancia_fabricacao:`)), lido pelo motor do front. ❓ A coluna no banco não aparece nos dumps lidos. Não há tela para mudar o corte (PS-063).
 
 **Filtros novos nas rotas** (todos na `develop`):
 

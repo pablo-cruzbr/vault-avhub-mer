@@ -77,12 +77,12 @@ O desenho completo está em [[03-Modelo-Novo-core_comissao]] e os estados em [[0
 
 ## Pontos de atenção
 
-1. ✅ O resumo mensal passa a mostrar o valor bloqueado (o pré-aceito das notas bloqueadas). ❓ Depende de uma migration fora do repositório (PS-062).
+1. ✅ O resumo mensal passa a mostrar o valor bloqueado (o pré-aceito das notas bloqueadas). A migration está no tst ([[Dump-AvHub-Teste-2026-11-23]]); produção ❓ (PS-062).
 2. O teto da regra fixa só é aplicado pela view. O motor da tela não o recebe. ✅
 3. Bloqueio e listas de bloqueio não têm data nem motivo obrigatório. Valem para sempre, até sobre meses pagos. ✅
 4. Quem aprova não é separado de quem digita. A tela esconde o botão, mas o servidor não barra. ✅
 5. Nada reconfere o custo líquido gravado, porque só o navegador o calcula. ✅
-6. As seis migrations da comissão de 18 a 23/11 estão fora do repositório e fora do dump de 18/11: sem elas as rotas novas falham (PS-062) ❓.
+6. As seis migrations da comissão de 18 a 23/11 estão fora do repositório. Estão no tst ✅ ([[Dump-AvHub-Teste-2026-11-23]]), mas não no dump de produção de 18/11: sem elas as rotas novas falham (PS-062) ❓.
 7. Minhas Comissões no Hub ainda não mostra `DEVOLVIDO` e fala em 403 onde a API já responde vazio (PS-064).
 
 A lista completa está no detalhe técnico.
