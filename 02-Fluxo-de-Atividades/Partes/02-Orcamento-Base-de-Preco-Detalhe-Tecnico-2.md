@@ -1,12 +1,12 @@
 ---
 tags: [fluxo, raia, orcamento, base-de-preco, matriz-de-precos, pedido-de-custo, pagina-do-produto, score, volatilidade, b1, b2, b3, b4, parte]
 criado: 2026-11-05
-estado-em: 2026-11-18
+estado-em: 2026-11-23
 status: proposta
-dono: Pablo e Robert (módulo; o Robert conduz as rotas desde 28/10, N16-117) · Gustavo (banco e API) · Nathan (front)
+dono: Nathan (dono do Orçamento desde 17/11, N16-168) · Gustavo (banco e API)
 parte-de: "[[02-Orcamento-Base-de-Preco]]"
-develop-conferida: [omie-elt-pipeline 28efc5a, em 2026-11-18 (C7); api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18 (LOG-61); api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
-fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119]
+develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23 (busca rápida e visual de Compras; só na develop); omie-elt-pipeline 28efc5a, em 2026-11-18 (C7); api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18 (LOG-61); api-acos-vital 0e9f93e, av-hub a92272a, em 2026-11-17 (LOG-60 entregue; também na main: api-acos-vital #313, av-hub #307 f5b614a); api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+fontes: [Registro-de-Decisoes (N16-06, N16-07, N16-14, N16-16, N16-41, N16-52, N16-54, N16-55, N16-56, N16-58, N16-59, N16-72), Proposta-Score-e-Volatilidade-OQ-46, Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 10-Anexo-Fora-do-Fluxo/Orcamento (antigo, substituído), LOG-42, LOG-52, api-comercial 5aa5311 (suprimentos.prisma, suprimentos.routes.ts, custos.routes.ts), HUB branch feat/menu-orcamento-vendas-compras (ededeea, 200e860, 5aa5311), telas-vendas-orcamento-compras.sql, Dump Avhub 14/10, av-hub develop 758d5f0 (app/(protected)/orcamento), N16-107, N16-108, N16-117, N16-119, N16-191, api-acos-vital #329, av-hub #335]
 ---
 
 # Orçamento e base de preço de compra: detalhe técnico (2/2)
@@ -83,22 +83,23 @@ Trechos que estavam na nota de proposta e pedido da v2 (a nota 11 da tag `v2-ant
 
 ## O que falta desenvolver
 
-Atualizado em 17/11/2026, depois da entrega do `LOG-60`:
+Estado em 23/11/2026, depois da entrega do `LOG-60` e do adendo da busca rápida:
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
 | 1 | Migrar suprimentos e custos para a `api-acos-vital` | Nathan, Gustavo | `B1` a `B4` | ✅ `LOG-60` (`src/schemas/core_comercial/index.js:54`, `comercial.use(solicitacoesCusto);`) |
-| 2 | Página do produto para o vendedor | Nathan | `B2` | ✅ `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`); ❓ o acesso do perfil de vendas em produção, com o Gustavo |
+| 2 | Página do produto para o vendedor | Nathan | `B2` | ✅ `components/Orcamento/ProdutoPagina.tsx:307` (`<KpiCotacaoVigente`); ❓ o acesso do perfil de vendas em produção, com o Gustavo |
 | 3 | Score, ranking por categoria e dado recente com parâmetros | — | `B2` | Fora do escopo, para o futuro (N16-174); a volatilidade está ✅ (`src/utils/precosProduto.js:20`, `JANELA_VOLATILIDADE_DIAS = 90`) |
 | 4 | Prazo de entrega em dias na oferta e na OC; data real de recebimento | — | `B1`, `B2` | Na oferta ✅ (`ofertas.route.js:123`, `prazo_entrega_dias`); na OC e o `dRec` ficam para o futuro com a nota do fornecedor (N16-176) |
-| 5 | Base com as duas fontes (OC efetivada e orçamentista) | Nathan | `B1` | ✅ as duas fontes lado a lado, e o vendedor escolhe (N16-172): `components/Orcamento/ProdutoPagina.tsx:259` (`<KpiCotacaoVigente vigentes`) |
-| 6 | Matriz de preços | Nathan | `B1`, `B2` | ✅ virou a aba Cotações (N16-173): `components/Orcamento/ProdutoPagina.tsx:343` (`valor: 'cotacoes' as const`) |
+| 5 | Base com as duas fontes (OC efetivada e orçamentista) | Nathan | `B1` | ✅ as duas fontes lado a lado, e o vendedor escolhe (N16-172): `components/Orcamento/ProdutoPagina.tsx:307` (`<KpiCotacaoVigente`) |
+| 6 | Matriz de preços | Nathan | `B1`, `B2` | ✅ virou a aba Cotações (N16-173): `components/Orcamento/ProdutoPagina.tsx:404` (`valor: 'cotacoes' as const`) |
 | 7 | Cronômetro do pedido de custo | Nathan | `B3` | ✅ `src/schemas/core_comercial/aggregates/solicitacoes_custo/solicitacoes_custo.route.js:124` (`router.get("/solicitacoes_custo"`) |
 | 8 | Perfil "orçamentista" | Gustavo | — | ✅ migration em produção (`04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:19819`, `CREATE TABLE core_comercial.solicitacoes_custo`); ❓ as pessoas no perfil |
 | 9 | O valor correto da OC (`C7`) no histórico de compras | Nathan, Gustavo | `B1` | ✅ conferido pelo código em 18/11, `omie-elt-pipeline` `src/omie/resources/pedidosCompras.ts:179` (`valor_unitario: unitario,`) (preço antes do desconto) |
 | 10 | Cadastro das telas em produção | Gustavo | — | ✅ migration em produção (`04-Dados/Dumps/avhub-prd-esqueleto-2026-11-18.sql:19065`, `CREATE TABLE core_comercial.ofertas`) |
 | 11 | Aviso ao vendedor e ao Orçamento | Gustavo, Nathan | `B3`, `B4` | ✅ `LOG-61` (Central de Avisos, N16-175): `src/utils/avisos.js:52` (`export async function notificar`) |
 | 12 | A proposta pedindo custo no item e mostrando as duas fontes | Robert | `V0.2`, `B2` | 🔴 a API aceita `id_proposta` e `id_item_proposta`; falta a tela da proposta |
+| 13 | Busca de produto rápida no "Pedir cotação" | Nathan | `B3` | ✅ só na `develop` (N16-191, API #329, Hub #335): `src/schemas/core/tables/produtos/produtos.route.js:284` (`router.get("/busca", buscarProdutos)`); falta a `main` |
 
 ## Pendências
 
