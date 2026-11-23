@@ -1,7 +1,8 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-23
+develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, só o grão do motor atual]
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
@@ -56,7 +57,7 @@ Comissão fechada sobre UMA NF faturada. É o que chega à Controladoria já cal
 
 #### `core_comissao.comissoes_nf_itens`
 
-Quebra da comissão da NF por item faturado: valor faturado x menor percentual entre o cotado e o real. Regenerada enquanto a NF aguarda decisão.
+Quebra da comissão da NF por item faturado: valor faturado x menor percentual entre o cotado e o real (⚠️ o motor atual passou ao grão do pedido em 18 a 23/11 (N16-185, N16-186, N16-190); este desenho ainda é por item. Ver "O motor mudou de grão" em [[03-Modelo-Novo-core_comissao]]). Regenerada enquanto a NF aguarda decisão.
 
 | Coluna | Tipo | Nulo | Padrão | Observação |
 |---|---|---|---|---|

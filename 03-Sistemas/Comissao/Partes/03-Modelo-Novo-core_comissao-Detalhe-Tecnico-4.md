@@ -1,11 +1,11 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-23
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, só o grão do motor atual; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [N16-02, N16-03, N16-09, N16-10, N16-11, N16-17, N16-18, N16-19, N16-20, OQ-06, OQ-11, OQ-12, OQ-28, dump core_comissionamento convertido, av-hub lib/simulador/motor.ts, tela-simulador-comissao.png]
 ---
 
@@ -17,16 +17,16 @@ fontes: [N16-02, N16-03, N16-09, N16-10, N16-11, N16-17, N16-18, N16-19, N16-20,
 
 ## O motor é o mesmo: a fórmula preservada
 
-O cálculo de **margem, letra, prejuízo, fabricação interna, teto da regra fixa e menor percentual** é o de `lib/simulador/motor.ts` e `vw_simulacao_resolvida`, sem mudar fórmula. A tabela mostra cada regra e onde ela passa a morar.
+O cálculo de **margem, letra, prejuízo, fabricação interna, teto da regra fixa e menor percentual** foi desenhado sobre o `lib/simulador/motor.ts` e a `vw_simulacao_resolvida` de outubro, por item. ⚠️ o motor atual passou ao grão do pedido em 18 a 23/11 (N16-185, N16-186, N16-190); este desenho ainda é por item. Ver "O motor mudou de grão" em [[03-Modelo-Novo-core_comissao]]. A tabela mostra cada regra como foi desenhada e onde ela passaria a morar.
 
 | Regra (nota 01) | Módulo atual | Módulo novo |
 |---|---|---|
 | R1 Custo líquido | `motor.ts:283-318` | Mesma função no motor da API; contas intermediárias gravadas em `comissao_calculo_itens` (`compra_bruta`, `icms_recuperar`, `valor_ipi`, `frete_item`, `custo_liquido`) |
-| R2 Margem líquida do item | `motor.ts:342-354` | Idêntica; `margem_item_pct` |
-| R3 Letra e % | `motor.ts:176-179, 389-401` | Idêntica; faixas em `parametros_faixas` |
-| R4 Prejuízo e fabricação | `motor.ts:369-394` | Idêntica; `parametros.fabricacao_interna_pct` |
+| R2 Margem líquida do item | `motor.ts:348` (`const margemCalculada`) | Idêntica; `margem_item_pct`. Hoje a margem que decide é a do pedido (N16-185) |
+| R3 Letra e % | `motor.ts:176-179, 389-401` (outubro) | Por item; faixas em `parametros_faixas`. Hoje a letra é do pedido (N16-185) 🟡 |
+| R4 Prejuízo e fabricação | `motor.ts:500` (`'FABRICACAO_BLOQUEADA' : 'PREJUIZO_PEDIDO'`) | `parametros.fabricacao_interna_pct`. Hoje há predominância e prejuízo do pedido (N16-185, N16-186), sem coluna aqui 🟡 |
 | R5 Percentual de Compras | Segunda simulação digitada por Compras | **Cálculo `REAL`**, automático, por evento de custo (N16-20); a conferência de Compras (🟡 OQ-28) vira `compras_estado` |
-| R6 `pct_final` = menor | `dump:1186-1190` | `comissoes_nf_itens.comissao_final_pct = LEAST(cotada, real)` (CHECK `final <= cotada`) |
+| R6 `pct_final` = menor | `dump:1186-1190` (até 23/11) | `comissoes_nf_itens.comissao_final_pct = LEAST(cotada, real)` (CHECK `final <= cotada`). Hoje a versão inteira de menor comissão paga o pedido (N16-190) 🟡 |
 | R7 Teto da regra fixa | View (`dump:1151-1198`) | Aplicado **no motor, por cálculo** (cada versão com o markup bruto dela) e gravado (`teto_regra_pct`, `regra_aplicada`). O resultado é o mesmo da view |
 | R8 Valor sobre o faturado | `dump:1128` | `fn_comissao_nf_fechar`: `round(valor_faturado_item × pct / 100, 2)` |
 | R9–R10 NF, situação, visibilidade | Views e BFF | `comissoes_nf` + estados; visibilidade em views e API |
@@ -56,7 +56,7 @@ O cálculo de **margem, letra, prejuízo, fabricação interna, teto da regra fi
 | **B. Motor na API** (função pura TypeScript) + gravação no banco | Porta `lib/simulador/motor.ts` para a `api-acos-vital` quase sem mudar; `fn_calculo_gravar` grava; job recalcula | **Mesmo código que hoje** (garante "motor igual"); testável com fixtures; versão gravada; Pablo migra o Comercial para a mesma API (N16-15) | Precisa de job e de evento; duas camadas (API calcula, banco grava e fecha) |
 | **C. Híbrido** | Motor na API para margem e letra; **fechamento por NF, menor percentual, arredondamento e decisão no banco** | Divide como hoje (motor no código, `LEAST` no banco); o dinheiro é sempre fechado por função com `CHECK` | Igual à B |
 
-**Sugestão 🟡 (Claude): opção C.** O motor continua sendo o **mesmo código** (porta de `motor.ts`, testes de ouro), rodando na API; tudo que fecha dinheiro (`fn_comissao_nf_fechar`, `fn_comissao_decidir`) roda no banco, com restrições que impedem valor errado. Motivos: (1) a regra do projeto é lógica no backend, e hoje o motor está no navegador (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)); (2) mantém a fórmula idêntica por reaproveitar o código; (3) as funções do banco são pequenas e testáveis (validadas em banco descartável); (4) o DBA (Gustavo) revisa o que grava dinheiro. Decisão do Nathan e do Gustavo; estimativa de esforço é do Claude, por complexidade.
+**Sugestão 🟡 (Claude): opção C.** O motor continua sendo o **mesmo código** (porta de `motor.ts`, testes de ouro), rodando na API; tudo que fecha dinheiro (`fn_comissao_nf_fechar`, `fn_comissao_decidir`) roda no banco, com restrições que impedem valor errado. Motivos: (1) a regra do projeto é lógica no backend, e hoje o motor está no navegador (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:713` (`calcularSimulacao(form, parametros)`)); (2) mantém a fórmula idêntica por reaproveitar o código; (3) as funções do banco são pequenas e testáveis (validadas em banco descartável); (4) o DBA (Gustavo) revisa o que grava dinheiro. Decisão do Nathan e do Gustavo; estimativa de esforço é do Claude, por complexidade.
 
 ### Custo parcial (regra do cálculo `REAL`) 🟡
 
@@ -101,7 +101,7 @@ Conversão de chaves dos JSON de parâmetros (carga, 🟡):
 
 - `simulacoes`, `simulacao_itens` e os dados de pedido do módulo atual: continuam lá, **intocados**. O pedido que chega do Omie **sem proposta** entra no módulo **novo** (N16-103, anexo `0006`): dossiê `PEDIDO_OMIE`; o vendedor preenche a simulação como hoje no Simulador de Comissão (N16-104) e a comissão segue como a da proposta.
 - `bloqueio_comissoes`, `comissao_coordenadores_historico`, `comissoes_provisoria`, `fn_jsonb_numero`, as 4 views antigas.
-- A regra do protótipo `experimental/simulador-comissao` (letra por pedido inteiro) **não** é referência; o motor de referência é o por item.
+- A regra do protótipo `experimental/simulador-comissao` (letra por pedido inteiro) virou a regra do motor atual em 18/11 (N16-185); este desenho ainda segue o motor por item.
 - Telas de Comissões atuais: seguem funcionando, sem mudança (N16-11).
 
 ## Plano de carga de dados (para o Gustavo)

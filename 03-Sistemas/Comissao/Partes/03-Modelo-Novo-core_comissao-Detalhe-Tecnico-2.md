@@ -1,11 +1,11 @@
 ---
 tags: [comissao, banco, core_comissao, modelo, proposta, controladoria, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-23
 status: proposta
 dono: Gustavo (DBA)
 parte-de: "[[03-Modelo-Novo-core_comissao]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, só o grão do motor atual; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [N16-02, N16-03, N16-09, N16-10, N16-11, N16-17, N16-18, N16-19, N16-20, OQ-06, OQ-11, OQ-12, OQ-28, dump core_comissionamento convertido, av-hub lib/simulador/motor.ts, tela-simulador-comissao.png]
 ---
 
@@ -113,7 +113,7 @@ Encargo financeiro somado ao preço sugerido por condição de pagamento. Substi
 
 #### `core_comissao.parametros_faixas`
 
-Faixas da letra: margem líquida mínima do item (semiaberto [min, próxima)) e percentual. Hoje A 15/2,0; B 12/1,3; C 9/0,7; D 0/0,5. Substitui o JSON faixas_comissao.
+Faixas da letra: margem líquida mínima do item (semiaberto [min, próxima)) e percentual (⚠️ no motor atual a margem é a da revenda do pedido, N16-185). Hoje A 15/2,0; B 12/1,3; C 9/0,7; D 0/0,5. Substitui o JSON faixas_comissao.
 
 | Coluna | Tipo | Nulo | Padrão | Observação |
 |---|---|---|---|---|
@@ -298,8 +298,8 @@ Cada execução do motor sobre uma comissão. COTADO = com o custo que o vendedo
 | `venda_sugerida` | numeric(15,2) | não |  |  |
 | `valor_liquido` | numeric(15,2) | não |  |  |
 | `total_nf` | numeric(15,2) | não |  |  |
-| `markup_projetado` | numeric(10,4) | sim |  | Preço sugerido total / custo total (`av-hub` `lib/simulador/motor.ts:502` (`markup_projetado`)). |
-| `markup_real` | numeric(10,4) | sim |  | MARK-UP REAL da tela: arredondarParaCima(venda de revenda / custo total, 2) (`av-hub` `lib/simulador/motor.ts:505` (`markup_real`)). |
+| `markup_projetado` | numeric(10,4) | sim |  | Preço sugerido total / custo total (`av-hub` `lib/simulador/motor.ts:595` (`markup_projetado`)). |
+| `markup_real` | numeric(10,4) | sim |  | MARK-UP REAL da tela: arredondarParaCima(venda de revenda / custo total, 2) (`av-hub` `lib/simulador/motor.ts:598` (`markup_real`)). |
 | `markup_bruto_pct` | numeric(10,4) | não |  | O "AC8": (total NF de revenda - compra bruta) / compra bruta. Gatilho da regra fixa. Não é a margem líquida que decide a letra. |
 | `margem_liquida_pct` | numeric(10,4) | não |  |  |
 | `lucro` | numeric(15,2) | não |  |  |
@@ -316,7 +316,7 @@ Cada execução do motor sobre uma comissão. COTADO = com o custo que o vendedo
 
 #### `core_comissao.comissao_calculo_itens`
 
-Item de um cálculo, com TODAS as entradas e saídas do motor (reprodutível). A comissão é decidida item a item. Só INSERT.
+Item de um cálculo, com TODAS as entradas e saídas do motor (reprodutível). A comissão é decidida item a item (⚠️ o motor atual passou ao grão do pedido em 18 a 23/11 (N16-185, N16-186, N16-190); este desenho ainda é por item. Ver "O motor mudou de grão" em [[03-Modelo-Novo-core_comissao]]). Só INSERT.
 
 | Coluna | Tipo | Nulo | Padrão | Observação |
 |---|---|---|---|---|
