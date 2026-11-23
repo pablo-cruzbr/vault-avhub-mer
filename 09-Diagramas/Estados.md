@@ -371,7 +371,7 @@ Selo ✅: enum em `estoque.prisma`; `qualidade.service.ts` (quarentena); carga i
 
 ### 3. Reserva de estoque (`StatusReserva`)
 
-Selo ✅ enum `estoque.prisma:48-52`, `consumirReservasDaParcial` em `estoque-operacao.helpers.ts:208`; 📝 retirada decidida; 🔴 sem código. Liberação manual: `PATCH /estoque/reservas/:id/liberar` ✅ `api-pcp` `src/estoque/operacao/estoque-operacao.controller.ts:131` (`@Patch('reservas/:id/liberar')`).
+Selo ✅ enum `estoque.prisma:48-52`, `consumirReservasDaParcial` em `estoque-operacao.helpers.ts:208`; 📝 retirada decidida; 🔴 sem código. Liberação manual: `PATCH /estoque/reservas/:id/liberar` ✅ `api-pcp` `src/estoque/operacao/estoque-operacao.controller.ts:148` (`@Patch('reservas/:id/liberar')`).
 
 ### 4. Recebimento (`StatusRecebimento`)
 
