@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, raia, custo-real, comissao, k1, k2, k3, k4, k5, k6, controladoria, simulador, tela, devolucao, apuracao, parte]
 criado: 2026-11-05
-estado-em: 2026-11-10
+estado-em: 2026-11-23
 status: proposta
 dono: Nathan (fluxo) · Gustavo (banco e API) · Robert (custo no MES) · Michele (decisão da comissão)
 parte-de: "[[15-Custo-Real-e-Comissao]]"
-develop-conferida: [api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, só o passo de Compras e o estado no código; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 fontes: [Registro-de-Decisoes (N16-09 a N16-11, N16-17 a N16-23, N16-34 a N16-51, N16-57, N16-71, N16-74), Proposta-Orcamento-Comissao/01-Decisoes/Respostas-da-Controladoria-2026-10-19 (fora do vault), Proposta-Orcamento-Comissao/01-Decisoes/Respostas-de-Compras-2026-10-19 (fora do vault), Estudo-Omie-API, 09-Diagramas/fontes/tela-simulador-comissao.png, av-hub comissoes/simulador/page.tsx e lib/simulador/motor.ts, 03-Sistemas/Comissao/01-Motor-Atual-Como-Calcula, 00-Fluxo-Mestre-0b, 03-Estoque-Atendimento-e-Despacho, 04-Circuito-de-Compra, Modelo-Estoque-e-Custo-do-Lote, API-008, LOG-47, 10-Anexo-Fora-do-Fluxo/Comissoes, api-pcp (estoque.prisma, compras.service.ts), 09-Diagramas/artifact-proposta-pedido.html, api-pcp develop de 27/10/2026 (GET /itens/custo, custo da OC), N16-143, N16-144, BL-067, BL-088, OQ-51, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -32,9 +32,9 @@ A tela da proposta é **semelhante à do Simulador de Comissão** que o Nathan m
 
 ### O passo "aprovação de Compras" do motor atual
 
-Hoje (✅ `simulacoes.route.js:30-36`, `:233-259`; `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803-845` (`aprovarCompras`)): o vendedor envia o simulador; Compras abre e, se o custo está errado, cria uma segunda versão (origem `COMPRAS`) com o custo correto; o percentual final do item é o menor entre o do vendedor e o de Compras ([[01-Motor-Atual-Como-Calcula]], R5 e R10).
+Hoje (✅ `api-acos-vital` `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:34` (`const TRANSICOES = {`); `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:858` (`const aprovarCompras = async`)): o vendedor envia o simulador; Compras abre e, se o custo está errado, cria uma segunda versão (origem `COMPRAS`) com o custo correto, ou devolve; o pedido inteiro é pago pela versão de menor comissão, a do vendedor ou a de Compras (N16-190; [[01-Motor-Atual-Como-Calcula]], R5 e R6).
 
-No fluxo novo (N16-51, OQ-28 em parte): o **percentual de Compras** deixa de ser uma digitação e passa a ser o cálculo `REAL`, gerado a cada evento de custo (`K2`); o passo "Compras aprova o percentual" **sai do fluxo e fica pronto no sistema, desligado**, até Compras validar. O percentual final continua sendo o **menor** entre os dois.
+No fluxo novo (N16-51, OQ-28 em parte): o **percentual de Compras** deixa de ser uma digitação e passa a ser o cálculo `REAL`, gerado a cada evento de custo (`K2`); o passo "Compras aprova o percentual" **sai do fluxo e fica pronto no sistema, desligado**, até Compras validar. O percentual final continua sendo o **menor** entre os dois; no desenho do módulo novo, ainda por item (o motor atual compara a versão inteira do pedido, N16-190).
 
 ### Telas e menu que a imagem mostra
 
@@ -97,14 +97,14 @@ A decisão tem seis ações (`aprovar`, `desaprovar`, `bloquear`, `desbloquear`,
 
 | Item | Estado | Selo |
 |---|---|---|
-| Motor atual (menor entre o percentual do vendedor e o de compras, regras fixas, bloqueios, blacklists) | existe em `core_comissionamento`, só leitura aqui ([[Comissoes]]) | ✅ (`api-acos-vital`) |
+| Motor atual (letra pelo pedido, predominância, versão pré-aceita de menor comissão, regras fixas, bloqueios, blacklists, competência) | existe em `core_comissionamento` e no front, só leitura aqui ([[01-Motor-Atual-Como-Calcula]]) | ✅ código (`av-hub` `lib/simulador/motor.ts:475`, `Comissão por PEDIDO`); ❓ banco das migrations de 18 a 23/11 (PS-062) |
 | Módulo novo em `core_comissao`, em Operações | rascunhado e **testado num Postgres 18 em 19/10**; sem API nem tela; o schema não está no banco de teste (tst) de 10/11/2026, que só tem o `core_comissionamento` (validação local em Docker de 10/11/2026) | 🔴 Gustavo (banco), Nathan (telas) |
 | Comissão estimada na proposta (`K1`) | não existe; o simulador do Hub só pré-preenche o lado da compra | 🔴 |
 | Custo real por evento, com a NF de entrada como verdade (`K2`) | não existe | 🔴 Robert, Gustavo |
 | Recurso novo da pipeline: recebimento de NF-e (imposto real, data de recebimento) | não existe | 🔴 Nathan ([[Estudo-Omie-API]]) |
-| Custo obrigatório em todo lote e `GET /itens/custo` | `GET /itens/custo` e o custo da OC no lote existem na `develop` do MES (27/10 e 19/10); o custo obrigatório (BL-066) não | ✅ (`api-pcp`) rota; 🔴 obrigatório, Robert (OQ-07) |
-| Tela da Controladoria igual à do Simulador, com custo real, e visão geral (`K4`, N16-19) | não existe; o Simulador atual é a referência | 🔴 Nathan |
-| Aprovação do vendedor na compra acima do valor, lista de Compras e cancelamento | não existe; o modelo atual **ainda não conhece** | 🔴 |
+| Custo obrigatório em todo lote e `GET /itens/custo` | `GET /itens/custo` e o custo da OC no lote existem na `develop` do MES (27/10 e 19/10); a carga inicial já exige custo e o recebimento sem custo fica em alerta (N16-181); falta o fim do lote sem custo (BL-066) | ✅ (`api-pcp` `src/integracao-avhub/integracao-avhub.controller.ts:29`, `@Get('itens/custo')`) rota; 🟡 obrigatório, Nathan (OQ-07) |
+| Tela da Controladoria igual à do Simulador, com custo real, e visão geral (`K4`, N16-19) | a Visão Geral do módulo atual agrupa por pedido, lê pela competência, filtra o pedido misto e mostra a margem do item; a tela do módulo novo, com custo real e decisão, não existe | 🟡 visão geral; 🔴 tela da Controladoria, Nathan |
+| Aprovação do vendedor na compra acima do valor, lista de Compras e cancelamento | a aprovação existe em Meus Pedidos (LOG-57, [[15-Custo-Real-e-Comissao]]); o uso na comissão real depende do BL-078 | ✅ aprovação (`av-hub` `components/Pedidos/DivergenciasDoVendedor.tsx:76`, `Para você responder`); 🔴 uso na comissão |
 | Abatimento por devolução, pendência de devolução parcial e apuração do vendedor | o abatimento está no modelo; a pendência de devolução parcial e a apuração (OQ-42) **não** | 🔴 |
 | Tela da proposta no formato do Simulador | não existe; o Simulador atual calcula no navegador | 🔴 Robert (tela de proposta), Nathan (`K1`) |
 
