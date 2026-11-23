@@ -1,7 +1,8 @@
 ---
 tags: [telas, menu, experiencia-do-usuario, proposta, vendas, orcamento, compras, comissao, redundancia, auditoria-de-telas, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-23
+develop-conferida: [av-hub 7f0f7e2, em 2026-11-23 (só o aviso do Orçamento)]
 status: proposta
 dono: Nathan
 parte-de: "[[Telas-e-Experiencia-do-Usuario]]"
@@ -33,6 +34,8 @@ Foram lidos os 47 arquivos `page.tsx` de `app/(protected)/vendas`, `orcamento` e
 | **Notas Fiscais de Saída** (inativa) | Lista as notas de saída com valores e se foi averbada. | ✅ Continua inativa | Data, nº NF, cliente, vendedor, filial, categoria, IPI, mercadorias, total, "Averbada?". |
 
 ## Texto completo e detalhe lido no código: Orçamento
+
+A tabela é a leitura de 23/10 das telas do Pablo. Desde 17/11 o menu Orçamento tem 3 telas com dado real (`LOG-60`, N16-173), no visual de Compras desde 23/11 (N16-192); o estado atual está em [[02-Orcamento-Base-de-Preco-Detalhe-Tecnico-1]], seção Telas.
 
 | Tela | O que faz (texto completo) | No modelo novo (texto completo) | Detalhe lido no código |
 |---|---|---|---|
