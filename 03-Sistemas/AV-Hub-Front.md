@@ -1,16 +1,16 @@
 ---
 tags: [sistemas, av-hub, hub, nextjs, frontend, bff]
 criado: 2026-10-14
-estado-em: 2026-11-18
+estado-em: 2026-11-23
 status: vigente
 dono: Nathan
-develop-conferida: [av-hub 857d90e (versão do Next), em 2026-11-18; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
-fontes: [av-hub 758d5f0 (develop, 29/10; repositório `av-hub`, antes `00 - HUB`), api-acos-vital 0384e89, v1 AV-Hub-Arquitetura-BFF, AV-Hub-Modulos, AV-Hub-RBAC]
+develop-conferida: [av-hub 7f0f7e2, api-acos-vital ce4f90f, em 2026-11-23, comissões, proposta, busca de produto, cabeçalho, peças do Orçamento, avisos e comentários; av-hub 857d90e (versão do Next), em 2026-11-18; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+fontes: [av-hub PRs #308, #312, #313, #316, #319, #321, #323, #327, #329, #331 a #336 (develop 7f0f7e2), N16-179, N16-185 a N16-192, LOG-61, PS-064, av-hub 758d5f0 (develop, 29/10; repositório `av-hub`, antes `00 - HUB`), api-acos-vital 0384e89, v1 AV-Hub-Arquitetura-BFF, AV-Hub-Modulos, AV-Hub-RBAC]
 ---
 
 # AV-Hub Front (HUB)
 
-**Em uma frase:** é o site do av-hub, com os portais do Vendedor, do Gerente, de Compras, do PCP (só leitura), de Comissões e de RH, mais Propostas e Orçamento. Dono: Nathan; as telas de Propostas são do Robert e as de Orçamento do Pablo com o Robert.
+**Em uma frase:** é o site do av-hub, com os portais do Vendedor, do Gerente, de Compras, do PCP (só leitura), de Comissões e de RH, mais Propostas e Orçamento. Dono: Nathan, também do Orçamento e das telas da comissão; as telas de Propostas são do Robert (N16-168, N16-169).
 
 ## Quem usa e para quê
 
@@ -48,7 +48,12 @@ fontes: [av-hub 758d5f0 (develop, 29/10; repositório `av-hub`, antes `00 - HUB`
 - ✅ O MES lê a OC da "Nova requisição" pela referência da OC (desde 15/10, `develop` do MES) e as requisições do Compras com pedido de venda (API-009, 23/10). Falta só a produção receber a `develop` do MES.
 - 📝 Imposto por item decidido em 29/10 (N16-144); falta a tela: campos de imposto e selo de origem na emissão da OC, quando o desenvolvimento começar.
 - 🟡 Endurecer a regra de aprovação quando Compras definir.
-- ✅ O Orçamento antigo (JSON local) saiu em 16/10 (`c851cda`). As telas novas de Orçamento (Catálogo de produtos, Fornecedores, Painel do comprador, Parâmetros de custo, Custo dos itens) leem a API do Hub ([[02-Orcamento-Base-de-Preco]]).
+- ✅ O Orçamento antigo (JSON local) saiu em 16/10 (`c851cda`). As telas novas de Orçamento (Catálogo de produtos, Fornecedores, Painel do comprador, Custo dos itens) leem a API do Hub ([[02-Orcamento-Base-de-Preco]]). A tela Parâmetros de custo saiu (N16-179, PR #321): os valores mudam só por SQL.
+- ✅ Busca rápida de produto no "Pedir cotação" (N16-191, PR #335): o BFF repassa `GET /produtos/busca` com a permissão `catalogo-produtos` (`av-hub` `app/api/comercial/[...rota]/route.ts:112` (`padrao: '/produtos/busca'`)).
+- ✅ Um visual só (N16-192): o cabeçalho padrão das telas (`av-hub` `components/Ui/CabecalhoDaTela/CabecalhoDaTela.tsx:22` (`export default function CabecalhoDaTela`) e `CaminhoDaTela.tsx:11` (`export default function CaminhoDaTela`), PR #319) e, no padrão de Compras, as peças do Orçamento reaproveitáveis em outras áreas (`components/Orcamento/BarraDaLista.tsx:24` (`export default function BarraDaLista`), `BotaoVoltar.tsx:10` (`export default function BotaoVoltar`), `LinhasEsqueleto.tsx:6` (`export default function LinhasEsqueleto`), PR #336).
+- ✅ Central de Avisos (LOG-61, PR #308): o BFF repassa `/me/avisos` sem checar tela, porque a API decide quem vê o quê (`av-hub` `app/api/avisos/[[...rota]]/route.ts:41` (`/me/avisos`)).
+- ✅ Comissões (módulo atual), 18 a 23/11: o simulador e a proposta calculam a comissão pelo pedido inteiro, com predominância (N16-185, N16-186; `av-hub` `lib/simulador/motor.ts:475` (`Comissão por PEDIDO`)); a Visão Geral agrupa as notas por pedido, lê pela competência, filtra o pedido misto e mostra a margem do item (`lib/domain/comissoes-visao-geral.ts:232` (`export function agruparPorPedido`)); Minhas Comissões lê `/comissoes_nf` com `meus=true` e os itens por um BFF novo, `/api/comissoes/minhas-comissoes/itens`, fora do `/faturamento_planilha` (`app/api/comissoes/minhas-comissoes/route.ts:148` (`/comissoes_nf?`)). 🟡 Minhas Comissões ainda não mostra `DEVOLVIDO` e fala em 403 (PS-064). Regras em [[01-Motor-Atual-Como-Calcula]].
+- ✅ Padrão de comentários de código: seção "Comentários" no `CLAUDE.md` do av-hub (`av-hub` `CLAUDE.md:178` (`## Comentários`)) e a skill `comentarios-codigo`.
 
 ## Detalhe técnico
 
