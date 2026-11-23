@@ -26,7 +26,7 @@ O Estoque do MES já mostra o que ainda vai chegar por OC de estoque (o "saldo f
 
 ## 2. Contexto: o que deve ser feito e por quê
 
-- **O problema:** pela regra do Recebimento, a peça reprovada na inspeção volta ao fornecedor e a OC original continua esperando por ela (`api-pcp` `src/compras/compra-oc.ts:186` (`volta ao fornecedor e continua esperado`)). Quando o Compras resolve o aviso do [[LOG-58-Avisos-do-MES-ao-Compras|LOG-58]] com uma OC de recompra, a mesma quantidade aparece nas duas OCs.
+- **O problema:** pela regra do Recebimento, a peça reprovada na inspeção volta ao fornecedor e a OC original continua esperando por ela (`api-pcp` `src/compras/compra-oc.ts:199` (`volta ao fornecedor e continua esperado`)). Quando o Compras resolve o aviso do [[LOG-58-Avisos-do-MES-ao-Compras|LOG-58]] com uma OC de recompra, a mesma quantidade aparece nas duas OCs.
 - **Exemplo real (Docker, 12/11):** a OC-000013 recebeu 5 PÇ e teve 2 reprovadas, e a OC-000014 é a recompra dessas 2. O saldo futuro do produto 10222656014 mostrava 4 PÇ a chegar; o certo é 2.
 - **Quem sofre:** o Estoque e o CCP, que olham o saldo futuro antes de pedir compra.
 - **Por que o MES não resolve sozinho:** só o av-hub sabe que uma OC é recompra de um aviso, pelo `ordens_compra.id_aviso_mes`. Esse campo guarda o id do aviso **no av-hub**, não o do MES (escolha da entrega do LOG-58, seção 15). A referência da OC que o MES lê não traz essa ligação.
@@ -42,11 +42,11 @@ O Estoque do MES já mostra o que ainda vai chegar por OC de estoque (o "saldo f
 - ✅ **MES, backend** (`api-pcp`, `bd6b442`):
   - saldo futuro: `src/estoque/operacao/saldo-futuro.ts:68` (`export async function saldoFuturoPorProduto`);
   - desconto da reprovada com recompra: `src/estoque/operacao/saldo-futuro.ts:38` (`async function reprovadoComRecompra`);
-  - rota: `src/estoque/operacao/estoque-operacao.controller.ts:46` (`@Get('saldo/futuro')`);
+  - rota: `src/estoque/operacao/estoque-operacao.controller.ts:48` (`@Get('saldo/futuro')`);
   - coluna `oc_referencia.id_aviso_mes_origem`: `prisma/models/integracao.prisma:159` (`idAvisoMesOrigem String?`), criada pela migration `20261113120000_bl050_oc_aviso_recompra`.
 - ✅ **MES, front** (`app-pcp`, `897dcd7`):
-  - bloco no modal: `app/(protected)/movimentacoes/components/AtenderEstoqueModal.tsx:448` (`A chegar por OC de estoque:`);
-  - card na tela Saldo: `app/(protected)/estoque-operacao/saldo/SaldoFuturoCard.tsx:50` (`<Card title="A chegar por OC de estoque">`).
+  - bloco no modal: `app/(protected)/movimentacoes/components/AtenderEstoqueModal.tsx:452` (`A chegar por OC de estoque:`);
+  - coluna "A chegar" na tela Estoque (o card da tela Saldo saiu na reorganização de 19/11, N16-184): `app/(protected)/estoque-operacao/saldo/TabelaMateriais.tsx:33` (`A chegar`).
 - ✅ **API do av-hub** (`api-acos-vital`, `9abda4f`): a rota lê a coluna nova em `src/schemas/core_vendas_faturamento/views/vw_ordens_compra_referencia_mes/vw_ordens_compra_referencia_mes.route.js:71` (`v.id_aviso_mes_origem`). Sem a coluna no banco, lê o conjunto anterior (`:89`, `migration: "bl050"`).
 - ✅ **Banco do av-hub:** aplicada no tst em 13/11 pelo Gustavo (migration `2026-11-13_sql022_aviso_recompra_referencia_oc.sql`, com o DBA, N16-155): a view tem `id_aviso_mes_origem` no fim ([[Dump-AvHub-Teste-2026-11-13]], `avhub-tst-esqueleto-2026-11-13.sql:27920`, `av.id_aviso_mes AS id_aviso_mes_origem`). No tst as 9 OCs da referência vêm com o campo nulo, porque lá ainda não há recompra emitida a partir de aviso. Produção pendente, depois da log58.
 
