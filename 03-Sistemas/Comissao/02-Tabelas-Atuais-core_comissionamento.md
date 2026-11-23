@@ -60,5 +60,5 @@ Inventário do que existe hoje, com o que está bom e o que deve ser **melhorado
 
 O detalhe técnico desta nota fica em 2 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
 
-- [[02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-1]]: O que entrou de 18 a 23/11 (banco ❓, PS-062) · Mapa do schema · Tabelas
+- [[02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-1]]: O que entrou de 18 a 23/11 (no tst; produção ❓, PS-062) · Mapa do schema · Tabelas
 - [[02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-2]]: Views · Funções · Rotas da API que existem hoje · Resumo dos problemas de estrutura
