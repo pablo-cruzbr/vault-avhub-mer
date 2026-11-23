@@ -98,7 +98,7 @@ Perfis são dados do banco; o inspetor precisa de `PerfilSetor.podeAtuar` no set
 | 3 | Reprovar grava histórico e abre `Divergencia` tipo `QUALIDADE`, `ABERTA`, com motivo | ✅ `:1036-1058` |
 | 4 | Na fila, reprovado só tem duas saídas: `resolver` (falso alarme, volta a `EM_ANDAMENTO`) ou `retrabalho` (volta ao setor anterior; pela N16-141, de 29/10, o PCP passará a escolher o setor). Mover, concluir, pausar e devolver somem. Ajustar roteiro e reabrir compra são do novo norte (`P6`, sem tela; item 3 de "O que falta desenvolver") | ✅ `app-pcp` `app/(protected)/movimentacoes/acoes.ts:76` (`REPROVADO: ['retrabalho'`) |
 | 5 | Aprovado volta ao Estoque: **lote e saldo do fabricado**, retirada depois ([[Contratos-da-v2\|LOG-53]], [[Contratos-da-v2\|LOG-54]]) | 📝 ✅ (`api-pcp`) lote e saldo na `develop` (27/10); 🔴 retirada |
-| 6 | Reprovação de inspeção de saída **não** gera RNC nem nota de devolução: RNC é conceito do lote comprado | ✅ `rncs` só em `api-pcp` `src/qualidade/qualidade.service.ts:205` (`await tx.rnc.create({`) |
+| 6 | Reprovação de inspeção de saída **não** gera RNC nem nota de devolução: RNC é conceito do lote comprado | ✅ `rncs` só em `api-pcp` `src/qualidade/qualidade.service.ts:189` (`await tx.rnc.create({`) |
 | 7 | Inspeção de saída sem laudo nem checklist: um clique e um motivo (N16-129, 29/10, responde a pergunta T-04 da inspeção documental, ciclo 2). Hoje não há laudo na saída | 📝 ✅ (`api-pcp`) |
 | 8 | Pode reprovar só parte da parcial (N16-128, 29/10) | 📝 🔴 |
 
