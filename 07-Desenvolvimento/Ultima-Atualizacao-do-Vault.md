@@ -1,10 +1,10 @@
 ---
 tags: [desenvolvimento, atualizacao, develop, manutencao]
 criado: 2026-11-05
-estado-em: 2026-11-17
+estado-em: 2026-11-23
 status: vigente
 dono: Nathan
-fontes: [git log -1 origin/develop de cada sistema em 2026-11-17, conversa do Nathan de 17/11/2026 (N16-168 a N16-171), git log -1 origin/develop de cada sistema em 2026-11-16, reteste R4 no Docker de 16/11/2026 (docker-teste/RETESTE-R4-2026-11-16.md), reteste por cliques no Docker de 13/11/2026 (docker-teste/RETESTE-CLIQUES-2026-11-13.md, fora do vault), conferência completa do vault de 13/11/2026 (docker-teste/conferencia-vault/, fora do vault), reteste R2 no Docker de 13/11/2026 (docker-teste/RELATORIO-VALIDACAO.md seção R2, RETESTE-2026-11-13-AVHUB.md e RETESTE-2026-11-13-MES.md, fora do vault), teste da proposta no Docker local de 13/11, validação local em Docker de 10/11/2026]
+fontes: [git log -1 origin/develop de cada sistema em 2026-11-23, decisões N16-180 a N16-192 (19 a 23/11), git log -1 origin/develop de cada sistema em 2026-11-17, conversa do Nathan de 17/11/2026 (N16-168 a N16-171), git log -1 origin/develop de cada sistema em 2026-11-16, reteste R4 no Docker de 16/11/2026 (docker-teste/RETESTE-R4-2026-11-16.md), reteste por cliques no Docker de 13/11/2026 (docker-teste/RETESTE-CLIQUES-2026-11-13.md, fora do vault), conferência completa do vault de 13/11/2026 (docker-teste/conferencia-vault/, fora do vault), reteste R2 no Docker de 13/11/2026 (docker-teste/RELATORIO-VALIDACAO.md seção R2, RETESTE-2026-11-13-AVHUB.md e RETESTE-2026-11-13-MES.md, fora do vault), teste da proposta no Docker local de 13/11, validação local em Docker de 10/11/2026]
 ---
 
 # Última atualização do vault
@@ -15,15 +15,15 @@ fontes: [git log -1 origin/develop de cada sistema em 2026-11-17, conversa do Na
 
 ## Base atual
 
-**Data:** 17/11/2026. **Motivo:** o Nathan informou a MEGA aplicada em produção pelo Gustavo, pediu a `develop` de todos os sistemas na `main` e mudou a equipe do Comercial (N16-168 a N16-171). Na `develop`, desde a base de 16/11: `api-acos-vital` `96e83de` (exclusão lógica da proposta, LOG-59) e `av-hub` `ca3526b`, `63f9afb` e `e073fe0` (coluna Pedido Omie, revenda completa no compositor, exclusão e "Excluído no Omie"); `omie-elt-pipeline` `28efc5a` (porta 6379 do Redis mantida); MES sem mudança. **Nesta atualização:** [[Registro-N16-167-em-diante]], [[Registro-de-Decisoes]], [[Tipos-de-ID]], [[Equipe-e-Divisao]], [[Regras-do-Vault]], [[Capacidade-do-Robert]], [[Cronograma]], [[Banco-AvHub]], [[01-Proposta-de-Venda]] e a parte técnica 2, `LOG-59` e [[Contratos-da-v2]], [[Integracao-AvHub-MES-Detalhe-Tecnico-2]], [[Backlog-Frente-Nathan-Proposta-Omie-e-Comissao]] e [[Onde-Estamos]]. **Ainda sem conferir:** o deploy de cada sistema, as 17 migrations do MES aplicadas em produção e a produção do Hub por dump.
+**Data:** 23/11/2026. **Motivo:** o Nathan pediu o vault com tudo o que foi feito no AV-Hub e no MES de 17 a 23/11. Na `develop`, desde a base de 17/11: no MES, o Estoque do Nathan (`api-pcp` PRs #85 a #95: testes, motor único, conferência do livro, lote v2, travas, idempotência, kardex, inventário, painel, consulta, pendências, valor do kardex; `app-pcp` PRs #70 a #82: telas por tarefa, fila do Estoque, casca e tema do Hub, filtros); no Hub, a comissão por pedido, a predominância, a competência, a trava da versão do vendedor, a versão pré-aceita e o recorte do vínculo próprio (`av-hub` #312, #313, #327, #331, #333, #334; `api-acos-vital` `7c05f92`, `0244b1a`, `e363da5`, `0e56354`, `06bb146`), o LOG-62 (#314), o SQL-023 e o SQL-024 (#310, #321), o cabeçalho padrão (#319), o padrão de comentários (#323), o Next 16.4.6 (#325), a busca rápida do Pedir cotação (API #329, Hub #335) e o Orçamento no visual de Compras (#336); `omie-elt-pipeline` só o padrão de comentários (#10). **Nesta atualização:** decisões N16-180 a N16-192 e PS-060 a PS-064; raias [[01-Proposta-de-Venda]], [[05-Estoque-Atendimento]] (dividida: [[05-Estoque-Atendimento-Detalhe-Tecnico]]), [[09-Estoque-Entrada-do-Lote]], [[12-Estoque-Despacho]] e [[15-Custo-Real-e-Comissao]]; [[MES-Backend]], [[MES-Front]], [[AV-Hub-API]], [[AV-Hub-Front]], as notas da comissão (02 dividida), [[Onde-Estamos]], [[Equipe-e-Divisao]], [[Regras-do-Vault]], as telas e o RBAC, os contratos `LOG-60`, `SQL-023` e `SQL-024`, o backlog e cerca de 100 citações de código acertadas na `develop` de 23/11 (sobram 8 do `api-comercial` legado, de propósito). **Ainda sem conferir:** o banco das migrations da comissão de 18 a 23/11 (PS-062), o deploy do MES e o cadastro das telas novas do Estoque em Acessos no tst e na produção (PS-060).
 
 | Sistema | Ramo lido | Commit | Data do commit | Último merge |
 |---|---|---|---|---|
-| `api-acos-vital` | `origin/develop` | `96e83de` | 16/11/2026 | `96e83de` (exclusão lógica da proposta), direto na `develop`; na `main` pelo PR #311 (17/11) |
-| `av-hub` | `origin/develop` | `4cce84b` | 17/11/2026 | PR #304 (`feat/proposta-exclusao`); na `main` pelo PR #305 (17/11) |
-| `api-pcp` | `origin/develop` | `bd6b442` | 12/11/2026 | PR #81 (`feat/saldo-futuro-oc-estoque`); na `main` pelo PR #82 (17/11) |
-| `app-pcp` | `origin/develop` | `897dcd7` | 12/11/2026 | PR #66 (`feat/saldo-futuro-oc-estoque`); na `main` pelo PR #67 (17/11) |
-| `omie-elt-pipeline` | `origin/develop` (a `master`, de produção, recebeu a `develop` em 17/11 pelo PR #9, com a seed 013) | `28efc5a` | 17/11/2026 | `28efc5a` (porta do Redis), direto na `develop` |
+| `api-acos-vital` | `origin/develop` | `ce4f90f` | 23/11/2026 | PR #329 (busca rápida de produto); na `main` até o PR #327 (19/11) |
+| `av-hub` | `origin/develop` | `7f0f7e2` | 23/11/2026 | PR #336 (Orçamento no visual de Compras); na `main` até o PR #330 (19/11) |
+| `api-pcp` | `origin/develop` | `c8036db` | 23/11/2026 | PR #95 (valor do kardex); na `main` até o PR #84 (18/11) |
+| `app-pcp` | `origin/develop` | `8259344` | 23/11/2026 | PR #82 (filtros do Estoque no padrão do Hub); na `main` até o PR #69 (18/11) |
+| `omie-elt-pipeline` | `origin/develop` (a `master` é a produção) | `e42b65d` | 18/11/2026 | PR #10 (padrão de comentários) |
 
 São os commits do `develop-conferida` das notas conferidas nesta atualização; as raias não tocadas ainda dizem commits anteriores.
 
