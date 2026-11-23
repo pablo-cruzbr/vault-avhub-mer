@@ -1,16 +1,17 @@
 ---
 tags: [telas, menu, experiencia-do-usuario, proposta, vendas, orcamento, compras, comissao, redundancia, auditoria-de-telas, parte]
 criado: 2026-11-05
-estado-em: 2026-10-29
+estado-em: 2026-11-23
 status: proposta
 dono: Nathan
+develop-conferida: [av-hub 7f0f7e2, app-pcp 8259344, em 2026-11-23 (padrão visual)]
 parte-de: "[[Telas-e-Experiencia-do-Usuario]]"
-fontes: ["av-hub develop (23/10/2026): lidos os 47 arquivos page.tsx de app/(protected)/vendas, orcamento e compras e os componentes que cada um abre (components/Propostas, Clientes, Relatorios, Suprimentos, PainelComprador, CustoItens, Configuracoes, Compras, Painel, Orcamento)", "lib/auth/devSemLogin.ts (MENU_DEV)", "av-hub docs/ENVIAR - contrato-comercial-suprimentos-telas.md", "Registro-de-Decisoes (N16-01 a N16-78)", "11-Proposta-e-Pedido-de-Venda, 12-Orcamento-Base-de-Preco, 13-Custo-Real-e-Comissao-no-Fluxo", "05-Integracoes/Mapa-IncluirPedido-Omie"]
+fontes: ["av-hub develop (23/10/2026): lidos os 47 arquivos page.tsx de app/(protected)/vendas, orcamento e compras e os componentes que cada um abre (components/Propostas, Clientes, Relatorios, Suprimentos, PainelComprador, CustoItens, Configuracoes, Compras, Painel, Orcamento)", "lib/auth/devSemLogin.ts (MENU_DEV)", "av-hub docs/ENVIAR - contrato-comercial-suprimentos-telas.md", "Registro-de-Decisoes (N16-01 a N16-78)", "11-Proposta-e-Pedido-de-Venda, 12-Orcamento-Base-de-Preco, 13-Custo-Real-e-Comissao-no-Fluxo", "05-Integracoes/Mapa-IncluirPedido-Omie", "N16-192", "av-hub #319, #336", "app-pcp #78, #79, #80, #82"]
 ---
 
 # Telas de Vendas, Orçamento e Compras no modelo novo: detalhe técnico (2/2)
 
-**Em uma frase:** detalhe técnico da nota [[Telas-e-Experiencia-do-Usuario]] (parte 2 de 2): Menu revisto em 27/10/2026; Conexões entre telas: o que já está ligado; Repetições e confusões: texto completo; Telas que faltam: texto completo; A página de proposta: texto completo (seção 5); Itens da proposta e campos do formulário (`PropostaForm.tsx`, `ItemProposta.tsx`); Menu de desenvolvimento e ocultas.
+**Em uma frase:** detalhe técnico da nota [[Telas-e-Experiencia-do-Usuario]] (parte 2 de 2): Menu revisto em 27/10/2026; Conexões entre telas: o que já está ligado; Repetições e confusões: texto completo; Telas que faltam: texto completo; A página de proposta: texto completo (seção 5); Itens da proposta e campos do formulário (`PropostaForm.tsx`, `ItemProposta.tsx`); Menu de desenvolvimento e ocultas; Um visual só: as peças no código.
 
 **Onde estamos:** ← [[Telas-e-Experiencia-do-Usuario]] (resumo e índice) · partes: [[Telas-e-Experiencia-do-Usuario-Detalhe-Tecnico-1]] · **Telas-e-Experiencia-do-Usuario-Detalhe-Tecnico-2**
 
@@ -146,3 +147,18 @@ O vendedor pode marcar "pode faturar em partes" (N16-89). Nesse caso a tela do *
 - O menu de teste sem login vem de `lib/auth/devSemLogin.ts` (`MENU_DEV`).
 - Telas ocultas: `propostas-delegacao`, `propostas-valores`, `custo-item`, `solicitacoes-custo`.
 - Fontes da auditoria: `av-hub docs/ENVIAR - contrato-comercial-suprimentos-telas.md`, Registro-de-Decisoes (N16-01 a N16-78) e as notas 11, 12 e 13.
+
+## Um visual só: as peças no código
+
+O modelo são as telas de Compras do Hub (N16-192). Conferido em `av-hub` `7f0f7e2` e `app-pcp` `8259344`.
+
+| Peça | Para que serve | Onde está |
+|---|---|---|
+| Cabeçalho da tela (Hub, #319) | Caminho no menu, título, subtítulo e ações, com o fundo das Ordens de compra; usado em Acessos, Vínculos, Auxiliares e Orçamento | ✅ `av-hub` `components/Ui/CabecalhoDaTela/CabecalhoDaTela.tsx:22` (`export default function CabecalhoDaTela`) |
+| Estilos da lista | Barra de busca, KPIs e fundo da página (`PedidosLista.module.css`); tabela (`ComprasLista.module.css`) | ✅ `av-hub` `components/Orcamento/BarraDaLista.tsx:5` (`import shell from '@/components/Pedidos/PedidosLista.module.css'`) |
+| Barra da lista do Orçamento (#336) | Busca, abas e KPIs no padrão das listas de pedidos | ✅ `av-hub` `components/Orcamento/BarraDaLista.tsx:24` (`export default function BarraDaLista`) |
+| Botão voltar do Orçamento (#336) | Volta da página do pedido, do produto ou do fornecedor para a lista | ✅ `av-hub` `components/Orcamento/BotaoVoltar.tsx:10` (`export default function BotaoVoltar`) |
+| Linhas de carregamento do Orçamento (#336) | Esqueleto da tabela enquanto carrega | ✅ `av-hub` `components/Orcamento/LinhasEsqueleto.tsx:6` (`export default function LinhasEsqueleto`) |
+| Cabeçalho do MES (#78) | Caminho automático pelo menu da sessão (`trilha`) e ações | ✅ `app-pcp` `components/Layout/PageLayout/PageHeader/PageHeader.tsx:58` (`const PageHeader = ({ title, subtitle, trilha, acoes }`) |
+| Cartão translúcido do MES (#78) | Cartão sobre a luz de fundo no tema escuro | ✅ `app-pcp` `styles/variables.css:304` (`--card-surface: color-mix(`) |
+| Seletor de período e busca que escolhe item (MES, #82) | Mesmo jeito do Dashboard de compras do Hub, no lugar do Autocomplete do MUI | ✅ `app-pcp` `components/Ui/Alternar/Alternar.tsx:16` (`export default function Alternar`) e `components/Ui/BuscaSelecao/BuscaSelecao.tsx:30` (`export default function BuscaSelecao`) |
