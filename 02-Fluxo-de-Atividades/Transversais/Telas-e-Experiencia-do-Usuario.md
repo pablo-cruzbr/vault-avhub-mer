@@ -1,10 +1,11 @@
 ---
 tags: [telas, menu, experiencia-do-usuario, proposta, vendas, orcamento, compras, comissao, redundancia, auditoria-de-telas]
 criado: 2026-10-23
-atualizado: 2026-10-29
+estado-em: 2026-11-23
 status: proposta
 dono: Nathan
-fontes: ["av-hub develop (23/10/2026): lidos os 47 arquivos page.tsx de app/(protected)/vendas, orcamento e compras e os componentes que cada um abre (components/Propostas, Clientes, Relatorios, Suprimentos, PainelComprador, CustoItens, Configuracoes, Compras, Painel, Orcamento)", "lib/auth/devSemLogin.ts (MENU_DEV)", "av-hub docs/ENVIAR - contrato-comercial-suprimentos-telas.md", "Registro-de-Decisoes (N16-01 a N16-78)", "11-Proposta-e-Pedido-de-Venda, 12-Orcamento-Base-de-Preco, 13-Custo-Real-e-Comissao-no-Fluxo", "05-Integracoes/Mapa-IncluirPedido-Omie"]
+develop-conferida: [av-hub 7f0f7e2, app-pcp 8259344, em 2026-11-23 (padrão visual)]
+fontes: ["av-hub develop (23/10/2026): lidos os 47 arquivos page.tsx de app/(protected)/vendas, orcamento e compras e os componentes que cada um abre (components/Propostas, Clientes, Relatorios, Suprimentos, PainelComprador, CustoItens, Configuracoes, Compras, Painel, Orcamento)", "lib/auth/devSemLogin.ts (MENU_DEV)", "av-hub docs/ENVIAR - contrato-comercial-suprimentos-telas.md", "Registro-de-Decisoes (N16-01 a N16-78)", "11-Proposta-e-Pedido-de-Venda, 12-Orcamento-Base-de-Preco, 13-Custo-Real-e-Comissao-no-Fluxo", "05-Integracoes/Mapa-IncluirPedido-Omie", "N16-192", "av-hub #319, #336", "app-pcp #78, #79, #80, #82"]
 ---
 
 # Telas de Vendas, Orçamento e Compras no modelo novo
@@ -15,7 +16,7 @@ Esta nota mostra o que cada tela de Vendas, Orçamento e Compras faz hoje, como 
 
 ## Como usar esta nota
 
-- Ache o setor no **Mapa rápido** e vá à seção 1. Desconectado: seção 2. Repetido: seção 3. Faltam: seção 4. Proposta: seção 5. Menu: seção 6.
+- Ache o setor no **Mapa rápido** e vá à seção 1. Desconectado: seção 2. Repetido: seção 3. Faltam: seção 4. Proposta: seção 5. Menu: seção 6. Visual comum: seção 8.
 - Colunas, filtros e o texto completo estão em "Detalhe técnico".
 
 Substitui a versão de 23/10: **todas as páginas foram lidas**. Marcado ❓ o que não foi lido por dentro: botões no servidor, Cadastros, PCP e Meus Pedidos.
@@ -30,6 +31,7 @@ Selos: ✅ existe e foi lido · 🔴 não existe · 🟡 proposta · ❓ não co
 > - O "Pedido no Omie" digitado à mão, o fechamento parcial e a perda saíram do front em 28/10 (`2008344`); a proposta foi refeita em 27 e 29/10 (grade de itens, condições no layout do Simulador, abas e análise de margem; `37c9cf2`, `88fbafe`).
 > - Aprovar, cancelar e transformar em pedido já existem na API (`api-acos-vital`, 29/10), mas o BFF e a tela ainda não os usam.
 > - Os nomes dos itens do menu moram no banco (`telas`): não conferi se "Aprovar OC" e "Reprovados" já foram criados ❓.
+> - Desde 17/11 o Orçamento tem 3 telas com dado real: Pedidos de custo, Produtos e Fornecedores (`LOG-60`, N16-173). Parâmetros de custo saiu do Hub (N16-179). Detalhe em [[02-Orcamento-Base-de-Preco]].
 > - As linhas das tabelas abaixo são o registro da leitura de 23/10; onde isto muda o texto, a linha diz.
 
 ## Mapa rápido por setor
@@ -37,7 +39,7 @@ Selos: ✅ existe e foi lido · 🔴 não existe · 🟡 proposta · ❓ não co
 | Setor | Telas | Situação |
 |---|---|---|
 | Vendas | Propostas, Clientes, Relatórios, Pedidos de Venda do Omie: criar e acompanhar propostas | ✅ 🔴 |
-| Orçamento | Painel do Comprador, Ofertas, Fornecedores, Catálogo, Parâmetros: manter o preço de compra | ✅ 🔴 |
+| Orçamento | Pedidos de custo, Produtos, Fornecedores: manter o preço de compra (`LOG-60`) | ✅ |
 | Compras | Requisições, Emitir OC, Ordens, Aprovações, Follow-up: da requisição à OC | ✅ 🔴 |
 | Painéis | PCP, Dashboard de Vendas, Meus Pedidos: carteira do vendedor | ❓ |
 | Faltam | Aprovar, transformar em pedido, pendências, fila do Fiscal, comissões (seção 4) | 🔴 |
@@ -194,6 +196,15 @@ Menus de Vendas e Orçamento revistos em 27/10/2026 (N16-107, N16-108) e já apl
 5. **Fila do Fiscal** (reaproveita Pedidos de Venda).
 6. Comissões novas.
 
+## 8. Um visual só (N16-192)
+
+As telas de Compras do Hub (Ordens de compra, Aprovações) são o modelo de visual para os dois sistemas. Quem usa passa de uma tela para outra, ou do Hub para o MES, e reconhece o mesmo jeito.
+
+- ✅ **Cabeçalho padrão no Hub** (`av-hub` #319, 18/11): caminho no menu, título, subtítulo e uma ação, no fundo das Ordens de compra. Já está em Acessos, Vínculos, Auxiliares e Orçamento: `av-hub` `components/Ui/CabecalhoDaTela/CabecalhoDaTela.tsx:22` (`export default function CabecalhoDaTela`).
+- ✅ **Orçamento no visual de Compras** (`av-hub` #336, 23/11, só visual, só na `develop`): a barra de busca e os KPIs das listas de pedidos e a tabela de Compras, com três peças próprias (barra da lista, botão voltar e linhas de carregamento): `av-hub` `components/Orcamento/BarraDaLista.tsx:24` (`export default function BarraDaLista`).
+- ✅ **MES com a casca e o tema do Hub** (`app-pcp` #78, #79, #80 e #82, 19 a 23/11, só na `develop`): cabeçalho com o caminho no menu, a luz de fundo no tema escuro, largura de 1680 px, cartões translúcidos e o código do lote em laranja; as telas do Estoque seguem as Aprovações de Compras. `app-pcp` `components/Layout/PageLayout/PageHeader/PageHeader.tsx:58` (`const PageHeader = ({ title, subtitle, trilha, acoes }`).
+- Regra para tela nova ou migrada: partir das telas de Compras e das peças comuns, sem estilo próprio. O passo a passo está na skill `interface-hub` (fora do vault). Peças e arquivos em [[Telas-e-Experiencia-do-Usuario-Detalhe-Tecnico-2]].
+
 ## Ver também
 
 [[01-Proposta-de-Venda]] · [[02-Orcamento-Base-de-Preco]] · [[15-Custo-Real-e-Comissao]] · [[Mapa-IncluirPedido-Omie]]
@@ -205,4 +216,4 @@ Para quem mexe no código. Tudo o que saiu do texto principal está aqui.
 O detalhe técnico desta nota fica em 2 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
 
 - [[Telas-e-Experiencia-do-Usuario-Detalhe-Tecnico-1]]: Como a auditoria foi feita · Texto completo e detalhe lido no código: Vendas · Texto completo e detalhe lido no código: Orçamento · Texto completo e detalhe lido no código: Compras · Painéis que a proposta deve respeitar: texto completo · Menu: tabela completa
-- [[Telas-e-Experiencia-do-Usuario-Detalhe-Tecnico-2]]: Menu revisto em 27/10/2026 · Conexões entre telas: o que já está ligado · Repetições e confusões: texto completo · Telas que faltam: texto completo · A página de proposta: texto completo (seção 5) · Itens da proposta e campos do formulário (`PropostaForm.tsx`, `ItemProposta.tsx`) · Menu de desenvolvimento e ocultas
+- [[Telas-e-Experiencia-do-Usuario-Detalhe-Tecnico-2]]: Menu revisto em 27/10/2026 · Conexões entre telas: o que já está ligado · Repetições e confusões: texto completo · Telas que faltam: texto completo · A página de proposta: texto completo (seção 5) · Itens da proposta e campos do formulário (`PropostaForm.tsx`, `ItemProposta.tsx`) · Menu de desenvolvimento e ocultas · Um visual só: as peças no código
