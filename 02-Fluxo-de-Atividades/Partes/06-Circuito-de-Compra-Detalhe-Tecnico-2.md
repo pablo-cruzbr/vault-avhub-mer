@@ -115,7 +115,7 @@ Estados (N16-66, N16-73; no banco de teste desde 12/11, com `INFORMATIVA` para a
 |---|---|---|---|
 | `GET /meus-pedidos/divergencias`, `POST /meus-pedidos/divergencias/:id/aprovar` e `/:id/reprovar` | aviso ao vendedor e decisão dele | `C8` | ✅ `api-acos-vital` `src/schemas/core_comercial/tables/divergencias_compra/divergencias_compra.route.js:235` (`meusPedidosDivergencias.post("/:id/aprovar"`) |
 | `GET /compras/divergencias`, `POST /compras/divergencias/:id/solucao` | lista de Compras e solução | `C8` | ✅ `api-acos-vital` `src/schemas/core_comercial/tables/divergencias_compra/divergencias_compra.route.js:167` (`comprasDivergencias.post("/:id/solucao"`) |
-| `GET /compras/avisos-mes`, `/:id`, `PATCH /:id`; `POST /integracao/mes/avisos-compra` (só o MES) | avisos de recompra por RNC e de recebimento reaberto | `C1` | ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:192` (`comprasAvisosMes.patch("/:id"`) |
+| `GET /compras/avisos-mes`, `/:id`, `PATCH /:id`; `POST /integracao/mes/avisos-compra` (só o MES) | avisos de recompra por RNC e de recebimento reaberto | `C1` | ✅ `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:251` (`comprasAvisosMes.patch("/:id"`) |
 
 ### Dados
 
