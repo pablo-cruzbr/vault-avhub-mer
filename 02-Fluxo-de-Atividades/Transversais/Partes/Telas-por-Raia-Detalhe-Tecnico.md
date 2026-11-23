@@ -129,7 +129,7 @@ Os nomes novos já estão nos **títulos** do `app-pcp` (`9bb47e4`, #39: só ró
 | Nó | Nome atual | Nome antigo | Sistema | Rota | Slug | Arquivo ou observação |
 |---|---|---|---|---|---|---|
 | O1 | Fila de sinalização de faturamento | — | app-pcp | — | — | 🔴 |
-| O2 | Notas Fiscais de Saída | — | HUB | `/vendas/notas-fiscais-saida` | ❓ | Título `app/(protected)/vendas/notas-fiscais-saida/page.tsx:98` (`PageHeader`) |
+| O2 | Notas Fiscais de Saída | — | HUB | `/vendas/notas-fiscais-saida` | 🔴 | A página saiu do Hub com o `SQL-023` (N16-177, `av-hub` PR #310); a nota de saída se consulta no Omie |
 | O2 | Minhas Notas, Notas da Equipe, Notas do PCP | — | HUB | `/vendas/minhas-notas`, `/notas-equipe`, `/pcp-notas` | ❓ | Pós-fato |
 
 ### Telas que servem a todos
