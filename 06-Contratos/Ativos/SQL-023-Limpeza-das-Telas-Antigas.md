@@ -1,7 +1,7 @@
 ---
 id: SQL-023
 titulo: Limpeza das telas antigas do Hub (telas, rotas e permissões sem uso)
-status: para-implementar
+status: implementado-na-develop
 autor: Nathan
 data: 2026-11-18
 camadas: [frontend, api, sql]
@@ -10,15 +10,21 @@ nos_0b: []
 notas_afetadas: [RBAC-e-Permissoes, Banco-AvHub, 02-Orcamento-Base-de-Preco]
 depende_de: [LOG-60]
 decisoes: [N16-177, N16-173, N16-14]
-develop-conferida: [api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18]
+develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23 (entrega: av-hub #310 718b41b, api-acos-vital 55f8f6a; também na main); api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18]
 tags: [contrato, banco, rbac, permissoes, telas, limpeza]
 criado: 2026-11-18
-estado-em: 2026-11-18
+estado-em: 2026-11-23
 dono: Nathan
 fontes: [conversa do Nathan com o Claude de 18/11/2026 (lista da limpeza e o que fica), banco do Docker local com os dados do tst (docker-teste, fora do vault), api-acos-vital develop 3f762d2, av-hub develop 4b5c023, RBAC-e-Permissoes]
 ---
 
 # SQL-023 · Limpeza das telas antigas do Hub
+
+> **Situação em 23/11:** ✅ código na `develop` e na `main`; o SQL é do Gustavo.
+> - Hub: `av-hub` #310 (`718b41b`) e release #311. Saíram as páginas Pedidos de Venda, Notas Fiscais de Saída e Orçamento por PDF. As rotas do BFF que ficam mudaram de tela: `app/api/pedidos-venda/route.ts:9` (`requirePermission('dash-vendas', 'pode_visualizar')`) e `app/api/notas-fiscais-saida/route.ts:6` (`tela: ['dash-faturamento', 'bloqueio-comissoes'],`). As famílias exigem só `catalogo-produtos` desde o `SQL-024`: `app/api/familias/route.ts:25` (`requirePermission('catalogo-produtos', 'pode_visualizar')`).
+> - API: `api-acos-vital` `55f8f6a` (#316, release #317). Saiu o schema `orcamento_pdf` (a pasta `src/schemas/orcamento_pdf/` não existe mais na `develop`).
+> - Banco: aplicado no tst (85 telas depois do SQL, segundo o `LOG-62`). ❓ Em produção, não conferido.
+> - As citações de código das seções 4, 6 e 8 mostram o estado de antes da entrega (`av-hub` `4b5c023`, `api-acos-vital` `3f762d2`).
 
 ## 1. Resumo em linguagem simples
 
@@ -88,16 +94,16 @@ A tela de permissões mostra telas que não existem mais, como Categorias, Vínc
 **Código que depende das telas que saem** (`origin/develop`):
 - A busca no topo dos dashboards procura pedido e nota pelas rotas do BFF das páginas antigas:
   - `av-hub` `components/Layout/AppLayout/OverlayHeader/OverlayHeader.tsx:195` (`getPedidosVendaPaginados({ numero_pedido: query, limit: 5 }),`);
-  - a rota do BFF exige a tela antiga: `app/api/pedidos-venda/route.ts:7` (`requirePermission('pedidos-de-venda', 'pode_visualizar')`);
-  - e a de notas, em `app/api/notas-fiscais-saida/route.ts:4` (`tela: 'notas-fiscais-saida',`).
+  - a rota do BFF exigia a tela antiga: `app/api/pedidos-venda/route.ts`, linha 7 em `4b5c023` (`requirePermission('pedidos-de-venda', 'pode_visualizar')`);
+  - e a de notas, `app/api/notas-fiscais-saida/route.ts`, linha 4 em `4b5c023` (`tela: 'notas-fiscais-saida',`).
 - O Bloqueio de Comissões procura a nota pela mesma rota: `app/(protected)/comissoes/bloqueio-comissoes/page.tsx:114` (`const data = await getNotasFiscaisSaida({`).
-- O Cadastro de Produtos lê as famílias: `app/api/familias/route.ts:25` (`requirePermission(['produtos', 'catalogo-produtos'], 'pode_visualizar')`).
+- O Cadastro de Produtos lia as famílias: `app/api/familias/route.ts`, linha 25 em `4b5c023` (`requirePermission(['produtos', 'catalogo-produtos'], 'pode_visualizar')`).
   - Na API, porém, `GET /familias_produtos` só está mapeada para a tela antiga `historico-produtos`.
   - Hoje só passa quem tem essa tela ligada.
 - O Orçamento lê as categorias do Omie com as telas `fornecedores`, `catalogo-produtos` e `painel-comprador`: `app/api/comercial/[...rota]/route.ts:137` (`{ padrao: '/categorias', metodo: 'GET', tela: ['fornecedores', 'catalogo-produtos', 'painel-comprador']`).
   - Na API, `GET /categorias` só está mapeada para `categorias`, `compras` e `propostas`.
 - Rota sem tela no mapa responde 403 a quem tem token: `api-acos-vital` `src/middlewares/identidadeUsuario.js:115` (`ROTA_SEM_PERMISSAO_MAPEADA`).
-- A API do Orçamento por PDF é o schema `orcamento_pdf`, com uma tabela (`orcamento_pdf.relatorio`, 0 linhas no tst): `src/schemas/orcamento_pdf/index.js:21` (`export const rotas = [{ path: "/orcamento_pdf"`).
+- A API do Orçamento por PDF é o schema `orcamento_pdf`, com uma tabela (`orcamento_pdf.relatorio`, 0 linhas no tst): `src/schemas/orcamento_pdf/index.js`, linha 21 em `3f762d2` (`export const rotas = [{ path: "/orcamento_pdf"`).
 
 ## 5. Regras de negócio
 
@@ -125,7 +131,7 @@ A tela de permissões mostra telas que não existem mais, como Categorias, Vínc
 - **Sai o Orçamento por PDF inteiro:**
   - `components/OrcamentoPdf/` (11 arquivos);
   - as rotas do BFF `app/api/orcamento-pdf/route.ts` e `app/api/orcamento-pdf/[id]/route.ts`;
-  - a exceção de layout em `av-hub` `components/Layout/AppLayout/Layout.tsx:23` (`pathname === '/experimental/orcamento-pdf'`).
+  - a exceção de layout em `av-hub` `components/Layout/AppLayout/Layout.tsx`, linha 23 em `4b5c023` (`pathname === '/experimental/orcamento-pdf'`).
 - **Ficam**, porque a busca dos dashboards e o Bloqueio de Comissões usam:
   - os services `services/vendas/pedidosVendaPaginados.ts` e `services/vendas/notasFiscaisSaida.ts`;
   - os tipos em `lib/domain/vendas-pedidos-de-venda.ts` e `lib/domain/vendas-notas-fiscais-saida.ts`;
@@ -142,7 +148,7 @@ Não se aplica: não há regra nova no servidor. A autorização (`auth.fn_autor
 
 ## 8. API
 
-- Sai o schema `orcamento_pdf` da `api-acos-vital`: a pasta `src/schemas/orcamento_pdf/`, a montagem em `src/schemas/index.js:17` (`import { rotas as orcamento_pdf }`) e `:30`, o limite de corpo em `src/utils/limiteCorpo.js:21` (`limite: "1mb"`) e a dica de migration em `src/utils/erroHttp.js:138` (`2026-11-03_orcamento_pdf_relatorio.sql`).
+- Sai o schema `orcamento_pdf` da `api-acos-vital`: a pasta `src/schemas/orcamento_pdf/`, a montagem em `src/schemas/index.js` (linhas 17 e 30 em `3f762d2`, `import { rotas as orcamento_pdf }`), o limite de corpo em `src/utils/limiteCorpo.js` (linha 21, `limite: "1mb"`) e a dica de migration em `src/utils/erroHttp.js` (linha 138, `2026-11-03_orcamento_pdf_relatorio.sql`).
 - Na lista `TELAS_MODULO` de `src/schemas/core_comercial/capacidades.js` saem `sincronizacao-omie` e `matriz-precos`.
 - Nenhuma rota nova. As rotas da seção 4 que passam a exigir outras telas são só linhas novas no mapa (seção 9).
 
@@ -319,7 +325,7 @@ Feito no Docker em 18/11/2026, com os dados do tst:
   - uma integração fora do Hub chamar, com token de usuário, uma rota que fica sem tela (R5);
   - a conferência de uso cobre as chaves de serviço, mas não as chamadas com token.
 - **Rollback:** pela `auth.auditoria` (seção 9).
-- **P1. Quem vê o custo (`custo-item`).** A API decide quem vê o custo pela tela `custo-item`: `api-acos-vital` `src/schemas/core_comercial/capacidades.js:62` (`ve_custo: pode("custo-item"`).
+- **P1. Quem vê o custo (`custo-item`).** A API decide quem vê o custo pela tela `custo-item`: `api-acos-vital` `src/schemas/core_comercial/capacidades.js:64` (`ve_custo: pode("custo-item"`).
   - No tst essa tela não existe.
   - Em produção ela existe, em Orçamento, mas só o Admin (Dev) tem acesso. Então nenhum perfil de negócio tem `ve_custo`.
   - Falta decidir quem recebe o acesso. Não entra neste SQL.
