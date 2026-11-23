@@ -29,7 +29,7 @@ Nós do [[00-Fluxo-Mestre-0b]]: `R0` esperados e chegada com NF, `R1` conferênc
 | Compras (`compras-liberar`, em geral só o Administrador) | Libera a requisição para o Recebimento sem OC aprovada | `FilaSetor` / `CompraCcpCard` |
 | Qualidade | Recebe o lote | [[08-Qualidade-Entrada]] |
 
-Permissões: `movimentacoes` (visualizar ou editar) para conferir e recontar; `decisoes-pcp` para listar e decidir; `pode_atuar` no setor Recebimento (`PerfilSetor`) para a chegada e a recontagem (`api-pcp` `src/compras/compras.service.ts:929-931` (`opcoes.checarPermissaoSetor !== false`), `src/compras/recebimento.service.ts:527` (`ensurePodeAtuarNoRecebimento`)); a decisão do PCP **não** exige setor (`src/compras/recebimento.service.ts:821` (`checarPermissaoSetor: false`), em `registrarRecebimento`).
+Permissões: `movimentacoes` (visualizar ou editar) para conferir e recontar; `decisoes-pcp` para listar e decidir; `pode_atuar` no setor Recebimento (`PerfilSetor`) para a chegada e a recontagem (`api-pcp` `src/compras/compras.service.ts:929-931` (`opcoes.checarPermissaoSetor !== false`), `src/compras/recebimento.service.ts:532` (`ensurePodeAtuarNoRecebimento`)); a decisão do PCP **não** exige setor (`src/compras/recebimento.service.ts:827` (`checarPermissaoSetor: false`), em `registrarRecebimento`).
 
 ## Regras decididas
 
