@@ -1,7 +1,7 @@
 ---
 tags: [projeto, equipe, divisao]
 criado: 2026-10-14
-atualizado: 2026-11-17
+atualizado: 2026-11-23
 status: vigente
 dono: Nathan
 fontes: [v1 05-Pessoas-e-Equipe/Equipe-Projeto, v1 Cronograma-2-Meses §3.2 e §3.4, v1 Registro-de-Decisoes #32 #33 #33b, git log dos repositórios em 14/10/2026 e em 29/10/2026, Registro-de-Decisoes N16-09, N16-15, N16-117, N16-118, N16-119, N16-157, N16-158, N16-168, N16-169 e N16-170]
@@ -17,7 +17,7 @@ Os nomes completos vêm do `git log`.
 
 ## Dono de cada raia do fluxo 0b
 
-Decisão do Nathan de 11/11/2026 (N16-157), ajustada em 17/11/2026 (N16-168, N16-169). Ser dono não quer dizer fazer sozinho: o Nathan coordena, gerencia a equipe e ajuda o Robert em cada processo, porque não é válido nem justo deixar as raias só com ele. Desde 17/11 o Pablo é analista e não desenvolve, e o Nathan ficou dono do Orçamento. Na raia 15, o Robert faz o motor da comissão e o custo por evento, e o Nathan faz as telas (veja "Comercial: quem faz o quê" abaixo). O banco e a API são do Gustavo em todas as raias.
+Decisão do Nathan de 11/11/2026 (N16-157), ajustada em 17/11/2026 (N16-168, N16-169) e em 19/11/2026 (N16-180, o Estoque com o Nathan). Ser dono não quer dizer fazer sozinho: o Nathan coordena, gerencia a equipe e ajuda o Robert em cada processo, porque não é válido nem justo deixar as raias só com ele. Desde 17/11 o Pablo é analista e não desenvolve, e o Nathan ficou dono do Orçamento. Na raia 15, o Robert faz o motor da comissão e o custo por evento, e o Nathan faz as telas (veja "Comercial: quem faz o quê" abaixo). O banco e a API são do Gustavo em todas as raias.
 
 | Raia | Nota | Dono |
 |---|---|---|
@@ -25,19 +25,19 @@ Decisão do Nathan de 11/11/2026 (N16-157), ajustada em 17/11/2026 (N16-168, N16
 | 02 Orçamento (base de preço) | [[02-Orcamento-Base-de-Preco]] | Nathan (N16-168); o Pablo apoia como analista |
 | 03 Pedido de Venda e Liberação | [[03-Pedido-de-Venda-e-Liberacao]] | Robert |
 | 04 PCP (triagem e destinação) | [[04-PCP-Triagem-e-Destinacao]] | Robert |
-| 05 Estoque · atendimento | [[05-Estoque-Atendimento]] | Robert |
+| 05 Estoque · atendimento | [[05-Estoque-Atendimento]] | Nathan (N16-180) |
 | 06 Circuito de Compra | [[06-Circuito-de-Compra]] | Nathan |
 | 07 Recebimento | [[07-Recebimento]] | Robert |
 | 08 Qualidade de entrada | [[08-Qualidade-Entrada]] | Robert |
-| 09 Estoque · entrada do lote | [[09-Estoque-Entrada-do-Lote]] | Robert |
+| 09 Estoque · entrada do lote | [[09-Estoque-Entrada-do-Lote]] | Nathan (N16-180) |
 | 10 Produção e Roteiro | [[10-Producao-e-Roteiro]] | Robert |
 | 11 Qualidade de saída | [[11-Qualidade-Saida]] | Robert |
-| 12 Estoque · despacho | [[12-Estoque-Despacho]] | Robert |
+| 12 Estoque · despacho | [[12-Estoque-Despacho]] | Nathan (N16-180) |
 | 13 Expedição | [[13-Expedicao]] | Robert |
 | 14 Fiscal · Omie | [[14-Fiscal-Omie]] | Robert |
 | 15 Custo Real e Comissão | [[15-Custo-Real-e-Comissao]] | Robert (motor e custo por evento) e Nathan (telas) (N16-169) |
 
-A API do MES (`api-pcp`) continua com o Robert, acompanhado pelo Gustavo (N16-158).
+A API do MES (`api-pcp`) continua com o Robert, acompanhado pelo Gustavo (N16-158), menos o módulo do Estoque (`src/estoque/`), que o Nathan desenvolve desde 19/11 (N16-180).
 
 ## Comercial: quem faz o quê
 

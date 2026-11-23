@@ -50,14 +50,14 @@ O BFF tem 84 entradas na allowlist, cada uma com tela e ação ✅ `app/api/come
 | `/orcamento/pedido-cotacao` | `components/Suprimentos/PedidoCotacao.tsx`, `AnaliseItemPedidoModal.tsx` | `pedido-cotacao` | ✅ |
 | `/orcamento/ofertas-fornecedor` | `OfertasLista.tsx`, `LancarOfertaModal.tsx`, `ImportarMapaModal.tsx`, `LigarFornecedorMapa.tsx` | `ofertas-fornecedor` | ✅ |
 | `/orcamento/fornecedores`, `/[id]` | `FornecedoresLista.tsx`, `FornecedorFicha.tsx`, `CategoriasFornecedor.tsx`, `CertificadosFornecedor.tsx`, `EditarPerfilFornecedorModal.tsx` | `fornecedores` | ✅ |
-| `/orcamento/catalogo-produtos`, `/[id]` | `CatalogoLista.tsx` (lista de 80 mil produtos com busca por trigramas), `ProdutoDetalhe.tsx` (conferido em 13/11: abas Compras, Preços, Vendas, Cadastro (Omie) e Fornecedores, com o resumo de 90 dias por fornecedor; a aba Especificação saiu, porque o Hub não tem o dado técnico), `ProdutosPendentesModal.tsx` | `catalogo-produtos` | ✅ `av-hub` `components/Suprimentos/CatalogoLista.tsx:36` (`export default function CatalogoLista`), `components/Suprimentos/ProdutoDetalhe.tsx:20` (`const ABAS_PRODUTO`), `:15` (`Sem aba Especificação`) |
+| `/orcamento/catalogo-produtos`, `/[id]` | `CatalogoLista.tsx` (lista de 80 mil produtos com busca por trigramas), `ProdutoDetalhe.tsx` (conferido em 13/11: abas Compras, Preços, Vendas, Cadastro (Omie) e Fornecedores, com o resumo de 90 dias por fornecedor; a aba Especificação saiu, porque o Hub não tem o dado técnico), `ProdutosPendentesModal.tsx` | `catalogo-produtos` | ✅ `av-hub` `components/Suprimentos/CatalogoLista.tsx:35` (`export default function CatalogoLista`), `components/Suprimentos/ProdutoDetalhe.tsx:20` (`const ABAS_PRODUTO`), `:15` (`Sem aba Especificação`) |
 | `/orcamento/pesquisa-materiais` | `PesquisaMateriais.tsx`, `ComparativoMaterialModal.tsx` | `pesquisa-materiais` | ✅ |
 | `/orcamento/parametros-custo`, `/orcamento/tabela-telha` | páginas | `parametros-custo`, `tabela-telha` | ✅ |
 | `/compras/historico-compras` | `HistoricoCompras.tsx`, `GraficoComprasMes.tsx` | `historico-compras` | ✅ |
 | `/dashboards/dash-comercial` | página | `dash-comercial` | ✅ |
 | Faixa "fluxo do custo" nas telas de Orçamento | `FluxoDoCusto.tsx` e `lib/domain/fluxo-suprimentos.ts:19-56` (5 passos: vendedor pede custo, comprador assume, pedir cotação, registrar preço, custo volta à proposta) | — | ✅ |
 
-Os tipos de tela já seguem a API do Hub: `StatusProposta` é `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`, `EXPIRADA` (✅ `av-hub` `44bb770` `lib/domain/comercial-propostas.ts:19` (`StatusProposta`), conferido em 11/11/2026).
+Os tipos de tela já seguem a API do Hub: `StatusProposta` é `ABERTA`, `APROVADA`, `TRANSFORMADA`, `CANCELADA`, `EXPIRADA` (✅ `av-hub` `44bb770` `lib/domain/comercial-propostas.ts:21` (`StatusProposta`), conferido em 11/11/2026).
 
 ## 7. Integrações com o Omie
 

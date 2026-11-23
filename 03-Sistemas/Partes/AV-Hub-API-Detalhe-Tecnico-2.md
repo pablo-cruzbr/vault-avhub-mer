@@ -1,11 +1,11 @@
 ---
 tags: [sistemas, av-hub, api-acos-vital, express, sequelize, compras, torre-de-fluxo, custo, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-23
 status: vigente
 dono: Gustavo (DBA)
 parte-de: "[[AV-Hub-API]]"
-develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, só o resumo de Comissão e o pdf_gerado; api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-acos-vital 0384e89 (develop, 29/10), Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/), Dump Avhub (Esqueleto).sql de 14/10, v1 AV-Hub-API-Estado-Atual, AV-Hub-RBAC, Integracao-AvHub-MES-Especificacao-F1]
 ---
 
@@ -45,7 +45,7 @@ Rotas montadas em `core_comercial/index.js`, todas com `exigirTokenUsuario` (tok
 | `POST /comercial/clientes` | cadastra o cliente no Omie da unidade e grava em `core.parceiros` (upsert por CNPJ) | ✅ `aggregates/clientes/clientes.route.js:123` |
 | `GET /comercial/parceiros?tipo=&empresa=` | cadastro de parceiros para a proposta | ✅ `aggregates/parceiros/parceiros.route.js:60` |
 | `POST`/`GET /comercial/propostas`, `GET …/resumo`, `GET …/:id`, `GET …/:id/eventos` | cria (status `ABERTA`), lista, KPIs, abre, linha do tempo | ✅ `aggregates/propostas/propostas.route.js:383-548` (`router.post("/propostas"` a `"/propostas/:id/eventos"`) |
-| `POST …/:id/eventos/pdf_gerado` (13/11) | o Hub avisa que gerou o PDF (`COMERCIAL` ou `TECNICA`): evento `PDF_GERADO` na linha do tempo; o mesmo usuário, tipo e revisão em menos de 10 min não grava de novo (200); `COMERCIAL` só para quem vê valores (senão 403). A função `fn_proposta_pdf_gerado` vem da migration `2026-11-13_comercial_proposta_pedido_comissao`, ainda não aplicada no teste | 🟡 `propostas.route.js:708` (`router.post("/propostas/:id/eventos/pdf_gerado"`) |
+| `POST …/:id/eventos/pdf_gerado` (13/11) | o Hub avisa que gerou o PDF (`COMERCIAL` ou `TECNICA`): evento `PDF_GERADO` na linha do tempo; o mesmo usuário, tipo e revisão em menos de 10 min não grava de novo (200); `COMERCIAL` só para quem vê valores (senão 403). A função `fn_proposta_pdf_gerado` vem da migration `2026-11-13_comercial_proposta_pedido_comissao`, ainda não aplicada no teste | 🟡 `propostas.route.js:692` (`router.post("/propostas/:id/eventos/pdf_gerado"`) |
 | `PUT …/:id`, `POST …/:id/aprovar`, `…/cancelar`, `…/copiar`, `…/transformar` | revisão na negociação, ciclo de vida até o pedido | ✅ `propostas.route.js:550-676` (`router.put("/propostas/:id"` a `"/propostas/:id/transformar"`) |
 
 ⚠️ O código e o dump de 29/10 ainda guardam proposta, itens e eventos em `core_comercial.*` (23 tabelas, herdadas da `api-comercial`), enquanto a decisão N16-116 manda a proposta para `core_vendas_faturamento` e diz que `core_comercial` não existirá. Ver [[Banco-AvHub]] e a dúvida registrada no relatório do dia.
@@ -58,7 +58,7 @@ Rotas do `core_vendas_faturamento` acrescentadas depois de 14/10 (resumo):
 
 ## Outros módulos (resumo; detalhe nos anexos)
 
-Vendas e faturamento (`/pedidos_venda`, `/vendas_*`, `/faturamento_*`, `/dashboard*`, `/ranking_*`, `/ritmo_*`, `/nf_classified`), Comissão (`core_comissionamento`), Vagas (`core_aprovacao_de_vagas`), Organograma, Orçamento (`/orcamento/*` sobre `core_compras.orc_*`), cadastros `core.*` (parceiros, produtos, unidades, funcionários), Acompanhamento de Clientes e grupos de clientes (`/acompanhamento_clientes`, `/grupos_clientes`, contrato 48). Ficam em [[Comissoes]], [[Dashboards]], [[Orcamento]], [[RH-Vagas-Funcionarios]], [[Acompanhamento-Clientes]].
+Vendas e faturamento (`/pedidos_venda`, `/vendas_*`, `/faturamento_*`, `/dashboard*`, `/ranking_*`, `/ritmo_*`, `/nf_classified`), Comissão (`core_comissionamento`; rotas, filtros e migrations de 18 a 23/11 em [[02-Tabelas-Atuais-core_comissionamento]]), Vagas (`core_aprovacao_de_vagas`), Organograma, Orçamento (`/orcamento/*` sobre `core_compras.orc_*`), cadastros `core.*` (parceiros, produtos, unidades, funcionários), Acompanhamento de Clientes e grupos de clientes (`/acompanhamento_clientes`, `/grupos_clientes`, contrato 48). Ficam em [[Comissoes]], [[Dashboards]], [[Orcamento]], [[RH-Vagas-Funcionarios]], [[Acompanhamento-Clientes]].
 
 ## Variáveis de ambiente (conferidas)
 

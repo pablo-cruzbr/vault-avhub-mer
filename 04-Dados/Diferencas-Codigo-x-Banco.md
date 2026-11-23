@@ -32,7 +32,7 @@ Conferido de novo em 29/10 no código da `develop`.
 | Objeto | Situação | Selo | Evidência |
 |---|---|---|---|
 | Tabela `fornecedores` | existe, tem model, **nenhum código escreve nem lê** (projeção de `core.parceiros` prevista na D3) | 🟡 | dump `:595`; grep `prisma.fornecedor` sem ocorrência |
-| `OrigemCusto` `OC` e `MANUAL` | **agora têm escritor**: `OC` no Recebimento (`compra-oc.ts:114`, desde 16/10) e `MANUAL` em `PUT /estoque/lotes/:id/custo` (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:719` (`async informarCustoLote(`), 27/10) | ✅ | `compras.service.ts:1045`, `recebimento.service.ts:1135` |
+| `OrigemCusto` `OC` e `MANUAL` | **agora têm escritor**: `OC` no Recebimento (`compra-oc.ts:114`, desde 16/10) e `MANUAL` em `PUT /estoque/lotes/:id/custo` (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:757` (`async informarCustoLote(`), 27/10) | ✅ | `compras.service.ts:1045`, `recebimento.service.ts:1135` |
 | `OrigemLote` | ganhou `PRODUCAO` (28/10) e o código a usa para o fabricado aprovado | ✅ | `estoque.prisma:11-17`, `itens-parciais.service.ts:1489,1505` |
 | `StatusPedido.BLOQUEADO` | só é lido pelo dashboard; nenhum código o atribui | 🟡 | `dashboard.service.ts` |
 | `TipoAnexo` `CANHOTO`, `COMPROVANTE_ENTREGA` | sem referência fora do enum; `DESENHO` é usado | 🟡 | grep |
@@ -84,7 +84,7 @@ Resolvidos desde 14/10 (só na `develop`): `GET /itens/custo` com `alterado_desd
 | LOG-58: `core_vendas_faturamento.vw_avisos_mes_compra` e `fn_aviso_mes_compra_registrar` | ✅ existem no dump de 12/11 (`:26232`, `:7295`) | ✅ | `api-acos-vital` `src/schemas/core_vendas_faturamento/tables/avisos_mes_compra/avisos_mes_compra.route.js:36` (`vw_avisos_mes_compra`) |
 | API-019: `core_comercial.vw_pedido_venda_compra_proposta` | ✅ existe no dump de 12/11 (`:19381`) | ✅ | `api-acos-vital` `src/schemas/core_vendas_faturamento/views/vw_pedido_venda_compras/vw_pedido_venda_compras.route.js:72` (`vw_pedido_venda_compra_proposta`) |
 | Carteira de clientes e responsável da proposta: `fn_carteira_clientes`, `fn_emissao_opcoes` | ✅ existem no dump de 12/11 (`:7470`, `:2962`) | ✅ | `api-acos-vital` `src/schemas/core_comercial/aggregates/parceiros/parceiros.route.js:124` (`fn_carteira_clientes(`) e `cadastros.route.js:155` (`fn_emissao_opcoes`) |
-| Comentários do `av-hub` que ainda citam `unidades_emissoras` e `vw_unidades_emissoras` | a tabela e a view saíram no dump de 12/11 | 🟡 só comentário, sem efeito no código | `av-hub` `app/api/comercial/[...rota]/route.ts:46` (`unidades_emissoras ainda diz`), `components/Propostas/PropostaForm/TransformarModal.tsx:169` (`unidades_emissoras.id_unidade_conta_omie`), `components/Propostas/PropostaForm/useEmpresasEmissoras.ts:15` (`vw_unidades_emissoras`) |
+| Comentários do `av-hub` que ainda citam `unidades_emissoras` e `vw_unidades_emissoras` | a tabela e a view saíram no dump de 12/11 | ✅ resolvido na limpeza dos comentários (18/11, `av-hub` PR #323): o único que resta diz que a tabela saiu, `components/Propostas/PropostaForm/TransformarModal.tsx:168` (`a `unidades_emissoras` saiu`) |
 | `auth.rotas_telas` com `/fluxo/*`, `/itens_pedido_custo`, `/compras/requisicoes/eventos`, `/comercial/*` | tabela existe; linhas ❓ | ❓ | [[RBAC-e-Permissoes]] |
 
 ## Entre os sistemas (contrato x código)

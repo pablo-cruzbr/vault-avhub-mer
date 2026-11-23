@@ -26,7 +26,7 @@ Quando a Qualidade reprova um lote comprado ou o PCP reabre um recebimento, o ME
 
 ## 2. Contexto: o que deve ser feito e por quê
 
-- **O problema hoje.** No MES, a reprovação na inspeção de entrada move a parte reprovada para Compras ✅ `api-pcp` `src/compras/circuito-compra.ts:253` (`export async function devolverAComprasParteReprovada(`), e a decisão `REABRIR` do PCP faz o mesmo com o recebimento ✅ `src/compras/recebimento.service.ts:631` (`if (dto.decisao === 'REABRIR') {`). Nada disso sai do MES: no av-hub a OC e a requisição seguem como estavam.
+- **O problema hoje.** No MES, a reprovação na inspeção de entrada move a parte reprovada para Compras ✅ `api-pcp` `src/compras/circuito-compra.ts:253` (`export async function devolverAComprasParteReprovada(`), e a decisão `REABRIR` do PCP faz o mesmo com o recebimento ✅ `src/compras/recebimento.service.ts:636` (`if (dto.decisao === 'REABRIR') {`). Nada disso sai do MES: no av-hub a OC e a requisição seguem como estavam.
 - **Quem sofre.** O comprador, que só descobre a devolução por conversa; o pedido de venda, que espera um material que ninguém está comprando.
 - **De onde vem.** N16-126 (lote 100% reprovado: devolve e abre a recompra), N16-127 (o Compras é avisado no av-hub), N16-137 (a reabertura avisa pelo mesmo caminho), N16-135 (divergência contra a OC bloqueia como a da nota). Raia do Nathan desde a N16-157; a API do MES é do Robert, com o Gustavo acompanhando (N16-158).
 - **Se não for feito.** A recompra depende de alguém lembrar, e o custo e o prazo do pedido ficam errados no av-hub.

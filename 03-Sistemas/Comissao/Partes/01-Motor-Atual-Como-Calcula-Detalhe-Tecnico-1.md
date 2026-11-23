@@ -1,12 +1,12 @@
 ---
 tags: [comissao, motor-atual, core_comissionamento, proposta, validacao, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-23
 status: proposta
 dono: Nathan
 parte-de: "[[01-Motor-Atual-Como-Calcula]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
-fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, av-hub lib/simulador/motor.ts, av-hub app/(protected)/comissoes/simulador e analise-simuladores, av-hub app/api/comissoes, tela-simulador-comissao.png, N16-10, N16-11, N16-18, N16-19, N16-20]
+develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, comissão por pedido, predominância, competência, escopo, trava e pré-aceita; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, av-hub lib/simulador/motor.ts, av-hub app/(protected)/comissoes/simulador e analise-simuladores, av-hub app/api/comissoes, tela-simulador-comissao.png, N16-10, N16-11, N16-18, N16-19, N16-20, N16-185 a N16-190, PS-062, PS-063, PS-064]
 ---
 
 # Como o motor de comissão atual calcula: detalhe técnico (1/2)
@@ -17,40 +17,41 @@ fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vi
 
 ## Resumo em dez linhas
 
-1. O **vendedor** preenche um "simulador" por pedido, item a item: custo de compra, impostos, preço de venda. O simulador calcula a **margem líquida de cada item** e dá uma **letra** (A, B, C ou D) e um **percentual** de comissão.
-2. **Compras** abre a mesma simulação, corrige os custos para o valor real e gera uma segunda versão, com o **percentual de Compras**.
-3. A comissão de cada item usa o **menor** entre o percentual do vendedor e o de Compras (`pct_final`).
-4. Alguns clientes têm **regra fixa**: um teto de percentual, que muda conforme o markup do pedido.
-5. Item de **fabricação interna** paga um percentual fixo (hoje 2%) e não entra na margem. Item em **prejuízo** não paga nada.
-6. A comissão só vira dinheiro **depois de faturar**: valor faturado do item na NF × `pct_final`.
-7. **Bloqueio por NF** zera a comissão daquela nota. **Lista de bloqueio** (cliente ou vendedor) tira a nota do cálculo.
-8. O vendedor **não vê o valor** antes de Compras aprovar.
-9. Os **coordenadores** têm conta à parte: ajuda de custo mais um percentual do faturamento total do mês.
-10. Quem valida hoje é **Compras**; não existe etapa de Controladoria. Isso muda no módulo novo (N16-10).
+1. O **vendedor** preenche um "simulador" por pedido, item a item: custo de compra, impostos, preço de venda. O simulador calcula a margem de cada item, só para informação.
+2. A **margem líquida da revenda do pedido** dá uma **letra** (A, B, C ou D) e um percentual, que vale para todos os itens (N16-185).
+3. **Predominância:** se a fabricação interna passa do corte (`pct_predominancia_fabricacao`, padrão 50%) da venda do pedido, todos os itens pagam o fixo da fabricação (2%); abaixo, todos pagam a letra (N16-186).
+4. **Pedido no prejuízo** (margem da revenda ≤ 0) não paga nenhum item, nem a fabricação, que fica bloqueada até a Controladoria liberar (N16-185).
+5. **Compras** abre a mesma simulação e pode gravar uma versão com o custo real. O pedido inteiro é pago pela versão de **menor comissão** (pré-aceita; empate, Compras) (N16-190).
+6. Alguns clientes têm **regra fixa**: um teto de percentual, que muda conforme o markup do pedido.
+7. A comissão só vira dinheiro **depois de faturar**: valor faturado do item × percentual da versão pré-aceita. É vista pelo mês em que é paga (competência, N16-187).
+8. **Bloqueio por NF** zera a comissão daquela nota. **Lista de bloqueio** (cliente ou vendedor) tira a nota do cálculo.
+9. Depois de enviar, o vendedor só cria versão nova se Compras devolver (N16-188). Ele vê só a comissão do vínculo próprio (N16-189).
+10. Quem valida hoje é **Compras**; não existe etapa de Controladoria. Os **coordenadores** têm conta à parte.
 
 ## Visão do fluxo atual
 
 ```mermaid
 flowchart LR
-    V["Vendedor<br/>preenche o simulador<br/>(RASCUNHO → ENVIADO)"] --> C["Compras<br/>analisa e corrige<br/>(APROVADO)"]
-    C --> M["Menor percentual<br/>por item<br/>(pct_final)"]
+    V["Vendedor<br/>preenche o simulador<br/>(RASCUNHO → ENVIADO)"] --> P["Margem da revenda<br/>do PEDIDO → letra<br/>ou fixo (predominância)"]
+    P --> C["Compras<br/>aprova, corrige ou devolve<br/>(APROVADO / DEVOLVIDO)"]
+    C --> M["Versão pré-aceita<br/>menor comissão do pedido<br/>(empate: Compras)"]
     R["Regra fixa<br/>do cliente<br/>(teto)"] --> M
-    M --> F["NF faturada<br/>valor do item × pct_final"]
+    M --> F["NF faturada<br/>valor do item × percentual"]
     F --> B["Bloqueio por NF<br/>zera o valor"]
     L["Lista de bloqueio<br/>cliente / vendedor<br/>tira a nota"] --> F
-    B --> P["Comissão a pagar<br/>(situação VALIDADO)"]
+    B --> PG["Comissão a pagar<br/>(VALIDADO, na competência)"]
 ```
 
 ## 1. Quem faz o quê hoje
 
 | Quem | O que faz | Onde |
 |---|---|---|
-| Vendedor | Preenche, salva rascunho e envia o simulador do pedido | `comissoes/simulador/page.tsx` (envio em `:1148-1190`) |
-| Compras | Aprova a simulação como está, ou cria uma versão com os custos corrigidos e aprova | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803-845` (`aprovarCompras`), fila em `comissoes/analise-simuladores/page.tsx` |
-| Analista/Gerência | Acompanha o mês na Visão Geral e bloqueia NF | `comissoes/visao-geral`, `comissoes/bloqueio-comissoes` |
+| Vendedor | Preenche, salva rascunho e envia o simulador do pedido | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:810` (`const salvar = async`) |
+| Compras | Aprova a simulação como está, cria uma versão com os custos corrigidos ou devolve | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:858` (`const aprovarCompras = async`), fila em `comissoes/analise-simuladores/page.tsx` |
+| Analista/Gerência | Acompanha o mês na Visão Geral (por pedido e por competência), confirma a predominância e bloqueia NF | `comissoes/visao-geral`, `comissoes/bloqueio-comissoes` |
 | Coordenador | Recebe ajuda de custo e percentual sobre o faturamento do mês | `comissao_coordenadores`, `fn_dashboard_comissoes` |
 
-✅ O simulador é **calculado no navegador** (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)) por uma função do front, `lib/simulador/motor.ts`. O banco guarda o resultado e só faz a conta do **menor percentual** (view `vw_simulacao_resolvida`). Isso importa para o módulo novo: o motor precisa sair do navegador (ver nota 03).
+✅ O simulador é **calculado no navegador** (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:713` (`calcularSimulacao(form, parametros)`)) por uma função do front, `lib/simulador/motor.ts`. O banco guarda o resultado e só escolhe a versão que paga (view `vw_simulacao_resolvida`). O motor precisa sair do navegador (BL-078, nota 03).
 
 ## 2. Regra a regra
 
@@ -73,11 +74,11 @@ flowchart LR
 | Frete (rateio) | 5.000 × 1,438975% | R$ 71,95 |
 | **Custo líquido** | 5.000 − 600 + 0 + 0 + 71,95 | **R$ 4.471,95** |
 
-**De onde vem.** ✅ `lib/simulador/motor.ts:283-289` (compra, IPI, crédito de ICMS), `:307-312` (frete e custo líquido). Alíquotas: `simulador_parametros.icms_entrada` e `pct_rateio_logistica` (`dump:909-952`). A quantidade da compra é separada da quantidade da venda (`qtd_compra`, `dump:697-699`); o motor não converte unidade, cada lado usa o seu total.
+**De onde vem.** ✅ `av-hub` `lib/simulador/motor.ts:286` (`const compraBruta`), `:298` (`const icmsRecuperar`), `:315` (`const custoLiquido`). Alíquotas: `simulador_parametros.icms_entrada` e `pct_rateio_logistica` (`dump:909-952`). A quantidade da compra é separada da quantidade da venda (`qtd_compra`, `dump:697-699`); o motor não converte unidade, cada lado usa o seu total.
 
-### R2. Margem líquida do item
+### R2. Margem líquida do item e do pedido
 
-**O que faz.** Pega o preço de venda do item e desconta custo líquido, despesas operacionais, impostos sobre a venda e a provisão de comissão. O que sobra, dividido pela venda, é a **margem líquida do item**. É ela que decide a letra.
+**O que faz.** Pega o preço de venda do item e desconta custo líquido, despesas operacionais, impostos sobre a venda e a provisão de comissão. O que sobra, dividido pela venda, é a **margem do item**. Desde 18/11 ela **não decide nada**: mostra qual linha puxa o pedido para baixo. Quem decide é a **margem do pedido**: soma do lucro dos itens de revenda ÷ soma da venda de revenda. A fabricação interna fica fora dos dois lados (não tem custo de compra) (N16-185).
 
 - Despesas operacionais: `pct_despesas_operacionais` (hoje 11,451734%).
 - Impostos sobre a venda: ICMS efetivo do destino + PIS + COFINS + IRPJ + CSLL + adicional de IR. Com ICMS 12% a soma é **18,252%**.
@@ -93,115 +94,124 @@ flowchart LR
 | Impostos | 11.500 × 18,252% | R$ 2.098,98 |
 | Provisão de comissão | 11.500 × 2% | R$ 230,00 |
 | Lucro do item | 11.500 − 4.471,95 − 1.316,95 − 2.098,98 − 230 | R$ 3.382,12 |
-| **Margem líquida** | 3.382,12 ÷ 11.500 | **29,41%** |
+| **Margem do item** | 3.382,12 ÷ 11.500 | **29,41%** |
 
-**De onde vem.** ✅ `lib/simulador/motor.ts:342-354` (lucro e margem), `:104-110` (impostos), `:144-167` (ICMS efetivo na venda: importação, base reduzida e ST têm regras próprias). Gravado em `simulacao_itens.margem_item` (`dump:745-747`).
+Num pedido só com este item, a margem do pedido também é 29,41%.
 
-### R3. Letra e percentual do vendedor
+**De onde vem.** ✅ `av-hub` `lib/simulador/motor.ts:339` (`const lucroItem`), `:348` (`const margemCalculada`), `:351` (`ehFabricacao ? null`: fabricação sem margem), `:441` (`const margemLiquida`, a do pedido), `:101` (`export function pctImpostos`), `:140` (`export function icmsEfetivoVenda`). Gravado em `simulacao_itens.margem_item` e `simulacoes.margem_liquida`.
 
-**O que faz.** A margem líquida do item cai numa faixa. Cada faixa tem uma letra e um percentual de comissão. Os intervalos são "de X até antes da próxima faixa".
+### R3. Letra e percentual do pedido
 
-| Letra | Margem líquida do item | Percentual |
+**O que faz.** A **margem do pedido** cai numa faixa. Cada faixa tem uma letra e um percentual. Os intervalos são "de X até antes da próxima faixa". A letra do pedido vale para **todos** os itens: item fraco dentro de pedido bom recebe a letra do pedido (N16-185). O protótipo antigo (`experimental/simulador-comissao`) já calculava assim; hoje é a regra vigente.
+
+| Letra | Margem líquida da revenda do pedido | Percentual |
 |---|---|---|
 | A | 15% ou mais | 2,0% |
 | B | 12% até menos de 15% | 1,3% |
 | C | 9% até menos de 12% | 0,7% |
 | D | 0% até menos de 9% | 0,5% |
 
-**Exemplo.** Margem 29,41% → letra A → 2%. Comissão estimada do item: 11.500 × 2% = **R$ 230,00**.
+**Exemplo.** Margem do pedido 29,41% → letra A → 2% em todos os itens. Comissão estimada: 11.500 × 2% = **R$ 230,00**.
 
-**De onde vem.** ✅ `av-hub` `lib/simulador/motor.ts:165-168` (`faixaDaMargem`) e `:364-376`. Faixas em `simulador_parametros.faixas_comissao` (`dump:998-1000`, valores em `dump:1660`). A letra é decidida **por item**; a letra do pedido (`simulacoes.letra_equivalente`) é só informativa (`dump:901-902`).
+**De onde vem.** ✅ `av-hub` `lib/simulador/motor.ts:172` (`export function faixaDaMargem`) e `:475` (`Comissão por PEDIDO`); a letra vai em `simulacao_itens.letra_item` de cada item e em `simulacoes.letra_equivalente`. Faixas em `simulador_parametros.faixas_comissao` (`dump:998-1000`, valores em `dump:1660`). O motor avisa quando há item de revenda no prejuízo dentro do pedido (`ITEM_PREJUIZO`), sem zerá-lo.
 
-### R4. Prejuízo e fabricação interna
+### R4. Predominância, fabricação interna e prejuízo
 
 **O que faz.**
-- **Prejuízo:** item de revenda com lucro menor ou igual a zero (ou sem preço de venda) paga **0%**, qualquer que seja a letra.
-- **Fabricação interna:** item fabricado pela empresa paga um **percentual fixo** (`pct_fabricacao_interna`, hoje 2%). Não tem custo de compra informado, então **não entra na margem do pedido** e **não tem teto de regra fixa**.
+- **Peso da fabricação:** `pct_venda_fabricacao` = venda de fabricação interna ÷ venda do pedido × 100, por valor e não por número de linhas.
+- **Fabricação predomina** (acima de `pct_predominancia_fabricacao`, padrão 50%) ou pedido sem revenda: todos os itens pagam o percentual fixo da fabricação (`pct_fabricacao_interna`, hoje 2%), revenda inclusive (`regra_aplicada = FABRICACAO_INTERNA`). 📝 N16-186
+- **Revenda predomina:** todos os itens pagam a letra do pedido, fabricação inclusive (`LETRA`). 📝 N16-186
+- **Pedido misto:** o motor aplica e avisa (`REGRA_PREDOMINANCIA`); a Controladoria confirma ao aprovar na Visão Geral.
+- **Pedido no prejuízo** (margem da revenda do pedido ≤ 0): nenhum item paga. A revenda fica `PREJUIZO_PEDIDO`; a fabricação, `FABRICACAO_BLOQUEADA`, que a Controladoria pode liberar. O motor avisa `PEDIDO_PREJUIZO`. 📝 N16-185
+- **`PREJUIZO`:** só o item sem preço de venda.
 
-**Exemplo.** Flange sobre desenho (fabricação interna) vendida a R$ 1.800: 1.800 × 2% = **R$ 36,00**. Item de revenda com venda de R$ 4.000 e custo líquido de R$ 4.471,95: prejuízo, comissão **R$ 0,00**.
+**Exemplo.** Pedido de R$ 10.000 com R$ 6.000 de fabricação (60%): 2% em tudo, R$ 200,00. Com R$ 3.000 de fabricação (30%) e revenda na letra C: 0,7% em tudo, R$ 70,00. Se a revenda fechar com margem −2%: R$ 0,00 em tudo.
 
-**De onde vem.** ✅ `motor.ts:369-394`. Fabricação vem **antes** do teste de prejuízo de propósito (`:364-371`). Regra gravada em `simulacao_itens.regra_aplicada` (`PREJUIZO`, `FABRICACAO_INTERNA`, `LETRA`, `TETO_PADRAO`, `TETO_CONDICIONAL`; `dump:704, 754-756`).
+**De onde vem.** ✅ `av-hub` `lib/simulador/motor.ts:449` (`const pctVendaFabricacao`), `:452` (`PREDOMINÂNCIA`), `:459` (`const fabricacaoPredomina`), `:463` (`const pedidoEmPrejuizo`), `:500` (`'FABRICACAO_BLOQUEADA' : 'PREJUIZO_PEDIDO'`), PRs #312, #313 e #327 do av-hub. Na API, as duas regras novas entram na lista aceita: `api-acos-vital` `src/schemas/core_comercial/aggregates/propostas/propostas.route.js:69` (`const REGRAS = [`), commit `7c05f92`; item com regra fora da lista dá 400 e não mais 500 (`src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:151` (`const itemInvalido`)). O corte é parâmetro com vigência: `src/schemas/core_comissionamento/tables/simulador_parametros/simulador_parametros.model.js:112` (`pct_predominancia_fabricacao:`), padrão 50; não há tela para mudá-lo (PS-063). O mesmo CHECK de regras no banco vem da migration `2026-11-18_comissao_grao_pedido`, fora do repositório (❓ PS-062).
 
-### R5. Percentual de Compras
+### R5. Versão de Compras, devolução e trava do vendedor
 
-**O que faz.** Compras abre a simulação do vendedor e, se o custo estiver errado, grava uma **segunda versão** (origem `COMPRAS`) com o custo correto. O motor roda de novo e dá um novo percentual por item. A versão do vendedor passa a `CONTESTADO`; a de Compras fica `APROVADO`. Se Compras concorda, só aprova a versão do vendedor.
+**O que faz.** Compras abre a simulação do vendedor e, se o custo estiver errado, grava uma **segunda versão** (origem `COMPRAS`) com o custo correto. O motor roda de novo e dá a letra do pedido de Compras. A versão do vendedor passa a `CONTESTADO`; a de Compras fica `APROVADO`. Se Compras concorda, só aprova a versão do vendedor. Se devolve, a do vendedor fica `DEVOLVIDO` e a vez é dele.
 
 **Estados da simulação:** `RASCUNHO` → `ENVIADO` → `APROVADO`, `CONTESTADO` ou `DEVOLVIDO`. Os três últimos são finais; versão enviada não muda, correção é versão nova.
 
-**De onde vem.** ✅ `simulacoes.route.js:30-36` (transições), `:233-259` (Compras contesta a do vendedor no mesmo POST), `:311-345` (transição; `DEVOLVIDO` exige motivo), `:348-351` (só rascunho edita). Tela: `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:803-845` (`aprovarCompras`).
+**Trava do vendedor (N16-188).** Depois de enviar, o vendedor não mexe mais: versão nova de origem `VENDEDOR` (rascunho inclusive) ou rascunho antigo indo a `ENVIADO` só passam se a última versão enviada do vendedor não existe ou está `DEVOLVIDO`. Senão, 409 `VERSAO_VENDEDOR_FECHADA`. A regra é do banco (trigger `trg_simulacoes_trava_versao_vendedor`, migration `2026-11-19_comissao_trava_versao_vendedor`, ❓ PS-062).
 
-### R6. `pct_final`: o menor dos dois
+**De onde vem.** ✅ `api-acos-vital` `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:175` (`const versaoFechada`), commit `0e56354`; `:160` (`const semFaturamento`: enviar sem NF dá 409 `PEDIDO_SEM_FATURAMENTO`). Tela: `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:858` (`const aprovarCompras = async`).
 
-**O que faz.** Para cada item: `pct_final` = o **menor** entre o percentual do vendedor e o de Compras. Se Compras não analisou, vale o do vendedor. Consequência: **custo real melhor que o cotado não aumenta a comissão**; só o pior caso conta.
+### R6. Versão pré-aceita: o pedido paga pela menor comissão
 
-**Exemplo.** Pedido 27917, conferido no `dump` (vendedor: letra A nos 2 itens; Compras refez o custo do item 1 e ele caiu para letra C):
+**O que faz.** A view escolhe uma **versão** para o pedido inteiro: a de **menor comissão** do pedido, entre a do vendedor e a de Compras; no empate, a de Compras. Dela vêm percentual, tipo do item e composição de todas as linhas (`origem_pre_aceita`). Sem versão de Compras, vale a do vendedor. Antes de 23/11 era o `LEAST` percentual a percentual, item a item, que podia misturar as duas versões. 📝 N16-190
 
-| Item | % vendedor | % Compras | `pct_final` |
-|---|---|---|---|
-| 1 | 2,0% (A) | 0,7% (C) | **0,7%** |
-| 2 | 2,0% (A) | 2,0% (A) | **2,0%** |
+**Exemplo.** Vendedor: R$ 300 de comissão no pedido. Compras, com custo corrigido: R$ 210. Todas as linhas pagam pela versão de Compras. Custo real melhor que o cotado continua sem aumentar a comissão: vale a menor das duas.
 
-**De onde vem.** ✅ `vw_simulacao_resolvida`: `LEAST(...)` em `dump:1186-1190`. Dados em `dump:1648-1649`. A comissão do vendedor para esse pedido era R$ 216,69 e a de Compras R$ 142,48 (`dump:1648-1649`).
+**De onde vem.** ✅ `api-acos-vital` `src/schemas/core_comissionamento/views/vw_simulacao_resolvida/vw_simulacao_resolvida.model.js:136` (`origem_pre_aceita:`) e `:141` (`id_simulacao_pre_aceita:`); a escolha é da view `vw_simulacao_pre_aceita`, criada pela migration `2026-11-23_comissao_pre_aceita_devolvido` (❓ fora do repositório e do dump, PS-062). A `vw_comissao_master` traz `margem_item_vendedor` e `margem_item_compras` lado a lado (`vw_comissao_master.model.js:109` (`margem_item_vendedor:`)).
 
 ### R7. Regras fixas por cliente (teto)
 
-**O que faz.** Alguns clientes têm um **teto** de percentual combinado. Cada cliente (por unidade) tem três números: comissão **padrão**, comissão **condicional** e a **margem** de gatilho. O teto vale assim: se o **markup bruto** do pedido for **maior ou igual** à margem de gatilho, o teto é a condicional; senão, a padrão. O teto só limita item de **revenda** que pagou pela letra.
+**O que faz.** Alguns clientes têm um **teto** de percentual combinado. Cada cliente (por unidade) tem três números: comissão **padrão**, comissão **condicional** e a **margem** de gatilho. O teto vale assim: se o **markup bruto** do pedido for **maior ou igual** à margem de gatilho, o teto é a condicional; senão, a padrão. O teto só limita item pago pela **letra** (`LETRA`); fabricação predominante e prejuízo não passam por ele.
 
 Atenção: o gatilho usa o **markup bruto** do pedido, `(total da NF − compra bruta) ÷ compra bruta`, e **não** a margem líquida da letra. No pedido 26616 as duas dão 115,24% e 16,37% (`dump:891-894`). No novo modelo o campo `margem` passa a se chamar `gatilho_markup_pct` para não confundir.
 
-**Exemplo.** Cliente com padrão 0,5%, condicional 1,3% e gatilho 100%. Pedido com markup bruto de 127,87%: usa a condicional (1,3%). Item de letra A (2%) fica em **1,3%**. Se Compras refez o custo e o markup do pedido dela caiu para 60,19% (abaixo de 100%), o teto da versão de Compras é 0,5%; o `pct_final` é o menor dos dois tetos, **0,5%**. Esse é o caso do pedido 27917: 5.709,01 × 0,5% + 5.125,68 × 0,5% = **R$ 54,18** (e não os R$ 142,48 de Compras sem o teto). Conta feita sobre o valor do pedido; o real usa o faturado.
+**Exemplo.** Cliente com padrão 0,5%, condicional 1,3% e gatilho 100%. Pedido com markup bruto de 127,87%: usa a condicional (1,3%). Pedido de letra A (2%) fica em **1,3%** em todos os itens de letra.
 
-**De onde vem.** ✅ A view aplica o teto: `dump:1151-1198` (cada versão usa o markup da própria versão; `regra_fixa_aplicada` em `:1136-1142`). Regra em `regras_comissoes_fixas` (`dump:589-603`). ⚠️ O motor do front **tem** um trecho que aplica o teto (`av-hub` `lib/simulador/motor.ts:442-459` (`regraFixa`)), mas a tela chama `calcularSimulacao(form, parametros)` **sem** a regra fixa (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:664` (`calcularSimulacao(form, parametros)`)): na prática o teto só é aplicado pela view.
+**De onde vem.** ✅ A view aplica o teto pelo markup da versão pré-aceita (`vw_simulacao_resolvida.model.js`, colunas `pct_teto` e `regra_fixa_aplicada`). Regra em `regras_comissoes_fixas` (`dump:589-603`). ⚠️ O motor do front **tem** um trecho que aplica o teto (`av-hub` `lib/simulador/motor.ts:549` (`const usaCondicional`)), mas a tela chama o motor **sem** a regra fixa (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:713` (`calcularSimulacao(form, parametros)`)): na prática o teto só é aplicado pela view.
 
 ### R8. Comissão em reais: sobre o faturado, por item
 
-**O que faz.** O dinheiro só existe depois de faturar. Para cada item que saiu em uma NF: `valor da comissão = valor faturado do item × pct_final ÷ 100`, arredondado a 2 casas. Item **ainda não faturado fica sem valor (nulo, pendente), nunca zero**.
+**O que faz.** O dinheiro só existe depois de faturar. Para cada item que saiu em uma NF: `valor da comissão = valor faturado do item × percentual da versão pré-aceita ÷ 100`, arredondado a 2 casas. Item **ainda não faturado fica sem valor (nulo, pendente), nunca zero**.
 
-**Exemplo.** Item faturado em R$ 5.709,01 com `pct_final` 0,5% → 28,545 → **R$ 28,55**.
+**Exemplo.** Item faturado em R$ 5.709,01 a 0,5% → 28,545 → **R$ 28,55**.
 
-**De onde vem.** ✅ `dump:1128` (`valor_comissao`), `:1129` (`economia_compras`, comparada com a **primeira** versão do vendedor), `:1105-1113` (faturado por `codigo_empresa` + `codigo_item_omie`, não por código do pedido Omie, que muda quando o Omie recria o pedido; `dump:863-865`).
+**De onde vem.** ✅ `vw_simulacao_resolvida` (`valor_comissao`; comentário do model, linhas 16-18: faturado nulo é pendente). O faturado casa por `codigo_empresa` + `codigo_item_omie`, não pelo código do pedido Omie, que muda quando o Omie recria o pedido (`dump:863-865`).
 
-### R9. Comissão por NF e situação
+### R9. Comissão por NF, situação e competência
 
-**O que faz.** Soma os itens da NF. O percentual efetivo da NF é **ponderado** pelo valor dos itens. A **situação** da NF é a mais grave entre seus itens, nesta ordem: `BLOQUEADA`, `SEM_SIMULADOR`, `RASCUNHO`, `AGUARDANDO_COMPRAS`, `ITENS_FORA_DO_SIMULADOR`, `VALIDADO`. Só `VALIDADO` entra em "a pagar". A validação é **do pedido**: aprovado uma vez, vale para todas as NFs, inclusive de meses depois.
+**O que faz.** Soma os itens da NF. O percentual efetivo da NF é **ponderado** pelo valor dos itens. A **situação** da NF segue a precedência `BLOQUEADA` > `SEM_SIMULADOR` > `VALIDADO` / `ITENS_FORA_DO_SIMULADOR` > `DEVOLVIDO` > `RASCUNHO` > `AGUARDANDO_COMPRAS`. `DEVOLVIDO` (23/11) diz que Compras devolveu e a vez é do vendedor. Só `VALIDADO` entra em "a pagar". A validação é **do pedido**: aprovado uma vez, vale para todas as NFs.
 
 Também conta os itens da NF **sem vínculo** com a simulação (`qtd_itens_sem_vinculo`): é o aviso do caso "simulou 8, faturou 10".
 
-**De onde vem.** ✅ `vw_comissao_master` situação em `dump:1348-1360`; `vw_comissao_nf` em `dump:1426-1465` (ponderação em `:1444`); resumo do mês em `dump:1520`. A lista só considera NF faturada, de venda líquida, com pedido e vendedor (`dump:1305`).
+**Competência (N16-187).** Cada nota tem `mes_competencia`, o mês em que a comissão é paga: o da emissão, ou o mês ainda aberto no dia do desbloqueio, se a nota foi desbloqueada depois do fechamento (dia de fechamento da unidade em `calendario_comissao`, padrão 10). As rotas aceitam `competencia=AAAA-MM` (o resumo também `AAAA`), exclusivo com `mes`, `ano`, `data_inicio`, `data_fim` e `is_track_record`.
 
-### R10. O vendedor só vê o valor depois da aprovação
+**Peso da fabricação.** `/comissoes_nf` e `/comissoes_master` trazem `venda_revenda`, `venda_fabricacao` e `pct_venda_fabricacao` do pedido e filtram por `com_fabricacao`, `misto` e `pct_venda_fabricacao_min`/`_max`.
 
-**O que faz.** Enquanto Compras não aprova, o vendedor vê a **letra** e a margem do item, mas **não o valor em reais**. O corte é feito no servidor da tela (BFF), não no CSS, para o número não ir no JSON.
+**De onde vem.** ✅ `api-acos-vital` `src/schemas/core_comissionamento/competencia.js:41` (`export function lerCompetencia`), `src/schemas/core_comissionamento/recorte.js:132` (`export function lerFiltroFabricacao`), `vw_comissao_nf.model.js:71` (`pct_venda_fabricacao:`), commits `0244b1a` e `e363da5`. ❓ As colunas vêm das migrations `2026-11-18_comissao_competencia` e `2026-11-19_comissao_escopo_fabricacao`, fora do repositório (PS-062).
 
-**De onde vem.** ✅ `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:26-29` (`O CORTE DO VALOR`), `:221` (validado = alguma versão `APROVADO`), `:225-235` (situação), `:241-256` (percentual, valor e teto só se validado). ✅ No simulador a coluna de comissão em reais só aparece na visão de Compras (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:152` (`mostrarComissao = modoCompras`)). 🟡 No módulo novo o corte passa para o banco e a API (nota 03), porque o BFF não é barreira de segurança.
+### R10. O que o vendedor vê
+
+**O que faz.** Minhas Comissões lê as mesmas views da Visão Geral, com `meus=true`, pela competência. A API recorta pelo **vínculo próprio** do usuário: o auxiliar não vê a comissão do titular, nem o diligenciador a dos que diligencia; sem vínculo próprio, a resposta vem **vazia** (antes, 403). Quem entra só por Minhas Comissões tem o recorte sempre, com ou sem `meus=true` (N16-189).
+
+**De onde vem.** ✅ `api-acos-vital` `src/schemas/core_comissionamento/recorte.js:9` (`export const SQL_VINCULOS_PROPRIOS`), `:65` (`export async function lerRecorteVendedor`), `src/middlewares/escopoVendedor.js:121` (`simulacao_resolvida:`), commit `06bb146`. ✅ BFF: `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:148` (`/comissoes_nf?`), PR #334; os itens da nota vêm de `/api/comissoes/minhas-comissoes/itens`, sobre `/comissoes_master` (`av-hub` `lib/api/itensDaNota.ts:84`, `/comissoes_master?`). A tela saiu do `/faturamento_planilha`. ✅ No simulador, a coluna de comissão em reais só aparece na visão de Compras (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:171` (`mostrarComissao = modoCompras`)).
+
+❓ O BFF antigo cortava o valor em reais antes da aprovação de Compras; o novo repassa o `valor_comissao` da view, e a tela o mostra por nota. Se a view zera o valor antes da validação não dá para conferir: a SQL está fora do repositório (PS-062). 🟡 O Hub ainda está atrás da API: diz que `DEVOLVIDO` saiu (`av-hub` `lib/domain/comissoes-minhas-comissoes.ts:34` (`saiu nesta versão`)) e que a API responde 403 sem vínculo (`app/api/comissoes/minhas-comissoes/route.ts:33` (`devolve 403`)) (PS-064).
 
 ### R11. Bloqueio por NF
 
-**O que faz.** Uma NF pode ser **bloqueada**: o valor da comissão daquela nota vira zero, com um motivo em texto livre. Desbloquear é marcar "não bloqueada" (a linha fica, com quem mexeu). Não existe chave para a NF: o número é digitado com zeros à esquerda (`00051698`) e, se vier sem os zeros, **o bloqueio nunca casa e nada avisa**.
+**O que faz.** Uma NF pode ser **bloqueada**: o valor da comissão daquela nota vira zero, com um motivo em texto livre. Desbloquear é marcar "não bloqueada" (a linha fica, com quem mexeu); a data do desbloqueio decide a competência (R9). Não existe chave para a NF: o número é digitado com zeros à esquerda (`00051698`) e, se vier sem os zeros, **o bloqueio nunca casa e nada avisa**.
 
-**Dados hoje:** 2 linhas, **ambas desbloqueadas**, sem motivo (`dump:1570-1571`).
+**Dados no dump:** 2 linhas, **ambas desbloqueadas**, sem motivo (`dump:1570-1571`).
 
-**De onde vem.** ✅ `bloqueio_comissoes` (`dump:410-420`), uso em `vw_comissao_master` (`dump:1338-1347, 1368`). O motivo é opcional (`dump:465-468`).
+**De onde vem.** ✅ `bloqueio_comissoes` (`dump:410-420`), uso em `vw_comissao_master` (`dump:1338-1347, 1368`). O motivo é opcional (`dump:465-468`). A master guarda `valor_comissao_sem_bloqueio`, o que a nota pagaria sem o bloqueio (`vw_comissao_master.model.js:123` (`valor_comissao_sem_bloqueio:`)).
 
 ### R12. Listas de bloqueio: cliente e vendedor
 
 **O que faz.** Cliente na lista de bloqueio, ou vendedor na lista, **faz a NF sair do cálculo**: a nota não aparece na lista de comissões. Não confundir com `blacklist_vendedor_g5` do faturamento, que é outra coisa (cascata de deduções da venda líquida).
 
-**Dados hoje:** 1 cliente e 8 vendedores, sem observação (`dump:1549, 1556-1563`).
+**Dados no dump:** 1 cliente e 8 vendedores, sem observação (`dump:1549, 1556-1563`).
 
 **De onde vem.** ✅ `blacklist_comissoes_destinatario` e `blacklist_comissoes_vendedores` (`dump:333-342, 372-381`), usadas nos `NOT EXISTS` da `vw_comissao_master` (`dump:1305-1309`). Não têm data: valem para sempre, sobre qualquer NF, inclusive de meses já pagos.
 
-### R13. Valor máximo (pior caso)
+### R13. Valor máximo e valor pré-aceito
 
-**O que faz.** Para planejar o mês antes de existir simulador, a Visão Geral mostra o **valor máximo possível**: valor do item × o menor entre a maior faixa vigente (2%) e o maior dos dois percentuais da regra fixa do cliente. Se a nota já está validada, mostra o valor real.
+**O que faz.** Para planejar o mês, a Visão Geral mostra o **valor máximo possível** (pior caso): valor do item × o menor entre a maior faixa vigente (2%) e o maior percentual da regra fixa do cliente; nota validada mostra o valor real. Desde 23/11 o resumo também traz o **valor pré-aceito**: quanto provavelmente vai ser pago, pela versão pré-aceita, aprovada ou não.
 
-**De onde vem.** ✅ `dump:1361-1365` e comentário `:1410-1419`.
+**De onde vem.** ✅ `dump:1361-1365` e comentário `:1410-1419`; `vw_comissao_resumo_mensal.model.js:45` (`valor_comissao_pre_aceito:`).
 
 ### R14. Resumo mensal e cartões
 
-**O que faz.** Mostra por mês e por vendedor: notas por situação, faturado, comissão a pagar (só `VALIDADO`), valor máximo, bloqueado e economia de Compras. A linha de total e as linhas por vendedor vêm juntas (`is_total`); somar sem filtrar duplica.
+**O que faz.** Mostra por mês e por vendedor: notas por situação (com `qtd_devolvido` desde 23/11), faturado, comissão a pagar (só `VALIDADO`), valor máximo, valor pré-aceito, bloqueado e economia de Compras. A linha de total e as linhas por vendedor vêm juntas (`is_total`); somar sem filtrar duplica.
 
-⚠️ **A coluna "bloqueado" do resumo é sempre zero.** A conta é `valor_faturado_nf × 0` (`dump:1522`). Quem lê "comissões bloqueadas" nessa view vê R$ 0, mesmo com NF bloqueada. No módulo novo o valor retido é a soma do valor calculado das NFs bloqueadas.
+**Bloqueado.** `valor_comissao_bloqueado` deixou de ser sempre zero: é o pré-aceito das notas bloqueadas, o que pagariam sem o bloqueio (bloqueada sem simulação entra com 0). ✅ `vw_comissao_resumo_mensal.model.js:37` (`valor_comissao_bloqueado:`) e `:43` (`qtd_devolvido:`). ❓ A SQL nova está na migration `2026-11-23_comissao_pre_aceita_devolvido`, fora do repositório (PS-062); no dump antigo a conta era `valor_faturado_nf × 0` (`dump:1522`).
 
 ### R15. Coordenadores
 
@@ -215,7 +225,7 @@ Também conta os itens da NF **sem vínculo** com a simulação (`qtd_itens_sem_
 
 **Mudar valor** = fechar a vigência e abrir outra, para meses passados não mudarem. Se a pessoa tem duas vigências no mês (troca no meio), vale a que começou por último. Toda alteração fica num histórico que **não pode ser editado nem apagado**.
 
-**Dados hoje:** 5 de gerência e 1 de exceção, todos com vigência desde 01/01/2000 (carga do `coordenadores.json`, `dump:1578-1583`). Os valores nominais não são copiados aqui.
+**Dados no dump:** 5 de gerência e 1 de exceção, todos com vigência desde 01/01/2000 (carga do `coordenadores.json`, `dump:1578-1583`). Os valores nominais não são copiados aqui.
 
 **De onde vem.** ✅ `fn_dashboard_comissoes` (`dump:111-287`; conta do coordenador em `:179-194`), `fn_comissao_coordenadores_mes` (`dump:85-95`), tabela e travas (`dump:475-498, 1693`), histórico e imutabilidade (`dump:35-54, 70-76, 1883-1890`). ✅ Bloqueio desligado: `fn_dashboard_comissoes.route.js:20-22, 50`. ✅ A tela `dash-comissoes` ainda lê `lib/comissoes/coordenadores.json` do repositório e calcula no navegador (`LOG-42`, [[Comissoes]]). A tabela `comissao_coordenadores` **não tem rota na API**; só a função de leitura.
 
@@ -225,18 +235,4 @@ Também conta os itens da NF **sem vínculo** com a simulação (`qtd_itens_sem_
 
 **De onde vem.** ✅ `fn_dashboard_comissoes` (`dump:158-161, 197-214`), `comissoes_provisoria.route.js` (PUT grava o JSON). ❓ Quem é o gerador (o "sistema Python" que o código cita) não está nos repositórios lidos.
 
-### R17. Parâmetros e versão
-
-**O que faz.** Os percentuais (faixas, impostos, despesas, ICMS, encargos de pagamento, margem desejada, fabricação interna) ficam numa tabela com **vigência** por unidade. A simulação grava qual versão usou (`id_parametros`) e fica amarrada a ela. **Não se edita parâmetro vigente**: fecha-se a vigência e abre-se outra.
-
-**Dados hoje:** 3 linhas (uma por unidade), todas "Maio/23", vigência aberta, valores iguais (`dump:1660-1662`).
-
-**De onde vem.** ✅ `simulador_parametros` (`dump:909-952`), regra no comentário `dump:961-965`, exclusão de sobreposição `dump:1701`.
-
-### R18. Mark-up e preço sugerido (informativo)
-
-**O que faz.** O simulador sugere um preço de venda: `mark-up = 1 ÷ (1 − (margem desejada + despesas + impostos + provisão))`, arredondado **para cima** em 2 casas, aplicado ao custo líquido por unidade, mais o encargo da condição de pagamento. Não decide comissão.
-
-**Exemplo.** Soma = 10 + 11,451734 + 18,252 + 2 = 41,703734%. Mark-up = 1 ÷ 0,58296266 = 1,7153 → **1,72**.
-
-**De onde vem.** ✅ `motor.ts:119-133, 324-326`. O arredondamento para cima copia o `ROUNDUP` da planilha (`:40-55`).
+R17 e R18 continuam em [[01-Motor-Atual-Como-Calcula-Detalhe-Tecnico-2#2. Regra a regra (continuação)]].

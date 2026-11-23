@@ -1,7 +1,7 @@
 ---
 tags: [decisoes, registro, dec, en, ec, n14, n16]
 criado: 2026-10-14
-atualizado: 2026-11-05
+atualizado: 2026-11-23
 status: vigente
 dono: Nathan
 fontes: [v1 00-Indice/Registro-de-Decisoes-2026-10-07 (#1 a #99), v1 Decisoes-Chave-ERP e Perguntas-em-Aberto-Consolidadas (DEC-1 a DEC-12), v1 Encaixe-Estoque-Revenda-no-PCP (EN-01 a EN-07, EC-01 a EC-08), decisões do Nathan de 14/10/2026, decisões N16 de 16 a 26/10/2026 (pasta Proposta-Orcamento-Comissao, histórico), código de 14/10]
@@ -58,9 +58,13 @@ Resumo das decisões vigentes que mais pesam, agrupadas por assunto. O ID entre 
 - O pedido digitado no Omie tem estimativa preenchida pelo vendedor, como hoje no Simulador de Comissão (N16-104).
 - A comissão nova fica no schema `core_comissao`, separada do `core_comissionamento` atual (N16-143).
 - O imposto da linha da OC vem da parte de compras do pedido quando a OC é de pedido de venda ou recompra; para estoque ou uso interno, o Comprador digita. Uma linha por pedido, frete rateado pelo valor (N16-144).
+- A comissão é decidida pelo pedido inteiro: a letra sai da margem da revenda do pedido e o pedido no prejuízo zera todos os itens (N16-185). No pedido misto, quem passa de 50% da venda decide a regra de todos os itens (N16-186). A comissão é vista pelo mês em que é paga (N16-187).
+- Depois de enviar, o vendedor só faz versão nova se ela voltou devolvida (N16-188). Cada vendedor vê só a comissão do próprio vínculo (N16-189), e o pedido é pago pela versão de menor comissão (N16-190).
 
 **Menu e telas**
 
+- O sistema inteiro segue o visual das telas de Compras do Hub; o MES e o Orçamento já seguem (N16-192). A busca de produto do "Pedir cotação" ficou rápida sem mudar o banco (N16-191).
+- O Estoque é "blindado" (travas no banco, idempotência, conferência do livro) e tem 7 telas por tarefa; a carga inicial exige custo, o lote guarda peso e unidade, e o inventário trava o endereço e pede aprovação acima de R$ 500 ou 2% (N16-181 a N16-184).
 - A tela da proposta é parecida com o Simulador de Comissão atual, com três visões: vendedor, Compras e Controladoria (N16-19).
 - Menu enxuto: Vendas com quatro entradas (Propostas, Clientes, Meus Pedidos, Relatórios) e Orçamento com quatro (N16-107).
 - A tela Histórico de compras saiu: Ordens de compra já mostra todo o histórico (N16-108).
@@ -84,6 +88,7 @@ Resumo das decisões vigentes que mais pesam, agrupadas por assunto. O ID entre 
 - Quem precisa da mercadoria (Expedição ou Produção) pede a retirada ao Estoque, e só o Estoque confirma; é aí que o saldo baixa (N16-120).
 - Pedido integral ou por partes: quem decide é o vendedor, no pedido (N16-130).
 - Só quem está vinculado à Qualidade libera ou reprova lote em quarentena (N16-124).
+- O Estoque (raias 05, 09 e 12, no MES) passou ao Nathan em 19/11 (N16-180).
 
 ## Índice por assunto
 
@@ -97,13 +102,13 @@ Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (C
 - **Compras e OC (emissão, aprovação, requisição):** N14-03, N14-08, N14-14, N14-21, N14-23, N14-24, N14-25, N14-28, N14-29, N14-30, N14-33, DEC-3, N16-08, N16-123, N16-144, #50, #50b, #51, EC-04, N16-161.
 - **Compra acima do valor da proposta:** N16-159, N16-17, N16-18, N16-60, N16-61, N16-62, N16-63, N16-64, N16-65, N16-66, N16-67, N16-73, N16-76, N16-102.
 - **Custo real (por evento, NF de entrada, imposto da OC):** N16-09, N16-20, N16-22, N16-23, N16-37, N16-38, N16-40, N16-48, N16-53, N16-57, N16-86, N16-102, N16-144.
-- **Custo do lote e custo no Estoque:** #93, #94, #95, #97, #98, #99, N16-37, DEC-12.
-- **Comissão (cálculo, Controladoria, relatórios):** N16-10, N16-11, N16-12, N16-21, N16-34, N16-35, N16-39, N16-42, N16-43, N16-44, N16-45, N16-46, N16-47, N16-48, N16-49, N16-50, N16-51, N16-74, N16-77, N16-78, N16-103, N16-104, N16-105, N16-143, #90, N16-164, N16-166.
+- **Custo do lote e custo no Estoque:** #93, #94, #95, #97, #98, #99, N16-37, DEC-12, N16-181, N16-182.
+- **Comissão (cálculo, Controladoria, relatórios):** N16-10, N16-11, N16-12, N16-21, N16-34, N16-35, N16-39, N16-42, N16-43, N16-44, N16-45, N16-46, N16-47, N16-48, N16-49, N16-50, N16-51, N16-74, N16-77, N16-78, N16-103, N16-104, N16-105, N16-143, #90, N16-164, N16-166, N16-185 a N16-190.
 - **Unidades e contas Omie:** N16-79, N16-80, N16-81, N16-83, N16-85, N14-31, DEC-1, EN-07, #31c.
-- **Menu e telas:** N16-14, N16-19, N16-33, N16-107, N16-108, N16-119, N14-33, #54, #74.
+- **Menu e telas:** N16-14, N16-19, N16-33, N16-107, N16-108, N16-119, N14-33, #54, #74, N16-191, N16-192.
 - **Banco e API (onde cada coisa mora):** N16-15, N16-98, N16-154, N16-155, N16-109, N16-111, N16-112, N16-113, N16-116, N16-117, N16-143, N14-07, N14-15, N14-26, #3, #6, #82.
 - **Quem faz o quê e cronograma:** N16-157, N16-158, N14-09, N14-10, N14-11, N14-13, N14-32, N16-115, N16-117, N16-118, #32, #33, #33b, #34, #35, #36, #37, #73, #75, #96, #27, N16-165, N16-168, N16-169, N16-170, N16-171.
-- **Estoque, retirada e baixa:** N14-05, N14-06, N16-87, N16-120, N16-121, N16-122, N16-139, N16-140, EN-01, EN-03, EN-04, EC-02, EC-05, DEC-4, #31b, #24, #25, #28, #29, #78, #100.
+- **Estoque, retirada e baixa:** N14-05, N14-06, N16-87, N16-120, N16-121, N16-122, N16-139, N16-140, EN-01, EN-03, EN-04, EC-02, EC-05, DEC-4, #31b, #24, #25, #28, #29, #78, #100, N16-180, N16-183, N16-184.
 - **Recebimento e Qualidade:** N14-04, N16-124, N16-125, N16-126, N16-127, N16-128, N16-129, N16-134, N16-135, N16-136, N16-137, DEC-5, DEC-6, EC-01, EC-06, EC-07, #26.
 - **PCP, Triagem e Produção:** N14-22, N16-93, N16-138, N16-141, EN-02, EN-05, EN-06, EC-03, #74, #78, #104, #105, #106, N16-162.
 - **Expedição e Fiscal:** N16-92, N16-93, N16-130, N16-131, N16-132, N16-133, N14-05.
@@ -126,7 +131,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-97-a-N16-116]]: N16-97 a N16-116
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
 - [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026; empresa, responsável e carteira de clientes da proposta, N16-160, pedidos do Robert de 11/11/2026; entrega das etapas 1 a 6 em 3 dias: aprovação da OC, Destinação do pedido inteiro, Orçamento completo e comissão, N16-161 a N16-165, 12/11/2026; item de fabricação sem custo, N16-166, 16/11/2026)
-- [[Registro-N16-167-em-diante]]: N16-167 em diante (excluir proposta pelo Hub e o pedido excluído no Omie, 16/11/2026; o Pablo analista e o Comercial com o Nathan e o Robert, N16-168, a divisão entre os dois, N16-169, e o prazo de 01/12, N16-170, 17/11/2026; banco do Hub em produção e release de 17/11, N16-171; as duas fontes de preço, N16-172, o menu do Orçamento com três telas, N16-173, o que fica de fora do Orçamento e a validade da cotação, N16-174, a Central de Avisos, N16-175, e o prazo em dias na OC adiado e o acesso em produção, N16-176; a limpeza das telas antigas, N16-177; as telas de Acessos, N16-178)
+- [[Registro-N16-167-em-diante]]: N16-167 em diante (excluir proposta pelo Hub e o pedido excluído no Omie, 16/11/2026; o Pablo analista e o Comercial com o Nathan e o Robert, N16-168, a divisão entre os dois, N16-169, e o prazo de 01/12, N16-170, 17/11/2026; banco do Hub em produção e release de 17/11, N16-171; as duas fontes de preço, N16-172, o menu do Orçamento com três telas, N16-173, o que fica de fora do Orçamento e a validade da cotação, N16-174, a Central de Avisos, N16-175, e o prazo em dias na OC adiado e o acesso em produção, N16-176; a limpeza das telas antigas, N16-177; as telas de Acessos, N16-178; saem Parceiros, Produtos e Parâmetros de custo, N16-179, 18/11/2026; o Estoque com o Nathan, o custo, a unidade, o inventário e as telas do Estoque, N16-180 a N16-184, 19/11/2026; a comissão por pedido, a predominância, a competência, a trava da versão do vendedor, o vínculo próprio e a versão pré-aceita, N16-185 a N16-190, 18 a 23/11/2026; a busca rápida de produto e o visual único, N16-191 e N16-192, 23/11/2026)
 
 ## Onde está cada decisão
 

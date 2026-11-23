@@ -18,7 +18,7 @@ Como o Estoque do MES guarda e movimenta o material e como o custo acompanha o l
 |---|---|---|
 | **Material** | `materiais` | snapshot do produto do av-hub, chave `(codigo_empresa, codigo_produto_omie)`; "mesmo produto" entre filiais = `codigo_produto` legível ✅ `estoque-operacao.service.ts:230-237` |
 | **Lote** | `lotes` | unidade de rastreio, código `LT-AAAAMMDD-NNNN`, sempre de um material; pode ter lote pai (cisão) |
-| **Saldo** | `saldos_estoque` | quantidade do lote por **localização** (único `(id_lote, id_localizacao)`); nunca fica negativo (`aplicarDeltaSaldo` retira só com `quantidade >= retirar`, senão 409 "Saldo insuficiente") ✅ `estoque-operacao.helpers.ts:92-129` (`aplicarDeltaSaldo`) |
+| **Saldo** | `saldos_estoque` | quantidade do lote por **localização** (único `(id_lote, id_localizacao)`); nunca fica negativo: toda mudança passa pelo motor do Estoque, que recusa a retirada maior que o saldo (409), e o banco também recusa (N16-184) ✅ `api-pcp` `src/estoque/motor/motor-estoque.ts:227` (`Saldo insuficiente nessa localização`) |
 | **Movimento** | `movimentos_estoque` | razão só de inserção: `ENTRADA`, `SAIDA`, `TRANSFERENCIA`, `AJUSTE`, sempre com motivo e usuário |
 | **Reserva** | `reservas_estoque` | parte do lote prometida a uma parcial; `ATIVA` → `CONSUMIDA` (baixa) ou `LIBERADA` |
 | **Custo** | `lote_custo` | 1 para 1 com o lote; opcional |
@@ -28,7 +28,7 @@ Filial: o lote pertence à filial **do material** (`materiais.codigo_empresa`); 
 ## Fórmulas (conferidas)
 
 - **Saldo do lote** = soma de `saldos_estoque.quantidade` de todas as localizações.
-- **Reservado** = soma, das reservas `ATIVA` do lote, de `quantidade − quantidade_consumida` ✅ `estoque-operacao.helpers.ts:37-49` (`reservadoPorLote`).
+- **Reservado** = soma, das reservas `ATIVA` do lote, de `quantidade − quantidade_consumida` ✅ `estoque-operacao.helpers.ts:34-46` (`reservadoPorLote`).
 - **Disponível** = `max(saldo − reservado, 0)` **só se o lote está `LIBERADO`**; lote em outro status tem disponível 0 ✅ `estoque-operacao.service.ts:391-395`.
 - **Saldo disponível da parcial (E1)** = lotes `LIBERADO` do mesmo produto e da mesma filial, com disponível > 0, mais antigos primeiro; os comprados pela própria requisição do item vêm primeiro e marcados `daRequisicao` ✅ `:161-199`.
 - A tela de Saldo só mostra depósitos que o perfil visualiza (`perfil_depositos.pode_visualizar`) e até 1 000 linhas ✅ `:61-99`.
@@ -56,10 +56,10 @@ stateDiagram-v2
 | **Recebimento (conferência bateu)** | por item da requisição: lote `PENDENTE` (`origem = RECEBIMENTO`, `quarentena_desde = agora`, `id_requisicao_item`, NF e fornecedor), saldo na localização e `ENTRADA`; soma `quantidade_recebida`; requisição `RECEBIDA` ou `RECEBIDA_PARCIAL`; a parte da parcial coberta vai para a Qualidade (split se chegou parte; o resto volta a Compras · CCP) | R4 | ✅ `compras.service.ts:472-600` |
 | **Qualidade aprova** | lote `PENDENTE` → `LIBERADO` (laudo, `liberado_by`, `liberado_em`); devolve ao Estoque as parciais prontas da requisição (`devolverAoEstoqueParciaisProntas`) | Q2 → E5 | ✅ `api-pcp` `src/qualidade/qualidade.service.ts:75-92` (`async aprovar(`) |
 | **Qualidade reprova** | total: lote `REPROVADO` com `motivo_reprovacao` e evidência; **parcial: cisão** (lote filho `REPROVADO` com `id_lote_pai`, saldo movido por `SAIDA` no pai e `ENTRADA` no filho, mesmo custo), pai `LIBERADO` com o resto, **ou `QUARENTENA` se ainda há parcial esperando o lote**; abre `rncs` (`nota_devolucao_pendente = true`); a parte reprovada da parcial volta a Compras; `quantidade_recebida` da requisição é decrementada (recompra) | Q3, Q4 | ✅ `api-pcp` `src/qualidade/qualidade.service.ts:94-265` (`async reprovar(`); desde o LOG-58 a reprovação também avisa o Compras no Hub, na mesma transação, `:226` (`await enfileirarAvisoRecompraRnc(tx, {`) |
-| **Atender pelo estoque** (E3) | para cada alocação `(lote, quantidade)`: valida mesmo material e filial, lote `LIBERADO`, disponível suficiente; cria `reservas_estoque` `ATIVA`; divide a parcial (parte atendida segue para a Expedição, restante vai à compra ou ao roteiro) | E3, E4 | ✅ `itens-parciais.service.ts:607-720`, `estoque-operacao.helpers.ts:147-220` (`reservarParaParcial`) |
-| **Baixa da reserva** | `consumirReservasDaParcial`: consome as reservas `ATIVA` mais antigas, tira o saldo do lote por localização (maior saldo primeiro), grava `SAIDA` com `id_reserva`, soma `quantidade_consumida`, `CONSUMIDA` quando zera; 409 se o saldo físico não cobre | E6 (hoje) | ✅ `estoque-operacao.helpers.ts:317` (`consumirReservasDaParcial`) |
-| **Estorno** | `estornarConsumosDaParcial` devolve o saldo à mesma localização (`ENTRADA`) e volta a reserva a `ATIVA` (Embalagem desfaz o recebimento ou devolve ao Estoque) | — | ✅ `estoque-operacao.helpers.ts:400-490` (`estornarConsumosDaParcial`) |
-| **Liberar reserva** | `PATCH /estoque/reservas/:id/liberar` ou ao excluir a ordem: `ATIVA` → `LIBERADA` com motivo | — | ✅ `estoque-operacao.helpers.ts:687-710` (`liberarReservas`) |
+| **Atender pelo estoque** (E3) | para cada alocação `(lote, quantidade)`: valida mesmo material e filial, lote `LIBERADO`, disponível suficiente; cria `reservas_estoque` `ATIVA`; divide a parcial (parte atendida segue para a Expedição, restante vai à compra ou ao roteiro) | E3, E4 | ✅ `itens-parciais.service.ts:607-720`, `estoque-operacao.helpers.ts:102-175` (`reservarParaParcial`) |
+| **Baixa da reserva** | `consumirReservasDaParcial`: consome as reservas `ATIVA` mais antigas, tira o saldo do lote por localização (maior saldo primeiro), grava `SAIDA` com `id_reserva`, soma `quantidade_consumida`, `CONSUMIDA` quando zera; 409 se o saldo físico não cobre | E6 (hoje) | ✅ `estoque-operacao.helpers.ts:272` (`consumirReservasDaParcial`) |
+| **Estorno** | `estornarConsumosDaParcial` devolve o saldo à mesma localização (`ENTRADA`) e volta a reserva a `ATIVA` (Embalagem desfaz o recebimento ou devolve ao Estoque) | — | ✅ `estoque-operacao.helpers.ts:329-419` (`estornarConsumosDaParcial`) |
+| **Liberar reserva** | `PATCH /estoque/reservas/:id/liberar` ou ao excluir a ordem: `ATIVA` → `LIBERADA` com motivo | — | ✅ `estoque-operacao.helpers.ts:572` (`export async function liberarReservas(`) |
 | **Transferência e ajuste** | `POST /estoque/movimentos` com `TRANSFERENCIA` (entre localizações e depósitos) ou `AJUSTE` | — | ✅ `estoque-operacao.service.ts:624-717` |
 
 ## Onde a baixa acontece hoje e onde deveria
@@ -104,7 +104,7 @@ Fórmula do contrato (D5): `custo_liquido_unitario = valor_unitario × (1 − de
 | Tabela, model e migration `20261009140000_lote_custo` (PR #53) | ✅ | `prisma/models/estoque.prisma` |
 | Custo na **carga inicial** (`custoUnitario` > 0; vazio ou 0 = sem custo), só com `estoque-custo` editar | ✅ | `estoque-operacao.service.ts` (`cargaInicial`) |
 | Visibilidade: o custo só sai em `GET /estoque/saldo` e `GET /estoque/lotes/:id` para quem tem `estoque-custo` visualizar | ✅ | `estoque-operacao.service.ts` |
-| **Cisão** copia o custo do pai para o filho | ✅ | `estoque-operacao.helpers.ts:756` (`copiarCustoParaFilho`) |
+| **Cisão** copia o custo do pai para o filho | ✅ | `estoque-operacao.helpers.ts:648` (`copiarCustoParaFilho`) |
 | **Custo da OC no Recebimento** (`origem = OC`): o MES lê `GET /ordens-compra/referencia` (projeção `oc_referencia`) e grava `lote_custo` ao criar o lote; unidade da OC diferente da do material = lote sem custo, "custo a informar" (D2); OC sem valor unitário = sem custo | ✅ `develop`, 15 a 16/10 | `compra-oc.ts:100-122`, `compras.service.ts:1045`, `recebimento.service.ts:1148` |
 | Rota `MANUAL` (`PUT /estoque/lotes/:id/custo`) com `estoque-custo` editar e motivo (mínimo 3 caracteres); guarda o custo de antes em `lote_custo_historico` | ✅ `develop`, 27/10 | `estoque-operacao.controller.ts:102-103`, `estoque-operacao.service.ts:719` |
 | Snapshot do custo na `SAIDA` (`movimentos_estoque.custo_unitario`) | ✅ `develop`, 27/10 | `estoque-operacao.helpers.ts:442-475`; migration `20261027130000_itens_custo` |

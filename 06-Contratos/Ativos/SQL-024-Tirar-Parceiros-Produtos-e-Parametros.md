@@ -4,23 +4,23 @@ titulo: Saem de Cadastros › Auxiliares as telas Parceiros, Produtos, Produtos 
 status: para-implementar
 autor: Nathan
 data: 2026-11-18
-camadas: [frontend, sql]
-donos: {frontend: Nathan, sql: Gustavo}
+camadas: [frontend, api, sql]
+donos: {frontend: Nathan, api: Gustavo, sql: Gustavo}
 nos_0b: []
 notas_afetadas: [RBAC-e-Permissoes, Telas-e-Experiencia-do-Usuario, Registro-N16-167-em-diante]
 depende_de: [SQL-023]
 decisoes: [N16-179, N16-173]
-develop-conferida: [av-hub 2d3b25f, em 2026-11-18, também na main (av-hub #322 8938199)]
+develop-conferida: [api-acos-vital ce4f90f, em 2026-11-23 (a API do Gustavo, b9a46a1, também na main); av-hub 2d3b25f, em 2026-11-18, também na main (av-hub #322 8938199)]
 tags: [contrato, banco, rbac, permissoes, telas, limpeza, cadastros]
 criado: 2026-11-18
-estado-em: 2026-11-18
+estado-em: 2026-11-23
 dono: Nathan
-fontes: [conversa do Nathan com o Claude de 18/11/2026 à noite, av-hub PR #321 e release #322, banco do Docker local com os dados do tst (docker-teste, fora do vault), SQL-023-Limpeza-das-Telas-Antigas]
+fontes: [conversa do Nathan com o Claude de 18/11/2026 à noite, av-hub PR #321 e release #322, banco do Docker local com os dados do tst (docker-teste, fora do vault), SQL-023-Limpeza-das-Telas-Antigas, api-acos-vital b9a46a1]
 ---
 
 # SQL-024 · Tirar Parceiros, Produtos e Parâmetros de custo
 
-> **Situação em 18/11:** o Hub já está na `develop` e na `main` (av-hub #321 e release #322); falta o SQL do Gustavo (seção 9), que vem depois do deploy. O SQL foi testado no Docker.
+> **Situação em 23/11:** o Hub está na `develop` e na `main` (av-hub #321 e release #322). A API também mudou, na `develop` e na `main` (`api-acos-vital` `b9a46a1`, do Gustavo; seções 7 e 8). ❓ O SQL do Gustavo (seção 9) no tst e em produção não foi conferido; ele foi testado no Docker.
 
 ## 1. Resumo em linguagem simples
 
@@ -60,11 +60,15 @@ Transversal, sem nó do 0b.
 
 ## 7. Backend
 
-Não se aplica: a API não muda.
+✅ Na `develop` e na `main` (`api-acos-vital` `b9a46a1`): a lista `TELAS_MODULO`, que diz quais telas contam para o módulo Comercial, perdeu `parametros-custo` e ficou com 18 telas: `src/schemas/core_comercial/capacidades.js:23` (`As 18 telas do módulo`). Nenhuma regra nova: a autorização continua lendo o mapa de rotas.
 
 ## 8. API
 
-Não se aplica. As rotas de escrita (`POST /parceiros`, `PUT`/`DELETE /parceiros/*`, `POST /produtos`, `PUT`/`DELETE /produtos/*`) e `GET`/`PUT /comercial/parametros_custo` ficam sem tela no mapa: com token de usuário, respondem 403; sem token (MES, pipeline), nada muda.
+✅ Na `develop` e na `main` (`api-acos-vital` `b9a46a1`), só na documentação (swagger); nenhuma rota sai do código:
+- `GET` e `PUT /comercial/parametros_custo` documentam o 403 `ROTA_SEM_PERMISSAO_MAPEADA` a qualquer usuário com token; mudar os parâmetros passa a ser SQL do Gustavo, por `core_comercial.fn_parametros_custo_salvar`: `src/schemas/core_comercial/aggregates/cadastros/cadastros.swagger.json:918` (`desde o SQL-024 (18/11/2026) a rota não tem tela no mapa`) e `:1029` (`desde o SQL-024 (18/11/2026) a rota não tem tela no mapa`);
+- `GET /produtos/duplicatas` continua, liberada pela mesma permissão do `GET /produtos`, agora documentada como `compras` ou `catalogo-produtos`: `src/schemas/core/tables/produtos/produtos.swagger.json:724` (`compras ou catalogo-produtos, pode_visualizar`).
+
+As rotas de escrita (`POST /parceiros`, `PUT`/`DELETE /parceiros/*`, `POST /produtos`, `PUT`/`DELETE /produtos/*`) e `GET`/`PUT /comercial/parametros_custo` ficam sem tela no mapa: com token de usuário, respondem 403; sem token (MES, pipeline), nada muda.
 
 ## 9. Banco (SQL)
 

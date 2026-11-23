@@ -27,6 +27,6 @@ Fonte: `ListarVendedores` (`/geral/vendedores/`), resource `vendedores.ts`. Sem 
 
 Um vendedor pode ter várias linhas (uma por filial ou conta Omie), ligadas pelo `id_funcionario`, que o pipeline não gere. O vínculo é feito na tela de Vendedores do HUB ([[Contratos-da-v2|LOG-39]]).
 
-O escopo do vendedor (ver só os próprios pedidos) é aplicado pela API a partir do token, fixo no código desde o contrato 40 ✅ (`api-acos-vital` `src/utils/acessoConfig.js:26` (`Escopo de vendedores — FIXO desde 09/10/2026`); `src/middlewares/escopoVendedor.js:179` (`export async function aplicarEscopoVendedor`); [[Contratos-da-v2|LOG-40]]).
+O escopo do vendedor (ver só os próprios pedidos) é aplicado pela API a partir do token, fixo no código desde o contrato 40 ✅ (`api-acos-vital` `src/utils/acessoConfig.js:26` (`Escopo de vendedores — FIXO desde 09/10/2026`); `src/middlewares/escopoVendedor.js:201` (`export async function aplicarEscopoVendedor`); [[Contratos-da-v2|LOG-40]]).
 
 Ver também: [[Pedidos-de-Venda]].

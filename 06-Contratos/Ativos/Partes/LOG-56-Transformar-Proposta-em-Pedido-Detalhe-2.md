@@ -42,7 +42,7 @@ PUT /comercial/pedidos/{id}/conta-corrente   // string: o codigo_conta_omie é b
 { "codigo_conta_corrente": "1234567890" }
 ```
 
-- **Permissão:** a tela do financeiro com `pode_editar` (§7.5), não `propostas`. Precisa da linha em `auth.rotas_telas` (§14, passo 10) e da entrada no BFF; a entrada de `/contas-correntes` hoje é `tela: 'propostas'` (`av-hub` `app/api/comercial/[...rota]/route.ts:54` (`'/contas-correntes'`)) e passa a aceitar as duas telas.
+- **Permissão:** a tela do financeiro com `pode_editar` (§7.5), não `propostas`. Precisa da linha em `auth.rotas_telas` (§14, passo 10) e da entrada no BFF; a entrada de `/contas-correntes` hoje é `tela: 'propostas'` (`av-hub` `app/api/comercial/[...rota]/route.ts:49` (`'/contas-correntes'`)) e passa a aceitar as duas telas.
 - **Ordem de escrita:** chama o `AlterarPedidoVenda` primeiro e só grava no Hub depois que o Omie aceitar. Se o Omie recusar, devolve o `faultstring` e nada muda no Hub.
 - **Erros:** 409 se o pedido já estiver faturado; 422 se a conta não for da conta Omie do pedido; o erro do Omie repassado quando ele recusar.
 - **Histórico:** quem trocou, quando, de qual conta para qual, no molde de `pedidos_vendas_liberacao_historico` com `valor_anterior`, gravado por trigger (§7.5).

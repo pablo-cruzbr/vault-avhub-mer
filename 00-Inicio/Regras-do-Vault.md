@@ -1,7 +1,7 @@
 ---
 tags: [vault, regras]
 criado: 2026-10-14
-estado-em: 2026-11-17
+estado-em: 2026-11-23
 status: vigente
 dono: Nathan
 fontes: [plano de 14/10/2026, instrução da v3 (07-Desenvolvimento/v3/INSTRUCAO.md, fatos F1 a F5 de 05/11/2026)]
@@ -108,6 +108,10 @@ Contrato é o combinado por escrito entre dois sistemas ou entre duas pessoas so
 3. **Decisões** em [[Registro-de-Decisoes]].
 4. **O fluxo mestre** em [[00-Fluxo-Mestre-0b]].
 5. O vault anterior, só quando não conflita com 1 a 4.
+
+### Comentários no código dos sistemas
+
+Desde 18/11/2026 os cinco sistemas seguem um padrão de comentário: o comentário diz o que o código faz e por quê, no presente, sem "Antes…", datas nem "pedido do fulano" (a história fica no git). Está na seção "Comentários" do `CLAUDE.md` de cada repositório (`api-acos-vital` `CLAUDE.md:154`, `av-hub` `CLAUDE.md:178`, `api-pcp` `CLAUDE.md:248`, `app-pcp` `CLAUDE.md:230`, `omie-elt-pipeline` `CLAUDE.md:242`, âncora `## Comentários`) e na skill `comentarios-codigo` da pasta-mãe. Para o vault isso quer dizer: a âncora de uma citação pode estar num comentário que mudou de texto; confira a linha na `develop` antes de citar.
 
 ### Frontmatter obrigatório
 
