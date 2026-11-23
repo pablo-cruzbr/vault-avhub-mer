@@ -1,10 +1,10 @@
 ---
 tags: [sistemas, rbac, permissoes, mes, av-hub, seguranca]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-23
 status: vigente
 dono: Gustavo (DBA)
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-acos-vital ce4f90f, api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 fontes: [api-pcp befd973 (develop), app-pcp 93f96de (develop), api-acos-vital 1654f65 (develop, 05/11), api-acos-vital 0384e89 (develop, 29/10), av-hub 758d5f0 (develop), Dump MES de 14/10, Dump Avhub de 14/10 e de 29/10, v1 AV-Hub-RBAC, Achado-Duplicacao-RBAC, PS-048, OQ-50, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -87,8 +87,8 @@ Dump MES `:1046-1113`, `:1396-1440` ✅.
 | Slug | Flag | Efeito | Código |
 |---|---|---|---|
 | `estoque-custo` | `pode_visualizar` | `GET /estoque/saldo` e `GET /estoque/lotes/:id` incluem o custo do lote (`custoUnitario`, bloco `custo`) | ✅ `estoque-operacao.service.ts:67,546`; `app-pcp/…/saldo/page.tsx:36` |
-| `estoque-custo` | `pode_editar` | `POST /estoque/lotes/carga-inicial` aceita `custoUnitario` (sem a flag, 403 "Sem permissão para informar o custo do lote") | ✅ `api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:634-640` (`Sem permissão para informar o custo do lote`); `EntradaLoteModal.tsx:36` |
-| `compras-liberar` | `pode_editar` | `POST /compras/requisicoes/:id/liberar-recebimento` (rede de segurança: esperados do Recebimento sem OC aprovada, com motivo obrigatório) | ✅ `compras.service.ts:404-409`; `fila/CartaoItemParcial.tsx:227` (`liberarModal`) |
+| `estoque-custo` | `pode_editar` | `POST /estoque/lotes/carga-inicial` exige `custoUnitario` (N16-181; sem a flag, 403 "Sem permissão para informar o custo do lote") | ✅ `api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:647` (`Sem permissão para informar o custo do lote`); `EntradaLoteModal.tsx:36` |
+| `compras-liberar` | `pode_editar` | `POST /compras/requisicoes/:id/liberar-recebimento` (rede de segurança: esperados do Recebimento sem OC aprovada, com motivo obrigatório) | ✅ `compras.service.ts:404-409`; `fila/CartaoItemParcial.tsx:228` (`liberarModal`) |
 
 Terceira tela só de permissão, desde 26/10: `programar-fila` (`editar` muda a ordem de qualquer fila de fabricação, inclusive nos setores travados para o PCP; o líder com "pode atuar" só muda onde o setor não é travado; vale só para setor produtivo) ✅ `api-pcp/src/setores/fila-ordem.service.ts:13,84`.
 
@@ -174,13 +174,13 @@ Dados em `auth.rotas_telas` e `auth.telas`: **o dump é só esqueleto** (sem `CO
 
 #### Slugs do Comercial
 
-As 21 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`, `custo-item` (singular, ≠ `custo-itens`), `relatorio-gerencial`, `painel-comprador`, `clientes`, `solicitacoes-custo`, `ofertas-fornecedor`, `pedido-cotacao`, `catalogo-produtos`, `fornecedores`, `historico-compras`, `parametros-custo`, `tabela-telha`, `sincronizacao-omie`, `matriz-precos`, `pesquisa-materiais`, `relatorio-cotacoes`, `dash-comercial`, `empresas-emissoras`) ✅ `api-acos-vital/src/schemas/core_comercial/capacidades.js:20-26`. As capacidades (`escopo` por `escopo_vendedores` do perfil, `ve_valores`, `ve_custo`, `pode_delegar`, `comprador`…) saem das telas do usuário em `auth.fn_me_permissoes`, não do cargo comercial; `GET /comercial/me` devolve esse mapa. A `api-comercial` de teste lia `GET /me/permissoes` do av-hub; ela foi removida em 06/11/2026 ([[API-Comercial]], histórico). Toda rota `/comercial/*` e `/suprimentos/*` exige o token do usuário (401 `TOKEN_USUARIO_AUSENTE` mesmo com `x-api-key` válida) ✅ `middlewares/exigirTokenUsuario.js`. No BFF do av-hub cada rota da lista tem tela e ação ✅ `app/api/comercial/[...rota]/route.ts`. Em 05/11 entraram `POST /comercial/propostas/:id/transformar` e `POST /comercial/pedidos/:id/enviar-omie`, ambas declaradas com `propostas:pode_editar`, e `GET /comercial/produtos`, com `propostas:pode_visualizar` (`api-acos-vital` `pedidos.route.js:14`, `produtos.route.js`, `develop` `1654f65`). ❓ Não conferi se `auth.rotas_telas` tem linha para as rotas novas: com Bearer, rota sem linha dá 403 `ROTA_SEM_PERMISSAO_MAPEADA` ([[Chaves-e-Autenticacao]]), e o BFF ainda não as lista.
+As 18 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`, `custo-item` (singular, ≠ `custo-itens`), `relatorio-gerencial`, `painel-comprador`, `clientes`, `solicitacoes-custo`, `ofertas-fornecedor`, `pedido-cotacao`, `catalogo-produtos`, `fornecedores`, `historico-compras`, `tabela-telha`, `pesquisa-materiais`, `relatorio-cotacoes`, `dash-comercial`, `empresas-emissoras`; `parametros-custo` saiu no `SQL-024`) ✅ `api-acos-vital` `src/schemas/core_comercial/capacidades.js:23` (`As 18 telas do módulo`). As capacidades (`escopo` por `escopo_vendedores` do perfil, `ve_valores`, `ve_custo`, `pode_delegar`, `comprador`…) saem das telas do usuário em `auth.fn_me_permissoes`, não do cargo comercial; `GET /comercial/me` devolve esse mapa. A `api-comercial` de teste lia `GET /me/permissoes` do av-hub; ela foi removida em 06/11/2026 ([[API-Comercial]], histórico). Toda rota `/comercial/*` e `/suprimentos/*` exige o token do usuário (401 `TOKEN_USUARIO_AUSENTE` mesmo com `x-api-key` válida) ✅ `middlewares/exigirTokenUsuario.js`. No BFF do av-hub cada rota da lista tem tela e ação ✅ `app/api/comercial/[...rota]/route.ts`. Em 05/11 entraram `POST /comercial/propostas/:id/transformar` e `POST /comercial/pedidos/:id/enviar-omie`, ambas declaradas com `propostas:pode_editar`, e `GET /comercial/produtos`, com `propostas:pode_visualizar` (`api-acos-vital` `pedidos.route.js:14`, `produtos.route.js`, `develop` `1654f65`). ❓ Não conferi se `auth.rotas_telas` tem linha para as rotas novas: com Bearer, rota sem linha dá 403 `ROTA_SEM_PERMISSAO_MAPEADA` ([[Chaves-e-Autenticacao]]), e o BFF ainda não as lista.
 
 ### 3. Lacunas e decisões abertas
 
 > **Telas de Acessos (18/11/2026, N16-178):** ✅ Perfis e Pessoas no lugar de Perfis, Permissões, Usuários × Perfis e Usuários; cada tela mostra só as ações que as rotas dela usam (`auth.rotas_telas`); o alcance de vendedores se edita no perfil. API `api-acos-vital` `src/schemas/auth/index.js:60` (`path: "/acessos"`); telas `av-hub` `components/Acessos/PerfilPagina.tsx:26` (`export default function PerfilPagina`). Contrato `LOG-62` (`06-Contratos/Entregues/LOG-62-Telas-de-Acessos`).
 
-> **Limpeza das telas antigas (18/11/2026, N16-177):** 12 telas sem uso saem com as permissões e as rotas, e 8 rotas passam a exigir as telas que as usam de verdade. Contrato `SQL-023` (`06-Contratos/Ativos/SQL-023-Limpeza-das-Telas-Antigas`), 📝 para implementar. Também mostra, conferido em produção em 18/11, que o Hub ignora a permissão de tela desativada e a API não, e que a tela `custo-item` só existe em produção, só com o Admin (Dev).
+> **Limpeza das telas antigas (18/11/2026, N16-177):** 12 telas sem uso saem com as permissões e as rotas, e 8 rotas passam a exigir as telas que as usam de verdade. Contrato `SQL-023` (`06-Contratos/Ativos/SQL-023-Limpeza-das-Telas-Antigas`): ✅ código na `develop` e na `main` (`av-hub` #310, `api-acos-vital` `55f8f6a`) e SQL aplicado no tst; ❓ em produção. Também mostra, conferido em produção em 18/11, que o Hub ignora a permissão de tela desativada e a API não, e que a tela `custo-item` só existe em produção, só com o Admin (Dev).
 
 | Item | Estado |
 |---|---|
@@ -190,5 +190,5 @@ As 21 telas do módulo (`propostas`, `propostas-delegacao`, `propostas-valores`,
 | Permissão do documento de retirada (E6) | 🔴 não existe (a tela e a rota também não) |
 | Quem vê custo no MES e no av-hub | duas permissões distintas: `estoque-custo` (MES, custo do lote) e `custo-itens` (av-hub, custo do pedido) 🟡 alinhar perfis |
 | Chave própria do MES com escopo mínimo para ler o av-hub (hoje `API_KEY` de leitura e escrita) | 🔴 Gustavo ([[Chaves-e-Autenticacao]]) |
-| Linhas de `auth.rotas_telas` das rotas novas (`/fluxo/*`, `/itens_pedido_custo`, `/compras/requisicoes/eventos`, `/compras/requisicoes/referencia`, `/comercial/*`) e as 21 telas do módulo comercial em `auth.telas` | ❓ Gustavo |
+| Linhas de `auth.rotas_telas` das rotas novas (`/fluxo/*`, `/itens_pedido_custo`, `/compras/requisicoes/eventos`, `/compras/requisicoes/referencia`, `/comercial/*`) e as 18 telas do módulo comercial em `auth.telas` | ❓ Gustavo |
 | Duplicação de RBAC entre MES e av-hub (achado antigo) | por decisão cada sistema mantém o seu; o av-hub é a fonte dos perfis comerciais ([[Registro-de-Decisoes]]) |
