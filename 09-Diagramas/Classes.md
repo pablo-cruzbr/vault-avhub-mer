@@ -1,10 +1,10 @@
 ---
 tags: [diagramas, classes, uml, mes, estoque, comercial]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 dono: Robert
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, matéria-prima pela retirada e lote v2); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 Diagramas-UML (1, 2, 3, 23, 25), api-pcp 579a625 prisma/models/*.prisma (LoteCusto e OrigemLote reconferidos na develop befd973 em 29/10/2026), HUB b55ac55 api-comercial/prisma/models/*.prisma]
 ---
 
@@ -22,7 +22,7 @@ fontes: [v1 Diagramas-UML (1, 2, 3, 23, 25), api-pcp 579a625 prisma/models/*.pri
 
 ## 1. Estoque e compras no MES (E1 a E5, R0 a R4, Q1 a Q4)
 
-Cada material origina lotes. Cada lote tem saldo, movimentos, custo opcional e, se reprovado, uma RNC. A reserva liga o lote ao item que vai atendê-lo.
+Cada material origina lotes. Cada lote tem saldo, movimentos, custo e, se reprovado, uma RNC. A reserva liga o lote ao item que vai atendê-lo, e a retirada tira do lote o que foi reservado.
 
 ```mermaid
 classDiagram
@@ -99,10 +99,18 @@ classDiagram
         +string nomeFantasia
         +string cpfCnpj
     }
-    class RetiradaEstoque {
-        <<proposta>>
-        +string status
-        +decimal quantidade
+    class Retirada {
+        +string codigo
+        +DestinoRetirada destino
+        +StatusRetirada status
+        +string pedidoVenda
+        +string ordemProducao
+        +datetime confirmadaEm
+    }
+    class RetiradaItem {
+        +decimal quantidadePedida
+        +decimal quantidadeRetirada
+        +decimal quantidadeDevolvida
     }
 
     Material "1" --> "0..*" Lote : origina
@@ -117,9 +125,13 @@ classDiagram
     Reserva "0..*" --> "0..1" ItemParcial : split atendido
     MovimentoEstoque "0..*" --> "0..1" Reserva : consumo
     ItemParcial "0..*" --> "0..1" Lote : espera a inspecao
-    RetiradaEstoque "0..*" --> "1" Reserva : baixa na retirada E6
+    Retirada "1" --> "1..*" RetiradaItem
+    Retirada "0..*" --> "0..1" ItemParcial : atendimento E3 E4
+    RetiradaItem "0..*" --> "1" Lote
+    RetiradaItem "0..*" --> "0..1" Reserva : baixa na retirada E6
+    MovimentoEstoque "0..*" --> "0..1" RetiradaItem : saida e devolucao da sobra
 ```
-✅ Todas as caixas existem, menos `RetiradaEstoque` (📝 decidida em 14/10, 🔴 sem código).
+✅ Todas as caixas existem na `develop` do MES. A retirada (`Retirada` e `RetiradaItem`) existe desde 23/11 (`api-pcp` PRs #96 e #97, N16-193): `api-pcp` `prisma/models/estoque.prisma:582` (`model Retirada {`).
 
 ## 2. Produção no MES (P1, P2, F1, Q7, X1 a X4)
 
@@ -400,13 +412,13 @@ Redesenhados a partir do Prisma do `api-pcp` (`prisma/models/`) e do Prisma do `
 
 ### Diagrama 1: Estoque e compras no MES
 
-Selo ✅ para todas as classes exceto `RetiradaEstoque` (📝 decidida em 14/10, 🔴 sem código). Fontes: `estoque.prisma:61-423`. Mudanças em relação ao v1:
+Selo ✅ para todas as classes. Fontes: `estoque.prisma:61-423`. Mudanças em relação ao v1:
 
 - `Deposito` ganhou `codigoEmpresa` e `nomeUnidade` (filial do depósito) ✅ `estoque.prisma:69-70`; o v1 dizia que não tinha.
 - `LoteCusto` existe e tem `OrigemCusto` (`CARGA_INICIAL`, `OC`, `MANUAL`). Em 14/10 só a carga inicial gravava; na `develop` de 29/10 o Recebimento grava o custo da OC (19/10, `97b9adc`) e o custo pode ser informado ou corrigido à mão (27/10, `6c11147`) ✅. `OrigemLote` ganhou `PRODUCAO` (fabricado aprovado na inspeção de saída, LOG-53).
 - `Pesagem` não é classe: peso teórico, real e recontado ficam em `RecebimentoItem` (diagrama 3). Etiqueta é geração sob demanda (`src/estoque/etiquetas`), sem tabela. `OrdemSeparacao`, `ItemSeparacao`, `DevolucaoCliente` e `ContagemCiclica` não existem no schema e saíram deste vault (fora do fluxo 0b).
 - `Fornecedor` é projeção local (`fornecedores`) sem ligação com o lote; o lote guarda `numeroNf` e o recebimento guarda o nome do fornecedor.
-- `RetiradaEstoque` entra como proposta do nó E6: a baixa sai do recebimento da parcial na Embalagem e passa para a retirada. Nome e campos 🟡 a definir com o Robert.
+- `Retirada` e `RetiradaItem` são o nó E6: o atendimento abre a retirada (destino `EXPEDICAO` ou `PRODUCAO`), o Estoque confirma o que saiu e o saldo baixa nessa hora; a sobra de matéria-prima volta ao mesmo lote (`quantidadeDevolvida`). O lote ganhou peso real, kg por unidade, medidas, corrida, norma, grau, certificado e `custoPendente` (lote v2, 19/11), que o desenho não mostra.
 
 ### Diagrama 2: Produção no MES
 
