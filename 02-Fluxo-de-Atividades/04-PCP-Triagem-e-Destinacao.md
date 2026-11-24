@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, pcp, triagem, destinacao, mes, p1, p2, p6]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 ordem: 4
 nos: [P1, P2, P6]
 anterior: "[[03-Pedido-de-Venda-e-Liberacao]]"
 proxima: "[[05-Estoque-Atendimento]]"
-develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; app-pcp 897dcd7, em 2026-11-13, só o prazo da requisição; api-pcp 2e564e6, app-pcp 4c11886, em 2026-11-10; api-acos-vital b97981c, av-hub 2e5456d, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-pcp 6bca516, em 2026-11-24 (matéria-prima pela retirada, PR #97); api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; app-pcp 897dcd7, em 2026-11-13, só o prazo da requisição; api-pcp 2e564e6, app-pcp 4c11886, em 2026-11-10; api-acos-vital b97981c, av-hub 2e5456d, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [00-Fluxo-Mestre-0b, LOG-26, v1 01-Fluxo-Operacional/PCP-Carteira, v1 Modelo-Destinacao-Item, v1 Encaixe-Estoque-Revenda-no-PCP, v1 Fluxo-Estoque-Completo, api-pcp 579a625 (pedidos.service.ts, pedidos-carteira.service.ts, pedidos.controller.ts, fabricas.prisma), app-pcp 1fca8d3 (carteira, ordens-producao/novo), Registro-de-Decisoes #31b #50b, api-pcp e app-pcp develop de 27/10/2026 (OP, Montagem do Roteiro), N16-138 a N16-142, api-pcp develop 2e564e6 e app-pcp develop 4c11886 de 10/11/2026 (pedido inteiro destinado: pedidos.service.ts, ordens-producao/novo/page.tsx e ItensSection.tsx), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -77,7 +77,7 @@ O que aparece como "develop" nesta nota está publicado na `main` do MES desde 1
 - 🔴 Mostrar a OC do pedido na Triagem, na Destinação e no Atendimento (BL-049).
 - 🔴 Fila "Novo norte" (P6).
 - Retrabalho (N16-141): hoje o código volta sempre ao setor anterior.
-- 🟡 Matéria-prima: a `develop` baixa no "Atender pelo estoque" (19/10); a decisão é baixar na retirada (N16-140) 🔴.
+- ✅ Matéria-prima: o "Atender pelo estoque" só reserva, e a baixa sai na retirada para a Produção, pela quantidade pedida (N16-140, N16-193; `api-pcp` PR #97): `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1214` (`destino: 'EXPEDICAO'`) e [[12-Estoque-Despacho]].
 - 📝 Pedido anterior à data de corte: decidido, falta a mensagem no lugar do 404 (N16-142).
 
 Entrada: [[03-Pedido-de-Venda-e-Liberacao]]. Próxima raia: [[05-Estoque-Atendimento]].
