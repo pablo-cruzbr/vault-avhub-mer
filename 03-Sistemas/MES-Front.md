@@ -4,7 +4,7 @@ criado: 2026-10-14
 estado-em: 2026-11-24
 status: vigente
 dono: Robert (Estoque: Nathan, N16-180)
-develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); app-pcp 8259344, em 2026-11-23 (Estoque e visual do Hub, PRs #70 a #82); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 50f0a65, app-pcp 03fb038, em 2026-11-24 (coletor, N16-201); api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); app-pcp 8259344, em 2026-11-23 (Estoque e visual do Hub, PRs #70 a #82); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [app-pcp 8259344 (develop, 23/11), N16-180 a N16-184, N16-192, app-pcp 93f96de (develop, 27/10; a main parou em 08/10), api-pcp befd973, v1 App-PCP-Visao-Geral, App-PCP-Modelo-Producao, App-PCP-Recebimento-Conferencia]
 ---
 
@@ -50,7 +50,8 @@ Cada etapa do fluxo tem a sua tela. A lista completa, por nó, está no Detalhe 
 - ✅ Telas novas de 20 a 27/10 (só na `develop`): Montagem do Roteiro, Produtos em Produção, fila de Recebimento redesenhada, fila de fabricação por OP, ordem da fila, finalizar produção, aprovar saída e receber fabricado (LOG-53).
 - ✅ Estoque reorganizado (19 a 23/11, só na `develop`): Pendências, Atender pedidos (com Reservas), Movimentar, Estoque (por material, lote ou endereço) com a página do Material e do Lote, Movimentos (com o Kardex), Inventário e Painel com dados reais; as URLs antigas (Mapa do Depósito, Reservas) redirecionam ✅ `app-pcp` `app/(protected)/estoque-operacao/mapa-deposito/page.tsx:6` (`redirect('/estoque-operacao/saldo?visao=endereco')`).
 - ✅ Visual do Hub (N16-192): cabeçalho com trilha pelo menu, luz de fundo no escuro, largura 1680, cartões translúcidos, peças `Alternar` e `BuscaSelecao` ✅ `components/Layout/PageLayout/PageHeader/PageHeader.tsx`, `components/Ui/BuscaSelecao/BuscaSelecao.tsx`. As telas dos outros setores mudam só pela casca comum.
-- 🟡 Telas novas do Estoque (`pendencias`, `movimentar`, `inventario`, `inventario-aprovar`) ainda sem cadastro em Acessos no tst e na produção (PS-060).
+- ✅ Coletor do Estoque (24/11, só na `develop`, N16-201): leitura pelo leitor ou pela câmera, separar, contar, mudar de endereço e etiqueta de endereço; a câmera só abre em https ✅ `app-pcp` `app/(protected)/estoque-operacao/coletor/ColetorUi.tsx:110` (`function LeitorCamera`).
+- 🟡 Telas novas do Estoque (`pendencias`, `movimentar`, `inventario`, `inventario-aprovar`, `coletor`) ainda sem cadastro em Acessos no tst e na produção (PS-060).
 - 🔴 Não há tela de Torre de Fluxo.
 - ✅ Aba Retiradas no Atender pedidos (23/11, só na `develop`): lista, lista de separação em PDF, confirmar o que saiu e devolver a sobra de matéria-prima ✅ `app-pcp` `app/(protected)/estoque-operacao/atendimento/RetiradasAba.tsx:43` (`export default function RetiradasAba()`).
 - 🔴 Não há tela do `P6` (Novo norte).
@@ -109,6 +110,7 @@ Todas as telas "módulo" (Requisições, Compras · CCP, Recebimento, Inspeção
 | Movimentos | `/estoque-operacao/movimentacao` (aba Kardex: `/movimentacao/kardex`) | `movimentacao` | lista de movimentos e kardex com saldo corrido ✅ `movimentacao/page.tsx:172` (`title="Movimentos"`) |
 | Inventário | `/estoque-operacao/inventario`, `/inventario/[id]` | `inventario`; aprovar com `inventario-aprovar` | contagem cega, recontagem e aprovação acima do limite ✅ `inventario/page.tsx:78` (`title="Inventário"`) |
 | Painel do Estoque | `/estoque-operacao/painel-estoque` | `painel-estoque` | KPIs, gráfico e alertas reais (mínimo, RNC, custo a informar) ✅ `painel-estoque/page.tsx:242` (`title="Painel do Estoque"`) |
+| Coletor | `/estoque-operacao/coletor` (e `/separar`, `/contar`, `/mover`, `/etiquetas`) | `coletor`; ações com `atendimento`, `inventario` e `movimentacao` | leitor que digita ou câmera do celular (só em https); consultar, separar, contar, mudar de endereço e etiqueta de endereço (N16-201) ✅ `coletor/page.tsx:77` (`title="Coletor"`) |
 | Depósitos | `/cadastros/estoque/depositos` | `depositos` | depósitos e localizações |
 | Materiais | `/cadastros/estoque/materiais` | `materiais` | natureza, peso teórico, tolerância, mínimos |
 
