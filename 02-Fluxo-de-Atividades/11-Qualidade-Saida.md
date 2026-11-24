@@ -51,6 +51,8 @@ As 100 flanges chegam à inspeção de saída. O inspetor as confere.
 
 As decisões de 29/10/2026 (bloco N16-120 a N16-143) que tocam esta raia estão abaixo, com o ID.
 
+- 🔴 **No Hub (PR #338 do `av-hub`, rascunho) a saída é diferente do MES:** conferência da peça com 5 itens, segregação com o local, RNC, reprovação parcial e tratativa com Qualidade, PCP, Comercial e cliente (inclui concessão). Isso contraria três regras abaixo (sem checklist, sem RNC, só falso alarme ou retrabalho) e espera a validação da Mayara e as decisões do Cadu. Regras, pendências e donos: [[11-Qualidade-Saida-Regras-no-Hub]]; documentação ao cliente depois da saída: [[11-Qualidade-Documentacao-ao-Cliente-Regras-no-Hub]]; perguntas: [[Perguntas-Qualidade-Mayara]].
+
 - Todo roteiro de fabricação tem um setor de Qualidade antes da Expedição. Revenda não exige.
 - Só se reprova em setor de Qualidade, com a inspeção em andamento.
 - **Sem laudo nem checklist** (N16-129, 29/10/2026). A inspeção de saída é um clique e um motivo, como o código já faz. Nenhuma tela de laudo. A inspeção de entrada é diferente: lá a reprovação exige motivo e evidência.
@@ -69,6 +71,7 @@ As decisões de 29/10/2026 (bloco N16-120 a N16-143) que tocam esta raia estão 
 - 🔴 Escolha do setor de volta no retrabalho (N16-141): hoje volta ao anterior.
 - 🔴 Tela do novo norte do PCP; fila de inspeção de processo; reabrir divergência.
 - ❓ Uso real da tela em ambiente; regra de sucata e refugo.
+- 🔴 Qualidade no Hub (telas no PR #338, sem API nem banco): contrato `API-023`.
 
 ## Detalhe técnico
 

@@ -64,6 +64,8 @@ O lote de aço carbono comprado para as 100 flanges chega e fica em quarentena. 
 
 As quatro decisões acima são de 29/10/2026 (bloco N16-120 a N16-143).
 
+🔴 No Hub (PR #338 do `av-hub`, rascunho) a entrada ganha conferência de 14 itens e RNC com causa, ação e nova inspeção: [[08-Qualidade-Entrada-Regras-no-Hub]] (regras, pendências e donos), `API-023` e [[Perguntas-Qualidade-Mayara]].
+
 ## O que já existe e o que falta
 
 - ✅ (`app-pcp`) Tela de inspeção, aprovação, reprovação com cisão do lote e devolução da parte reprovada a Compras.
