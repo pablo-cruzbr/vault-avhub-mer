@@ -1,11 +1,11 @@
 ---
 tags: [fluxo, raia, estoque, atendimento, reserva, lote, custo, inventario, kardex, mes, e1, e2, e3, e4, parte]
 criado: 2026-11-23
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan (MES e decisões, N16-180)
 parte-de: "[[05-Estoque-Atendimento]]"
-develop-conferida: [api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050, reteste)]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada e matéria-prima pela retirada, PRs #96, #97, #83 e #84); api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050, reteste)]
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026, v1 02-PRD-Estoque e Estoque-Custo-do-Lote, API-008, LOG-53, N16-09, N16-140, N16-180 a N16-184, OQ-49, api-pcp c8036db (PRs #85 a #95: testes, motor, conferência do livro, lote v2, travas, idempotência, kardex, inventário, painel, consulta), app-pcp 8259344 (PRs #70 a #82), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -58,7 +58,7 @@ As regras 9 e 11 (entrada do lote) estão em [[09-Estoque-Entrada-do-Lote]]; a r
 
 ### Reserva (`StatusReserva`)
 
-`ATIVA` nasce em "Atender pelo estoque" (`reservarParaParcial`); vira `CONSUMIDA` quando a Embalagem recebe a parcial (`consumirReservasDaParcial`, saída pelo motor) ou `LIBERADA` (ordem excluída, parcial cancelada ou liberação com motivo na aba Reservas). O estorno (`estornarConsumosDaParcial`) devolve o saldo à mesma localização quando a Embalagem desfaz o recebimento ou devolve ao Estoque.
+`ATIVA` nasce em "Atender pelo estoque" (`reservarParaParcial`); vira `CONSUMIDA` quando o Estoque confirma a retirada (saída pelo motor, [[12-Estoque-Despacho]]); a parcial atendida antes de 23/11, sem retirada, ainda consome no recebimento da Embalagem (`consumirReservasDaParcial`) ou `LIBERADA` (ordem excluída, parcial cancelada ou liberação com motivo na aba Reservas). O estorno (`estornarConsumosDaParcial`) devolve o saldo à mesma localização quando a Embalagem desfaz o recebimento ou devolve ao Estoque.
 
 ### Parcial no Estoque
 
@@ -114,7 +114,7 @@ Todos no `api-pcp`. As 8 rotas que exigem `Idempotency-Key`: atender (as duas), 
 
 ✅ `destinoRestante = COMPRA` (ou Revenda, sempre) move a parcial para o setor `REQUISICAO` `itens-parciais.service.ts:1056` (`setorDoCircuito(this.prisma, 'REQUISICAO')`), com a observação "Sem saldo no estoque: N vão para compra" (`:1158`, `Sem saldo no estoque`). O PCP abre a requisição lá ([[06-Circuito-de-Compra]], `P3`).
 
-✅ **Enviar à produção** só existe com matéria-prima do estoque: as unidades cobertas seguem no roteiro e o restante vai para compra (`ConsumoMateriaPrima`; baixa imediata pelo motor, estornada se a parcial volta: `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1195` (`await consumirMateriaPrima(tx, {`)). 🔴 Diverge da N16-140 (baixa na retirada). A genealogia (J4) segue sem código.
+✅ **Enviar à produção** só existe com matéria-prima do estoque: as unidades cobertas seguem no roteiro e o restante vai para compra (`ConsumoMateriaPrima`): desde 23/11 a matéria-prima fica reservada e abre uma retirada para a Produção, que baixa na confirmação pela quantidade pedida (N16-140, N16-193): `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1221` (`await reservarMateriaPrima(tx, {`). Parcial devolvida libera o que ainda estava reservado e cancela a retirada aberta; a sobra já retirada volta pela devolução da retirada. A genealogia (J4) segue sem código.
 
 ## Dados
 
@@ -139,7 +139,7 @@ O item 1 (documento de retirada) está em [[12-Estoque-Despacho]] e o item 2 (fa
 |---|---|---|---|---|
 | 3 | `GET /itens/custo`: falta testar junto com o job do hub ([[Contratos-da-v2\|LOG-47]]) | Nathan, Gustavo | E3 | ✅ rota (`api-pcp` `src/integracao-avhub/integracao-avhub.controller.ts:29`, `@Get('itens/custo')`); 🔴 teste conjunto |
 | 4 | Custo obrigatório (BL-066, N16-181): falta decidir o fim do lote recebido sem custo que fica em alerta | Nathan | R4 | 🟡 |
-| 5 | Baixa de matéria-prima **na retirada** (N16-140), com genealogia (J2, J3, J4) | Nathan | E4, F1 | 🟡 baixa imediata ✅ (`itens-parciais.service.ts:1195`, `consumirMateriaPrima`); 🔴 retirada e genealogia |
+| 5 | Baixa de matéria-prima **na retirada** (N16-140), com genealogia (J2, J3, J4) | Nathan | E4, F1 | ✅ na retirada (`itens-parciais.service.ts:1221`, `reservarMateriaPrima`); 🔴 genealogia |
 | 6 | Ponto de pedido preventivo (EB2 a EB5): só o alerta de mínimo (a contagem cíclica virou o inventário ✅, `api-pcp` `src/estoque/inventario/inventario.controller.ts:35`, `@Controller('estoque/inventarios')`) | Nathan | — | 🔴 |
 | 7 | Transferência entre filiais (etapas 2 a 4); ver [[Transferencia-entre-Filiais]] | Nathan | E1 | 🔴 |
 | 8 | Separação física (`ordem_separacao`) | Nathan | E3 | 🔴 |
@@ -169,7 +169,7 @@ flowchart TD
     Q1 -->|"aprova"| E5["E5 · Entrada no Estoque<br/>comprado vira lote e saldo<br/>fabricado vira lote PRODUCAO"]
     Q8{"Q8 · Qualidade de saída aprova?"} -->|"sim, decisão: volta ao Estoque"| E5
     E5 --> E3
-    E3 --> E6["E6 · Despacho<br/>documento de retirada e baixa na retirada<br/>hoje a baixa ocorre na Embalagem"]
+    E3 --> E6["E6 · Despacho<br/>retirada e baixa na confirmação"]
     E6 -->|"produto pronto"| X1["X1 · Embalagem e paletização"]
     E6 -->|"matéria-prima ou beneficiamento"| F1["F1 · Setores produtivos do roteiro"]
 ```
