@@ -1,10 +1,10 @@
 ---
 tags: [comissao, motor-atual, core_comissionamento, proposta, validacao]
 criado: 2026-10-16
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: proposta
 dono: Nathan
-develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, comissão por pedido, predominância, competência, escopo, trava e pré-aceita]
+develop-conferida: [av-hub c4a455d, em 2026-11-24 (DEVOLVIDO, Provável, AGUARDANDO_APROVACAO e Visão Geral por pedido, PRs #337 e #339); api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, comissão por pedido, predominância, competência, escopo, trava e pré-aceita]
 fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, av-hub lib/simulador/motor.ts, av-hub app/(protected)/comissoes/simulador e analise-simuladores, av-hub app/api/comissoes, tela-simulador-comissao.png, N16-10, N16-11, N16-18, N16-19, N16-20, N16-185 a N16-190, PS-062, PS-063, PS-064, av-hub PRs #312, #313, #327, #331 a #334, api-acos-vital 7c05f92, 0244b1a, e363da5, 0e56354, 06bb146]
 ---
 
@@ -83,7 +83,7 @@ O desenho completo está em [[03-Modelo-Novo-core_comissao]] e os estados em [[0
 4. Quem aprova não é separado de quem digita. A tela esconde o botão, mas o servidor não barra. ✅
 5. Nada reconfere o custo líquido gravado, porque só o navegador o calcula. ✅
 6. As seis migrations da comissão de 18 a 23/11 estão fora do repositório. Estão no tst ✅ ([[Dump-AvHub-Teste-2026-11-23]]), mas não no dump de produção de 18/11: sem elas as rotas novas falham (PS-062) ❓.
-7. Minhas Comissões no Hub ainda não mostra `DEVOLVIDO` e fala em 403 onde a API já responde vazio (PS-064).
+7. As telas do Hub mostram `DEVOLVIDO`, o valor provável da versão pré-aceita e a letra da versão que paga o pedido (`av-hub` PRs #337 e #339, 23/11); a situação `AGUARDANDO_APROVACAO` ainda não vem da API (PS-065).
 
 A lista completa está no detalhe técnico.
 

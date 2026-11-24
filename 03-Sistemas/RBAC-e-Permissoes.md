@@ -116,7 +116,7 @@ Seeds: `estoque-custo` nasce "default-deny, só o Administrador" ✅ `api-pcp` `
 
 **Reteste no Docker de 13/11 (MES, develop de 12/11)** 🟡:
 - `GET /setores`, `/setores/:id` e `/setores/:id/painel` só exigem login, sem `@RequirePermission` ✅ `api-pcp` `src/setores/setores.controller.ts:41-54` (`@Get(':id/painel')`). As duas primeiras já eram assim de propósito (o BFF filtra); o painel, não: um perfil sem permissão nenhuma recebe a fila do setor com pedido, cliente, prazo, prioridade e as últimas observações.
-- O escopo por setor e por depósito só vale quando a consulta filtra o setor ou o depósito: sem filtro, um perfil sem setores vê todas as parciais, reservas, lotes e o saldo futuro ✅ `src/itens-parciais/itens-parciais.service.ts:100-101` (`PerfilSetor.podeVisualizar só é checado quando a consulta filtra um setor`).
+- O escopo por setor e por depósito só vale quando a consulta filtra o setor ou o depósito: sem filtro, um perfil sem setores vê todas as parciais, reservas, lotes e o saldo futuro ✅ `src/itens-parciais/itens-parciais.service.ts:105-106` (`PerfilSetor.podeVisualizar só é checado quando a consulta filtra um setor`).
 - A tela `roteiros` da tabela acima não existe na tabela `telas` do MES de teste, e o CRUD `/roteiros` exige essa tela: até o Administrador recebe 403 ✅ `src/roteiros/roteiros.controller.ts:24` (`@RequirePermission('roteiros', 'editar')`). O app não usa essas rotas: a Montagem do Roteiro usa `/pedidos/roteiros` e `/pedidos/:id/roteiro`. ❓ A decidir (Robert): criar a tela ou tirar o CRUD.
 
 `movimentacao` (singular, ajuste e carga inicial) e `movimentacoes` (plural, fila) são telas distintas ✅ `estoque-operacao.controller.ts:63-93` e `itens-parciais.controller.ts:57`; conferir o cadastro de ambas em produção ❓.

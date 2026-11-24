@@ -1,11 +1,11 @@
 ---
 tags: [sistemas, mes, api-pcp, nestjs, backend, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 dono: Robert
 parte-de: "[[MES-Backend]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf56), prisma/migrations até 20261028120100, Dump MES (Esqueleto).sql de 14/10 (defasado), v1 App-PCP-Backend-Producao, App-PCP-Visao-Geral, MES-Arquitetura-Decisoes]
 ---
 
@@ -25,7 +25,7 @@ fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf
 | Filtro global | `PrismaExceptionFilter` traduz P2002/P2003/P2039/P2025 em HTTP amigável | ✅ `src/app.module.ts:88` |
 | Saúde | `GET /health` público (`@Public()`) | ✅ `src/app.controller.ts:11-12` |
 | Docs | `/docs` (Scalar) e `/api-docs-json` com Basic Auth `DOCS_USER`/`DOCS_PASSWORD`; sem senha em produção responde 404 | ✅ `src/main.ts:56-83` |
-| Migrations | 66 pastas em `prisma/migrations` (de `20260818164425_init` a `20261028120100_op_e_lote_fabricado`); schema em 7 arquivos `prisma/models/*.prisma` (54 models, 22 enums) | ✅ `api-pcp/prisma/` |
+| Migrations | 76 pastas em `prisma/migrations` (de `20260818164425_init` a `20261123150000_estoque_retirada_devolucao`, lidas em 24/11); a contagem de models e enums (54 e 22) é a de 27/10 ❓ | ✅ `api-pcp/prisma/` |
 
 215 rotas (contagem dos decorators `@Get/@Post/@Put/@Patch/@Delete` dos controllers na `develop`, 29/10; eram 192 em 14/10). A tabela rota a rota está na seção seguinte; as rotas novas de 15 a 28/10 têm a sua própria subseção.
 
@@ -123,7 +123,7 @@ A rota `PATCH /compras/requisicoes/:id/compra` ("Registrar compra" manual) **nã
 | `GET /estoque/saldo/disponivel-parcial/:idItemParcial` | `movimentacoes`, visualizar | ✅ `:46` |
 | `GET /estoque/lotes/:id` | `saldo`, visualizar | ✅ `:73` |
 | `GET /estoque/lotes/:id/etiqueta` | `saldo`, visualizar | ✅ `etiqueta.controller.ts:21` |
-| `POST /estoque/lotes/carga-inicial` | `movimentacao`, criar (custo opcional: `estoque-custo` editar) | ✅ `:67`, `service:398-475` |
+| `POST /estoque/lotes/carga-inicial` | `movimentacao`, criar (custo obrigatório, com `estoque-custo` editar; N16-181) | ✅ `estoque-operacao.controller.ts:92` (`@Post('lotes/carga-inicial')`), `service:642` |
 | `GET /estoque/unidades`, `/estoque/produtos-avhub` | `movimentacao`, criar | ✅ `:55,61` |
 | `GET /estoque/movimentos` | `movimentacao`, visualizar | ✅ `:79` |
 | `POST /estoque/movimentos` (TRANSFERENCIA ou AJUSTE) | `movimentacao`, criar | ✅ `:85` |

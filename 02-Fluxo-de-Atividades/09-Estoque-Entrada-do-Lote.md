@@ -71,9 +71,9 @@ A numeração é a da nota de Estoque da v2; as outras regras estão em [[05-Est
 
 | # | Regra | Selo |
 |---|---|---|
-| 9 | Parcial de item **comprado** só entra de volta no Estoque depois que a Qualidade liberou o lote (409 se há lote `PENDENTE`) | 📝 ✅ `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1224` (`statusQualidade: 'PENDENTE'`) |
-| 11 | **Tudo que é fabricado ou comprado vai para o Estoque**: o fabricado aprovado vira lote e saldo e só então é despachado | 📝 ✅ `itens-parciais.service.ts:1267` (`async aprovarSaida(`), `:1403` (`async receberFabricado(`); 🔴 a Expedição ainda não sai pela retirada |
-| 25 | Lote recebido sem custo nasce com `custo_pendente = true` e fica em alerta até `PUT /estoque/lotes/:id/custo`; fabricado não entra no alerta | 📝 N16-181 ✅ `api-pcp` `src/compras/recebimento.service.ts:1152` (`custoPendente: !custo.dados`), `src/itens-parciais/itens-parciais.service.ts:1401` (`LIBERADO, sem custo`) |
+| 9 | Parcial de item **comprado** só entra de volta no Estoque depois que a Qualidade liberou o lote (409 se há lote `PENDENTE`) | 📝 ✅ `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1255` (`statusQualidade: 'PENDENTE'`) |
+| 11 | **Tudo que é fabricado ou comprado vai para o Estoque**: o fabricado aprovado vira lote e saldo e só então é despachado | 📝 ✅ `itens-parciais.service.ts:1298` (`async aprovarSaida(`), `:1403` (`async receberFabricado(`); 🔴 a Expedição ainda não sai pela retirada |
+| 25 | Lote recebido sem custo nasce com `custo_pendente = true` e fica em alerta até `PUT /estoque/lotes/:id/custo`; fabricado não entra no alerta | 📝 N16-181 ✅ `api-pcp` `src/compras/recebimento.service.ts:1152` (`custoPendente: !custo.dados`), `src/itens-parciais/itens-parciais.service.ts:1432` (`LIBERADO, sem custo`) |
 | 26 | Peso do lote: kg por unidade = peso real ÷ quantidade, ou o peso teórico do material | 📝 N16-182 ✅ `api-pcp` `src/estoque/operacao/lote-v2.ts:24` (`export function pesoDoLote(`) |
 
 ### Telas

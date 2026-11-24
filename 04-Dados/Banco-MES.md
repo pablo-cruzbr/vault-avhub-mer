@@ -1,10 +1,10 @@
 ---
 tags: [dados, banco, mes, postgres, prisma]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 dono: Robert
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [Dump MES (Esqueleto).sql de 14/10/2026 15:00 (defasado: não há dump mais novo), api-pcp befd973 develop (prisma/models/*.prisma, 66 migrations até 20261028120100), v1 App-PCP-Modelo-Producao, MES-Arquitetura-Decisoes]
 ---
 
@@ -72,13 +72,18 @@ Estados do pedido e da parcial: [[Estados-e-Status]].
 | `depositos` (`:499`) | depósito físico | `codigo` único, **`codigo_empresa`** (uuid da filial), `nome_unidade` |
 | `localizacoes_estoque` (`:768`) | localização dentro do depósito | único `(id_deposito, codigo)` |
 | `materiais` (`:863`) | snapshot do produto do av-hub | único **`(codigo_empresa, codigo_produto_omie)`**; `codigo_produto` (legível, ex. `015VRDP060`), `id_produto_avhub`, `natureza`, `categoria`, `unidade`, `ncm`, `familia`, `peso_teorico_unitario`, **`tolerancia_peso`** (padrão 0,05), `estoque_minimo`, `estoque_maximo`, `ponto_de_pedido` |
-| `lotes` (`:813`) | **lote**: unidade de rastreio | `codigo` único (`LT-AAAAMMDD-NNNN`), `id_material` (RESTRICT), `origem`, `status_qualidade`, `quantidade`, `id_lote_pai` (cisão), `id_requisicao_item` (compra), **`id_pedido_op`** (28/10: OP do lote `PRODUCAO`; único por OP e material), `numero_nf`, `fornecedor` (texto), `laudo_url`, `quarentena_desde`, reprovação (`motivo_reprovacao`, `evidencia_url`, `reprovado_*`), liberação (`liberado_*`) |
+| `lotes` (`:813`) | **lote**: unidade de rastreio | desde 19/11 (lote v2, N16-181, N16-182): `peso_real`, `kg_por_unidade`, `espessura_mm`, `largura_mm`, `comprimento_mm`, `corrida`, `norma`, `grau`, `certificado_url`, `custo_pendente`; `codigo` único (`LT-AAAAMMDD-NNNN`), `id_material` (RESTRICT), `origem`, `status_qualidade`, `quantidade`, `id_lote_pai` (cisão), `id_requisicao_item` (compra), **`id_pedido_op`** (28/10: OP do lote `PRODUCAO`; único por OP e material), `numero_nf`, `fornecedor` (texto), `laudo_url`, `quarentena_desde`, reprovação (`motivo_reprovacao`, `evidencia_url`, `reprovado_*`), liberação (`liberado_*`) |
 | **`lote_custo`** (`:786`) | custo do lote, 1 para 1 | `id_lote` (PK e FK `CASCADE`), `origem`, **`custo_liquido_unitario`** `numeric(15,6)`, `valor_unitario`, `moeda` (padrão `BRL`), `cotacao`, `desconto_pct`, `icms_recuperar_unit`, `ipi_unit`, `st_unit`, `frete_unit`, `id_item_oc`, **`cotacao_a_conferir`**, `atualizado_por_id` |
 | `lote_custo_historico` (27/10) | histórico do custo de antes e o motivo, a cada `PUT /estoque/lotes/:id/custo` | `id_lote` (CASCADE), `usuario_id` |
-| `consumos_materia_prima` (19/10) | matéria-prima baixada ao atender pelo estoque uma parcial de fabricação (estornável ao devolver); `movimentos_estoque.id_consumo_mp` | `id_lote`, `id_item_parcial` |
+| `consumos_materia_prima` (19/10) | matéria-prima de uma parcial de fabricação; desde 23/11 fica reservada e sai pela retirada (N16-140); `movimentos_estoque.id_consumo_mp` | `id_lote`, `id_item_parcial` |
+| `retiradas` e `retirada_itens` (23/11, `20261123120000_estoque_retirada`) | retirada do Estoque (E6): uma linha por reserva, destino `EXPEDICAO` ou `PRODUCAO` | `codigo` único (`RT-AAAAMMDD-NNNN`), `status` (`ABERTA`, `PARCIAL`, `CONCLUIDA`, `CANCELADA`), `id_item_parcial`; na linha, `id_lote`, `id_reserva`, `quantidade_pedida`, `quantidade_retirada` e `quantidade_devolvida` (`20261123150000`) |
+| `conferencias_livro_estoque` (19/11) | resultado da conferência diária movimentos = saldo | origem `OrigemConferenciaLivro` |
+| `lote_historico` (19/11) | linha do tempo do lote, só inclusão (trigger `lote_historico_imutavel`) | `id_lote` |
+| `inventarios`, `inventario_localizacoes`, `inventario_contagens`, `inventario_itens` (19/11) | inventário com endereço travado e contagem cega (N16-183) | `StatusInventario`; triggers do ciclo e `saldos_estoque_inventario` (recusa mexer em endereço travado) |
+| `idempotencia_requisicoes` (19/11) | resposta guardada por `Idempotency-Key` nas rotas que mexem no saldo | — |
 | `entradas_uso_interno` (16/10) | item de OC de uso interno: conferido contra a NF e entregue a quem pediu, sem lote nem saldo (custo vai para despesa) | `id_recebimento_item`, `id_oc_item`, `id_material` |
 | `saldos_estoque` (`:1359`) | saldo por lote e localização | único `(id_lote, id_localizacao)`; `quantidade` |
-| `movimentos_estoque` (`:894`) | razão do estoque (só inserção) | `tipo`, `quantidade`, `motivo`, origem e destino (localização e depósito), `id_reserva`, `usuario_id`, `autorizado_por_id`, `ocorrido_em`; desde 27/10 `custo_unitario` (snapshot do custo na saída) |
+| `movimentos_estoque` (`:894`) | razão do estoque (só inserção) | `tipo`, `quantidade`, `motivo`, origem e destino (localização e depósito), `id_reserva`, `usuario_id`, `autorizado_por_id`, `ocorrido_em`; desde 27/10 `custo_unitario` (snapshot do custo na saída); desde 23/11 `peso_kg` e `id_retirada_item`. Imutável desde 19/11 (trigger `movimentos_estoque_imutavel`), e os triggers adiados `*_livro` exigem livro = saldo e reservado ≤ saldo (`20261119150000_estoque_travas`, N16-184) |
 | `reservas_estoque` (`:1284`) | reserva de lote para uma parcial | `quantidade`, `quantidade_consumida`, `status`, snapshot (`pedido_venda`, `ordem_producao`, `item_codigo`, `item_descricao`), `liberada_by_id`, `motivo_liberacao` |
 | `rncs` (`:1310`) | não conformidade de lote | `quantidade_reprovada`, `evidencia_url`, **`nota_devolucao_pendente`** (padrão `true`) |
 | `fornecedores` (`:595`) | projeção de `core.parceiros` | único `(codigo_empresa, codigo_parceiro_omie)`; **sem escritor nem leitor no código** 🟡 |
@@ -116,11 +121,10 @@ Os 94 FKs estão em `grep "FOREIGN KEY"` do dump de 14/10 ✅ (as tabelas novas 
 
 | Falta | Nó | Selo |
 |---|---|---|
-| Tabela de **documento de retirada** do Estoque (`documentos_retirada` + itens, com `id_reserva`, destino Expedição ou Produção) | E6 | 🔴 |
 | Tabela de feed de eventos (`fluxo.evento`, `seq` bigserial) para a Torre | LOG-46 | 🔴 |
 | Custo do **fabricado** (hoje o lote `PRODUCAO` nasce sem custo e o `GET /itens/custo` deixa o item fabricado de fora) | Q8 → E5, LOG-47 | ❓ regra do custo |
 | Registro de P6 (Novo norte) | P6 | 🔴 |
 
-Já resolvido desde 14/10 (só na `develop`): `OrigemLote.PRODUCAO` e vínculo `lotes` ↔ parcial (28/10); escritor de `lote_custo` com `origem = OC` e `MANUAL` (16/10 e 27/10); `custo_alterado_em` e `GET /itens/custo` (27/10).
+Já resolvido desde 14/10 (só na `develop`): a retirada do Estoque (`retiradas`, 23/11); `OrigemLote.PRODUCAO` e vínculo `lotes` ↔ parcial (28/10); escritor de `lote_custo` com `origem = OC` e `MANUAL` (16/10 e 27/10); `custo_alterado_em` e `GET /itens/custo` (27/10).
 
 Mapa conceitual e diagrama de classes: [[Modelo-de-Dados]].

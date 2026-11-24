@@ -1,11 +1,11 @@
 ---
 tags: [sistemas, mes, api-pcp, nestjs, backend, parte]
 criado: 2026-11-05
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 dono: Robert
 parte-de: "[[MES-Backend]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf56), prisma/migrations até 20261028120100, Dump MES (Esqueleto).sql de 14/10 (defasado), v1 App-PCP-Backend-Producao, App-PCP-Visao-Geral, MES-Arquitetura-Decisoes]
 ---
 
@@ -81,6 +81,6 @@ As cinco variáveis `AVHUB_*_INTERVALO_*`/`_MIN` são regra em ambiente. A regra
 - 🔴 Módulo `fluxo` (Torre) não existe; o `GET /itens/custo` existe desde 27/10 (só na `develop`).
 - ✅ Fabricado aprovado vira lote `PRODUCAO` (LOG-53, `OrigemLote.PRODUCAO`, `prisma/models/estoque.prisma:11-17`). O fabricado entra **sem custo** (`itens-parciais.service.ts:1403-1410`); o custo da matéria-prima do fabricado ainda não existe ❓.
 - ✅ `lote_custo` é gravado na carga inicial, na cisão, pela OC no Recebimento (`compras.service.ts:1045`, `recebimento.service.ts:1148`, `compra-oc.ts:114`) e pela rota manual (`estoque-operacao.service.ts:732`).
-- 🔴 Não há documento de retirada; a baixa de saldo acontece quando a Embalagem/Expedição recebe a parcial (`itens-parciais.service.ts:318`) e de novo, por garantia, na entrega (`entregas.service.ts:72`).
+- ✅ Retirada: a baixa do saldo acontece na confirmação da retirada (`src/estoque/retirada/retirada.ts:146`, `await registrarSaidaDoLote(tx, {`), e o recebimento da parcial espera a retirada concluir (`itens-parciais.service.ts:280`, `retiradaPendenteDaParcial`). A parcial atendida antes de 23/11 ainda baixa no recebimento (`itens-parciais.service.ts:332`) e, por garantia, na entrega (`entregas.service.ts:72`).
 - 🟡 Tabela `fornecedores` (projeção de `core.parceiros`) existe e nenhum código a popula nem lê; o fornecedor da OC vem de `oc_referencia`.
 - 🟡 `GET /requisicoes-compra` (contrato 003) sem consumidor.

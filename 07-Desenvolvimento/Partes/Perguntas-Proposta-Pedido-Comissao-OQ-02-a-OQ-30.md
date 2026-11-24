@@ -55,7 +55,7 @@ fontes: [Proposta-Orcamento-Comissao/00-Briefing-Decisoes (OQ-02 a OQ-12, fora d
 
 **Situação.** **Aberta.** Pergunta: na carga inicial do marco zero (13/11/2026), o lote sem custo é recusado ou entra com custo `MANUAL` e motivo? Quem responde: Robert, com o Nathan. Trava: BL-066 e BL-031 e o marco zero (M5).
 
-**Contexto.** N16-09 torna o custo obrigatório em todo lote e supera o #93. Desde 19/11 (N16-181) a `develop` recusa a carga inicial sem custo (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:642` (`a carga inicial não aceita lote sem custo`)), a carga é de um lote por chamada e a carga em lote (G1) não existe. A origem `MANUAL` já existe no MES (`api-pcp` `prisma/models/estoque.prisma:404` (`MANUAL`)). Exigir custo de todo o saldo inicial é trabalho de Compras e Controladoria, não só de código.
+**Contexto.** N16-09 torna o custo obrigatório em todo lote e supera o #93. Desde 19/11 (N16-181) a `develop` recusa a carga inicial sem custo (`api-pcp` `src/estoque/operacao/estoque-operacao.service.ts:642` (`a carga inicial não aceita lote sem custo`)), a carga é de um lote por chamada e a carga em lote (G1) não existe. A origem `MANUAL` já existe no MES (`api-pcp` `prisma/models/estoque.prisma:413` (`MANUAL`)). Exigir custo de todo o saldo inicial é trabalho de Compras e Controladoria, não só de código.
 
 **Opções.** (a) Obrigatório já na G1: sem custo, a linha não entra; (b) obrigatório no Recebimento (`R4`) e, na carga inicial, custo informado ou custo `MANUAL` com motivo obrigatório e auditoria; (c) obrigatório só depois do marco zero. **Default 🟡:** (b). A estimativa está em `Proposta-Orcamento-Comissao/07-Cronograma/Proposta-de-Cronograma.md` (fora do vault, a validar). Ligada à OQ-38 (o saldo está confiável?).
 

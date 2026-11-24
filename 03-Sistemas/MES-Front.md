@@ -1,10 +1,10 @@
 ---
 tags: [sistemas, mes, app-pcp, nextjs, frontend]
 criado: 2026-10-14
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: vigente
 dono: Robert (Estoque: Nathan, N16-180)
-develop-conferida: [app-pcp 8259344, em 2026-11-23 (Estoque e visual do Hub, PRs #70 a #82); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); app-pcp 8259344, em 2026-11-23 (Estoque e visual do Hub, PRs #70 a #82); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [app-pcp 8259344 (develop, 23/11), N16-180 a N16-184, N16-192, app-pcp 93f96de (develop, 27/10; a main parou em 08/10), api-pcp befd973, v1 App-PCP-Visao-Geral, App-PCP-Modelo-Producao, App-PCP-Recebimento-Conferencia]
 ---
 
@@ -52,7 +52,7 @@ Cada etapa do fluxo tem a sua tela. A lista completa, por nó, está no Detalhe 
 - ✅ Visual do Hub (N16-192): cabeçalho com trilha pelo menu, luz de fundo no escuro, largura 1680, cartões translúcidos, peças `Alternar` e `BuscaSelecao` ✅ `components/Layout/PageLayout/PageHeader/PageHeader.tsx`, `components/Ui/BuscaSelecao/BuscaSelecao.tsx`. As telas dos outros setores mudam só pela casca comum.
 - 🟡 Telas novas do Estoque (`pendencias`, `movimentar`, `inventario`, `inventario-aprovar`) ainda sem cadastro em Acessos no tst e na produção (PS-060).
 - 🔴 Não há tela de Torre de Fluxo.
-- 🔴 Não há tela de documento de retirada (`E6`).
+- ✅ Aba Retiradas no Atender pedidos (23/11, só na `develop`): lista, lista de separação em PDF, confirmar o que saiu e devolver a sobra de matéria-prima ✅ `app-pcp` `app/(protected)/estoque-operacao/atendimento/RetiradasAba.tsx:43` (`export default function RetiradasAba()`).
 - 🔴 Não há tela do `P6` (Novo norte).
 - 🟡 Em Compras · CCP a atualização leva até 5 minutos, ou vale o botão "Atualizar".
 - 🟡 Reteste no Docker de 13/11 (43 telas abertas): `/ordens-producao/<id inválido>` fica em "Carregando..." para sempre, sem mensagem, porque a tela só sai do carregando quando acha o pedido ✅ `app-pcp` `app/(protected)/ordens-producao/[id]/page.tsx:502-505` (`loading || !pedido`); a Montagem do Roteiro e o Lote tratam o caso. A fila de um setor que não existe (`/movimentacoes/<id>`) aparece vazia ("Nenhum item na fila deste setor") em vez de "setor não encontrado".
@@ -84,7 +84,7 @@ A coluna "Slug" é o `telaId` que decide `pode_*` na tela. Nós do 0b: [[00-Flux
 | Montagem do Roteiro | `/montagem-roteiro`, `/montagem-roteiro/[id]` | `montagem-roteiro` | P2 | `GET /pedidos/roteiros`, `GET`/`PUT /pedidos/:id/roteiro`, `POST /pedidos/:id/devolver-destinacao`; enquanto o roteiro não é liberado, o item só sai do Estoque para compra | ✅ `montagem-roteiro/page.tsx:106-107` |
 | Produtos em Produção | `/produtos-em-producao` | `produtos-em-producao` | F1, X1 | `GET /pedidos/produtos-em-producao`: uma linha por split, onde o produto está no roteiro, com exportação em planilha | ✅ `produtos-em-producao/page.tsx:244-245` |
 | Acompanhamento dos Pedidos · lista de Ordens de Produção | `/ordens-producao` e `/ordens-producao/[id]` | `ordens-producao` | P2, X1 | `GET /pedidos`, `/pedidos/:id`, embalagens, anexos, itens | ✅ `ordens-producao/page.tsx`, `[id]/page.tsx` |
-| Atender pedidos (Estoque) | `/estoque-operacao/atendimento` | `atendimento` | E1 a E4 | fila própria do Estoque (`FilaEstoque`, 19/11); `PATCH /itens-parciais/:id/atender-estoque`, `POST /itens-parciais/atender-estoque/lote` (OP inteira); `GET /estoque/saldo/disponivel-parcial/:id`, `…/disponivel-setor/:id`, `…/materia-prima/:id`; no setor Estoque, `receber-fabricado` (LOG-53) | ✅ `estoque-operacao/atendimento/page.tsx:67` (`title="Atender pedidos"`) |
+| Atender pedidos (Estoque) | `/estoque-operacao/atendimento` | `atendimento` | E1 a E4 | fila própria do Estoque (`FilaEstoque`, 19/11); `PATCH /itens-parciais/:id/atender-estoque`, `POST /itens-parciais/atender-estoque/lote` (OP inteira); `GET /estoque/saldo/disponivel-parcial/:id`, `…/disponivel-setor/:id`, `…/materia-prima/:id`; no setor Estoque, `receber-fabricado` (LOG-53) | ✅ `estoque-operacao/atendimento/page.tsx:75` (`title="Atender pedidos"`) |
 | Requisições de compras | `/compras/requisicoes` | `requisicoes` | P3 | fila de setor tipo `REQUISICAO`; `POST /compras/requisicoes` (modal `RequisitarCompraModal`) | ✅ `app-pcp` `compras/requisicoes/page.tsx:13` (`telaId="requisicoes"`) |
 | Compras · CCP | `/compras/pedidos-compra` | `pedidos-compra` | C5 | fila de setor tipo `COMPRAS`, só leitura; `POST /compras/requisicoes/sincronizar`; `GET /compras/requisicoes/:id/eventos` (linha do tempo) | ✅ `compras/pedidos-compra/page.tsx:9-15`, `components/CompraCcpCard.tsx`, `EventosRequisicaoModal.tsx` |
 | Recebimento | `/logistica/logistica-entrada` | `logistica-entrada` | R0 a R4 | fila tipo `LOGISTICA_ENTRADA` com "Entregas esperadas": `GET /compras/requisicoes/esperados`, `POST …/:id/chegada` ("Receber com NF"), `POST /compras/recebimentos`, `…/:id/recontar`; botão de liberar sem OC só com `compras-liberar` editar. Redesenhada em 26/10: `GET /compras/recebimentos/oc-esperadas` e `POST /compras/recebimentos/nf` (recebe por NF, com várias OCs) | ✅ `logistica/logistica-entrada/page.tsx`, `movimentacoes/components/FilaRecebimento.tsx`, `RecebimentoFila.tsx`, `ReceberComNfModal.tsx`, `ConferirNfModal.tsx` |
@@ -101,7 +101,7 @@ Todas as telas "módulo" (Requisições, Compras · CCP, Recebimento, Inspeção
 | Tela | Rota | Slug | Observação |
 |---|---|---|---|
 | Pendências | `/estoque-operacao/pendencias` | `pendencias` | o que o Estoque precisa fazer agora; cada grupo leva à tela que resolve ✅ `pendencias/page.tsx:70` (`title="Pendências"`) |
-| Atender pedidos | `/estoque-operacao/atendimento` (aba Reservas: `?aba=reservas`) | `atendimento`; aba com `reservas` | fila própria do Estoque com Atender, Devolver, Receber e Enviar fabricado; KPIs e filtros na URL ✅ `atendimento/page.tsx:67` (`title="Atender pedidos"`), `atendimento/FilaEstoque.tsx` |
+| Atender pedidos | `/estoque-operacao/atendimento` (abas Reservas, `?aba=reservas`, e Retiradas) | `atendimento`; aba com `reservas` | fila própria do Estoque com Atender, Devolver, Receber e Enviar fabricado; KPIs e filtros na URL ✅ `atendimento/page.tsx:75` (`title="Atender pedidos"`), `atendimento/FilaEstoque.tsx` |
 | Movimentar | `/estoque-operacao/movimentar` | `movimentar` | transferir, ajustar e carga inicial (custo obrigatório, só com `estoque-custo` editar) ✅ `movimentar/page.tsx:93` (`title="Movimentar"`), `saldo/EntradaLoteModal.tsx:155` (`A carga inicial exige o custo do lote`) |
 | Estoque | `/estoque-operacao/saldo` (visões material, lote e endereço; o Mapa do Depósito redireciona) | `saldo` | custo só com `estoque-custo` visualizar; coluna "A chegar" das OCs de estoque ✅ `saldo/page.tsx:233` (`title="Estoque"`) |
 | Material | `/estoque-operacao/saldo/material/[id]` | `saldo` | saldo do material por lote e endereço ✅ `saldo/material/[id]/page.tsx:66` (`title={d.material.descricao}`) |
@@ -146,7 +146,7 @@ O Compras do av-hub (permissões `compras.pode_criar`, `compras.pode_aprovar`, `
 
 ### Diferenças e pontas soltas do front
 
-- 🔴 Não há tela de Torre de Fluxo nem tela de documento de retirada (E6).
+- 🔴 Não há tela de Torre de Fluxo.
 - 🔴 Não há tela de P6 (Novo norte).
 - 🟡 Em Compras · CCP o front lê o MES, não o av-hub; a lista de esperados e a linha do tempo dependem do polling de 5 min ou do botão "Atualizar" (`POST /compras/requisicoes/sincronizar`, pulado se a leitura tem menos de 30 s) ✅ `services/comprasRequisicoes.ts:52`, `api-pcp/src/integracao-avhub/eventos-avhub.service.ts:25`.
 - ❓ Slugs de `Permissões`, `Setores por Perfil` e `Depósitos por Perfil` dependem do cadastro em `telas` (o seed `01-base.sql` citado nos comentários não está nos repositórios).
