@@ -59,6 +59,7 @@ fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf
 | `POST /auth/login` | público | ✅ `auth.controller.ts:21` |
 | `POST /auth/azure` | `x-api-key` = `MES_INTERNAL_API_KEY` (só o BFF do app-pcp) | ✅ `auth.controller.ts:31`, `guards/api-key.guard.ts:15` |
 | `GET /auth/me`, `/auth/menu`, `/auth/setores-permitidos` | só JWT | ✅ `auth.controller.ts:38-60` |
+| `POST /auth/renovar` | só JWT: devolve um token novo para quem está ativo; o app-pcp chama depois de 1/4 da vida do token | ✅ `src/auth/auth.controller.ts:35` (`@Post('renovar')`) |
 | `GET /auth/dashboard-check` | `dashboard`, visualizar | ✅ `auth.controller.ts:56-57` (`dashboard-check`) |
 | `GET /auditoria/login`, `/auditoria/acesso` | `usuarios`, visualizar | ✅ `api-pcp` `src/auditoria/auditoria.controller.ts:14` (`@Get('login')`), `:20` (`@Get('acesso')`) |
 
