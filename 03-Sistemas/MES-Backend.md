@@ -1,10 +1,10 @@
 ---
 tags: [sistemas, mes, api-pcp, nestjs, backend]
 criado: 2026-10-14
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: vigente
 dono: Robert (Estoque: Nathan, N16-180)
-develop-conferida: [api-pcp c8036db, app-pcp 8259344, em 2026-11-23]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); api-pcp c8036db, app-pcp 8259344, em 2026-11-23]
 fontes: [api-pcp c8036db (develop, 23/11: motor do Estoque, travas, idempotência, kardex, inventário, painel, consulta e testes, PRs #85 a #95), N16-180 a N16-184, api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf56), prisma/migrations até 20261028120100, Dump MES (Esqueleto).sql de 14/10 (defasado), v1 App-PCP-Backend-Producao, App-PCP-Visao-Geral, MES-Arquitetura-Decisoes]
 ---
 
@@ -53,7 +53,7 @@ fontes: [api-pcp c8036db (develop, 23/11: motor do Estoque, travas, idempotênci
 - ✅ Fabricado aprovado vira lote `PRODUCAO` e saldo no Estoque (LOG-53, `ab3318d`, 27/10). A OP é emitida na criação. Na `develop`.
 - ✅ O fornecedor da OC chega ao MES (api007b, 26/10) e preenche o fornecedor da requisição.
 - 🔴 Torre de Fluxo não existe aqui (`/fluxo/*`). O job da Torre do av-hub recebe erro 404.
-- 🔴 Não há documento de retirada (BL-007). A baixa do saldo acontece quando a Embalagem recebe.
+- ✅ Retirada do Estoque (BL-007, N16-193, 23/11, só na `develop`): o atendimento abre a retirada, o Estoque confirma pela lista de separação e o saldo baixa na confirmação; a matéria-prima sai pela retirada e a sobra volta por devolução ([[12-Estoque-Despacho]], `src/estoque/retirada/`).
 - 🟡 A tabela de fornecedores existe, mas nada a preenche nem lê.
 - 🟡 A rota antiga `GET /requisicoes-compra` não tem consumidor.
 - 🟡 Os intervalos automáticos ainda ficam em variável de ambiente.
