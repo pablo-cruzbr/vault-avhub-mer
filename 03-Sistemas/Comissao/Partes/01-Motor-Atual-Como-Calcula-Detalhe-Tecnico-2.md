@@ -1,11 +1,11 @@
 ---
 tags: [comissao, motor-atual, core_comissionamento, proposta, validacao, parte]
 criado: 2026-11-05
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: proposta
 dono: Nathan
 parte-de: "[[01-Motor-Atual-Como-Calcula]]"
-develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, comissão por pedido e pré-aceita; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [av-hub c4a455d, em 2026-11-24 (DEVOLVIDO, Provável, AGUARDANDO_APROVACAO e Visão Geral por pedido, PRs #337 e #339); api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, comissão por pedido e pré-aceita; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, av-hub lib/simulador/motor.ts, av-hub app/(protected)/comissoes/simulador e analise-simuladores, av-hub app/api/comissoes, tela-simulador-comissao.png, N16-10, N16-11, N16-18, N16-19, N16-20, N16-185 a N16-190, PS-062, PS-063, PS-064]
 ---
 
@@ -109,7 +109,7 @@ Em uma frase: **a aprovação de Compras sobre o percentual vira a conferência 
 | 14 | O custo líquido só existe no navegador; nenhuma rota nem função de banco o recalcula, então nada reconfere o valor gravado | `motor.ts:315` (`const custoLiquido`), `simulacoes.route.js` | ✅ |
 | 15 | Seis migrations da comissão (`2026-11-18_comissao_competencia`, `2026-11-18_comissao_grao_pedido`, `2026-11-19_comissao_escopo_fabricacao`, `2026-11-19_comissao_master_itens_desempenho`, `2026-11-19_comissao_trava_versao_vendedor`, `2026-11-23_comissao_pre_aceita_devolvido`) estão fora do repositório; estão no tst de 23/11, não na produção de 18/11, e sem elas as rotas de comissão falham | comentários dos models; `dump tst 23/11:36879` (`trg_simulacoes_trava_versao_vendedor`) | ✅ tst; ❓ produção (PS-062) |
 | 16 | O corte da predominância (`pct_predominancia_fabricacao`) não tem tela: só muda por SQL ou pela API | `simulador_parametros.model.js:112` (`pct_predominancia_fabricacao:`) | ✅ PS-063 |
-| 17 | Minhas Comissões no Hub está atrás da API: não mostra `DEVOLVIDO` e ainda fala em 403 sem vínculo | `av-hub` `lib/domain/comissoes-minhas-comissoes.ts:34` (`saiu nesta versão`) | ✅ PS-064 |
+| 17 | Minhas Comissões e Visão Geral mostram `DEVOLVIDO`, o provável e a versão que paga (PS-064 fechada em 24/11); `AGUARDANDO_APROVACAO` sem fonte na API | `av-hub` `lib/domain/comissoes-minhas-comissoes.ts:59` (`DEVOLVIDO: {`) | ✅ PS-064 · ❓ PS-065 |
 
 ## O que a Michele precisa confirmar
 
