@@ -5,7 +5,7 @@ estado-em: 2026-11-24
 status: vigente
 dono: Nathan (MES e decisões, N16-180)
 parte-de: "[[05-Estoque-Atendimento]]"
-develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada e matéria-prima pela retirada, PRs #96, #97, #83 e #84); api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050, reteste)]
+develop-conferida: [api-pcp 50f0a65, app-pcp 03fb038, em 2026-11-24 (coletor, PRs #99 e #86, N16-201); api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada e matéria-prima pela retirada, PRs #96, #97, #83 e #84); api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050, reteste)]
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026, v1 02-PRD-Estoque e Estoque-Custo-do-Lote, API-008, LOG-53, N16-09, N16-140, N16-180 a N16-184, OQ-49, api-pcp c8036db (PRs #85 a #95: testes, motor, conferência do livro, lote v2, travas, idempotência, kardex, inventário, painel, consulta), app-pcp 8259344 (PRs #70 a #82), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
@@ -79,6 +79,7 @@ Todas em `app-pcp` `app/(protected)/estoque-operacao/`. O que foi juntado virou 
 | Movimentos · Movimentação | `/estoque-operacao/movimentacao` (aba Kardex em `/movimentacao/kardex`) | `movimentacao` | ✅ `movimentacao/page.tsx:172` (`title="Movimentos"`) |
 | Inventário | `/estoque-operacao/inventario`, `/inventario/[id]` | `inventario`, `inventario-aprovar` | ✅ `inventario/page.tsx:78` (`title="Inventário"`) |
 | Painel do Estoque | `/estoque-operacao/painel-estoque` | `painel-estoque` | ✅ `painel-estoque/page.tsx:242` (`title="Painel do Estoque"`), dados reais |
+| Coletor | `/estoque-operacao/coletor` (e `/separar`, `/contar`, `/mover`, `/etiquetas`) | `coletor`; as ações com `atendimento`, `inventario` e `movimentacao` | ✅ `coletor/page.tsx:77` (`title="Coletor"`): leitor que digita ou câmera (`coletor/ColetorUi.tsx:22`, `export function Leitor`), aviso de reserva e confirmação para a área de quarentena no Mudar de endereço (`coletor/mover/page.tsx:38`, `const pedeQuarentena`) (N16-201) |
 
 ## Endpoints e contratos
 
@@ -98,6 +99,7 @@ Todos no `api-pcp`. As 8 rotas que exigem `Idempotency-Key`: atender (as duas), 
 | `/estoque/inventarios` (GET, `opcoes-abertura`, `:id`, POST, `contagens`, `itens` POST e DELETE, `encerrar-contagem`, `aprovar`, `reprovar`, `cancelar`) | `inventario`; aprovar e reprovar com `inventario-aprovar` | Ciclo do inventário | ✅ `src/estoque/inventario/inventario.controller.ts` |
 | `GET /estoque/painel`, `GET /estoque/mapa` | `painel-estoque`, `mapa-deposito` | Painel e visão por endereço | ✅ `src/estoque/painel/painel.service.ts:85` (`async painel(`) |
 | `GET /estoque/alertas/estoque-minimo`, `/rnc-pendentes`, `/custo-pendente`, `GET`/`POST /conferencia-livro` | `painel-estoque:visualizar` | Alertas | ✅ `src/estoque/alertas/alertas.controller.ts` |
+| `GET /estoque/coletor/ler?codigo=`, `GET /estoque/coletor/etiquetas-enderecos` | `coletor:visualizar` | Lote (saldo, livre, reservas com OP e retirada, endereços) ou endereço (lotes, travado, `quarentena`); PDF das etiquetas `END.<depósito>.<endereço>` | ✅ `src/estoque/coletor/coletor.controller.ts:27` (`@Get('ler')`), `src/estoque/coletor/codigo-endereco.ts:7` (`export function codigoDoEndereco`) (N16-201) |
 ## Como está no código
 
 ### E1 e E2: saldo disponível e decisão
@@ -143,7 +145,7 @@ O item 1 (documento de retirada) está em [[12-Estoque-Despacho]] e o item 2 (fa
 | 6 | Ponto de pedido preventivo (EB2 a EB5): só o alerta de mínimo (a contagem cíclica virou o inventário ✅, `api-pcp` `src/estoque/inventario/inventario.controller.ts:35`, `@Controller('estoque/inventarios')`) | Nathan | — | 🔴 |
 | 7 | Transferência entre filiais (etapas 2 a 4); ver [[Transferencia-entre-Filiais]] | Nathan | E1 | 🔴 |
 | 8 | Separação física (`ordem_separacao`) | Nathan | E3 | 🔴 |
-| 9 | Cadastrar as telas novas em Acessos (tst e produção) e acertar o menu (PS-060) | Nathan | — | 🟡 |
+| 9 | Cadastrar as telas novas em Acessos (tst e produção), inclusive `coletor`, e acertar o menu (PS-060) | Nathan | — | 🟡 |
 | 10 | Importação de carga inicial em lote (BL-031; hoje um lote por vez) | Nathan | — | 🔴 |
 | 11 | Saldo futuro no "Atender OP" (BL-090) | Nathan | E1 | 🟡 |
 
