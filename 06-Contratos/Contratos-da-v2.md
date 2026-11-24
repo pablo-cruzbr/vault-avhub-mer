@@ -56,7 +56,7 @@ Estas seções ficam em notas à parte, para cada arquivo ficar abaixo de 25 KB 
 
 ## Contratos novos (v3)
 
-A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`, `CON-04`, `LOG-63`, `SQL-025`.
+A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-024`, `CON-04`, `LOG-63`, `SQL-026`.
 
 | ID | Título | Status | Autor | Data |
 |---|---|---|---|---|
@@ -71,5 +71,7 @@ A numeração continua depois do maior ID da v2. Próximos IDs livres: `API-020`
 | [[SQL-023-Limpeza-das-Telas-Antigas\|SQL-023]] | Limpeza das telas antigas do Hub: 12 telas, as rotas e as permissões sem uso; saem as páginas Pedidos de Venda, Notas Fiscais de Saída e Orçamento por PDF | `implementado-na-develop` | Nathan | 2026-11-18 |
 | [[SQL-024-Tirar-Parceiros-Produtos-e-Parametros\|SQL-024]] | Saem de Cadastros › Auxiliares as telas Parceiros, Produtos, Produtos duplicados e Parâmetros de custo; a lista de parceiros fica para Comissões, Propostas e Fornecedores | `para-implementar` | Nathan | 2026-11-18 |
 | [[LOG-62-Telas-de-Acessos\|LOG-62]] | Redesenho das telas de Acessos: Perfis e Pessoas no lugar de 5 telas, ações pelas rotas, Telas só do administrador e o grupo Vínculos | `implementado-na-develop` | Nathan | 2026-11-18 |
+| [[API-023-Qualidade-de-Entrada-e-Saida-no-Hub|API-023]] | Qualidade no Hub: inspeção de entrada (conferência de 14 itens, RNC com causa e ação), inspeção de saída (conferência de 5 itens, segregação, RNC, reprovação parcial e tratativa) e documentação ao cliente (dossiê e Data Book); telas no PR #338 do `av-hub`, sem API e sem banco (banco e API propostos no [[SQL-025-Qualidade-v2-Banco-e-API|SQL-025]]) | `proposta` | Pablo | 2026-11-24 |
+| [[SQL-025-Qualidade-v2-Banco-e-API\|SQL-025]] | Qualidade v2 no banco e na API do hub: conferência, RNC, tratativa, segregação, dossiê, laudo e anexos (MES e schema `core_qualidade`); divide-se em duas partes | `proposta` | Pablo | 2026-11-24 |
 
 O modelo de consulta está em [[Modelo-de-Consulta]].

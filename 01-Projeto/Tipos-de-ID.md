@@ -36,8 +36,8 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |
 | `INT-nn` | Troca de dados entre o av-hub e o MES | [[Integracao-AvHub-MES]] | 9 (até `INT-09`) | `INT-10` |
 | `LOG-nn` | Contrato de lógica (regra de negócio, fluxo) | [[Contratos-da-v2]] (v2) e `06-Contratos/` (v3) | 55 na v2 e 7 na v3 (`LOG-56` a `LOG-62`) | `LOG-63` |
-| `SQL-nnn` | Contrato de banco (tabela, migration, view) | idem | 17 na v2; `SQL-022` a `SQL-024` na v3 | `SQL-025` |
-| `API-nnn` | Contrato de rota de API | idem | 17 na v2; `API-019` na v3 | `API-020` |
+| `SQL-nnn` | Contrato de banco (tabela, migration, view) | idem | 17 na v2; `SQL-022` a `SQL-025` na v3 | `SQL-026` |
+| `API-nnn` | Contrato de rota de API | idem | 17 na v2; `API-019` e `API-023` na v3 | `API-024` |
 | `CON-nn` | Consulta: pergunta formal a alguém, com resposta registrada | idem; modelo em [[Modelo-de-Consulta]] | 3 na v2 | `CON-04` |
 
 As contagens de contrato são as linhas distintas do índice (92 contratos; IDs com letra, como `LOG-04a`, contam à parte). Os próximos IDs continuam depois do maior ID da v2 (veja o fim do [[Contratos-da-v2]]).
