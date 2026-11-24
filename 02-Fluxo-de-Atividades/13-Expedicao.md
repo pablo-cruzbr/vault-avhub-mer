@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, expedicao, logistica-saida, paletes, entrega, x1, x2, x3, x4, mes]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 ordem: 13
 nos: [X1, X2, X3, X4]
 anterior: "[[12-Estoque-Despacho]]"
 proxima: "[[14-Fiscal-Omie]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada e matéria-prima pela retirada, PRs #96, #97, #83 e #84); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10]
 dono: Robert (MES) · Expedição/Logística (regra) · Nathan (decisões)
 fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens, pedido-embalagem-pallets, estoque-operacao.helpers.ts), app-pcp 1fca8d3 (logistica/expedicao, movimentacoes, ordens-producao), v1 Fluxo-Expedicao-Faturamento-Completo, v1 Fluxograma-Telas-por-Bloco bloco 10, T-06, api-pcp develop de 27/10/2026, N16-130 a N16-133, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -22,7 +22,7 @@ fontes: [api-pcp 579a625 (entregas, itens-parciais.service.ts, pedido-embalagens
 
 ## Como funciona, passo a passo
 
-1. A parcial pronta chega à Embalagem. O operador confirma o recebimento. Hoje a baixa do saldo do Estoque acontece aqui. Pela decisão, a Embalagem só vai receber depois que o Estoque confirmar a retirada (N16-122). `X1`
+1. A parcial pronta chega à Embalagem. O operador confirma o recebimento, que só passa depois que o Estoque concluiu a retirada (N16-122); a baixa do saldo acontece na retirada ([[12-Estoque-Despacho]]). `X1`
 2. O operador cadastra cada pallet com nome, peso e unidades. `X1`
 3. Ele passa a parcial da Embalagem para a Logística. `X1`
 4. O pedido sai por partes ou inteiro. Quem decide é o vendedor, pela marca "pode faturar em partes" (N16-130). Hoje não há campo no sistema: esperar o pedido inteiro é prática da Expedição. `X2`
@@ -60,7 +60,7 @@ As 100 flanges do Cliente Exemplo S.A. chegam à Embalagem, que registra os pall
 
 Decisões de 29/10/2026 (bloco N16-120 a N16-143):
 
-- A Expedição pede a retirada ao Estoque e só o Estoque confirma (N16-120). O que o documento imprime segue aberto.
+- A retirada nasce do atendimento e só o Estoque confirma (N16-120); a lista de separação é um PDF A4 (N16-193).
 - A reserva é consumida junto com a baixa (N16-121).
 - A Embalagem só recebe depois da retirada confirmada (N16-122).
 - O vendedor decide se o pedido sai inteiro ou por partes, pela marca "pode faturar em partes" (N16-130). A Expedição segue essa marca.
@@ -73,7 +73,7 @@ Decisões de 29/10/2026 (bloco N16-120 a N16-143):
 - ✅ (`app-pcp`, `api-pcp`) Fila, pallets, confirmar entrega e fechamento do pedido. O comprovante é opcional e é um link (URL), sem envio de arquivo; a validação local em Docker de 10/11/2026 confirmou a entrega sem anexo.
 - 🟡 Escolha parcial ou integral: decidida, falta o campo na tela.
 - 🟡 NF da entrega é texto livre, sem ligação com o número do Omie.
-- 🔴 Documento de retirada e baixa na retirada (sem código).
+- ✅ Retirada e baixa na retirada; recebimento travado até a retirada concluir (`api-pcp` PR #96, 23/11).
 - 🔴 Consolidação de carga (`X3`) e transporte (`X4`).
 - 🔴 Aviso ao Faturamento dentro do sistema (fila de sinalização, ligação do `O1`).
 - 🔴 Registro de remessa de produtos, no Ciclo 2.
@@ -109,7 +109,7 @@ Papéis como no resumo do topo; aqui só onde cada um atua.
 | 4 | Entrega é **livre, item a item e por quantidade**: não existe trava de "pedido inteiro pronto". O pedido só vira `ENTREGUE` quando zera o pendente de todos os itens ativos e não resta parcial ativa | ✅ `entregas.service.ts:17-24`, `:104-130` |
 | 5 | Só entrega parcial `CONCLUIDO`, com quantidade até o pendente do item e até a quantidade da parcial | ✅ `entregas.service.ts:44-63` |
 | 6 | Parcial ou integral é decisão humana: do vendedor, pela marca "pode faturar em partes" (N16-130). Faturamento integral travado por um item que nunca chega (T-06): decisão manual, sem prazo automático (N16-131) | 📝 🔴 sem campo |
-| 7 | **Despacho é no Estoque**: quem precisa da mercadoria (Expedição ou Produção) gera um **documento de retirada**; a baixa do saldo acontece na retirada. Hoje a baixa ocorre quando a Embalagem **recebe** a parcial | 📝 🔴 |
+| 7 | **Despacho é no Estoque**: quem precisa da mercadoria (Expedição ou Produção) gera um **documento de retirada**; a baixa do saldo acontece na retirada | ✅ `api-pcp` `src/itens-parciais/itens-parciais.service.ts:280` (`retiradaPendenteDaParcial`) |
 | 8 | Nota fiscal de saída é do Omie. O MES guarda só o número digitado na entrega | 📝 ✅ `entregas.service.ts:82` |
 | 9 | Remessa de produtos (registro de remessa) vai ao Ciclo 2 (22/01/2027), item 27 do registro de 07/10 | 📝 |
 
@@ -159,11 +159,11 @@ Dois modelos coexistem:
 
 A baixa do Estoque acontece **quando a Embalagem recebe** a parcial:
 
-- `receber()` chama `consumirReservasDaParcial` se `atendidoPeloEstoque` (`itens-parciais.service.ts:317-324`). A reserva vira `CONSUMIDA` e nasce um `MovimentoEstoque` `SAIDA` (`estoque-operacao.helpers.ts:317-389`).
+- `receber()` recusa com 409 enquanto a retirada da parcial não conclui (`itens-parciais.service.ts:280`, `retiradaPendenteDaParcial`). Só a parcial atendida antes de 23/11, sem retirada, ainda consome a reserva aqui (`itens-parciais.service.ts:332`, `await consumirReservasDaParcial(tx, {`).
 - `desfazerRecebimento` e `devolver` ao Estoque estornam a baixa (`estornarConsumosDaParcial`, helpers `:287`; service `:1450`, `:1587`).
 - `EntregasService.create` consome de novo o que ainda estiver reservado, como garantia (`entregas.service.ts:87-94`).
 
-Não existe **documento de retirada** nem tabela dele: a baixa depende do movimento da parcial, não de uma retirada física registrada no Estoque. Lacuna para o Robert (E6).
+A **retirada** existe desde 23/11 (tabelas `retiradas` e `retirada_itens`): a baixa é registrada na confirmação do Estoque, com a linha da retirada no movimento ([[12-Estoque-Despacho]]).
 
 #### X2 · parcial ou integral 🟡
 
@@ -181,8 +181,8 @@ Nenhuma entidade (carga, romaneio, veículo, transportadora de saída) existe em
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 1 | **Documento de retirada** do Estoque (solicitante: Expedição ou Produção; itens, lotes, quantidades) e baixa do saldo na retirada; remover a baixa em `receber()` | Robert, Nathan decide fluxo | `E6`, X1 | 🔴 |
-| 2 | Entrada única na Expedição: tudo vem do Estoque pelo documento de retirada (na `main` há duas portas; na `develop` o fabricado já passa pelo Estoque, falta a retirada) | Robert | X1 | 🟡 🔴 retirada |
+| 1 | **Documento de retirada** do Estoque (solicitante: Expedição ou Produção; itens, lotes, quantidades) e baixa do saldo na retirada; remover a baixa em `receber()` | Nathan (N16-180) | `E6`, X1 | ✅ `api-pcp` PR #96 (BL-007) |
+| 2 | Entrada única na Expedição: tudo vem do Estoque pelo documento de retirada (na `develop` o fabricado passa pelo Estoque e a retirada existe; falta confirmar se sobra porta direta) | Robert | X1 | 🟡 |
 | 3 | Decisão e campo parcial x integral por pedido, com gatilho de saída para item travado (T-06) | Nathan, Comercial, Expedição | X2 | 🔴 (decidido em 29/10, N16-130 e N16-131; falta o campo) |
 | 4 | Consolidação de carga: visão por pedido, espera dos itens, romaneio | Robert | X3 | 🔴 |
 | 5 | Transporte e roteiro: frota própria ou terceirizada | Robert | X4 | 🔴 |
@@ -192,7 +192,7 @@ Nenhuma entidade (carga, romaneio, veículo, transportadora de saída) existe em
 
 ### Pendências
 
-- Nathan: a retirada exige conferência física dupla? O que o documento imprime? Seguem abertos. (Quem gera e quem confirma foi respondido em 29/10/2026, N16-120: a Expedição pede, só o Estoque confirma.)
+- Nathan: a retirada exige conferência física dupla? Segue aberto. (Quem confirma: N16-120; o que a lista imprime: N16-193.)
 - Respondido em 29/10/2026: pedido integral é opção do vendedor, não regra do cliente nem decisão da Expedição (N16-130); não há prazo máximo de espera automático, o item que não chega é decisão manual (N16-131).
 - Expedição: frota própria e terceirizada usam o mesmo fluxo de carga?
 - Robert: `PerfilSetor` por filial (hoje inexistente) afeta quem vê a carga.
@@ -201,7 +201,7 @@ Nenhuma entidade (carga, romaneio, veículo, transportadora de saída) existe em
 
 ```mermaid
 flowchart TD
-    E6["E6 · Despacho do Estoque<br/>documento de retirada (decidido)"] -->|"produto pronto"| X1["X1 · Embalagem e paletizacao<br/>receber, pallets, mover"]
+    E6["E6 · Despacho do Estoque<br/>retirada (develop)"] -->|"produto pronto"| X1["X1 · Embalagem e paletizacao<br/>receber, pallets, mover"]
     Q8["Q8 · Aprova? (codigo hoje: mover)"] -.-> X1
     X1 --> X2{"X2 · Parcial ou integral?"}
     X2 -->|integral| X3["X3 · Consolida a carga"]
