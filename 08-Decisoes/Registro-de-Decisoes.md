@@ -70,6 +70,7 @@ Resumo das decisões vigentes que mais pesam, agrupadas por assunto. O ID entre 
 - Menu enxuto: Vendas com quatro entradas (Propostas, Clientes, Meus Pedidos, Relatórios) e Orçamento com quatro (N16-107).
 - A tela Histórico de compras saiu: Ordens de compra já mostra todo o histórico (N16-108).
 - As telas do Pablo ficam; o Robert troca o backend delas em vez de refazer tudo (N16-119).
+- O Estoque tem coletor: lê a etiqueta do lote e do endereço pelo leitor ou pela câmera, e separa, conta e muda de endereço lendo; lote reservado pode mudar de endereço (N16-201).
 
 **Banco e API**
 
@@ -110,7 +111,7 @@ Cada linha lista os IDs do assunto, para você ir direto às linhas da tabela (C
 - **Menu e telas:** N16-14, N16-19, N16-33, N16-107, N16-108, N16-119, N14-33, #54, #74, N16-191, N16-192.
 - **Banco e API (onde cada coisa mora):** N16-15, N16-98, N16-154, N16-155, N16-109, N16-111, N16-112, N16-113, N16-116, N16-117, N16-143, N14-07, N14-15, N14-26, #3, #6, #82.
 - **Quem faz o quê e cronograma:** N16-157, N16-158, N14-09, N14-10, N14-11, N14-13, N14-32, N16-115, N16-117, N16-118, #32, #33, #33b, #34, #35, #36, #37, #73, #75, #96, #27, N16-165, N16-168, N16-169, N16-170, N16-171.
-- **Estoque, retirada e baixa:** N14-05, N14-06, N16-87, N16-120, N16-121, N16-122, N16-139, N16-140, EN-01, EN-03, EN-04, EC-02, EC-05, DEC-4, #31b, #24, #25, #28, #29, #78, #100, N16-180, N16-183, N16-184, N16-193.
+- **Estoque, retirada e baixa:** N14-05, N14-06, N16-87, N16-120, N16-121, N16-122, N16-139, N16-140, EN-01, EN-03, EN-04, EC-02, EC-05, DEC-4, #31b, #24, #25, #28, #29, #78, #100, N16-180, N16-183, N16-184, N16-193, N16-201.
 - **Recebimento e Qualidade:** N14-04, N16-124, N16-125, N16-126, N16-127, N16-128, N16-129, N16-134, N16-135, N16-136, N16-137, DEC-5, DEC-6, EC-01, EC-06, EC-07, #26.
 - **PCP, Triagem e Produção:** N14-22, N16-93, N16-138, N16-141, EN-02, EN-05, EN-06, EC-03, #74, #78, #104, #105, #106, N16-162.
 - **Expedição e Fiscal:** N16-92, N16-93, N16-130, N16-131, N16-132, N16-133, N14-05.
@@ -134,7 +135,7 @@ A tabela fica em 6 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloc
 - [[Registro-N16-117-a-N16-149]]: N16-117 a N16-149
 - [[Registro-N16-150-a-N16-155]]: N16-150 a N16-155 (modal "Transformar em pedido", Qualidade e refaturamento, 05/11/2026; refaturamento por unidade, 10/11/2026; a empresa emissora vira a própria unidade, 10/11/2026; sem migrations no repositório da API, 11/11/2026; sem carga do marco zero em 13/11, N16-156, 11/11/2026; dono de cada raia do fluxo 0b, N16-157, e a API do MES com o Robert, N16-158, 11/11/2026; compra acima do cotado, primeira etapa, N16-159, 11/11/2026; empresa, responsável e carteira de clientes da proposta, N16-160, pedidos do Robert de 11/11/2026; entrega das etapas 1 a 6 em 3 dias: aprovação da OC, Destinação do pedido inteiro, Orçamento completo e comissão, N16-161 a N16-165, 12/11/2026; item de fabricação sem custo, N16-166, 16/11/2026)
 - [[Registro-N16-167-em-diante]]: N16-167 em diante (excluir proposta pelo Hub e o pedido excluído no Omie, 16/11/2026; o Pablo analista e o Comercial com o Nathan e o Robert, N16-168, a divisão entre os dois, N16-169, e o prazo de 01/12, N16-170, 17/11/2026; banco do Hub em produção e release de 17/11, N16-171; as duas fontes de preço, N16-172, o menu do Orçamento com três telas, N16-173, o que fica de fora do Orçamento e a validade da cotação, N16-174, a Central de Avisos, N16-175, e o prazo em dias na OC adiado e o acesso em produção, N16-176; a limpeza das telas antigas, N16-177; as telas de Acessos, N16-178; saem Parceiros, Produtos e Parâmetros de custo, N16-179, 18/11/2026; o Estoque com o Nathan, o custo, a unidade, o inventário e as telas do Estoque, N16-180 a N16-184, 19/11/2026; a comissão por pedido, a predominância, a competência, a trava da versão do vendedor, o vínculo próprio e a versão pré-aceita, N16-185 a N16-190, 18 a 23/11/2026; a busca rápida de produto e o visual único, N16-191 e N16-192, 23/11/2026; a retirada do Estoque, N16-193, 23/11/2026)
-- [[Registro-N16-194-em-diante]]: N16-194 em diante (o fluxo da comissão atual decidido pelo Robert e implementado pelo Gustavo: aprovação da Controladoria por pedido, N16-194, fechamento do mês por unidade, N16-195, revogação, N16-196, casamento pelo produto e nota parcial, N16-197, ajuste de letra, N16-198, contestação por pedido, N16-199, e o dashboard, N16-200, 18 a 23/11/2026)
+- [[Registro-N16-194-em-diante]]: N16-194 em diante (o fluxo da comissão atual decidido pelo Robert e implementado pelo Gustavo: aprovação da Controladoria por pedido, N16-194, fechamento do mês por unidade, N16-195, revogação, N16-196, casamento pelo produto e nota parcial, N16-197, ajuste de letra, N16-198, contestação por pedido, N16-199, e o dashboard, N16-200, 18 a 23/11/2026; coletor do Estoque, N16-201, 24/11/2026)
 
 ## Onde está cada decisão
 

@@ -7,7 +7,7 @@ ordem: 5
 nos: [E1, E2, E3, E4]
 anterior: "[[04-PCP-Triagem-e-Destinacao]]"
 proxima: "[[06-Circuito-de-Compra]]"
-develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada e matéria-prima pela retirada, PRs #96, #97, #83 e #84); api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050, reteste)]
+develop-conferida: [api-pcp 50f0a65, app-pcp 03fb038, em 2026-11-24 (coletor, PRs #99 e #86, N16-201); api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada e matéria-prima pela retirada, PRs #96, #97, #83 e #84); api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10; api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13 (BL-050, reteste)]
 dono: Nathan (MES e decisões, N16-180)
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026, v1 02-PRD-Estoque e Estoque-Custo-do-Lote, API-008, LOG-53, N16-09, N16-140, N16-180 a N16-184, OQ-49, api-pcp c8036db (PRs #85 a #95: testes, motor, conferência do livro, lote v2, travas, idempotência, kardex, inventário, painel, consulta), app-pcp 8259344 (PRs #70 a #82), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
@@ -80,8 +80,9 @@ Tudo o que é MES de 19/11 em diante está só na `develop` (a `main` do MES é 
 - ✅ (`api-pcp`, `app-pcp`) Saldo futuro (BL-050) no "Atender pelo estoque", na tela Estoque e no Material (🟡 não no "Atender OP", BL-090); a reprovada com recompra conta uma vez só no tst ([[Dump-AvHub-Teste-2026-11-13]]). 🟡 Requisições não mostra a OC de estoque a chegar (RS-008).
 - 🟡 Custo obrigatório (BL-066, N16-181): a carga inicial recusa lote sem custo; o recebimento sem custo fica em alerta até alguém informar. Custo do fabricado adiado (BL-067, N16-166).
 - ✅ Peso (N16-182): o lote guarda peso e kg por unidade e a OC em kg vira lote na unidade do material; todo movimento grava o peso proporcional à quantidade, `api-pcp` `src/estoque/motor/motor-estoque.ts:299` (`pesoKg: lote?.kgPorUnidade`).
-- 🟡 Acessos: as telas `pendencias`, `movimentar`, `inventario` e `inventario-aprovar` só existem no banco de teste; falta cadastrar no tst e na produção, renomear o menu e tirar "Mapa do Depósito" (PS-060).
+- 🟡 Acessos: as telas `pendencias`, `movimentar`, `inventario`, `inventario-aprovar` e `coletor` só existem no banco de teste; falta cadastrar no tst e na produção, renomear o menu e tirar "Mapa do Depósito" (PS-060).
 - ✅ Retirada (BL-007) e matéria-prima pela retirada (N16-140, N16-193): aba Retiradas no Atender pedidos (`api-pcp` PRs #96 e #97, `app-pcp` PRs #83 e #84, 23/11); detalhe em [[12-Estoque-Despacho]].
+- ✅ (`api-pcp`, `app-pcp`) Coletor (N16-201): ler a etiqueta do lote ou do endereço pelo leitor ou pela câmera; consultar, separar a retirada, contar o inventário e mudar de endereço lendo; etiqueta de endereço `END.<depósito>.<endereço>`. `api-pcp` `src/estoque/coletor/coletor.controller.ts:27` (`@Get('ler')`); detalhe em [[05-Estoque-Atendimento-Detalhe-Tecnico]].
 - 🔴 Transferência entre filiais (passa direto, sem nota) e separação física.
 
 Entrada: [[04-PCP-Triagem-e-Destinacao]]. Próxima raia: [[06-Circuito-de-Compra]].
