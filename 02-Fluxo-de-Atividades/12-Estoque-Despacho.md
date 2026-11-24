@@ -80,7 +80,7 @@ A numeração é a da nota de Estoque da v2; as outras regras estão em [[05-Est
 
 | # | Regra | Selo |
 |---|---|---|
-| 10 | **Despacho é no Estoque**: o atendimento abre a **retirada**; a **baixa do saldo ocorre na confirmação da retirada** | ✅ `api-pcp` `src/estoque/retirada/retirada.ts:146` (`await registrarSaidaDoLote(tx, {`); N16-120 a N16-122, N16-193 |
+| 10 | **Despacho é no Estoque**: o atendimento abre a **retirada**; a **baixa do saldo ocorre na confirmação da retirada** | ✅ `api-pcp` `src/estoque/retirada/retirada.ts:179` (`await registrarSaidaDoLote(tx, {`); N16-120 a N16-122, N16-193 |
 
 ### Telas
 
@@ -103,13 +103,13 @@ No `app-pcp`, o BFF repete as rotas em `app/api/estoque-operacao/retiradas/` (`r
 
 #### E6: despacho
 
-✅ **Abertura.** No atendimento pelo estoque, a parte `PRONTO` abre a retirada para a Expedição e a parte `MP` reserva a matéria-prima e abre a retirada para a Produção: `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1211` (`if (parte.tipo === 'PRONTO') {`), `:1221` (`await reservarMateriaPrima(tx, {`) e `src/estoque/retirada/retirada.ts:32` (`export async function abrirRetiradaDaParcial(`). O número é `RT-AAAAMMDD-nnnn`, `retirada.ts:57` (`codigo: await gerarCodigo(tx),`).
+✅ **Abertura.** No atendimento pelo estoque, a parte `PRONTO` abre a retirada para a Expedição e a parte `MP` reserva a matéria-prima e abre a retirada para a Produção: `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1211` (`if (parte.tipo === 'PRONTO') {`), `:1221` (`await reservarMateriaPrima(tx, {`) e `src/estoque/retirada/retirada.ts:37` (`export async function abrirRetiradaDaParcial(`). O número é `RT-AAAAMMDD-nnnn`, `retirada.ts:62` (`codigo: await gerarCodigo(tx),`).
 
-✅ **Confirmação e baixa.** `retirada.ts:94` (`export async function confirmarRetirada(`) trava os lotes, recusa quantidade acima do que falta e baixa pelo motor com a reserva e a linha da retirada no movimento, `retirada.ts:151` (`vinculo: { idReserva: item.reserva.id, idRetiradaItem: item.id },`). Quem confirma tem de poder atuar num dos depósitos do lote: `src/estoque/retirada/retirada.service.ts:134` (`ensurePodeAtuarAlgumDeposito(userId, depositos)`). Todo movimento grava o peso: `src/estoque/motor/motor-estoque.ts:299` (`pesoKg: lote?.kgPorUnidade`).
+✅ **Confirmação e baixa.** `retirada.ts:99` (`export async function confirmarRetirada(`) trava os lotes, recusa quantidade acima do que falta e baixa pelo motor com a reserva e a linha da retirada no movimento, `retirada.ts:156` (`vinculo: { idReserva: item.reserva.id, idRetiradaItem: item.id },`). Quem confirma tem de poder atuar num dos depósitos do lote: `src/estoque/retirada/retirada.service.ts:137` (`ensurePodeAtuarAlgumDeposito(userId, depositos)`). Todo movimento grava o peso: `src/estoque/motor/motor-estoque.ts:299` (`pesoKg: lote?.kgPorUnidade`).
 
 ✅ **Recebimento travado.** `itens-parciais.service.ts:280` (`const pendente = await retiradaPendenteDaParcial(this.prisma, id);`) responde 409 "Aguardando a retirada … no Estoque" enquanto a retirada não conclui.
 
-✅ **Devolução da sobra.** `retirada.ts:197` (`export async function devolverSobraDaRetirada(`), só para destino `PRODUCAO`.
+✅ **Devolução da sobra.** `retirada.ts:227` (`export async function devolverSobraDaRetirada(`), só para destino `PRODUCAO`.
 
 🟡 **Caminho antigo.** A parcial atendida antes da retirada existir ainda baixa no recebimento da Embalagem: `itens-parciais.service.ts:332` (`await consumirReservasDaParcial(tx, {`), e a entrega chama de novo por garantia, `src/entregas/entregas.service.ts:72` (`await consumirReservasDaParcial(tx, {`).
 
