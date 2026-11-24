@@ -1,7 +1,7 @@
 ---
 tags: [comissao, motor-atual, core_comissionamento, proposta, validacao, parte]
 criado: 2026-11-05
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: proposta
 dono: Nathan
 parte-de: "[[01-Motor-Atual-Como-Calcula]]"
@@ -181,9 +181,9 @@ Também conta os itens da NF **sem vínculo** com a simulação (`qtd_itens_sem_
 
 **O que faz.** Minhas Comissões lê as mesmas views da Visão Geral, com `meus=true`, pela competência. A API recorta pelo **vínculo próprio** do usuário: o auxiliar não vê a comissão do titular, nem o diligenciador a dos que diligencia; sem vínculo próprio, a resposta vem **vazia** (antes, 403). Quem entra só por Minhas Comissões tem o recorte sempre, com ou sem `meus=true` (N16-189).
 
-**De onde vem.** ✅ `api-acos-vital` `src/schemas/core_comissionamento/recorte.js:9` (`export const SQL_VINCULOS_PROPRIOS`), `:65` (`export async function lerRecorteVendedor`), `src/middlewares/escopoVendedor.js:121` (`simulacao_resolvida:`), commit `06bb146`. ✅ BFF: `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:148` (`/comissoes_nf?`), PR #334; os itens da nota vêm de `/api/comissoes/minhas-comissoes/itens`, sobre `/comissoes_master` (`av-hub` `lib/api/itensDaNota.ts:84`, `/comissoes_master?`). A tela saiu do `/faturamento_planilha`. ✅ No simulador, a coluna de comissão em reais só aparece na visão de Compras (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:171` (`mostrarComissao = modoCompras`)).
+**De onde vem.** ✅ `api-acos-vital` `src/schemas/core_comissionamento/recorte.js:9` (`export const SQL_VINCULOS_PROPRIOS`), `:65` (`export async function lerRecorteVendedor`), `src/middlewares/escopoVendedor.js:121` (`simulacao_resolvida:`), commit `06bb146`. ✅ BFF: `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:152` (`/comissoes_nf?`), PR #334; os itens da nota vêm de `/api/comissoes/minhas-comissoes/itens`, sobre `/comissoes_master` (`av-hub` `lib/api/itensDaNota.ts:84`, `/comissoes_master?`). A tela saiu do `/faturamento_planilha`. ✅ No simulador, a coluna de comissão em reais só aparece na visão de Compras (`av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:171` (`mostrarComissao = modoCompras`)).
 
-❓ O BFF antigo cortava o valor em reais antes da aprovação de Compras; o novo repassa o `valor_comissao` da view, e a tela o mostra por nota. Se a view zera o valor antes da validação não dá para conferir: a SQL está fora do repositório (PS-062). 🟡 O Hub ainda está atrás da API: diz que `DEVOLVIDO` saiu (`av-hub` `lib/domain/comissoes-minhas-comissoes.ts:34` (`saiu nesta versão`)) e que a API responde 403 sem vínculo (`app/api/comissoes/minhas-comissoes/route.ts:33` (`devolve 403`)) (PS-064).
+❓ O BFF antigo cortava o valor em reais antes da aprovação de Compras; o novo repassa o `valor_comissao` da view, e a tela o mostra por nota. Se a view zera o valor antes da validação não dá para conferir: a SQL está fora do repositório (PS-062). ✅ Desde 23/11 as telas mostram `DEVOLVIDO`, que a `vw_comissao_nf` voltou a distinguir (`av-hub` `lib/domain/comissoes-minhas-comissoes.ts:59` (`DEVOLVIDO: {`), PR #337; PS-064 fechada). Sobra um comentário velho que fala em 403 sem vínculo (`app/api/comissoes/minhas-comissoes/route.ts:33` (`devolve 403`)).
 
 ### R11. Bloqueio por NF
 
