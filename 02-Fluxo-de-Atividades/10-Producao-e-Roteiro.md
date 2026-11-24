@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, producao, roteiro, f1, p6, mes]
 criado: 2026-10-14
-estado-em: 2026-11-16
+estado-em: 2026-11-24
 status: vigente
 ordem: 10
 nos: [F1]
 anterior: "[[09-Estoque-Entrada-do-Lote]]"
 proxima: "[[11-Qualidade-Saida]]"
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada e matéria-prima pela retirada, PRs #96, #97, #83 e #84); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Robert (MES) · Nathan (decisões)
 fontes: [api-pcp 579a625 (itens-parciais.service.ts, pedidos.service.ts, divergencias, roteiro-item, prisma/models/producao.prisma e fabricas.prisma), app-pcp 1fca8d3 (movimentacoes), v1 02-PRD-Estoque/Fluxo-Producao-OS-OP-Completo, v1 01-Fluxo-Operacional/Fluxograma-Telas-por-Bloco bloco 7, Dump MES 14/10, api-pcp e app-pcp develop de 27/10/2026 (finalizar, Montagem do Roteiro, aprovar-saida, ConsumoMateriaPrima), N16-140, N16-141]
 ---
@@ -62,7 +62,7 @@ O PCP monta a rota das 100 flanges de aço carbono. O Estoque vem primeiro e a i
 - Item de pedido inativo bloqueia tudo, menos cancelar.
 - Revenda não produz. A fábrica de revenda só envia o restante para compra.
 - Tudo que é fabricado volta ao Estoque como lote e saldo (decisão de 14/10; feito na `develop` em 27/10).
-- A matéria-prima sai do Estoque na retirada, pela quantidade pedida, no mesmo documento de retirada da Expedição. O operador não lança consumo ao concluir a etapa (N16-140, 29/10).
+- A matéria-prima sai do Estoque pela retirada, na quantidade pedida; a sobra volta pela devolução da retirada. O operador não lança consumo ao concluir a etapa (N16-140, N16-193).
 - Retrabalho: o PCP escolhe o setor de volta (N16-141). O código ainda volta ao setor anterior.
 - A regra 8 do detalhe (volta ao setor anterior) vale só até a N16-141 ter código. As duas decisões são de 29/10/2026 (bloco N16-120 a N16-143).
 
@@ -73,7 +73,7 @@ O PCP monta a rota das 100 flanges de aço carbono. O Estoque vem primeiro e a i
 - ✅ (`api-pcp`) Na `develop` (23/10): ação "finalizar" no setor (status `FINALIZADO`, para o cronômetro e a peça aguarda no setor; `reabrir` volta a `EM_ANDAMENTO`).
 - ✅ (`api-pcp`) Na `develop` (27/10): Ordem de Produção impressa (PDF, 2ª via) e fabricado aprovado vira lote e saldo no Estoque (LOG-53, `ab3318d`): o "sim" da inspeção de saída (`aprovar-saida`) leva a parcela ao Estoque, e o lote de origem `PRODUCAO` nasce em `receber-fabricado`.
 - ✅ Na `develop`: roteiro individual do item (`RoteiroItem`) lido por `mover`, `concluir`, `atender-estoque`, `reprovar` e `aprovar-saida` (`roteiro-efetivo.ts`).
-- 🟡 Matéria-prima: a `develop` já baixa na hora do "Atender pelo estoque" (19/10); a decisão (N16-140) é baixar na retirada, ainda sem código 🔴.
+- ✅ Matéria-prima pela retirada, e a Produção só recebe com a retirada concluída (`api-pcp` PR #97, 23/11; [[12-Estoque-Despacho]]).
 - 🔴 Tela do novo norte, reabrir divergência e reabrir compra a partir da produção.
 - 🔴 Painel TV, `PerfilSetor` por filial e feed `/fluxo/eventos`.
 - 🟡 Botões de dividir e juntar parciais na fila (a API existe).
@@ -114,8 +114,8 @@ O acesso a cada fila depende de `PerfilSetor` (`podeVisualizar`, `podeAtuar`), d
 | 8 | `retrabalho` só sai de `REPROVADO`: cancela a linha e cria outra `EM_TRANSITO` no setor anterior com `retrabalho = true` (`:1124-1192`). Não altera a quantidade do `ItensPedido` | ✅; **superada em parte pela N16-141 (29/10): o PCP passa a escolher o setor de volta, ainda sem código** |
 | 9 | `devolver` cria linha nova ligada por `idDevolvidoDe`; a antiga vira `CANCELADO` e nunca é editada (`:1387-1488`). Não vale para parcial com requisição de compra viva (`ensureDevolucaoForaDaCompra`, `:1391`) | ✅ |
 | 10 | Item de pedido inativo bloqueia toda ação, menos `cancelar` (`:202-208`) | ✅ |
-| 11 | **Tudo que é fabricado volta ao Estoque** como lote e saldo, e só sai pelo documento de retirada. Decisão do Nathan de 14/10 | 📝 ✅ (`api-pcp`) lote e saldo na `develop` (27/10, `aprovar-saida` e `receber-fabricado`); 🔴 a saída pelo documento de retirada |
-| 12 | **Matéria-prima é consumida do Estoque** na produção (J2/J3 do v1). **Decidido em 29/10 (N16-140): a baixa é na retirada do Estoque, pela quantidade pedida** | 📝 🔴 na retirada; hoje a `develop` baixa na hora do "Atender pelo estoque" (`ConsumoMateriaPrima`, 19/10) |
+| 11 | **Tudo que é fabricado volta ao Estoque** como lote e saldo, e só sai pelo documento de retirada. Decisão do Nathan de 14/10 | 📝 ✅ (`api-pcp`) lote e saldo na `develop` (27/10, `aprovar-saida` e `receber-fabricado`); ✅ a saída pela retirada (`api-pcp` PR #96) |
+| 12 | **Matéria-prima é consumida do Estoque** na produção (J2/J3 do v1). **Decidido em 29/10 (N16-140): a baixa é na retirada do Estoque, pela quantidade pedida** | ✅ na retirada (`api-pcp` `src/itens-parciais/itens-parciais.service.ts:1221`, `await reservarMateriaPrima(tx, {`) |
 | 13 | Novo norte (P6): o PCP decide entre retrabalho e reabrir a compra. Roteiro individual do item (`RoteiroItem`, C8) é a ferramenta decidida | 📝 ✅ (`api-pcp`) `RoteiroItem` lido pelo motor na `develop`; 🔴 a tela do novo norte |
 
 ### Estados
@@ -220,7 +220,7 @@ Cada setor produtivo (Flange, Caldeiraria HRM, corte etc.) é um registro da tab
 
 #### Consumo de matéria-prima 🟡
 
-Na `develop` (19/10, `8d07917`) existe a baixa de matéria-prima no "Atender pelo estoque" de um item de fabricação: `ConsumoMateriaPrima` (lote de qualquer produto, quantidade baixada, unidades do item cobertas), `SAIDA` imediata com `id_consumo_mp`, estorno ao devolver a parcial ao Estoque. Não existe baixa ao iniciar ou concluir etapa, nem estrutura de produto, nem genealogia. A decisão N16-140 manda baixar na retirada do Estoque; isso ainda não tem código. Registro de 14/10 (superado em parte), mantido:
+Na `develop` (19/10, `8d07917`) existia a baixa imediata de matéria-prima no "Atender pelo estoque". Desde 23/11 (`api-pcp` PR #97) a matéria-prima fica reservada (`ConsumoMateriaPrima`) e sai pela retirada para a Produção, na confirmação (N16-140). Não existe baixa ao iniciar ou concluir etapa, nem estrutura de produto, nem genealogia. Registro de 14/10 (superado em parte), mantido:
 
 - `destinoRestante: 'ROTEIRO'` em `atenderEstoque` só move a parcial para a próxima etapa, sem reservar nem consumir material (`service:722-742`).
 - `TipoItemRequisicao.MATERIA_PRIMA` existe só para a compra, com o comentário "ação no Estoque·Entrada na próxima rodada" (`compras.prisma:17-22`).
@@ -236,8 +236,8 @@ Desde 27/10/2026 (`ab3318d`) a `develop` do MES tem `OrigemLote.PRODUCAO`: o "si
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 1 | Baixa de matéria-prima na retirada do Estoque (N16-140) e genealogia; hoje há a baixa imediata no "Atender pelo estoque" (`develop`) | Robert | F1 | 🟡 baixa imediata ✅ (`api-pcp`); 🔴 retirada |
-| 2 | Fabricado aprovado vira lote e saldo: feito na `develop` (27/10). Falta a saída pelo documento de retirada | Robert | F1, `E5` | ✅ (`api-pcp`) lote; 🔴 retirada |
+| 1 | Baixa de matéria-prima na retirada do Estoque (N16-140) e genealogia; hoje há a baixa imediata no "Atender pelo estoque" (`develop`) | Nathan | F1 | ✅ retirada (PR #97); 🔴 genealogia |
+| 2 | Fabricado aprovado vira lote e saldo: feito na `develop` (27/10). A saída pela retirada entrou em 23/11 | Robert | F1, `E5` | ✅ (`api-pcp`) lote e retirada |
 | 3 | `RoteiroItem` lido por `mover`, `concluir` e Expedição: lido pelo motor na `develop`; conferir a Expedição | Robert | P6 | ✅ (`api-pcp`) motor; ❓ Expedição |
 | 4 | Tela do novo norte para divergência de produção (reprovada na inspeção de saída), com retrabalho e reabrir compra; `/decisoes-pcp` só cobre recebimento | Robert, Nathan decide | P6 | 🔴 |
 | 5 | Reabertura de divergência (hoje `RESOLVIDA` e `CANCELADA` são terminais) | Robert | P6 | 🔴 |
@@ -265,5 +265,5 @@ flowchart TD
     Q8 -->|nao| P6["P6 · Novo norte"]
     P6 -->|retrabalho| F1
     P6 -->|reabre compra| P3["P3 · Requisicao de compra"]
-    F1 -.->|"consumo de materia-prima (baixa no atendimento na develop; na retirada, sem codigo)"| E1["E1 · Estoque"]
+    F1 -.->|"consumo de materia-prima (baixa na retirada)"| E1["E1 · Estoque"]
 ```
