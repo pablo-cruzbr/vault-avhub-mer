@@ -5,17 +5,17 @@ status: implementado-na-develop
 autor: Nathan
 data: 2026-11-18
 camadas: [frontend, backend, api, sql]
-donos: {frontend: Nathan, backend: Nathan, api: Nathan, sql: Gustavo}
+donos: {frontend: Nathan, backend: Gustavo, api: Gustavo, sql: Gustavo}
 nos_0b: []
 notas_afetadas: [RBAC-e-Permissoes, Banco-AvHub, Telas-e-Experiencia-do-Usuario]
 depende_de: [SQL-023]
 decisoes: [N16-178, N16-177]
-develop-conferida: [api-acos-vital a6eee9d, av-hub 22ccece, em 2026-11-18, entrega (também na main: api-acos-vital #318 d282db3, av-hub #315 9f8f10a); api-acos-vital 68bbe9c, av-hub 718b41b, em 2026-11-18]
+develop-conferida: [api-acos-vital ed6d147, em 2026-11-24, rotas a mais da seção 8 (PDFs do Gustavo de 18 e 24/11); api-acos-vital a6eee9d, av-hub 22ccece, em 2026-11-18, entrega (também na main: api-acos-vital #318 d282db3, av-hub #315 9f8f10a); api-acos-vital 68bbe9c, av-hub 718b41b, em 2026-11-18]
 tags: [contrato, rbac, permissoes, telas, acessos, perfis, usuarios]
 criado: 2026-11-18
-estado-em: 2026-11-18
+estado-em: 2026-11-24
 dono: Nathan
-fontes: [conversa do Nathan com o Claude de 18/11/2026 (redesenho das telas de Acessos e o protótipo no artifact "Acessos do Hub (redesenho)"), mapa das 9 telas de Cadastros › Acessos lido na develop do av-hub 718b41b e da api-acos-vital 68bbe9c, banco do Docker local com os dados do tst (docker-teste, fora do vault), SQL-023-Limpeza-das-Telas-Antigas, RBAC-e-Permissoes, conversa do Nathan com o Claude de 18/11/2026 à tarde (P1 e P2, testes no tst), av-hub PR #314 e releases #315 e api-acos-vital #318]
+fontes: [conversa do Nathan com o Claude de 18/11/2026 (redesenho das telas de Acessos e o protótipo no artifact "Acessos do Hub (redesenho)"), mapa das 9 telas de Cadastros › Acessos lido na develop do av-hub 718b41b e da api-acos-vital 68bbe9c, banco do Docker local com os dados do tst (docker-teste, fora do vault), SQL-023-Limpeza-das-Telas-Antigas, RBAC-e-Permissoes, conversa do Nathan com o Claude de 18/11/2026 à tarde (P1 e P2, testes no tst), av-hub PR #314 e releases #315 e api-acos-vital #318, PDF de Gustavo de 18/11/2026 (API do LOG-62), PDF de Gustavo de 24/11/2026 (migrations aplicadas e custo-item)]
 ---
 
 # LOG-62 · Redesenho das telas de Acessos
@@ -29,7 +29,8 @@ fontes: [conversa do Nathan com o Claude de 18/11/2026 (redesenho das telas de A
 >   - criar pessoa, desativar, unidades, funcionário e "Nova tela" usam as rotas antigas (`/usuarios`, `/telas`), porque `/acessos/*` não tem essas escritas;
 >   - "o que acessa" esconde os grupos do menu no Hub, `lib/domain/acessos-pessoas.ts:115` (`export function semGrupos`), com `GAMBIARRA(vault LOG-62)`, até a API marcar os grupos (BL-108);
 >   - a tela fora do menu só aparece no perfil que já a tem; "Fica em" só grava com o botão Mover.
-> - 🔴 A P2 não entrou no SQL do tst: `custo-item` ainda é tela comum (BL-110).
+> - Banco (PDF do Gustavo de 24/11): `2026-11-18_log62_telas_de_acessos` e `log62b` (tira Permissões e Usuários × Perfis do menu) aplicadas no tst e na produção até 19/11.
+> - 🔴 A P2 não entrou no SQL do tst: `custo-item` ainda é tela comum (BL-110). Desde 19/11 ela está inativa (desligada pela tela Acessos), e com isso ninguém vê custo e margem na proposta (PS-066).
 
 ## 1. Resumo em linguagem simples
 
@@ -127,6 +128,10 @@ O protótipo clicável está no artifact "Acessos do Hub (redesenho)", do Nathan
 | GET | `/acessos/opcoes` | escolhas de pessoa, perfil, unidade e funcionário | `perfis` ou `usuarios`: ver |
 | GET | `/acessos/telas` | árvore com as ações usadas | `telas`: ver; `perfis`: ver (sem as rotas) |
 | PUT | `/acessos/telas/ordem` | arrastar na árvore | `telas`: editar |
+| POST | `/acessos/perfis` | botão "Novo perfil" (seção 6); 409 `PERFIL_JA_EXISTE` | `perfis`: criar |
+| PUT | `/acessos/telas/:id` | nome, ativo e slug (R7); trocar o slug sem `confirmar: true` dá 409 `SLUG_EM_USO` com as contagens | `telas`: editar |
+
+As duas últimas entraram a mais que esta tabela na entrega do Gustavo (PDF de 18/11): `api-acos-vital` `src/schemas/auth/aggregates/acessos/acessos.perfis.route.js:106` (`router.post("/perfis"`) e `src/schemas/auth/aggregates/acessos/acessos.telas.route.js:108` (`router.put("/telas/:id"`).
 
 - **`GET /acessos/perfis`:** `?busca=&page=&limit=` (até 200). Resposta:
   ```json
@@ -189,7 +194,7 @@ O protótipo clicável está no artifact "Acessos do Hub (redesenho)", do Nathan
 ## 14. Ordem de implementação e responsáveis
 
 1. **Gustavo:** o SQL (seção 9).
-2. **Nathan:** a API (seções 7 e 8).
+2. **Gustavo:** a API (seções 7 e 8), `api-acos-vital` `a6eee9d` (18/11); o contrato a dava ao Nathan.
 3. **Nathan:** o Hub (seção 6), por partes: Perfis e a página do perfil; depois Pessoas e a página da pessoa; depois Telas.
 4. **Segunda etapa, em contrato próprio:** as telas de Vínculos no mesmo padrão de painel.
 
@@ -198,7 +203,8 @@ O protótipo clicável está no artifact "Acessos do Hub (redesenho)", do Nathan
 - **Risco:** ao trocar o conjunto inteiro de permissões de um perfil, uma tela some sem querer. Por isso a tela mostra o que muda antes de salvar, e a auditoria guarda o antes.
 - **Rollback:** o Hub volta para as telas antigas (as rotas antigas da API continuam), e o SQL tem volta (seção 9).
 - **P1.** De qual tela a "Conta corrente" (`pedidos-venda-financeiro`) é ação: Pedidos da Equipe, Meus Pedidos ou outra? **Respondida pelo Nathan em 18/11:** de Pedidos da Equipe (`pedidos-equipe`). Está assim no tst; a tela continua desativada até o Hub ter onde trocar a conta.
-- **P2.** Quem recebe a tela `custo-item` (quem vê o custo), que em produção só o Admin (Dev) tem (P1 do `SQL-023`). Pode virar ação de uma tela do Orçamento pela R4. **Respondida pelo Nathan em 18/11:** vira a ação "Ver custo" de Propostas (`acao_de` = `propostas`), criada pelo SQL onde não existir (no tst não existia); cada perfil decide se liga. Falta no SQL (BL-110).
+- **P2.** Quem recebe a tela `custo-item` (quem vê o custo), que em produção só o Admin (Dev) tem (P1 do `SQL-023`). Pode virar ação de uma tela do Orçamento pela R4. **Respondida pelo Nathan em 18/11:** vira a ação "Ver custo" de Propostas (`acao_de` = `propostas`), criada pelo SQL onde não existir (no tst não existia); cada perfil decide se liga. Falta no SQL (BL-110). O Gustavo propôs o rótulo "Ver custo e margem" e pergunta quais perfis recebem; em 24/11 o Robert pediu para aposentar a tela (`ve_custo` = `propostas: pode_visualizar`), à espera de decisão (PS-066).
+- **P3 (Gustavo, 18/11).** Ações que o BFF confere sem rota na API somem da página do perfil, porque a lista de ações vem do mapa de rotas. O Gustavo acrescentou à mão só o `pode_exportar` do Acompanhamento de Clientes. **Pergunta (Gustavo):** quais outras ações o Hub confere só no BFF, para ele pôr na view?
 
 ## 16. Impacto no vault quando for entregue
 

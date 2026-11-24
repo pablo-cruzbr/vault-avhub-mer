@@ -1,16 +1,16 @@
 ---
 tags: [comissao, banco, core_comissionamento, tabelas, dba]
 criado: 2026-10-16
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: proposta
 dono: Gustavo (DBA)
-develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, colunas, filtros e migrations da comissão de 18 a 23/11; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
-fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, N16-11, api-acos-vital 7c05f92, 0244b1a, e363da5, 0e56354, 06bb146 (models e rotas de core_comissionamento), N16-185 a N16-190, PS-062, PS-063]
+develop-conferida: [api-acos-vital ed6d147, em 2026-11-24, aprovação, fechamento, ajuste e contestação; api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, colunas, filtros e migrations da comissão de 18 a 23/11; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, N16-11, api-acos-vital 7c05f92, 0244b1a, e363da5, 0e56354, 06bb146 (models e rotas de core_comissionamento), N16-185 a N16-190, PS-062, PS-063, PDF de Gustavo de 24/11/2026, Dump-AvHub-Teste-2026-11-24, api-acos-vital 9e6ef60, 0b7d92c, ed6d147, N16-194 a N16-200]
 ---
 
 # Tabelas, views e funções atuais do `core_comissionamento`
 
-**Em uma frase:** o banco atual da comissão (`core_comissionamento`) tinha, no dump, 9 tabelas, 4 views e 5 funções; de 18 a 23/11 ganhou colunas, uma view, uma tabela, uma função e um trigger por seis migrations que não estão no repositório, e esta nota lista o que há nele e o que o módulo novo corrige.
+**Em uma frase:** o banco atual da comissão (`core_comissionamento`) tinha, no dump, 9 tabelas, 4 views e 5 funções; de 18 a 23/11 ganhou colunas, views, tabelas, funções e triggers por onze migrations que não estão no repositório (no tst e na produção), e esta nota lista o que há nele e o que o módulo novo corrige.
 
 **Quando consultar esta nota:** quando o time de TI ou o DBA (Gustavo) precisar saber o que existe hoje, o que está frágil e para onde cada tabela vai no módulo novo. O schema atual **não é alterado** (N16-11). Quem não é técnico lê só este resumo.
 
@@ -28,7 +28,7 @@ fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vi
 | `comissao_coordenadores` | Ajuda de custo e percentual dos coordenadores | 6 |
 | `comissao_coordenadores_historico` | Histórico imutável das mudanças dos coordenadores | 6 |
 
-As 4 views juntam tudo para mostrar a comissão por item, por NF e por mês. As 5 funções montam o dashboard e gravam o histórico dos coordenadores. Os objetos novos de 18 a 23/11 (competência, grão por pedido, peso da fabricação, trava do vendedor e versão pré-aceita) estão em "O que entrou de 18 a 23/11", no detalhe técnico; o banco deles é ❓ (PS-062).
+As 4 views juntam tudo para mostrar a comissão por item, por NF e por mês. As 5 funções montam o dashboard e gravam o histórico dos coordenadores. Os objetos novos de 18 a 23/11 (competência, grão por pedido, peso da fabricação, trava do vendedor e versão pré-aceita) estão em "O que entrou de 18 a 23/11", no detalhe técnico. Em 23 e 24/11 entraram a aprovação da Controladoria, o fechamento do mês com foto, a revogação, o casamento pelo produto com nota parcial, o ajuste de letra e a contestação (N16-194 a N16-200; sete tabelas novas, como `aprovacoes_comissao`, `fechamentos_comissao` e `contestacoes_vendedor`), em "O que entrou em 23 e 24/11", no detalhe técnico. O banco de tudo isso está no tst e na produção (PDF do Gustavo de 24/11).
 
 ## Exemplo
 
@@ -60,5 +60,5 @@ Inventário do que existe hoje, com o que está bom e o que deve ser **melhorado
 
 O detalhe técnico desta nota fica em 2 notas à parte, para cada arquivo ficar abaixo de 25 KB (Bloco 5 da v3):
 
-- [[02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-1]]: O que entrou de 18 a 23/11 (no tst; produção ❓, PS-062) · Mapa do schema · Tabelas
-- [[02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-2]]: Views · Funções · Rotas da API que existem hoje · Resumo dos problemas de estrutura
+- [[02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-1]]: O que entrou de 18 a 23/11 (no tst e na produção) · Mapa do schema · Tabelas
+- [[02-Tabelas-Atuais-core_comissionamento-Detalhe-Tecnico-2]]: Views · Funções · Rotas da API que existem hoje · O que entrou em 23 e 24/11 · Resumo dos problemas de estrutura

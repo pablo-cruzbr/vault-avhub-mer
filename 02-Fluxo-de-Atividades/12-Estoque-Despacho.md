@@ -7,7 +7,7 @@ ordem: 12
 nos: [E6]
 anterior: "[[11-Qualidade-Saida]]"
 proxima: "[[13-Expedicao]]"
-develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-pcp 50f0a65, app-pcp 03fb038, em 2026-11-24 (coletor, PRs #99 e #86, N16-201); api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan (MES e decisões, N16-180)
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026, api-pcp 579a625 (itens-parciais.service.ts, estoque-operacao.helpers.ts), LOG-54, N16-120 a N16-122, N16-140, N16-180, api-pcp c8036db (motor do Estoque, PR #86), N16-193, api-pcp 6bca516 (src/estoque/retirada/), app-pcp ffdcd3f (aba Retiradas)]
 ---
@@ -55,6 +55,7 @@ Decisões de 29/10/2026 (N16-120 a N16-122, N16-140) e de 23/11/2026 (N16-193). 
 
 - ✅ (`api-pcp` PR #96, `app-pcp` PR #83, 23/11) Retirada com lista de separação, confirmação parcial e baixa na confirmação (BL-007).
 - ✅ (`api-pcp` PR #97, `app-pcp` PR #84, 23/11) Matéria-prima pela retirada e devolução da sobra.
+- ✅ (`api-pcp` PR #99, `app-pcp` PR #86, 24/11) Separação pelo coletor: lê o endereço e o lote de cada linha, recusa o errado, e a baixa sai só do endereço lido (N16-201).
 - 🟡 A parcial atendida antes de a retirada existir ainda baixa quando a Embalagem recebe (caminho antigo, para os dados de antes de 23/11).
 - 🔴 As telas e permissões do Estoque em Acessos no tst e na produção (PS-060).
 - Publicado na `main`: não (a `main` da `api-pcp` está no PR #84, de 18/11).
@@ -79,7 +80,7 @@ A numeração é a da nota de Estoque da v2; as outras regras estão em [[05-Est
 
 | # | Regra | Selo |
 |---|---|---|
-| 10 | **Despacho é no Estoque**: o atendimento abre a **retirada**; a **baixa do saldo ocorre na confirmação da retirada** | ✅ `api-pcp` `src/estoque/retirada/retirada.ts:146` (`await registrarSaidaDoLote(tx, {`); N16-120 a N16-122, N16-193 |
+| 10 | **Despacho é no Estoque**: o atendimento abre a **retirada**; a **baixa do saldo ocorre na confirmação da retirada** | ✅ `api-pcp` `src/estoque/retirada/retirada.ts:179` (`await registrarSaidaDoLote(tx, {`); N16-120 a N16-122, N16-193 |
 
 ### Telas
 
@@ -102,13 +103,13 @@ No `app-pcp`, o BFF repete as rotas em `app/api/estoque-operacao/retiradas/` (`r
 
 #### E6: despacho
 
-✅ **Abertura.** No atendimento pelo estoque, a parte `PRONTO` abre a retirada para a Expedição e a parte `MP` reserva a matéria-prima e abre a retirada para a Produção: `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1211` (`if (parte.tipo === 'PRONTO') {`), `:1221` (`await reservarMateriaPrima(tx, {`) e `src/estoque/retirada/retirada.ts:32` (`export async function abrirRetiradaDaParcial(`). O número é `RT-AAAAMMDD-nnnn`, `retirada.ts:57` (`codigo: await gerarCodigo(tx),`).
+✅ **Abertura.** No atendimento pelo estoque, a parte `PRONTO` abre a retirada para a Expedição e a parte `MP` reserva a matéria-prima e abre a retirada para a Produção: `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1211` (`if (parte.tipo === 'PRONTO') {`), `:1221` (`await reservarMateriaPrima(tx, {`) e `src/estoque/retirada/retirada.ts:37` (`export async function abrirRetiradaDaParcial(`). O número é `RT-AAAAMMDD-nnnn`, `retirada.ts:62` (`codigo: await gerarCodigo(tx),`).
 
-✅ **Confirmação e baixa.** `retirada.ts:94` (`export async function confirmarRetirada(`) trava os lotes, recusa quantidade acima do que falta e baixa pelo motor com a reserva e a linha da retirada no movimento, `retirada.ts:151` (`vinculo: { idReserva: item.reserva.id, idRetiradaItem: item.id },`). Quem confirma tem de poder atuar num dos depósitos do lote: `src/estoque/retirada/retirada.service.ts:134` (`ensurePodeAtuarAlgumDeposito(userId, depositos)`). Todo movimento grava o peso: `src/estoque/motor/motor-estoque.ts:299` (`pesoKg: lote?.kgPorUnidade`).
+✅ **Confirmação e baixa.** `retirada.ts:99` (`export async function confirmarRetirada(`) trava os lotes, recusa quantidade acima do que falta e baixa pelo motor com a reserva e a linha da retirada no movimento, `retirada.ts:156` (`vinculo: { idReserva: item.reserva.id, idRetiradaItem: item.id },`). Quem confirma tem de poder atuar num dos depósitos do lote: `src/estoque/retirada/retirada.service.ts:137` (`ensurePodeAtuarAlgumDeposito(userId, depositos)`). Todo movimento grava o peso: `src/estoque/motor/motor-estoque.ts:299` (`pesoKg: lote?.kgPorUnidade`).
 
 ✅ **Recebimento travado.** `itens-parciais.service.ts:280` (`const pendente = await retiradaPendenteDaParcial(this.prisma, id);`) responde 409 "Aguardando a retirada … no Estoque" enquanto a retirada não conclui.
 
-✅ **Devolução da sobra.** `retirada.ts:197` (`export async function devolverSobraDaRetirada(`), só para destino `PRODUCAO`.
+✅ **Devolução da sobra.** `retirada.ts:227` (`export async function devolverSobraDaRetirada(`), só para destino `PRODUCAO`.
 
 🟡 **Caminho antigo.** A parcial atendida antes da retirada existir ainda baixa no recebimento da Embalagem: `itens-parciais.service.ts:332` (`await consumirReservasDaParcial(tx, {`), e a entrega chama de novo por garantia, `src/entregas/entregas.service.ts:72` (`await consumirReservasDaParcial(tx, {`).
 
@@ -119,7 +120,7 @@ No `app-pcp`, o BFF repete as rotas em `app/api/estoque-operacao/retiradas/` (`r
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
 | 1 | Cadastrar as telas e permissões do Estoque em Acessos (tst e produção) | Nathan | E6 | 🔴 PS-060 |
-| 2 | Ler a etiqueta do lote na confirmação da retirada (coletor) | Nathan | E6 | 🔴 ideia do roteiro do Estoque, sem decisão |
+| 2 | Ler a etiqueta do lote na confirmação da retirada (coletor) | Nathan | E6 | ✅ N16-201: o coletor lê o endereço e o lote de cada linha, recusa o errado e confirma com o `idLocalizacao` lido, `api-pcp` `src/estoque/retirada/retirada.ts:158` (`if (c.idLocalizacao) {`) |
 
 Os demais itens estão em [[05-Estoque-Atendimento]] e [[09-Estoque-Entrada-do-Lote]].
 

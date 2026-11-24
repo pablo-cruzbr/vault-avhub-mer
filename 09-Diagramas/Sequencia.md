@@ -1,10 +1,10 @@
 ---
 tags: [diagramas, sequencia, uml, mes, av-hub]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, matéria-prima pela retirada e lote v2); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML (0a, 12, 15), v1 02-PRD-Estoque/Fluxo-*-Completo, 00-Fluxo-Mestre-0b, api-pcp 579a625, api-acos-vital f322dcd, app-pcp 1fca8d3]
 ---
 
@@ -232,25 +232,27 @@ sequenceDiagram
 ```
 ✅ Conferido. O Mestre manda o aprovado ao Estoque (`Q8` para `E5`), mas o código manda à Expedição; o desenho mostra as duas coisas (dono: Robert). 🟡 `Q8` (aprovado volta ao Estoque) e `X3` (consolidar carga) sem código. 🔴 Aviso do MES ao Omie para faturar (ligação do `O1`).
 
-## 7. Despacho do Estoque: hoje e decidido (E6)
+## 7. Despacho do Estoque: a retirada (E6)
 
-Hoje o saldo baixa quando a Embalagem ou a Expedição recebe a parcial. Decidido em 14/10: a baixa passa a sair de um documento de retirada gerado no Estoque.
+O atendimento reserva o lote e abre a retirada. O Estoque imprime a lista de separação, separa e confirma o que saiu; o saldo baixa nessa hora. Só depois a Expedição ou a Produção recebe a parcial.
 
 ```mermaid
 sequenceDiagram
-    participant REQ as Expedicao ou Producao
-    participant EST as Setor Estoque
+    participant ALM as Almoxarife
     participant MES as api-pcp
     participant DB as Banco do MES
-    Note over REQ,DB: Decidido 14/10, sem codigo
-    REQ->>EST: E6 precisa da mercadoria e gera o documento de retirada
-    EST->>MES: confirma a retirada do lote reservado
-    MES->>DB: Reserva CONSUMIDA e Movimento SAIDA do lote
-    Note over REQ,DB: Hoje no codigo
-    REQ->>MES: receber a parcial na Embalagem ou Expedicao
-    MES->>DB: consumirReservasDaParcial, Reserva CONSUMIDA e SAIDA
+    participant DEST as Expedicao ou Producao
+    ALM->>MES: E3 ou E4 atender pelo estoque
+    MES->>DB: Reserva ATIVA e Retirada ABERTA, destino EXPEDICAO ou PRODUCAO
+    ALM->>MES: imprime a lista de separacao em A4
+    ALM->>MES: E6 confirma o que saiu, pode ser parcial
+    MES->>DB: Movimento SAIDA com custo e peso, Reserva CONSUMIDA, Retirada PARCIAL ou CONCLUIDA
+    DEST->>MES: receber a parcial
+    MES-->>DEST: so com a retirada CONCLUIDA, senao recusa com o codigo da retirada
+    ALM->>MES: devolve a sobra, so materia-prima
+    MES->>DB: Movimento ENTRADA no mesmo lote e endereco, com o custo da saida
 ```
-📝 Decisão do Nathan de 14/10. 🔴 O documento de retirada e a tela ainda não existem. Dono: Robert ([[12-Estoque-Despacho]]).
+✅ Na `develop` do MES desde 23/11 (`api-pcp` PRs #96 e #97, `app-pcp` #83 e #84; N16-193): `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1214` (`destino: 'EXPEDICAO'`). Detalhe em [[12-Estoque-Despacho]].
 
 ## Detalhe técnico
 
@@ -284,4 +286,4 @@ Selo ✅: `itens-parciais.controller.ts` (reprovar, resolver, retrabalho), `iten
 
 ### 7. Despacho do Estoque
 
-📝 Decisão do Nathan de 14/10. 🔴 Não existe documento de retirada nem tela; hoje a baixa é na Embalagem/Expedição (`itens-parciais.service.ts`). Dono: Robert ([[12-Estoque-Despacho]]).
+✅ Retirada em `api-pcp` `src/estoque/retirada/` (abrir, confirmar, lista de separação em PDF, devolução da sobra) e aba Retiradas no Atendimento do `app-pcp`. As parciais atendidas antes de 23/11 ainda baixam na Embalagem 🟡 ([[12-Estoque-Despacho]]).

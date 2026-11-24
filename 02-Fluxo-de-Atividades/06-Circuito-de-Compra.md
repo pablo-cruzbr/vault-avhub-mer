@@ -9,7 +9,7 @@ anterior: "[[05-Estoque-Atendimento]]"
 proxima: "[[07-Recebimento]]"
 develop-conferida: [av-hub 857d90e, api-pcp 5aa95d5 (main 3af224e), app-pcp f3a10bf (main fe8972b), em 2026-11-19, PDF da OC e main do MES; api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-10, av-hub bc85670 (BL-086), em 2026-11-12, citação conferida no a43befe, api-acos-vital bebca52 (LOG-57, LOG-58, API-019), av-hub a43befe (front de C6 a C8 e LOG-58), api-pcp 2e564e6, em 2026-11-12; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, em 2026-11-13 (BL-086, LOG-58, follow-up e requisições)]
 dono: Compras (regra) · Gustavo (API) · Nathan (front av-hub) · Robert (MES)
-fontes: [00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144, BL-086, OQ-52, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
+fontes: [Sistemática do Setor de Compras – Revenda, de Loise (Coordenadora de Compras), recebida em 24/11/2026 (fora do vault), 00-Fluxo-Mestre-0b, Integracao-AvHub-MES (INT-02, INT-03, INT-04), LOG-34, LOG-35, LOG-32, LOG-23, LOG-36, SQL-008, API-004, v1 02-PRD-Estoque/Fluxo-Compras-Completo, decisões do Nathan de 14/10 (duas origens, aprovação, Compras·CCP só leitura), api-pcp 579a625, api-acos-vital f322dcd, omie-elt-pipeline 0f739f0, HUB b55ac55 (lido em disco), Dump Avhub 14/10, api-pcp develop de 27/10/2026 (K4, API-009, API-011), N16-144, BL-086, OQ-52, validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault)]
 ---
 
 # Circuito de compra (P3, C0 a C8, FN1)
@@ -115,7 +115,14 @@ Em 18/11/2026 o Nathan refez Compras e Recebimento do ponto 0, para validar cada
 - as decisões em aberto D1 a D8: D1 receber acima da OC (a IT-LOG-REC-001 diz que é não conforme, [[07-Recebimento#O processo da doca (IT-LOG-REC-001)]]); D2 aprovação definitiva; D3 requisição "atendida" na emissão ou na aprovação da OC; D4 recontagem às cegas (BL-091); D5 cotação no Hub; D6 e-mail da OC; D7 prazos de atraso; D8 um ou dois formulários de OC;
 - o plano em ondas 1 a 5, com donos, e os cenários V1 a V10 para o teste ponta a ponta.
 
-O processo de Compras será levantado com a Loise (Compras) em 23/11/2026; o do Recebimento veio na IT do Douglas.
+O processo do Recebimento veio na IT do Douglas. O de Compras veio em 24/11/2026, na **Sistemática do Setor de Compras – Revenda**, da Loise (Coordenadora de Compras), resumida em [[06-Circuito-de-Compra-Sistematica-da-Revenda]]. Ela responde, pelo lado de Compras, a quatro das oito decisões:
+
+- **D2:** toda OC é aprovada, sem limite de valor, por aprovador da unidade. Hoje há aprovação automática até R$ 30 mil.
+- **D5:** mapa de cotação obrigatório anexado à OC.
+- **D6:** envio pelo sistema com confirmação do fornecedor, sem dizer se pelo Hub ou pelo Omie.
+- **D7:** prazos em dias corridos até o faturamento.
+
+Ela também traz uma regra de markup do pedido inteiro que não bate com a aprovação do vendedor por produto (N16-61, LOG-57). As quatro continuam ❓ até o Nathan decidir. D1, D3, D4 e D8 seguem sem resposta.
 
 ## Detalhe técnico
 
@@ -123,3 +130,5 @@ O detalhe técnico desta nota fica em 2 notas à parte, para cada arquivo ficar 
 
 - [[06-Circuito-de-Compra-Detalhe-Tecnico-1]]: Nós e entradas · Quem atua (onde) · Regras decididas · Estados · Telas · Endpoints e contratos
 - [[06-Circuito-de-Compra-Detalhe-Tecnico-2]]: Como está no código · C6, C7 e C8: a parte de compras do pedido da proposta · O que falta desenvolver · Pendências · Subfluxo
+
+O processo de Compras da Revenda, descrito pela Coordenação de Compras, fica em [[06-Circuito-de-Compra-Sistematica-da-Revenda]].

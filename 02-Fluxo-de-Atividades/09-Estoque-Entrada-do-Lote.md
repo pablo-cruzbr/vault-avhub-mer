@@ -1,13 +1,13 @@
 ---
 tags: [fluxo, raia, estoque, entrada, lote, fabricado, comprado, etiqueta, mes, e5]
 criado: 2026-11-05
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: vigente
 ordem: 9
 nos: [E5]
 anterior: "[[08-Qualidade-Entrada]]"
 proxima: "[[10-Producao-e-Roteiro]]"
-develop-conferida: [api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
+develop-conferida: [api-pcp 6bca516, em 2026-11-24 (retirada da Expedição, PR #96); api-pcp c8036db, app-pcp 8259344, em 2026-11-23; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
 dono: Nathan (MES e decisões, N16-180)
 fontes: [00-Fluxo-Mestre-0b, dividida de 03-Estoque-Atendimento-e-Despacho da v2 (tag v2-antes-da-v3) em 05/11/2026, api-pcp develop befd973 de 27/10/2026 (aprovar-saida, receber-fabricado), circuito-compra.ts, LOG-53, N16-166, N16-180 a N16-182, api-pcp c8036db (PRs #88 lote v2 e etiqueta, #90 histórico do lote), app-pcp 8259344 (PRs #70, #73)]
 ---
@@ -59,7 +59,7 @@ Tudo de 19/11 em diante está só na `develop` do MES.
 - ✅ Etiqueta nova: código de barras do código curto do lote, faixa de qualidade (liberado, quarentena, bloqueado), endereço, peso, NF, fornecedor e corrida (`api-pcp` `src/estoque/etiquetas/etiqueta.service.ts:198`, `bcid: 'code128'`).
 - ✅ Linha do tempo do lote (criação, qualidade, RNC, movimentos, reservas, custo, rastreabilidade, cisão): `api-pcp` `src/estoque/kardex/kardex.controller.ts:24` (`@Get('lotes/:id/historico')`).
 - ⏸ O lote do fabricado nasce sem custo: BL-067 adiado (N16-166).
-- 🔴 A Expedição ainda não sai do Estoque pela retirada ([[12-Estoque-Despacho]]).
+- ✅ A Expedição sai do Estoque pela retirada: o atendimento abre a retirada com destino Expedição e o saldo só baixa na confirmação, `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1214` (`destino: 'EXPEDICAO'`) ([[12-Estoque-Despacho]], N16-193).
 
 ## Detalhe técnico
 

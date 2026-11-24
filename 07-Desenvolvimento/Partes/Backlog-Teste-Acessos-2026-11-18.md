@@ -1,12 +1,12 @@
 ---
 tags: [desenvolvimento, backlog, pendencias, parte, validacao, acessos]
 criado: 2026-11-18
-estado-em: 2026-11-18
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan
 parte-de: "[[Backlog-por-Frente]]"
 develop-conferida: [api-acos-vital a6eee9d, av-hub 22ccece, em 2026-11-18]
-fontes: [teste das telas de Acessos (LOG-62) contra a API do tst em 18/11/2026, com perfil, pessoa e telas criados só para o teste e apagados no fim, N16-178]
+fontes: [PDF de Gustavo de 18/11/2026 e PDF de Gustavo de 24/11/2026 (custo-item), teste das telas de Acessos (LOG-62) contra a API do tst em 18/11/2026, com perfil, pessoa e telas criados só para o teste e apagados no fim, N16-178]
 ---
 
 # Backlog: o que o teste das telas de Acessos achou, 18/11
@@ -21,4 +21,4 @@ O teste rodou com a `develop` de 18/11 (av-hub `22ccece`, api-acos-vital `a6eee9
 |---|---|---|---|---|---|
 | BL-108 | transversal | Gustavo | **A página da pessoa recebe os grupos do menu.** `GET /acessos/pessoas/:id` manda Cadastros, Compras etc. como telas, com as ações antigas. O Hub esconde por conta própria (`av-hub` `lib/domain/acessos-pessoas.ts:115` (`export function semGrupos`), `GAMBIARRA(vault LOG-62)`). Falta a API marcar o grupo (`grupo: true`) ou não mandá-lo, e trazer só as ações que a tela usa; depois o Hub tira o remendo | 🔴 | Página da pessoa no tst |
 | BL-109 | transversal | Gustavo | **Não há como redefinir a senha de outra pessoa.** O `PATCH /usuarios/:id/senha` só troca a própria (`SENHA_DE_OUTRO_USUARIO`). Falta a rota; depois a página da pessoa ganha o botão "Redefinir senha" do protótipo | 🔴 | Protótipo do LOG-62 |
-| BL-110 | transversal | Gustavo | **A P2 do LOG-62 não entrou no SQL.** `custo-item` ainda é tela comum no tst; pela decisão do Nathan de 18/11, vira a ação "Ver custo" de Propostas (`acao_de` = `propostas`, `rotulo_acao` = "Ver custo"), criada onde não existir | 🔴 | `GET /acessos/telas` no tst |
+| BL-110 | transversal | Gustavo | **A P2 do LOG-62 não entrou no SQL.** `custo-item` ainda é tela comum no tst; pela decisão do Nathan de 18/11, vira a ação "Ver custo" de Propostas (`acao_de` = `propostas`, `rotulo_acao` = "Ver custo"), criada onde não existir. **Achado do Gustavo (PDFs de 18 e 24/11):** a `custo-item` está inativa desde 19/11 (pela tela Acessos), e a `auth.fn_me_permissoes`, que decide o `ve_custo`, ignora tela inativa: ninguém vê custo e margem na proposta (PS-066). O Robert pediu em 24/11 para aposentar a tela (`ve_custo` = `propostas: pode_visualizar`); espera a decisão dele e a do Nathan | 🔴 | `GET /acessos/telas` no tst |

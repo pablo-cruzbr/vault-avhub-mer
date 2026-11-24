@@ -1,7 +1,7 @@
 ---
 tags: [desenvolvimento, backlog, pendencias]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan
 develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital b97981c, av-hub 2e5456d, api-pcp befd973, app-pcp 93f96de, omie-elt-pipeline master 5e7e94d, em 2026-11-05]
@@ -44,6 +44,7 @@ A lista completa desta nota fica em 4 notas à parte, uma por frente, para cada 
 - [[Backlog-Reteste-R4-2026-11-16]]: itens BL-097 a BL-100, o que o reteste R4 (o fluxo de 0 a 100% pelas telas, 16/11/2026) achou
 - [[Backlog-Reteste-R5-R6-2026-11-16]]: itens BL-101 a BL-107, o que os retestes R5 e R6 pela API (16/11/2026, banco igual ao tst de 16/11) acharam
 - [[Backlog-Teste-Acessos-2026-11-18]]: itens BL-108 a BL-110, o que o teste das telas de Acessos (`LOG-62`) contra a API do tst achou (18/11/2026, frente Gustavo)
+- [[Backlog-Entrega-Gustavo-2026-11-24]]: itens BL-111 a BL-115, o que a entrega do Gustavo de 24/11/2026 deixou por fazer: o fluxo novo da comissão (N16-194 a N16-200) ir ao ar (telas, ações nos perfis, ajuda de custo e o marco) e a cópia das telas do teste para a produção
 - [[Backlog-Frente-Comercial-e-Suprimentos]]: Frente Comercial & Suprimentos (Robert conduz; Pablo acompanha)
 
 ## Fechados em 14/10/2026

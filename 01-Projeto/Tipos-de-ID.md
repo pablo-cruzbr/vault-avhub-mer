@@ -1,7 +1,7 @@
 ---
 tags: [projeto, ids, dicionario]
 criado: 2026-11-05
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan
 develop-conferida: [api-acos-vital e522962, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, em 2026-11-13, reteste por cliques e Da proposta à comissão; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
@@ -24,13 +24,13 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 
 | Prefixo | O que é | Onde nasce (a linha "dona") | Quantos hoje | Próximo livre |
 |---|---|---|---|---|
-| `N16-nn` | Decisão do Nathan desde 16/10/2026 (proposta, pedido, custo real, comissão e o que veio depois) | [[Registro-de-Decisoes]], nas notas `Registro-N16-...` | 193 (`N16-01` a `N16-193`) | `N16-194` |
+| `N16-nn` | Decisão do Nathan desde 16/10/2026 (proposta, pedido, custo real, comissão e o que veio depois) | [[Registro-de-Decisoes]], nas notas `Registro-N16-...` | 201 (`N16-01` a `N16-201`) | `N16-202` |
 | `N14-nn` | Decisão do Nathan de 14 e 15/10/2026 | [[Registro-N14-01-a-N14-33]] | 33 | série fechada |
 | `DEC-n` | Decisão com prazo de 21 e 22/09/2026 | [[Registro-DEC-EN-EC-e-1-a-38]] | 12 | série fechada |
 | `EN-nn`, `EC-nn` | Encaixe do Estoque e da Revenda no PCP (EN) e do circuito de compra (EC) | [[Registro-DEC-EN-EC-e-1-a-38]] | 7 e 8 | séries fechadas |
 | `#n` | Decisão do registro de 07/10/2026 (vault v1) | [[Registro-DEC-EN-EC-e-1-a-38]], [[Registro-39-a-80]], [[Registro-81-a-100-e-Estado-no-Codigo]] | `#1` a `#106` | série fechada |
-| `BL-nnn` | Tarefa do backlog: o que falta desenvolver | [[Backlog-por-Frente]] (uma nota por frente) | 109 (até `BL-110`) | `BL-111` |
-| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 65 (até `PS-065`) | `PS-066` |
+| `BL-nnn` | Tarefa do backlog: o que falta desenvolver | [[Backlog-por-Frente]] (uma nota por frente) | 114 (até `BL-115`) | `BL-116` |
+| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] (desde a PS-066, em [[Pontas-Soltas-PS-066-em-diante]]) | 68 (até `PS-068`) | `PS-069` |
 | `OQ-nn` | Pergunta em aberto (de negócio ou técnica) | [[Perguntas-Proposta-Pedido-Comissao]] e notas de estudo (por exemplo [[Estudo-Omie-API]]) | 52 (até `OQ-53`) | `OQ-54` |
 | `RS-nn` | Risco | [[Riscos]] | 24 (até `RS-024`) | `RS-025` |
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |
