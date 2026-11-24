@@ -50,7 +50,7 @@ fontes: [API-023, 08-Qualidade-Entrada-Regras-no-Hub, 11-Qualidade-Saida-Regras-
 ### QT-05 · Itens da conferência da saída
 
 **Pergunta:** a lista de conferência da peça que sai da Produção é esta? Falta algum item ou sobra algum?
-**O sistema faz hoje:** mostra 5 itens: dimensional, visual, identificação (sinete, gravação, corrida, lote), rastreabilidade (peça × certificado × documentação de origem) e requisitos técnicos do cliente. Para liberar a peça, todos precisam estar respondidos e nenhum pode estar Não conforme. Antes, a saída era só um clique com motivo, sem lista.
+**O sistema faz hoje:** mostra 5 itens: dimensional, visual, identificação (sinete, gravação, corrida, lote), rastreabilidade (peça × certificado × documentação de origem) e requisitos técnicos do cliente. Para liberar a peça, todos precisam estar respondidos e nenhum pode estar Não conforme. Antes, a saída era só um clique com motivo, sem lista. **Atenção:** a lista contraria a N16-129 (Nathan, 29/10: saída sem laudo nem checklist); a resposta da Mayara precisa da confirmação do Nathan.
 **Resposta:** ____________ · **Quem respondeu:** ____________ · **Data:** ____/____/______
 
 ### QT-06 · Locais de segregação
