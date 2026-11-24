@@ -79,7 +79,7 @@ Tudo o que é MES de 19/11 em diante está só na `develop` (a `main` do MES é 
 - ✅ (`api-pcp`) Fabricado aprovado vira lote `PRODUCAO` e saldo; `GET /itens/custo`; custo da OC no lote do Recebimento; baixa de matéria-prima no "Atender pelo estoque".
 - ✅ (`api-pcp`, `app-pcp`) Saldo futuro (BL-050) no "Atender pelo estoque", na tela Estoque e no Material (🟡 não no "Atender OP", BL-090); a reprovada com recompra conta uma vez só no tst ([[Dump-AvHub-Teste-2026-11-13]]). 🟡 Requisições não mostra a OC de estoque a chegar (RS-008).
 - 🟡 Custo obrigatório (BL-066, N16-181): a carga inicial recusa lote sem custo; o recebimento sem custo fica em alerta até alguém informar. Custo do fabricado adiado (BL-067, N16-166).
-- 🟡 Peso (N16-182): o lote guarda peso e kg por unidade e a OC em kg vira lote na unidade do material; a saída ainda não grava o peso proporcional.
+- ✅ Peso (N16-182): o lote guarda peso e kg por unidade e a OC em kg vira lote na unidade do material; todo movimento grava o peso proporcional à quantidade, `api-pcp` `src/estoque/motor/motor-estoque.ts:299` (`pesoKg: lote?.kgPorUnidade`).
 - 🟡 Acessos: as telas `pendencias`, `movimentar`, `inventario` e `inventario-aprovar` só existem no banco de teste; falta cadastrar no tst e na produção, renomear o menu e tirar "Mapa do Depósito" (PS-060).
 - ✅ Retirada (BL-007) e matéria-prima pela retirada (N16-140, N16-193): aba Retiradas no Atender pedidos (`api-pcp` PRs #96 e #97, `app-pcp` PRs #83 e #84, 23/11); detalhe em [[12-Estoque-Despacho]].
 - 🔴 Transferência entre filiais (passa direto, sem nota) e separação física.
