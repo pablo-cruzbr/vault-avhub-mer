@@ -1,7 +1,7 @@
 ---
 id: SQL-024
 titulo: Saem de Cadastros › Auxiliares as telas Parceiros, Produtos, Produtos duplicados e Parâmetros de custo
-status: para-implementar
+status: implementado-na-develop
 autor: Nathan
 data: 2026-11-18
 camadas: [frontend, api, sql]
@@ -13,14 +13,14 @@ decisoes: [N16-179, N16-173]
 develop-conferida: [api-acos-vital ce4f90f, em 2026-11-23 (a API do Gustavo, b9a46a1, também na main); av-hub 2d3b25f, em 2026-11-18, também na main (av-hub #322 8938199)]
 tags: [contrato, banco, rbac, permissoes, telas, limpeza, cadastros]
 criado: 2026-11-18
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 dono: Nathan
-fontes: [conversa do Nathan com o Claude de 18/11/2026 à noite, av-hub PR #321 e release #322, banco do Docker local com os dados do tst (docker-teste, fora do vault), SQL-023-Limpeza-das-Telas-Antigas, api-acos-vital b9a46a1]
+fontes: [conversa do Nathan com o Claude de 18/11/2026 à noite, av-hub PR #321 e release #322, banco do Docker local com os dados do tst (docker-teste, fora do vault), SQL-023-Limpeza-das-Telas-Antigas, api-acos-vital b9a46a1, PDF de Gustavo de 24/11/2026 (SQL aplicado e testes)]
 ---
 
 # SQL-024 · Tirar Parceiros, Produtos e Parâmetros de custo
 
-> **Situação em 23/11:** o Hub está na `develop` e na `main` (av-hub #321 e release #322). A API também mudou, na `develop` e na `main` (`api-acos-vital` `b9a46a1`, do Gustavo; seções 7 e 8). ❓ O SQL do Gustavo (seção 9) no tst e em produção não foi conferido; ele foi testado no Docker.
+> **Situação em 24/11:** o Hub está na `develop` e na `main` (av-hub #321 e release #322). A API também mudou, na `develop` e na `main` (`api-acos-vital` `b9a46a1`, do Gustavo; seções 7 e 8). O SQL do Gustavo (seção 9) foi aplicado no tst e na produção até 24/11 (PDF do Gustavo de 24/11, `APLICADAS.md`). Testes dele: `fn_autorizar` antes e depois (7 usuários × 9 chamadas) e a API (8 identidades × 10 chamadas). Efeito colateral: o perfil Cadastros perdeu `GET /parceiros`, `/produtos` e `/familias_produtos` (PS-058).
 
 ## 1. Resumo em linguagem simples
 
@@ -93,8 +93,8 @@ MES e pipeline: nenhuma (chamam sem token).
 ## 12. Critérios de aceite
 
 - [x] **Frontend:** as quatro páginas saíram da `develop` e da `main`; a lista de parceiros exige as telas de Comissões.
-- [ ] **Banco:** as quatro telas não existem mais em `auth.telas`, e `GET /parceiros` tem as quatro telas novas no mapa.
-- [ ] **Uso:** em Comissões, a Blacklist de clientes e as Regras de comissões fixas continuam achando o cliente.
+- [x] **Banco:** as quatro telas não existem mais em `auth.telas`, e `GET /parceiros` tem as quatro telas novas no mapa. tst e produção.
+- [x] **Uso:** em Comissões, a Blacklist de clientes e as Regras de comissões fixas continuam achando o cliente. Teste do Gustavo: Comissões (Blacklist e Regras fixas), Propostas e Fornecedores passaram de 403 para 200 em `GET /parceiros`.
 
 ## 13. Como testar
 
