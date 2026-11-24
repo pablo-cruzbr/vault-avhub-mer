@@ -236,7 +236,7 @@ Desde 27/10/2026 (`ab3318d`) a `develop` do MES tem `OrigemLote.PRODUCAO`: o "si
 
 | # | O quê | Dono | Nó | Selo |
 |---|---|---|---|---|
-| 1 | Baixa de matéria-prima na retirada do Estoque (N16-140) e genealogia; hoje há a baixa imediata no "Atender pelo estoque" (`develop`) | Nathan | F1 | ✅ retirada (PR #97); 🔴 genealogia |
+| 1 | Baixa de matéria-prima na retirada do Estoque (N16-140) e genealogia; hoje há a baixa imediata no "Atender pelo estoque" (`develop`) | Nathan | F1 | ✅ retirada (`api-pcp` `itens-parciais.service.ts:1221`, `reservarMateriaPrima`); 🔴 genealogia |
 | 2 | Fabricado aprovado vira lote e saldo: feito na `develop` (27/10). A saída pela retirada entrou em 23/11 | Robert | F1, `E5` | ✅ (`api-pcp`) lote e retirada |
 | 3 | `RoteiroItem` lido por `mover`, `concluir` e Expedição: lido pelo motor na `develop`; conferir a Expedição | Robert | P6 | ✅ (`api-pcp`) motor; ❓ Expedição |
 | 4 | Tela do novo norte para divergência de produção (reprovada na inspeção de saída), com retrabalho e reabrir compra; `/decisoes-pcp` só cobre recebimento | Robert, Nathan decide | P6 | 🔴 |
