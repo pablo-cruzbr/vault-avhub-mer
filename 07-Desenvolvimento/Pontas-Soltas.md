@@ -1,11 +1,11 @@
 ---
 tags: [desenvolvimento, pontas-soltas, pendencias]
 criado: 2026-10-14
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan
 fontes: [00-Fluxo-Mestre-0b, raias de 02-Fluxo-de-Atividades, Registro-de-Decisoes (N16-147, N16-153, N16-155), Integracao-AvHub-MES, Backlog-por-Frente, Perguntas-Proposta-Pedido-Comissao, dump avhub-tst-esqueleto-2026-11-10.sql, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), validação local em Docker de 10/11/2026 (docker-teste/RELATORIO-VALIDACAO.md, fora do vault), revisão de todas as pontas em 11/11/2026]
-develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, api-pcp c8036db, app-pcp 8259344, em 2026-11-23 (PS-060 a PS-064); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-11]
+develop-conferida: [av-hub c4a455d, em 2026-11-24 (PS-064 fechada, PS-065); api-acos-vital ce4f90f, av-hub 7f0f7e2, api-pcp c8036db, app-pcp 8259344, em 2026-11-23 (PS-060 a PS-064); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13; api-acos-vital cc3fbb3, av-hub 44bb770, api-pcp 2e564e6, app-pcp 4c11886, omie-elt-pipeline master 0593c9f, em 2026-11-11]
 ---
 
 # Pontas soltas
@@ -32,7 +32,7 @@ develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, api-pcp c8036db, app
 - **BFF do av-hub (Nathan).** `menu` e `uploads` sem tela (PS-042), erro das rotas de compras (PS-043) e 13 rotas que escondem o erro (PS-044); mais 45 rotas antigas de cadastro, `uploads` com JSON e o 307 sem sessão (PS-057) e as famílias de produto que Cadastros não lê (PS-058).
 - **Imposto.** Desenho decidido (N16-144); falta marcar o início do desenvolvimento (PS-014).
 - **Reteste no Docker de 13/11.** Além do PS-057 e do PS-058: a doca do Recebimento não desconta a recompra (PS-059, Robert).
-- **Estoque e comissão na `develop` de 23/11.** Telas novas do Estoque sem cadastro em Acessos (PS-060) e a migration das travas no deploy (PS-061); migrations da comissão no tst, produção ❓ (PS-062), corte da predominância sem tela (PS-063) e Minhas Comissões atrás da API (PS-064).
+- **Estoque e comissão na `develop` de 23/11.** Telas novas do Estoque sem cadastro em Acessos (PS-060) e a migration das travas no deploy (PS-061); migrations da comissão no tst, produção ❓ (PS-062), corte da predominância sem tela (PS-063) e a situação `AGUARDANDO_APROVACAO` que o Hub lê e o banco não entrega (PS-065); a PS-064 fechou em 24/11.
 - **Validação local de 10/11.** Cadastro e dados do tst (PS-046 a PS-051); perguntas na OQ-50 e OQ-51.
 - **Fechadas.** PS-001, PS-005, PS-006, PS-011, PS-024, PS-025, PS-030, PS-031, PS-033, PS-035, PS-040, PS-041, PS-052, PS-054, PS-055 e as sete de 14/10, em [[Pontas-Soltas-Resolvidas-em-14-10]].
 
@@ -82,11 +82,11 @@ Selos: [[Regras-do-Vault]]. Donos: Nathan (front e decisões), Gustavo (banco e 
 | PS-061 | **A migration das travas do Estoque pode falhar no deploy.** `api-pcp` `prisma/migrations/20261119150000_estoque_travas` cria CHECKs e o trigger livro = saldo; se o banco tiver saldo negativo, reservado acima do saldo ou movimento que não fecha com o saldo, o `migrate deploy` para | Nathan, Gustavo | E1 a E6 | Rodar a conferência do livro no banco de destino antes do deploy e corrigir o que acusar 🟡 | [[Banco-MES]], N16-184 |
 | PS-062 | **Seis migrations da comissão fora do repositório.** As seis (`2026-11-18_comissao_competencia` a `2026-11-23_comissao_pre_aceita_devolvido`) estão no tst ✅ ([[Dump-AvHub-Teste-2026-11-23]]); o dump de produção de 18/11 não tem nenhuma, e sem elas as rotas de comissão falham | Gustavo | K1, K4 | **Pergunta (Gustavo):** quando vão para a produção? ❓ | [[02-Tabelas-Atuais-core_comissionamento]], N16-185 a N16-190 |
 | PS-063 | **Corte da predominância sem tela.** `pct_predominancia_fabricacao` (padrão 50%) só é lido pelo motor e pelas rotas; nenhuma tela de Parâmetros o mostra | Nathan, Robert | K1 | **Pergunta (Nathan):** quem altera o corte, por tela ou por SQL? 🟡 | N16-186 |
-| PS-064 | **Minhas Comissões atrás da API.** A API de 23/11 devolve `DEVOLVIDO` e resposta vazia sem vínculo próprio, mas o Hub ainda diz que `DEVOLVIDO` saiu (`av-hub` `lib/domain/comissoes-minhas-comissoes.ts:34`) e trata o 403 (`app/api/comissoes/minhas-comissoes/route.ts:33`); `origem_pre_aceita`, `valor_comissao_pre_aceito` e `qtd_devolvido` ainda não aparecem na tela | Nathan | K4 | Ajustar a tela à API (N16-189, N16-190) 🔴 | [[15-Custo-Real-e-Comissao]] |
+| PS-065 | **Situação `AGUARDANDO_APROVACAO` sem fonte.** As telas de comissão do Hub (PR #339, 23/11) leem a situação `AGUARDANDO_APROVACAO` e o `qtd_aguardando_aprovacao` do resumo (`av-hub` `lib/domain/comissoes-visao-geral.ts:75`, `AGUARDANDO_APROVACAO: {`), mas nem a `api-acos-vital` (`ce4f90f`) nem o dump de teste de 23/11 têm esses nomes: o chip fica sempre em zero | Nathan, Gustavo | K4 | **Pergunta (Gustavo):** a `vw_comissao_nf` já entrega essa situação em algum banco? ❓ | [[15-Custo-Real-e-Comissao]] |
 
 ## Pontas fechadas
 
-As pontas que o Nathan decidiu em 14/10 (PS-003, PS-004, PS-007, PS-008, PS-010, PS-021 e PS-028) e as fechadas depois (PS-001, PS-005, PS-006, PS-011, PS-024, PS-025, PS-030, PS-031, PS-033, PS-035, PS-040, PS-041, PS-052, PS-054 e PS-055, movidas em 13/11/2026, e PS-038, movida em 23/11/2026, para esta nota ficar abaixo de 25 KB) estão em [[Pontas-Soltas-Resolvidas-em-14-10]].
+As pontas que o Nathan decidiu em 14/10 (PS-003, PS-004, PS-007, PS-008, PS-010, PS-021 e PS-028) e as fechadas depois (PS-001, PS-005, PS-006, PS-011, PS-024, PS-025, PS-030, PS-031, PS-033, PS-035, PS-040, PS-041, PS-052, PS-054 e PS-055, movidas em 13/11/2026; PS-038 e PS-064, movidas em 23 e 24/11, e PS-038, movida em 23/11/2026, para esta nota ficar abaixo de 25 KB) estão em [[Pontas-Soltas-Resolvidas-em-14-10]].
 
 ## Ligações rápidas
 

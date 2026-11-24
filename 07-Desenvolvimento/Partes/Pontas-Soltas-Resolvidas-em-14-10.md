@@ -1,7 +1,7 @@
 ---
 tags: [desenvolvimento, pontas-soltas, pendencias, parte]
 criado: 2026-11-12
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan
 parte-de: "[[Pontas-Soltas]]"
@@ -49,3 +49,4 @@ Movidas da [[Pontas-Soltas]] em 13/11/2026, sem mudar o texto. O original de cad
 | PS-052 | ✅ **Fechada (12/11/2026, N16-162): a Destinação é do pedido inteiro, como a `develop` faz; a rodada sai do desenho.** Original: **Destinação sem rodada (develop × desenho).** A regra 6 de [[04-PCP-Triagem-e-Destinacao]] manda destinar por rodada; a `develop` exige o pedido inteiro: `api-pcp` `src/pedidos/pedidos.service.ts:482` (`exigirPedidoInteiroDestinado`), commit `fe11538`, 22/10 | Robert, Nathan | P2 | ✅ (N16-162) | — |
 | PS-054 | ✅ **Fechada (13/11/2026), pela resposta do Gustavo:** a migration `2026-11-12_comercial_encargo_pagamento_proposta_simulacao.sql` está no tst desde 12/11; ❓ está no dump de 13/11 ([[Dump-AvHub-Teste-2026-11-13]]); a produção vem depois. Original: o av-hub PR #291 grava o `encargo_pagamento` e a migration não tinha sido conferida no tst (sem a coluna, salvar a proposta com encargo falha) | Gustavo | V0.3 | ✅ respondida | [[01-Proposta-de-Venda]], [[15-Custo-Real-e-Comissao]] |
 | PS-055 | ✅ **Fechada (13/11/2026), pela resposta do Gustavo:** os cadastros estão no tst desde 12/11 e vêm dentro das migrations do LOG-57 e do LOG-58, então vão junto para a produção. Original: a tela `compras-divergencias`, as permissões e as linhas de `auth.rotas_telas` são dados e não vêm no dump de esquema; sem elas o BFF dá 403 e o C8 some sem erro (Docker de 12/11, só com o esquema) | Gustavo | C8, C1 | ✅ respondida | LOG-57, LOG-58 |
+| PS-064 | ✅ **Fechada (24/11/2026) pelo `av-hub` PRs #337 e #339 (23/11):** as duas telas de comissão voltaram a mostrar `DEVOLVIDO`, o valor "Provável" (`valor_comissao_pre_aceito`), a versão que paga o pedido (`origem_pre_aceita`) e quanto pagaria sem o bloqueio, `av-hub` `lib/domain/comissoes-minhas-comissoes.ts:59` (`DEVOLVIDO: {`). Sobra só um comentário velho que fala em 403 no BFF (`app/api/comissoes/minhas-comissoes/route.ts:33`). Original: Minhas Comissões atrás da API de 23/11 (N16-189, N16-190) | Nathan | K4 | — | [[15-Custo-Real-e-Comissao]] |
