@@ -1,10 +1,10 @@
 ---
 tags: [diagramas, estados, uml, mes, av-hub]
 criado: 2026-10-14
-estado-em: 2026-11-13
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan
-develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, matéria-prima pela retirada e lote v2); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [v1 Diagramas-UML (5, 6, 7, 8, 20, 24), api-pcp 579a625 prisma/models, api-acos-vital f322dcd, 00-Fluxo-Mestre-0b, api-comercial 5aa5311 enums.prisma, migrações de 26/10/2026, Dump Avhub de 29/10/2026 e rotas `/comercial/propostas` da api-acos-vital develop (29/10), Registro-de-Decisoes N16]
 ---
 
@@ -84,21 +84,20 @@ Atender pelo estoque reserva o lote para um item. A reserva é consumida na baix
 
 ```mermaid
 stateDiagram-v2
-    [*] --> ATIVA : E3 atender pelo estoque, so lote LIBERADO
-    ATIVA --> CONSUMIDA : baixa do saldo
-    CONSUMIDA --> ATIVA : estorno ao desfazer o recebimento
-    ATIVA --> LIBERADA : cancelamento do pedido ou liberacao manual com motivo
+    [*] --> ATIVA : E3 ou E4 atender pelo estoque, so lote LIBERADO
+    ATIVA --> CONSUMIDA : E6 retirada confirmada no Estoque
+    CONSUMIDA --> ATIVA : estorno ao desfazer o recebimento, so sem retirada concluida
+    ATIVA --> LIBERADA : cancelamento, devolucao ou liberacao manual com motivo
     CONSUMIDA --> [*]
     LIBERADA --> [*]
 
     note right of CONSUMIDA
-        Hoje a baixa acontece quando a Embalagem
-        ou Expedicao recebe a parcial.
-        Decidido 14/10: a baixa passa para o
-        documento de retirada no Estoque, E6
+        A baixa acontece na confirmacao
+        da retirada. Retirada parcial consome
+        so o que saiu; o resto segue ATIVA
     end note
 ```
-Hoje a baixa acontece quando a Embalagem ou a Expedição recebe a parcial. Decidido em 14/10: passa para o documento de retirada no Estoque (`E6`) 📝, sem código 🔴.
+A baixa acontece na confirmação da retirada no Estoque (`E6`, N16-193) ✅, na `develop` do MES desde 23/11 (diagrama 17). As parciais atendidas antes de 23/11 ainda baixam quando a Embalagem recebe 🟡.
 
 ## 4. Recebimento
 
@@ -354,6 +353,25 @@ stateDiagram-v2
     NF_CANCELADA --> [*]
 ```
 Toda decisão leva justificativa, e ninguém decide a própria comissão. O vendedor só vê a comissão real depois da decisão (`K4` e `K5`).
+
+## 17. Retirada do Estoque
+
+O atendimento abre a retirada para a Expedição (produto pronto) ou para a Produção (matéria-prima). O Estoque separa pela lista impressa e confirma o que saiu; pode confirmar em partes. A sobra de matéria-prima volta ao mesmo lote. Regras: [[12-Estoque-Despacho]] e N16-193.
+
+```mermaid
+stateDiagram-v2
+    [*] --> ABERTA : E3 ou E4 atender abre a retirada, destino EXPEDICAO ou PRODUCAO
+    ABERTA --> PARCIAL : confirma parte, o resto segue reservado
+    PARCIAL --> PARCIAL : confirma mais uma parte
+    ABERTA --> CONCLUIDA : confirma tudo, o saldo baixa
+    PARCIAL --> CONCLUIDA : confirma o resto
+    ABERTA --> CANCELADA : parcial devolvida ou reservas liberadas
+    PARCIAL --> CANCELADA : parcial devolvida ou reservas liberadas
+    CONCLUIDA --> CONCLUIDA : devolucao da sobra, so PRODUCAO, ate o que saiu
+    CONCLUIDA --> [*]
+    CANCELADA --> [*]
+```
+✅ `api-pcp` `prisma/models/estoque.prisma:565` (`enum StatusRetirada {`). A Expedição e a Produção só recebem a parcial com a retirada concluída.
 
 ## Detalhe técnico
 

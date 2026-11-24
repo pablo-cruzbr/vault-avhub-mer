@@ -41,7 +41,7 @@ fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML, v1 01-Fluxo-Operacional (F
 | `Historia-da-Proposta-ao-Pedido.pdf` | A jornada do usuário de ponta a ponta, num caso só (Mogi: flanges, tubos, flanges cegas e flange sobre desenho) | 3 páginas |
 | [[01-Proposta-de-Venda]], [[02-Orcamento-Base-de-Preco]], [[15-Custo-Real-e-Comissao]] | Subfluxos da proposta ao pedido, do Orçamento e do custo real e da comissão | 3 |
 | [[Sequencia]] | Pedido ao PCP, atendimento do Estoque, requisição ida e volta, chegada com NF e Recebimento, inspeção de entrada, produção e Expedição, despacho | 8 |
-| [[Estados]] | Parcial, lote, reserva, recebimento, divergência, requisição (MES e hub), etapa de compra, OC, envio, liberação, etapa do item; proposta, pedido do Hub, pedido de custo e comissão nova (13 a 16, 🟡) | 17 |
+| [[Estados]] | Parcial, lote, reserva, recebimento, divergência, requisição (MES e hub), etapa de compra, OC, envio, liberação, etapa do item; proposta, pedido do Hub, pedido de custo e comissão nova (13 a 16, 🟡); retirada do Estoque (17) | 18 |
 | [[Classes]] | Estoque e compras, produção, compras e integração, api-comercial | 4 |
 | [[Casos-de-Uso]] | Seis blocos por raia | 6 |
 | [[Componentes-e-Implantacao]] | Componentes e integrações, implantação, pacotes de schema, fluxo de dados | 4 |
