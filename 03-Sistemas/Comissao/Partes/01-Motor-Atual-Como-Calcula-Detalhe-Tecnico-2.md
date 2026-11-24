@@ -70,7 +70,7 @@ fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vi
 | 4a. Aprova como está | `PUT /simulacoes/:id {status: APROVADO}` | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:858` (`const aprovarCompras = async`) |
 | 4b. Ajusta e aprova | `POST /simulacoes` com `origem = COMPRAS` e `id_simulacao_contestada`; no mesmo POST a versão do vendedor vira `CONTESTADO`; depois a versão de Compras vai a `APROVADO` (retomável se a segunda chamada falhar) | `simulacoes.route.js`; `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:858` (`const aprovarCompras = async`) |
 | 5. Versão pré-aceita | O pedido inteiro paga pela versão de menor comissão (empate, Compras); sem Compras, vale a do vendedor (N16-190) | `vw_simulacao_resolvida` (`origem_pre_aceita`), migration fora do repositório (PS-062) |
-| 6. Vendedor vê | Minhas Comissões lê `/comissoes_nf` com `meus=true`, pela competência; o BFF não corta mais o valor (❓ se a view o zera antes da validação, PS-062) | `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:148` (`/comissoes_nf?`) |
+| 6. Vendedor vê | Minhas Comissões lê `/comissoes_nf` com `meus=true`, pela competência; o BFF não corta mais o valor (❓ se a view o zera antes da validação, PS-062) | `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:152` (`/comissoes_nf?`) |
 
 Estados e transições: `RASCUNHO → ENVIADO → APROVADO | CONTESTADO | DEVOLVIDO`, os três últimos terminais (`api-acos-vital` `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:34` (`const TRANSICOES = {`)). `DEVOLVIDO` exige motivo. A trava da versão do vendedor está em `:175` (`const versaoFechada`).
 
