@@ -1,16 +1,18 @@
 ---
 tags: [dados, banco, av-hub, postgres]
 criado: 2026-10-14
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: vigente
 dono: Gustavo (DBA)
 develop-conferida: [api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
-fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-10 (10/11/2026), PDF de Gustavo de 10/11/2026 (entrega N16-147 itens 1 e 2), Dump-AvHub-Teste-2026-11-12 (12/11/2026), PDF de Gustavo de 16/11/2026 (status dos contratos), Dump-AvHub-Teste-2026-11-23]
+fontes: [Dump do Avhub para referência (29.10).sql (guardado em api-acos-vital/; esqueleto, gerado em 29/10/2026 14:54), Dump Avhub (Esqueleto).sql de 14/10/2026, api-acos-vital 0384e89, omie-elt-pipeline 0f739f0, v1 AV-Hub-API-Estado-Atual, Schema-Postgres-Multi-Dominio, PDF de Robert de 09/11/2026 (contrato LOG-56 v8 e adendo v4), Dump-AvHub-Teste-2026-11-09 (09/11/2026), Dump-AvHub-Teste-2026-11-10 (10/11/2026), PDF de Gustavo de 10/11/2026 (entrega N16-147 itens 1 e 2), Dump-AvHub-Teste-2026-11-12 (12/11/2026), PDF de Gustavo de 16/11/2026 (status dos contratos), Dump-AvHub-Teste-2026-11-23, Dump-AvHub-Teste-2026-11-24, PDF de Gustavo de 24/11/2026]
 ---
 
 # Banco do av-hub
 
 > [!info] Dump mais novo: banco de teste, 23/11/2026
+> O esqueleto do banco de **teste** de 24/11/2026 14:15 ([[Dump-AvHub-Teste-2026-11-24]]) tem 164 tabelas, 60 views e 324 funções: o de 23/11 mais o fluxo novo da comissão (aprovação, fechamento, revogação, A2, ajuste e contestação; N16-194 a N16-200). Pelo PDF do Gustavo de 24/11, todas as migrations de 18 a 24/11 estão também na produção.
+>
 > O esqueleto do banco de **teste** de 23/11/2026 12:00 ([[Dump-AvHub-Teste-2026-11-23]]) tem **157 tabelas, 57 views, 306 funções e 219 triggers**: tudo o que a produção tinha em 18/11, mais as seis migrations da comissão de 18 a 23/11 (grão do pedido, competência, escopo da fabricação, itens na master, trava da versão do vendedor, pré-aceita e `DEVOLVIDO`; PS-062 resolvida no tst) e a estrutura das telas de Acessos (`LOG-62`).
 >
 > O primeiro esqueleto do banco de **produção**, de 18/11/2026 07:22 ([[Dump-AvHub-Producao-2026-11-18]]), tem tudo o que o teste de 16/11 ([[Dump-AvHub-Teste-2026-11-16]]) tinha, mais o Orçamento (`LOG-60`), a Central de Avisos (`LOG-61`) e a exclusão de proposta (`LOG-59`). ❓ A comissão de 18 a 23/11 ainda não foi vista em produção.
