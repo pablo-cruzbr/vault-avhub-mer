@@ -2,11 +2,13 @@
 tags: [fluxo, mestre, 0b, atividades]
 criado: 2026-10-14
 atualizado: 2026-10-29
+estado-em: 2026-11-24
 status: vigente
 ordem: 0
 proxima: "[[01-Proposta-de-Venda]]"
 dono: Nathan
 fontes: [v1 04-Arquitetura-Transversal/Diagramas-UML.md (0b, rev. 09/10), Registro-de-Decisoes #21 #24 #25 #26 #31b #33 #50b #74 #78, decisões do Nathan de 14/10 e de 16 a 29/10 (N16-01 a N16-144), fluxo da proposta ao pedido aprovado em 26/10 (09-Diagramas/artifact-proposta-pedido.html), código de 14/10 (api-pcp 579a625, app-pcp 1fca8d3, api-acos-vital f322dcd, HUB b55ac55) e de 29/10 (api-acos-vital develop 0384e89, api-pcp e app-pcp develop de 27/10, av-hub develop 758d5f0)]
+develop-conferida: [api-acos-vital ed6d147, av-hub 8fb8c9d, api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (Orçamento, C6 a C8, retirada e matéria-prima, comissão no módulo atual)]
 ---
 
 # Fluxo mestre de Atividades (0b)
@@ -24,7 +26,7 @@ Selos (pela `develop`, F5): ✅ está na `develop` · 📝 decidido · 🟡 parc
 | P3 | Uma origem (PCP) | **Duas origens:** PCP no MES (material do pedido) e Compras no av-hub (necessidade própria) 📝 |
 | E4 | "solicitar compra, sempre na Revenda" | "solicitar compra" (matéria-prima também é comprada) ✅ |
 | R1 | "Confere a NF contra a OC ou o pedido de venda" | **Chegada com NF na doca, conferência contra a NF** (chave de 44 dígitos) ✅ |
-| E6 | "Despacho do Estoque: baixa do saldo" | **Documento de retirada; a baixa é na retirada, no Estoque** 📝 (código ainda baixa na Embalagem 🔴) |
+| E6 | "Despacho do Estoque: baixa do saldo" | **Documento de retirada; a baixa é na retirada, no Estoque** 📝 (N16-193; ✅ na `develop` do MES desde 23/11, `api-pcp` PRs #96 e #97) |
 | Q8 / F1 | Fabricado aprovado vai direto à Expedição | **Tudo que é fabricado ou comprado vira lote e saldo no Estoque** 📝 (fabricado vira lote na `develop` do MES desde 27/10 ✅; na `main` do MES, parada em 08/10, ainda não) |
 | C5 | CCP follow-up | **Compras · CCP no MES é só leitura**, espelha os marcos do contrato 35; a OC aprovada entra nos **esperados do Recebimento** ✅. O CCP registra a nova data do fornecedor e vincula a NF de entrada à OC 📝 (N16-86, N16-88) |
 | V0 | — (o pedido nascia no Omie) | **Proposta no Hub** (`V0.1` a `V0.7`, `V0C`): o vendedor monta, busca o custo, a comissão estimada nasce, a Gerência aprova fisicamente, o vendedor marca aprovada e transforma em pedido, que vai ao Omie por API 📝 (N16-01 a N16-05, N16-89, N16-90); a `api-acos-vital` (`develop`, 29/10) já tem criar, revisar, aprovar, cancelar e transformar em pedido do Hub ✅; o envio ao Omie existe na API desde 05/11 (`1654f65`) 🟡; faltam o banco dessa função ❓ e a tela de aprovar e transformar 🔴 |
@@ -206,9 +208,9 @@ flowchart TD
     classDef ok fill:#e6f4ea,stroke:#1e7e34,color:#0b2e13
     classDef parcial fill:#fff4d6,stroke:#a8860f,color:#3b2f00
     classDef falta fill:#fde8e8,stroke:#b3261e,color:#410002
-    class V2,V3,P1,P2,P3,E1,E2,E3,E5,C1,C2,C3,C4,C5,FN1,R0,R1,R2,R3,R4,R6,Q1,Q2,Q3,Q4,F1,Q7,X1,O2 ok
-    class V1,E4,X2,X3,X4,P6,Q8,C0,O1,V01,V05,V0C,V06,V07 parcial
-    class E6,V02,V03,V04,B1,B2,B3,B4,C6,C7,C8,K1,K2,K3,K4,K5,K6 falta
+    class V2,V3,V05,P1,P2,P3,E1,E2,E3,E5,E6,C1,C2,C3,C4,C5,C7,FN1,R0,R1,R2,R3,R4,R6,Q1,Q2,Q3,Q4,F1,Q7,X1,O2,V02,B1,B2,B3,B4 ok
+    class V1,E4,X2,X3,X4,P6,Q8,C0,C6,C8,O1,V01,V0C,V06,V07,V03,K4,K5 parcial
+    class V04,K1,K2,K3,K6 falta
 ```
 
 > O verde é o que está no código, o amarelo é parcial e o vermelho é sem código. Os nós do Orçamento, de `C6` a `C8` e da comissão nova são proposta aprovada em 26/10 e ainda não têm código na `api-acos-vital`. Os da proposta (`V0.1`, `V0.5`, `V0C`, `V0.6`) têm API na `develop` da `api-acos-vital` desde 29/10, sem tela de aprovar e transformar; o envio ao Omie (`V0.7`) existe na API desde 05/11 (`1654f65`), mas o banco dessa função está fora do repositório. Os nós do MES que só existem na `develop` do MES (fabricado como lote, custo, recebimento por OC) estão contados como no código; a `main` do MES parou em 08/10 (merge BL-035). Nos diagramas, os IDs com ponto aparecem sem o ponto (`V01` = `V0.1`). A coluna "Código" da tabela a seguir é a fonte; a cor é um resumo. Q4 e Q3 estão no código, mas a substituição aprovada depende do circuito de compra completo (🟡).
