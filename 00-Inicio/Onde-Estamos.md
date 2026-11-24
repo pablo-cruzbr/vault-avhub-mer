@@ -12,6 +12,9 @@ fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas 
 
 **Em uma frase:** o fluxo do pedido já funciona da liberação ao recebimento, e a OP, o lote do fabricado e o custo por item já estão na `develop` do MES; o que falta é, sobretudo, o pedido da proposta no Omie, a comissão nova e o custo real por evento. Publicar o MES na `main` (BL-035) é informação de publicação, não critério de pronto.
 
+> [!info] Coletor do Estoque e sessão do MES, 24/11/2026
+> Coletor no Estoque (N16-201): lê lote e endereço pelo leitor ou pela câmera para consultar, separar, contar e mudar de endereço. O MES avisa a sessão vencida e leva ao login. Na `develop`; falta a tela `coletor` em Acessos (PS-060).
+
 > [!info] Estoque, comissão e visual, 19 a 24/11/2026
 > **Estoque (Nathan, N16-180 a N16-184):** no MES (`api-pcp` #85 a #95, `app-pcp` #70 a #82, só na `develop`) entraram os primeiros testes automatizados, o motor único do saldo, as travas no banco, a idempotência, a conferência diária do livro, o lote v2 (peso, corrida, custo pendente), a etiqueta nova, o kardex, o inventário e o painel com dado real; as 11 telas viraram 7 por tarefa. Em 23/11 entrou a retirada (BL-007, N16-193; `api-pcp` #96 e #97, `app-pcp` #83 e #84): baixa na confirmação do Estoque, matéria-prima pela retirada e devolução da sobra. Falta cadastrar as telas em Acessos (PS-060). **Comissão (Robert, N16-185 a N16-190):** decidida pelo pedido inteiro, com predominância, competência, trava da versão do vendedor e versão pré-aceita de menor comissão; a Visão Geral agrupa por pedido (`av-hub` #312 a #334); banco no tst desde 23/11, produção ❓ (PS-062). **Orçamento (N16-191, N16-192):** busca rápida de produto no "Pedir cotação" e telas no visual de Compras (API #329, Hub #335 e #336, 23/11, só na `develop`). O MES ganhou a casca do Hub.
 
@@ -35,9 +38,6 @@ fontes: [00-Fluxo-Mestre-0b, seção "O que já existe e o que falta" das notas 
 
 > [!info] Conferência completa do vault e reteste no Docker, 13/11/2026
 > Todas as citações de código do vault foram relidas na `develop` de 12/11 (pipeline `46b53d4`) e os 14 fatos desatualizados foram corrigidos. No mesmo dia, o reteste R2 no Docker varreu o Hub e o MES por rota e por tela e refez o fluxo com dados novos (proposta AV2026-0017 → PV-000007; pedido 28224 no MES): ✅ o saldo futuro (BL-050) e o aviso de recompra do MES ao Compras (LOG-58) funcionam de ponta a ponta. Os achados novos viraram PS-057 (rotas do BFF que escondem o erro da API), PS-058 (Cadastros sem famílias de produto) e PS-059 (a doca não desconta a recompra). A autoaprovação da OC vista no reteste é a regra da N16-161, não defeito. Detalhe em [[Ultima-Atualizacao-do-Vault]].
-
-> [!info] Validação ponta a ponta de 10/11/2026
-> O fluxo físico foi testado de ponta a ponta num ambiente Docker local, com a `develop` e os dados do tst: o pedido 28189 foi liberado, triado, destinado (uma OP de fabricação e uma de revenda), comprou, recebeu, passou pelas duas qualidades, foi produzido, embalado e entregue, com o Hub acompanhando cada etapa. Os problemas ficaram nas pontas e estão no backlog e nas pontas soltas: OC aberta pela "Nova ordem de compra" desliga a compra do pedido (BL-086), ICMS do item que não acompanha o destino (BL-087), custo real inacessível (BL-088), fabricado sem custo (BL-067), Torre de Fluxo vazia (BL-003), cadastros do tst (PS-046 a PS-051), dois pontos em que a `develop` não segue a regra do vault (Destinação sem rodada, PS-052; reprovação parcial na entrada, PS-053), conta `admin` genérica (RS-023) e cinco perguntas ao Nathan (OQ-49 a OQ-53). O "transformar proposta em pedido", que no teste dava 400, já foi corrigido na `develop` depois dele (av-hub PR #277).
 
 **Quando consultar esta nota:** quando você precisar saber o que está pronto, o que falta e quem toca cada setor.
 
