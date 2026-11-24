@@ -1,7 +1,7 @@
 ---
 tags: [decisoes, registro, n16, parte]
 criado: 2026-11-16
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 status: vigente
 dono: Nathan
 parte-de: "[[Registro-de-Decisoes]]"
@@ -42,3 +42,4 @@ fontes: [PDF de Robert de 16/11/2026 ("Exclusão de proposta e pedido excluído 
 | N16-190 | **Versão pré-aceita pelo pedido.** 23/11/2026. O pedido inteiro é pago pela versão de menor comissão (a do vendedor ou a de Compras; no empate, a de Compras), no lugar do menor percentual item a item (`LEAST`); a situação ganha `DEVOLVIDO`. ✅ na `develop`: `api-acos-vital` `06bb146` (`origem_pre_aceita`) | 23/11/2026 | Robert | ✅ (banco no tst de 23/11; produção ❓, PS-062) | Supera, na escolha da versão, o "menor entre os dois" por item da N16-11 |
 | N16-191 | **Busca rápida de produto no "Pedir cotação".** Nathan, 23/11/2026. Caminho "API e Hub, sem banco": `GET /produtos/busca` com os produtos já comprados em memória (renova a cada 10 minutos) e o banco completando com os nunca comprados; no Hub, debounce de 200 ms e cache por termo. Medido no Docker: de 0,2–2,1 s para 22–104 ms. Índice ou resumo no banco, se vier, é com o Gustavo. ✅ na `develop` (`api-acos-vital` PR #329, `av-hub` PR #335); falta a `main`. Adendo do `LOG-60` | 23/11/2026 | Nathan | ✅ | |
 | N16-192 | **Um visual só, com Compras de modelo.** Nathan, 19 e 23/11/2026. As telas de Compras do Hub (`ComprasOrdens`, `OrdemDetalhe`) são o modelo visual do sistema inteiro. O MES ganhou a casca e o tema do Hub (`app-pcp` PRs #78, #80 e #82, 19 a 23/11) e o Orçamento passou ao padrão de Compras (`av-hub` PR #336, 23/11). Ao migrar outra área, reaproveitar o cabeçalho padrão (`CabecalhoDaTela`, `av-hub` PR #319) e as peças do Orçamento | 23/11/2026 | Nathan | ✅ (Orçamento e Estoque do MES); 🔴 outras áreas | |
+| N16-193 | **Retirada do Estoque (E1 a E3).** Nathan, 23/11/2026, para o BL-007. (1) **Quem confirma:** quem pode atuar num dos depósitos do lote; a confirmação pode ser parcial, e o resto continua reservado com a retirada aberta. (2) **Lista de separação:** PDF A4 com número, destino, quem pediu, pedido e OP; por linha, lote, endereço, material, quantidade com unidade e peso; assinatura de quem separou e de quem recebeu. (3) **Matéria-prima:** fica reservada no atendimento e sai pela retirada para a Produção, na quantidade pedida (N16-140); a sobra volta como devolução ao mesmo lote, no endereço de onde mais saiu, com o custo da saída, e é a base do retalho. A Expedição e a Produção só recebem a parcial com a retirada concluída (N16-122). ✅ na `develop`: `api-pcp` `src/estoque/retirada/` (PRs #96 e #97) e `app-pcp` aba Retiradas (PRs #83 e #84), 23/11 | 23/11/2026 | Nathan | ✅ | Responde o "o que o documento imprime" que a N16-120 deixou aberto |
