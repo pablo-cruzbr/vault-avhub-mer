@@ -30,7 +30,7 @@ fontes: [busca dos prefixos em todas as notas do vault em 05/11/2026 (fora de 07
 | `EN-nn`, `EC-nn` | Encaixe do Estoque e da Revenda no PCP (EN) e do circuito de compra (EC) | [[Registro-DEC-EN-EC-e-1-a-38]] | 7 e 8 | séries fechadas |
 | `#n` | Decisão do registro de 07/10/2026 (vault v1) | [[Registro-DEC-EN-EC-e-1-a-38]], [[Registro-39-a-80]], [[Registro-81-a-100-e-Estado-no-Codigo]] | `#1` a `#106` | série fechada |
 | `BL-nnn` | Tarefa do backlog: o que falta desenvolver | [[Backlog-por-Frente]] (uma nota por frente) | 109 (até `BL-110`) | `BL-111` |
-| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 64 (até `PS-064`) | `PS-065` |
+| `PS-nnn` | Ponta solta: divergência entre vault, código e banco | [[Pontas-Soltas]] | 65 (até `PS-065`) | `PS-066` |
 | `OQ-nn` | Pergunta em aberto (de negócio ou técnica) | [[Perguntas-Proposta-Pedido-Comissao]] e notas de estudo (por exemplo [[Estudo-Omie-API]]) | 52 (até `OQ-53`) | `OQ-54` |
 | `RS-nn` | Risco | [[Riscos]] | 24 (até `RS-024`) | `RS-025` |
 | `CR-nn` | Contradição do vault v1 já resolvida | [[Contradicoes-Resolvidas]] | 19 | `CR-20` |
