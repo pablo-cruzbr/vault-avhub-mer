@@ -13,9 +13,9 @@ decisoes: [N16-177, N16-173, N16-14]
 develop-conferida: [api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23 (entrega: av-hub #310 718b41b, api-acos-vital 55f8f6a; também na main); api-acos-vital 3f762d2, av-hub 4b5c023, em 2026-11-18]
 tags: [contrato, banco, rbac, permissoes, telas, limpeza]
 criado: 2026-11-18
-estado-em: 2026-11-23
+estado-em: 2026-11-24
 dono: Nathan
-fontes: [conversa do Nathan com o Claude de 18/11/2026 (lista da limpeza e o que fica), banco do Docker local com os dados do tst (docker-teste, fora do vault), api-acos-vital develop 3f762d2, av-hub develop 4b5c023, RBAC-e-Permissoes]
+fontes: [conversa do Nathan com o Claude de 18/11/2026 (lista da limpeza e o que fica), banco do Docker local com os dados do tst (docker-teste, fora do vault), api-acos-vital develop 3f762d2, av-hub develop 4b5c023, RBAC-e-Permissoes, PDF de Gustavo de 18/11/2026 (respostas da P2 e conferência de uso), PDF de Gustavo de 24/11/2026 (SQL aplicado no tst e na produção)]
 ---
 
 # SQL-023 · Limpeza das telas antigas do Hub
@@ -23,7 +23,7 @@ fontes: [conversa do Nathan com o Claude de 18/11/2026 (lista da limpeza e o que
 > **Situação em 23/11:** ✅ código na `develop` e na `main`; o SQL é do Gustavo.
 > - Hub: `av-hub` #310 (`718b41b`) e release #311. Saíram as páginas Pedidos de Venda, Notas Fiscais de Saída e Orçamento por PDF. As rotas do BFF que ficam mudaram de tela: `app/api/pedidos-venda/route.ts:9` (`requirePermission('dash-vendas', 'pode_visualizar')`) e `app/api/notas-fiscais-saida/route.ts:6` (`tela: ['dash-faturamento', 'bloqueio-comissoes'],`). As famílias exigem só `catalogo-produtos` desde o `SQL-024`: `app/api/familias/route.ts:25` (`requirePermission('catalogo-produtos', 'pode_visualizar')`).
 > - API: `api-acos-vital` `55f8f6a` (#316, release #317). Saiu o schema `orcamento_pdf` (a pasta `src/schemas/orcamento_pdf/` não existe mais na `develop`).
-> - Banco: aplicado no tst (85 telas depois do SQL, segundo o `LOG-62`). ❓ Em produção, não conferido.
+> - Banco: aplicado no tst e na produção (PDF do Gustavo de 24/11). O `DROP SCHEMA orcamento_pdf` está parado: a produção tem 3 relatórios (P2).
 > - As citações de código das seções 4, 6 e 8 mostram o estado de antes da entrega (`av-hub` `4b5c023`, `api-acos-vital` `3f762d2`).
 
 ## 1. Resumo em linguagem simples
@@ -289,7 +289,7 @@ Nenhum perfil perde acesso a uma tela que existe. Quem tinha só as telas que sa
 
 ## 12. Critérios de aceite
 
-- [ ] **Banco:**
+- [x] **Banco:** tst e produção (PDF do Gustavo de 24/11).
   - as 12 telas não existem em `auth.telas`;
   - as 6 que ficam existem (`blog`, `organograma-clientes`, `organograma-debug-fatias`, `api-docs`, `pedidos-venda-financeiro` e `experimental`);
   - há 8 linhas com `observacao LIKE 'SQL-023:%'` em `auth.rotas_telas`.
@@ -297,7 +297,7 @@ Nenhum perfil perde acesso a uma tela que existe. Quem tinha só as telas que sa
   - as três páginas saíram da `develop` do av-hub;
   - a busca dos dashboards e o Bloqueio de Comissões funcionam com um usuário que não tem as telas antigas;
   - o `npm run check` passa.
-- [ ] **API:** a `develop` não monta mais `/orcamento_pdf`.
+- [x] **API:** a `develop` não monta mais `/orcamento_pdf` (conferido em `ed6d147`).
 - [ ] **Tela de permissões:** no menu Orçamento aparecem só Pedidos de custo, Produtos e Fornecedores.
 
 ## 13. Como testar
@@ -323,14 +323,15 @@ Feito no Docker em 18/11/2026, com os dados do tst:
 
 - **Risco:**
   - uma integração fora do Hub chamar, com token de usuário, uma rota que fica sem tela (R5);
-  - a conferência de uso cobre as chaves de serviço, mas não as chamadas com token.
+  - a conferência de uso cobre as chaves de serviço, mas não as chamadas com token. Na produção de 17/11 deu 0 linhas, mas 4 chaves têm uso só como `/*`: `mes-integracao` (PUT), `carteira-pcp` (GET), `comissoes-provisorias` (PUT) e `organograma` (GET).
 - **Rollback:** pela `auth.auditoria` (seção 9).
 - **P1. Quem vê o custo (`custo-item`).** A API decide quem vê o custo pela tela `custo-item`: `api-acos-vital` `src/schemas/core_comercial/capacidades.js:64` (`ve_custo: pode("custo-item"`).
   - No tst essa tela não existe.
   - Em produção ela existe, em Orçamento, mas só o Admin (Dev) tem acesso. Então nenhum perfil de negócio tem `ve_custo`.
   - Falta decidir quem recebe o acesso. Não entra neste SQL.
+  - Desde 19/11 a tela está inativa e ninguém vê custo na proposta (PS-066).
 - **P3. Segunda rodada.** As 8 telas do módulo do Pablo que só existem em produção (seção 4) ficam para depois, conferidas uma a uma.
-- **P2.** A tabela `orcamento_pdf.relatorio` está vazia em produção? Se estiver, o schema é apagado.
+- **P2.** A tabela `orcamento_pdf.relatorio` está vazia em produção? Se estiver, o schema é apagado. **Resposta (Gustavo, 18/11): não;** o dump de produção de 17/11 tem 3 relatórios, de 03/11; o schema fica até o Nathan dizer se apaga assim mesmo. 🟡
 
 ## 16. Impacto no vault quando for entregue
 
