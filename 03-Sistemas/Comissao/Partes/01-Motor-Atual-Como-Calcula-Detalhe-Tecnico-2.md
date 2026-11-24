@@ -5,7 +5,7 @@ estado-em: 2026-11-24
 status: proposta
 dono: Nathan
 parte-de: "[[01-Motor-Atual-Como-Calcula]]"
-develop-conferida: [av-hub c4a455d, em 2026-11-24 (DEVOLVIDO, Provável, AGUARDANDO_APROVACAO e Visão Geral por pedido, PRs #337 e #339); api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, comissão por pedido e pré-aceita; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-acos-vital ed6d147, av-hub 8fb8c9d, em 2026-11-24 (aprovação da Controladoria, fechamento, ajuste, contestação; migrations no tst e na produção, PDF de Gustavo de 24/11/2026); av-hub c4a455d, em 2026-11-24 (DEVOLVIDO, Provável, AGUARDANDO_APROVACAO e Visão Geral por pedido, PRs #337 e #339); api-acos-vital ce4f90f, av-hub 7f0f7e2, em 2026-11-23, comissão por pedido e pré-aceita; api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vital f322dcd src/schemas/core_comissionamento, av-hub lib/simulador/motor.ts, av-hub app/(protected)/comissoes/simulador e analise-simuladores, av-hub app/api/comissoes, tela-simulador-comissao.png, N16-10, N16-11, N16-18, N16-19, N16-20, N16-185 a N16-190, PS-062, PS-063, PS-064]
 ---
 
@@ -70,9 +70,9 @@ fontes: [dump core_comissionamento convertido (09-Diagramas/fontes), api-acos-vi
 | 4a. Aprova como está | `PUT /simulacoes/:id {status: APROVADO}` | `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:858` (`const aprovarCompras = async`) |
 | 4b. Ajusta e aprova | `POST /simulacoes` com `origem = COMPRAS` e `id_simulacao_contestada`; no mesmo POST a versão do vendedor vira `CONTESTADO`; depois a versão de Compras vai a `APROVADO` (retomável se a segunda chamada falhar) | `simulacoes.route.js`; `av-hub` `components/Comissoes/Simulador/useSimuladorComissao.ts:858` (`const aprovarCompras = async`) |
 | 5. Versão pré-aceita | O pedido inteiro paga pela versão de menor comissão (empate, Compras); sem Compras, vale a do vendedor (N16-190) | `vw_simulacao_resolvida` (`origem_pre_aceita`), migration fora do repositório (PS-062) |
-| 6. Vendedor vê | Minhas Comissões lê `/comissoes_nf` com `meus=true`, pela competência; o BFF não corta mais o valor (❓ se a view o zera antes da validação, PS-062) | `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:152` (`/comissoes_nf?`) |
+| 6. Vendedor vê | Minhas Comissões lê `/comissoes_nf` com `meus=true`, pela competência; o BFF não corta mais o valor (❓ se a view o zera antes da validação) | `av-hub` `app/api/comissoes/minhas-comissoes/route.ts:154` (`/comissoes_nf?`) |
 
-Estados e transições: `RASCUNHO → ENVIADO → APROVADO | CONTESTADO | DEVOLVIDO`, os três últimos terminais (`api-acos-vital` `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:34` (`const TRANSICOES = {`)). `DEVOLVIDO` exige motivo. A trava da versão do vendedor está em `:175` (`const versaoFechada`).
+Estados e transições: `RASCUNHO → ENVIADO → APROVADO | CONTESTADO | DEVOLVIDO`, os três últimos terminais (`api-acos-vital` `src/schemas/core_comissionamento/tables/simulacoes/simulacoes.route.js:35` (`const TRANSICOES = {`)). `DEVOLVIDO` exige motivo. A trava da versão do vendedor está em `:175` (`const versaoFechada`).
 
 **Permissões de hoje.** A tela `Análise de Simuladores` e o `Simulador` são duas telas do cadastro (`slug` `analise-simuladores` e `simulador`). O BFF aceita qualquer uma das duas para ler, criar e editar (`av-hub` `app/api/comissoes/simulacoes/route.ts:31` (`pode_visualizar`) e `:60`; `av-hub` `app/api/comissoes/simulacoes/[id]/route.ts:48` (`pode_visualizar`) e `:58`); **a ação de aprovar é um `PUT` de status com a permissão `pode_editar` de qualquer das duas**, ou seja, quem tem `pode_editar` no `Simulador` do vendedor consegue chamar a rota de aprovação. A tela esconde o botão, o BFF não barra 🔴 (ponto de atenção 13).
 
@@ -107,9 +107,9 @@ Em uma frase: **a aprovação de Compras sobre o percentual vira a conferência 
 | 12 | Refaturamento e devolução não aparecem na lógica da view (a nota diz zero casos em 6 meses) | `dump:1388-1392` | ✅ / ❓ |
 | 13 | O BFF não separa quem aprova de quem digita: o `PUT` de status aceita `pode_editar` do `Simulador` do vendedor | `av-hub` `app/api/comissoes/simulacoes/[id]/route.ts:58` (`pode_editar`) | ✅ |
 | 14 | O custo líquido só existe no navegador; nenhuma rota nem função de banco o recalcula, então nada reconfere o valor gravado | `motor.ts:315` (`const custoLiquido`), `simulacoes.route.js` | ✅ |
-| 15 | Seis migrations da comissão (`2026-11-18_comissao_competencia`, `2026-11-18_comissao_grao_pedido`, `2026-11-19_comissao_escopo_fabricacao`, `2026-11-19_comissao_master_itens_desempenho`, `2026-11-19_comissao_trava_versao_vendedor`, `2026-11-23_comissao_pre_aceita_devolvido`) estão fora do repositório; estão no tst de 23/11, não na produção de 18/11, e sem elas as rotas de comissão falham | comentários dos models; `dump tst 23/11:36879` (`trg_simulacoes_trava_versao_vendedor`) | ✅ tst; ❓ produção (PS-062) |
+| 15 | Seis migrations da comissão (`2026-11-18_comissao_competencia`, `2026-11-18_comissao_grao_pedido`, `2026-11-19_comissao_escopo_fabricacao`, `2026-11-19_comissao_master_itens_desempenho`, `2026-11-19_comissao_trava_versao_vendedor`, `2026-11-23_comissao_pre_aceita_devolvido`) estão fora do repositório; estão no tst e na produção (PDF do Gustavo de 24/11), e sem elas as rotas de comissão falham | comentários dos models; `dump tst 23/11:36879` (`trg_simulacoes_trava_versao_vendedor`) | ✅ tst e produção (PS-062 fechada) |
 | 16 | O corte da predominância (`pct_predominancia_fabricacao`) não tem tela: só muda por SQL ou pela API | `simulador_parametros.model.js:112` (`pct_predominancia_fabricacao:`) | ✅ PS-063 |
-| 17 | Minhas Comissões e Visão Geral mostram `DEVOLVIDO`, o provável e a versão que paga (PS-064 fechada em 24/11); `AGUARDANDO_APROVACAO` sem fonte na API | `av-hub` `lib/domain/comissoes-minhas-comissoes.ts:59` (`DEVOLVIDO: {`) | ✅ PS-064 · ❓ PS-065 |
+| 17 | Minhas Comissões e Visão Geral mostram `DEVOLVIDO`, o provável e a versão que paga (PS-064 fechada em 24/11); `AGUARDANDO_APROVACAO` vem do banco desde 23/11 (`9e6ef60`) | `av-hub` `lib/domain/comissoes-minhas-comissoes.ts:61` (`DEVOLVIDO: {`) | ✅ PS-064 e PS-065 |
 
 ## O que a Michele precisa confirmar
 
