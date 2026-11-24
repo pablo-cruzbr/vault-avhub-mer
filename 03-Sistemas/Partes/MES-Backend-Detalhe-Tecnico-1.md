@@ -5,7 +5,7 @@ estado-em: 2026-11-24
 status: vigente
 dono: Robert
 parte-de: "[[MES-Backend]]"
-develop-conferida: [api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
+develop-conferida: [api-pcp 50f0a65, app-pcp 03fb038, em 2026-11-24 (coletor, N16-201); api-pcp 6bca516, app-pcp ffdcd3f, em 2026-11-24 (retirada, PRs #96, #97, #83 e #84); api-acos-vital 9abda4f, av-hub c6310ad, api-pcp bd6b442, app-pcp 897dcd7, omie-elt-pipeline 46b53d4 (master 8f79d12), em 2026-11-13]
 fontes: [api-pcp befd973 (develop, 27/10; a main parou em 08/10 e está em 8e2bf56), prisma/migrations até 20261028120100, Dump MES (Esqueleto).sql de 14/10 (defasado), v1 App-PCP-Backend-Producao, App-PCP-Visao-Geral, MES-Arquitetura-Decisoes]
 ---
 
@@ -131,6 +131,8 @@ A rota `PATCH /compras/requisicoes/:id/compra` ("Registrar compra" manual) **nã
 | `/estoque/depositos` (POST, GET, GET `unidades`, GET/PATCH/DELETE `:id`), `/:id/localizacoes` (POST, PATCH, DELETE) | `depositos` criar/visualizar/editar/deletar | ✅ `estoque.controller.ts:23-87` (`estoque/depositos`) |
 | `GET/PATCH /estoque/materiais`, `/:id` | `materiais` visualizar/editar | ✅ `materiais.controller.ts:21-41` (`estoque/materiais`) |
 | `GET /estoque/alertas/estoque-minimo`, `/rnc-pendentes` | `painel-estoque`, visualizar | ✅ `alertas.controller.ts:19,25` |
+| `GET /estoque/coletor/ler?codigo=`, `GET /estoque/coletor/etiquetas-enderecos` (coletor, N16-201) | `coletor`, visualizar | ✅ `src/estoque/coletor/coletor.controller.ts:27` (`@Get('ler')`), `:33` (`@Get('etiquetas-enderecos')`) |
+| `POST /estoque/retiradas/:id/confirmar` com `idLocalizacao` por linha (o endereço lido pelo coletor; a saída é só dele) | `atendimento`, editar | ✅ `src/estoque/retirada/retirada.ts:158` (`if (c.idLocalizacao) {`) |
 
 Observação: o controller usa o slug `movimentacao` (singular, ações do Estoque) e `movimentacoes` (plural, fila de setor). São duas telas diferentes em `telas` ✅ `estoque-operacao.controller.ts:63-93` x `itens-parciais.controller.ts:57`. Conferir se as duas existem em produção ❓.
 
