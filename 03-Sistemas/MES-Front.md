@@ -66,7 +66,7 @@ Front do MES. Next.js 16.3 (App Router) com React 19, MUI 9 e NextAuth 4 (✅ `a
 
 ### Como funciona
 
-- **Login:** NextAuth com Azure AD ou usuário e senha. O Azure chama `POST /auth/azure` do `api-pcp` com `x-api-key: MES_INTERNAL_API_KEY`; a senha chama `POST /auth/login` ✅ `app-pcp` `app/api/auth/[...nextauth]/route.ts:54-60` (`/auth/azure`), `:112` (`/auth/login`). A sessão guarda `menu` (de `GET /auth/menu`) e `setoresPermitidos` (de `GET /auth/setores-permitidos`) ✅ `:21,37`.
+- **Login:** NextAuth com Azure AD ou usuário e senha. O Azure chama `POST /auth/azure` do `api-pcp` com `x-api-key: MES_INTERNAL_API_KEY`; a senha chama `POST /auth/login` ✅ `app-pcp` `app/api/auth/[...nextauth]/route.ts:73` (`/auth/azure`), `:112` (`/auth/login`). A sessão guarda `menu` (de `GET /auth/menu`) e `setoresPermitidos` (de `GET /auth/setores-permitidos`) ✅ `:21,37`.
 - **Rotas protegidas:** `proxy.ts` (middleware NextAuth) barra tudo menos `/login`, `/api/auth` e estáticos ✅ `app-pcp` `proxy.ts:3-18` (`withAuth`).
 - **Variável do BFF:** `API_URL` aponta para o `api-pcp` (não para o av-hub) ✅ `app/api/**`; mais `MES_INTERNAL_API_KEY` e `AZURE_AD_*`.
 - **Permissão na tela:** `usePermission()` pega o último segmento da URL como slug da tela e consulta o menu da sessão ✅ `app-pcp` `hooks/usePermission.ts:8-17` (`usePermission`). Telas que abrem uma fila de setor passam `telaId` explícito. Ações: `pode_visualizar`, `pode_criar`, `pode_editar`, `pode_deletar` (o MES não tem `pode_aprovar`) ✅ `app-pcp` `lib/permissions.ts:3` (`pode_deletar`).
