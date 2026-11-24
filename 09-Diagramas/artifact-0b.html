@@ -121,7 +121,7 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <div id="vp"><div id="world"></div></div>
 <div class="hud" id="info">
   <h1>Fluxo 0b: Atividades</h1>
-  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> de 12/11/2026 na proposta, em Compras e na pipeline, e de 13/11 no MES; os ● são achados da validação ponta a ponta de 10/11 (pedido 28189, em Docker com os dados do tst). Clique num nó para ver os detalhes ou em <b>Áreas</b> para a conclusão de cada uma.</p>
+  <p>Um pedido de venda de 0 a 100%, da proposta (ou do pedido digitado no Omie) à nota fiscal e à comissão. Conforme o vault v3: estado da <code>develop</code> de 24/11/2026 (Orçamento entregue, comissão no módulo atual, retirada e matéria-prima no Estoque); os ● são achados da validação ponta a ponta de 10/11 (pedido 28189, em Docker com os dados do tst). Clique num nó para ver os detalhes ou em <b>Áreas</b> para a conclusão de cada uma.</p>
   <div class="chips" id="sum"></div>
   <div id="dica">Arraste para mover · roda do mouse ou pinça para zoom · duplo clique preenche a tela</div>
 </div>
@@ -138,24 +138,24 @@ code{font-family:var(--f-mono);font-size:12px;background:var(--lane-a);padding:1
 <section class="hud" id="detail" hidden aria-live="polite"></section>
 <section class="hud" id="areas" hidden aria-labelledby="areasT"></section>
 <script>
-var LANES=[["proposta","Vendas · proposta","81%"],["orc","Orçamento · av-hub","21%"],["vendas","Vendas · pedido","50%"],["pcp","PCP · MES","50%"],["estoque","Estoque · MES","56 · 50 · 0%"],["compras","Compras · CCP","78%"],["forn","Fornecedor",""],["rec","Recebimento · MES","65%"],["qe","Qualidade de entrada","57%"],["prod","Produção · MES","70%"],["qs","Qualidade de saída","50%"],["exp","Expedição · MES","29%"],["fis","Fiscal · Omie","30%"],["comis","Comissão · av-hub","35%"]];
-/* Conclusão por etapa do fluxo, pelos selos do vault (12/11/2026) e pela develop de 13/11 (saldo futuro, avisos do MES ao Compras): funcionalidades = seção "O que já existe e o que falta" (✅ 1, 🟡 0,5, 🔴 0); telas = nota Telas-por-Raia. */
+var LANES=[["proposta","Vendas · proposta","84%"],["orc","Orçamento · av-hub","100%"],["vendas","Vendas · pedido","54%"],["pcp","PCP · MES","59%"],["estoque","Estoque · MES","86 · 100 · 62%"],["compras","Compras · CCP","85%"],["forn","Fornecedor",""],["rec","Recebimento · MES","65%"],["qe","Qualidade de entrada","62%"],["prod","Produção · MES","75%"],["qs","Qualidade de saída","33%"],["exp","Expedição · MES","43%"],["fis","Fiscal · Omie","30%"],["comis","Comissão · av-hub","62%"]];
+/* Conclusão por etapa do fluxo, pelos selos do vault de 24/11/2026: funcionalidades = seção "O que já existe e o que falta" (✅ 1, 🟡 0,5, 🔴 0); telas = nota Telas-por-Raia, com o Orçamento e o Estoque conferidos na develop de 24/11. */
 var AREAS=[
-["1","Proposta de venda","AV-Hub · Vendas › Propostas",81,33],
-["2","Orçamento e base de preço","AV-Hub · Orçamento",21,33],
-["3","Pedido de venda e liberação","AV-Hub · Vendas, Portal do Gerente, PCP no Hub",50,100],
-["4","PCP: triagem e destinação","MES · PCP",50,85],
-["5","Estoque: atendimento","MES · Estoque",56,70],
-["6","Circuito de compra","AV-Hub · Compras; MES · Compras",78,100],
+["1","Proposta de venda","AV-Hub · Vendas › Propostas",84,33],
+["2","Orçamento e base de preço","AV-Hub · Orçamento",100,100],
+["3","Pedido de venda e liberação","AV-Hub · Vendas, Portal do Gerente, PCP no Hub",54,100],
+["4","PCP: triagem e destinação","MES · PCP",59,85],
+["5","Estoque: atendimento","MES · Estoque",86,100],
+["6","Circuito de compra","AV-Hub · Compras; MES · Compras",85,100],
 ["7","Recebimento","MES · Logística de entrada",65,100],
-["8","Qualidade de entrada","MES · Inspeção de entrada",57,100],
-["9","Estoque: entrada do lote","MES · Estoque",50,70],
-["10","Produção e roteiro","MES · Produção",70,83],
-["11","Qualidade de saída","MES · Inspeção de saída",50,100],
-["12","Estoque: despacho","MES · Estoque",0,70],
-["13","Expedição","MES · Logística › Expedição",29,50],
+["8","Qualidade de entrada","MES · Inspeção de entrada",62,100],
+["9","Estoque: entrada do lote","MES · Estoque",100,100],
+["10","Produção e roteiro","MES · Produção",75,83],
+["11","Qualidade de saída","MES · Inspeção de saída",33,100],
+["12","Estoque: despacho","MES · Estoque",62,100],
+["13","Expedição","MES · Logística › Expedição",43,50],
 ["14","Fiscal / Omie","Omie e pipeline",30,67],
-["15","Custo real e comissão","AV-Hub · Comissões",35,33]];
+["15","Custo real e comissão","AV-Hub · Comissões",62,33]];
 var N={
 "V0.1": {
 "l": "proposta",
@@ -170,11 +170,11 @@ var N={
 "V0.2": {
 "l": "proposta",
 "t": "Vendedor preenche o custo",
-"s": "fa",
+"s": "ok",
 "r": "Vendedor preenche o custo com o que conseguiu, consultando a página do produto, ou pede ao Orçamento (B3) e segue",
 "tela": "Propostas · /vendas/propostas (HUB)",
 "ep": "—",
-"cod": "🔴"
+"cod": "✅ página do produto com as duas fontes e o \"Pedir cotação\" (raia 02, LOG-60, N16-191); a revenda só entra com fornecedor, preço, quantidade e origem da compra"
 },
 "V0.3": {
 "l": "proposta",
@@ -236,38 +236,38 @@ var N={
 "B1": {
 "l": "orc",
 "t": "Base de preço com histórico",
-"s": "fa",
+"s": "ok",
 "r": "Base de preço de compra com histórico: OCs do Hub e do Omie viram ofertas; estatística por produto",
-"tela": "—",
-"ep": "fn_ofertas_gerar_de_ocs · · 02-Orcamento-Base-de-Preco",
-"cod": "🔴"
+"tela": "Orçamento · Cotações (aba da página do produto)",
+"ep": "/comercial/ofertas · LOG-60",
+"cod": "✅ ofertas imutáveis com histórico (LOG-60); o valor da OC efetivada entra no histórico de compras pela pipeline"
 },
 "B2": {
 "l": "orc",
 "t": "Página do produto",
-"s": "fa",
+"s": "ok",
 "r": "Página do produto: histórico, top fornecedores com score, volatilidade, média",
-"tela": "Página do produto (nova)",
-"ep": "—",
-"cod": "🔴"
+"tela": "Página do produto (av-hub)",
+"ep": "GET /produtos/:id/precos · LOG-60",
+"cod": "✅ duas fontes lado a lado, volatilidade e média (N16-172); busca rápida no \"Pedir cotação\" (N16-191)"
 },
 "B3": {
 "l": "orc",
 "t": "Pedido de custo",
-"s": "fa",
+"s": "ok",
 "r": "Pedido de custo do vendedor, sem prazo fixo, com o tempo cronometrado",
 "tela": "Orçamento · Pedidos de custo",
-"ep": "—",
-"cod": "🔴 (api-comercial de teste ✅ com prazo)"
+"ep": "/comercial/solicitacoes_custo · LOG-60",
+"cod": "✅ pedido de custo com cronômetro (N16-58) e aviso na Central de Avisos (LOG-61)"
 },
 "B4": {
 "l": "orc",
 "t": "Orçamentista cota",
-"s": "fa",
+"s": "ok",
 "r": "O setor de Orçamento (o Moisés é uma das pessoas) cota, grava a oferta e responde",
 "tela": "Orçamento · Pedidos de custo",
 "ep": "—",
-"cod": "🔴"
+"cod": "✅ o perfil Orçamentos responde com a oferta (LOG-60, em produção desde 17/11)"
 },
 "V1": {
 "l": "vendas",
@@ -370,7 +370,7 @@ var N={
 "r": "Para o restante: solicitar compra ou enviar à produção",
 "tela": "Atendimento · /estoque-operacao/atendimento",
 "ep": "PATCH /itens-parciais/:id/atender-estoque (destinoRestante)",
-"cod": "✅ compra; 🟡 enviar à produção com baixa imediata de matéria-prima no Atender pelo estoque (develop, 19/10); a decisão é baixar na retirada (N16-140) 🔴",
+"cod": "✅ compra; ✅ a matéria-prima é reservada no Atender pelo estoque e baixada na retirada para a Produção (api-pcp #97, N16-140, N16-193); 🔴 o restante sem matéria-prima seguir o roteiro (OQ-49)",
 "d": 1,
 "v": "Enviar à produção só existe com matéria-prima do estoque: o restante sem matéria-prima vai para a compra, e a develop recusa seguir o roteiro (OQ-49)."
 },
@@ -390,7 +390,7 @@ var N={
 "r": "Aprovação: OC acima de R$ 30 mil, o Gerente de Compras aprova; até R$ 30 mil, compradores livres (sem aprovação)",
 "tela": "Aprovações · /compras/aprovacoes (HUB)",
 "ep": "parametros_compras; oc_enviada_aprovacao, oc_aprovada",
-"cod": "✅ 📝 N14-21: a trigger fn_ordens_compra_recalcular aprova sozinha a OC até parametros_compras.limite_aprovacao (padrão R$ 30 mil, por unidade); acima disso a OC fica aguardando_aprovacao e só quem tem pode_aprovar na tela compras (Gerência) aprova (ordens_compra.route.js:1230-1240, FecharCompra.tsx:604-605). Regra mais rígida depois, com Compras 🟡",
+"cod": "✅ 📝 N14-21: a trigger fn_ordens_compra_recalcular aprova sozinha a OC até parametros_compras.limite_aprovacao (padrão R$ 30 mil, por unidade); acima disso a OC fica aguardando_aprovacao e só quem tem pode_aprovar na tela compras (Gerência) aprova (ordens_compra.route.js:1230-1240, FecharCompra.tsx:604-605). Regra mais rígida depois, com Compras 🟡. A Sistemática de Compras (Loise, 24/11) pede aprovação de toda OC, sem limite, por aprovador da unidade: falta decidir (D2)",
 "d": 1
 },
 "C3": {
@@ -503,7 +503,7 @@ var N={
 "r": "Cria o lote PENDENTE (quarentena) com ENTRADA no saldo; split se chegou parte; custo da OC opcional",
 "tela": "Recebimento · /logistica/logistica-entrada",
 "ep": "POST /compras/recebimentos/:id/recontar, /decidir",
-"cod": "✅ lote e custo da OC (develop do MES, 19/10, 97b9adc); 🔴 custo obrigatório em todo lote (N16-09)"
+"cod": "✅ lote e custo da OC; 🟡 recebimento sem custo entra com \"custo a informar\" e alerta (N16-181); custo do fabricado adiado (N16-166)"
 },
 "R6": {
 "l": "rec",
@@ -578,7 +578,7 @@ var N={
 "r": "Setores produtivos do roteiro de cada fábrica",
 "tela": "Filas de Produção · /movimentacoes",
 "ep": "/itens-parciais/:id/*",
-"cod": "✅ filas e ações (inclui finalizar na develop); baixa de matéria-prima 🟡 (ver E4)"
+"cod": "✅ filas e ações (inclui finalizar); a matéria-prima sai pela retirada e a Produção só recebe com ela concluída (api-pcp #97)"
 },
 "Q7": {
 "l": "qs",
@@ -603,11 +603,11 @@ var N={
 "E6": {
 "l": "estoque",
 "t": "Despacho: documento de retirada",
-"s": "fa",
+"s": "ok",
 "r": "Despacho: documento de retirada; baixa do saldo na retirada, no Estoque",
-"tela": "— (não existe)",
-"ep": "hoje: consumirReservasDaParcial em receber() (itens-parciais.service.ts:278-285) e de novo em EntregasService.create (entregas.service.ts:87-94)",
-"cod": "🔴"
+"tela": "Atender pedidos · aba Retiradas · /estoque-operacao/atendimento",
+"ep": "/estoque/retiradas (confirmar, lista de separação em PDF, devolução da sobra) · N16-193",
+"cod": "✅ desde 23/11 (api-pcp #96 e #97, app-pcp #83 e #84): a Expedição e a Produção só recebem com a retirada concluída; 🟡 as parciais atendidas antes de 23/11 ainda baixam na Embalagem"
 },
 "X1": {
 "l": "exp",
@@ -698,21 +698,21 @@ var N={
 "K4": {
 "l": "comis",
 "t": "Controladoria, Gerência ou Coordenação decidem",
-"s": "fa",
+"s": "pa",
 "r": "Controladoria, Gerência ou Coordenação decidem, com justificativa; ninguém decide a própria comissão",
 "tela": "Fila da Controladoria",
 "ep": "fn_comissao_decidir",
-"cod": "🔴",
+"cod": "🟡 Visão Geral da Controladoria no módulo atual, por pedido (N16-185); 🔴 tela do módulo novo com decisão e justificativa",
 "d": 1
 },
 "K5": {
 "l": "comis",
 "t": "Vendedor vê a comissão real",
-"s": "fa",
+"s": "pa",
 "r": "O vendedor vê a comissão real só depois da decisão, com a justificativa",
 "tela": "Minhas Comissões",
 "ep": "vw_comissao_nf_vendedor",
-"cod": "🔴"
+"cod": "🟡 Minhas Comissões no módulo atual, pela competência e só com o vínculo próprio (N16-187, N16-189, av-hub #334); 🔴 comissão real do módulo novo"
 },
 "K6": {
 "l": "comis",
@@ -817,13 +817,13 @@ var sel=null;
 /* ---------- painel de conclusão por área ---------- */
 var A=document.getElementById("areas"),bA=document.getElementById("abrirAreas");
 function barra(v){return '<span class="bar '+(v<35?'lo':v<60?'mid':'')+'"><i style="--w:'+v+'%"></i>'+v+'%</span>'}
-(function(){var mf=Math.round(AREAS.reduce(function(t,a){return t+a[3]},0)/AREAS.length);
+(function(){var mf=Math.round(AREAS.reduce(function(t,a){return t+a[3]},0)/AREAS.length),mt=Math.round(AREAS.reduce(function(t,a){return t+a[4]},0)/AREAS.length);
  A.innerHTML='<button type="button" id="closeA" aria-label="Fechar conclusão por área">×</button><h2 id="areasT">Conclusão por área</h2>'+
- '<p>Pelos selos do vault em 12/11/2026, com a develop de 13/11 no MES (saldo futuro e avisos ao Compras). Funcionalidades: itens de "O que já existe e o que falta" de cada etapa (✅ vale 1, 🟡 0,5, 🔴 0). Telas: nota Telas-por-Raia.</p>'+
- '<div class="tot"><span><b>'+mf+'%</b>funcionalidades (média)</span><span><b>80%</b>telas</span></div>'+
+ '<p>Pelos selos do vault em 24/11/2026. Funcionalidades: itens de "O que já existe e o que falta" de cada etapa (✅ vale 1, 🟡 0,5, 🔴 0). Telas: nota Telas-por-Raia; as do Orçamento e do Estoque conferidas na develop de 24/11.</p>'+
+ '<div class="tot"><span><b>'+mf+'%</b>funcionalidades (média)</span><span><b>'+mt+'%</b>telas</span></div>'+
  '<table class="atab"><thead><tr><th>#</th><th>Etapa e onde fica</th><th class="pc">Funções</th><th class="pc">Telas</th></tr></thead><tbody>'+
  AREAS.map(function(a){return '<tr><td class="n">'+a[0]+'</td><td>'+a[1]+'<small>'+a[2]+'</small></td><td class="pc">'+barra(a[3])+'</td><td class="pc">'+barra(a[4])+'</td></tr>'}).join("")+
- '</tbody></table><p class="nota">Proposta, Orçamento e comissão dividem uma linha na nota de telas (33%), e o Estoque outra (70%). O despacho (12) funciona e foi validado; a seção do vault só lista o que falta (documento de retirada e baixa na retirada). Dashboards, RH e Cadastros ficam fora do fluxo e o vault não os mede.</p>';
+ '</tbody></table><p class="nota">Proposta e comissão dividem uma linha na nota de telas (33%). O Orçamento tem as 3 telas e a página do produto; o Estoque tem Pendências, Atendimento com Reservas e Retiradas, Movimentar, Estoque, Movimentos, Inventário e Painel. Dashboards, RH e Cadastros ficam fora do fluxo e o vault não os mede.</p>';
  A.querySelector("#closeA").addEventListener("click",function(){alternarAreas(false)})})();
 function alternarAreas(on){A.hidden=!on;bA.setAttribute("aria-expanded",on?"true":"false");if(on)A.scrollTop=0}
 bA.addEventListener("click",function(){alternarAreas(A.hidden)});
