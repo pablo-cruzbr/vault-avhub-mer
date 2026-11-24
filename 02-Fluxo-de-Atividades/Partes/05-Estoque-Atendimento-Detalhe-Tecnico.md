@@ -22,25 +22,25 @@ As regras 9 e 11 (entrada do lote) estão em [[09-Estoque-Entrada-do-Lote]]; a r
 | # | Regra | Selo |
 |---|---|---|
 | 1 | O Estoque (setor `estoque`) é a **etapa 1** de todo roteiro e o **único** Estoque do circuito (a compra volta a ele) | 📝 ✅ `src/pedidos/pedidos.service.ts:88` (`O setor Estoque fixo é sempre a ordem 0`), `src/compras/circuito-compra.ts:22` (`ESTOQUE: SETOR_ESTOQUE_FIXO_CODIGO`) |
-| 2 | Saldo disponível = lotes `LIBERADO` − reservas `ATIVA`, na **filial do pedido** (DEC-1) | 📝 ✅ `src/estoque/operacao/estoque-operacao.helpers.ts:102` (`export async function reservarParaParcial`) |
-| 3 | A leitura do saldo e a criação da reserva acontecem **no mesmo passo**, com o lote travado | 📝 ✅ `estoque-operacao.helpers.ts:121` (`await travarLotes(tx, idsLote);`) |
-| 4 | **Saldo zero exige clique**: atender 0 é uma ação explícita | 📝 ✅ `src/itens-parciais/itens-parciais.service.ts:778` (`decide num clique`) |
+| 2 | Saldo disponível = lotes `LIBERADO` − reservas `ATIVA`, na **filial do pedido** (DEC-1) | 📝 ✅ `src/estoque/operacao/estoque-operacao.helpers.ts:103` (`export async function reservarParaParcial`) |
+| 3 | A leitura do saldo e a criação da reserva acontecem **no mesmo passo**, com o lote travado | 📝 ✅ `estoque-operacao.helpers.ts:122` (`await travarLotes(tx, idsLote);`) |
+| 4 | **Saldo zero exige clique**: atender 0 é uma ação explícita | 📝 ✅ `src/itens-parciais/itens-parciais.service.ts:792` (`decide num clique`) |
 | 5 | Reserva nasce `ATIVA`, **sem expiração**; libera por ação explícita (`LIBERADA`) ou quando a ordem é excluída | 📝 ✅ `prisma/models/estoque.prisma:41` (`enum StatusReserva`), `src/pedidos/pedidos.service.ts:765` (`await liberarReservas(tx`) |
-| 6 | Na **Revenda** o restante **sempre** vai para compra | 📝 ✅ `itens-parciais.service.ts:1016` (`fabrica.tipo === 'REVENDA'`) |
-| 7 | Na **Fabricação** o restante pode seguir o roteiro (`ROTEIRO`) ou ir à compra (`COMPRA`, matéria-prima) | 📝 🔴 a `develop` recusa `ROTEIRO` com 400 `itens-parciais.service.ts:932` (`destinoRestante === 'ROTEIRO'`); a #100 aceitou isso até o levantamento físico; ❓ OQ-49 |
-| 8 | A parte atendida vai para a **primeira etapa `EXPEDICAO`** depois do Estoque; sem ela no roteiro, 409 | ✅ `itens-parciais.service.ts:1037` (`e.tipo === 'EXPEDICAO'`) |
-| 12 | **Custo do item = média ponderada dos lotes** das reservas | 📝 ✅ `src/integracao-avhub/itens-custo.ts:62` (`export async function listarItensCusto(`); fabricado fora ([[Contratos-da-v2\|API-008]]) |
+| 6 | Na **Revenda** o restante **sempre** vai para compra | 📝 ✅ `itens-parciais.service.ts:1030` (`fabrica.tipo === 'REVENDA'`) |
+| 7 | Na **Fabricação** o restante pode seguir o roteiro (`ROTEIRO`) ou ir à compra (`COMPRA`, matéria-prima) | 📝 🔴 a `develop` recusa `ROTEIRO` com 400 `itens-parciais.service.ts:946` (`destinoRestante === 'ROTEIRO'`); a #100 aceitou isso até o levantamento físico; ❓ OQ-49 |
+| 8 | A parte atendida vai para a **primeira etapa `EXPEDICAO`** depois do Estoque; sem ela no roteiro, 409 | ✅ `itens-parciais.service.ts:1051` (`e.tipo === 'EXPEDICAO'`) |
+| 12 | **Custo do item = média ponderada dos lotes** das reservas | 📝 ✅ `src/integracao-avhub/itens-custo.ts:64` (`export async function listarItensCusto(`); fabricado fora ([[Contratos-da-v2\|API-008]]) |
 | 13 | **Carga inicial sem custo é recusada**; recebimento sem custo entra com `custo_pendente` e alerta "Custo a informar"; fabricado sem custo (N16-166) | 📝 N16-09, N16-181; ✅ `src/estoque/operacao/estoque-operacao.service.ts:642` (`a carga inicial não aceita lote sem custo`), `src/compras/recebimento.service.ts:1152` (`custoPendente: !custo.dados`); 🟡 BL-066 |
-| 14 | Lote filho de cisão herda o custo do pai; transferência não muda o custo | 📝 ✅ `estoque-operacao.helpers.ts:648` (`copiarCustoParaFilho`) |
+| 14 | Lote filho de cisão herda o custo do pai; transferência não muda o custo | 📝 ✅ `estoque-operacao.helpers.ts:636` (`copiarCustoParaFilho`) |
 | 15 | Ajuste não pode comer o que está reservado; motivo obrigatório | ✅ `estoque-operacao.service.ts:1019` (`o motor não deixa o lote abaixo do reservado`) |
 | 16 | Carga inicial (marco zero) nasce `LIBERADO` sem inspeção | 📝 ✅ `estoque-operacao.service.ts:667` (`statusQualidade: 'LIBERADO'`) |
 | 17 | **Saldo futuro:** para OC de **estoque** aprovada, o MES mostra a parte que ainda vai chegar (saldo atual + saldo futuro, [[Glossario]]), pela referência da OC (`GET /ordens-compra/referencia`, `destino` `estoque`) | 📝 N14-20; ✅ `src/estoque/operacao/saldo-futuro.ts:68` (`export async function saldoFuturoPorProduto`) |
 | 18 | OC **vinculada a pedido de venda** não entra no saldo futuro livre; o Estoque e o PCP veem que já existe OC para o pedido | 📝 N14-20 🔴 (BL-049) |
-| 19 | **Motor único:** entrada, saída, saída do lote, transferência e ajuste passam por uma porta só, que trava o lote e grava saldo, movimento e custo do lote juntos | 📝 N16-184 ✅ `src/estoque/motor/motor-estoque.ts:57` (`export async function registrarEntrada`), com teste de arquitetura |
+| 19 | **Motor único:** entrada, saída, saída do lote, transferência e ajuste passam por uma porta só, que trava o lote e grava saldo, movimento e custo do lote juntos | 📝 N16-184 ✅ `src/estoque/motor/motor-estoque.ts:61` (`export async function registrarEntrada`), com teste de arquitetura |
 | 20 | **Travas no banco:** saldo ≥ 0, quantidades positivas, livro = saldo e reservado ≤ saldo no commit; movimento só se inclui | 📝 N16-184 ✅ `prisma/migrations/20261119150000_estoque_travas/migration.sql:103` (`CREATE TRIGGER "movimentos_estoque_imutavel"`), `:192` (`CREATE CONSTRAINT TRIGGER "saldos_estoque_livro"`); ⚠ PS-061 |
 | 21 | **Idempotência:** a ação repetida com a mesma `Idempotency-Key` devolve a resposta guardada; 8 rotas exigem a chave | 📝 N16-184 ✅ `src/app.module.ts:89` (`IdempotenciaInterceptor`); `app-pcp` `lib/idempotencia.ts:6` (`CABECALHO_IDEMPOTENCIA = 'Idempotency-Key'`) |
 | 22 | **Conferência do livro** (soma dos movimentos = saldo) uma vez por dia e sob pedido; divergência vira alerta | 📝 N16-184 ✅ `src/estoque/alertas/conferencia-livro.service.ts:75` (`async conferirSeDevida()`) |
-| 23 | **Inventário:** endereço travado durante a contagem; recontagem cega do que diverge; acima de R$ 500 ou 2% (ou sem custo), aprova quem não contou | 📝 N16-183 ✅ `motor-estoque.ts:186` (`Endereço travado por inventário`), `src/common/constants/inventario.constants.ts:9` (`INVENTARIO_LIMITE_VALOR_PADRAO = 500`), `src/estoque/inventario/inventario.service.ts:33` (`espera aprovação de quem não contou`) |
+| 23 | **Inventário:** endereço travado durante a contagem; recontagem cega do que diverge; acima de R$ 500 ou 2% (ou sem custo), aprova quem não contou | 📝 N16-183 ✅ `motor-estoque.ts:190` (`Endereço travado por inventário`), `src/common/constants/inventario.constants.ts:9` (`INVENTARIO_LIMITE_VALOR_PADRAO = 500`), `src/estoque/inventario/inventario.service.ts:33` (`espera aprovação de quem não contou`) |
 | 24 | **Unidade e peso:** saldo na unidade do material; lote com peso real e kg por unidade; fator kg↔unidade = peso teórico do material | 📝 N16-182 ✅ `src/estoque/operacao/lote-v2.ts:24` (`export function pesoDoLote(`), `src/compras/compra-oc.ts:119` (`fator = kgPorUnidade`); 🟡 a saída não grava o peso proporcional |
 
 ## Estados
@@ -71,7 +71,7 @@ Todas em `app-pcp` `app/(protected)/estoque-operacao/`. O que foi juntado virou 
 | Tela | Rota | Slug | Estado |
 |---|---|---|---|
 | Pendências | `/estoque-operacao/pendencias` | `pendencias` | ✅ `pendencias/page.tsx:70` (`title="Pendências"`): atender, custo a informar, inventário, mínimo, qualidade, reservas paradas, livro |
-| Atender pedidos · Atendimento | `/estoque-operacao/atendimento` (aba `?aba=reservas`) | `atendimento`, `reservas` | ✅ `atendimento/page.tsx:67` (`title="Atender pedidos"`), fila própria `atendimento/FilaEstoque.tsx:62` (`export default function FilaEstoque`); `/estoque-operacao/reservas` redireciona para a aba |
+| Atender pedidos · Atendimento | `/estoque-operacao/atendimento` (aba `?aba=reservas`) | `atendimento`, `reservas` | ✅ `atendimento/page.tsx:75` (`title="Atender pedidos"`), fila própria `atendimento/FilaEstoque.tsx:62` (`export default function FilaEstoque`); `/estoque-operacao/reservas` redireciona para a aba |
 | Movimentar | `/estoque-operacao/movimentar` | `movimentar` | ✅ `movimentar/page.tsx:93` (`title="Movimentar"`): transferência, ajuste e carga inicial (custo obrigatório, `saldo/EntradaLoteModal.tsx:155` (`A carga inicial exige o custo do lote`)) |
 | Estoque · Saldo | `/estoque-operacao/saldo` (visões material, lote, endereço) | `saldo` | ✅ `saldo/page.tsx:233` (`title="Estoque"`); `/estoque-operacao/mapa-deposito` redireciona para a visão por endereço |
 | Material | `/estoque-operacao/saldo/material/[id]` | `saldo` | ✅ `saldo/material/[id]/page.tsx:26` (`export default function MaterialPage`), com "A chegar por OC" |
@@ -112,7 +112,7 @@ Todos no `api-pcp`. As 8 rotas que exigem `Idempotency-Key`: atender (as duas), 
 
 ### E4: o restante
 
-✅ `destinoRestante = COMPRA` (ou Revenda, sempre) move a parcial para o setor `REQUISICAO` `itens-parciais.service.ts:1056` (`setorDoCircuito(this.prisma, 'REQUISICAO')`), com a observação "Sem saldo no estoque: N vão para compra" (`:1158`, `Sem saldo no estoque`). O PCP abre a requisição lá ([[06-Circuito-de-Compra]], `P3`).
+✅ `destinoRestante = COMPRA` (ou Revenda, sempre) move a parcial para o setor `REQUISICAO` `itens-parciais.service.ts:1070` (`setorDoCircuito(this.prisma, 'REQUISICAO')`), com a observação "Sem saldo no estoque: N vão para compra" (`:1158`, `Sem saldo no estoque`). O PCP abre a requisição lá ([[06-Circuito-de-Compra]], `P3`).
 
 ✅ **Enviar à produção** só existe com matéria-prima do estoque: as unidades cobertas seguem no roteiro e o restante vai para compra (`ConsumoMateriaPrima`): desde 23/11 a matéria-prima fica reservada e abre uma retirada para a Produção, que baixa na confirmação pela quantidade pedida (N16-140, N16-193): `api-pcp` `src/itens-parciais/itens-parciais.service.ts:1221` (`await reservarMateriaPrima(tx, {`). Parcial devolvida libera o que ainda estava reservado e cancela a retirada aberta; a sobra já retirada volta pela devolução da retirada. A genealogia (J4) segue sem código.
 
