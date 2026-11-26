@@ -1,7 +1,7 @@
 ---
 tags: [desenvolvimento, plano, qualidade, qualidade-entrada, qualidade-saida, mes, av-hub, proposta]
 criado: 2026-11-24
-estado-em: 2026-11-24
+estado-em: 2026-11-26
 status: proposta
 dono: Pablo
 develop-conferida: [api-pcp 50f0a65 (develop), av-hub feat/qualidade-v2 (PR 338, rascunho, fora da develop), em 2026-11-24]
@@ -20,6 +20,8 @@ As duas são no `api-pcp` e no `app-pcp`, em PRs separados. Nenhuma depende das 
 
 ### Entrega A: reprovar só uma parte na saída (N16-128)
 
+**Situação (26/11):** em revisão no `api-pcp`, [PR 108](https://github.com/Acosvital/api-pcp/pull/108), junto com a trava da N16-124. O retrabalho com escolha do setor (N16-141) está no [PR 110](https://github.com/Acosvital/api-pcp/pull/110).
+
 Já decidida, sem migração de banco.
 
 | Onde | O que muda |
@@ -35,6 +37,7 @@ O `aprovarSaida` já divide a parcela do mesmo jeito, então é o modelo. O `spl
 **Aceite:** com 100 peças, reprovar 5 deixa 95 em inspeção e 5 reprovadas; a soma continua 100; as 5 podem ir a retrabalho ou falso alarme; quantidade zero ou maior que a parcela é recusada; duas chamadas ao mesmo tempo não passam da quantidade.
 
 ### Entrega B: fechar a RNC da entrada
+**Situação (26/11):** em revisão no `api-pcp`, [PR 109](https://github.com/Acosvital/api-pcp/pull/109). Por enquanto, quem fecha é a Qualidade.
 
 Precisa de migração pequena. A nota continua sendo emitida no Omie.
 
@@ -71,7 +74,7 @@ Ficam para depois, fora de A e B: numeração da RNC, causa e ação, conferênc
 
 ### Diferenças que precisam de ajuste
 
-1. **`mover` não aprova mais.** No MES a inspeção de saída usa `aprovar-saida`, e o controller diz que `mover` é recusado nesse setor. O Hub e o `API-023` ainda dizem `mover`.
+1. **`mover` não aprova mais.** No MES a inspeção de saída usa `aprovar-saida`, e `mover` é recusado nesse setor. Corrigido: o BFF do Hub traduz (av-hub `b982c8ed`) e o `API-023` já diz `aprovar-saida`.
 2. **O Hub e a SQL-025 usam caminhos diferentes na saída:** o código chama `PATCH /itens-parciais/:id/:acao`; a SQL-025 propõe `POST /qualidade/saida/parciais/:id/:acao`.
 3. **`rncs.motivo` já existe** no MES. A SQL-025 pede para criar.
 4. **Retrabalho troca o id:** a parcela reprovada vira `CANCELADO` e nasce outra, com `idDevolvidoDe`. Uma RNC ligada à parcela tem de seguir esse vínculo.

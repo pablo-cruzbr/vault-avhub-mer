@@ -13,7 +13,7 @@ decisoes: [N16-124, N16-125, N16-126, N16-127, N16-128, N16-129]
 develop-conferida: [av-hub d9809b8f (branch feat/qualidade-v2, PR #338 em rascunho, fora da develop), em 2026-11-24; api-acos-vital e api-pcp não conferidos para este contrato]
 tags: [contrato, contrato-api, qualidade, qualidade-entrada, qualidade-saida, documentacao-cliente, lote, rnc, quarentena, conferencia, segregacao, data-book, rascunho]
 criado: 2026-11-18
-estado-em: 2026-11-24
+estado-em: 2026-11-26
 dono: Nathan (telas e BFF) · Mayara (Qualidade) valida o dia a dia · Carlos Eduardo (Cadu) decide o que contraria regra antiga
 fontes: ["02-Fluxo-de-Atividades/08-Qualidade-Entrada e 11-Qualidade-Saida", "fluxo oficial da Qualidade v2 (imagem public/qualidade/fluxo-processo-qualidade.jpg do av-hub, 9 passos)", "av-hub lib/domain/qualidade-*.ts e app/api/qualidade/** (PR #338)", "api-pcp qualidade.controller.ts e itens-parciais.service.ts (referência do MES)"]
 ---
@@ -133,8 +133,8 @@ interface ItemConferencia { id: string; grupo: 'DOCUMENTAL'|'INSPECAO'|'ANALISE'
 | `GET /qualidade/saida/parciais` (proposta) | `GET /api/qualidade/saida/parciais` | `inspecao-saida` visualizar | Parciais nos setores tipo `QUALIDADE`, exceto `qualidade-entrada` |
 | `PATCH /itens-parciais/:id/receber` | `POST /api/qualidade/saida/parciais/:id/receber` | `inspecao-saida` editar | `EM_TRANSITO` → `RECEBIDO` |
 | `PATCH /itens-parciais/:id/iniciar` | `POST .../iniciar` | idem | `RECEBIDO` → `EM_ANDAMENTO` |
-| `PATCH /itens-parciais/:id/mover` | `POST .../mover` | idem | Aprova: segue ao Estoque; exige a conferência |
-| `PATCH /itens-parciais/:id/reprovar` | `POST .../reprovar` | idem | `REPROVADO`, segrega, abre a RNC; aceita reprovação parcial |
+| `PATCH /itens-parciais/:id/aprovar-saida` | `POST .../mover` | idem | Aprova: segue ao Estoque; exige a conferência. O MES recusa `mover` na inspeção de saída, então o BFF traduz o `mover` da tela (av-hub `b982c8ed`) |
+| `PATCH /itens-parciais/:id/reprovar` | `POST .../reprovar` | idem | `REPROVADO`, segrega, abre a RNC; reprovação parcial pelo campo `quantidade` do MES (N16-128, api-pcp PR 108; o Hub manda `quantidade_reprovada`) |
 | `POST /qualidade/saida/parciais/:id/tratativa` | `POST /api/qualidade/saida/parciais/:id/tratativa` | idem | Registra a tratativa (destino na regra 9 e abaixo) |
 
 ```ts
